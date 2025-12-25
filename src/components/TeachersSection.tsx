@@ -132,7 +132,7 @@ export function TeachersSection() {
                 <p className="text-gray-600">
                   Giảng dạy hàng ngày trên các nền tảng
                   <br />
-                  <span className="font-bold text-red-600">trực tuyển</span>
+                  <span className="font-bold text-red-600">trực tuyến</span>
                 </p>
               </div>
             </div>
