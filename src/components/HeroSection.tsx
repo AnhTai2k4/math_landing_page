@@ -84,7 +84,7 @@ export function HeroSection() {
             <div className="relative inline-block">
               <div className="rounded-3xl overflow-hidden shadow-2xl border-4 border-yellow-400 max-w-sm md:max-w-md lg:max-w-lg">
                 <img 
-                  src={heroImage} 
+                  src="/avatar.png"
                   alt="Thầy giáo Tô Minh Thành - Tự tin giỏi toán, hiểu sâu nhớ lâu, đỗ trường top đầu" 
                   className="w-full h-auto object-cover "
                 />

@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "Math_Web",
+			"path": "../.."
+		},
+		{
+			"name": "public",
+			"path": "../../../MinhThanhMath_WEB/public"
+		}
+	],
+	"settings": {}
+}
