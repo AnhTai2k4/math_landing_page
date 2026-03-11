@@ -1,5 +1,6 @@
 import { Button } from "./ui/button";
 import { GraduationCap, TrendingUp, Award } from "lucide-react";
+import avatarImg from '../assets/avatar.png';
 import heroImage from "figma:asset/bd36b26f465734ac6ed738bfb7b629af3f695065.png";
 import backgroundImage from "figma:asset/3a0a47e483030d752b74a16044b2bd5c5183d3ba.png";
 import React from "react";
@@ -84,7 +85,7 @@ export function HeroSection() {
             <div className="relative inline-block">
               <div className="rounded-3xl overflow-hidden shadow-2xl border-4 border-yellow-400 max-w-sm md:max-w-md lg:max-w-lg">
                 <img 
-                  src="/avatar.png"
+                  src={avatarImg}
                   alt="Thầy giáo Tô Minh Thành - Tự tin giỏi toán, hiểu sâu nhớ lâu, đỗ trường top đầu" 
                   className="w-full h-auto object-cover "
                 />
