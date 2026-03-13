@@ -1,6 +1,6 @@
 import { Button } from "./ui/button";
 import { GraduationCap, TrendingUp, Award } from "lucide-react";
-import avatarImg from '../assets/avatar.png';
+import avatarImg from '../assets/avatar.jpg';
 import heroImage from "figma:asset/bd36b26f465734ac6ed738bfb7b629af3f695065.png";
 import backgroundImage from "figma:asset/3a0a47e483030d752b74a16044b2bd5c5183d3ba.png";
 import React from "react";
