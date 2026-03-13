@@ -65,7 +65,7 @@ export function CoursesSection() {
         "Toán tư duy logic và phân tích",
         "Toán ứng dụng thực tiễn",
         "Kỹ thuật giải nhanh câu hỏi trắc nghiệm",
-        "Luyện đề ĐGNL ĐHQG TP.HCM & Hà Nội"
+        "Luyện đề ĐGNL ĐHQG Hà Nội"
       ],
       schedule: "2 buổi/tuần - 3h/buổi"
     }
