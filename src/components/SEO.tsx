@@ -51,10 +51,10 @@ export function SEO({
       <meta name="twitter:image" content={ogImage} />
 
       {/* Additional SEO */}
-      <meta name="geo.region" content="VN-SG" />
-      <meta name="geo.placename" content="Ho Chi Minh City" />
-      <meta name="geo.position" content="10.8231;106.6297" />
-      <meta name="ICBM" content="10.8231, 106.6297" />
+      <meta name="geo.region" content="VN-HN" />
+      <meta name="geo.placename" content="Ha Noi" />
+      <meta name="geo.position" content="21.0285;105.8542" />
+      <meta name="ICBM" content="21.0285, 105.8542" />
 
       {/* Mobile Optimization */}
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />

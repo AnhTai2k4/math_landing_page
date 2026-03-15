@@ -14,16 +14,16 @@ export function StructuredData() {
     "telephone": "+84-123-456-789",
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "123 Đường ABC, Phường XYZ",
-      "addressLocality": "Quận 1",
-      "addressRegion": "TP. Hồ Chí Minh",
-      "postalCode": "700000",
+      "streetAddress": "82 Chùa Láng, Láng Thượng",
+      "addressLocality": "Đống Đa",
+      "addressRegion": "Hà Nội",
+      "postalCode": "100000",
       "addressCountry": "VN"
     },
     "geo": {
       "@type": "GeoCoordinates",
-      "latitude": "10.8231",
-      "longitude": "106.6297"
+      "latitude": "21.0285",
+      "longitude": "105.8542"
     },
     "sameAs": [
       "https://facebook.com/minhthanhmath",
@@ -48,16 +48,16 @@ export function StructuredData() {
     "priceRange": "$$",
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "123 Đường ABC, Phường XYZ",
-      "addressLocality": "Quận 1",
-      "addressRegion": "TP. Hồ Chí Minh",
-      "postalCode": "700000",
+      "streetAddress": "82 Chùa Láng, Láng Thượng",
+      "addressLocality": "Đống Đa",
+      "addressRegion": "Hà Nội",
+      "postalCode": "100000",
       "addressCountry": "VN"
     },
     "geo": {
       "@type": "GeoCoordinates",
-      "latitude": "10.8231",
-      "longitude": "106.6297"
+      "latitude": "21.0285",
+      "longitude": "105.8542"
     },
     "url": "https://minhthanhmath.com",
     "telephone": "+84-123-456-789",
