@@ -1,3 +1,4 @@
+import { MtmInterview } from './MtmInterview';
 import { PencilLine, Lightbulb, CheckCheck } from 'lucide-react';
 import { MtmMomentsGallery } from './MtmMomentsGallery';
 const steps = [
@@ -9,6 +10,7 @@ export function TeachersSection(){return <section id="teachers" className="mtm-s
   <p className="mtm-eyebrow">CÁCH HỌC TẠI MTM</p><h2>Từ hiểu đề đến<br /><span className="mtm-highlight">tự kiểm tra lời giải</span></h2>
   <p className="mtm-lead">Đội ngũ MTM đồng hành cùng học sinh qua từng câu hỏi, từng lời giải rõ ràng và từng bước tiến nhỏ.</p>
   <div className="mtm-three">{steps.map(({n,title,text,Icon})=><article key={n} className="mtm-card"><div className="mtm-method-top"><span className="mtm-step">{n}</span><Icon size={28} aria-hidden="true" /></div><h3>{title}</h3><p>{text}</p></article>)}</div>
+  <MtmInterview />
   <MtmMomentsGallery />
 </div></section>}
 
