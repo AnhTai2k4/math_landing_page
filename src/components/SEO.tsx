@@ -10,11 +10,11 @@ interface SEOProps {
 }
 
 export function SEO({
-  title = "Minh Thành Math - Trung Tâm Toán Cấp 3 Uy Tín | Hà Nội",
-  description = "Trung tâm dạy Toán cấp 3 chất lượng cao tại Hà Nội. Đội ngũ giảng viên giàu kinh nghiệm, phương pháp giảng dạy hiện đại, 95% học sinh đạt điểm cao. Đăng ký học thử miễn phí.",
+  title = "Minh Thành Math - Toán THCS, THPT, HSA & TSA",
+  description = "Học Toán THCS, THPT, HSA và TSA tại Minh Thành Math, 82 Chùa Láng, Hà Nội. Tư vấn lớp học và truy cập cổng học tập.",
   keywords = "dạy toán cấp 3, trung tâm toán THPT, luyện thi THPT Quốc gia, học toán lớp 10, học toán lớp 11, học toán lớp 12, gia sư toán, Minh Thành Math, toán Hà Nội",
-  ogImage = "https://images.unsplash.com/photo-1509228468518-180dd4864904?w=1200&h=630&fit=crop",
-  url = "https://minhthanhmath.com",
+  ogImage = "https://minhthanhmath.vn/logo.png",
+  url = "https://minhthanhmath.vn",
   type = "website"
 }: SEOProps) {
   const siteTitle = title.includes("Minh Thành Math") ? title : `${title} | Minh Thành Math`;

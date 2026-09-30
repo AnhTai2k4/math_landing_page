@@ -1,4 +1,4 @@
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { ReactNode } from "react";
 
 interface ScrollRevealProps {
@@ -14,6 +14,7 @@ export function ScrollReveal({
   direction = "up",
   className = ""
 }: ScrollRevealProps) {
+  const reduce=useReducedMotion();
   const directionOffset = {
     up: { y: 50 },
     down: { y: -50 },
@@ -23,7 +24,7 @@ export function ScrollReveal({
 
   return (
     <motion.div
-      initial={{ 
+      initial={reduce?false:{ 
         opacity: 0, 
         ...directionOffset[direction]
       }}
@@ -34,7 +35,7 @@ export function ScrollReveal({
       }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ 
-        duration: 0.6, 
+        duration: reduce?0:0.6, 
         delay,
         ease: [0.25, 0.4, 0.25, 1]
       }}
