@@ -1,3 +1,4 @@
+import { requestRegistration } from './registration-context';
 import { Button } from "./ui/button";
 import { Gift, Users } from "lucide-react";
 import { ScrollReveal } from "./ScrollReveal";
@@ -18,7 +19,7 @@ export function PromotionsSection() {
       <div className="mt-8 bg-white rounded-2xl p-6 text-gray-700 space-y-3">
         <p>Chương trình tiếp tục áp dụng cho nhóm đăng ký từ tháng 10/2026 trở đi. Các tháng tiếp theo trở về mức học phí của khóa đã đăng ký.</p>
         <p>Khi để lại thông tin, bạn ghi thêm số bạn trong nhóm và lớp muốn học để MTM tư vấn đúng mức học phí nhé.</p>
-        <Button className="bg-blue-900 text-white" onClick={()=>document.getElementById("register")?.scrollIntoView({behavior:"smooth"})}>Mình muốn đăng ký cùng bạn</Button>
+        <Button className="bg-blue-900 text-white" onClick={()=>{requestRegistration({group:true});document.getElementById("register")?.scrollIntoView({behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"})}}>Mình muốn đăng ký cùng bạn</Button>
       </div>
     </div>
   </section>;

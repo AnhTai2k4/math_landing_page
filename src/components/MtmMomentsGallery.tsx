@@ -1,3 +1,4 @@
+import {useState} from 'react';
 import './mtm-moments.css';
 
 const moments = [
@@ -9,10 +10,10 @@ const moments = [
   {n:6, alt:'Ảnh nhóm MTM; Nguyễn Duy Hoàng ngoài cùng trái, Trần Thanh Anh Tài ngoài cùng phải',label:'Gặp gỡ đội ngũ MTM',width:1400,height:933},
 ];
 
-export function MtmMomentsGallery(){return <div className="mtm-moments" aria-labelledby="mtm-moments-title">
+export function MtmMomentsGallery(){const [expanded,setExpanded]=useState(false);return <div className="mtm-moments" aria-labelledby="mtm-moments-title">
   <div className="mtm-moments-heading"><div><p className="mtm-eyebrow">KHOẢNH KHẮC MTM</p><h3 id="mtm-moments-title">Cùng nhau học Toán,<br />cùng giữ những niềm vui.</h3></div><span aria-hidden="true" className="mtm-moments-sticker">Hello,<br />MTM! ✦</span></div>
-  <div className="mtm-moments-grid">{moments.map(photo=><figure className={`mtm-moment mtm-moment-${photo.n}`} key={photo.n}>
+  <div id="mtm-moments-grid" className={`mtm-moments-grid${expanded?' is-expanded':''}`}>{moments.map(photo=><figure className={`mtm-moment mtm-moment-${photo.n}`} key={photo.n}>
     <img src={`/gallery/mtm-moment-${photo.n}.webp`} alt={photo.alt} width={photo.width} height={photo.height} loading="lazy" decoding="async" />
     <figcaption><span>{photo.label}</span>{photo.n===6&&<small>Trong ảnh: Nguyễn Duy Hoàng — giáo viên cấp 2 (ngoài cùng trái); Trần Thanh Anh Tài — giáo viên cấp 3, HSA (ngoài cùng phải).</small>}</figcaption>
-  </figure>)}</div>
+  </figure>)}</div><button type="button" className="mtm-moments-toggle" aria-expanded={expanded} aria-controls="mtm-moments-grid" onClick={()=>setExpanded(v=>!v)}>{expanded?'Thu gọn bộ ảnh':'Xem thêm 3 ảnh MTM'}</button>
 </div>}

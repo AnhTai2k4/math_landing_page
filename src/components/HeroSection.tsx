@@ -17,7 +17,7 @@ export function HeroSection() {
           <p className="mtm-contact">82 Chùa Láng, Hà Nội <span aria-hidden="true">·</span> <a href="tel:0964345413">0964 345 413</a></p>
         </div>
         <figure className="mtm-hero-photo">
-          <img src="/mtm-thanh-portrait-v1.png" alt="Anh Thành — Minh Thành Math" width="1199" height="1312" fetchPriority="high" decoding="async" />
+          <picture><source type="image/webp" srcSet="/mtm-thanh-portrait-480.webp 480w, /mtm-thanh-portrait-800.webp 800w, /mtm-thanh-portrait-1199.webp 1199w" sizes="(max-width: 767px) min(500px, calc(100vw - 36px)), (max-width: 1288px) calc((100vw - 96px) / 2), 596px" /><img src="/mtm-thanh-portrait-v1.png" alt="Anh Thành — Minh Thành Math" width="1199" height="1312" fetchPriority="high" decoding="async" /></picture>
           <figcaption><span>MINH THÀNH MATH</span><strong>Rõ cách nghĩ.<br />Chắc cách làm.</strong></figcaption>
         </figure>
       </div>

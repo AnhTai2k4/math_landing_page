@@ -11,3 +11,6 @@
 .mtm-moment-3{background:#fff1eb}.mtm-moment-5{background:#eef6ff}
 @media(max-width:760px){.mtm-moments-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.mtm-moment-2{grid-column:auto;grid-row:auto}.mtm-moments{margin-top:42px}.mtm-moments-sticker{font-size:18px;padding:16px}.mtm-moment figcaption{font-size:14px;padding:12px 3px 5px}}
 @media(max-width:480px){.mtm-moments-grid{grid-template-columns:1fr}.mtm-moments-heading{gap:12px}.mtm-moments-sticker{font-size:16px;padding:14px}.mtm-moment-2{max-width:330px;justify-self:center;width:100%}.mtm-moment figcaption{font-size:16px}.mtm-moment small{font-size:14px}}
+
+.mtm-moments-toggle{display:none}
+@media(max-width:760px){.mtm-moments-grid:not(.is-expanded) .mtm-moment:nth-child(n+4){display:none}.mtm-moments-toggle{display:inline-flex;align-items:center;justify-content:center;min-height:48px;margin-top:22px;padding:12px 20px;border:1px solid #213269;border-radius:10px;background:#213269;color:white;font:inherit;font-weight:600;cursor:pointer}.mtm-moments-toggle:focus-visible{outline:3px solid #dc9f00;outline-offset:4px}}
