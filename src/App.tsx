@@ -3,8 +3,8 @@ import { HeroSection } from "./components/HeroSection";
 import { PromotionsSection } from "./components/PromotionsSection";
 import { CoursesSection } from "./components/CoursesSection";
 import { BenefitsSection } from "./components/BenefitsSection";
-import { ClassSection } from "./components/ClassSection";
-import { FeedbackSection } from "./components/FeedbackSection";
+
+
 import { TeachersSection } from "./components/TeachersSection";
 import { RegisterSection } from "./components/RegisterSection";
 import { FloatingContact } from "./components/FloatingContact";
@@ -20,6 +20,7 @@ export default function App() {
       <SEO />
       <StructuredData />
       <div className="min-h-screen">
+        <a className="mtm-skip" href="#main-content">Đến nội dung chính</a>
         <Header />
         <main id="main-content" role="main">
           <HeroSection />
@@ -27,8 +28,7 @@ export default function App() {
           <TeachersSection />
           <BenefitsSection />
           
-          <ClassSection />
-          <FeedbackSection />
+
           <PromotionsSection />   
           <RegisterSection />
         </main>
