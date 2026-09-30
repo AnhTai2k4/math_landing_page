@@ -3,12 +3,12 @@ import { PortalLinks } from './PortalLinks';
 
 export function HeroSection() {
   return <>
-    <section id="home" className="mtm-hero" aria-labelledby="hero-heading">
+    <section id="home" className="mtm-hero mtm-hero-community" aria-labelledby="hero-heading">
       <div className="mtm-shell mtm-hero-grid">
         <div className="mtm-hero-copy">
-          <p className="mtm-eyebrow">MINH THÀNH MATH · HÀ NỘI</p>
-          <h1 id="hero-heading">Học Toán.<br />Hiểu <span>bản chất.</span><br />Vững từng bước.</h1>
-          <p className="mtm-lead">Từ một câu hỏi đến một lời giải rõ ràng. Cùng MTM học cách lập luận, trình bày và tự kiểm tra kết quả.</p>
+          <p className="mtm-eyebrow">MINH THÀNH MATH · MỘT NƠI ĐỂ CÙNG NHAU LỚN LÊN</p>
+          <h1 id="hero-heading">Học cùng nhau.<br /><span>Vững vàng</span> từng bước.</h1>
+          <p className="mtm-lead">MTM lớn lên từ tình yêu thương của học sinh, sự tin tưởng của phụ huynh và tâm huyết của cả đội ngũ. Ở đây, chúng mình cùng học Toán, cùng hỏi, cùng sửa sai — và cùng giữ thật nhiều kỷ niệm.</p>
           <div className="mtm-subjects" aria-label="Chương trình học"><span>THCS</span><span>THPT</span><span>HSA</span><span>TSA</span></div>
           <div className="mtm-actions">
             <a className="mtm-primary" href="#register">Tìm lớp phù hợp <ArrowUpRight size={21} aria-hidden="true" /></a>
@@ -16,9 +16,9 @@ export function HeroSection() {
           </div>
           <p className="mtm-contact">82 Chùa Láng, Hà Nội <span aria-hidden="true">·</span> <a href="tel:0964345413">0964 345 413</a></p>
         </div>
-        <figure className="mtm-hero-photo">
-          <picture><source type="image/webp" srcSet="/mtm-thanh-portrait-480.webp 480w, /mtm-thanh-portrait-800.webp 800w, /mtm-thanh-portrait-1199.webp 1199w" sizes="(max-width: 767px) min(500px, calc(100vw - 36px)), (max-width: 1288px) calc((100vw - 96px) / 2), 596px" /><img src="/mtm-thanh-portrait-v1.png" alt="Anh Thành — Minh Thành Math" width="1199" height="1312" fetchPriority="high" decoding="async" /></picture>
-          <figcaption><span>MINH THÀNH MATH</span><strong>Rõ cách nghĩ.<br />Chắc cách làm.</strong></figcaption>
+        <figure className="mtm-hero-photo mtm-community-photo">
+          <a href="/mtm-class-moment-v1.jpg" target="_blank" rel="noopener noreferrer" aria-label="Xem ảnh tập thể MTM đầy đủ"><img src="/mtm-class-moment-v1.jpg" alt="Khoảnh khắc thầy trò và tập thể MTM quây quần trong lớp học" width="2048" height="1282" fetchPriority="high" decoding="async" /></a>
+          <figcaption><span>CHÚNG MÌNH LÀ MTM ✦</span><strong>Có Toán. Có bạn. Có những ngày thật vui.</strong><small>Bấm vào ảnh để xem đầy đủ.</small></figcaption>
         </figure>
       </div>
     </section>
