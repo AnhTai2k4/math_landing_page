@@ -1,0 +1,4 @@
+[
+ {"id":"hsa2-20261001","title":"HSA.2","status":"PUBLISHED","kind":"Dự kiến khai giảng","starts_at":"2026-10-01T14:30:00+07:00","expires_at":"2026-10-01T17:30:00+07:00","schedule":"Thứ Năm · 14:30–17:30","date_label":"01/10/2026","description":"Tìm hiểu lớp HSA.2 và xác nhận thông tin tham gia cùng MTM.","href":"#register"},
+ {"id":"tsa-20261004","title":"TSA","status":"PUBLISHED","kind":"Dự kiến khai giảng","starts_at":"2026-10-04T14:00:00+07:00","expires_at":"2026-10-04T17:00:00+07:00","schedule":"Chủ nhật · 14:00–17:00","date_label":"04/10/2026","description":"Tìm hiểu lớp TSA và xác nhận thông tin tham gia cùng MTM.","href":"#register"}
+]
