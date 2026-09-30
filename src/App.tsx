@@ -1,4 +1,4 @@
-import { MtmCommunityStories } from './components/MtmCommunityStories';
+import { MtmLifeTabs } from './components/MtmLifeTabs';
 import { MtmTimetable } from './components/MtmTimetable';
 import { MtmNewsSection } from './components/MtmNewsSection';
 import { Header } from "./components/Header";
@@ -38,7 +38,7 @@ export default function App() {
           <PromotionsSection />   
           <RegisterSection />
           <FAQSection />
-          <MtmCommunityStories />
+          <div className="mtm-shell"><MtmLifeTabs /></div>
         </main>
         <Footer />
         <FloatingContact />
