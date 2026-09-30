@@ -1,3 +1,6 @@
+import { MtmCommunityStories } from './components/MtmCommunityStories';
+import { MtmTimetable } from './components/MtmTimetable';
+import { MtmNewsSection } from './components/MtmNewsSection';
 import { Header } from "./components/Header";
 import { HeroSection } from "./components/HeroSection";
 import { PromotionsSection } from "./components/PromotionsSection";
@@ -25,7 +28,9 @@ export default function App() {
         <Header />
         <main id="main-content" role="main">
           <HeroSection />
+          <MtmNewsSection />
           <CoursesSection />
+          <MtmTimetable />
           <TeachersSection />
           <BenefitsSection />
           
@@ -33,6 +38,7 @@ export default function App() {
           <PromotionsSection />   
           <RegisterSection />
           <FAQSection />
+          <MtmCommunityStories />
         </main>
         <Footer />
         <FloatingContact />
