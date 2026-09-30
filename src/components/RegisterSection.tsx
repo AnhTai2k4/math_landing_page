@@ -139,7 +139,7 @@ export function RegisterSection() {
               </Button>
 
               {isSubmitted && (
-                <p role="status" className="text-sm text-green-500">
+                <p role="status" className="text-sm" style={{color:"#166534"}}>
                   Yêu cầu tư vấn đã được gửi; lịch học và đăng ký cần trung tâm xác nhận.
                 </p>
               )}
