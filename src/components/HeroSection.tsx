@@ -14,7 +14,7 @@ export function HeroSection() {
   };
 
   return (
-    <section id="home" className="pt-32 md:pt-40 pb-20 relative overflow-hidden min-h-screen flex items-center" aria-labelledby="hero-heading">
+    <section style={{paddingTop:"calc(var(--mtm-header-height, 96px) + 32px)"}} id="home" className="pt-32 md:pt-40 pb-20 relative overflow-hidden min-h-screen flex items-center" aria-labelledby="hero-heading">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <img 
