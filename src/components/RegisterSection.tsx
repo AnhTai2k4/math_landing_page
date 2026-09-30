@@ -8,21 +8,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner@2.0.3";
 import { ScrollReveal } from "./ScrollReveal";
 import emailjs from "@emailjs/browser";
 
-import { createRegistrationGate } from './registration-submit';
+import { createRegistrationGate, emailRegistration } from './registration-submit';
+
+import { applyRegistrationContext, registrationContextEvent } from './registration-context';
 
 export function RegisterSection() {
   const [formData, setFormData] = useState({
     studentName: "",
     phone: "",
     grade: "",
-    message: "",
+    message: "", notes:"", groupSize:"",
   });
 
+  const [groupInterest,setGroupInterest]=useState(false);
+  useEffect(()=>{const receive=(event:Event)=>{const detail=(event as CustomEvent).detail;if(detail?.group)setGroupInterest(true);setFormData(prior=>applyRegistrationContext(prior,detail));};window.addEventListener(registrationContextEvent,receive);return()=>window.removeEventListener(registrationContextEvent,receive)},[]);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submitError,setSubmitError]=useState('');
 
@@ -31,12 +35,12 @@ export function RegisterSection() {
   const handleSubmit=async(e:React.FormEvent)=>{
     e.preventDefault();if(isSubmitted||submitting.current)return;submitting.current=true;setSubmitError('');
     try{
-      const sent=await gate.current(formData,async(data)=>{
+      const sent=await gate.current({...formData,groupInterest},async(data)=>{
         if(!import.meta.env.VITE_SERVICE_KEY||!import.meta.env.VITE_TEMPLATE_KEY||!import.meta.env.VITE_PUBLIC_KEY)throw new Error('Form chưa sẵn sàng. Vui lòng liên hệ trung tâm qua kênh tư vấn.');
         setIsPending(true);
-        await emailjs.send(import.meta.env.VITE_SERVICE_KEY,import.meta.env.VITE_TEMPLATE_KEY,{...data,time:new Date().toLocaleString('vi-VN',{timeZone:'Asia/Saigon'})},import.meta.env.VITE_PUBLIC_KEY);
+        await emailjs.send(import.meta.env.VITE_SERVICE_KEY,import.meta.env.VITE_TEMPLATE_KEY,{...emailRegistration(data),time:new Date().toLocaleString('vi-VN',{timeZone:'Asia/Saigon'})},import.meta.env.VITE_PUBLIC_KEY);
       });
-      if(sent){toast.success('Đã gửi yêu cầu tư vấn. Trung tâm sẽ liên hệ để xác nhận.');setIsSubmitted(true);setFormData({studentName:'',phone:'',grade:'',message:''});}
+      if(sent){toast.success('Đã gửi yêu cầu tư vấn. Trung tâm sẽ liên hệ để xác nhận.');setIsSubmitted(true);setFormData({studentName:'',phone:'',grade:'',message:'',notes:'',groupSize:''});}
     }catch(error){const message=error instanceof Error?error.message:'Chưa xác nhận gửi được. Kiểm tra thông tin trước khi thử lại.';setSubmitError(message);toast.error(message);}
     finally{submitting.current=false;setIsPending(false);}
   };
@@ -52,7 +56,7 @@ export function RegisterSection() {
               Đăng Ký Tư Vấn
             </h2>
 
-            <div id="data-notice" className="mtm-data-notice"><h3>Thông tin dữ liệu đăng ký</h3><p>Tên học sinh, số điện thoại, lớp và hình thức học bạn nhập được gửi qua dịch vụ EmailJS để trung tâm tiếp nhận yêu cầu tư vấn. Chỉ cung cấp thông tin cần thiết; không gửi mật khẩu hoặc hồ sơ nhạy cảm. Việc gửi yêu cầu không tự đăng ký lớp, tạo tài khoản hay đồng ý nhận quảng cáo.</p><p>Cần hỏi về việc sử dụng hoặc chỉnh sửa thông tin đã gửi? Liên hệ 0964 345 413. Nếu không muốn dùng biểu mẫu, bạn có thể gọi trực tiếp.</p></div><form aria-describedby="data-notice" onSubmit={handleSubmit} className="space-y-6"><fieldset disabled={isPending || isSubmitted} className="space-y-6">
+            <div id="data-notice" className="mtm-data-notice"><h3>Thông tin dữ liệu đăng ký</h3><p>Tên học sinh, số điện thoại, lớp, hình thức học và thông tin tư vấn tùy chọn bạn nhập được gửi qua dịch vụ EmailJS để trung tâm tiếp nhận yêu cầu tư vấn. Chỉ cung cấp thông tin cần thiết; không gửi mật khẩu hoặc hồ sơ nhạy cảm. Việc gửi yêu cầu không tự đăng ký lớp, tạo tài khoản hay đồng ý nhận quảng cáo.</p><p>Cần hỏi về việc sử dụng hoặc chỉnh sửa thông tin đã gửi? Liên hệ 0964 345 413. Nếu không muốn dùng biểu mẫu, bạn có thể gọi trực tiếp.</p></div><form aria-describedby="data-notice" onSubmit={handleSubmit} className="space-y-6"><fieldset disabled={isPending || isSubmitted} className="space-y-6">
               {/* Họ tên */}
               <div className="space-y-2">
                 <Label htmlFor="student-name">Họ và tên học sinh *</Label>
@@ -66,7 +70,7 @@ export function RegisterSection() {
 
               {/* Phone */}
               <div className="space-y-2">
-                <Label htmlFor="phone">Số điện thoại *</Label>
+                <Label htmlFor="phone">Số điện thoại liên hệ *</Label>
                 <Input
                   id="phone" type="tel" inputMode="tel" autoComplete="tel" maxLength={25} aria-describedby="phone-hint" required
                   value={formData.phone}
@@ -74,7 +78,7 @@ export function RegisterSection() {
                     setFormData({ ...formData, phone: e.target.value })
                   }
                 />
-                <p id="phone-hint" className="text-sm text-gray-600">Số di động để trung tâm liên hệ. Có thể nhập dạng 09… hoặc +84…</p>
+                <p id="phone-hint" className="text-sm text-gray-600">Số di động của phụ huynh hoặc học sinh để trung tâm liên hệ. Có thể nhập dạng 09… hoặc +84…</p>
               </div>
 
               {/* Grade */}
@@ -123,6 +127,9 @@ export function RegisterSection() {
                 </Select>
               </div>
 
+              <div className="space-y-2"><Label htmlFor="consult-notes">Bạn muốn MTM tư vấn thêm điều gì? (không bắt buộc)</Label><textarea id="consult-notes" maxLength={1500} rows={3} className="w-full rounded-lg border border-gray-300 p-3" value={formData.notes} onChange={e=>setFormData({...formData,notes:e.target.value})} placeholder="Ví dụ: lịch học phù hợp, phần kiến thức muốn củng cố…" /></div>
+              <label className="flex items-center gap-3"><input type="checkbox" checked={groupInterest} onChange={e=>{setGroupInterest(e.target.checked);if(!e.target.checked)setFormData({...formData,groupSize:''})}}/>Mình muốn tìm hiểu đăng ký cùng bạn</label>
+              {groupInterest&&<div className="space-y-2"><Label htmlFor="group-size">Số bạn trong nhóm (không bắt buộc)</Label><Input id="group-size" type="number" min={2} max={99} step={1} value={formData.groupSize} onChange={e=>setFormData({...formData,groupSize:e.target.value})}/><p className="text-sm text-gray-600">Tính cả bạn; có thể để trống nếu nhóm chưa chốt.</p></div>}
               <Button
                 type="submit"
                 disabled={isSubmitted || isPending}
@@ -144,4 +151,3 @@ export function RegisterSection() {
     </section>
   );
 }
-
