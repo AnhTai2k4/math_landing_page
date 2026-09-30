@@ -126,7 +126,7 @@ export function RegisterSection() {
               <Button
                 type="submit"
                 disabled={isSubmitted || isPending}
-                className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold px-10 py-2 rounded-full"
+                className="bg-blue-900 hover:bg-blue-800 text-white font-bold px-10 py-2 rounded-full"
               >
                 {isPending ? "Đang gửi…" : "Gửi yêu cầu tư vấn"}
               </Button>
@@ -144,3 +144,4 @@ export function RegisterSection() {
     </section>
   );
 }
+

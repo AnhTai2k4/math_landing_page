@@ -1,0 +1,13 @@
+.mtm-moments{margin-top:64px;color:#213269}
+.mtm-moments-heading{display:flex;justify-content:space-between;align-items:center;gap:24px;margin-bottom:28px}
+.mtm-moments-heading h3{font-size:clamp(26px,3vw,42px);line-height:1.25;margin:0;letter-spacing:-.03em}
+.mtm-moments-sticker{background:#ffcf24;padding:18px 25px;border-radius:50%;font-size:22px;font-weight:800;line-height:1.15;transform:rotate(8deg);flex-shrink:0}
+.mtm-moments-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;align-items:start}
+.mtm-moment{margin:0;background:white;padding:10px;border-radius:20px;border:1px solid #dfe5f0;box-shadow:0 8px 24px #2132690b;min-width:0}
+.mtm-moment img{display:block;width:100%;height:auto;border-radius:12px;background:#eef3f8}
+.mtm-moment figcaption{padding:14px 8px 9px;line-height:1.6;font-weight:700;font-size:16px}
+.mtm-moment small{display:block;margin-top:8px;font-size:13px;font-weight:400;color:#44506b;line-height:1.7}
+.mtm-moment-2{grid-column:3;grid-row:1 / span 2;background:#fff8dd}
+.mtm-moment-3{background:#fff1eb}.mtm-moment-5{background:#eef6ff}
+@media(max-width:760px){.mtm-moments-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.mtm-moment-2{grid-column:auto;grid-row:auto}.mtm-moments{margin-top:42px}.mtm-moments-sticker{font-size:18px;padding:16px}.mtm-moment figcaption{font-size:14px;padding:12px 3px 5px}}
+@media(max-width:480px){.mtm-moments-grid{grid-template-columns:1fr}.mtm-moments-heading{gap:12px}.mtm-moments-sticker{font-size:16px;padding:14px}.mtm-moment-2{max-width:330px;justify-self:center;width:100%}.mtm-moment figcaption{font-size:16px}.mtm-moment small{font-size:14px}}
