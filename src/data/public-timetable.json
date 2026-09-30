@@ -1,0 +1,199 @@
+{
+  "updated_on": "30/09/2026",
+  "reference_week": "30/09–06/10/2026",
+  "timezone": "Asia/Ho_Chi_Minh",
+  "sessions": [
+    {
+      "class_name": "2K9 XPS 9+",
+      "group": "2K9",
+      "weekday": 1,
+      "time": "17:30–19:30"
+    },
+    {
+      "class_name": "2K14",
+      "group": "2K14",
+      "weekday": 1,
+      "time": "18:00–20:00"
+    },
+    {
+      "class_name": "2K10 XPT",
+      "group": "2K10",
+      "weekday": 1,
+      "time": "19:30–21:30"
+    },
+    {
+      "class_name": "2K9 XPT",
+      "group": "2K9",
+      "weekday": 1,
+      "time": "19:30–21:30"
+    },
+    {
+      "class_name": "2K9 XPS 8+",
+      "group": "2K9",
+      "weekday": 2,
+      "time": "17:30–19:30"
+    },
+    {
+      "class_name": "2K10 XPS 9+",
+      "group": "2K10",
+      "weekday": 2,
+      "time": "19:30–21:30"
+    },
+    {
+      "class_name": "2K9 XPT",
+      "group": "2K9",
+      "weekday": 2,
+      "time": "19:30–21:30"
+    },
+    {
+      "class_name": "2K13",
+      "group": "2K13",
+      "weekday": 2,
+      "time": "20:00–22:00"
+    },
+    {
+      "class_name": "2K9 XPS 9+",
+      "group": "2K9",
+      "weekday": 3,
+      "time": "17:30–19:30"
+    },
+    {
+      "class_name": "2K11 XPS 8+",
+      "group": "2K11",
+      "weekday": 3,
+      "time": "19:30–21:30"
+    },
+    {
+      "class_name": "2K11 XPT",
+      "group": "2K11",
+      "weekday": 3,
+      "time": "19:30–21:30"
+    },
+    {
+      "class_name": "2K14",
+      "group": "2K14",
+      "weekday": 4,
+      "time": "09:00–11:00"
+    },
+    {
+      "class_name": "HSA.2",
+      "group": "HSA",
+      "weekday": 4,
+      "time": "14:30–17:30"
+    },
+    {
+      "class_name": "2K9 XPS 8+",
+      "group": "2K9",
+      "weekday": 4,
+      "time": "17:30–19:30"
+    },
+    {
+      "class_name": "2K12",
+      "group": "2K12",
+      "weekday": 4,
+      "time": "18:00–20:00"
+    },
+    {
+      "class_name": "2K15",
+      "group": "2K15",
+      "weekday": 4,
+      "time": "18:00–20:00"
+    },
+    {
+      "class_name": "2K11 XPS 9+",
+      "group": "2K11",
+      "weekday": 4,
+      "time": "19:30–21:30"
+    },
+    {
+      "class_name": "2K9 XPT",
+      "group": "2K9",
+      "weekday": 4,
+      "time": "19:30–21:30"
+    },
+    {
+      "class_name": "2K9 XPS 9+",
+      "group": "2K9",
+      "weekday": 5,
+      "time": "17:30–19:30"
+    },
+    {
+      "class_name": "2K10 XPS 8+",
+      "group": "2K10",
+      "weekday": 5,
+      "time": "19:30–21:30"
+    },
+    {
+      "class_name": "2K13",
+      "group": "2K13",
+      "weekday": 5,
+      "time": "20:00–22:00"
+    },
+    {
+      "class_name": "2K11 XPT",
+      "group": "2K11",
+      "weekday": 6,
+      "time": "13:30–15:30"
+    },
+    {
+      "class_name": "2K10 XPT",
+      "group": "2K10",
+      "weekday": 6,
+      "time": "15:30–17:30"
+    },
+    {
+      "class_name": "2K9 XPS 8+",
+      "group": "2K9",
+      "weekday": 6,
+      "time": "17:30–19:30"
+    },
+    {
+      "class_name": "2K10 XPS 9+",
+      "group": "2K10",
+      "weekday": 7,
+      "time": "08:00–10:00"
+    },
+    {
+      "class_name": "2K10 XPS 8+",
+      "group": "2K10",
+      "weekday": 7,
+      "time": "10:00–12:00"
+    },
+    {
+      "class_name": "2K11 XPS 9+",
+      "group": "2K11",
+      "weekday": 7,
+      "time": "13:30–15:30"
+    },
+    {
+      "class_name": "2K15",
+      "group": "2K15",
+      "weekday": 7,
+      "time": "14:00–16:00"
+    },
+    {
+      "class_name": "TSA",
+      "group": "TSA",
+      "weekday": 7,
+      "time": "14:00–17:00"
+    },
+    {
+      "class_name": "2K12",
+      "group": "2K12",
+      "weekday": 7,
+      "time": "15:00–17:00"
+    },
+    {
+      "class_name": "2K11 XPS 8+",
+      "group": "2K11",
+      "weekday": 7,
+      "time": "15:30–17:30"
+    },
+    {
+      "class_name": "HSA",
+      "group": "HSA",
+      "weekday": 7,
+      "time": "17:00–20:00"
+    }
+  ]
+}
