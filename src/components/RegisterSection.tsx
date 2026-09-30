@@ -24,11 +24,12 @@ export function RegisterSection() {
   });
 
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submitError,setSubmitError]=useState('');
 
   const [isPending,setIsPending]=useState(false);
   const gate=useRef(createRegistrationGate()); const submitting=useRef(false);
   const handleSubmit=async(e:React.FormEvent)=>{
-    e.preventDefault();if(isSubmitted||submitting.current)return;submitting.current=true;
+    e.preventDefault();if(isSubmitted||submitting.current)return;submitting.current=true;setSubmitError('');
     try{
       const sent=await gate.current(formData,async(data)=>{
         if(!import.meta.env.VITE_SERVICE_KEY||!import.meta.env.VITE_TEMPLATE_KEY||!import.meta.env.VITE_PUBLIC_KEY)throw new Error('Form chưa sẵn sàng. Vui lòng liên hệ trung tâm qua kênh tư vấn.');
@@ -36,7 +37,7 @@ export function RegisterSection() {
         await emailjs.send(import.meta.env.VITE_SERVICE_KEY,import.meta.env.VITE_TEMPLATE_KEY,{...data,time:new Date().toLocaleString('vi-VN',{timeZone:'Asia/Saigon'})},import.meta.env.VITE_PUBLIC_KEY);
       });
       if(sent){toast.success('Đã gửi yêu cầu tư vấn. Trung tâm sẽ liên hệ để xác nhận.');setIsSubmitted(true);setFormData({studentName:'',phone:'',grade:'',message:''});}
-    }catch(error){toast.error(error instanceof Error?error.message:'Chưa xác nhận gửi được. Kiểm tra thông tin trước khi thử lại.');}
+    }catch(error){const message=error instanceof Error?error.message:'Chưa xác nhận gửi được. Kiểm tra thông tin trước khi thử lại.';setSubmitError(message);toast.error(message);}
     finally{submitting.current=false;setIsPending(false);}
   };
   return (
@@ -55,7 +56,7 @@ export function RegisterSection() {
               {/* Họ tên */}
               <div className="space-y-2">
                 <Label htmlFor="student-name">Họ và tên học sinh *</Label>
-                <Input id="student-name" autoComplete="name" required
+                <Input id="student-name" autoComplete="name" maxLength={200} required
                   value={formData.studentName}
                   onChange={(e) =>
                     setFormData({ ...formData, studentName: e.target.value })
@@ -67,12 +68,13 @@ export function RegisterSection() {
               <div className="space-y-2">
                 <Label htmlFor="phone">Số điện thoại *</Label>
                 <Input
-                  id="phone" type="tel" inputMode="tel" autoComplete="tel" required
+                  id="phone" type="tel" inputMode="tel" autoComplete="tel" maxLength={25} aria-describedby="phone-hint" required
                   value={formData.phone}
                   onChange={(e) =>
                     setFormData({ ...formData, phone: e.target.value })
                   }
                 />
+                <p id="phone-hint" className="text-sm text-gray-600">Số di động để trung tâm liên hệ. Có thể nhập dạng 09… hoặc +84…</p>
               </div>
 
               {/* Grade */}
@@ -91,7 +93,8 @@ export function RegisterSection() {
                     <SelectItem value="10">Lớp 10</SelectItem>
                     <SelectItem value="11">Lớp 11</SelectItem>
                     <SelectItem value="12">Lớp 12</SelectItem>
-                    <SelectItem value="dgnl">ĐGNL</SelectItem>
+                    <SelectItem value="hsa">HSA — đánh giá năng lực</SelectItem>
+                    <SelectItem value="tsa">TSA — đánh giá tư duy</SelectItem>
                     <SelectItem value="thcs">THCS</SelectItem>
                   </SelectContent>
                 </Select>
@@ -134,6 +137,7 @@ export function RegisterSection() {
                 </p>
               )}
             </fieldset></form>
+            {submitError&&<div role="alert" className="mt-4 rounded-xl border border-red-200 bg-red-50 p-4"><p>{submitError}</p><p>Thông tin vẫn được giữ trong biểu mẫu. Bạn có thể <a href="tel:0964345413" className="underline font-semibold">gọi 0964 345 413</a> để được tư vấn. Nếu chưa rõ yêu cầu đã tới trung tâm hay chưa, hãy kiểm tra qua điện thoại trước khi gửi lại.</p></div>}
           </div>
         </ScrollReveal>
       </div>
