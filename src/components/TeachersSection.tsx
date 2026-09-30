@@ -7,10 +7,8 @@ const steps = [
 ];
 export function TeachersSection(){return <section id="teachers" className="mtm-section mtm-method"><div className="mtm-shell">
   <p className="mtm-eyebrow">CÁCH HỌC TẠI MTM</p><h2>Từ hiểu đề đến<br /><span className="mtm-highlight">tự kiểm tra lời giải</span></h2>
-  <p className="mtm-lead">Anh Thành hướng dẫn học sinh học Toán qua lập luận rõ ràng, đủ bước và bám tiến độ kiến thức.</p>
+  <p className="mtm-lead">Đội ngũ MTM đồng hành cùng học sinh qua từng câu hỏi, từng lời giải rõ ràng và từng bước tiến nhỏ.</p>
   <div className="mtm-three">{steps.map(({n,title,text,Icon})=><article key={n} className="mtm-card"><div className="mtm-method-top"><span className="mtm-step">{n}</span><Icon size={28} aria-hidden="true" /></div><h3>{title}</h3><p>{text}</p></article>)}</div>
-  <div className="mtm-class-heading"><div><p className="mtm-eyebrow">MỘT GÓC MTM</p><h3>Có Toán. Có cả những khoảnh khắc vui.</h3></div><span className="mtm-sticker" aria-hidden="true">Cùng học<br />cùng vui ✦</span></div>
-  <figure className="mtm-class-photo"><img src="/mtm-class-moment-v1.jpg" alt="Khoảnh khắc tập thể trong lớp học Minh Thành Math" width="2048" height="1282" loading="lazy" decoding="async" /><figcaption>Một khoảnh khắc tại lớp học Minh Thành Math.</figcaption></figure>
   <MtmMomentsGallery />
 </div></section>}
 
