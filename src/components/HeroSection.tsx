@@ -17,7 +17,7 @@ export function HeroSection() {
           <p className="mtm-contact">82 Chùa Láng, Hà Nội <span aria-hidden="true">·</span> <a href="tel:0964345413">0964 345 413</a></p>
         </div>
         <figure className="mtm-hero-photo mtm-community-photo">
-          <a href="/mtm-class-moment-v1.jpg" target="_blank" rel="noopener noreferrer" aria-label="Xem ảnh tập thể MTM đầy đủ"><img src="/mtm-class-moment-v1.jpg" alt="Khoảnh khắc thầy trò và tập thể MTM quây quần trong lớp học" width="2048" height="1282" fetchPriority="high" decoding="async" /></a>
+          <a href="/mtm-class-moment-v1.jpg" target="_blank" rel="noopener noreferrer" aria-label="Xem ảnh tập thể MTM đầy đủ"><img src="/mtm-class-moment-v1.jpg" alt="Khoảnh khắc thầy trò và tập thể MTM quây quần trong lớp học" width="2048" height="1282" {...{'fetchpriority':'high'}} loading="eager" decoding="async" /></a>
           <figcaption><span>CHÚNG MÌNH LÀ MTM ✦</span><strong>Có Toán. Có bạn. Có những ngày thật vui.</strong><small>Bấm vào ảnh để xem đầy đủ.</small></figcaption>
         </figure>
       </div>
