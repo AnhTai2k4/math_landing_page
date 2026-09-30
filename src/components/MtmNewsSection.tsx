@@ -1,0 +1,6 @@
+import {useEffect,useState} from 'react';
+import {CalendarDays,ArrowUpRight} from 'lucide-react';
+import news from '../data/public-news.json';
+import {activePublicNews} from './public-news';
+import './mtm-news.css';
+export function MtmNewsSection(){const [now,setNow]=useState<number|null>(null);useEffect(()=>{const update=()=>setNow(Date.now());update();const timer=setInterval(update,30000);return()=>clearInterval(timer)},[]);const items=now===null?[]:activePublicNews(news,now);if(!items.length)return null;return <section className="mtm-news" aria-labelledby="mtm-news-title"><div className="mtm-shell"><p className="mtm-news-eyebrow">HẸN GẶP Ở MTM</p><h2 id="mtm-news-title">Bản tin MTM</h2><p className="mtm-news-intro">Những lịch hẹn sắp tới để mình cùng chuẩn bị. Thời gian theo giờ Việt Nam.</p><div className="mtm-news-grid">{items.map(n=><article key={n.id} className="mtm-news-card"><div className="mtm-news-top"><CalendarDays size={26} aria-hidden="true"/><span>{n.kind}</span></div><h3>{n.title}</h3><p className="mtm-news-time"><time dateTime={n.starts_at}>{n.date_label}</time><br/>{n.schedule}</p><p>{n.description}</p><a href={n.href}>Tư vấn lớp {n.title}<ArrowUpRight size={18} aria-hidden="true"/></a></article>)}</div><p className="mtm-news-note">Lịch dự kiến; liên hệ MTM để xác nhận trước khi tham gia.</p></div></section>}

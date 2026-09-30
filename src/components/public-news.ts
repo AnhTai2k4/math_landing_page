@@ -1,0 +1,2 @@
+export type PublicNews={id:string;title:string;status:string;kind:string;starts_at:string;expires_at:string;schedule:string;date_label:string;description:string;href:string};
+export function activePublicNews(items:PublicNews[],now:number){return Number.isFinite(now)?items.filter(n=>n.status==='PUBLISHED'&&n.href==='#register'&&Number.isFinite(Date.parse(n.starts_at))&&Date.parse(n.expires_at)>Date.parse(n.starts_at)&&now<Date.parse(n.expires_at)).slice(0,2):[]}
