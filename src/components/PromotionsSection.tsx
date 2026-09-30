@@ -4,11 +4,13 @@ import { ScrollReveal } from "./ScrollReveal";
 import React from "react";
 
 export function PromotionsSection() {
+  const ended=Date.now()>=Date.parse('2026-10-01T00:00:00+07:00');
   return <section id="promotions" className="py-14 bg-blue-50" aria-labelledby="promotions-heading">
     <div className="container mx-auto px-4 max-w-6xl">
       <ScrollReveal><header className="text-center mb-10">
         <Gift className="mx-auto mb-3 text-yellow-600" size={32}/>
-        <h2 id="promotions-heading" className="text-3xl md:text-4xl font-bold text-blue-900 mb-3">Ưu đãi nhóm XPT online</h2>
+        <h2 id="promotions-heading" className="text-3xl md:text-4xl font-bold text-blue-900 mb-3">{ended?'Đợt ưu đãi nhóm tháng 9/2026 đã kết thúc':'Ưu đãi nhóm XPT online'}</h2>
+        {ended&&<p className="font-semibold text-blue-900 mb-3">Thông tin dưới đây thuộc đợt cũ. Đăng ký mới cần trung tâm xác nhận chính sách hiện hành.</p>}
         <p className="text-gray-700 max-w-3xl mx-auto">Dành cho nhóm đăng ký và bắt đầu học cùng nhau trong tháng 9/2026, thuộc gói online 2K9 XPT, 2K10 XPT hoặc 2K11 XPT. Giảm học phí chỉ trong tháng học đầu tiên sau khi trung tâm xác nhận đủ điều kiện.</p>
       </header></ScrollReveal>
       <div className="grid md:grid-cols-3 gap-6">

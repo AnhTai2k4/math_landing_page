@@ -13,7 +13,7 @@ export function SEO({
   title = "Minh Thành Math - Toán THCS, THPT, HSA & TSA",
   description = "Học Toán THCS, THPT, HSA và TSA tại Minh Thành Math, 82 Chùa Láng, Hà Nội. Tư vấn lớp học và truy cập cổng học tập.",
   keywords = "dạy toán cấp 3, trung tâm toán THPT, luyện thi THPT Quốc gia, học toán lớp 10, học toán lớp 11, học toán lớp 12, gia sư toán, Minh Thành Math, toán Hà Nội",
-  ogImage = "https://minhthanhmath.vn/logo.png",
+  ogImage = "https://minhthanhmath.vn/mtm-original-logo.png",
   url = "https://minhthanhmath.vn",
   type = "website"
 }: SEOProps) {
@@ -38,8 +38,6 @@ export function SEO({
       <meta property="og:title" content={siteTitle} />
       <meta property="og:description" content={description} />
       <meta property="og:image" content={ogImage} />
-      <meta property="og:image:width" content="1200" />
-      <meta property="og:image:height" content="630" />
       <meta property="og:site_name" content="Minh Thành Math" />
       <meta property="og:locale" content="vi_VN" />
 
@@ -53,8 +51,6 @@ export function SEO({
       {/* Additional SEO */}
       <meta name="geo.region" content="VN-HN" />
       <meta name="geo.placename" content="Ha Noi" />
-      <meta name="geo.position" content="21.0285;105.8542" />
-      <meta name="ICBM" content="21.0285, 105.8542" />
 
       {/* Mobile Optimization */}
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />

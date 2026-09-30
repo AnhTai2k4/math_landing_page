@@ -1,0 +1,7 @@
+const questions = [
+  ['MTM có lớp trực tiếp và online không?', 'Bạn có thể chọn hình thức mong muốn trong form tư vấn. Trung tâm sẽ xác nhận hình thức, lịch và lớp còn phù hợp trước khi đăng ký; không phải mọi lớp đều có cả hai hình thức.'],
+  ['Lấy tài khoản học sinh hoặc phụ huynh ở đâu?', 'Tài khoản do trung tâm cấp sau khi xác minh thông tin và liên kết đúng học sinh. Đăng ký tư vấn không tự tạo tài khoản; mỗi tài khoản chỉ xem nội dung được cấp quyền.'],
+  ['Sau buổi học, xem bài tập và tài liệu lúc nào?', 'Thời điểm và kênh nhận bài tập, tài liệu sẽ được xác nhận theo lớp. Nội dung trên cổng học tập chỉ xuất hiện khi trung tâm đã kiểm tra và công bố; quy trình cập nhật sau ca đang được hoàn thiện.'],
+  ['Học phí và lịch học được xác nhận thế nào?', 'Trung tâm trao đổi học phí, lịch và điều kiện của lớp trước khi xác nhận đăng ký. Nếu bạn chưa rõ, hãy để lại lớp đang học và hình thức mong muốn để được tư vấn.'],
+];
+export function FAQSection(){return <section id="faq" className="mtm-section mtm-faq"><div className="mtm-shell mtm-faq-grid"><div><p className="mtm-eyebrow">BẠN CÓ THỂ ĐANG THẮC MẮC</p><h2>Hỏi một chút,<br /><span className="mtm-highlight">rõ hơn một chút.</span></h2><p className="mtm-lead">Những điều cần biết trước khi bắt đầu học cùng MTM.</p><a href="#register" className="mtm-text-link">Còn câu hỏi khác? Gửi lời nhắn →</a></div><div className="mtm-faq-list">{questions.map(([question,answer])=><details key={question}><summary>{question}</summary><p>{answer}</p></details>)}</div></div></section>}

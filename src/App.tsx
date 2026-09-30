@@ -2,6 +2,7 @@ import { Header } from "./components/Header";
 import { HeroSection } from "./components/HeroSection";
 import { PromotionsSection } from "./components/PromotionsSection";
 import { CoursesSection } from "./components/CoursesSection";
+import { FAQSection } from "./components/FAQSection";
 import { BenefitsSection } from "./components/BenefitsSection";
 
 
@@ -31,6 +32,7 @@ export default function App() {
 
           <PromotionsSection />   
           <RegisterSection />
+          <FAQSection />
         </main>
         <Footer />
         <FloatingContact />
