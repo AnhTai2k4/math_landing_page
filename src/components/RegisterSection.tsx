@@ -51,11 +51,11 @@ export function RegisterSection() {
               Đăng Ký Tư Vấn
             </h2>
 
-            <form onSubmit={handleSubmit} className="space-y-6"><fieldset disabled={isPending || isSubmitted} className="space-y-6">
+            <div id="data-notice" className="mtm-data-notice"><h3>Thông tin dữ liệu đăng ký</h3><p>Tên học sinh, số điện thoại, lớp và hình thức học bạn nhập được gửi qua dịch vụ EmailJS để trung tâm tiếp nhận yêu cầu tư vấn. Chỉ cung cấp thông tin cần thiết; không gửi mật khẩu hoặc hồ sơ nhạy cảm. Việc gửi yêu cầu không tự đăng ký lớp, tạo tài khoản hay đồng ý nhận quảng cáo.</p><p>Cần hỏi về việc sử dụng hoặc chỉnh sửa thông tin đã gửi? Liên hệ 0964 345 413. Nếu không muốn dùng biểu mẫu, bạn có thể gọi trực tiếp.</p></div><form aria-describedby="data-notice" onSubmit={handleSubmit} className="space-y-6"><fieldset disabled={isPending || isSubmitted} className="space-y-6">
               {/* Họ tên */}
               <div className="space-y-2">
-                <Label>Họ và tên học sinh *</Label>
-                <Input
+                <Label htmlFor="student-name">Họ và tên học sinh *</Label>
+                <Input id="student-name" autoComplete="name" required
                   value={formData.studentName}
                   onChange={(e) =>
                     setFormData({ ...formData, studentName: e.target.value })
@@ -65,9 +65,9 @@ export function RegisterSection() {
 
               {/* Phone */}
               <div className="space-y-2">
-                <Label>Số điện thoại *</Label>
+                <Label htmlFor="phone">Số điện thoại *</Label>
                 <Input
-                  type="tel"
+                  id="phone" type="tel" inputMode="tel" autoComplete="tel" required
                   value={formData.phone}
                   onChange={(e) =>
                     setFormData({ ...formData, phone: e.target.value })
@@ -77,14 +77,14 @@ export function RegisterSection() {
 
               {/* Grade */}
               <div className="space-y-2">
-                <Label>Lớp học *</Label>
+                <Label htmlFor="grade">Lớp học *</Label>
                 <Select
                   value={formData.grade}
                   onValueChange={(value) =>
                     setFormData({ ...formData, grade: value })
                   }
                 >
-                  <SelectTrigger>
+                  <SelectTrigger id="grade" aria-required="true">
                     <SelectValue placeholder="Chọn lớp học" />
                   </SelectTrigger>
                   <SelectContent>
@@ -99,14 +99,14 @@ export function RegisterSection() {
 
               {/* Message */}
               <div className="space-y-2">
-                <Label>Hình thức học *</Label>
+                <Label htmlFor="study-mode">Hình thức học *</Label>
                 <Select
                   value={formData.message}
                   onValueChange={(value) =>
                     setFormData({ ...formData, message: value })
                   }
                 >
-                  <SelectTrigger>
+                  <SelectTrigger id="study-mode" aria-required="true">
                     <SelectValue placeholder="Chọn hình thức" />
                   </SelectTrigger>
                   <SelectContent>
@@ -129,7 +129,7 @@ export function RegisterSection() {
               </Button>
 
               {isSubmitted && (
-                <p className="text-sm text-green-500">
+                <p role="status" className="text-sm text-green-500">
                   Yêu cầu tư vấn đã được gửi; lịch học và đăng ký cần trung tâm xác nhận.
                 </p>
               )}
