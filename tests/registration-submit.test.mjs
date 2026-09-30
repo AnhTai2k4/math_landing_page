@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import {normalizeRegistration,createRegistrationGate} from '../src/components/registration-submit.ts';
+const form={studentName:' Người kiểm thử ',phone:'+84 912 345 678',grade:'hsa',message:'online'};
+assert.equal(normalizeRegistration(form).phone,'0912345678');
+assert.equal(normalizeRegistration({...form,grade:'tsa'}).grade,'tsa');
+assert.throws(()=>normalizeRegistration({...form,phone:'0912345678abc'}));
+assert.throws(()=>normalizeRegistration({...form,grade:'fake'}));
+assert.throws(()=>normalizeRegistration({...form,studentName:' '}));
+const gate=createRegistrationGate();let release;let calls=0;
+const first=gate(form,()=>{calls++;return new Promise(r=>release=r)});
+assert.equal(await gate(form,async()=>{calls++}),false);
+release();assert.equal(await first,true);assert.equal(calls,1);
+await assert.rejects(gate(form,async()=>{throw new Error('Synthetic send failure')}));
+assert.equal(await gate(form,async()=>{}),true);
+console.log('PASS: phone normalization, HSA/TSA, invalid inputs, duplicate gate, retry after failure; no real delivery.');
