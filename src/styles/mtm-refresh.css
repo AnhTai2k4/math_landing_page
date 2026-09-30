@@ -62,3 +62,22 @@
 
 /* Inline contact bar cannot cover portal controls or form fields. */
 .mtm-contact-dock{position:static;right:auto;bottom:auto;justify-content:center;flex-wrap:wrap;border-radius:0;box-shadow:none;border:0;border-top:1px solid #8b97ba;padding:12px 16px calc(12px + env(safe-area-inset-bottom))}.mtm-footer{padding-bottom:40px}.mtm-hero-photo picture{display:block;width:100%;height:100%}
+
+/* Readable mobile entry points; details retain the full registration notice. */
+.mtm-data-notice a{text-decoration:underline;text-underline-offset:3px}.mtm-data-notice details{margin-top:10px}.mtm-data-notice summary{cursor:pointer;min-height:44px;display:list-item;padding:10px 0;font-weight:600}.mtm-data-notice summary:focus-visible{outline:3px solid #dc9f00;outline-offset:3px}.mtm-data-notice details p{margin-top:10px}
+@media(max-width:767px){.mtm-hero .mtm-contact,.mtm-portal-links a{font-size:14px;line-height:1.5}.mtm-portal-links{min-width:0}.mtm-portal-links a{min-width:0;white-space:normal;overflow-wrap:anywhere;flex-wrap:wrap;align-content:center}.mtm-portal-links a svg{flex-shrink:0}}
+
+/* A shared story: the full class replaces an individual portrait. */
+.mtm-hero-community .mtm-hero-grid{grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:34px;align-items:center}
+.mtm-hero-community .mtm-hero-copy{max-width:900px}
+.mtm-hero-community h1{font-size:clamp(38px,4.4vw,60px);line-height:1.12}
+.mtm-hero-community .mtm-lead{max-width:760px;font-size:18px;line-height:1.8}
+.mtm-hero-community .mtm-community-photo{aspect-ratio:auto;border-radius:28px;max-width:none;width:100%;background:#fff;border:1px solid #d5ddeb;border-bottom:7px solid #ffcf24;box-shadow:8px 8px 0 #e7edf8}
+.mtm-community-photo>a{display:block;aspect-ratio:16/7;overflow:hidden}
+.mtm-community-photo img{display:block;width:100%;height:100%;object-fit:cover;object-position:center bottom}
+.mtm-community-photo figcaption{position:static;background:#fff;color:#213269;padding:22px 26px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.mtm-community-photo figcaption span{font-size:12px;font-weight:700;letter-spacing:.07em;background:#ffcf24;color:#213269;border-radius:8px;padding:10px 12px;margin:0}
+.mtm-community-photo figcaption strong{font-size:21px;line-height:1.4}
+.mtm-community-photo figcaption small{font-size:13px;color:#52617f;margin-left:auto}
+.mtm-community-photo a:focus-visible{outline:4px solid #bf8500;outline-offset:-4px}
+@media(max-width:767px){.mtm-hero-community .mtm-lead{font-size:16px}.mtm-hero-community .mtm-hero-grid{grid-template-columns:1fr;gap:25px}.mtm-hero-community .mtm-community-photo{border-radius:18px;box-shadow:4px 5px 0 #e7edf8}.mtm-community-photo>a{aspect-ratio:16/9}.mtm-community-photo figcaption{padding:16px;gap:10px}.mtm-community-photo figcaption strong{font-size:18px}.mtm-community-photo figcaption small{margin-left:0}}
