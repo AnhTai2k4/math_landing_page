@@ -8,10 +8,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { toast } from "sonner@2.0.3";
 import { ScrollReveal } from "./ScrollReveal";
 import emailjs from "@emailjs/browser";
+
+import { createRegistrationGate } from './registration-submit';
 
 export function RegisterSection() {
   const [formData, setFormData] = useState({
@@ -23,59 +25,20 @@ export function RegisterSection() {
 
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
-  e.preventDefault();
-
-  // Validate rỗng
-  if (!formData.studentName || !formData.phone || !formData.grade) {
-    toast.error("Vui lòng điền đầy đủ thông tin bắt buộc!");
-    return;
-  }
-
-  // ✅ Validate số điện thoại (10 chữ số)
-  const phoneRegex = /^[0-9]{10}$/;
-  if (!phoneRegex.test(formData.phone)) {
-    toast.error("Số điện thoại không hợp lệ (phải đủ 10 chữ số)");
-    return;
-  }
-
-  // Dữ liệu gửi EmailJS
-  const templateParams = {
-    studentName: formData.studentName,
-    phone: formData.phone,
-    grade: formData.grade,
-    message: formData.message,
-    time: new Date().toLocaleString("vi-VN"),
+  const [isPending,setIsPending]=useState(false);
+  const gate=useRef(createRegistrationGate()); const submitting=useRef(false);
+  const handleSubmit=async(e:React.FormEvent)=>{
+    e.preventDefault();if(isSubmitted||submitting.current)return;submitting.current=true;
+    try{
+      const sent=await gate.current(formData,async(data)=>{
+        if(!import.meta.env.VITE_SERVICE_KEY||!import.meta.env.VITE_TEMPLATE_KEY||!import.meta.env.VITE_PUBLIC_KEY)throw new Error('Form chưa sẵn sàng. Vui lòng liên hệ trung tâm qua kênh tư vấn.');
+        setIsPending(true);
+        await emailjs.send(import.meta.env.VITE_SERVICE_KEY,import.meta.env.VITE_TEMPLATE_KEY,{...data,time:new Date().toLocaleString('vi-VN',{timeZone:'Asia/Saigon'})},import.meta.env.VITE_PUBLIC_KEY);
+      });
+      if(sent){toast.success('Đã gửi yêu cầu tư vấn. Trung tâm sẽ liên hệ để xác nhận.');setIsSubmitted(true);setFormData({studentName:'',phone:'',grade:'',message:''});}
+    }catch(error){toast.error(error instanceof Error?error.message:'Chưa xác nhận gửi được. Kiểm tra thông tin trước khi thử lại.');}
+    finally{submitting.current=false;setIsPending(false);}
   };
-
-  emailjs
-    .send(
-      import.meta.env.VITE_SERVICE_KEY,
-      import.meta.env.VITE_TEMPLATE_KEY,
-      templateParams,
-      import.meta.env.VITE_PUBLIC_KEY
-    )
-    .then(
-      () => {
-        toast.success("Đăng ký thành công! Chúng tôi sẽ liên hệ sớm.");
-        setIsSubmitted(true);
-
-        setFormData({
-          studentName: "",
-          phone: "",
-          grade: "",
-          message: "",
-        });
-
-        setTimeout(() => setIsSubmitted(false), 3000);
-      },
-      () => {
-        toast.error("Gửi đăng ký thất bại. Vui lòng thử lại!");
-      }
-    );
-};
-
-
   return (
     <section
       id="register"
@@ -85,10 +48,10 @@ export function RegisterSection() {
         <ScrollReveal>
           <div className="max-w-3xl mx-auto">
             <h2 className="text-3xl font-bold text-blue-600 mb-8 uppercase">
-              Đăng Ký Học Thử Miễn Phí
+              Đăng Ký Tư Vấn
             </h2>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6"><fieldset disabled={isPending || isSubmitted} className="space-y-6">
               {/* Họ tên */}
               <div className="space-y-2">
                 <Label>Họ và tên học sinh *</Label>
@@ -159,18 +122,18 @@ export function RegisterSection() {
 
               <Button
                 type="submit"
-                disabled={isSubmitted}
+                disabled={isSubmitted || isPending}
                 className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold px-10 py-2 rounded-full"
               >
-                Đăng ký
+                {isPending ? "Đang gửi…" : "Gửi yêu cầu tư vấn"}
               </Button>
 
               {isSubmitted && (
                 <p className="text-sm text-green-500">
-                  Form đã được gửi thành công 🎉
+                  Yêu cầu tư vấn đã được gửi; lịch học và đăng ký cần trung tâm xác nhận.
                 </p>
               )}
-            </form>
+            </fieldset></form>
           </div>
         </ScrollReveal>
       </div>

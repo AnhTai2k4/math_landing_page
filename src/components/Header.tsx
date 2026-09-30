@@ -1,10 +1,13 @@
+import {PortalLinks} from "./PortalLinks";
 import { Menu, X } from "lucide-react";
 import { Button } from "./ui/button";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import logoImage from "figma:asset/c3828b87f854d6b00602b5cf82b0722439681986.png";
 import React from "react";
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const headerRef=useRef<HTMLElement>(null);
+  useEffect(()=>{const el=headerRef.current;if(!el)return;const measure=()=>document.documentElement.style.setProperty('--mtm-header-height',`${el.getBoundingClientRect().height}px`);measure();const observer=new ResizeObserver(measure);observer.observe(el);return()=>observer.disconnect()},[]);
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -15,7 +18,7 @@ export function Header() {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 bg-white shadow-lg z-50 border-b-4 border-yellow-400" role="banner">
+    <header ref={headerRef} className="fixed top-0 left-0 right-0 bg-white shadow-lg z-50 border-b-4 border-yellow-400" role="banner">
       <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
           {/* Logo with Brand Name */}
@@ -86,13 +89,14 @@ export function Header() {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden text-gray-700"
+            aria-label={isMenuOpen?"Đóng menu":"Mở menu"} aria-expanded={isMenuOpen} className="md:hidden text-gray-700"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
 
+        <PortalLinks/>
         {/* Mobile Navigation */}
         {isMenuOpen && (
           <nav className="md:hidden mt-4 pb-4 flex flex-col gap-3">

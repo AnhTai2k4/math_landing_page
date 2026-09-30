@@ -1,3 +1,4 @@
+import {PortalLinks} from "./PortalLinks";
 import { Facebook, Mail, Phone, MapPin, Youtube, Instagram } from "lucide-react";
 import logoImage from "figma:asset/c3828b87f854d6b00602b5cf82b0722439681986.png";
 import React from "react";
@@ -158,6 +159,7 @@ export function Footer() {
           </div>
         </div>
 
+        <PortalLinks footer/>
         {/* Bottom Bar */}
         <div className="border-t border-blue-800 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
