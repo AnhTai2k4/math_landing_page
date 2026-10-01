@@ -12,6 +12,7 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner@2.0.3";
 import { ScrollReveal } from "./ScrollReveal";
 import emailjs from "@emailjs/browser";
+import './registration-submit.css';
 
 import { createRegistrationGate, emailRegistration } from './registration-submit';
 
@@ -29,6 +30,9 @@ export function RegisterSection() {
   useEffect(()=>{const receive=(event:Event)=>{const detail=(event as CustomEvent).detail;if(detail?.group)setGroupInterest(true);setFormData(prior=>applyRegistrationContext(prior,detail));};window.addEventListener(registrationContextEvent,receive);return()=>window.removeEventListener(registrationContextEvent,receive)},[]);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submitError,setSubmitError]=useState('');
+  const successRef=useRef<HTMLParagraphElement>(null);
+  const errorRef=useRef<HTMLDivElement>(null);
+  useEffect(()=>{if(isSubmitted)successRef.current?.focus();else if(submitError)errorRef.current?.focus();},[isSubmitted,submitError]);
 
   const [isPending,setIsPending]=useState(false);
   const gate=useRef(createRegistrationGate()); const submitting=useRef(false);
@@ -56,7 +60,7 @@ export function RegisterSection() {
               Đăng Ký Tư Vấn
             </h2>
 
-            <div id="data-notice" className="mtm-data-notice"><h3>Thông tin đăng ký được dùng thế nào?</h3><p>Thông tin bạn nhập được gửi qua EmailJS để MTM tiếp nhận và liên hệ tư vấn. Bạn cũng có thể <a href="tel:0964345413">gọi 0964 345 413</a> thay cho biểu mẫu.</p><details><summary>Xem chi tiết về dữ liệu đăng ký</summary><p>Tên học sinh, số điện thoại, lớp, hình thức học và thông tin tư vấn tùy chọn bạn nhập được gửi qua dịch vụ EmailJS để trung tâm tiếp nhận yêu cầu tư vấn. Chỉ cung cấp thông tin cần thiết; không gửi mật khẩu hoặc hồ sơ nhạy cảm. Việc gửi yêu cầu không tự đăng ký lớp, tạo tài khoản hay đồng ý nhận quảng cáo.</p><p>Cần hỏi về việc sử dụng hoặc chỉnh sửa thông tin đã gửi? <a href="tel:0964345413">Liên hệ 0964 345 413</a>. Nếu không muốn dùng biểu mẫu, bạn có thể gọi trực tiếp.</p></details></div><form aria-describedby="data-notice" onSubmit={handleSubmit} className="space-y-6"><fieldset disabled={isPending || isSubmitted} className="space-y-6">
+            <div id="data-notice" className="mtm-data-notice"><p>Bạn có thể tự gửi email trực tiếp tới <a href="mailto:quanlytoanminhthanhmath@gmail.com">quanlytoanminhthanhmath@gmail.com</a>. Đây là lựa chọn gửi riêng qua ứng dụng email của bạn.</p><h3>Thông tin đăng ký được dùng thế nào?</h3><p>Biểu mẫu sử dụng EmailJS để gửi yêu cầu tư vấn. Bạn cũng có thể <a href="tel:0964345413">gọi 0964 345 413</a> thay cho biểu mẫu.</p><details><summary>Xem chi tiết về dữ liệu đăng ký</summary><p>Tên học sinh, số điện thoại, lớp, hình thức học và thông tin tư vấn tùy chọn bạn nhập được gửi qua dịch vụ EmailJS để trung tâm tiếp nhận yêu cầu tư vấn. Chỉ cung cấp thông tin cần thiết; không gửi mật khẩu hoặc hồ sơ nhạy cảm. Việc gửi yêu cầu không tự đăng ký lớp, tạo tài khoản hay đồng ý nhận quảng cáo.</p><p>Cần hỏi về việc sử dụng hoặc chỉnh sửa thông tin đã gửi? <a href="tel:0964345413">Liên hệ 0964 345 413</a>. Nếu không muốn dùng biểu mẫu, bạn có thể gọi trực tiếp.</p></details></div><form aria-describedby="data-notice" onSubmit={handleSubmit} className="space-y-6"><fieldset disabled={isPending || isSubmitted} className="space-y-6">
               {/* Họ tên */}
               <div className="space-y-2">
                 <Label htmlFor="student-name">Họ và tên học sinh *</Label>
@@ -133,18 +137,20 @@ export function RegisterSection() {
               <Button
                 type="submit"
                 disabled={isSubmitted || isPending}
-                className="bg-blue-900 hover:bg-blue-800 text-white font-bold px-10 py-2 rounded-full"
+                className="mtm-registration-submit"
+                aria-busy={isPending}
+                style={{minHeight:48,padding:"12px 24px",backgroundColor:"#213269",color:"#ffcf24",fontWeight:700,border:"2px solid #213269",borderRadius:12,whiteSpace:"normal"}}
               >
-                {isPending ? "Đang gửi…" : "Gửi yêu cầu tư vấn"}
+                {isPending ? "Đang gửi yêu cầu…" : isSubmitted ? "Đã gửi yêu cầu" : "Gửi yêu cầu tư vấn"}
               </Button>
 
               {isSubmitted && (
-                <p role="status" className="text-sm" style={{color:"#166534"}}>
+                <p ref={successRef} tabIndex={-1} role="status" aria-live="polite" className="text-sm mtm-registration-feedback" style={{color:"#166534"}}>
                   Yêu cầu tư vấn đã được gửi; lịch học và đăng ký cần trung tâm xác nhận.
                 </p>
               )}
             </fieldset></form>
-            {submitError&&<div role="alert" className="mt-4 rounded-xl border border-red-200 bg-red-50 p-4"><p>{submitError}</p><p>Thông tin vẫn được giữ trong biểu mẫu. Bạn có thể <a href="tel:0964345413" className="underline font-semibold">gọi 0964 345 413</a> để được tư vấn. Nếu chưa rõ yêu cầu đã tới trung tâm hay chưa, hãy kiểm tra qua điện thoại trước khi gửi lại.</p></div>}
+            {submitError&&<div ref={errorRef} tabIndex={-1} role="alert" className="mt-4 rounded-xl border border-red-200 bg-red-50 p-4 mtm-registration-feedback"><p>{submitError}</p><p>Thông tin vẫn được giữ trong biểu mẫu. Bạn có thể <a href="tel:0964345413" className="underline font-semibold">gọi 0964 345 413</a> để được tư vấn. Nếu chưa rõ yêu cầu đã tới trung tâm hay chưa, hãy kiểm tra qua điện thoại trước khi gửi lại.</p></div>}
           </div>
         </ScrollReveal>
       </div>
