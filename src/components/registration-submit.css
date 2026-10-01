@@ -1,0 +1,8 @@
+.mtm-registration-submit{transition:background-color 280ms ease,color 280ms ease,border-color 280ms ease!important;cursor:pointer}
+.mtm-registration-submit:hover:not(:disabled){background-color:#182650!important;border-color:#182650!important}
+.mtm-registration-submit:focus-visible{outline:3px solid #a87500!important;outline-offset:4px}
+.mtm-registration-submit:disabled{cursor:default;opacity:.65}
+@media(prefers-reduced-motion:reduce){.mtm-registration-submit{transition:none!important}}
+.mtm-registration-feedback:focus{outline:3px solid #a87500;outline-offset:5px;border-radius:8px}
+#register .mtm-data-notice a{overflow-wrap:anywhere}
+@media(max-width:600px){.mtm-registration-submit{width:100%;font-size:1rem}}
