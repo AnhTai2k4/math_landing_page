@@ -7,6 +7,7 @@ import {fetchReaderBytes,readerView,readerPath,readerMessage,ZOOM_LEVELS,type Re
 import './reader.css';
 import ReaderSearch from './ReaderSearch';
 import ReaderPosition from './ReaderPosition';
+import ReaderBookmarks from './ReaderBookmarks';
 GlobalWorkerOptions.workerSrc=workerUrl;
 export default function NativePdfReader({file,title,search}:{file:ReaderFile;title:string;search:string}){
  const view=readerView(search,file.pages),[doc,setDoc]=useState<PDFDocumentProxy|null>(null),[error,setError]=useState(''),[retry,setRetry]=useState(0),[busy,setBusy]=useState(true),[width,setWidth]=useState(600),[shown,setShown]=useState(0),[text,setText]=useState(''),[jump,setJump]=useState(String(view.page)),[jumpError,setJumpError]=useState('');
@@ -41,6 +42,7 @@ export default function NativePdfReader({file,title,search}:{file:ReaderFile;tit
   <div className="reader-source-note"><b>Nội dung trên bìa PDF:</b> {file.observedContents}. {file.sourceMetadataNeedsReview?'Nhãn mục/lớp trong danh mục gốc chưa khớp hoàn toàn nội dung tệp; cần trung tâm chuẩn hóa trước khi công bố. ':''}Tệp được giữ nguyên, không chỉnh đề hoặc lời giải.</div>
   <div className="reader-toolbar" role="group" aria-label="Điều khiển đọc tài liệu"><button type="button" disabled={!doc||view.page<=1} onClick={()=>go(view.page-1)} aria-label="Trang trước"><ChevronLeft size={18}/></button><form onSubmit={e=>{e.preventDefault();const p=Number(jump);if(!/^[1-9][0-9]*$/.test(jump)||!Number.isInteger(p)||p>file.pages){setJumpError('Nhập số trang từ 1 đến '+file.pages);return;}go(p);}}><label>Trang <input aria-label="Số trang PDF" value={jump} disabled={!doc} onChange={e=>setJump(e.target.value)} inputMode="numeric" maxLength={4}/></label><span>/ {file.pages}</span><button disabled={!doc} type="submit">Đến</button></form><button type="button" disabled={!doc||view.page>=file.pages} onClick={()=>go(view.page+1)} aria-label="Trang sau"><ChevronRight size={18}/></button><label className="reader-zoom">Thu/phóng <select aria-label="Độ phóng PDF" disabled={!doc} value={view.zoom} onChange={e=>go(view.page,Number(e.target.value))}>{ZOOM_LEVELS.map(n=><option key={n} value={n}>{n===100?'Vừa khung':n+'%'}</option>)}</select></label></div>
   <ReaderPosition key={file.sha256} file={file} page={view.page} zoom={view.zoom} shown={shown} busy={busy} explicit={new URLSearchParams(search).has('trang')||new URLSearchParams(search).has('zoom')} onPage={go}/>
+  <ReaderBookmarks key={file.sha256} file={file} page={view.page} shown={shown} busy={busy} onPage={go}/>
   <ReaderSearch doc={doc} onPage={page=>go(page)}/>
   {jumpError&&<p className="reader-error" role="alert">{jumpError}</p>}
   <p className="reader-status" role="status" aria-live="polite">{error?'Chưa đọc được trang':busy?doc?'Đang dựng trang '+view.page+'…':'Đang tải và kiểm tệp PDF…':'Đã hiển thị trang '+shown+' / '+file.pages}</p>
