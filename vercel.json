@@ -4,6 +4,10 @@
   "outputDirectory": "build",
   "rewrites": [
     {
+      "source": "/bai-hoc/:path*",
+      "destination": "/index.html"
+    },
+    {
       "source": "/khoa-hoc",
       "destination": "/index.html"
     },
