@@ -1,0 +1,1455 @@
+{
+  "captured_at": "2026-10-06T10:12:17.634Z",
+  "source": "https://elearning-fe-eight.vercel.app/khoa-hoc",
+  "metadataOnly": true,
+  "videoUrlsIncluded": false,
+  "pricesApprovedForTarget": false,
+  "courses": [
+    {
+      "id": "6a22872c45f6df77749bf607",
+      "slug": "doc-vi-de-dgnl-dgtd",
+      "title": "Đọc vị đề ĐGNL - ĐGTD",
+      "grade": 12,
+      "sourcePrice": 1200000,
+      "overview": "",
+      "sections": [],
+      "sourceUrl": "https://elearning-fe-eight.vercel.app/khoa-hoc/doc-vi-de-dgnl-dgtd",
+      "sourceImage": "https://res.cloudinary.com/ds3zqakub/image/upload/v1781994541/HSA_xrduxg.png",
+      "image": "/migration-assets/course-doc-vi-de-dgnl-dgtd.png"
+    },
+    {
+      "id": "6a21de6ac7c498d9a700682c",
+      "slug": "step-1-nen-tang-toan-10",
+      "title": "Step 1: Nền tảng toán 10",
+      "grade": 10,
+      "sourcePrice": 1050000,
+      "overview": "Khóa học Nền tảng toán 10 giúp học sinh chuyển cấp vững vàng, bám sát SGK lớp 10 mới.",
+      "sections": [
+        {
+          "id": "section-0",
+          "title": "CHƯƠNG I. MỆNH ĐỀ VÀ TẬP HỢP",
+          "lessons": [
+            {
+              "title": "Bài 1. Mệnh đề toán học (Nền tảng)",
+              "subtitle": "Mệnh đề chứa biến, mệnh đề phủ định, kéo theo",
+              "slug": "step 1-g10-bai-1-menh-de",
+              "duration": "30",
+              "isFree": true
+            },
+            {
+              "title": "Bài 2. Tập hợp và các phép toán trên tập hợp (Nền tảng)",
+              "subtitle": "Giao, hợp, hiệu của hai tập hợp và biểu đồ Ven",
+              "slug": "step 1-g10-bai-2-tap-hop",
+              "duration": "35",
+              "isFree": false
+            }
+          ]
+        },
+        {
+          "id": "section-1",
+          "title": "CHƯƠNG II. BẤT PHƯƠNG TRÌNH VÀ HỆ BẤT PHƯƠNG TRÌNH BẬC NHẤT HAI ẨN",
+          "lessons": [
+            {
+              "title": "Bài 3. Bất phương trình bậc nhất hai ẩn (Nền tảng)",
+              "subtitle": "Biểu diễn miền nghiệm của bất phương trình trên Oxy",
+              "slug": "step 1-g10-bai-3-bpt-bac-nhat-2-an",
+              "duration": "35",
+              "isFree": true
+            },
+            {
+              "title": "Bài 4. Hệ bất phương trình bậc nhất hai ẩn (Nền tảng)",
+              "subtitle": "Ứng dụng quy hoạch tuyến tính tìm giá trị tối ưu thực tế",
+              "slug": "step 1-g10-bai-4-he-bpt-bac-nhat-2-an",
+              "duration": "40",
+              "isFree": false
+            }
+          ]
+        },
+        {
+          "id": "section-2",
+          "title": "CHƯƠNG III. HÀM SỐ BẬC HAI VÀ ĐỒ THỊ",
+          "lessons": [
+            {
+              "title": "Bài 5. Hàm số và đồ thị (Nền tảng)",
+              "subtitle": "Tập xác định, sự biến thiên đồng biến nghịch biến",
+              "slug": "step 1-g10-bai-5-ham-so-do-thi",
+              "duration": "30",
+              "isFree": true
+            },
+            {
+              "title": "Bài 6. Hàm số bậc hai (Nền tảng)",
+              "subtitle": "Đồ thị parabol, đỉnh, trục đối xứng và ứng dụng cực trị",
+              "slug": "step 1-g10-bai-6-ham-so-bac-hai",
+              "duration": "35",
+              "isFree": false
+            },
+            {
+              "title": "Bài 7. Tam thức bậc hai (Nền tảng)",
+              "subtitle": "Định lý về dấu của tam thức bậc hai và bất phương trình bậc hai",
+              "slug": "step 1-g10-bai-7-tam-thuc-bac-hai",
+              "duration": "40",
+              "isFree": false
+            }
+          ]
+        },
+        {
+          "id": "section-3",
+          "title": "CHƯƠNG IV. HỆ THỨC LƯỢNG TRONG TAM GIÁC",
+          "lessons": [
+            {
+              "title": "Bài 8. Giá trị lượng giác của một góc từ 0 đến 180 độ (Nền tảng)",
+              "subtitle": "Định nghĩa lượng giác góc tù, góc nhọn và quan hệ phụ nhau",
+              "slug": "step 1-g10-bai-8-gtlg-0-180",
+              "duration": "30",
+              "isFree": true
+            },
+            {
+              "title": "Bài 9. Định lí côsin và định lí sin trong tam giác (Nền tảng)",
+              "subtitle": "Công thức cosin, sin và ứng dụng đo đạc khoảng cách thực tế",
+              "slug": "step 1-g10-bai-9-dinh-li-sin-cos",
+              "duration": "40",
+              "isFree": false
+            },
+            {
+              "title": "Bài 10. Giải tam giác và các công thức diện tích (Nền tảng)",
+              "subtitle": "Công thức Heron, diện tích theo bán kính R, r",
+              "slug": "step 1-g10-bai-10-dien-tich-tam-giac",
+              "duration": "35",
+              "isFree": false
+            }
+          ]
+        }
+      ],
+      "sourceUrl": "https://elearning-fe-eight.vercel.app/khoa-hoc/step-1-nen-tang-toan-10",
+      "sourceImage": "https://res.cloudinary.com/ds3zqakub/image/upload/v1781994542/Lop10-step1_wiimuq.png",
+      "image": "/migration-assets/course-step-1-nen-tang-toan-10.png"
+    },
+    {
+      "id": "6a21de6ac7c498d9a70067f3",
+      "slug": "step-1-nen-tang-toan-11",
+      "title": "Step 1: Nền tảng toán 11",
+      "grade": 11,
+      "sourcePrice": 1250000,
+      "overview": "Khóa học xây dựng nền tảng Toán 11 vững chắc, bám sát chương trình sách giáo khoa mới.",
+      "sections": [
+        {
+          "id": "section-0",
+          "title": "CHƯƠNG I. HÀM SỐ LƯỢNG GIÁC VÀ PHƯƠNG TRÌNH LƯỢNG GIÁC",
+          "lessons": [
+            {
+              "title": "Bài 1. Góc lượng giác và giá trị lượng giác (Nền tảng)",
+              "subtitle": "Khái niệm góc lượng giác, đường tròn lượng giác",
+              "slug": "step 1-g11-bai-1-goc-luong-giac",
+              "duration": "35",
+              "isFree": true
+            },
+            {
+              "title": "Bài 2. Các công thức lượng giác cơ bản (Nền tảng)",
+              "subtitle": "Công thức cộng, công thức nhân đôi, công thức biến đổi",
+              "slug": "step 1-g11-bai-2-cong-thuc-luong-giac",
+              "duration": "45",
+              "isFree": false
+            },
+            {
+              "title": "Bài 3. Hàm số lượng giác và đồ thị (Nền tảng)",
+              "subtitle": "Tính tuần hoàn, tập xác định và vẽ đồ thị sin, cos, tan, cot",
+              "slug": "step 1-g11-bai-3-ham-so-luong-giac",
+              "duration": "40",
+              "isFree": false
+            },
+            {
+              "title": "Bài 4. Phương trình lượng giác cơ bản (Nền tảng)",
+              "subtitle": "Giải phương trình sin x = a, cos x = a và các bài toán thực tế",
+              "slug": "step 1-g11-bai-4-pt-luong-giac",
+              "duration": "45",
+              "isFree": false
+            }
+          ]
+        },
+        {
+          "id": "section-1",
+          "title": "CHƯƠNG II. DÃY SỐ. CẤP SỐ CỘNG VÀ CẤP SỐ NHÂN",
+          "lessons": [
+            {
+              "title": "Bài 5. Dãy số (Nền tảng)",
+              "subtitle": "Định nghĩa dãy số, dãy số tăng, giảm và bị chặn",
+              "slug": "step 1-g11-bai-5-day-so",
+              "duration": "30",
+              "isFree": true
+            },
+            {
+              "title": "Bài 6. Cấp số cộng (Nền tảng)",
+              "subtitle": "Công thức số hạng tổng quát và tổng n số hạng đầu",
+              "slug": "step 1-g11-bai-6-cap-so-cong",
+              "duration": "35",
+              "isFree": false
+            },
+            {
+              "title": "Bài 7. Cấp số nhân (Nền tảng)",
+              "subtitle": "Số hạng tổng quát và ứng dụng cấp số nhân vào lãi suất ngân hàng",
+              "slug": "step 1-g11-bai-7-cap-so-nhan",
+              "duration": "35",
+              "isFree": false
+            }
+          ]
+        },
+        {
+          "id": "section-2",
+          "title": "CHƯƠNG III. GIỚI HẠN. HÀM SỐ LIÊN TỤC",
+          "lessons": [
+            {
+              "title": "Bài 8. Giới hạn của dãy số (Nền tảng)",
+              "subtitle": "Giới hạn hữu hạn và giới hạn vô cực của dãy số",
+              "slug": "step 1-g11-bai-8-gioi-han-day-so",
+              "duration": "30",
+              "isFree": true
+            },
+            {
+              "title": "Bài 9. Giới hạn của hàm số (Nền tảng)",
+              "subtitle": "Định lý về giới hạn hàm số và cách khử các dạng vô định",
+              "slug": "step 1-g11-bai-9-gioi-han-ham-so",
+              "duration": "40",
+              "isFree": false
+            },
+            {
+              "title": "Bài 10. Hàm số liên tục (Nền tảng)",
+              "subtitle": "Khảo sát tính liên tục tại một điểm và trên một khoảng",
+              "slug": "step 1-g11-bai-10-ham-so-lien-tuc",
+              "duration": "35",
+              "isFree": false
+            }
+          ]
+        },
+        {
+          "id": "section-3",
+          "title": "CHƯƠNG IV. ĐƯỜNG THẲNG VÀ MẶT PHẲNG TRONG KHÔNG GIAN. QUAN HỆ SONG SONG",
+          "lessons": [
+            {
+              "title": "Bài 11. Đường thẳng và mặt phẳng trong không gian (Nền tảng)",
+              "subtitle": "Các đại lượng cơ bản và cách xác định giao tuyến",
+              "slug": "step 1-g11-bai-11-duong-mat-phang",
+              "duration": "40",
+              "isFree": true
+            },
+            {
+              "title": "Bài 12. Hai đường thẳng song song (Nền tảng)",
+              "subtitle": "Vị trí tương đối của hai đường thẳng và tính chất song song",
+              "slug": "step 1-g11-bai-12-hai-duong-song-song",
+              "duration": "35",
+              "isFree": false
+            },
+            {
+              "title": "Bài 13. Đường thẳng và mặt phẳng song song (Nền tảng)",
+              "subtitle": "Điều kiện để đường thẳng song song với mặt phẳng",
+              "slug": "step 1-g11-bai-13-duong-song-song-mat",
+              "duration": "35",
+              "isFree": false
+            },
+            {
+              "title": "Bài 14. Hai mặt phẳng song song (Nền tảng)",
+              "subtitle": "Định lý Ta-lét trong không gian và hình lăng trụ",
+              "slug": "step 1-g11-bai-14-hai-mat-song-song",
+              "duration": "40",
+              "isFree": false
+            }
+          ]
+        }
+      ],
+      "sourceUrl": "https://elearning-fe-eight.vercel.app/khoa-hoc/step-1-nen-tang-toan-11",
+      "sourceImage": "https://res.cloudinary.com/ds3zqakub/image/upload/v1781994542/Lop11-step1_niq5ja.png",
+      "image": "/migration-assets/course-step-1-nen-tang-toan-11.png"
+    },
+    {
+      "id": "6a21de6ac7c498d9a7006793",
+      "slug": "step-1-nen-tang-toan-12",
+      "title": "Step 1: Nền tảng toán 12",
+      "grade": 12,
+      "sourcePrice": 1450000,
+      "overview": "Khóa học tập trung vào các chuyên đề trọng tâm: Hàm số, Mũ - Lôgarit, Nguyên hàm, Tích phân và Hình học không gian bám sát chương trình mới.",
+      "sections": [
+        {
+          "id": "section-0",
+          "title": "CHƯƠNG I. ỨNG DỤNG ĐẠO HÀM ĐỂ KHẢO SÁT VÀ VẼ ĐỒ THỊ HÀM SỐ",
+          "lessons": [
+            {
+              "title": "Bài 1. Tính đơn điệu và cực trị của hàm số (Nền tảng)",
+              "subtitle": "Cách xét dấu đạo hàm, lập bảng biến thiên và tìm điểm cực trị",
+              "slug": "step 1-bai-1-tinh-don-dieu-va-cuc-tri",
+              "duration": "45",
+              "isFree": true
+            },
+            {
+              "title": "Bài 2. Giá trị lớn nhất và giá trị nhỏ nhất của hàm số (Nền tảng)",
+              "subtitle": "Tìm GTLN, GTNN trên đoạn và trên khoảng",
+              "slug": "step 1-bai-2-gtln-gtnn",
+              "duration": "40",
+              "isFree": false
+            },
+            {
+              "title": "Bài 3. Đường tiệm cận của đồ thị hàm số (Nền tảng)",
+              "subtitle": "Định nghĩa và cách tìm tiệm cận đứng, tiệm cận ngang",
+              "slug": "step 1-bai-3-duong-tiem-can",
+              "duration": "35",
+              "isFree": false
+            },
+            {
+              "title": "Bài 4. Khảo sát sự biến thiên và vẽ đồ thị hàm số (Nền tảng)",
+              "subtitle": "Các bước khảo sát hàm số bậc ba, phân thức bậc nhất",
+              "slug": "step 1-bai-4-khao-sat-do-thi",
+              "duration": "50",
+              "isFree": false
+            },
+            {
+              "title": "Bài 5. Ứng dụng đạo hàm giải quyết một số bài toán thực tế (Nền tảng)",
+              "subtitle": "Tối ưu hóa chi phí, thể tích hộp và các bài toán kinh tế",
+              "slug": "step 1-bai-5-ung-dung-thuc-te",
+              "duration": "45",
+              "isFree": false
+            },
+            {
+              "title": "Bài tập cuối chương I (Nền tảng)",
+              "subtitle": "Chữa chi tiết các dạng bài tập trọng tâm chương I",
+              "slug": "step 1-bai-tap-cuoi-chuong-1",
+              "duration": "60",
+              "isFree": false
+            }
+          ]
+        },
+        {
+          "id": "section-1",
+          "title": "CHƯƠNG II. VECTƠ VÀ HỆ TRỤC TOẠ ĐỘ TRONG KHÔNG GIAN",
+          "lessons": [
+            {
+              "title": "Bài 6. Vectơ trong không gian (Nền tảng)",
+              "subtitle": "Quy tắc hình hộp, sự đồng phẳng của 3 vectơ",
+              "slug": "step 1-bai-6-vecto-trong-khong-gian",
+              "duration": "30",
+              "isFree": true
+            },
+            {
+              "title": "Bài 7. Hệ trục toạ độ trong không gian (Nền tảng)",
+              "subtitle": "Tọa độ điểm, tọa độ vectơ hệ Oxyz",
+              "slug": "step 1-bai-7-he-truc-toa-do-oxyz",
+              "duration": "25",
+              "isFree": false
+            },
+            {
+              "title": "Bài 8. Biểu thức toạ độ của các phép toán vectơ (Nền tảng)",
+              "subtitle": "Tích vô hướng, tích có hướng và ứng dụng",
+              "slug": "step 1-bai-8-bieu-thuc-toa-do-vecto",
+              "duration": "35",
+              "isFree": false
+            },
+            {
+              "title": "Bài tập cuối chương II (Nền tảng)",
+              "subtitle": "Luyện tập tổng hợp Oxyz phần cơ bản",
+              "slug": "step 1-bai-tap-cuoi-chuong-2",
+              "duration": "45",
+              "isFree": false
+            }
+          ]
+        },
+        {
+          "id": "section-2",
+          "title": "CHƯƠNG III. CÁC SỐ ĐẶC TRƯNG ĐO MỨC ĐỘ PHÂN TÁN CỦA MẪU SỐ LIỆU GHÉP NHÓM",
+          "lessons": [
+            {
+              "title": "Bài 9. Khoảng biến thiên và khoảng tứ phân vị (Nền tảng)",
+              "subtitle": "Xác định R và IQR cho mẫu số liệu ghép nhóm",
+              "slug": "step 1-bai-9-khoang-bien-thien-tu-phan-vi",
+              "duration": "25",
+              "isFree": true
+            },
+            {
+              "title": "Bài 10. Phương sai và độ lệch chuẩn (Nền tảng)",
+              "subtitle": "Đánh giá mức độ phân tán của số liệu",
+              "slug": "step 1-bai-10-phuong-sai-do-lech-chuan",
+              "duration": "30",
+              "isFree": false
+            },
+            {
+              "title": "Bài tập cuối chương III (Nền tảng)",
+              "subtitle": "Chữa bài tập thống kê xác suất lớp 12 mới",
+              "slug": "step 1-bai-tap-cuoi-chuong-3",
+              "duration": "40",
+              "isFree": false
+            }
+          ]
+        },
+        {
+          "id": "section-3",
+          "title": "CHƯƠNG IV. NGUYÊN HÀM VÀ TÍCH PHÂN",
+          "lessons": [
+            {
+              "title": "Bài 11. Nguyên hàm (Nền tảng)",
+              "subtitle": "Bảng nguyên hàm cơ bản và phương pháp đổi biến số",
+              "slug": "step 1-bai-11-nguyen-ham",
+              "duration": "35",
+              "isFree": true
+            },
+            {
+              "title": "Bài 12. Tích phân (Nền tảng)",
+              "subtitle": "Tính chất tích phân và phương pháp tính",
+              "slug": "step 1-bai-12-tich-phan",
+              "duration": "40",
+              "isFree": false
+            },
+            {
+              "title": "Bài 13. Ứng dụng hình học của tích phân (Nền tảng)",
+              "subtitle": "Tính diện tích hình phẳng và thể tích khối tròn xoay",
+              "slug": "step 1-bai-13-ung-dung-tich-phan",
+              "duration": "35",
+              "isFree": false
+            },
+            {
+              "title": "Bài tập cuối chương IV (Nền tảng)",
+              "subtitle": "Luyện đề phần Nguyên hàm - Tích phân",
+              "slug": "step 1-bai-tap-cuoi-chuong-4",
+              "duration": "50",
+              "isFree": false
+            }
+          ]
+        },
+        {
+          "id": "section-4",
+          "title": "CHƯƠNG V. PHƯƠNG PHÁP TOẠ ĐỘ TRONG KHÔNG GIAN",
+          "lessons": [
+            {
+              "title": "Bài 14. Phương trình mặt phẳng (Nền tảng)",
+              "subtitle": "Vectơ pháp tuyến và phương trình tổng quát",
+              "slug": "step 1-bai-14-phuong-trinh-mat-phang",
+              "duration": "30",
+              "isFree": true
+            },
+            {
+              "title": "Bài 15. Phương trình đường thẳng trong không gian (Nền tảng)",
+              "subtitle": "Phương trình tham số và chính tắc của đường thẳng",
+              "slug": "step 1-bai-15-phuong-trinh-duong-thang",
+              "duration": "35",
+              "isFree": false
+            },
+            {
+              "title": "Bài 16. Công thức tính góc trong không gian (Nền tảng)",
+              "subtitle": "Góc giữa 2 đường thẳng, 2 mặt phẳng, đường và mặt",
+              "slug": "step 1-bai-16-cong-thuc-tinh-goc",
+              "duration": "25",
+              "isFree": false
+            },
+            {
+              "title": "Bài 17. Phương trình mặt cầu (Nền tảng)",
+              "subtitle": "Xác định tâm, bán kính và sự tương giao",
+              "slug": "step 1-bai-17-phuong-trinh-mat-cau",
+              "duration": "25",
+              "isFree": false
+            },
+            {
+              "title": "Bài tập cuối chương V (Nền tảng)",
+              "subtitle": "Tổng ôn Oxyz và các bài toán cực trị hình học",
+              "slug": "step 1-bai-tap-cuoi-chuong-5",
+              "duration": "55",
+              "isFree": false
+            }
+          ]
+        },
+        {
+          "id": "section-5",
+          "title": "CHƯƠNG VI. XÁC SUẤT CÓ ĐIỀU KIỆN",
+          "lessons": [
+            {
+              "title": "Bài 18. Xác suất có điều kiện (Nền tảng)",
+              "subtitle": "Định nghĩa và bài tập tính xác suất có điều kiện",
+              "slug": "step 1-bai-18-xac-suat-co-dieu-kien",
+              "duration": "30",
+              "isFree": true
+            },
+            {
+              "title": "Bài 19. Công thức xác suất toàn phần và công thức Bayes (Nền tảng)",
+              "subtitle": "Phương pháp vẽ sơ đồ hình cây để giải bài tập",
+              "slug": "step 1-bai-19-cong-thuc-toan-phan-bayes",
+              "duration": "35",
+              "isFree": false
+            },
+            {
+              "title": "Bài tập cuối chương VI (Nền tảng)",
+              "subtitle": "Luyện tập các dạng toán Xác suất 12 trọng tâm",
+              "slug": "step 1-bai-tap-cuoi-chuong-6",
+              "duration": "40",
+              "isFree": false
+            }
+          ]
+        }
+      ],
+      "sourceUrl": "https://elearning-fe-eight.vercel.app/khoa-hoc/step-1-nen-tang-toan-12",
+      "sourceImage": "https://res.cloudinary.com/ds3zqakub/image/upload/v1781994108/Lop12-step1_pgozut.png",
+      "image": "/migration-assets/course-step-1-nen-tang-toan-12.png"
+    },
+    {
+      "id": "6a21de6ac7c498d9a700683b",
+      "slug": "step-2-van-dung-toan-10",
+      "title": "Step 2: Vận dụng toán 10",
+      "grade": 10,
+      "sourcePrice": 1100000,
+      "overview": "Khóa học Vận dụng toán 10 rèn luyện phản xạ giải bài tập nâng cao, bám sát các kỳ thi học kỳ.",
+      "sections": [
+        {
+          "id": "section-0",
+          "title": "CHƯƠNG I. MỆNH ĐỀ VÀ TẬP HỢP",
+          "lessons": [
+            {
+              "title": "Bài 1. Mệnh đề toán học (Vận dụng)",
+              "subtitle": "Mệnh đề chứa biến, mệnh đề phủ định, kéo theo",
+              "slug": "step 2-g10-bai-1-menh-de",
+              "duration": "30",
+              "isFree": false
+            },
+            {
+              "title": "Bài 2. Tập hợp và các phép toán trên tập hợp (Vận dụng)",
+              "subtitle": "Giao, hợp, hiệu của hai tập hợp và biểu đồ Ven",
+              "slug": "step 2-g10-bai-2-tap-hop",
+              "duration": "35",
+              "isFree": false
+            }
+          ]
+        },
+        {
+          "id": "section-1",
+          "title": "CHƯƠNG II. BẤT PHƯƠNG TRÌNH VÀ HỆ BẤT PHƯƠNG TRÌNH BẬC NHẤT HAI ẨN",
+          "lessons": [
+            {
+              "title": "Bài 3. Bất phương trình bậc nhất hai ẩn (Vận dụng)",
+              "subtitle": "Biểu diễn miền nghiệm của bất phương trình trên Oxy",
+              "slug": "step 2-g10-bai-3-bpt-bac-nhat-2-an",
+              "duration": "35",
+              "isFree": false
+            },
+            {
+              "title": "Bài 4. Hệ bất phương trình bậc nhất hai ẩn (Vận dụng)",
+              "subtitle": "Ứng dụng quy hoạch tuyến tính tìm giá trị tối ưu thực tế",
+              "slug": "step 2-g10-bai-4-he-bpt-bac-nhat-2-an",
+              "duration": "40",
+              "isFree": false
+            }
+          ]
+        },
+        {
+          "id": "section-2",
+          "title": "CHƯƠNG III. HÀM SỐ BẬC HAI VÀ ĐỒ THỊ",
+          "lessons": [
+            {
+              "title": "Bài 5. Hàm số và đồ thị (Vận dụng)",
+              "subtitle": "Tập xác định, sự biến thiên đồng biến nghịch biến",
+              "slug": "step 2-g10-bai-5-ham-so-do-thi",
+              "duration": "30",
+              "isFree": false
+            },
+            {
+              "title": "Bài 6. Hàm số bậc hai (Vận dụng)",
+              "subtitle": "Đồ thị parabol, đỉnh, trục đối xứng và ứng dụng cực trị",
+              "slug": "step 2-g10-bai-6-ham-so-bac-hai",
+              "duration": "35",
+              "isFree": false
+            },
+            {
+              "title": "Bài 7. Tam thức bậc hai (Vận dụng)",
+              "subtitle": "Định lý về dấu của tam thức bậc hai và bất phương trình bậc hai",
+              "slug": "step 2-g10-bai-7-tam-thuc-bac-hai",
+              "duration": "40",
+              "isFree": false
+            }
+          ]
+        },
+        {
+          "id": "section-3",
+          "title": "CHƯƠNG IV. HỆ THỨC LƯỢNG TRONG TAM GIÁC",
+          "lessons": [
+            {
+              "title": "Bài 8. Giá trị lượng giác của một góc từ 0 đến 180 độ (Vận dụng)",
+              "subtitle": "Định nghĩa lượng giác góc tù, góc nhọn và quan hệ phụ nhau",
+              "slug": "step 2-g10-bai-8-gtlg-0-180",
+              "duration": "30",
+              "isFree": false
+            },
+            {
+              "title": "Bài 9. Định lí côsin và định lí sin trong tam giác (Vận dụng)",
+              "subtitle": "Công thức cosin, sin và ứng dụng đo đạc khoảng cách thực tế",
+              "slug": "step 2-g10-bai-9-dinh-li-sin-cos",
+              "duration": "40",
+              "isFree": false
+            },
+            {
+              "title": "Bài 10. Giải tam giác và các công thức diện tích (Vận dụng)",
+              "subtitle": "Công thức Heron, diện tích theo bán kính R, r",
+              "slug": "step 2-g10-bai-10-dien-tich-tam-giac",
+              "duration": "35",
+              "isFree": false
+            }
+          ]
+        }
+      ],
+      "sourceUrl": "https://elearning-fe-eight.vercel.app/khoa-hoc/step-2-van-dung-toan-10",
+      "sourceImage": "https://res.cloudinary.com/ds3zqakub/image/upload/v1781994542/Lop10-step2_xqlspk.png",
+      "image": "/migration-assets/course-step-2-van-dung-toan-10.png"
+    },
+    {
+      "id": "6a21de6ac7c498d9a7006806",
+      "slug": "step-2-van-dung-toan-11",
+      "title": "Step 2: Vận dụng toán 11",
+      "grade": 11,
+      "sourcePrice": 1300000,
+      "overview": "Khóa học Vận dụng toán 11 phát triển tư duy giải các bài toán phân loại lớp 11 đạt điểm 8, 9 trên lớp.",
+      "sections": [
+        {
+          "id": "section-0",
+          "title": "CHƯƠNG I. HÀM SỐ LƯỢNG GIÁC VÀ PHƯƠNG TRÌNH LƯỢNG GIÁC",
+          "lessons": [
+            {
+              "title": "Bài 1. Góc lượng giác và giá trị lượng giác (Vận dụng)",
+              "subtitle": "Khái niệm góc lượng giác, đường tròn lượng giác",
+              "slug": "step 2-g11-bai-1-goc-luong-giac",
+              "duration": "35",
+              "isFree": false
+            },
+            {
+              "title": "Bài 2. Các công thức lượng giác cơ bản (Vận dụng)",
+              "subtitle": "Công thức cộng, công thức nhân đôi, công thức biến đổi",
+              "slug": "step 2-g11-bai-2-cong-thuc-luong-giac",
+              "duration": "45",
+              "isFree": false
+            },
+            {
+              "title": "Bài 3. Hàm số lượng giác và đồ thị (Vận dụng)",
+              "subtitle": "Tính tuần hoàn, tập xác định và vẽ đồ thị sin, cos, tan, cot",
+              "slug": "step 2-g11-bai-3-ham-so-luong-giac",
+              "duration": "40",
+              "isFree": false
+            },
+            {
+              "title": "Bài 4. Phương trình lượng giác cơ bản (Vận dụng)",
+              "subtitle": "Giải phương trình sin x = a, cos x = a và các bài toán thực tế",
+              "slug": "step 2-g11-bai-4-pt-luong-giac",
+              "duration": "45",
+              "isFree": false
+            }
+          ]
+        },
+        {
+          "id": "section-1",
+          "title": "CHƯƠNG II. DÃY SỐ. CẤP SỐ CỘNG VÀ CẤP SỐ NHÂN",
+          "lessons": [
+            {
+              "title": "Bài 5. Dãy số (Vận dụng)",
+              "subtitle": "Định nghĩa dãy số, dãy số tăng, giảm và bị chặn",
+              "slug": "step 2-g11-bai-5-day-so",
+              "duration": "30",
+              "isFree": false
+            },
+            {
+              "title": "Bài 6. Cấp số cộng (Vận dụng)",
+              "subtitle": "Công thức số hạng tổng quát và tổng n số hạng đầu",
+              "slug": "step 2-g11-bai-6-cap-so-cong",
+              "duration": "35",
+              "isFree": false
+            },
+            {
+              "title": "Bài 7. Cấp số nhân (Vận dụng)",
+              "subtitle": "Số hạng tổng quát và ứng dụng cấp số nhân vào lãi suất ngân hàng",
+              "slug": "step 2-g11-bai-7-cap-so-nhan",
+              "duration": "35",
+              "isFree": false
+            }
+          ]
+        },
+        {
+          "id": "section-2",
+          "title": "CHƯƠNG III. GIỚI HẠN. HÀM SỐ LIÊN TỤC",
+          "lessons": [
+            {
+              "title": "Bài 8. Giới hạn của dãy số (Vận dụng)",
+              "subtitle": "Giới hạn hữu hạn và giới hạn vô cực của dãy số",
+              "slug": "step 2-g11-bai-8-gioi-han-day-so",
+              "duration": "30",
+              "isFree": false
+            },
+            {
+              "title": "Bài 9. Giới hạn của hàm số (Vận dụng)",
+              "subtitle": "Định lý về giới hạn hàm số và cách khử các dạng vô định",
+              "slug": "step 2-g11-bai-9-gioi-han-ham-so",
+              "duration": "40",
+              "isFree": false
+            },
+            {
+              "title": "Bài 10. Hàm số liên tục (Vận dụng)",
+              "subtitle": "Khảo sát tính liên tục tại một điểm và trên một khoảng",
+              "slug": "step 2-g11-bai-10-ham-so-lien-tuc",
+              "duration": "35",
+              "isFree": false
+            }
+          ]
+        },
+        {
+          "id": "section-3",
+          "title": "CHƯƠNG IV. ĐƯỜNG THẲNG VÀ MẶT PHẲNG TRONG KHÔNG GIAN. QUAN HỆ SONG SONG",
+          "lessons": [
+            {
+              "title": "Bài 11. Đường thẳng và mặt phẳng trong không gian (Vận dụng)",
+              "subtitle": "Các đại lượng cơ bản và cách xác định giao tuyến",
+              "slug": "step 2-g11-bai-11-duong-mat-phang",
+              "duration": "40",
+              "isFree": false
+            },
+            {
+              "title": "Bài 12. Hai đường thẳng song song (Vận dụng)",
+              "subtitle": "Vị trí tương đối của hai đường thẳng và tính chất song song",
+              "slug": "step 2-g11-bai-12-hai-duong-song-song",
+              "duration": "35",
+              "isFree": false
+            },
+            {
+              "title": "Bài 13. Đường thẳng và mặt phẳng song song (Vận dụng)",
+              "subtitle": "Điều kiện để đường thẳng song song với mặt phẳng",
+              "slug": "step 2-g11-bai-13-duong-song-song-mat",
+              "duration": "35",
+              "isFree": false
+            },
+            {
+              "title": "Bài 14. Hai mặt phẳng song song (Vận dụng)",
+              "subtitle": "Định lý Ta-lét trong không gian và hình lăng trụ",
+              "slug": "step 2-g11-bai-14-hai-mat-song-song",
+              "duration": "40",
+              "isFree": false
+            }
+          ]
+        }
+      ],
+      "sourceUrl": "https://elearning-fe-eight.vercel.app/khoa-hoc/step-2-van-dung-toan-11",
+      "sourceImage": "https://res.cloudinary.com/ds3zqakub/image/upload/v1781994542/Lop11-step2_cmuras.png",
+      "image": "/migration-assets/course-step-2-van-dung-toan-11.png"
+    },
+    {
+      "id": "6a21de6ac7c498d9a70067b3",
+      "slug": "step-2-van-dung-toan-12",
+      "title": "Step 2: Vận dụng toán 12",
+      "grade": 12,
+      "sourcePrice": 1500000,
+      "overview": "Khóa học Vận dụng toán 12 đi sâu vào giải quyết các bài toán phân loại điểm 8+, rèn luyện tư duy logic cao độ.",
+      "sections": [
+        {
+          "id": "section-0",
+          "title": "CHƯƠNG I. ỨNG DỤNG ĐẠO HÀM ĐỂ KHẢO SÁT VÀ VẼ ĐỒ THỊ HÀM SỐ",
+          "lessons": [
+            {
+              "title": "Bài 1. Tính đơn điệu và cực trị của hàm số (Vận dụng)",
+              "subtitle": "Bài toán tìm tham số m để hàm số đơn điệu, cực trị mức độ vận dụng",
+              "slug": "step 2-bai-1-tinh-don-dieu-va-cuc-tri",
+              "duration": "45",
+              "isFree": false
+            },
+            {
+              "title": "Bài 2. Giá trị lớn nhất và giá trị nhỏ nhất của hàm số (Vận dụng)",
+              "subtitle": "Tìm GTLN, GTNN trên đoạn và trên khoảng",
+              "slug": "step 2-bai-2-gtln-gtnn",
+              "duration": "40",
+              "isFree": false
+            },
+            {
+              "title": "Bài 3. Đường tiệm cận của đồ thị hàm số (Vận dụng)",
+              "subtitle": "Định nghĩa và cách tìm tiệm cận đứng, tiệm cận ngang",
+              "slug": "step 2-bai-3-duong-tiem-can",
+              "duration": "35",
+              "isFree": false
+            },
+            {
+              "title": "Bài 4. Khảo sát sự biến thiên và vẽ đồ thị hàm số (Vận dụng)",
+              "subtitle": "Các bước khảo sát hàm số bậc ba, phân thức bậc nhất",
+              "slug": "step 2-bai-4-khao-sat-do-thi",
+              "duration": "50",
+              "isFree": false
+            },
+            {
+              "title": "Bài 5. Ứng dụng đạo hàm giải quyết một số bài toán thực tế (Vận dụng)",
+              "subtitle": "Tối ưu hóa chi phí, thể tích hộp và các bài toán kinh tế",
+              "slug": "step 2-bai-5-ung-dung-thuc-te",
+              "duration": "45",
+              "isFree": false
+            },
+            {
+              "title": "Bài tập cuối chương I (Vận dụng)",
+              "subtitle": "Chữa chi tiết các dạng bài tập trọng tâm chương I",
+              "slug": "step 2-bai-tap-cuoi-chuong-1",
+              "duration": "60",
+              "isFree": false
+            }
+          ]
+        },
+        {
+          "id": "section-1",
+          "title": "CHƯƠNG II. VECTƠ VÀ HỆ TRỤC TOẠ ĐỘ TRONG KHÔNG GIAN",
+          "lessons": [
+            {
+              "title": "Bài 6. Vectơ trong không gian (Vận dụng)",
+              "subtitle": "Quy tắc hình hộp, sự đồng phẳng của 3 vectơ",
+              "slug": "step 2-bai-6-vecto-trong-khong-gian",
+              "duration": "30",
+              "isFree": false
+            },
+            {
+              "title": "Bài 7. Hệ trục toạ độ trong không gian (Vận dụng)",
+              "subtitle": "Tọa độ điểm, tọa độ vectơ hệ Oxyz",
+              "slug": "step 2-bai-7-he-truc-toa-do-oxyz",
+              "duration": "25",
+              "isFree": false
+            },
+            {
+              "title": "Bài 8. Biểu thức toạ độ của các phép toán vectơ (Vận dụng)",
+              "subtitle": "Tích vô hướng, tích có hướng và ứng dụng",
+              "slug": "step 2-bai-8-bieu-thuc-toa-do-vecto",
+              "duration": "35",
+              "isFree": false
+            },
+            {
+              "title": "Bài tập cuối chương II (Vận dụng)",
+              "subtitle": "Luyện tập tổng hợp Oxyz phần cơ bản",
+              "slug": "step 2-bai-tap-cuoi-chuong-2",
+              "duration": "45",
+              "isFree": false
+            }
+          ]
+        },
+        {
+          "id": "section-2",
+          "title": "CHƯƠNG III. CÁC SỐ ĐẶC TRƯNG ĐO MỨC ĐỘ PHÂN TÁN CỦA MẪU SỐ LIỆU GHÉP NHÓM",
+          "lessons": [
+            {
+              "title": "Bài 9. Khoảng biến thiên và khoảng tứ phân vị (Vận dụng)",
+              "subtitle": "Xác định R và IQR cho mẫu số liệu ghép nhóm",
+              "slug": "step 2-bai-9-khoang-bien-thien-tu-phan-vi",
+              "duration": "25",
+              "isFree": false
+            },
+            {
+              "title": "Bài 10. Phương sai và độ lệch chuẩn (Vận dụng)",
+              "subtitle": "Đánh giá mức độ phân tán của số liệu",
+              "slug": "step 2-bai-10-phuong-sai-do-lech-chuan",
+              "duration": "30",
+              "isFree": false
+            },
+            {
+              "title": "Bài tập cuối chương III (Vận dụng)",
+              "subtitle": "Chữa bài tập thống kê xác suất lớp 12 mới",
+              "slug": "step 2-bai-tap-cuoi-chuong-3",
+              "duration": "40",
+              "isFree": false
+            }
+          ]
+        },
+        {
+          "id": "section-3",
+          "title": "CHƯƠNG IV. NGUYÊN HÀM VÀ TÍCH PHÂN",
+          "lessons": [
+            {
+              "title": "Bài 11. Nguyên hàm (Vận dụng)",
+              "subtitle": "Bảng nguyên hàm cơ bản và phương pháp đổi biến số",
+              "slug": "step 2-bai-11-nguyen-ham",
+              "duration": "35",
+              "isFree": false
+            },
+            {
+              "title": "Bài 12. Tích phân (Vận dụng)",
+              "subtitle": "Tính chất tích phân và phương pháp tính",
+              "slug": "step 2-bai-12-tich-phan",
+              "duration": "40",
+              "isFree": false
+            },
+            {
+              "title": "Bài 13. Ứng dụng hình học của tích phân (Vận dụng)",
+              "subtitle": "Tính diện tích hình phẳng và thể tích khối tròn xoay",
+              "slug": "step 2-bai-13-ung-dung-tich-phan",
+              "duration": "35",
+              "isFree": false
+            },
+            {
+              "title": "Bài tập cuối chương IV (Vận dụng)",
+              "subtitle": "Luyện đề phần Nguyên hàm - Tích phân",
+              "slug": "step 2-bai-tap-cuoi-chuong-4",
+              "duration": "50",
+              "isFree": false
+            }
+          ]
+        },
+        {
+          "id": "section-4",
+          "title": "CHƯƠNG V. PHƯƠNG PHÁP TOẠ ĐỘ TRONG KHÔNG GIAN",
+          "lessons": [
+            {
+              "title": "Bài 14. Phương trình mặt phẳng (Vận dụng)",
+              "subtitle": "Vectơ pháp tuyến và phương trình tổng quát",
+              "slug": "step 2-bai-14-phuong-trinh-mat-phang",
+              "duration": "30",
+              "isFree": false
+            },
+            {
+              "title": "Bài 15. Phương trình đường thẳng trong không gian (Vận dụng)",
+              "subtitle": "Phương trình tham số và chính tắc của đường thẳng",
+              "slug": "step 2-bai-15-phuong-trinh-duong-thang",
+              "duration": "35",
+              "isFree": false
+            },
+            {
+              "title": "Bài 16. Công thức tính góc trong không gian (Vận dụng)",
+              "subtitle": "Góc giữa 2 đường thẳng, 2 mặt phẳng, đường và mặt",
+              "slug": "step 2-bai-16-cong-thuc-tinh-goc",
+              "duration": "25",
+              "isFree": false
+            },
+            {
+              "title": "Bài 17. Phương trình mặt cầu (Vận dụng)",
+              "subtitle": "Xác định tâm, bán kính và sự tương giao",
+              "slug": "step 2-bai-17-phuong-trinh-mat-cau",
+              "duration": "25",
+              "isFree": false
+            },
+            {
+              "title": "Bài tập cuối chương V (Vận dụng)",
+              "subtitle": "Tổng ôn Oxyz và các bài toán cực trị hình học",
+              "slug": "step 2-bai-tap-cuoi-chuong-5",
+              "duration": "55",
+              "isFree": false
+            }
+          ]
+        },
+        {
+          "id": "section-5",
+          "title": "CHƯƠNG VI. XÁC SUẤT CÓ ĐIỀU KIỆN",
+          "lessons": [
+            {
+              "title": "Bài 18. Xác suất có điều kiện (Vận dụng)",
+              "subtitle": "Định nghĩa và bài tập tính xác suất có điều kiện",
+              "slug": "step 2-bai-18-xac-suat-co-dieu-kien",
+              "duration": "30",
+              "isFree": false
+            },
+            {
+              "title": "Bài 19. Công thức xác suất toàn phần và công thức Bayes (Vận dụng)",
+              "subtitle": "Phương pháp vẽ sơ đồ hình cây để giải bài tập",
+              "slug": "step 2-bai-19-cong-thuc-toan-phan-bayes",
+              "duration": "35",
+              "isFree": false
+            },
+            {
+              "title": "Bài tập cuối chương VI (Vận dụng)",
+              "subtitle": "Luyện tập các dạng toán Xác suất 12 trọng tâm",
+              "slug": "step 2-bai-tap-cuoi-chuong-6",
+              "duration": "40",
+              "isFree": false
+            }
+          ]
+        }
+      ],
+      "sourceUrl": "https://elearning-fe-eight.vercel.app/khoa-hoc/step-2-van-dung-toan-12",
+      "sourceImage": "https://res.cloudinary.com/ds3zqakub/image/upload/v1781994542/Lop12-step2_enzvlw.png",
+      "image": "/migration-assets/course-step-2-van-dung-toan-12.png"
+    },
+    {
+      "id": "6a21de6ac7c498d9a700684a",
+      "slug": "step-3-van-dung-cao-toan-10",
+      "title": "Step 3: Vận dụng cao toán 10",
+      "grade": 10,
+      "sourcePrice": 1200000,
+      "overview": "Khóa học Vận dụng cao toán 10 chinh phục điểm số tuyệt đối, ôn luyện học sinh giỏi.",
+      "sections": [
+        {
+          "id": "section-0",
+          "title": "CHƯƠNG I. MỆNH ĐỀ VÀ TẬP HỢP",
+          "lessons": [
+            {
+              "title": "Bài 1. Mệnh đề toán học (Vận dụng cao)",
+              "subtitle": "Mệnh đề chứa biến, mệnh đề phủ định, kéo theo",
+              "slug": "step 3-g10-bai-1-menh-de",
+              "duration": "30",
+              "isFree": false
+            },
+            {
+              "title": "Bài 2. Tập hợp và các phép toán trên tập hợp (Vận dụng cao)",
+              "subtitle": "Giao, hợp, hiệu của hai tập hợp và biểu đồ Ven",
+              "slug": "step 3-g10-bai-2-tap-hop",
+              "duration": "35",
+              "isFree": false
+            }
+          ]
+        },
+        {
+          "id": "section-1",
+          "title": "CHƯƠNG II. BẤT PHƯƠNG TRÌNH VÀ HỆ BẤT PHƯƠNG TRÌNH BẬC NHẤT HAI ẨN",
+          "lessons": [
+            {
+              "title": "Bài 3. Bất phương trình bậc nhất hai ẩn (Vận dụng cao)",
+              "subtitle": "Biểu diễn miền nghiệm của bất phương trình trên Oxy",
+              "slug": "step 3-g10-bai-3-bpt-bac-nhat-2-an",
+              "duration": "35",
+              "isFree": false
+            },
+            {
+              "title": "Bài 4. Hệ bất phương trình bậc nhất hai ẩn (Vận dụng cao)",
+              "subtitle": "Ứng dụng quy hoạch tuyến tính tìm giá trị tối ưu thực tế",
+              "slug": "step 3-g10-bai-4-he-bpt-bac-nhat-2-an",
+              "duration": "40",
+              "isFree": false
+            }
+          ]
+        },
+        {
+          "id": "section-2",
+          "title": "CHƯƠNG III. HÀM SỐ BẬC HAI VÀ ĐỒ THỊ",
+          "lessons": [
+            {
+              "title": "Bài 5. Hàm số và đồ thị (Vận dụng cao)",
+              "subtitle": "Tập xác định, sự biến thiên đồng biến nghịch biến",
+              "slug": "step 3-g10-bai-5-ham-so-do-thi",
+              "duration": "30",
+              "isFree": false
+            },
+            {
+              "title": "Bài 6. Hàm số bậc hai (Vận dụng cao)",
+              "subtitle": "Đồ thị parabol, đỉnh, trục đối xứng và ứng dụng cực trị",
+              "slug": "step 3-g10-bai-6-ham-so-bac-hai",
+              "duration": "35",
+              "isFree": false
+            },
+            {
+              "title": "Bài 7. Tam thức bậc hai (Vận dụng cao)",
+              "subtitle": "Định lý về dấu của tam thức bậc hai và bất phương trình bậc hai",
+              "slug": "step 3-g10-bai-7-tam-thuc-bac-hai",
+              "duration": "40",
+              "isFree": false
+            }
+          ]
+        },
+        {
+          "id": "section-3",
+          "title": "CHƯƠNG IV. HỆ THỨC LƯỢNG TRONG TAM GIÁC",
+          "lessons": [
+            {
+              "title": "Bài 8. Giá trị lượng giác của một góc từ 0 đến 180 độ (Vận dụng cao)",
+              "subtitle": "Định nghĩa lượng giác góc tù, góc nhọn và quan hệ phụ nhau",
+              "slug": "step 3-g10-bai-8-gtlg-0-180",
+              "duration": "30",
+              "isFree": false
+            },
+            {
+              "title": "Bài 9. Định lí côsin và định lí sin trong tam giác (Vận dụng cao)",
+              "subtitle": "Công thức cosin, sin và ứng dụng đo đạc khoảng cách thực tế",
+              "slug": "step 3-g10-bai-9-dinh-li-sin-cos",
+              "duration": "40",
+              "isFree": false
+            },
+            {
+              "title": "Bài 10. Giải tam giác và các công thức diện tích (Vận dụng cao)",
+              "subtitle": "Công thức Heron, diện tích theo bán kính R, r",
+              "slug": "step 3-g10-bai-10-dien-tich-tam-giac",
+              "duration": "35",
+              "isFree": false
+            }
+          ]
+        }
+      ],
+      "sourceUrl": "https://elearning-fe-eight.vercel.app/khoa-hoc/step-3-van-dung-cao-toan-10",
+      "sourceImage": "https://res.cloudinary.com/ds3zqakub/image/upload/v1781994541/Lop10-step3_x4zqqx.png",
+      "image": "/migration-assets/course-step-3-van-dung-cao-toan-10.png"
+    },
+    {
+      "id": "6a21de6ac7c498d9a7006819",
+      "slug": "step-3-van-dung-cao-toan-11",
+      "title": "Step 3: Vận dụng cao toán 11",
+      "grade": 11,
+      "sourcePrice": 1400000,
+      "overview": "Khóa học Vận dụng cao toán 11 giúp học sinh chinh phục điểm 10 tuyệt đối và tạo đà sớm cho kỳ thi THPTQG.",
+      "sections": [
+        {
+          "id": "section-0",
+          "title": "CHƯƠNG I. HÀM SỐ LƯỢNG GIÁC VÀ PHƯƠNG TRÌNH LƯỢNG GIÁC",
+          "lessons": [
+            {
+              "title": "Bài 1. Góc lượng giác và giá trị lượng giác (Vận dụng cao)",
+              "subtitle": "Khái niệm góc lượng giác, đường tròn lượng giác",
+              "slug": "step 3-g11-bai-1-goc-luong-giac",
+              "duration": "35",
+              "isFree": false
+            },
+            {
+              "title": "Bài 2. Các công thức lượng giác cơ bản (Vận dụng cao)",
+              "subtitle": "Công thức cộng, công thức nhân đôi, công thức biến đổi",
+              "slug": "step 3-g11-bai-2-cong-thuc-luong-giac",
+              "duration": "45",
+              "isFree": false
+            },
+            {
+              "title": "Bài 3. Hàm số lượng giác và đồ thị (Vận dụng cao)",
+              "subtitle": "Tính tuần hoàn, tập xác định và vẽ đồ thị sin, cos, tan, cot",
+              "slug": "step 3-g11-bai-3-ham-so-luong-giac",
+              "duration": "40",
+              "isFree": false
+            },
+            {
+              "title": "Bài 4. Phương trình lượng giác cơ bản (Vận dụng cao)",
+              "subtitle": "Giải phương trình sin x = a, cos x = a và các bài toán thực tế",
+              "slug": "step 3-g11-bai-4-pt-luong-giac",
+              "duration": "45",
+              "isFree": false
+            }
+          ]
+        },
+        {
+          "id": "section-1",
+          "title": "CHƯƠNG II. DÃY SỐ. CẤP SỐ CỘNG VÀ CẤP SỐ NHÂN",
+          "lessons": [
+            {
+              "title": "Bài 5. Dãy số (Vận dụng cao)",
+              "subtitle": "Định nghĩa dãy số, dãy số tăng, giảm và bị chặn",
+              "slug": "step 3-g11-bai-5-day-so",
+              "duration": "30",
+              "isFree": false
+            },
+            {
+              "title": "Bài 6. Cấp số cộng (Vận dụng cao)",
+              "subtitle": "Công thức số hạng tổng quát và tổng n số hạng đầu",
+              "slug": "step 3-g11-bai-6-cap-so-cong",
+              "duration": "35",
+              "isFree": false
+            },
+            {
+              "title": "Bài 7. Cấp số nhân (Vận dụng cao)",
+              "subtitle": "Số hạng tổng quát và ứng dụng cấp số nhân vào lãi suất ngân hàng",
+              "slug": "step 3-g11-bai-7-cap-so-nhan",
+              "duration": "35",
+              "isFree": false
+            }
+          ]
+        },
+        {
+          "id": "section-2",
+          "title": "CHƯƠNG III. GIỚI HẠN. HÀM SỐ LIÊN TỤC",
+          "lessons": [
+            {
+              "title": "Bài 8. Giới hạn của dãy số (Vận dụng cao)",
+              "subtitle": "Giới hạn hữu hạn và giới hạn vô cực của dãy số",
+              "slug": "step 3-g11-bai-8-gioi-han-day-so",
+              "duration": "30",
+              "isFree": false
+            },
+            {
+              "title": "Bài 9. Giới hạn của hàm số (Vận dụng cao)",
+              "subtitle": "Định lý về giới hạn hàm số và cách khử các dạng vô định",
+              "slug": "step 3-g11-bai-9-gioi-han-ham-so",
+              "duration": "40",
+              "isFree": false
+            },
+            {
+              "title": "Bài 10. Hàm số liên tục (Vận dụng cao)",
+              "subtitle": "Khảo sát tính liên tục tại một điểm và trên một khoảng",
+              "slug": "step 3-g11-bai-10-ham-so-lien-tuc",
+              "duration": "35",
+              "isFree": false
+            }
+          ]
+        },
+        {
+          "id": "section-3",
+          "title": "CHƯƠNG IV. ĐƯỜNG THẲNG VÀ MẶT PHẲNG TRONG KHÔNG GIAN. QUAN HỆ SONG SONG",
+          "lessons": [
+            {
+              "title": "Bài 11. Đường thẳng và mặt phẳng trong không gian (Vận dụng cao)",
+              "subtitle": "Các đại lượng cơ bản và cách xác định giao tuyến",
+              "slug": "step 3-g11-bai-11-duong-mat-phang",
+              "duration": "40",
+              "isFree": false
+            },
+            {
+              "title": "Bài 12. Hai đường thẳng song song (Vận dụng cao)",
+              "subtitle": "Vị trí tương đối của hai đường thẳng và tính chất song song",
+              "slug": "step 3-g11-bai-12-hai-duong-song-song",
+              "duration": "35",
+              "isFree": false
+            },
+            {
+              "title": "Bài 13. Đường thẳng và mặt phẳng song song (Vận dụng cao)",
+              "subtitle": "Điều kiện để đường thẳng song song với mặt phẳng",
+              "slug": "step 3-g11-bai-13-duong-song-song-mat",
+              "duration": "35",
+              "isFree": false
+            },
+            {
+              "title": "Bài 14. Hai mặt phẳng song song (Vận dụng cao)",
+              "subtitle": "Định lý Ta-lét trong không gian và hình lăng trụ",
+              "slug": "step 3-g11-bai-14-hai-mat-song-song",
+              "duration": "40",
+              "isFree": false
+            }
+          ]
+        }
+      ],
+      "sourceUrl": "https://elearning-fe-eight.vercel.app/khoa-hoc/step-3-van-dung-cao-toan-11",
+      "sourceImage": "https://res.cloudinary.com/ds3zqakub/image/upload/v1781994542/Lop11-step3_ejrzho.png",
+      "image": "/migration-assets/course-step-3-van-dung-cao-toan-11.png"
+    },
+    {
+      "id": "6a21de6ac7c498d9a70067d3",
+      "slug": "step-3-van-dung-cao-toan-12",
+      "title": "Step 3: Vận dụng cao toán 12",
+      "grade": 12,
+      "sourcePrice": 1600000,
+      "overview": "Khóa học Vận dụng cao toán 12 dành riêng cho học sinh mục tiêu điểm 9+, 10 tối ưu các phương pháp giải siêu tốc.",
+      "sections": [
+        {
+          "id": "section-0",
+          "title": "CHƯƠNG I. ỨNG DỤNG ĐẠO HÀM ĐỂ KHẢO SÁT VÀ VẼ ĐỒ THỊ HÀM SỐ",
+          "lessons": [
+            {
+              "title": "Bài 1. Tính đơn điệu và cực trị của hàm số (Vận dụng cao)",
+              "subtitle": "Kỹ thuật cô lập tham số m, cực trị chứa dấu giá trị tuyệt đối nâng cao",
+              "slug": "step 3-bai-1-tinh-don-dieu-va-cuc-tri",
+              "duration": "45",
+              "isFree": false
+            },
+            {
+              "title": "Bài 2. Giá trị lớn nhất và giá trị nhỏ nhất của hàm số (Vận dụng cao)",
+              "subtitle": "Tìm GTLN, GTNN trên đoạn và trên khoảng",
+              "slug": "step 3-bai-2-gtln-gtnn",
+              "duration": "40",
+              "isFree": false
+            },
+            {
+              "title": "Bài 3. Đường tiệm cận của đồ thị hàm số (Vận dụng cao)",
+              "subtitle": "Định nghĩa và cách tìm tiệm cận đứng, tiệm cận ngang",
+              "slug": "step 3-bai-3-duong-tiem-can",
+              "duration": "35",
+              "isFree": false
+            },
+            {
+              "title": "Bài 4. Khảo sát sự biến thiên và vẽ đồ thị hàm số (Vận dụng cao)",
+              "subtitle": "Các bước khảo sát hàm số bậc ba, phân thức bậc nhất",
+              "slug": "step 3-bai-4-khao-sat-do-thi",
+              "duration": "50",
+              "isFree": false
+            },
+            {
+              "title": "Bài 5. Ứng dụng đạo hàm giải quyết một số bài toán thực tế (Vận dụng cao)",
+              "subtitle": "Tối ưu hóa chi phí, thể tích hộp và các bài toán kinh tế",
+              "slug": "step 3-bai-5-ung-dung-thuc-te",
+              "duration": "45",
+              "isFree": false
+            },
+            {
+              "title": "Bài tập cuối chương I (Vận dụng cao)",
+              "subtitle": "Chữa chi tiết các dạng bài tập trọng tâm chương I",
+              "slug": "step 3-bai-tap-cuoi-chuong-1",
+              "duration": "60",
+              "isFree": false
+            }
+          ]
+        },
+        {
+          "id": "section-1",
+          "title": "CHƯƠNG II. VECTƠ VÀ HỆ TRỤC TOẠ ĐỘ TRONG KHÔNG GIAN",
+          "lessons": [
+            {
+              "title": "Bài 6. Vectơ trong không gian (Vận dụng cao)",
+              "subtitle": "Quy tắc hình hộp, sự đồng phẳng của 3 vectơ",
+              "slug": "step 3-bai-6-vecto-trong-khong-gian",
+              "duration": "30",
+              "isFree": false
+            },
+            {
+              "title": "Bài 7. Hệ trục toạ độ trong không gian (Vận dụng cao)",
+              "subtitle": "Tọa độ điểm, tọa độ vectơ hệ Oxyz",
+              "slug": "step 3-bai-7-he-truc-toa-do-oxyz",
+              "duration": "25",
+              "isFree": false
+            },
+            {
+              "title": "Bài 8. Biểu thức toạ độ của các phép toán vectơ (Vận dụng cao)",
+              "subtitle": "Tích vô hướng, tích có hướng và ứng dụng",
+              "slug": "step 3-bai-8-bieu-thuc-toa-do-vecto",
+              "duration": "35",
+              "isFree": false
+            },
+            {
+              "title": "Bài tập cuối chương II (Vận dụng cao)",
+              "subtitle": "Luyện tập tổng hợp Oxyz phần cơ bản",
+              "slug": "step 3-bai-tap-cuoi-chuong-2",
+              "duration": "45",
+              "isFree": false
+            }
+          ]
+        },
+        {
+          "id": "section-2",
+          "title": "CHƯƠNG III. CÁC SỐ ĐẶC TRƯNG ĐO MỨC ĐỘ PHÂN TÁN CỦA MẪU SỐ LIỆU GHÉP NHÓM",
+          "lessons": [
+            {
+              "title": "Bài 9. Khoảng biến thiên và khoảng tứ phân vị (Vận dụng cao)",
+              "subtitle": "Xác định R và IQR cho mẫu số liệu ghép nhóm",
+              "slug": "step 3-bai-9-khoang-bien-thien-tu-phan-vi",
+              "duration": "25",
+              "isFree": false
+            },
+            {
+              "title": "Bài 10. Phương sai và độ lệch chuẩn (Vận dụng cao)",
+              "subtitle": "Đánh giá mức độ phân tán của số liệu",
+              "slug": "step 3-bai-10-phuong-sai-do-lech-chuan",
+              "duration": "30",
+              "isFree": false
+            },
+            {
+              "title": "Bài tập cuối chương III (Vận dụng cao)",
+              "subtitle": "Chữa bài tập thống kê xác suất lớp 12 mới",
+              "slug": "step 3-bai-tap-cuoi-chuong-3",
+              "duration": "40",
+              "isFree": false
+            }
+          ]
+        },
+        {
+          "id": "section-3",
+          "title": "CHƯƠNG IV. NGUYÊN HÀM VÀ TÍCH PHÂN",
+          "lessons": [
+            {
+              "title": "Bài 11. Nguyên hàm (Vận dụng cao)",
+              "subtitle": "Bảng nguyên hàm cơ bản và phương pháp đổi biến số",
+              "slug": "step 3-bai-11-nguyen-ham",
+              "duration": "35",
+              "isFree": false
+            },
+            {
+              "title": "Bài 12. Tích phân (Vận dụng cao)",
+              "subtitle": "Tính chất tích phân và phương pháp tính",
+              "slug": "step 3-bai-12-tich-phan",
+              "duration": "40",
+              "isFree": false
+            },
+            {
+              "title": "Bài 13. Ứng dụng hình học của tích phân (Vận dụng cao)",
+              "subtitle": "Tính diện tích hình phẳng và thể tích khối tròn xoay",
+              "slug": "step 3-bai-13-ung-dung-tich-phan",
+              "duration": "35",
+              "isFree": false
+            },
+            {
+              "title": "Bài tập cuối chương IV (Vận dụng cao)",
+              "subtitle": "Luyện đề phần Nguyên hàm - Tích phân",
+              "slug": "step 3-bai-tap-cuoi-chuong-4",
+              "duration": "50",
+              "isFree": false
+            }
+          ]
+        },
+        {
+          "id": "section-4",
+          "title": "CHƯƠNG V. PHƯƠNG PHÁP TOẠ ĐỘ TRONG KHÔNG GIAN",
+          "lessons": [
+            {
+              "title": "Bài 14. Phương trình mặt phẳng (Vận dụng cao)",
+              "subtitle": "Vectơ pháp tuyến và phương trình tổng quát",
+              "slug": "step 3-bai-14-phuong-trinh-mat-phang",
+              "duration": "30",
+              "isFree": false
+            },
+            {
+              "title": "Bài 15. Phương trình đường thẳng trong không gian (Vận dụng cao)",
+              "subtitle": "Phương trình tham số và chính tắc của đường thẳng",
+              "slug": "step 3-bai-15-phuong-trinh-duong-thang",
+              "duration": "35",
+              "isFree": false
+            },
+            {
+              "title": "Bài 16. Công thức tính góc trong không gian (Vận dụng cao)",
+              "subtitle": "Góc giữa 2 đường thẳng, 2 mặt phẳng, đường và mặt",
+              "slug": "step 3-bai-16-cong-thuc-tinh-goc",
+              "duration": "25",
+              "isFree": false
+            },
+            {
+              "title": "Bài 17. Phương trình mặt cầu (Vận dụng cao)",
+              "subtitle": "Xác định tâm, bán kính và sự tương giao",
+              "slug": "step 3-bai-17-phuong-trinh-mat-cau",
+              "duration": "25",
+              "isFree": false
+            },
+            {
+              "title": "Bài tập cuối chương V (Vận dụng cao)",
+              "subtitle": "Tổng ôn Oxyz và các bài toán cực trị hình học",
+              "slug": "step 3-bai-tap-cuoi-chuong-5",
+              "duration": "55",
+              "isFree": false
+            }
+          ]
+        },
+        {
+          "id": "section-5",
+          "title": "CHƯƠNG VI. XÁC SUẤT CÓ ĐIỀU KIỆN",
+          "lessons": [
+            {
+              "title": "Bài 18. Xác suất có điều kiện (Vận dụng cao)",
+              "subtitle": "Định nghĩa và bài tập tính xác suất có điều kiện",
+              "slug": "step 3-bai-18-xac-suat-co-dieu-kien",
+              "duration": "30",
+              "isFree": false
+            },
+            {
+              "title": "Bài 19. Công thức xác suất toàn phần và công thức Bayes (Vận dụng cao)",
+              "subtitle": "Phương pháp vẽ sơ đồ hình cây để giải bài tập",
+              "slug": "step 3-bai-19-cong-thuc-toan-phan-bayes",
+              "duration": "35",
+              "isFree": false
+            },
+            {
+              "title": "Bài tập cuối chương VI (Vận dụng cao)",
+              "subtitle": "Luyện tập các dạng toán Xác suất 12 trọng tâm",
+              "slug": "step 3-bai-tap-cuoi-chuong-6",
+              "duration": "40",
+              "isFree": false
+            }
+          ]
+        }
+      ],
+      "sourceUrl": "https://elearning-fe-eight.vercel.app/khoa-hoc/step-3-van-dung-cao-toan-12",
+      "sourceImage": "https://res.cloudinary.com/ds3zqakub/image/upload/v1781994542/Lop12-step3_w7w45c.png",
+      "image": "/migration-assets/course-step-3-van-dung-cao-toan-12.png"
+    },
+    {
+      "id": "6a2286e045f6df77749bf3c5",
+      "slug": "step-4-tong-on-va-luyen-de-lop-11",
+      "title": "Step 4: Tổng ôn và luyện đề lớp 11",
+      "grade": 11,
+      "sourcePrice": 1200000,
+      "overview": "",
+      "sections": [],
+      "sourceUrl": "https://elearning-fe-eight.vercel.app/khoa-hoc/step-4-tong-on-va-luyen-de-lop-11",
+      "sourceImage": "https://res.cloudinary.com/ds3zqakub/image/upload/v1781994541/Lop11-step4_cn6n4z.png",
+      "image": "/migration-assets/course-step-4-tong-on-va-luyen-de-lop-11.png"
+    },
+    {
+      "id": "6a22864045f6df77749bf0c3",
+      "slug": "step-4-tong-on-va-luyen-de-lop-12",
+      "title": "Step 4: Tổng ôn và Luyện đề lớp 12",
+      "grade": 12,
+      "sourcePrice": 1500000,
+      "overview": "",
+      "sections": [],
+      "sourceUrl": "https://elearning-fe-eight.vercel.app/khoa-hoc/step-4-tong-on-va-luyen-de-lop-12",
+      "sourceImage": "https://res.cloudinary.com/ds3zqakub/image/upload/v1781994541/Lop12-step4_xyhvem.png",
+      "image": "/migration-assets/course-step-4-tong-on-va-luyen-de-lop-12.png"
+    },
+    {
+      "id": "6a22870245f6df77749bf546",
+      "slug": "step-4-tong-on-va-luyen-de-toan-10",
+      "title": "Step 4: Tổng ôn và Luyện đề toán 10",
+      "grade": 10,
+      "sourcePrice": 1600000,
+      "overview": "",
+      "sections": [],
+      "sourceUrl": "https://elearning-fe-eight.vercel.app/khoa-hoc/step-4-tong-on-va-luyen-de-toan-10",
+      "sourceImage": "https://res.cloudinary.com/ds3zqakub/image/upload/v1781994541/Lop10-step4_xyp8a9.png",
+      "image": "/migration-assets/course-step-4-tong-on-va-luyen-de-toan-10.png"
+    }
+  ]
+}

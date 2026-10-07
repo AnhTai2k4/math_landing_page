@@ -1,0 +1,218 @@
+{
+  "capturedAt": "2026-10-06T17:53:13.243Z",
+  "courses": [
+    {
+      "slug": "doc-vi-de-dgnl-dgtd",
+      "title": "Đọc vị đề ĐGNL - ĐGTD",
+      "description": "",
+      "overview": "",
+      "price": 1200000,
+      "grade": 12
+    },
+    {
+      "slug": "step-1-nen-tang-toan-10",
+      "title": "Step 1: Nền tảng toán 10",
+      "description": "<h2>Chuyển cấp vững vàng - Làm quen phương pháp học THPT</h2><p>Học tốt toán 10 ngay từ đầu giúp các em không bị ngợp trước sự thay đổi phương pháp dạy học ở cấp ba. Khóa học phủ kín kiến thức mệnh đề, tập hợp, bất phương trình, đồ thị bậc hai và hệ thức lượng tam giác.</p>",
+      "overview": "Khóa học Nền tảng toán 10 giúp học sinh chuyển cấp vững vàng, bám sát SGK lớp 10 mới.",
+      "price": 1050000,
+      "grade": 10
+    },
+    {
+      "slug": "step-1-nen-tang-toan-11",
+      "title": "Step 1: Nền tảng toán 11",
+      "description": "<h2>Nền tảng vững chắc - Khởi đầu hoàn hảo cho lớp 11</h2><p>Môn Toán lớp 11 là cầu nối cực kỳ quan trọng lên lớp 12. Khóa học này giúp học sinh nắm vững các khái niệm lượng giác, cấp số cộng/nhân, giới hạn và hình học không gian cơ bản một cách trực quan, sinh động nhất.</p>",
+      "overview": "Khóa học xây dựng nền tảng Toán 11 vững chắc, bám sát chương trình sách giáo khoa mới.",
+      "price": 1250000,
+      "grade": 11
+    },
+    {
+      "slug": "step-1-nen-tang-toan-12",
+      "title": "Step 1: Nền tảng toán 12",
+      "description": "<h2>Khóa học lộ trình từ mất gốc tới làm chủ nền tảng toán 12</h2><p>Lớp 12 là năm học mang tính bước ngoặt. Với chương trình giáo dục phổ thông mới (2018), môn Toán không chỉ dừng lại ở những con số khô khan mà đòi hỏi tư duy logic, khả năng ứng dụng thực tiễn và thống kê số liệu. Khóa học <b>Toán 12 Nền tảng</b> được thiết kế như một tấm bản đồ chi tiết, dẫn dắt em đi từ con số 0 đến sự tự tin chinh phục mức điểm 8+ trong kỳ thi THPT Quốc gia.</p><h3>Khóa học này mang lại cho em những gì?</h3><ul><li><b>Quét sạch 100% dạng bài trọng tâm:</b> Lộ trình đi từ cơ bản đến nâng cao qua 6 chương cốt lõi. Đặc biệt chú trọng các chuyên đề mới như <i>Thống kê (phương sai, độ lệch chuẩn)</i> và <i>Xác suất có điều kiện (công thức Bayes)</i>.</li><li><b>Học bản chất - Nhớ lâu - Giải nhanh:</b> Anh không dạy mẹo vặt sáo rỗng. Khóa học tập trung rèn luyện tư duy toán học gốc rễ, giúp em tự suy luận hướng giải kể cả khi gặp câu hỏi lạ.</li><li><b>Môi trường học tập kỷ luật với AI Coaching:</b> Điểm khác biệt lớn nhất! Em không học một mình. Hệ thống E-learning tích hợp <i>Sổ tay kế hoạch thông minh</i> sẽ yêu cầu em lên mục tiêu hàng ngày. Trợ giảng AI và Mentor sẽ liên tục chấm điểm kỷ luật, nhắc nhở và đánh giá hiệu suất học tập của em mỗi tuần.</li></ul><p>Đừng để môn Toán trở thành rào cản cản bước chân em vào ngôi trường Đại học mơ ước. Hãy bắt đầu xây dựng nền móng vững chắc ngay hôm nay!</p>",
+      "overview": "Khóa học tập trung vào các chuyên đề trọng tâm: Hàm số, Mũ - Lôgarit, Nguyên hàm, Tích phân và Hình học không gian bám sát chương trình mới.",
+      "price": 1450000,
+      "grade": 12
+    },
+    {
+      "slug": "step-2-van-dung-toan-10",
+      "title": "Step 2: Vận dụng toán 10",
+      "description": "<h2>Bứt phá điểm giỏi môn Toán lớp 10</h2><p>Học cách ứng dụng hệ thức lượng đo đạc, lập mô hình bài toán quy hoạch tuyến tính và các dạng bài toán đồ thị hàm số bậc hai nâng cao.</p>",
+      "overview": "Khóa học Vận dụng toán 10 rèn luyện phản xạ giải bài tập nâng cao, bám sát các kỳ thi học kỳ.",
+      "price": 1100000,
+      "grade": 10
+    },
+    {
+      "slug": "step-2-van-dung-toan-11",
+      "title": "Step 2: Vận dụng toán 11",
+      "description": "<h2>Đột phá điểm số - Tự tin dẫn đầu lớp 11</h2><p>Khóa học thiết kế chuyên biệt để giải quyết các câu hỏi khó trong các kỳ thi giữa kỳ, cuối kỳ lớp 11. Giúp các em mở rộng tư duy giải toán nhanh, chính xác.</p>",
+      "overview": "Khóa học Vận dụng toán 11 phát triển tư duy giải các bài toán phân loại lớp 11 đạt điểm 8, 9 trên lớp.",
+      "price": 1300000,
+      "grade": 11
+    },
+    {
+      "slug": "step-2-van-dung-toan-12",
+      "title": "Step 2: Vận dụng toán 12",
+      "description": "<h2>Bứt phá giới hạn - Chinh phục điểm 8+ môn Toán</h2><p>Nếu bạn đã nắm chắc nền tảng cơ bản và muốn tiến xa hơn vào nhóm điểm cao, khóa học <b>Toán 12 Vận dụng</b> chính là bệ phóng hoàn hảo dành cho bạn. Khóa học giúp chuyển hóa lý thuyết căn bản thành khả năng nhận diện và giải quyết các bài toán phức tạp.</p><h3>Điểm nổi bật của khóa học:</h3><ul><li><b>Hệ thống chuyên đề phân loại điểm 8+:</b> Đào sâu vào các phương pháp biện luận tham số m, cực trị nâng cao, các bài toán thực tế tích phân và hình học Oxyz mức độ 3.</li><li><b>Kỹ năng xử lý bài toán đa bước:</b> Rèn luyện thói quen tư duy sâu, liên kết nhiều kiến thức để tìm ra lời giải tối ưu.</li><li><b>Hỗ trợ học tập 24/7:</b> Nhóm học tập chất lượng cao cùng Mentor chuyên môn giải đáp mọi thắc mắc của bạn nhanh chóng.</li></ul>",
+      "overview": "Khóa học Vận dụng toán 12 đi sâu vào giải quyết các bài toán phân loại điểm 8+, rèn luyện tư duy logic cao độ.",
+      "price": 1500000,
+      "grade": 12
+    },
+    {
+      "slug": "step-3-van-dung-cao-toan-10",
+      "title": "Step 3: Vận dụng cao toán 10",
+      "description": "<h2>Ươm mầm tài năng - Tư duy Toán học đỉnh cao</h2><p>Giải quyết các bài toán cực trị hình học dùng Vectơ, các hệ bất phương trình bậc hai nâng cao chứa tham số và các bài toán tổ hợp khó bậc nhất.</p>",
+      "overview": "Khóa học Vận dụng cao toán 10 chinh phục điểm số tuyệt đối, ôn luyện học sinh giỏi.",
+      "price": 1200000,
+      "grade": 10
+    },
+    {
+      "slug": "step-3-van-dung-cao-toan-11",
+      "title": "Step 3: Vận dụng cao toán 11",
+      "description": "<h2>Bứt phá tư duy - Sẵn sàng cho kỳ thi lớn</h2><p>Chinh phục các chuyên đề khó nhất của chương trình Toán 11: Tổ hợp - Xác suất phức tạp, Cực trị hình học không gian song song và vuông góc, Giới hạn vô định nâng cao.</p>",
+      "overview": "Khóa học Vận dụng cao toán 11 giúp học sinh chinh phục điểm 10 tuyệt đối và tạo đà sớm cho kỳ thi THPTQG.",
+      "price": 1400000,
+      "grade": 11
+    },
+    {
+      "slug": "step-3-van-dung-cao-toan-12",
+      "title": "Step 3: Vận dụng cao toán 12",
+      "description": "<h2>Chinh phục đỉnh cao - Đạt điểm 9+, 10 môn Toán</h2><p>Khóa học <b>Toán 12 Vận dụng cao</b> được biên soạn kỹ lưỡng dành riêng cho những chiến binh đặt mục tiêu thủ khoa, á khoa. Nơi bạn làm chủ những phương pháp giải toán đỉnh cao nhất để tối ưu thời gian làm bài trắc nghiệm.</p><h3>Nội dung khóa học:</h3><ul><li><b>Tuyển tập phương pháp giải siêu tốc:</b> Ghép trục, ghép đồ thị, sơ đồ V, dồn biến, giải tích hóa hình học không gian, các kỹ thuật Casio đỉnh cao bứt tốc thời gian làm bài.</li><li><b>Hệ thống đề thi thử form chuẩn Bộ GD:</b> Thực chiến nâng cao phản xạ, rèn luyện tâm lý phòng thi vững vàng.</li></ul>",
+      "overview": "Khóa học Vận dụng cao toán 12 dành riêng cho học sinh mục tiêu điểm 9+, 10 tối ưu các phương pháp giải siêu tốc.",
+      "price": 1600000,
+      "grade": 12
+    },
+    {
+      "slug": "step-4-tong-on-va-luyen-de-lop-11",
+      "title": "Step 4: Tổng ôn và luyện đề lớp 11",
+      "description": "",
+      "overview": "",
+      "price": 1200000,
+      "grade": 11
+    },
+    {
+      "slug": "step-4-tong-on-va-luyen-de-lop-12",
+      "title": "Step 4: Tổng ôn và Luyện đề lớp 12",
+      "description": "",
+      "overview": "",
+      "price": 1500000,
+      "grade": 12
+    },
+    {
+      "slug": "step-4-tong-on-va-luyen-de-toan-10",
+      "title": "Step 4: Tổng ôn và Luyện đề toán 10",
+      "description": "",
+      "overview": "",
+      "price": 1600000,
+      "grade": 10
+    }
+  ],
+  "exams": [
+    {
+      "id": "6ac3bb971b13b84fcf748153",
+      "title": "uyuyuyuyuyu",
+      "description": "",
+      "grade": 12,
+      "createdAt": "2026-10-05T15:00:39.256Z",
+      "duration": 90,
+      "questionsCount": 22,
+      "type": "exam"
+    },
+    {
+      "id": "6a544e9b80c1fe002afa6512",
+      "title": "Đề thi thử Lê Quý Đôn",
+      "description": "",
+      "grade": 12,
+      "createdAt": "2026-07-13T02:34:03.783Z",
+      "duration": 90,
+      "questionsCount": 22,
+      "type": "exam"
+    },
+    {
+      "id": "6a54449065e18f267ddd96d4",
+      "title": "Đề thi thử Trần Phú",
+      "description": "",
+      "grade": 12,
+      "createdAt": "2026-07-13T01:51:12.782Z",
+      "duration": 90,
+      "questionsCount": 22,
+      "type": "exam"
+    },
+    {
+      "id": "6a50c16220925aadeed16fb3",
+      "title": "Đề thi Phan Huy Chú",
+      "description": "",
+      "grade": 12,
+      "createdAt": "2026-07-10T09:54:42.203Z",
+      "duration": 90,
+      "questionsCount": 22,
+      "type": "exam"
+    },
+    {
+      "id": "6a4df0dc6fc523a9a7a8001b",
+      "title": "Đề thi Mỹ Đình - Hà Nội",
+      "description": "",
+      "grade": 12,
+      "createdAt": "2026-07-08T06:40:28.828Z",
+      "duration": 90,
+      "questionsCount": 22,
+      "type": "exam"
+    },
+    {
+      "id": "6a4df0ae6fc523a9a7a7ff5a",
+      "title": "Đề thi thử chuyên Đà Nẵng",
+      "description": "",
+      "grade": 12,
+      "createdAt": "2026-07-08T06:39:42.684Z",
+      "duration": 90,
+      "questionsCount": 22,
+      "type": "exam"
+    },
+    {
+      "id": "6a4de08ef485b49780f75997",
+      "title": "Đề thi Phan Huy Chú 2",
+      "description": "",
+      "grade": 12,
+      "createdAt": "2026-07-08T05:30:54.530Z",
+      "duration": 90,
+      "questionsCount": 22,
+      "type": "exam"
+    }
+  ],
+  "documents": [
+    {
+      "id": "6a54be473fd8333b187a0152",
+      "title": "Tài liệu thi THPT Quốc gia",
+      "description": "",
+      "grade": 12,
+      "createdAt": "2026-07-13T10:30:31.518Z"
+    },
+    {
+      "id": "6a54be253fd8333b187a014d",
+      "title": "Tài liệu ôn tập sở Lào Cai",
+      "description": "",
+      "grade": 12,
+      "createdAt": "2026-07-13T10:29:57.663Z"
+    },
+    {
+      "id": "6a54be003fd8333b187a0146",
+      "title": "Bộ đề sở Hà Nội",
+      "description": "",
+      "grade": 12,
+      "createdAt": "2026-07-13T10:29:20.111Z"
+    },
+    {
+      "id": "6a544f3880c1fe002afa676a",
+      "title": "Bộ đề ôn tập sở Hà Nội",
+      "description": "",
+      "grade": 11,
+      "createdAt": "2026-07-13T02:36:40.067Z"
+    },
+    {
+      "id": "6a544f0580c1fe002afa6766",
+      "title": "Bộ đề sở Đà Nẵng",
+      "description": "",
+      "grade": 12,
+      "createdAt": "2026-07-13T02:35:49.238Z"
+    }
+  ]
+}

@@ -1,0 +1,209 @@
+[
+  {
+    "kind": "course",
+    "name": "course-doc-vi-de-dgnl-dgtd",
+    "alt": "Đọc vị đề ĐGNL - ĐGTD",
+    "url": "https://res.cloudinary.com/ds3zqakub/image/upload/v1781994541/HSA_xrduxg.png",
+    "local": "/migration-assets/course-doc-vi-de-dgnl-dgtd.png",
+    "bytes": 171376,
+    "sha256": "c22e00188ff5fc0326eceaffaf9ae543fc09112121605a7baaf0e7533477e30a"
+  },
+  {
+    "kind": "course",
+    "name": "course-step-1-nen-tang-toan-10",
+    "alt": "Step 1: Nền tảng toán 10",
+    "url": "https://res.cloudinary.com/ds3zqakub/image/upload/v1781994542/Lop10-step1_wiimuq.png",
+    "local": "/migration-assets/course-step-1-nen-tang-toan-10.png",
+    "bytes": 168220,
+    "sha256": "017dbb702e5c386e6377b0b787e681184ea4391e69586871dec960e50e598af2"
+  },
+  {
+    "kind": "course",
+    "name": "course-step-1-nen-tang-toan-11",
+    "alt": "Step 1: Nền tảng toán 11",
+    "url": "https://res.cloudinary.com/ds3zqakub/image/upload/v1781994542/Lop11-step1_niq5ja.png",
+    "local": "/migration-assets/course-step-1-nen-tang-toan-11.png",
+    "bytes": 166615,
+    "sha256": "4540b2c358cfbab50b067bb261bbb0113c8143c94fc6e03585729f6f4fea6ae8"
+  },
+  {
+    "kind": "course",
+    "name": "course-step-1-nen-tang-toan-12",
+    "alt": "Step 1: Nền tảng toán 12",
+    "url": "https://res.cloudinary.com/ds3zqakub/image/upload/v1781994108/Lop12-step1_pgozut.png",
+    "local": "/migration-assets/course-step-1-nen-tang-toan-12.png",
+    "bytes": 169609,
+    "sha256": "42d416d6f01dd1466cd45cc15c100f6cf25559b6eabca4cc6e60eaca930b38f3"
+  },
+  {
+    "kind": "course",
+    "name": "course-step-2-van-dung-toan-10",
+    "alt": "Step 2: Vận dụng toán 10",
+    "url": "https://res.cloudinary.com/ds3zqakub/image/upload/v1781994542/Lop10-step2_xqlspk.png",
+    "local": "/migration-assets/course-step-2-van-dung-toan-10.png",
+    "bytes": 169517,
+    "sha256": "ea1cce217619a4ba9c85ccbf1c56b509aa49a7ac666884a7c6ba5aa4e3f6d89b"
+  },
+  {
+    "kind": "course",
+    "name": "course-step-2-van-dung-toan-11",
+    "alt": "Step 2: Vận dụng toán 11",
+    "url": "https://res.cloudinary.com/ds3zqakub/image/upload/v1781994542/Lop11-step2_cmuras.png",
+    "local": "/migration-assets/course-step-2-van-dung-toan-11.png",
+    "bytes": 168826,
+    "sha256": "a2f498e8723527078e10f59c51d091f36aee9f9e9fde84e072430f072c75cb79"
+  },
+  {
+    "kind": "course",
+    "name": "course-step-2-van-dung-toan-12",
+    "alt": "Step 2: Vận dụng toán 12",
+    "url": "https://res.cloudinary.com/ds3zqakub/image/upload/v1781994542/Lop12-step2_enzvlw.png",
+    "local": "/migration-assets/course-step-2-van-dung-toan-12.png",
+    "bytes": 170018,
+    "sha256": "d9eb72219d5a07e0f404d2427b6e35599933f139d7542778c7a94f1630a8a5c5"
+  },
+  {
+    "kind": "course",
+    "name": "course-step-3-van-dung-cao-toan-10",
+    "alt": "Step 3: Vận dụng cao toán 10",
+    "url": "https://res.cloudinary.com/ds3zqakub/image/upload/v1781994541/Lop10-step3_x4zqqx.png",
+    "local": "/migration-assets/course-step-3-van-dung-cao-toan-10.png",
+    "bytes": 172612,
+    "sha256": "8f8d1e7e93c8783fec3173142d82ecd61b52176b17d93627651c7d2667687223"
+  },
+  {
+    "kind": "course",
+    "name": "course-step-3-van-dung-cao-toan-11",
+    "alt": "Step 3: Vận dụng cao toán 11",
+    "url": "https://res.cloudinary.com/ds3zqakub/image/upload/v1781994542/Lop11-step3_ejrzho.png",
+    "local": "/migration-assets/course-step-3-van-dung-cao-toan-11.png",
+    "bytes": 170877,
+    "sha256": "3f7aefb95abf86062bd413128790fa87dc8b805d09315273618087832b181090"
+  },
+  {
+    "kind": "course",
+    "name": "course-step-3-van-dung-cao-toan-12",
+    "alt": "Step 3: Vận dụng cao toán 12",
+    "url": "https://res.cloudinary.com/ds3zqakub/image/upload/v1781994542/Lop12-step3_w7w45c.png",
+    "local": "/migration-assets/course-step-3-van-dung-cao-toan-12.png",
+    "bytes": 172498,
+    "sha256": "40a3e77ec8793d47a844719a870173b7e61498d4bf95bdaf122d3d41bc8e7b66"
+  },
+  {
+    "kind": "course",
+    "name": "course-step-4-tong-on-va-luyen-de-lop-11",
+    "alt": "Step 4: Tổng ôn và luyện đề lớp 11",
+    "url": "https://res.cloudinary.com/ds3zqakub/image/upload/v1781994541/Lop11-step4_cn6n4z.png",
+    "local": "/migration-assets/course-step-4-tong-on-va-luyen-de-lop-11.png",
+    "bytes": 173698,
+    "sha256": "160d2b0b241a1bee8628da1f7670c123a11415ced4e8b6077d7940dcc486575c"
+  },
+  {
+    "kind": "course",
+    "name": "course-step-4-tong-on-va-luyen-de-lop-12",
+    "alt": "Step 4: Tổng ôn và Luyện đề lớp 12",
+    "url": "https://res.cloudinary.com/ds3zqakub/image/upload/v1781994541/Lop12-step4_xyhvem.png",
+    "local": "/migration-assets/course-step-4-tong-on-va-luyen-de-lop-12.png",
+    "bytes": 174089,
+    "sha256": "e5e5687e065d3b5baf6134e1e0b7a71f77d32b0e932bece139bd6a1746ad2e16"
+  },
+  {
+    "kind": "course",
+    "name": "course-step-4-tong-on-va-luyen-de-toan-10",
+    "alt": "Step 4: Tổng ôn và Luyện đề toán 10",
+    "url": "https://res.cloudinary.com/ds3zqakub/image/upload/v1781994541/Lop10-step4_xyp8a9.png",
+    "local": "/migration-assets/course-step-4-tong-on-va-luyen-de-toan-10.png",
+    "bytes": 174454,
+    "sha256": "036a87e802cb32fcf11be8dd8ec097ad472f0400bccb846796e2fff2073c2be9"
+  },
+  {
+    "kind": "home",
+    "name": "source-logo",
+    "alt": "MTMath Logo",
+    "url": "https://elearning-fe-eight.vercel.app/images/math_assets/logo.png",
+    "local": "/migration-assets/source-logo.png",
+    "bytes": 429616,
+    "sha256": "722dd4a25667830a8bfd0ffa7d7d347e1d67091ed88f90248bb67d7a61ad904d"
+  },
+  {
+    "kind": "home",
+    "name": "source-3a0a47e483030d752b74a16044b2bd5c5183d3ba",
+    "alt": "Lớp học ToánMath",
+    "url": "https://elearning-fe-eight.vercel.app/images/math_assets/3a0a47e483030d752b74a16044b2bd5c5183d3ba.png",
+    "local": "/migration-assets/source-3a0a47e483030d752b74a16044b2bd5c5183d3ba.png",
+    "bytes": 270238,
+    "sha256": "40bae49f9493e925600971f9890403ad9709995891e71674fac2e4765e569ce5"
+  },
+  {
+    "kind": "home",
+    "name": "source-avatar",
+    "alt": "Giáo viên ToánMath - Tự tin giỏi toán, hiểu sâu nhớ lâu",
+    "url": "https://elearning-fe-eight.vercel.app/images/math_assets/avatar.jpg",
+    "local": "/migration-assets/source-avatar.jpg",
+    "bytes": 321782,
+    "sha256": "b8663bb0406c94136e3834245a6902aaa0f9afa577a6f5c6c127e17031c82eb9"
+  },
+  {
+    "kind": "home",
+    "name": "source-bd36b26f465734ac6ed738bfb7b629af3f695065",
+    "alt": "Thầy Tô Minh Thành - Founder ToánMath",
+    "url": "https://elearning-fe-eight.vercel.app/images/math_assets/bd36b26f465734ac6ed738bfb7b629af3f695065.png",
+    "local": "/migration-assets/source-bd36b26f465734ac6ed738bfb7b629af3f695065.png",
+    "bytes": 3030675,
+    "sha256": "5adca3c07912c350f218bd8fd2413a3d20290a3c2b280fa1812a3c2e85c4981b"
+  },
+  {
+    "kind": "home",
+    "name": "source-bg",
+    "alt": "Background",
+    "url": "https://elearning-fe-eight.vercel.app/images/math_assets/bg.jpg",
+    "local": "/migration-assets/source-bg.jpg",
+    "bytes": 142544,
+    "sha256": "d0ce5c531ec37857230a84cbb579408ad4532575d3ad3b21b2085589078ed759"
+  },
+  {
+    "kind": "home",
+    "name": "source-d56a53b54b176fd3ff4b77016e41cca55d662b40",
+    "alt": "Học sinh Minh Thành Math - Khoảnh khắc vui vẻ tại lớp học",
+    "url": "https://elearning-fe-eight.vercel.app/images/math_assets/d56a53b54b176fd3ff4b77016e41cca55d662b40.png",
+    "local": "/migration-assets/source-d56a53b54b176fd3ff4b77016e41cca55d662b40.png",
+    "bytes": 6506291,
+    "sha256": "5be3040db6103556ab1b7b9231bb439cb23d335872dda323412d8f033bd08d75"
+  },
+  {
+    "kind": "home",
+    "name": "source-35b1461c5a7359dbd98f1549d1acd92a614c862b",
+    "alt": "Phản hồi học sinh Minh Thành Math - Hơn 1000 hành trình chinh phục toán",
+    "url": "https://elearning-fe-eight.vercel.app/images/math_assets/35b1461c5a7359dbd98f1549d1acd92a614c862b.png",
+    "local": "/migration-assets/source-35b1461c5a7359dbd98f1549d1acd92a614c862b.png",
+    "bytes": 4127097,
+    "sha256": "80fce55741b345540fa6f39dbdc5bbd9d530e1a79cecdda3627290cbdfef619e"
+  },
+  {
+    "kind": "home",
+    "name": "source-fb",
+    "alt": "Học sinh Ẩn Danh",
+    "url": "https://elearning-fe-eight.vercel.app/images/math_assets/fb.jpg",
+    "local": "/migration-assets/source-fb.jpg",
+    "bytes": 876020,
+    "sha256": "bdb84ead90e447c53500e9e603e57290f7da191d879c6bc7b1a3182d1c1afc26"
+  },
+  {
+    "kind": "home",
+    "name": "source-9d658ea6d8327bc9490e1829f8861bb4221904ef",
+    "alt": "Phạm Quang Anh",
+    "url": "https://elearning-fe-eight.vercel.app/images/math_assets/9d658ea6d8327bc9490e1829f8861bb4221904ef.png",
+    "local": "/migration-assets/source-9d658ea6d8327bc9490e1829f8861bb4221904ef.png",
+    "bytes": 2300828,
+    "sha256": "4cc2876a5abe61b2d487331634b0a0306d53884b02431469f9b0916cbd2fd215"
+  },
+  {
+    "kind": "home",
+    "name": "source-GiaHan",
+    "alt": "Gia Hân",
+    "url": "https://elearning-fe-eight.vercel.app/images/math_assets/GiaHan.jpg",
+    "local": "/migration-assets/source-GiaHan.jpg",
+    "bytes": 642212,
+    "sha256": "4142986149d4b9b1225773cf12586a8ff9c3a751f1e27af0163fa0ea38aad573"
+  }
+]

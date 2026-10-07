@@ -1,0 +1,58 @@
+{
+  "capturedAt": "2026-10-06T19:34:45.675Z",
+  "files": [
+    {
+      "id": "6a54be473fd8333b187a0152",
+      "path": "/learning-documents/e9d3aff85a223402a32c8386d5fd70a7ead3af8ec70161c82f4575cc728bb1cc.pdf",
+      "sha256": "e9d3aff85a223402a32c8386d5fd70a7ead3af8ec70161c82f4575cc728bb1cc",
+      "bytes": 2276175,
+      "pages": 13,
+      "observedContents": "Đề thi thử THPT Mỹ Đình, Toán 12, mã 0107 và phần lời giải",
+      "sourceGrouping": 3,
+      "sourceMetadataNeedsReview": false
+    },
+    {
+      "id": "6a54be253fd8333b187a014d",
+      "path": "/learning-documents/d1cc1493df2b8af27d3b20a875c1eb8ea8c12eed46457924068f97e63a7305ef.pdf",
+      "sha256": "d1cc1493df2b8af27d3b20a875c1eb8ea8c12eed46457924068f97e63a7305ef",
+      "bytes": 2696941,
+      "pages": 19,
+      "observedContents": "Đề thi thử Đà Nẵng 2026 lần 3, mã 1016 và phần lời giải",
+      "sourceGrouping": 2,
+      "sourceMetadataNeedsReview": true
+    },
+    {
+      "id": "6a54be003fd8333b187a0146",
+      "path": "/learning-documents/e9d3aff85a223402a32c8386d5fd70a7ead3af8ec70161c82f4575cc728bb1cc.pdf",
+      "sha256": "e9d3aff85a223402a32c8386d5fd70a7ead3af8ec70161c82f4575cc728bb1cc",
+      "bytes": 2276175,
+      "pages": 13,
+      "observedContents": "Đề thi thử THPT Mỹ Đình, Toán 12, mã 0107 và phần lời giải",
+      "sourceGrouping": 3,
+      "sourceMetadataNeedsReview": true
+    },
+    {
+      "id": "6a544f3880c1fe002afa676a",
+      "path": "/learning-documents/e9d3aff85a223402a32c8386d5fd70a7ead3af8ec70161c82f4575cc728bb1cc.pdf",
+      "sha256": "e9d3aff85a223402a32c8386d5fd70a7ead3af8ec70161c82f4575cc728bb1cc",
+      "bytes": 2276175,
+      "pages": 13,
+      "observedContents": "Đề thi thử THPT Mỹ Đình, Toán 12, mã 0107 và phần lời giải",
+      "sourceGrouping": 3,
+      "sourceMetadataNeedsReview": true
+    },
+    {
+      "id": "6a544f0580c1fe002afa6766",
+      "path": "/learning-documents/d1cc1493df2b8af27d3b20a875c1eb8ea8c12eed46457924068f97e63a7305ef.pdf",
+      "sha256": "d1cc1493df2b8af27d3b20a875c1eb8ea8c12eed46457924068f97e63a7305ef",
+      "bytes": 2696941,
+      "pages": 19,
+      "observedContents": "Đề thi thử Đà Nẵng 2026 lần 3, mã 1016 và phần lời giải",
+      "sourceGrouping": 2,
+      "sourceMetadataNeedsReview": false
+    }
+  ],
+  "publicAnonymousSource": true,
+  "originalBytesPreserved": true,
+  "contentCorrectnessReviewed": false
+}

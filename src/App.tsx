@@ -1,86 +1,23 @@
-import { useEffect, useRef, useState, type ComponentType } from 'react';
-import { MtmLifeTabs } from './components/MtmLifeTabs';
-import { MtmTimetable } from './components/MtmTimetable';
-import { MtmNewsSection } from './components/MtmNewsSection';
-import { Header } from "./components/Header";
-import { HeroSection } from "./components/HeroSection";
-import { PromotionsSection } from "./components/PromotionsSection";
-import { CoursesSection } from "./components/CoursesSection";
-import { FAQSection } from "./components/FAQSection";
-import { BenefitsSection } from "./components/BenefitsSection";
+import {Component,lazy,Suspense,useEffect,type ReactNode} from 'react';
+import {routeMetadata} from './migration/route-policy';
+import {SEOProvider} from './components/SEOProvider';import {SEO} from './components/SEO';import {StructuredData} from './components/StructuredData';
 
 
-import { TeachersSection } from "./components/TeachersSection";
-import { RegisterSection } from "./components/RegisterSection";
-import { FloatingContact } from "./components/FloatingContact";
-import { Footer } from "./components/Footer";
-import { Toaster } from "./components/ui/sonner";
-import { SEOProvider } from "./components/SEOProvider";
-import { SEO } from "./components/SEO";
-import { StructuredData } from "./components/StructuredData";
+import {Footer} from './components/Footer';import {FloatingContact} from './components/FloatingContact';import {Toaster} from './components/ui/sonner';
 
-function DeferredReferenceLibrary() {
-  const container = useRef<HTMLDivElement>(null);
-  const [wanted, setWanted] = useState(false);
-  const [Library, setLibrary] = useState<ComponentType | null>(null);
-  const [error, setError] = useState(false);
-  const [retry, setRetry] = useState(0);
-  useEffect(() => {
-    const followAnchor = () => { if (window.location.hash === '#tai-lieu-tham-khao') setWanted(true); };
-    followAnchor();
-    window.addEventListener('hashchange', followAnchor);
-    const observer = typeof IntersectionObserver === 'undefined' ? null : new IntersectionObserver(entries => {
-      if (entries.some(entry => entry.isIntersecting)) { setWanted(true); observer?.disconnect(); }
-    }, { rootMargin: '600px 0px' });
-    if (container.current) observer?.observe(container.current);
-    return () => { observer?.disconnect(); window.removeEventListener('hashchange', followAnchor); };
-  }, []);
-  useEffect(() => {
-    if (!wanted) return;
-    let cancelled = false;
-    setError(false);
-    void import('./components/MtmReferenceLibrary').then(module => {
-      if (!cancelled) setLibrary(() => module.default);
-    }).catch(() => { if (!cancelled) setError(true); });
-    return () => { cancelled = true; };
-  }, [wanted, retry]);
-  return <div ref={container} id={Library ? undefined : 'tai-lieu-tham-khao'}>
-    {Library ? <Library /> : <section aria-label="Thư viện tham khảo" style={{maxWidth:1200,margin:'48px auto',padding:24,minHeight:220}}>
-      <h2>Thư viện tài liệu tham khảo</h2>
-      <p>{error ? 'Chưa tải được danh mục. Em có thể thử lại khi có kết nối.' : wanted ? 'Đang tải danh mục bài nguồn…' : '1.200 bài nguồn, có bộ lọc lớp và dạng tài liệu.'}</p>
-      <button type="button" disabled={wanted && !error} onClick={() => { setWanted(true); setRetry(n => n + 1); }} style={{minHeight:48,padding:'12px 20px',background:'#213269',color:'#fff',borderRadius:10}}>{error ? 'Thử tải lại thư viện' : 'Mở thư viện tham khảo'}</button>
-      <p role="status" aria-live="polite">{error ? 'Tải danh mục chưa thành công.' : wanted ? 'Đang tải thư viện.' : ''}</p>
-    </section>}
-  </div>;
+import {MigrationHeader,PreviewNotice,AccessDialog} from './migration/Experience';
+const Home=lazy(()=>import('./migration/Home'));
+const Catalogue=lazy(()=>import('./native/NativeCourses').then(m=>({default:m.NativeCatalogue})));
+const CourseDetail=lazy(()=>import('./native/NativeCourses').then(m=>({default:m.NativeCourseDetail})));
+const NativeLesson=lazy(()=>import('./native/NativeCourses').then(m=>({default:m.NativeLesson})));
+const NativeResources=lazy(()=>import('./native/NativeResources'));
+const Notebook=lazy(()=>import('./migration/Notebook'));
+const NotFound=lazy(()=>import('./migration/StudyRoutes').then(m=>({default:m.NotFound})));
+class RouteError extends Component<{children:ReactNode},{failed:boolean}>{state={failed:false};static getDerivedStateFromError(){return{failed:true};}render(){return this.state.failed?<section className="mig-container mig-panel mig-load-error" role="alert"><h1>Chưa tải được nội dung</h1><p>Kết nối có thể đã gián đoạn hoặc phiên bản trang vừa thay đổi. Bản sổ tay đã lưu trên trình duyệt không bị xóa.</p><button type="button" className="mig-button outline" onClick={()=>location.reload()}>Thử tải lại trang</button></section>:this.props.children;}}
+
+import {Link,useRoute,RoutePosition,navigate} from './migration/navigation';import {findCourse} from './migration/catalogue';
+export default function App(){const route=useRoute();const path=route.pathname;const slug=path.startsWith('/khoa-hoc/')?path.slice('/khoa-hoc/'.length):'';const course=slug?findCourse(slug):undefined;const name=path==='/'?'Học cùng MTM':path==='/khoa-hoc'?'Khóa học Toán':course?.title||({ '/thi-thu':'Thi thử và bài tập','/so-tay':'Sổ tay học tập','/tai-lieu':'Thư viện học liệu'} as Record<string,string>)[path]||'Không tìm thấy trang';
+useEffect(()=>{const click=(event:MouseEvent)=>{if(event.defaultPrevented||event.button!==0||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;const target=event.target instanceof Element?event.target.closest<HTMLAnchorElement>('a[href^="#"]'):null;const hash=target?.getAttribute('href');if(hash&&hash.length>1){event.preventDefault();if(hash==='#main-content'){navigate(location.pathname+location.search+hash);}else if(hash==='#tai-lieu-tham-khao'){navigate('/tai-lieu'+hash);}else{navigate('/'+hash);}}};document.addEventListener('click',click);return()=>document.removeEventListener('click',click);},[]);
+const metadata=routeMetadata(path,location.hostname,route.search);
+return <SEOProvider><SEO {...metadata}/><StructuredData/><div className={'mtm-migration'+(path!=='/'?' is-learning':'')}><a className="mtm-skip" href="#main-content">Đến nội dung chính</a><MigrationHeader pathname={path}/><PreviewNotice/><main id="main-content" tabIndex={-1}><RouteError key={path}><Suspense fallback={<div className="mig-container mig-route-loading" role="status" aria-live="polite">Đang tải nội dung…</div>}>{path==='/'?<Home/>:path==='/khoa-hoc'?<Catalogue search={route.search}/>:course?<CourseDetail key={course.slug} course={course}/>:path.startsWith('/bai-hoc/')?<NativeLesson key={path+route.search} pathname={path} search={route.search}/>:path==='/thi-thu'||path.startsWith('/thi-thu/')?<NativeResources kind="exams" pathname={path} search={route.search}/>:path==='/so-tay'?<Notebook/>:path==='/tai-lieu'||path.startsWith('/tai-lieu/')?<NativeResources kind="documents" pathname={path} search={route.search}/>:<NotFound/>}</Suspense></RouteError></main><Footer/><FloatingContact/><AccessDialog/><RoutePosition pathname={path} hash={route.hash}/><Toaster position="top-center"/></div></SEOProvider>;
 }
-export default function App() {
-  return (
-    <SEOProvider>
-      <SEO />
-      <StructuredData />
-      <div className="min-h-screen">
-        <a className="mtm-skip" href="#main-content">Đến nội dung chính</a>
-        <Header />
-        <main id="main-content" role="main">
-          <HeroSection />
-          <MtmNewsSection />
-          <CoursesSection />
-          <MtmTimetable />
-          <TeachersSection />
-          <BenefitsSection />
-          
-
-          <PromotionsSection />   
-          <RegisterSection />
-          <FAQSection />
-          <DeferredReferenceLibrary />
-          <div className="mtm-shell"><MtmLifeTabs /></div>
-        </main>
-        <Footer />
-        <FloatingContact />
-        <Toaster position="top-center" />
-      </div>
-    </SEOProvider>
-  );
-}
-

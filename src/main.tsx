@@ -3,6 +3,7 @@
   import App from "./App.tsx";
   import "./index.css";
   import "./styles/mtm-refresh.css";
+  import "./migration/migration.css";
 
   createRoot(document.getElementById("root")!).render(<App />);
   

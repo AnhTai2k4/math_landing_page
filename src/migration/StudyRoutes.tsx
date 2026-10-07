@@ -1,0 +1,2 @@
+import {ArrowLeft,BookOpen} from 'lucide-react';import {Link} from './navigation';
+export function NotFound(){return <section className="mig-container mig-empty mig-not-found"><BookOpen size={38}/><p className="mig-eyebrow">CHƯA CÓ TRANG NÀY</p><h1>Hãy chọn lại lộ trình của bạn</h1><p>Đường dẫn chưa tồn tại trong bản tích hợp. Không chuyển bạn đến một khóa học khác ngoài ý muốn.</p><Link className="mig-button primary" href="/khoa-hoc"><ArrowLeft size={17}/>Về danh mục khóa học</Link></section>;}

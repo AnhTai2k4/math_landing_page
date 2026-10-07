@@ -1,0 +1,35 @@
+{
+  "framework": "vite",
+  "buildCommand": "npm run build",
+  "outputDirectory": "build",
+  "rewrites": [
+    {
+      "source": "/khoa-hoc",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/khoa-hoc/:path*",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/thi-thu",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/thi-thu/:path*",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/so-tay",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/tai-lieu",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/tai-lieu/:path*",
+      "destination": "/index.html"
+    }
+  ]
+}

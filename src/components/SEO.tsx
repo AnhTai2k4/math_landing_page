@@ -7,6 +7,7 @@ interface SEOProps {
   ogImage?: string;
   url?: string;
   type?: string;
+  robots?: string;
 }
 
 export function SEO({
@@ -15,19 +16,20 @@ export function SEO({
   keywords = "dạy toán cấp 3, trung tâm toán THPT, luyện thi THPT Quốc gia, học toán lớp 10, học toán lớp 11, học toán lớp 12, gia sư toán, Minh Thành Math, toán Hà Nội",
   ogImage = "https://minhthanhmath.vn/mtm-original-logo.png",
   url = "https://minhthanhmath.vn",
-  type = "website"
+  type = "website",
+  robots = "noindex, follow"
 }: SEOProps) {
   const siteTitle = title.includes("Minh Thành Math") ? title : `${title} | Minh Thành Math`;
 
   return (
-    <Helmet>
+    <Helmet defer={false}>
       {/* Primary Meta Tags */}
       <title>{siteTitle}</title>
       <meta name="title" content={siteTitle} />
       <meta name="description" content={description} />
       <meta name="keywords" content={keywords} />
       <meta name="author" content="Minh Thành Math" />
-      <meta name="robots" content="index, follow" />
+      <meta name="robots" content={robots} />
       <meta name="language" content="Vietnamese" />
       <meta name="revisit-after" content="7 days" />
       <link rel="canonical" href={url} />
@@ -53,8 +55,7 @@ export function SEO({
       <meta name="geo.placename" content="Ha Noi" />
 
       {/* Mobile Optimization */}
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <meta name="theme-color" content="#2563eb" />
+      <meta name="theme-color" content="#233463" />
     </Helmet>
   );
 }
