@@ -313,7 +313,7 @@
       "locator": "Mã 101; trang 1,2,3"
     },
     "sourcePdf": {
-      "url": "/exam-assets/0b7f6ade72f2d7c854e619a3c998cc6b6f30148f6edbadf06fdb52a9e373cbe2.pdf",
+      "url": "https://raw.githubusercontent.com/AnhTai2k4/math_landing_page/bc5185dcbc5d7606e231697ee407bdf6575d17c4/public/exam-assets/0b7f6ade72f2d7c854e619a3c998cc6b6f30148f6edbadf06fdb52a9e373cbe2.pdf",
       "verified": true,
       "sha256": "0b7f6ade72f2d7c854e619a3c998cc6b6f30148f6edbadf06fdb52a9e373cbe2",
       "bytes": 335300,
@@ -642,7 +642,7 @@
       "locator": "Mã 1201; trang 1,2,3,4"
     },
     "sourcePdf": {
-      "url": "/exam-assets/72833fb86b0bfa34179ca3a98e0b8ea47959a74dc8820eb827dc4282c7803cae.pdf",
+      "url": "https://raw.githubusercontent.com/AnhTai2k4/math_landing_page/bc5185dcbc5d7606e231697ee407bdf6575d17c4/public/exam-assets/72833fb86b0bfa34179ca3a98e0b8ea47959a74dc8820eb827dc4282c7803cae.pdf",
       "verified": true,
       "sha256": "72833fb86b0bfa34179ca3a98e0b8ea47959a74dc8820eb827dc4282c7803cae",
       "bytes": 221746,

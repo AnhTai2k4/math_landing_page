@@ -3,7 +3,11 @@ export type QuestionPdf=NonNullable<PracticeExam['sourcePdf']>;
 export async function fetchQuestionPdf(file:QuestionPdf,signal:AbortSignal,fetcher:typeof fetch=fetch):Promise<Uint8Array> {
   if(!validSourcePdf(file))throw Error('Thông tin bản đề chưa hợp lệ.');
   const response=await fetcher(file.url,{credentials:'omit',redirect:'error',signal,cache:'no-cache'});
-  if(!response.ok||!/^application\/pdf(?:\s*;|$)/i.test(response.headers.get('content-type')??''))throw Error('Chưa tải được bản đề PDF hợp lệ.');
+  const mime=response.headers.get('content-type')??'';
+  // Immutable, already public MTM repository assets use a generic binary MIME.
+  // They still require exact byte size, PDF signature and SHA-256 below.
+  const rawAsset=new RegExp('^https://raw\\.githubusercontent\\.com/AnhTai2k4/math_landing_page/[a-f0-9]{40}/public/exam-assets/'+file.sha256+'\\.pdf$').test(file.url);
+  if(!response.ok||!(/^application\/pdf(?:\s*;|$)/i.test(mime)||(rawAsset&&/^application\/octet-stream(?:\s*;|$)/i.test(mime))))throw Error('Chưa tải được bản đề PDF hợp lệ.');
   const declared=response.headers.get('content-length');
   const encoding=response.headers.get('content-encoding');
   // Fetch exposes decoded body bytes. Encoded Content-Length describes wire bytes.
