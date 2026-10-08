@@ -1,0 +1,661 @@
+[
+  {
+    "id": "mtm-g11-gk1-2024-2025-code101",
+    "grade": 11,
+    "period": "GK1",
+    "title": "Toán 11 — Giữa kỳ I 2024-2025 — mã 101",
+    "durationMinutes": 90,
+    "sourceHash": "be57c1d0af7478d25ecc360e3a2eefe57e3870152774011b5a91aeafd036930e",
+    "sourceRef": "https://toanmath.com/toanmath-pdf/de-giua-ky-1-toan-11-nam-2024-2025-truong-thpt-nguyen-thi-minh-khai-ha-tinh.pdf",
+    "questionCount": 22,
+    "answerKeyVerified": true,
+    "rubricVerified": true,
+    "questions": [
+      {
+        "id": "I-1",
+        "sourceRef": "Mã 101, câu I.1, trang 1",
+        "kind": "mc",
+        "choices": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "C",
+        "maxMillipoints": 250
+      },
+      {
+        "id": "I-2",
+        "sourceRef": "Mã 101, câu I.2, trang 1",
+        "kind": "mc",
+        "choices": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "A",
+        "maxMillipoints": 250
+      },
+      {
+        "id": "I-3",
+        "sourceRef": "Mã 101, câu I.3, trang 1",
+        "kind": "mc",
+        "choices": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "D",
+        "maxMillipoints": 250
+      },
+      {
+        "id": "I-4",
+        "sourceRef": "Mã 101, câu I.4, trang 1",
+        "kind": "mc",
+        "choices": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B",
+        "maxMillipoints": 250
+      },
+      {
+        "id": "I-5",
+        "sourceRef": "Mã 101, câu I.5, trang 1",
+        "kind": "mc",
+        "choices": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B",
+        "maxMillipoints": 250
+      },
+      {
+        "id": "I-6",
+        "sourceRef": "Mã 101, câu I.6, trang 1",
+        "kind": "mc",
+        "choices": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "C",
+        "maxMillipoints": 250
+      },
+      {
+        "id": "I-7",
+        "sourceRef": "Mã 101, câu I.7, trang 1",
+        "kind": "mc",
+        "choices": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "A",
+        "maxMillipoints": 250
+      },
+      {
+        "id": "I-8",
+        "sourceRef": "Mã 101, câu I.8, trang 1",
+        "kind": "mc",
+        "choices": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B",
+        "maxMillipoints": 250
+      },
+      {
+        "id": "I-9",
+        "sourceRef": "Mã 101, câu I.9, trang 2",
+        "kind": "mc",
+        "choices": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "D",
+        "maxMillipoints": 250
+      },
+      {
+        "id": "I-10",
+        "sourceRef": "Mã 101, câu I.10, trang 2",
+        "kind": "mc",
+        "choices": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "A",
+        "maxMillipoints": 250
+      },
+      {
+        "id": "I-11",
+        "sourceRef": "Mã 101, câu I.11, trang 2",
+        "kind": "mc",
+        "choices": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "A",
+        "maxMillipoints": 250
+      },
+      {
+        "id": "I-12",
+        "sourceRef": "Mã 101, câu I.12, trang 2",
+        "kind": "mc",
+        "choices": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B",
+        "maxMillipoints": 250
+      },
+      {
+        "id": "II-1",
+        "sourceRef": "Mã 101, câu II.1, trang 2",
+        "kind": "tf",
+        "answer": [
+          true,
+          false,
+          true,
+          false
+        ],
+        "maxMillipoints": 1000,
+        "pointsByCorrectCount": [
+          0,
+          100,
+          250,
+          500,
+          1000
+        ]
+      },
+      {
+        "id": "II-2",
+        "sourceRef": "Mã 101, câu II.2, trang 2",
+        "kind": "tf",
+        "answer": [
+          true,
+          false,
+          false,
+          true
+        ],
+        "maxMillipoints": 1000,
+        "pointsByCorrectCount": [
+          0,
+          100,
+          250,
+          500,
+          1000
+        ]
+      },
+      {
+        "id": "II-3",
+        "sourceRef": "Mã 101, câu II.3, trang 3",
+        "kind": "tf",
+        "answer": [
+          false,
+          true,
+          false,
+          true
+        ],
+        "maxMillipoints": 1000,
+        "pointsByCorrectCount": [
+          0,
+          100,
+          250,
+          500,
+          1000
+        ]
+      },
+      {
+        "id": "II-4",
+        "sourceRef": "Mã 101, câu II.4, trang 3",
+        "kind": "tf",
+        "answer": [
+          false,
+          true,
+          true,
+          true
+        ],
+        "maxMillipoints": 1000,
+        "pointsByCorrectCount": [
+          0,
+          100,
+          250,
+          500,
+          1000
+        ]
+      },
+      {
+        "id": "III-1",
+        "sourceRef": "Mã 101, câu III.1, trang 3",
+        "kind": "short",
+        "mode": "numeric",
+        "acceptedAnswers": [
+          "4.6"
+        ],
+        "maxMillipoints": 500
+      },
+      {
+        "id": "III-2",
+        "sourceRef": "Mã 101, câu III.2, trang 3",
+        "kind": "short",
+        "mode": "numeric",
+        "acceptedAnswers": [
+          "-7"
+        ],
+        "maxMillipoints": 500
+      },
+      {
+        "id": "III-3",
+        "sourceRef": "Mã 101, câu III.3, trang 3",
+        "kind": "short",
+        "mode": "numeric",
+        "acceptedAnswers": [
+          "0.33"
+        ],
+        "maxMillipoints": 500
+      },
+      {
+        "id": "III-4",
+        "sourceRef": "Mã 101, câu III.4, trang 3",
+        "kind": "short",
+        "mode": "numeric",
+        "acceptedAnswers": [
+          "30"
+        ],
+        "maxMillipoints": 500
+      },
+      {
+        "id": "III-5",
+        "sourceRef": "Mã 101, câu III.5, trang 3",
+        "kind": "short",
+        "mode": "numeric",
+        "acceptedAnswers": [
+          "19"
+        ],
+        "maxMillipoints": 500
+      },
+      {
+        "id": "III-6",
+        "sourceRef": "Mã 101, câu III.6, trang 3",
+        "kind": "short",
+        "mode": "numeric",
+        "acceptedAnswers": [
+          "4.8"
+        ],
+        "maxMillipoints": 500
+      }
+    ],
+    "rubricVersion": "MTM-THPT-3PART-2025-v1",
+    "sourceUrl": "https://toanmath.com/toanmath-pdf/de-giua-ky-1-toan-11-nam-2024-2025-truong-thpt-nguyen-thi-minh-khai-ha-tinh.pdf",
+    "sourceMaterial": {
+      "title": "THPT Nguyen Thi Minh Khai, Ha Tinh",
+      "publisher": "THPT Nguyen Thi Minh Khai, Ha Tinh",
+      "version": "2024-2025",
+      "locator": "Mã 101; trang 1,2,3"
+    },
+    "sourcePdf": {
+      "url": "/exam-assets/0b7f6ade72f2d7c854e619a3c998cc6b6f30148f6edbadf06fdb52a9e373cbe2.pdf",
+      "verified": true,
+      "sha256": "0b7f6ade72f2d7c854e619a3c998cc6b6f30148f6edbadf06fdb52a9e373cbe2",
+      "bytes": 335300,
+      "totalPages": 3,
+      "questionPages": [
+        1,
+        2,
+        3
+      ]
+    },
+    "publicationVerified": true,
+    "questionDisplayVerified": true,
+    "versionHash": "d69fb35197d27fc73f31c76bed79e5e7cd3df56c8f5c884843eb776c6fbf75d5"
+  },
+  {
+    "id": "mtm-g12-gk1-2025-2026-code1201",
+    "grade": 12,
+    "period": "GK1",
+    "title": "Toán 12 — Giữa kỳ I 2025-2026 — mã 1201",
+    "durationMinutes": 90,
+    "sourceHash": "8e433e9303be2396cc080c5bdfc3bfed9ba3387b020622777b988098138f8773",
+    "sourceRef": "https://toanmath.com/toanmath-pdf/de-giua-ki-1-toan-12-nam-2025-2026-truong-nguyen-binh-khiem-ha-noi.pdf",
+    "questionCount": 22,
+    "answerKeyVerified": true,
+    "rubricVerified": true,
+    "questions": [
+      {
+        "id": "I-1",
+        "sourceRef": "Mã 1201, câu I.1, trang 1",
+        "kind": "mc",
+        "choices": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B",
+        "maxMillipoints": 250
+      },
+      {
+        "id": "I-2",
+        "sourceRef": "Mã 1201, câu I.2, trang 1",
+        "kind": "mc",
+        "choices": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "D",
+        "maxMillipoints": 250
+      },
+      {
+        "id": "I-3",
+        "sourceRef": "Mã 1201, câu I.3, trang 1",
+        "kind": "mc",
+        "choices": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "A",
+        "maxMillipoints": 250
+      },
+      {
+        "id": "I-4",
+        "sourceRef": "Mã 1201, câu I.4, trang 2",
+        "kind": "mc",
+        "choices": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B",
+        "maxMillipoints": 250
+      },
+      {
+        "id": "I-5",
+        "sourceRef": "Mã 1201, câu I.5, trang 2",
+        "kind": "mc",
+        "choices": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "A",
+        "maxMillipoints": 250
+      },
+      {
+        "id": "I-6",
+        "sourceRef": "Mã 1201, câu I.6, trang 2",
+        "kind": "mc",
+        "choices": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "A",
+        "maxMillipoints": 250
+      },
+      {
+        "id": "I-7",
+        "sourceRef": "Mã 1201, câu I.7, trang 2",
+        "kind": "mc",
+        "choices": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "A",
+        "maxMillipoints": 250
+      },
+      {
+        "id": "I-8",
+        "sourceRef": "Mã 1201, câu I.8, trang 2",
+        "kind": "mc",
+        "choices": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "A",
+        "maxMillipoints": 250
+      },
+      {
+        "id": "I-9",
+        "sourceRef": "Mã 1201, câu I.9, trang 2",
+        "kind": "mc",
+        "choices": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "A",
+        "maxMillipoints": 250
+      },
+      {
+        "id": "I-10",
+        "sourceRef": "Mã 1201, câu I.10, trang 2",
+        "kind": "mc",
+        "choices": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "A",
+        "maxMillipoints": 250
+      },
+      {
+        "id": "I-11",
+        "sourceRef": "Mã 1201, câu I.11, trang [2, 3]",
+        "kind": "mc",
+        "choices": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "C",
+        "maxMillipoints": 250
+      },
+      {
+        "id": "I-12",
+        "sourceRef": "Mã 1201, câu I.12, trang 3",
+        "kind": "mc",
+        "choices": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "A",
+        "maxMillipoints": 250
+      },
+      {
+        "id": "II-1",
+        "sourceRef": "Mã 1201, câu II.1, trang 3",
+        "kind": "tf",
+        "answer": [
+          true,
+          false,
+          false,
+          true
+        ],
+        "maxMillipoints": 1000,
+        "pointsByCorrectCount": [
+          0,
+          100,
+          250,
+          500,
+          1000
+        ]
+      },
+      {
+        "id": "II-2",
+        "sourceRef": "Mã 1201, câu II.2, trang 3",
+        "kind": "tf",
+        "answer": [
+          true,
+          true,
+          false,
+          true
+        ],
+        "maxMillipoints": 1000,
+        "pointsByCorrectCount": [
+          0,
+          100,
+          250,
+          500,
+          1000
+        ]
+      },
+      {
+        "id": "II-3",
+        "sourceRef": "Mã 1201, câu II.3, trang 3",
+        "kind": "tf",
+        "answer": [
+          false,
+          true,
+          true,
+          false
+        ],
+        "maxMillipoints": 1000,
+        "pointsByCorrectCount": [
+          0,
+          100,
+          250,
+          500,
+          1000
+        ]
+      },
+      {
+        "id": "II-4",
+        "sourceRef": "Mã 1201, câu II.4, trang 3",
+        "kind": "tf",
+        "answer": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "maxMillipoints": 1000,
+        "pointsByCorrectCount": [
+          0,
+          100,
+          250,
+          500,
+          1000
+        ]
+      },
+      {
+        "id": "III-1",
+        "sourceRef": "Mã 1201, câu III.1, trang 4",
+        "kind": "short",
+        "mode": "numeric",
+        "acceptedAnswers": [
+          "1012"
+        ],
+        "maxMillipoints": 500
+      },
+      {
+        "id": "III-2",
+        "sourceRef": "Mã 1201, câu III.2, trang 4",
+        "kind": "short",
+        "mode": "numeric",
+        "acceptedAnswers": [
+          "0.41"
+        ],
+        "maxMillipoints": 500
+      },
+      {
+        "id": "III-3",
+        "sourceRef": "Mã 1201, câu III.3, trang 4",
+        "kind": "short",
+        "mode": "numeric",
+        "acceptedAnswers": [
+          "0.5"
+        ],
+        "maxMillipoints": 500
+      },
+      {
+        "id": "III-4",
+        "sourceRef": "Mã 1201, câu III.4, trang 4",
+        "kind": "short",
+        "mode": "numeric",
+        "acceptedAnswers": [
+          "4"
+        ],
+        "maxMillipoints": 500
+      },
+      {
+        "id": "III-5",
+        "sourceRef": "Mã 1201, câu III.5, trang 4",
+        "kind": "short",
+        "mode": "numeric",
+        "acceptedAnswers": [
+          "4.47"
+        ],
+        "maxMillipoints": 500
+      },
+      {
+        "id": "III-6",
+        "sourceRef": "Mã 1201, câu III.6, trang 4",
+        "kind": "short",
+        "mode": "numeric",
+        "acceptedAnswers": [
+          "1.5"
+        ],
+        "maxMillipoints": 500
+      }
+    ],
+    "rubricVersion": "MTM-THPT-3PART-2025-v1",
+    "sourceUrl": "https://toanmath.com/toanmath-pdf/de-giua-ki-1-toan-12-nam-2025-2026-truong-nguyen-binh-khiem-ha-noi.pdf",
+    "sourceMaterial": {
+      "title": "THCS&THPT Nguyen Binh Khiem - Cau Giay, Ha Noi",
+      "publisher": "THCS&THPT Nguyen Binh Khiem - Cau Giay, Ha Noi",
+      "version": "2025-2026",
+      "locator": "Mã 1201; trang 1,2,3,4"
+    },
+    "sourcePdf": {
+      "url": "/exam-assets/72833fb86b0bfa34179ca3a98e0b8ea47959a74dc8820eb827dc4282c7803cae.pdf",
+      "verified": true,
+      "sha256": "72833fb86b0bfa34179ca3a98e0b8ea47959a74dc8820eb827dc4282c7803cae",
+      "bytes": 221746,
+      "totalPages": 4,
+      "questionPages": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    "publicationVerified": true,
+    "questionDisplayVerified": true,
+    "versionHash": "81f0aba7a761b862105017e5eb7a27480eb845e403ab38030ca32b567c53423a"
+  }
+]
