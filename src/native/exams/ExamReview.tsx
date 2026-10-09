@@ -1,0 +1,49 @@
+import React,{lazy,Suspense,useEffect,useId,useState} from 'react';
+import type {PracticeExam} from './data';
+import type {Draft} from './store';
+import {displayAnswer,formatPoints,reviewRows,statementLetters,STATUS_LABELS} from './review';
+const DetailedSolution=lazy(()=>import('./DetailedSolution'));
+
+export default function ExamReview({exam,draft}:{exam:PracticeExam;draft:Draft}) {
+  const [filter,setFilter]=useState<'all'|'mistakes'|'unanswered'>('all');
+  const [expanded,setExpanded]=useState<Set<string>>(()=>new Set());
+  const [focusQuestion,setFocusQuestion]=useState<number|null>(null);
+  const instance=useId();
+  useEffect(()=>{if(focusQuestion!==null){const target=document.getElementById(`${instance}-card-${focusQuestion}`);target?.focus();target?.scrollIntoView({block:'start'});setFocusQuestion(null);}},[focusQuestion,instance]);
+  if(draft.submittedAt===null)return null;
+  const rows=reviewRows(exam,draft),visible=rows.filter(r=>filter==='all'||(filter==='mistakes'?r.status!=='correct':r.status==='unanswered'));
+  const wrong=rows.filter(r=>r.status!=='correct').length,blank=rows.filter(r=>r.status==='unanswered').length;
+  const allOpen=visible.length>0&&visible.every(r=>expanded.has(r.q.id));
+  return <section className="ep-result-review" aria-label="Đối chiếu bài đã nộp">
+    <h2>Điểm từng phần</h2>
+    <div className="ep-table-wrap"><table className="ep-score-table"><thead><tr><th scope="col">Phần</th><th scope="col">Điểm đạt</th><th scope="col">Tối đa</th></tr></thead><tbody>{[{label:'I · Trắc nghiệm',from:0,to:12},{label:'II · Đúng/sai',from:12,to:16},{label:'III · Trả lời ngắn',from:16,to:22}].map(part=><tr key={part.label}><th scope="row">{part.label}</th><td>{rows.some(r=>r.status==='unscored')?'Chưa tính được':formatPoints(rows.slice(part.from,part.to).reduce((n,r)=>n+r.earned,0))}</td><td>{formatPoints(rows.slice(part.from,part.to).reduce((n,r)=>n+r.q.maxMillipoints,0))}</td></tr>)}</tbody></table></div>
+    <h2>Tổng quan câu trả lời</h2>
+    <nav className="ep-question-nav ep-result-nav" aria-label="Tổng quan đúng sai">{rows.map(r=><button type="button" key={r.q.id} className={`ep-verdict-${r.status}`} aria-label={`Câu ${r.index+1}: ${STATUS_LABELS[r.status]}`} onClick={()=>{setFilter('all');setFocusQuestion(r.index);}}>{r.index+1}</button>)}</nav>
+    <p>Đúng toàn bộ: {rows.filter(r=>r.status==='correct').length} · Đúng một phần: {rows.filter(r=>r.status==='partial').length} · Chưa đúng: {rows.filter(r=>r.status==='wrong').length} · Bỏ trống: {blank}.</p>
+    <div className="ep-review-filters" role="group" aria-label="Lọc câu đã nộp">
+      <button type="button" aria-pressed={filter==='all'} onClick={()=>setFilter('all')}>Tất cả câu ({rows.length})</button>
+      <button type="button" aria-pressed={filter==='mistakes'} onClick={()=>setFilter('mistakes')}>Câu sai / chưa đủ điểm ({wrong})</button>
+      <button type="button" aria-pressed={filter==='unanswered'} onClick={()=>setFilter('unanswered')}>Câu bỏ trống ({blank})</button>
+      <button type="button" disabled={!visible.length} onClick={()=>setExpanded(previous=>{const next=new Set(previous);for(const r of visible)allOpen?next.delete(r.q.id):next.add(r.q.id);return next;})}>{allOpen?'Thu gọn lời giải':'Mở lời giải các câu đang xem'}</button>
+    </div>
+    <p role="status">Đang xem {visible.length}/{rows.length} câu. Câu đúng/sai được đối chiếu từng ý; câu đúng một phần vẫn nằm trong mục chưa đủ điểm.</p>
+    {!visible.length&&<p>Không có câu trong mục này.</p>}
+    {visible.map(({q,index,answer,earned,status,invalidNumeric})=><section className="ep-question ep-card" key={q.id} id={`${instance}-card-${index}`} tabIndex={-1} aria-labelledby={`${instance}-q-${index}`}>
+      <h3 id={`${instance}-q-${index}`}>Câu {index+1} <small>({formatPoints(q.maxMillipoints)} điểm)</small></h3>
+      <p className={`ep-verdict ep-verdict-${status}`}>{STATUS_LABELS[status]}</p>
+      {(q.prompt||q.text)&&<p className="ep-source-text">{q.prompt??q.text}</p>}
+      <p className="ep-source-ref">{q.sourceRef}</p>
+      <div className="ep-review">
+        <p><strong>Bài làm:</strong> {displayAnswer(answer)}</p>
+        <p><strong>Đáp án:</strong> {q.kind==='mc'?q.answer:q.kind==='tf'?q.answer.map((v,i)=>`${statementLetters[i]}) ${v?'Đúng':'Sai'}`).join('; '):q.acceptedAnswers.join(' hoặc ')}</p>
+        {q.kind==='tf'&&<ul className="ep-statement-review">{q.answer.map((expected,i)=>{
+          const value=Array.isArray(answer)?answer[i]:null;
+          return <li key={i}><strong>Ý {statementLetters[i]}:</strong> {value===null?'Chưa trả lời':value===expected?'Khớp đáp án':'Chưa khớp đáp án'}{q.statements?.[i]&&<p>{q.statements[i]}</p>}</li>;
+        })}</ul>}
+        {invalidNumeric&&<p>Câu trả lời không đúng định dạng số: 0 điểm.</p>}
+        <p><strong>Điểm câu này:</strong> {status==='unscored'?'Chưa tính được':formatPoints(earned)} / {formatPoints(q.maxMillipoints)}</p>
+      </div>
+      {q.solution&&<details className="ep-solution" open={expanded.has(q.id)} onToggle={event=>{const open=event.currentTarget.open;setExpanded(previous=>{if(previous.has(q.id)===open)return previous;const next=new Set(previous);open?next.add(q.id):next.delete(q.id);return next;});}}><summary>Lời giải câu {index+1}</summary>{expanded.has(q.id)&&<Suspense fallback={<p>Đang mở lời giải…</p>}><DetailedSolution examId={exam.id} versionHash={exam.versionHash} questionId={q.id} fallback={q.solution}/></Suspense>}</details>}
+    </section>)}
+  </section>;
+}

@@ -2,17 +2,35 @@ import {useEffect, useMemo, useState} from 'react';
 import {Link, navigate} from '../migration/navigation';
 import {filterSearch, GRADES, PERIODS, PERIOD_LABELS, PRACTICE_EXAMS, readFilters, readyExams, titleTerm, type Filters, type PracticeExam} from './exams/data';
 import PracticeAttempt, {localStore} from './exams/PracticeAttempt';
-import {readHistory, STORAGE_PREFIX} from './exams/store';
+import {STORAGE_PREFIX} from './exams/store';
 import {resultFor} from './exams/result';
 import {SEO} from '../components/SEO';
 import {examRouteMetadata} from './exams/route-metadata';
+import ExamReview from './exams/ExamReview';
+import type {Draft} from './exams/store';
+import {historySummary} from './exams/history-summary';
+import {formatPoints} from './exams/review';
+import {SOURCE_HOLDS} from './exams/source-holds';
+import {erratumFor,originalExamId,practiceVersion} from './exams/practice-errata';
 import './exams/exams.css';
 
-function LocalHistory({catalog, search}: {catalog: readonly PracticeExam[]; search: string}) {
-  const [history, setHistory] = useState(() => readHistory(localStore(), catalog));
+function SavedAttemptReview({exam,draft}:{exam:PracticeExam;draft:Draft}) {
+  const [open,setOpen]=useState(false);
+  return <details open={open} onToggle={event=>setOpen(event.currentTarget.open)}><summary>Xem lại lượt đã nộp</summary>{open&&<>
+    <p>Nguồn: {exam.sourceMaterial.title} · {exam.sourceMaterial.version}</p>
+    {exam.answerVerificationNote&&<p>{exam.answerVerificationNote}</p>}
+    {erratumFor(exam.id)&&<p className="ep-notice">{exam.id===originalExamId(exam.id)?'Lượt trước đính chính: điểm giữ theo khóa cũ, cần đọc giới hạn điều kiện.':'Lượt dùng bản MTM đính chính v37.'} {erratumFor(exam.id)!.condition}</p>}
+    {SOURCE_HOLDS[exam.id]&&<p className="ep-notice">Đề đang chờ đính chính. Điểm lượt cũ dùng khóa trước khi phát hiện vấn đề: {SOURCE_HOLDS[exam.id]}</p>}
+    <Link className="ep-link" href={`/thi-thu/${encodeURIComponent(originalExamId(exam.id))}`}>Mở lại đề gốc</Link>
+    <ExamReview key={draft.attemptId} exam={exam} draft={draft}/>
+  </>}</details>;
+}
+
+function useLocalSummary(catalog:readonly PracticeExam[],search:string) {
+  const [summary, setSummary] = useState(() => historySummary(localStore(),catalog));
   useEffect(() => {
     const captured=localStore();
-    const refresh = () => setHistory(readHistory(localStore(), catalog));
+    const refresh = () => setSummary(historySummary(localStore(),catalog));
     const changed = (event: StorageEvent) => {
       if (!captured||event.storageArea!==captured) return;
       if (event.key === null || event.key.startsWith(STORAGE_PREFIX)) refresh();
@@ -20,14 +38,19 @@ function LocalHistory({catalog, search}: {catalog: readonly PracticeExam[]; sear
     refresh();
     window.addEventListener('storage', changed);
     return () => window.removeEventListener('storage', changed);
-  }, [catalog]);
+  }, [catalog,search]);
+  return summary;
+}
+function LocalHistory({summary}: {summary:ReturnType<typeof historySummary>}) {
+  const history=summary.history;
   return <section className="ep-card" aria-labelledby="ep-history-heading">
     <h2 id="ep-history-heading">Lịch sử trên trình duyệt này</h2>
+    <p>Đã làm {summary.completedExams} đề · {summary.totalAttempts} lượt đã nộp. Lịch sử thuộc trình duyệt này; xóa dữ liệu trình duyệt sẽ mất bản lưu. Chưa đồng bộ sang tài khoản hoặc thiết bị khác.</p>
     {history.messages.map((message, i) => <p className="ep-notice" role="status" key={i}>{message}</p>)}
     {!history.items.length && <p>Chưa có bài nộp đã lưu để hiển thị.</p>}
     <ul className="ep-history">{history.items.map(({exam, draft}) => {
       const result = resultFor(exam, draft);
-      return <li key={draft.attemptId + ':' + exam.id}><strong>{exam.title}</strong><span>{new Date(draft.submittedAt!).toLocaleString('vi-VN')} · {result?.score.ok ? `${(result.score.earnedMillipoints / 1000).toLocaleString('vi-VN', {maximumFractionDigits: 3})} / 10` : 'Chưa tính được điểm'}</span><details><summary>Xem lại lượt đã nộp</summary><p>Nguồn: {exam.sourceMaterial.title} · {exam.sourceMaterial.version}</p>{exam.questions.map((q,i)=><p key={q.id}>Câu {i+1}: bài làm {JSON.stringify(draft.answers[q.id]??null)} · đáp án {q.kind==='mc'?q.answer:q.kind==='tf'?q.answer.map(v=>v?'Đúng':'Sai').join(', '):q.acceptedAnswers.join(' hoặc ')}</p>)}</details></li>;
+      return <li key={draft.attemptId + ':' + exam.id}><strong>{exam.title}</strong><span>{new Date(draft.submittedAt!).toLocaleString('vi-VN')} · {result?.score.ok ? `${formatPoints(result.score.earnedMillipoints)} / 10` : 'Chưa tính được điểm'}</span><SavedAttemptReview exam={exam} draft={draft}/></li>;
     })}</ul>
   </section>;
 }
@@ -38,6 +61,7 @@ export default function NativeExams({pathname, search, catalog = PRACTICE_EXAMS}
   const ready = useMemo(() => readyExams(catalog), [catalog]);
   const filters = readFilters(search), normalizedSearch = filterSearch(filters);
   const catalogUrl = '/thi-thu' + normalizedSearch;
+  const localSummary=useLocalSummary(ready,pathname+normalizedSearch);
   useEffect(() => {
     if (search !== normalizedSearch) navigate(pathname + normalizedSearch + location.hash, {replace: true});
   }, [pathname, search, normalizedSearch]);
@@ -51,8 +75,8 @@ export default function NativeExams({pathname, search, catalog = PRACTICE_EXAMS}
 
   return <div className="ep-root">
     <SEO {...examRouteMetadata(exam,id!==null)}/>
-    {id !== null ? exam ? <PracticeAttempt key={exam.id + ':' + exam.versionHash + ':' + exam.rubricVersion} exam={exam} catalogUrl={catalogUrl}/> : <section className="ep-card"><h1>Chưa mở được đề này</h1><p>Đề trong đường dẫn chưa có trong danh sách đã kiểm tra hoặc đường dẫn không đúng.</p><p>Đề đang được kiểm tra nguồn và đáp án trước khi mở làm bài.</p><Link className="ep-link" href={catalogUrl}>Về danh sách đề</Link></section> : <>
-      <header className="ep-intro"><p>Minh Thành Math · Tự luyện</p><h1>Thi thử Toán</h1><p>Đọc đề, làm bài có thời gian và xem đáp án, lời giải sau khi nộp.</p><p className="ep-total"><strong>{ready.length}</strong> đề mở làm bài</p></header>
+    {id !== null ? exam ? <PracticeAttempt key={exam.id + ':' + exam.versionHash + ':' + exam.rubricVersion} exam={practiceVersion(exam)} previousExam={practiceVersion(exam)===exam?undefined:exam} catalogUrl={catalogUrl}/> : <section className="ep-card"><h1>Chưa mở được đề này</h1><p>Đề trong đường dẫn chưa có trong danh sách đã kiểm tra hoặc đường dẫn không đúng.</p><p>Đề đang được kiểm tra nguồn và đáp án trước khi mở làm bài.</p><Link className="ep-link" href={catalogUrl}>Về danh sách đề</Link></section> : <>
+      <header className="ep-intro"><p>Minh Thành Math · Tự luyện</p><h1>Thi thử Toán</h1><p>Đọc đề, làm bài có thời gian và xem đáp án, lời giải sau khi nộp.</p><p className="ep-total"><strong>{ready.filter(e=>!SOURCE_HOLDS[e.id]).length}</strong> đề mở làm bài · điều kiện đính chính được ghi rõ trước khi bắt đầu</p></header>
       <div className="ep-filters" role="search" aria-label="Lọc đề thi">
         <label>Lớp<select value={filters.lop} onChange={event => changeFilters({lop: event.target.value as Filters['lop']})}><option value="all">Tất cả lớp</option>{GRADES.map(grade => <option key={grade} value={grade}>Lớp {grade}</option>)}</select></label>
         <label>Kỳ kiểm tra<select value={filters.ky} onChange={event => changeFilters({ky: event.target.value as Filters['ky']})}><option value="all">Tất cả kỳ</option>{PERIODS.map(period => <option key={period} value={period}>{PERIOD_LABELS[period]}</option>)}</select></label>
@@ -61,9 +85,10 @@ export default function NativeExams({pathname, search, catalog = PRACTICE_EXAMS}
       </div>
       <section aria-label="Đề theo lớp và kỳ" className="ep-buckets">{GRADES.flatMap(grade => PERIODS.map(period => <button type="button" className="ep-bucket" key={`${grade}-${period}`} aria-pressed={filters.lop === String(grade) && filters.ky === period} onClick={() => changeFilters({lop: String(grade) as Filters['lop'], ky: period})}><span>Lớp {grade} · {PERIOD_LABELS[period]}</span><strong>{ready.filter(item => item.grade === grade && item.period === period).length} đề</strong></button>))}</section>
       <p role="status" aria-live="polite">{matches.length} đề phù hợp bộ lọc</p>
-      <div className="ep-catalog">{matches.map(item => <article className="ep-card" key={item.id}><p>Lớp {item.grade} · {PERIOD_LABELS[item.period]}</p><h2>{item.title}</h2><p>22 câu · {item.durationMinutes} phút</p><Link className="ep-link" href={`/thi-thu/${encodeURIComponent(item.id)}${normalizedSearch}`}>Mở đề luyện tập →</Link></article>)}</div>
+      <p>Trên trình duyệt này: đã làm {localSummary.completedExams} đề, {localSummary.totalAttempts} lượt đã nộp.</p>
+      <div className="ep-catalog">{matches.map(item => {const saved=localSummary.exams.find(e=>e.examId===item.id);return <article className="ep-card" key={item.id}><p>Lớp {item.grade} · {PERIOD_LABELS[item.period]}</p><h2>{item.title}</h2><p>22 câu · {item.durationMinutes} phút</p>{erratumFor(item.id)&&<p className="ep-notice">Bản MTM đính chính v37 · giữ PDF nguồn</p>}{SOURCE_HOLDS[item.id]&&<p className="ep-notice">Chờ đính chính điều kiện · chưa mở lượt mới</p>}<p className="ep-progress-label">{saved?.count?`Đã làm ${saved.count} lượt`: 'Chưa có lượt đã nộp'}{saved?.inProgress?' · Có bài đang làm':''}</p>{saved&&saved.count>0&&<p>Gần nhất: {saved.latestScore===null?'Chưa tính được':formatPoints(saved.latestScore)} / 10 · Cao nhất: {saved.best===null?'Chưa tính được':formatPoints(saved.best)} / 10</p>}<Link className="ep-link" href={`/thi-thu/${encodeURIComponent(item.id)}${normalizedSearch}`}>{saved?.inProgress?'Tiếp tục làm bài →':'Mở đề luyện tập →'}</Link></article>;})}</div>
       {!matches.length && <p className="ep-card">{ready.length ? 'Chưa có đề phù hợp. Hãy thử đổi bộ lọc.' : 'Chưa có đề mở làm bài.'}</p>}
-      <LocalHistory catalog={ready} search={normalizedSearch}/>
+      <LocalHistory summary={localSummary}/>
     </>}
   </div>;
 }
