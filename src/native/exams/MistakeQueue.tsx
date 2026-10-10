@@ -41,7 +41,7 @@ export default function MistakeQueue({history}:{history:ReviewHistory}) {
       {active.exam.answerVerificationNote&&<p>{active.exam.answerVerificationNote}</p>}
       {erratumFor(active.exam.id)&&<p className="ep-notice">{active.exam.id===originalExamId(active.exam.id)?'Lượt trước đính chính: điểm giữ theo khóa cũ.':'Lượt theo điều kiện đính chính MTM.'} {erratumFor(active.exam.id)!.condition}</p>}
       {SOURCE_HOLDS[active.exam.id]&&<p className="ep-notice">Điểm lượt cũ dùng khóa trước khi phát hiện vấn đề: {SOURCE_HOLDS[active.exam.id]}</p>}
-      {active.exam.sourcePdf&&<details open={pdfOpen} onToggle={event=>setPdfOpen(event.currentTarget.open)}><summary>Đọc đề PDF đúng phiên bản này</summary>{pdfOpen&&<Suspense fallback={<p role="status">Đang mở bản đề đã lưu…</p>}><QuestionPdf key={active.exam.sourcePdf.sha256} file={active.exam.sourcePdf} title={active.exam.title} onReady={()=>{}}/></Suspense>}</details>}
+      {active.exam.id.startsWith('mtm-custom-')?<p>Đề tự đăng: dùng hai nút PDF bên dưới để đọc đề và lời giải đầy đủ của đúng phiên bản đã nộp. Mỗi lần mở sẽ lấy liên kết mới; không dùng lại liên kết tạm trong bản lưu.</p>:active.exam.sourcePdf&&<details open={pdfOpen} onToggle={event=>setPdfOpen(event.currentTarget.open)}><summary>Đọc đề PDF đúng phiên bản này</summary>{pdfOpen&&<Suspense fallback={<p role="status">Đang mở bản đề đã lưu…</p>}><QuestionPdf key={active.exam.sourcePdf.sha256} file={active.exam.sourcePdf} title={active.exam.title} onReady={()=>{}}/></Suspense>}</details>}
       <button type="button" onClick={()=>setSelected(null)}>Đóng bài đang ôn</button>
       <ExamReview key={active.key+active.draft.attemptId} exam={active.exam} draft={active.draft} initialQuestionId={active.questionId}/>
     </div>}
