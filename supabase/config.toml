@@ -1,0 +1,4 @@
+# New student-code gateway authenticates its own capability in each RPC.
+# This does not change admin Auth or any existing project's JWT setting.
+[functions.mtm-homework-access]
+verify_jwt = false

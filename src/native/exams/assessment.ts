@@ -5,7 +5,7 @@ type Base = { id: string; sourceRef: string; maxMillipoints: number };
 export type Question =
   | (Base & { kind: 'mc'; choices: [string, string, string, string]; answer: Choice })
   | (Base & { kind: 'tf'; answer: [boolean, boolean, boolean, boolean]; pointsByCorrectCount: [number, number, number, number, number] })
-  | (Base & { kind: 'short'; mode: 'numeric' | 'exact'; acceptedAnswers: string[] })
+  | (Base & { kind: 'short'; mode: 'numeric' | 'rational' | 'exact'; acceptedAnswers: string[] })
   | (Base & { kind: 'essay' });
 export type Assessment = { id: string; sourceHash: string; sourceRef: string; questionCount: number;
   answerKeyVerified: true; rubricVerified: true; questions: Question[] };
@@ -26,6 +26,16 @@ export function canonicalNumeric(value: string): string | null {
   const decimal = fraction.replace(/0+$/, '');
   return (integer === '0' && !decimal ? '' : sign) + integer + (decimal ? '.' + decimal : '');
 }
+
+/** Exact bounded rational comparison, without eval or floating-point tolerance. */
+export function canonicalRational(value:string):string|null {
+ const raw=value.trim();if(raw.length>100)return null;
+ let n:bigint,d:bigint;
+ if(/^[+-]?\d+\/[+-]?\d+$/.test(raw)){const pair=raw.split('/');n=BigInt(pair[0]);d=BigInt(pair[1]);if(d===0n)return null;}
+ else {const decimal=canonicalNumeric(raw);if(decimal===null)return null;const [whole,frac='']=decimal.split('.');n=BigInt(whole+frac);d=10n**BigInt(frac.length);}
+ if(d<0n){n=-n;d=-d;}let a=n<0n?-n:n,b=d;while(b){const r=a%b;a=b;b=r;}return `${n/a}/${d/a}`;
+}
+export const normalizedShort=(mode:string,value:string)=>mode==='numeric'?canonicalNumeric(value):mode==='rational'?canonicalRational(value):value.trim();
 
 export function validateAssessment(input: unknown): Validation {
   const errors: string[] = [];
@@ -58,10 +68,10 @@ export function validateAssessment(input: unknown): Validation {
         break;
       }
       case 'short': {
-        if (q.mode !== 'numeric' && q.mode !== 'exact') errors.push(prefix + 'explicit short answer mode required');
+        if (!['numeric','rational','exact'].includes(q.mode as string)) errors.push(prefix + 'explicit short answer mode required');
         if (!Array.isArray(q.acceptedAnswers) || !q.acceptedAnswers.length || !Array.from(q.acceptedAnswers).every(text)) errors.push(prefix + 'nonblank accepted answers required');
         else {
-          const normalized = q.acceptedAnswers.map(s => q.mode === 'numeric' ? canonicalNumeric(s) : s.trim());
+          const normalized = q.acceptedAnswers.map(s => normalizedShort(q.mode as string,s));
           if (normalized.includes(null) || new Set(normalized).size !== normalized.length) errors.push(prefix + 'malformed or duplicate accepted answers');
         }
         break;
@@ -104,9 +114,9 @@ export function scoreAssessment(input: unknown, submitted: unknown): ScoreResult
       } else {
         if (typeof a !== 'string') errors.push(q.id + ': short answer must be text');
         else {
-          const normalized = q.mode === 'numeric' ? canonicalNumeric(a) : a.trim();
+          const normalized = normalizedShort(q.mode,a);
           if (normalized === null) errors.push(q.id + ': malformed numeric answer');
-          else earned = q.acceptedAnswers.some(s => (q.mode === 'numeric' ? canonicalNumeric(s) : s.trim()) === normalized) ? q.maxMillipoints : 0;
+          else earned = q.acceptedAnswers.some(s => normalizedShort(q.mode,s) === normalized) ? q.maxMillipoints : 0;
         }
       }
     }

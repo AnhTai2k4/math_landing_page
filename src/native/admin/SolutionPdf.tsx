@@ -1,0 +1,5 @@
+import React,{useState} from 'react';
+import {publishedExams,signedPdf} from './backend';
+export default function SolutionPdf({examId,kind='solutions'}:{examId:string;kind?:'questions'|'solutions'}){const [busy,setBusy]=useState(false),[message,setMessage]=useState('');if(!examId.startsWith('mtm-custom-'))return null;
+ return <div><button type="button" disabled={busy} onClick={()=>{setBusy(true);setMessage('');void publishedExams().then(async rows=>{const row=rows.find(r=>r.id===examId),path=kind==='questions'?row?.question_path:row?.solution_path;if(!path){setMessage(kind==='questions'?'Chưa tìm thấy PDF câu hỏi của phiên bản này.':'Lời giải theo từng câu được trình bày bên dưới.');return;}const url=await signedPdf(path);const a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener noreferrer';a.click();}).catch(()=>setMessage('Chưa mở được PDF. Thử lại khi kết nối ổn định.')).finally(()=>setBusy(false));}}>{kind==='questions'?'Mở PDF câu hỏi của lượt đã nộp':'Mở PDF đáp án và lời giải đầy đủ'}</button><p role="status">{message}</p></div>;
+}

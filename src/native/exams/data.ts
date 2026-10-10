@@ -1,6 +1,6 @@
 import verifiedCatalog from './catalog.json';
 import type {Assessment, Question, Validation} from './assessment';
-import {validateMtmAssessment} from './mtm-profile';
+import {validatePracticeProfile,type ExamSection} from './flexible-profile';
 
 export const GRADES = [10, 11, 12] as const;
 export const PERIODS = ['GK1', 'CK1', 'GK2', 'CK2'] as const;
@@ -17,6 +17,7 @@ export type PracticeQuestion = Exclude<Question, {kind: 'essay'}> & {
   statements?: [string, string, string, string];
 };
 export interface PracticeExam extends Assessment {
+  sections?:ExamSection[];
   grade: Grade;
   period: Period;
   title: string;
@@ -55,7 +56,7 @@ export function validSourcePdf(value:unknown):boolean {
   return Array.isArray(value.questionPages)&&value.questionPages.length>0&&new Set(value.questionPages).size===value.questionPages.length&&Array.from(value.questionPages).every(p=>Number.isSafeInteger(p)&&p>=1&&p<=(value.totalPages as number));
 }
 export function validatePracticeExam(input: unknown): Validation {
-  const gate = validateMtmAssessment(input);
+  const gate = validatePracticeProfile(input);
   if (!gate.valid || !isRecord(input)) return gate;
   const errors: string[] = [];
   if (!boundedText(input.id, 120) || !/^[a-zA-Z0-9][a-zA-Z0-9_-]*$/.test(input.id)||input.id==='history') errors.push('Invalid or reserved route id');

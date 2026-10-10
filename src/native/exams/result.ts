@@ -1,5 +1,5 @@
-import {canonicalNumeric} from './assessment';
-import {scoreMtmAssessment} from './mtm-profile';
+import {normalizedShort} from './assessment';
+import {scorePracticeAssessment} from './flexible-profile';
 import type {PracticeExam} from './data';
 import {validateDraft, type Draft} from './store';
 
@@ -13,10 +13,10 @@ export function resultFor(exam: PracticeExam, draft: Draft) {
   const invalidNumeric: string[] = [];
   for (const q of exam.questions) {
     const value = answers[q.id];
-    if (q.kind === 'short' && q.mode === 'numeric' && typeof value === 'string' && value.trim() && canonicalNumeric(value) === null) {
+    if (q.kind === 'short' && q.mode !== 'exact' && typeof value === 'string' && value.trim() && normalizedShort(q.mode,value) === null) {
       invalidNumeric.push(q.id);
       answers[q.id] = '';
     }
   }
-  return {score: scoreMtmAssessment(exam, answers), invalidNumeric};
+  return {score: scorePracticeAssessment(exam, answers), invalidNumeric};
 }

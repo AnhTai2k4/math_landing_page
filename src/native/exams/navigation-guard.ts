@@ -1,10 +1,13 @@
-import {useEffect, useRef} from 'react';
-import {BEFORE_NAVIGATION_EVENT} from '../../migration/navigation';
+import {createElement,useEffect,useRef,useState} from 'react';
+import {BEFORE_NAVIGATION_EVENT,navigate} from '../../migration/navigation';
+import ExamConfirm from './ExamConfirm';
 
 /** Capture popstate before the shared router's bubble listener can unmount us.
  * Query/hash changes on the same attempt are safe and never reset its RAM. */
-export function useUnsavedGuard(hasUnsaved: () => boolean) {
+export function useUnsavedGuard(hasUnsaved: () => boolean, message = 'Bài đang làm chưa được lưu trên trình duyệt. Rời trang sẽ mất phần chưa lưu. Bạn có muốn rời trang?') {
   const readUnsaved = useRef(hasUnsaved);
+  const [pending,setPending]=useState<{href:string;traversal:boolean}|null>(null);
+  const approved=useRef<string|null>(null);
   readUnsaved.current = hasUnsaved;
   useEffect(() => {
     let acceptedUrl = location.href;
@@ -12,7 +15,6 @@ export function useUnsavedGuard(hasUnsaved: () => boolean) {
       const next = new URL(href, location.href), previous = new URL(acceptedUrl);
       return next.origin !== previous.origin || next.pathname.replace(/\/$/, '') !== previous.pathname.replace(/\/$/, '');
     };
-    const confirmLeave = () => window.confirm('Bài đang làm chưa được lưu trên trình duyệt. Rời trang sẽ mất phần chưa lưu. Bạn có muốn rời trang?');
     const beforeUnload = (event: BeforeUnloadEvent) => {
       if (!readUnsaved.current()) return;
       event.preventDefault();
@@ -20,13 +22,22 @@ export function useUnsavedGuard(hasUnsaved: () => boolean) {
     };
     const beforeNavigation = (event: Event) => {
       const href = (event as CustomEvent<{href?: string}>).detail?.href;
-      if (href && leavingAttempt(href) && readUnsaved.current() && !confirmLeave()) event.preventDefault();
+      if(href&&approved.current===href){approved.current=null;return;}
+      if(href&&leavingAttempt(href)&&readUnsaved.current()){
+        event.preventDefault();setPending({href,traversal:false});
+      }
     };
     const popstate = (event: PopStateEvent) => {
-      if (leavingAttempt(location.href) && readUnsaved.current() && !confirmLeave()) {
+      if(approved.current===location.href){approved.current=null;acceptedUrl=location.href;return;}
+      if(document.querySelector('[role="alertdialog"]')){
+        event.stopImmediatePropagation();history.pushState(null,'',acceptedUrl);window.dispatchEvent(new Event('mtm:cancel-confirm'));return;
+      }
+      if (leavingAttempt(location.href) && readUnsaved.current()) {
         // Keep the mounted attempt and restore its complete filter/hash URL.
         event.stopImmediatePropagation();
+        const requested=location.href;
         history.pushState(null, '', acceptedUrl);
+        setPending({href:requested,traversal:true});
         return;
       }
       acceptedUrl = location.href;
@@ -45,4 +56,5 @@ export function useUnsavedGuard(hasUnsaved: () => boolean) {
       window.removeEventListener('hashchange', acceptedNavigation);
     };
   }, []);
+  return pending?createElement(ExamConfirm,{title:'Có rời trang đang làm?',message,confirmLabel:'Rời trang',onCancel:()=>setPending(null),onConfirm:()=>{approved.current=pending.href;setPending(null);if(pending.traversal)history.back();else navigate(pending.href);}}):null;
 }

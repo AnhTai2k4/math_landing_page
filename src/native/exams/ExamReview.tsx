@@ -1,8 +1,10 @@
+import {examSections} from './flexible-profile';
 import React,{lazy,Suspense,useEffect,useId,useState} from 'react';
 import type {PracticeExam} from './data';
 import type {Draft} from './store';
 import {displayAnswer,formatPoints,reviewRows,statementLetters,STATUS_LABELS} from './review';
 const DetailedSolution=lazy(()=>import('./DetailedSolution'));
+const SolutionPdf=lazy(()=>import('../admin/SolutionPdf'));
 
 export default function ExamReview({exam,draft}:{exam:PracticeExam;draft:Draft}) {
   const [filter,setFilter]=useState<'all'|'mistakes'|'unanswered'>('all');
@@ -15,8 +17,9 @@ export default function ExamReview({exam,draft}:{exam:PracticeExam;draft:Draft})
   const wrong=rows.filter(r=>r.status!=='correct').length,blank=rows.filter(r=>r.status==='unanswered').length;
   const allOpen=visible.length>0&&visible.every(r=>expanded.has(r.q.id));
   return <section className="ep-result-review" aria-label="Đối chiếu bài đã nộp">
+    {exam.id.startsWith('mtm-custom-')&&<Suspense fallback={<p>Đang mở công cụ lời giải…</p>}><SolutionPdf examId={exam.id} kind="questions"/><SolutionPdf examId={exam.id}/></Suspense>}
     <h2>Điểm từng phần</h2>
-    <div className="ep-table-wrap"><table className="ep-score-table"><thead><tr><th scope="col">Phần</th><th scope="col">Điểm đạt</th><th scope="col">Tối đa</th></tr></thead><tbody>{[{label:'I · Trắc nghiệm',from:0,to:12},{label:'II · Đúng/sai',from:12,to:16},{label:'III · Trả lời ngắn',from:16,to:22}].map(part=><tr key={part.label}><th scope="row">{part.label}</th><td>{rows.some(r=>r.status==='unscored')?'Chưa tính được':formatPoints(rows.slice(part.from,part.to).reduce((n,r)=>n+r.earned,0))}</td><td>{formatPoints(rows.slice(part.from,part.to).reduce((n,r)=>n+r.q.maxMillipoints,0))}</td></tr>)}</tbody></table></div>
+    <div className="ep-table-wrap"><table className="ep-score-table"><thead><tr><th scope="col">Phần</th><th scope="col">Điểm đạt</th><th scope="col">Tối đa</th></tr></thead><tbody>{examSections(exam).map(part=><tr key={part.label}><th scope="row">{part.label}</th><td>{rows.some(r=>r.status==='unscored')?'Chưa tính được':formatPoints(rows.slice(part.from,part.to).reduce((n,r)=>n+r.earned,0))}</td><td>{formatPoints(rows.slice(part.from,part.to).reduce((n,r)=>n+r.q.maxMillipoints,0))}</td></tr>)}</tbody></table></div>
     <h2>Tổng quan câu trả lời</h2>
     <nav className="ep-question-nav ep-result-nav" aria-label="Tổng quan đúng sai">{rows.map(r=><button type="button" key={r.q.id} className={`ep-verdict-${r.status}`} aria-label={`Câu ${r.index+1}: ${STATUS_LABELS[r.status]}`} onClick={()=>{setFilter('all');setFocusQuestion(r.index);}}>{r.index+1}</button>)}</nav>
     <p>Đúng toàn bộ: {rows.filter(r=>r.status==='correct').length} · Đúng một phần: {rows.filter(r=>r.status==='partial').length} · Chưa đúng: {rows.filter(r=>r.status==='wrong').length} · Bỏ trống: {blank}.</p>

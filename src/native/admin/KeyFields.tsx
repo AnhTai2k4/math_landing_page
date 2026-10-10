@@ -1,0 +1,6 @@
+import type {AdminDraft} from './model';
+import {layoutRows,LEGACY_LAYOUT} from './layout';
+export default function KeyFields({draft,onChange}:{draft:AdminDraft;onChange:(patch:Partial<AdminDraft>)=>void}){
+ const rows=layoutRows(draft.layout??LEGACY_LAYOUT);
+ return <div className="ma-key-grid">{rows.map(r=>{const v=r.kind==='mc'?draft.mc[r.kindIndex]:r.kind==='short'?draft.short[r.kindIndex]:draft.tf[r.kindIndex];return <fieldset key={r.index}><legend>{r.label} · Câu {r.number}</legend>{r.kind==='mc'?<label>Đáp án câu {r.index+1}<select value={v as string} onChange={e=>onChange({mc:draft.mc.map((a,i)=>i===r.kindIndex?e.target.value:a),keyReviewed:false})}><option value="">Chọn A/B/C/D</option>{['A','B','C','D'].map(a=><option key={a}>{a}</option>)}</select></label>:r.kind==='tf'?(v as string[]).map((a,j)=><label key={j}>Đáp án câu {r.index+1}, ý {'abcd'[j]}<select value={a} onChange={e=>onChange({tf:draft.tf.map((row,i)=>i===r.kindIndex?row.map((b,k)=>j===k?e.target.value:b):row),keyReviewed:false})}><option value="">Chọn</option><option value="D">Đúng</option><option value="S">Sai</option></select></label>):<label>Đáp án câu {r.index+1}<input maxLength={100} value={v as string} onChange={e=>onChange({short:draft.short.map((a,i)=>i===r.kindIndex?e.target.value:a),keyReviewed:false})}/></label>}</fieldset>;})}</div>;
+}

@@ -1,3 +1,4 @@
+import {examSections} from './flexible-profile';
 import {lazy,Suspense,useCallback, useEffect, useRef, useState} from 'react';
 import {Link} from '../../migration/navigation';
 import type {Choice} from './assessment';
@@ -35,12 +36,13 @@ function exportDraft(draft: Draft): boolean {
   } catch { if (url) URL.revokeObjectURL(url); return false; }
 }
 
-export default function PracticeAttempt({exam,previousExam,catalogUrl}: {exam: PracticeExam; previousExam?:PracticeExam; catalogUrl: string}) {
+export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverride}: {exam: PracticeExam; previousExam?:PracticeExam; catalogUrl: string; storeOverride?:Store}) {
+  const getStore=useCallback(()=>storeOverride??localStore(),[storeOverride]);
   const sourceIssue=SOURCE_HOLDS[exam.id];
   const erratum=erratumFor(exam.id);
   const [acceptedErratum,setAcceptedErratum]=useState(false);
-  const [legacy]=useState(()=>previousExam?readDraft(localStore(),previousExam):null);
-  const [initial] = useState(() => readDraft(localStore(), exam));
+  const [legacy]=useState(()=>previousExam?readDraft(getStore(),previousExam):null);
+  const [initial] = useState(() => readDraft(getStore(), exam));
   const persisted = useRef<Draft | null>(initial.ok ? initial.value : null);
   const ram = useRef<Draft | null>(initial.ok && initial.value && initial.value.submittedAt !== null ? initial.value : null);
   const dirty = useRef(false), conflict = useRef(false);
@@ -57,7 +59,7 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl}: {exam: P
   useEffect(() => {
     if (draft?.submittedAt != null) resultHeading.current?.focus();
   }, [draft?.attemptId, draft?.submittedAt]);
-  useUnsavedGuard(() => dirty.current);
+  const leaveConfirmation=useUnsavedGuard(() => dirty.current);
 
   const persist = useCallback((next: Draft) => {
     // RAM is authoritative for this mounted attempt, even when storage refuses.
@@ -67,7 +69,7 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl}: {exam: P
       setUnsaved(true);
       setNotice('Bản lưu đã thay đổi ở nơi khác. Câu trả lời trên trang này được giữ nguyên và chưa được lưu. Hãy xuất bài làm trước khi rời trang.');
     } else {
-      const saved = saveDraft(localStore(), exam, next, persisted.current);
+      const saved = saveDraft(getStore(), exam, next, persisted.current);
       dirty.current = !saved.ok;
       setUnsaved(!saved.ok);
       if (saved.ok) { persisted.current = saved.value; setNotice(''); }
@@ -77,10 +79,10 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl}: {exam: P
       }
     }
     setDraft(next);
-  }, [exam]);
+  }, [exam,getStore]);
 
   useEffect(() => {
-    const captured=localStore();
+    const captured=getStore();
     const changed = (event: StorageEvent) => {
       if (!matchingStorageEvent(event,captured,exam.id)) return;
       conflict.current = true;
@@ -89,7 +91,7 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl}: {exam: P
     };
     window.addEventListener('storage', changed);
     return () => window.removeEventListener('storage', changed);
-  }, [exam.id]);
+  }, [exam.id,getStore]);
 
   const finish = useCallback((automatic: boolean, confirmed=false) => {
     const current = ram.current;
@@ -145,6 +147,7 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl}: {exam: P
   const submitted = !!draft && draft.submittedAt !== null;
   const result = draft && submitted ? resultFor(exam, draft) : null;
   const score = result?.score;
+  const sections=examSections(exam);
   const answered = draft ? exam.questions.filter(q => isAnswered(exam, q.id, draft.answers)).length : 0;
   const seconds = draft ? Math.ceil(remainingMs(draft, now) / 1000) : 0;
   const retake=(confirmed=false)=>{
@@ -154,14 +157,14 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl}: {exam: P
     if(!confirmed){setConfirmation('retake');return;}
     setConfirmation(null);setActiveQuestion(0);setMobilePane('answers');
     const id=typeof crypto.randomUUID==='function'?crypto.randomUUID():`local-${Date.now()}-${Math.random().toString(36).slice(2)}`;
-    const next=retakeDraft(localStore(),exam,old,id,Date.now());
+    const next=retakeDraft(getStore(),exam,old,id,Date.now());
     if(!next.ok){setNotice(next.message);return;}
     persisted.current=next.value;ram.current=next.value;setDraft(next.value);setNow(Date.now());setNotice('');setExportNotice('');setUnsaved(false);
   };
 
-  return <section className="ep-attempt">
+  return <section className="ep-attempt">{leaveConfirmation}
     <Link className="ep-link" href={catalogUrl}>← Danh sách đề</Link>
-    <header><p>Lớp {exam.grade} · {PERIOD_LABELS[exam.period]}</p><h1>{exam.title}</h1><p>22 câu · {exam.durationMinutes} phút · Thang điểm 10</p></header>
+    <header><p>Lớp {exam.grade} · {PERIOD_LABELS[exam.period]}</p><h1>{exam.title}</h1><p>{exam.questions.length} câu · {exam.durationMinutes} phút · Thang điểm 10</p></header>
     {notice&&<p className="ep-notice" role="alert">{notice}</p>}
     {erratum&&<div className="ep-notice"><strong>Bản luyện tập MTM đính chính v37 · điều kiện áp dụng khi chấm</strong><p>{erratum.condition}</p><p>Thành đã duyệt đính chính này. PDF nguồn giữ nguyên; lượt mới dùng mã phiên bản riêng. Lịch sử cũ giữ điểm theo khóa trước đính chính.</p>{<label className="ep-erratum-accept"><input type="checkbox" checked={acceptedErratum} onChange={event=>setAcceptedErratum(event.target.checked)}/> Tôi đã đọc điều kiện đính chính và làm bài theo điều kiện này.</label>}{legacy?.ok&&legacy.value&&<p>Đã giữ bản lưu trước đính chính. {legacy.value.submittedAt===null?<button type="button" onClick={()=>setExportNotice(exportDraft(legacy.value!)?'Đã yêu cầu tải bản bài cũ.':'Chưa xuất được; hãy giữ trang mở.')}>Xuất bài cũ đang làm</button>:<Link href={catalogUrl}>Xem lượt cũ trong lịch sử</Link>}</p>}</div>}
     {sourceIssue&&<div className="ep-notice" role="alert"><strong>Đề đang chờ đính chính · tạm ngừng lượt mới.</strong><p>{sourceIssue}</p><p>PDF gốc và lịch sử cũ được giữ. Điểm cũ dùng khóa trước khi phát hiện vấn đề này; cần đọc phần đối chiếu để hiểu giới hạn của kết quả.</p>{persisted.current&&persisted.current.submittedAt===null&&<button type="button" onClick={()=>setExportNotice(exportDraft(persisted.current!)?'Đã yêu cầu tải bản bài làm đang lưu.':'Chưa xuất được; hãy giữ trang mở.')}>Xuất bài đang làm để giữ bản cũ</button>}</div>}
@@ -174,13 +177,13 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl}: {exam: P
       </div>
       <div className="ep-answer-pane" aria-label={submitted?'Kết quả bài làm':'Phiếu trả lời'}>
         {!draft?<section className="ep-card">
-          <h2>Phiếu trả lời</h2><p>Bài làm và kết quả lưu trên trình duyệt này. Thời gian tiếp tục tính khi bạn rời trang.</p>
-          <p>Phần I: 12 câu chọn đáp án. Phần II: 4 câu đúng/sai. Phần III: 6 câu trả lời ngắn.</p>
+          <h2>Phiếu trả lời</h2><p>{storeOverride?'Bản xem thử chỉ giữ trong bộ nhớ của trang quản trị, không ghi lịch sử học sinh.':'Bài làm và kết quả lưu trên trình duyệt này. Thời gian tiếp tục tính khi bạn rời trang.'}</p>
+          <p>{sections.map(s=>`${s.name}: ${s.count} câu`).join(' · ')}</p>
           {persisted.current&&<p>Đã có bài đang làm. Hạn nộp: {new Date(persisted.current.deadline).toLocaleString('vi-VN')}.</p>}
           <button type="button" className="ep-primary ep-wide" disabled={!pdfReady||!!sourceIssue||!!erratum&&!acceptedErratum} onClick={begin}>{sourceIssue?'Chờ đính chính điều kiện':persisted.current?'Tiếp tục làm bài':'Bắt đầu làm bài'}</button>
         </section>:<>
           <div className="ep-toolbar ep-answer-toolbar">
-            {submitted?<strong role="status">{unsaved?'Đã nộp trên trang · chưa xác nhận lưu':'Đã nộp và lưu kết quả'}</strong>:<><span role="timer" aria-label="Thời gian còn lại" aria-live="off">Còn {Math.floor(seconds/60)}:{String(seconds%60).padStart(2,'0')}</span><span>{answered}/22 câu đã trả lời đầy đủ</span></>}
+            {submitted?<strong role="status">{unsaved?'Đã nộp trên trang · chưa xác nhận lưu':'Đã nộp và lưu kết quả'}</strong>:<><span role="timer" aria-label="Thời gian còn lại" aria-live="off">Còn {Math.floor(seconds/60)}:{String(seconds%60).padStart(2,'0')}</span><span>{answered}/{exam.questions.length} câu đã trả lời đầy đủ</span></>}
           </div>
           {submitted?<>
             <section className="ep-card" aria-label="Kết quả"><h2 ref={resultHeading} tabIndex={-1}>Kết quả luyện tập</h2>{score?.ok?<p className="ep-score">{formatPoints(score.earnedMillipoints)} / 10</p>:<p role="alert">Chưa tính được điểm. Bài làm vẫn giữ nguyên để đối chiếu.</p>}
@@ -191,21 +194,21 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl}: {exam: P
             <ExamReview key={draft.attemptId} exam={exam} draft={draft}/>
           </>:<>
             <h2>Phiếu trả lời</h2>
-            <nav aria-label="Chuyển đến câu hỏi">{[{name:'Phần I · Trắc nghiệm',from:0,to:12},{name:'Phần II · Đúng/sai',from:12,to:16},{name:'Phần III · Trả lời ngắn',from:16,to:22}].map(part=><section key={part.name}><h3>{part.name}</h3><div className="ep-question-nav">{exam.questions.slice(part.from,part.to).map((q,j)=>{const index=part.from+j;return <button type="button" key={q.id} className={isAnswered(exam,q.id,draft.answers)?'is-answered':''} aria-current={activeQuestion===index?'step':undefined} aria-label={`${part.name}, câu ${j+1}: ${isAnswered(exam,q.id,draft.answers)?'đã trả lời đầy đủ':'chưa trả lời đầy đủ'}`} onClick={()=>{setActiveQuestion(index);setQuestionFocus(true);}}>{j+1}</button>;})}</div></section>)}</nav>
+            <nav aria-label="Chuyển đến câu hỏi">{sections.map(part=><section key={part.name}><h3>{part.name}</h3><div className="ep-question-nav">{exam.questions.slice(part.from,part.to).map((q,j)=>{const index=part.from+j;return <button type="button" key={q.id} className={isAnswered(exam,q.id,draft.answers)?'is-answered':''} aria-current={activeQuestion===index?'step':undefined} aria-label={`${part.name}, câu ${j+1}: ${isAnswered(exam,q.id,draft.answers)?'đã trả lời đầy đủ':'chưa trả lời đầy đủ'}`} onClick={()=>{setActiveQuestion(index);setQuestionFocus(true);}}>{j+1}</button>;})}</div></section>)}</nav>
             <p className="ep-source-ref">Ô tô màu: đã trả lời đầy đủ. Viền nổi: câu đang chọn.</p>
             {exam.questions.map((q,index)=>{
               if(index!==activeQuestion)return null;
               const answer=draft.answers[q.id],tfAnswers=Array.isArray(answer)?answer:[null,null,null,null];
-              const part=index<12?'I':index<16?'II':'III',number=index<12?index+1:index<16?index-11:index-15;
+              const section=sections.find(s=>index>=s.from&&index<s.to)!,part=section.name,number=index-section.from+1;
               return <section className="ep-question ep-card" key={q.id} id={`ep-question-${index}`} tabIndex={-1} aria-labelledby={`ep-heading-${index}`}>
-                <h3 id={`ep-heading-${index}`}>Phần {part} · Câu {number} <small>({formatPoints(q.maxMillipoints)} điểm)</small></h3>
+                <h3 id={`ep-heading-${index}`}>{part} · Câu {number} <small>({formatPoints(q.maxMillipoints)} điểm)</small></h3>
                 {(q.prompt||q.text)&&<p className="ep-source-text">{q.prompt??q.text}</p>}<p className="ep-source-ref">{q.sourceRef}</p>
                 {q.kind==='mc'&&<fieldset disabled={!pdfReady} className="ep-mc-grid"><legend>Chọn đáp án câu {number}</legend>{q.choices.map((choice,i)=><label className={`ep-option ${answer===letters[i]?'is-selected':''}`} key={letters[i]}><input type="radio" name={`ep-mc-${index}`} value={letters[i]} checked={answer===letters[i]} onChange={()=>changeAnswer(q.id,letters[i])}/><span>{letters[i]}{choice!==letters[i]?`. ${choice}`:''}</span>{answer===letters[i]&&<span aria-hidden="true">✓</span>}</label>)}<button type="button" className="ep-clear-answer" onClick={()=>changeAnswer(q.id,null)}>Bỏ chọn</button></fieldset>}
                 {q.kind==='tf'&&<div>{statementLetters.map((letter,i)=><fieldset key={letter} disabled={!pdfReady}><legend className="ep-source-text">Ý {letter}: {q.statements?.[i]??`${q.sourceRef}, ý ${letter}`}</legend>{[true,false,null].map(value=><label className={`ep-tf-option ${tfAnswers[i]===value?'is-selected':''}`} key={String(value)}><input type="radio" name={`ep-tf-${index}-${i}`} checked={tfAnswers[i]===value} onChange={()=>{const next=[...tfAnswers] as (boolean|null)[];next[i]=value;changeAnswer(q.id,next);}}/>{value===null?'Chưa chọn':value?'Đúng':'Sai'}</label>)}</fieldset>)}</div>}
-                {q.kind==='short'&&<div><label htmlFor={`ep-short-${index}`}>Trả lời câu {number}</label><input id={`ep-short-${index}`} className="ep-short" type="text" disabled={!pdfReady} maxLength={MAX_SHORT_LENGTH} autoComplete="off" spellCheck={false} value={typeof answer==='string'?answer:''} aria-describedby={`ep-help-${index}`} onChange={event=>changeAnswer(q.id,event.target.value)}/><p id={`ep-help-${index}`}>{q.mode==='numeric'?'Nhập số thập phân bằng dấu phẩy hoặc dấu chấm; không nhập biểu thức hoặc phân số.':'Nhập câu trả lời chính xác theo yêu cầu đề.'}</p></div>}
+                {q.kind==='short'&&<div><label htmlFor={`ep-short-${index}`}>Trả lời câu {number}</label><input id={`ep-short-${index}`} className="ep-short" type="text" disabled={!pdfReady} maxLength={MAX_SHORT_LENGTH} autoComplete="off" spellCheck={false} value={typeof answer==='string'?answer:''} aria-describedby={`ep-help-${index}`} onChange={event=>changeAnswer(q.id,event.target.value)}/><p id={`ep-help-${index}`}>{q.mode==='numeric'?'Nhập số thập phân bằng dấu phẩy hoặc dấu chấm; không nhập biểu thức hoặc phân số.':q.mode==='rational'?'Nhập số nguyên, số thập phân hoặc phân số, ví dụ -3/4; không nhập đơn vị hay biểu thức.':'Nhập câu trả lời chính xác theo yêu cầu đề (phân biệt chữ hoa/thường).'}</p></div>}
               </section>;
             })}
-            <div className="ep-question-step"><button type="button" disabled={activeQuestion===0} onClick={()=>{setActiveQuestion(i=>i-1);setQuestionFocus(true);}}>Câu trước</button><button type="button" disabled={activeQuestion===21} onClick={()=>{setActiveQuestion(i=>i+1);setQuestionFocus(true);}}>Câu tiếp</button></div>
+            <div className="ep-question-step"><button type="button" disabled={activeQuestion===0} onClick={()=>{setActiveQuestion(i=>i-1);setQuestionFocus(true);}}>Câu trước</button><button type="button" disabled={activeQuestion===exam.questions.length-1} onClick={()=>{setActiveQuestion(i=>i+1);setQuestionFocus(true);}}>Câu tiếp</button></div>
             <div className="ep-submit-row"><Link className="ep-link" href={catalogUrl}>Rời bài thi</Link><button type="button" className="ep-primary" onClick={()=>finish(false)}>Nộp bài</button></div>
           </>}
           <div className="ep-toolbar"><button type="button" onClick={()=>setExportNotice(exportDraft(draft)?'Đã yêu cầu tải tệp JSON bài làm.':'Chưa xuất được tệp. Hãy giữ trang mở và thử lại.')}>Xuất bài làm JSON</button>{unsaved&&!conflict.current&&<button type="button" onClick={()=>persist(draft)}>Thử lưu lại</button>}</div>
@@ -213,6 +216,6 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl}: {exam: P
       </div>
     </div>
     {exportNotice&&<p role="status">{exportNotice}</p>}
-    {confirmation&&<ExamConfirm title={confirmation==='submit'?'Nộp bài chưa hoàn thành?':'Làm một lượt mới?'} message={confirmation==='submit'?`Còn ${22-answered} câu chưa trả lời đầy đủ. Nộp bài sẽ kết thúc lượt làm này.`:'Bài đã nộp giữ trong lịch sử trước khi bắt đầu lượt mới.'} confirmLabel={confirmation==='submit'?'Nộp bài':'Bắt đầu lượt mới'} onCancel={()=>setConfirmation(null)} onConfirm={()=>confirmation==='submit'?finish(false,true):retake(true)}/>}
+    {confirmation&&<ExamConfirm title={confirmation==='submit'?'Nộp bài chưa hoàn thành?':'Làm một lượt mới?'} message={confirmation==='submit'?`Còn ${exam.questions.length-answered} câu chưa trả lời đầy đủ. Nộp bài sẽ kết thúc lượt làm này.`:'Bài đã nộp giữ trong lịch sử trước khi bắt đầu lượt mới.'} confirmLabel={confirmation==='submit'?'Nộp bài':'Bắt đầu lượt mới'} onCancel={()=>setConfirmation(null)} onConfirm={()=>confirmation==='submit'?finish(false,true):retake(true)}/>}
   </section>;
 }
