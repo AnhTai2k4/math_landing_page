@@ -6,10 +6,10 @@ import {displayAnswer,formatPoints,reviewRows,statementLetters,STATUS_LABELS} fr
 const DetailedSolution=lazy(()=>import('./DetailedSolution'));
 const SolutionPdf=lazy(()=>import('../admin/SolutionPdf'));
 
-export default function ExamReview({exam,draft}:{exam:PracticeExam;draft:Draft}) {
+export default function ExamReview({exam,draft,initialQuestionId}:{exam:PracticeExam;draft:Draft;initialQuestionId?:string}) {
   const [filter,setFilter]=useState<'all'|'mistakes'|'unanswered'>('all');
-  const [expanded,setExpanded]=useState<Set<string>>(()=>new Set());
-  const [focusQuestion,setFocusQuestion]=useState<number|null>(null);
+  const [expanded,setExpanded]=useState<Set<string>>(()=>new Set(draft.submittedAt!==null&&initialQuestionId?[initialQuestionId]:[]));
+  const [focusQuestion,setFocusQuestion]=useState<number|null>(()=>{const index=exam.questions.findIndex(q=>q.id===initialQuestionId);return draft.submittedAt!==null&&index>=0?index:null;});
   const instance=useId();
   useEffect(()=>{if(focusQuestion!==null){const target=document.getElementById(`${instance}-card-${focusQuestion}`);target?.focus();target?.scrollIntoView({block:'start'});setFocusQuestion(null);}},[focusQuestion,instance]);
   if(draft.submittedAt===null)return null;

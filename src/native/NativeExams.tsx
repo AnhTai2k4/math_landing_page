@@ -7,6 +7,7 @@ import {resultFor} from './exams/result';
 import {SEO} from '../components/SEO';
 import {examRouteMetadata} from './exams/route-metadata';
 import ExamReview from './exams/ExamReview';
+import MistakeQueue from './exams/MistakeQueue';
 import type {Draft} from './exams/store';
 import {historySummary} from './exams/history-summary';
 import {formatPoints} from './exams/review';
@@ -89,6 +90,7 @@ export default function NativeExams({pathname, search, catalog = PRACTICE_EXAMS,
       <p>Trên trình duyệt này: đã làm {localSummary.completedExams} đề, {localSummary.totalAttempts} lượt đã nộp.</p>
       <div className="ep-catalog">{matches.map(item => {const saved=localSummary.exams.find(e=>e.examId===item.id);return <article className="ep-card" key={item.id}><p>Lớp {item.grade} · {PERIOD_LABELS[item.period]}</p><h2>{item.title}</h2><p>{item.questions.length} câu · {item.durationMinutes} phút</p>{erratumFor(item.id)&&<p className="ep-notice">Bản MTM đính chính v37 · giữ PDF nguồn</p>}{SOURCE_HOLDS[item.id]&&<p className="ep-notice">Chờ đính chính điều kiện · chưa mở lượt mới</p>}<p className="ep-progress-label">{saved?.count?`Đã làm ${saved.count} lượt`: 'Chưa có lượt đã nộp'}{saved?.inProgress?' · Có bài đang làm':''}</p>{saved&&saved.count>0&&<p>Gần nhất: {saved.latestScore===null?'Chưa tính được':formatPoints(saved.latestScore)} / 10 · Cao nhất: {saved.best===null?'Chưa tính được':formatPoints(saved.best)} / 10</p>}<Link className="ep-link" href={`/thi-thu/${encodeURIComponent(item.id)}${normalizedSearch}`}>{saved?.inProgress?'Tiếp tục làm bài →':'Mở đề luyện tập →'}</Link></article>;})}</div>
       {!matches.length && <p className="ep-card">{ready.length ? 'Chưa có đề phù hợp. Hãy thử đổi bộ lọc.' : 'Chưa có đề mở làm bài.'}</p>}
+      <MistakeQueue history={localSummary.history}/>
       <LocalHistory summary={localSummary}/>
     </>}
   </div>;
