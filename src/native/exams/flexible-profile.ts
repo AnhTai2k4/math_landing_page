@@ -7,7 +7,7 @@ export function validatePracticeProfile(input:unknown):Validation {
  if(e?.rubricVersion!==FLEX_RUBRIC)return validateMtmAssessment(input);
  const gate=validateAssessment(input);if(!gate.valid)return gate;
  const errors:string[]=[];
- if(!e.id.startsWith('mtm-custom-')&&!e.id.startsWith('mtm-preview-'))errors.push('Flexible profile requires a custom edition');
+ if(!e.id.startsWith('mtm-custom-')&&!e.id.startsWith('mtm-preview-')&&!e.id.startsWith('mtm-practice-'))errors.push('Flexible profile requires a custom edition');
  if(!Array.isArray(e.sections)||!e.sections.length||e.sections.length>12)return{valid:false,errors:[...errors,'Sections required']};
  let offset=0;for(const section of e.sections){if(!section||typeof section.label!=='string'||!section.label.trim()||section.label.length>100||!['mc','tf','short'].includes(section.kind)||!Number.isSafeInteger(section.count)||section.count<1||section.count>300){errors.push('Invalid section');continue;}
  if(e.questions.slice(offset,offset+section.count).length!==section.count||e.questions.slice(offset,offset+section.count).some(q=>q.kind!==section.kind))errors.push('Section/question mismatch');offset+=section.count;}

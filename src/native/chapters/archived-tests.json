@@ -1,0 +1,3137 @@
+[
+  {
+    "exam": {
+      "id": "mtm-preview-g10-c1-b01-v1",
+      "title": "Toán 10 · Chương I · Bài 1: Mệnh đề và phủ định",
+      "sourceHash": "489bbd15923d312370b5fbf5e5d937d4616422e22978f934a5bcf1cd142388d7",
+      "sourceRef": "MTM biên soạn mới 2026–2027; chưa đối chiếu Toanmath từng câu",
+      "sourceUrl": "https://www.minhthanhmath.vn",
+      "sourceUrlMeaning": "Trang nhà xuất bản/tác giả MTM; không phải URL từng câu hay nguồn Toanmath",
+      "questionCount": 6,
+      "grade": 10,
+      "period": "GK1",
+      "chapter": 1,
+      "practiceNumber": 1,
+      "topic": "Mệnh đề và phủ định",
+      "durationMinutes": 20,
+      "answerKeyVerified": true,
+      "rubricVerified": true,
+      "questionDisplayVerified": true,
+      "publicationVerified": true,
+      "sections": [
+        {
+          "label": "I · Trắc nghiệm",
+          "kind": "mc",
+          "count": 3
+        },
+        {
+          "label": "II · Đúng/sai",
+          "kind": "tf",
+          "count": 1
+        },
+        {
+          "label": "III · Trả lời ngắn",
+          "kind": "short",
+          "count": 2
+        }
+      ],
+      "rubricVersion": "MTM-FLEX-10-v1",
+      "questions": [
+        {
+          "kind": "mc",
+          "prompt": "Với $n\\in\\mathbb{Z}$ và $-3\\le n\\le3$, xét $P(n):n^2-n-2<0$. Tập hợp tất cả giá trị $n$ để $P(n)$ đúng là",
+          "choices": [
+            "$\\{-1;0;1;2\\}$",
+            "$\\{0;1\\}$",
+            "$\\{-3;-2;-1;2;3\\}$",
+            "$\\{-1;2\\}$"
+          ],
+          "answer": "B",
+          "solution": "Ta có $n^2-n-2=(n-2)(n+1)$. Tích âm khi $-1<n<2$. Vì $n$ nguyên nên chỉ có $n=0$ hoặc $n=1$. Hai giá trị biên $-1,2$ cho tích bằng $0$, không thỏa dấu $<$. Chọn B.",
+          "skills": [
+            "Giá trị đúng/sai của mệnh đề chứa biến",
+            "Dấu nghiêm ngặt và giá trị nguyên"
+          ],
+          "level": 2,
+          "maxMillipoints": 1000,
+          "id": "g10-c1-b01-i1",
+          "part": 1,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 1 · I.1",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "mc",
+          "prompt": "Với $m\\in\\mathbb{Z}$, $-2\\le m\\le3$, gọi $P(m)$ là mệnh đề “Phương trình $x^2-2mx+m+2=0$ có nghiệm thực”. Tập các giá trị $m$ để mệnh đề phủ định của $P(m)$ đúng là",
+          "choices": [
+            "$\\{-2;-1;2;3\\}$",
+            "$\\{-1;0;1;2\\}$",
+            "$\\{0;1\\}$",
+            "$\\{-2;3\\}$"
+          ],
+          "answer": "C",
+          "solution": "Phủ định của “có nghiệm thực” là “không có nghiệm thực”. Phương trình có $\\Delta'=m^2-m-2=(m-2)(m+1)$. Không có nghiệm thực khi $\\Delta'<0$, tương đương $-1<m<2$. Các giá trị nguyên thỏa mãn trong miền đã cho là $0,1$. Chọn C.",
+          "skills": [
+            "Phủ định một mệnh đề toán học",
+            "Điều kiện nghiệm thực của phương trình bậc hai"
+          ],
+          "level": 2,
+          "maxMillipoints": 1000,
+          "id": "g10-c1-b01-i2",
+          "part": 1,
+          "number": 2,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 1 · I.2",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "mc",
+          "prompt": "Với $n\\in\\mathbb{Z}$, mệnh đề $P(n)$ là “$n\\ge-2$ và $n<4$”. Mệnh đề nào là phủ định của $P(n)$?",
+          "choices": [
+            "$n<-2$ và $n\\ge4$",
+            "$n\\le-2$ hoặc $n>4$",
+            "$n>-2$ và $n\\le4$",
+            "$n<-2$ hoặc $n\\ge4$"
+          ],
+          "answer": "D",
+          "solution": "Để phủ định một mệnh đề ghép bằng “và”, cần ít nhất một điều kiện thành phần không đúng, nên đổi thành “hoặc”. Phủ định của $n\\ge-2$ là $n<-2$; phủ định của $n<4$ là $n\\ge4$. Vì vậy $\\overline{P(n)}$ là “$n<-2$ hoặc $n\\ge4$”. Tại $n=-2$ hoặc $n=3$, $P(n)$ đúng nên phủ định phải sai; tại $n=4$ phủ định đúng. Chọn D.",
+          "skills": [
+            "Phủ định điều kiện ghép",
+            "Kiểm tra đầu mút"
+          ],
+          "level": 2,
+          "maxMillipoints": 1000,
+          "id": "g10-c1-b01-i3",
+          "part": 1,
+          "number": 3,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 1 · I.3",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "tf",
+          "prompt": "Với $n\\in\\{-2;-1;0;1;2;3\\}$, xét $P(n):n^2-n-2<0$. Xác định đúng hoặc sai cho từng khẳng định.",
+          "statements": [
+            "$P(-1)$ là mệnh đề đúng.",
+            "$P(0)$ là mệnh đề đúng.",
+            "$P(n)$ đúng với mọi giá trị $n$ trong tập đã cho.",
+            "Phủ định của $P(n)$ là $n^2-n-2\\ge0$."
+          ],
+          "answer": [
+            false,
+            true,
+            false,
+            true
+          ],
+          "statementSolutions": [
+            "Sai. Với $n=-1$, $n^2-n-2=1+1-2=0$; bất đẳng thức $0<0$ sai.",
+            "Đúng. Với $n=0$, vế trái bằng $-2<0$.",
+            "Sai. Giá trị $n=-2$ cho $4+2-2=4$, nên là một phản ví dụ. Thực tế chỉ $n=0,1$ thỏa mãn.",
+            "Đúng. Với số thực $t=n^2-n-2$, phủ định của $t<0$ là $t\\ge0$, phải bao gồm trường hợp $t=0$."
+          ],
+          "solution": "a) Sai. Với $n=-1$, $n^2-n-2=1+1-2=0$; bất đẳng thức $0<0$ sai.\n\nb) Đúng. Với $n=0$, vế trái bằng $-2<0$.\n\nc) Sai. Giá trị $n=-2$ cho $4+2-2=4$, nên là một phản ví dụ. Thực tế chỉ $n=0,1$ thỏa mãn.\n\nd) Đúng. Với số thực $t=n^2-n-2$, phủ định của $t<0$ là $t\\ge0$, phải bao gồm trường hợp $t=0$.",
+          "skills": [
+            "Phản ví dụ",
+            "Phủ định dấu bất đẳng thức"
+          ],
+          "level": 2,
+          "maxMillipoints": 4000,
+          "pointsByCorrectCount": [
+            0,
+            1000,
+            2000,
+            3000,
+            4000
+          ],
+          "id": "g10-c1-b01-ii1",
+          "part": 2,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 1 · II.1",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "short",
+          "mode": "numeric",
+          "prompt": "Có bao nhiêu số nguyên $n\\in[-3;4]$ làm mệnh đề $n^2-n-2\\ge0$ đúng?",
+          "acceptedAnswers": [
+            "6"
+          ],
+          "solution": "Ta có $(n-2)(n+1)\\ge0$ khi $n\\le-1$ hoặc $n\\ge2$. Trong đoạn đã cho, các giá trị nguyên là $-3,-2,-1,2,3,4$, gồm $6$ giá trị. Cũng có thể đếm $8$ số nguyên rồi loại hai giá trị $0,1$ khiến tích âm. Đáp án: $6$.",
+          "skills": [
+            "Đếm giá trị đúng của mệnh đề",
+            "Lấy cả hai nghiệm biên"
+          ],
+          "level": 2,
+          "maxMillipoints": 1500,
+          "id": "g10-c1-b01-iii1",
+          "part": 3,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 1 · III.1",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "short",
+          "mode": "numeric",
+          "prompt": "Xét bốn mệnh đề: (1) $(\\sqrt5-2)(\\sqrt5+2)=1$; (2) $|1-\\sqrt5|=1-\\sqrt5$; (3) $(-2)^3=-8$; (4) $\\sqrt{(-4)^2}=-4$. Có bao nhiêu mệnh đề sai?",
+          "acceptedAnswers": [
+            "2"
+          ],
+          "solution": "(1) Đúng vì hiệu hai bình phương bằng $5-4=1$. (2) Sai vì $\\sqrt5>1$, nên $|1-\\sqrt5|=\\sqrt5-1>0$, còn $1-\\sqrt5<0$. (3) Đúng vì $(-2)^3=-8$. (4) Sai vì căn bậc hai số học không âm: $\\sqrt{(-4)^2}=|-4|=4$. Có hai mệnh đề sai, là (2) và (4). Đáp án: $2$.",
+          "skills": [
+            "Đánh giá mệnh đề toán học",
+            "Căn số học và trị tuyệt đối"
+          ],
+          "level": 2,
+          "maxMillipoints": 1500,
+          "id": "g10-c1-b01-iii2",
+          "part": 3,
+          "number": 2,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 1 · III.2",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        }
+      ],
+      "sourceMaterial": {
+        "title": "Bài luyện Chương I: Mệnh đề và phủ định",
+        "publisher": "Minh Thành Math",
+        "version": "2026-2027-v1-author",
+        "locator": "Bài 1 · 6 nhóm câu · 9 ô đáp án",
+        "sourceType": "ORIGINAL_MTM_AUTHORING",
+        "toanmathPerQuestionAlignment": false
+      },
+      "answerVerificationNote": "Khóa chấm và lời giải đã được đối chiếu độc lập. Thang luyện MTM 10 điểm, đúng–sai tính điểm theo số ý đúng; không phải điểm kỳ thi HSA/TSA chính thức. Bản luyện tập này đang thử trên PC, chưa đăng web.",
+      "versionHash": "c6961a2b12615ed508591e7d1a145a5fd48d1c418da0735374dcdf734f76e64a"
+    },
+    "scope": "PC_ONLY",
+    "published": false,
+    "sourceArtifactHash": "489bbd15923d312370b5fbf5e5d937d4616422e22978f934a5bcf1cd142388d7",
+    "note": "MTM biên soạn mới. Thang điểm luyện tập riêng: trắc nghiệm 3 điểm, đúng/sai 4 điểm (mỗi ý đúng 1 điểm), trả lời ngắn 3 điểm. Chưa gắn nhãn thang điểm thi tốt nghiệp.",
+    "reviewStatus": "AUTHOR_VERIFIED_INDEPENDENT_REVIEW_PENDING",
+    "limits": [
+      "Chờ phản biện toán học độc lập từ bộ đề không có khóa và lời giải.",
+      "Chờ root nghiệm thu bố cục/chấm điểm/history trước tích hợp.",
+      "Nguồn câu hỏi là MTM tự biên soạn; chưa đối chiếu Toanmath từng câu."
+    ],
+    "track": "10",
+    "chapter": "1",
+    "order": 1,
+    "coverage": "Mệnh đề và phủ định",
+    "admission": {
+      "authorVersionHash": "c70f23f610f3c63d0ff58a744d86cd4bf9122d3d31420db0b4b66999c3379827",
+      "authorId": "mtm-pc-g10-c1-b01-v1",
+      "authorRubric": "MTM-PRACTICE-3MC-1TF-2SA-LINEAR-v1",
+      "mathVerified": true,
+      "engineAndBrowserReceipt": "See final v46 handoff",
+      "legacyFlagsAreNotLivePublication": true
+    }
+  },
+  {
+    "exam": {
+      "id": "mtm-preview-g10-c1-b02-v1",
+      "title": "Toán 10 · Chương I · Bài 2: Kéo theo, đảo và tương đương",
+      "sourceHash": "ee5b15019bb93508193fca2dc70f179f8f35d942e4d43bb3cca286ea08181f27",
+      "sourceRef": "MTM biên soạn mới 2026–2027; chưa đối chiếu Toanmath từng câu",
+      "sourceUrl": "https://www.minhthanhmath.vn",
+      "sourceUrlMeaning": "Trang nhà xuất bản/tác giả MTM; không phải URL từng câu hay nguồn Toanmath",
+      "questionCount": 6,
+      "grade": 10,
+      "period": "GK1",
+      "chapter": 1,
+      "practiceNumber": 2,
+      "topic": "Kéo theo, đảo và tương đương",
+      "durationMinutes": 20,
+      "answerKeyVerified": true,
+      "rubricVerified": true,
+      "questionDisplayVerified": true,
+      "publicationVerified": true,
+      "sections": [
+        {
+          "label": "I · Trắc nghiệm",
+          "kind": "mc",
+          "count": 3
+        },
+        {
+          "label": "II · Đúng/sai",
+          "kind": "tf",
+          "count": 1
+        },
+        {
+          "label": "III · Trả lời ngắn",
+          "kind": "short",
+          "count": 2
+        }
+      ],
+      "rubricVersion": "MTM-FLEX-10-v1",
+      "questions": [
+        {
+          "kind": "mc",
+          "prompt": "Với $x\\in\\mathbb{R}$, đặt $P(x):x^2-5x+6=0$ và $Q(x):x^2-4=0$. Xét hai mệnh đề “Với mọi $x\\in\\mathbb{R}$, $P(x)\\Rightarrow Q(x)$” và “Với mọi $x\\in\\mathbb{R}$, $Q(x)\\Rightarrow P(x)$”. Kết luận nào đúng?",
+          "choices": [
+            "Cả hai mệnh đề đều đúng.",
+            "Mệnh đề thứ nhất đúng, mệnh đề thứ hai sai.",
+            "Mệnh đề thứ nhất sai, mệnh đề thứ hai đúng.",
+            "Cả hai mệnh đề đều sai."
+          ],
+          "answer": "D",
+          "solution": "$P(x)$ đúng khi $x\\in\\{2;3\\}$; $Q(x)$ đúng khi $x\\in\\{-2;2\\}$. Giá trị $x=3$ làm $P$ đúng nhưng $Q$ sai, nên mệnh đề thứ nhất sai. Giá trị $x=-2$ làm $Q$ đúng nhưng $P$ sai, nên mệnh đề thứ hai cũng sai. Chọn D.",
+          "skills": [
+            "Kiểm tra hai chiều kéo theo",
+            "Phản ví dụ theo tập nghiệm"
+          ],
+          "level": 2,
+          "maxMillipoints": 1000,
+          "id": "g10-c1-b02-i1",
+          "part": 1,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 2 · I.1",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "mc",
+          "prompt": "Với $n\\in\\mathbb{Z}$, $1\\le n\\le30$, đặt $P(n)$ là “$n$ chia hết cho $6$”, $Q(n)$ là “$n$ chia hết cho $3$”. Mệnh đề $P(n)\\Rightarrow Q(n)$ đúng với mọi $n$ trong miền. Có bao nhiêu giá trị $n$ là phản ví dụ cho mệnh đề đảo $Q(n)\\Rightarrow P(n)$?",
+          "choices": [
+            "2",
+            "5",
+            "10",
+            "15"
+          ],
+          "answer": "B",
+          "solution": "Mệnh đề đảo của $P\\Rightarrow Q$ là $Q\\Rightarrow P$. Một phản ví dụ phải làm $Q$ đúng nhưng $P$ sai, tức $n$ chia hết cho $3$ nhưng không chia hết cho $6$. Trong miền đã cho, các số chia hết cho $3$ là $3,6,9,12,15,18,21,24,27,30$; bỏ $6,12,18,24,30$ chia hết cho $6$, còn $3,9,15,21,27$. Có $5$ phản ví dụ, chọn B.",
+          "skills": [
+            "Xác định mệnh đề đảo",
+            "Đếm phản ví dụ với hai điều kiện"
+          ],
+          "level": 2,
+          "maxMillipoints": 1000,
+          "id": "g10-c1-b02-i2",
+          "part": 1,
+          "number": 2,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 2 · I.2",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "mc",
+          "prompt": "Với $x\\in\\mathbb{R}$, khẳng định nào sau đây đúng với mọi $x$?",
+          "choices": [
+            "$x^2=4\\Leftrightarrow x=2$",
+            "$x^2=4\\Leftrightarrow x\\ge0$",
+            "$x=2\\Leftrightarrow (x^2=4\\ \\text{và}\\ x\\ge0)$",
+            "$x=2\\Leftrightarrow (x^2=4\\ \\text{và}\\ x<0)$"
+          ],
+          "answer": "C",
+          "solution": "Từ $x=2$ suy ra $x^2=4$ và $x\\ge0$. Ngược lại, $x^2=4$ cho $x=\\pm2$, kết hợp $x\\ge0$ chỉ giữ $x=2$. Vì cả hai chiều đều đúng nên C đúng. A sai tại $x=-2$; B sai tại $x=0$; D sai tại $x=2$. Chọn C.",
+          "skills": [
+            "Mệnh đề tương đương",
+            "Điều kiện bổ sung loại nghiệm"
+          ],
+          "level": 2,
+          "maxMillipoints": 1000,
+          "id": "g10-c1-b02-i3",
+          "part": 1,
+          "number": 3,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 2 · I.3",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "tf",
+          "prompt": "Với $m\\in\\{-3;-2;-1;0;1;2;3\\}$, đặt $P(m):m^2=4$, $Q(m):|m|=2$ và $R(m):m=2$. Các khẳng định dưới đây đều được hiểu là đúng với mọi $m$ trong tập đã cho.",
+          "statements": [
+            "$P(m)\\Rightarrow Q(m)$",
+            "$Q(m)\\Rightarrow R(m)$",
+            "$R(m)\\Rightarrow P(m)$",
+            "$P(m)\\Leftrightarrow R(m)$"
+          ],
+          "answer": [
+            true,
+            false,
+            true,
+            false
+          ],
+          "statementSolutions": [
+            "Đúng. $m^2=4$ tương đương $m=2$ hoặc $m=-2$, cả hai đều có $|m|=2$.",
+            "Sai. $m=-2$ làm $Q(m)$ đúng nhưng $R(m)$ sai.",
+            "Đúng. Thay $m=2$ được $m^2=4$.",
+            "Sai. Chiều $P\\Rightarrow R$ sai tại $m=-2$, nên không thể kết luận tương đương dù chiều đảo đúng."
+          ],
+          "solution": "a) Đúng. $m^2=4$ tương đương $m=2$ hoặc $m=-2$, cả hai đều có $|m|=2$.\n\nb) Sai. $m=-2$ làm $Q(m)$ đúng nhưng $R(m)$ sai.\n\nc) Đúng. Thay $m=2$ được $m^2=4$.\n\nd) Sai. Chiều $P\\Rightarrow R$ sai tại $m=-2$, nên không thể kết luận tương đương dù chiều đảo đúng.",
+          "skills": [
+            "Kéo theo và tương đương",
+            "So sánh tập giá trị thỏa mãn"
+          ],
+          "level": 2,
+          "maxMillipoints": 4000,
+          "pointsByCorrectCount": [
+            0,
+            1000,
+            2000,
+            3000,
+            4000
+          ],
+          "id": "g10-c1-b02-ii1",
+          "part": 2,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 2 · II.1",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "short",
+          "mode": "numeric",
+          "prompt": "Trong các số nguyên $n$ từ $1$ đến $12$, có bao nhiêu giá trị làm mệnh đề “Nếu $n$ chẵn thì $n$ chia hết cho $3$” sai?",
+          "acceptedAnswers": [
+            "4"
+          ],
+          "solution": "Một mệnh đề kéo theo sai khi tiền đề đúng và kết luận sai. Các số chẵn trong miền là $2,4,6,8,10,12$. Trong đó $6,12$ chia hết cho $3$, còn $2,4,8,10$ không chia hết cho $3$. Vì vậy có $4$ phản ví dụ. Các số lẻ không làm kéo theo sai vì tiền đề khi đó sai. Đáp án: $4$.",
+          "skills": [
+            "Đếm phản ví dụ của kéo theo"
+          ],
+          "level": 2,
+          "maxMillipoints": 1500,
+          "id": "g10-c1-b02-iii1",
+          "part": 3,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 2 · III.1",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "short",
+          "mode": "numeric",
+          "prompt": "Trong các số nguyên $n\\in[-5;5]$, có bao nhiêu giá trị làm mệnh đề “$n^2>9$ khi và chỉ khi $n>3$” sai?",
+          "acceptedAnswers": [
+            "2"
+          ],
+          "solution": "$n^2>9$ tương đương $n<-3$ hoặc $n>3$. Hai vế có giá trị khác nhau chỉ khi $n<-3$: vế trái đúng, vế phải sai. Trong đoạn đã cho có $n=-5,-4$. Với $n=4,5$ cả hai đúng; với $-3\\le n\\le3$ cả hai sai. Do đó có $2$ giá trị khiến tương đương sai. Đáp án: $2$.",
+          "skills": [
+            "Đếm giá trị sai của tương đương",
+            "Hai trường hợp hai vế cùng sai"
+          ],
+          "level": 3,
+          "maxMillipoints": 1500,
+          "id": "g10-c1-b02-iii2",
+          "part": 3,
+          "number": 2,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 2 · III.2",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        }
+      ],
+      "sourceMaterial": {
+        "title": "Bài luyện Chương I: Kéo theo, đảo và tương đương",
+        "publisher": "Minh Thành Math",
+        "version": "2026-2027-v1-author",
+        "locator": "Bài 2 · 6 nhóm câu · 9 ô đáp án",
+        "sourceType": "ORIGINAL_MTM_AUTHORING",
+        "toanmathPerQuestionAlignment": false
+      },
+      "answerVerificationNote": "Khóa chấm và lời giải đã được đối chiếu độc lập. Thang luyện MTM 10 điểm, đúng–sai tính điểm theo số ý đúng; không phải điểm kỳ thi HSA/TSA chính thức. Bản luyện tập này đang thử trên PC, chưa đăng web.",
+      "versionHash": "f01b5736bdaf196d55aae56fe4c688b7e63e3c93072c85c753d739387b0844e9"
+    },
+    "scope": "PC_ONLY",
+    "published": false,
+    "sourceArtifactHash": "ee5b15019bb93508193fca2dc70f179f8f35d942e4d43bb3cca286ea08181f27",
+    "note": "MTM biên soạn mới. Thang điểm luyện tập riêng: trắc nghiệm 3 điểm, đúng/sai 4 điểm (mỗi ý đúng 1 điểm), trả lời ngắn 3 điểm. Chưa gắn nhãn thang điểm thi tốt nghiệp.",
+    "reviewStatus": "AUTHOR_VERIFIED_INDEPENDENT_REVIEW_PENDING",
+    "limits": [
+      "Chờ phản biện toán học độc lập từ bộ đề không có khóa và lời giải.",
+      "Chờ root nghiệm thu bố cục/chấm điểm/history trước tích hợp.",
+      "Nguồn câu hỏi là MTM tự biên soạn; chưa đối chiếu Toanmath từng câu."
+    ],
+    "track": "10",
+    "chapter": "1",
+    "order": 2,
+    "coverage": "Kéo theo, đảo và tương đương",
+    "admission": {
+      "authorVersionHash": "76991c3378ed1e873d26fccc7e592e7e25bb2e53f3a5d1bf1b108056c6bf2697",
+      "authorId": "mtm-pc-g10-c1-b02-v1",
+      "authorRubric": "MTM-PRACTICE-3MC-1TF-2SA-LINEAR-v1",
+      "mathVerified": true,
+      "engineAndBrowserReceipt": "See final v46 handoff",
+      "legacyFlagsAreNotLivePublication": true
+    }
+  },
+  {
+    "exam": {
+      "id": "mtm-preview-g10-c1-b03-v1",
+      "title": "Toán 10 · Chương I · Bài 3: Lượng từ và miền xác định",
+      "sourceHash": "67924f4b3e10549de9a9384186991add3c6f1da965fd533c2d2bbc9f37c3fae5",
+      "sourceRef": "MTM biên soạn mới 2026–2027; chưa đối chiếu Toanmath từng câu",
+      "sourceUrl": "https://www.minhthanhmath.vn",
+      "sourceUrlMeaning": "Trang nhà xuất bản/tác giả MTM; không phải URL từng câu hay nguồn Toanmath",
+      "questionCount": 6,
+      "grade": 10,
+      "period": "GK1",
+      "chapter": 1,
+      "practiceNumber": 3,
+      "topic": "Lượng từ và miền xác định",
+      "durationMinutes": 20,
+      "answerKeyVerified": true,
+      "rubricVerified": true,
+      "questionDisplayVerified": true,
+      "publicationVerified": true,
+      "sections": [
+        {
+          "label": "I · Trắc nghiệm",
+          "kind": "mc",
+          "count": 3
+        },
+        {
+          "label": "II · Đúng/sai",
+          "kind": "tf",
+          "count": 1
+        },
+        {
+          "label": "III · Trả lời ngắn",
+          "kind": "short",
+          "count": 2
+        }
+      ],
+      "rubricVersion": "MTM-FLEX-10-v1",
+      "questions": [
+        {
+          "kind": "mc",
+          "prompt": "Cho $P:$ “$\\forall x\\in\\mathbb{R},\\ x^2+2x+2>0$”. Phương án nào nêu đúng cả mệnh đề phủ định của $P$ và giá trị đúng/sai của mệnh đề phủ định đó?",
+          "choices": [
+            "$\\forall x\\in\\mathbb{R},\\ x^2+2x+2\\le0$; mệnh đề phủ định này sai.",
+            "$\\exists x\\in\\mathbb{R},\\ x^2+2x+2\\le0$; mệnh đề phủ định này sai.",
+            "$\\exists x\\in\\mathbb{R},\\ x^2+2x+2\\le0$; mệnh đề phủ định này đúng.",
+            "$\\exists x\\in\\mathbb{R},\\ x^2+2x+2<0$; mệnh đề phủ định này sai."
+          ],
+          "answer": "B",
+          "solution": "Bước 1: phủ định “với mọi” là “tồn tại”, phủ định dấu $>$ là $\\le$. Mệnh đề phủ định đúng cấu trúc là $\\exists x\\in\\mathbb{R},\\ x^2+2x+2\\le0$. Bước 2: $x^2+2x+2=(x+1)^2+1\\ge1>0$ với mọi $x\\in\\mathbb{R}$, nên không có giá trị $x$ nào làm biểu thức không dương. Vì thế $P$ đúng và mệnh đề phủ định sai. Chỉ B nêu đúng cả hai yêu cầu.",
+          "skills": [
+            "Đổi lượng từ khi phủ định",
+            "Xác định giá trị bằng hoàn thành bình phương"
+          ],
+          "level": 2,
+          "maxMillipoints": 1000,
+          "id": "g10-c1-b03-i1",
+          "part": 1,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 3 · I.1",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "mc",
+          "prompt": "Với $m\\in\\mathbb{R}$, mệnh đề “$\\exists n\\in\\mathbb{Z},\\ -2\\le n\\le3$ và $n^2-3n+m=0$” đúng khi và chỉ khi",
+          "choices": [
+            "$m\\in\\{-10;-4;0;2\\}$",
+            "$m\\in\\{-2;-1;0;1;2;3\\}$",
+            "$m\\in\\{0;2\\}$",
+            "$m\\in\\{-10;-4;0;2;4\\}$"
+          ],
+          "answer": "A",
+          "solution": "Biến đổi phương trình thành $m=3n-n^2$. Thay lần lượt $n=-2,-1,0,1,2,3$ được các giá trị $m=-10,-4,0,2,2,0$. Loại giá trị lặp, tập các tham số cần tìm là $\\{-10;-4;0;2\\}$. Với mỗi giá trị trong tập này đều có ít nhất một $n$ làm chứng; ngoài tập không có. Chọn A.",
+          "skills": [
+            "Lượng từ tồn tại trên miền hữu hạn",
+            "Tập giá trị tham số"
+          ],
+          "level": 2,
+          "maxMillipoints": 1000,
+          "id": "g10-c1-b03-i2",
+          "part": 1,
+          "number": 2,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 3 · I.2",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "mc",
+          "prompt": "Với $m\\in\\mathbb{R}$, điều kiện nào cần và đủ để mệnh đề “$\\forall x\\in\\mathbb{R},\\ x^2\\ge m$” đúng?",
+          "choices": [
+            "$m<0$",
+            "$m\\ge0$",
+            "$m>0$",
+            "$m\\le0$"
+          ],
+          "answer": "D",
+          "solution": "Nếu mệnh đề đúng, thay $x=0$ được $0\\ge m$, tức $m\\le0$. Ngược lại, nếu $m\\le0$ thì với mọi $x$ ta có $x^2\\ge0\\ge m$, nên mệnh đề đúng. Cần giữ cả trường hợp $m=0$; vì vậy chọn D.",
+          "skills": [
+            "Điều kiện cần và đủ cho lượng từ toàn bộ",
+            "Giá trị nhỏ nhất đơn giản"
+          ],
+          "level": 2,
+          "maxMillipoints": 1000,
+          "id": "g10-c1-b03-i3",
+          "part": 1,
+          "number": 3,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 3 · I.3",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "tf",
+          "prompt": "Đặt $F(x)=x^2-2x-3$. Xác định đúng hoặc sai cho từng mệnh đề.",
+          "statements": [
+            "$\\forall x\\in\\mathbb{R},\\ F(x)\\ge-4$",
+            "$\\exists x\\in\\mathbb{R},\\ F(x)<-4$",
+            "$\\forall x\\in\\mathbb{Z},\\ F(x)>-4$",
+            "$\\exists x\\in\\mathbb{Z},\\ F(x)=0$"
+          ],
+          "answer": [
+            true,
+            false,
+            false,
+            true
+          ],
+          "statementSolutions": [
+            "Đúng. $F(x)=(x-1)^2-4\\ge-4$ với mọi số thực $x$.",
+            "Sai. Vì $(x-1)^2\\ge0$ nên không tồn tại số thực $x$ để $F(x)<-4$.",
+            "Sai. Số nguyên $x=1$ cho $F(1)=-4$, không lớn hơn $-4$.",
+            "Đúng. $F(x)=(x-3)(x+1)$; chọn số nguyên $x=3$ hoặc $x=-1$ đều cho $F(x)=0$."
+          ],
+          "solution": "a) Đúng. $F(x)=(x-1)^2-4\\ge-4$ với mọi số thực $x$.\n\nb) Sai. Vì $(x-1)^2\\ge0$ nên không tồn tại số thực $x$ để $F(x)<-4$.\n\nc) Sai. Số nguyên $x=1$ cho $F(1)=-4$, không lớn hơn $-4$.\n\nd) Đúng. $F(x)=(x-3)(x+1)$; chọn số nguyên $x=3$ hoặc $x=-1$ đều cho $F(x)=0$.",
+          "skills": [
+            "Lượng từ trên hai miền số",
+            "Phản ví dụ biên"
+          ],
+          "level": 2,
+          "maxMillipoints": 4000,
+          "pointsByCorrectCount": [
+            0,
+            1000,
+            2000,
+            3000,
+            4000
+          ],
+          "id": "g10-c1-b03-ii1",
+          "part": 2,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 3 · II.1",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "short",
+          "mode": "numeric",
+          "prompt": "Có bao nhiêu giá trị nguyên $m\\in[-5;5]$ để mệnh đề “$\\forall x\\in\\mathbb{R},\\ x^2-4x+m\\ge0$” đúng?",
+          "acceptedAnswers": [
+            "2"
+          ],
+          "solution": "Ta có $x^2-4x+m=(x-2)^2+m-4$. Nếu bất đẳng thức đúng với mọi $x$, thay $x=2$ suy ra $m-4\\ge0$. Ngược lại, $m\\ge4$ làm cả hai hạng tử không âm nên điều kiện đúng với mọi $x$. Các giá trị nguyên trong đoạn là $m=4,5$, gồm $2$ giá trị. Đáp án: $2$.",
+          "skills": [
+            "Tham số trong mệnh đề với mọi"
+          ],
+          "level": 3,
+          "maxMillipoints": 1500,
+          "id": "g10-c1-b03-iii1",
+          "part": 3,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 3 · III.1",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "short",
+          "mode": "numeric",
+          "prompt": "Có bao nhiêu giá trị nguyên $m\\in[0;10]$ để mệnh đề “$\\exists x\\in\\{0;1;2;3\\},\\ x^2=m$” đúng?",
+          "acceptedAnswers": [
+            "4"
+          ],
+          "solution": "Các giá trị $x^2$ ứng với $x=0,1,2,3$ là $0,1,4,9$, đều nằm trong $[0;10]$ và khác nhau. Vì vậy mệnh đề tồn tại đúng với đúng bốn giá trị $m$. Những số khác trong đoạn không là bình phương của một $x$ thuộc miền đã nêu. Đáp án: $4$.",
+          "skills": [
+            "Lượng từ tồn tại và đếm giá trị phân biệt"
+          ],
+          "level": 2,
+          "maxMillipoints": 1500,
+          "id": "g10-c1-b03-iii2",
+          "part": 3,
+          "number": 2,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 3 · III.2",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        }
+      ],
+      "sourceMaterial": {
+        "title": "Bài luyện Chương I: Lượng từ và miền xác định",
+        "publisher": "Minh Thành Math",
+        "version": "2026-2027-v1-author",
+        "locator": "Bài 3 · 6 nhóm câu · 9 ô đáp án",
+        "sourceType": "ORIGINAL_MTM_AUTHORING",
+        "toanmathPerQuestionAlignment": false
+      },
+      "answerVerificationNote": "Khóa chấm và lời giải đã được đối chiếu độc lập. Thang luyện MTM 10 điểm, đúng–sai tính điểm theo số ý đúng; không phải điểm kỳ thi HSA/TSA chính thức. Bản luyện tập này đang thử trên PC, chưa đăng web.",
+      "versionHash": "dbc01864ccb5bdaacce7bf4585f702655ef25cf4b63d07e472a932491ea53b59"
+    },
+    "scope": "PC_ONLY",
+    "published": false,
+    "sourceArtifactHash": "67924f4b3e10549de9a9384186991add3c6f1da965fd533c2d2bbc9f37c3fae5",
+    "note": "MTM biên soạn mới. Thang điểm luyện tập riêng: trắc nghiệm 3 điểm, đúng/sai 4 điểm (mỗi ý đúng 1 điểm), trả lời ngắn 3 điểm. Chưa gắn nhãn thang điểm thi tốt nghiệp.",
+    "reviewStatus": "AUTHOR_VERIFIED_INDEPENDENT_REVIEW_PENDING",
+    "limits": [
+      "Chờ phản biện toán học độc lập từ bộ đề không có khóa và lời giải.",
+      "Chờ root nghiệm thu bố cục/chấm điểm/history trước tích hợp.",
+      "Nguồn câu hỏi là MTM tự biên soạn; chưa đối chiếu Toanmath từng câu."
+    ],
+    "track": "10",
+    "chapter": "1",
+    "order": 3,
+    "coverage": "Lượng từ và miền xác định",
+    "admission": {
+      "authorVersionHash": "1091765a80091a249e18390e6ed5ceba6a0a264fc8cd6b4146ff2290d7a6574f",
+      "authorId": "mtm-pc-g10-c1-b03-v1",
+      "authorRubric": "MTM-PRACTICE-3MC-1TF-2SA-LINEAR-v1",
+      "mathVerified": true,
+      "engineAndBrowserReceipt": "See final v46 handoff",
+      "legacyFlagsAreNotLivePublication": true
+    }
+  },
+  {
+    "exam": {
+      "id": "mtm-preview-g10-c1-b04-v1",
+      "title": "Toán 10 · Chương I · Bài 4: Tập hợp và cách cho tập hợp",
+      "sourceHash": "582e74597028faa55a6f3ec5633e139492d87f10b30dc321b549bb6725fca04b",
+      "sourceRef": "MTM biên soạn mới 2026–2027; chưa đối chiếu Toanmath từng câu",
+      "sourceUrl": "https://www.minhthanhmath.vn",
+      "sourceUrlMeaning": "Trang nhà xuất bản/tác giả MTM; không phải URL từng câu hay nguồn Toanmath",
+      "questionCount": 6,
+      "grade": 10,
+      "period": "GK1",
+      "chapter": 1,
+      "practiceNumber": 4,
+      "topic": "Tập hợp và cách cho tập hợp",
+      "durationMinutes": 20,
+      "answerKeyVerified": true,
+      "rubricVerified": true,
+      "questionDisplayVerified": true,
+      "publicationVerified": true,
+      "sections": [
+        {
+          "label": "I · Trắc nghiệm",
+          "kind": "mc",
+          "count": 3
+        },
+        {
+          "label": "II · Đúng/sai",
+          "kind": "tf",
+          "count": 1
+        },
+        {
+          "label": "III · Trả lời ngắn",
+          "kind": "short",
+          "count": 2
+        }
+      ],
+      "rubricVersion": "MTM-FLEX-10-v1",
+      "questions": [
+        {
+          "kind": "mc",
+          "prompt": "Cho $A=\\{x\\in\\mathbb{Z}\\mid -3\\le x\\le4,\\ x^2-x-2\\le0\\}$. Cách liệt kê đúng của $A$ là",
+          "choices": [
+            "$\\{0;1\\}$",
+            "$\\{-1;0;1;2\\}$",
+            "$\\{-3;-2;-1;2;3;4\\}$",
+            "$\\{-1;2\\}$"
+          ],
+          "answer": "B",
+          "solution": "$x^2-x-2=(x-2)(x+1)\\le0$ khi $-1\\le x\\le2$. Kết hợp điều kiện nguyên và $-3\\le x\\le4$ được $x=-1,0,1,2$. Dấu $\\le$ cho phép lấy cả hai nghiệm $-1$ và $2$. Chọn B.",
+          "skills": [
+            "Từ điều kiện đặc trưng sang liệt kê",
+            "Kết hợp miền và bất đẳng thức"
+          ],
+          "level": 2,
+          "maxMillipoints": 1000,
+          "id": "g10-c1-b04-i1",
+          "part": 1,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 4 · I.1",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "mc",
+          "prompt": "Cho $A=\\{x\\in\\mathbb{R}\\mid (x-1)(x-3)=0\\}$ và $B=\\{x\\in\\mathbb{R}\\mid |x-2|=1\\}$. Khẳng định nào đúng?",
+          "choices": [
+            "$A=\\{1\\}$ và $B=\\{3\\}$",
+            "$A=\\{1;3\\}$ và $B=\\{-1;1\\}$",
+            "$A=B=\\{1;3\\}$",
+            "$A=B=\\{2\\}$"
+          ],
+          "answer": "C",
+          "solution": "Tích bằng $0$ khi $x=1$ hoặc $x=3$, nên $A=\\{1;3\\}$. Mặt khác $|x-2|=1$ tương đương $x-2=1$ hoặc $x-2=-1$, cũng cho $x=3$ hoặc $x=1$. Do đó $A=B=\\{1;3\\}$. Chọn C.",
+          "skills": [
+            "Hai cách cho cùng tập hợp",
+            "Phương trình trị tuyệt đối"
+          ],
+          "level": 2,
+          "maxMillipoints": 1000,
+          "id": "g10-c1-b04-i2",
+          "part": 1,
+          "number": 2,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 4 · I.2",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "mc",
+          "prompt": "Tập hợp $A=\\{-2;-1;0;1;2\\}$ được cho đúng bằng điều kiện đặc trưng nào sau đây?",
+          "choices": [
+            "$A=\\{x\\in\\mathbb{Z}\\mid x^2<4\\}$",
+            "$A=\\{x\\in\\mathbb{N}\\mid x^2\\le4\\}$, với $\\mathbb{N}=\\{0;1;2;\\ldots\\}$",
+            "$A=\\{x\\in\\mathbb{R}\\mid x^2\\le4\\}$",
+            "$A=\\{x\\in\\mathbb{Z}\\mid x^2\\le4\\}$"
+          ],
+          "answer": "D",
+          "solution": "$x^2\\le4$ tương đương $-2\\le x\\le2$. Khi miền là $\\mathbb{Z}$, đúng năm phần tử đã cho được liệt kê; vì vậy D đúng. A bỏ hai biên $\\pm2$; B bỏ các số âm; C chứa tất cả số thực giữa $-2$ và $2$, chẳng hạn $1/2$, nên không bằng tập hữu hạn đã cho.",
+          "skills": [
+            "Miền số khi cho tập hợp",
+            "Phân biệt đoạn thực và tập nguyên"
+          ],
+          "level": 2,
+          "maxMillipoints": 1000,
+          "id": "g10-c1-b04-i3",
+          "part": 1,
+          "number": 3,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 4 · I.3",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "tf",
+          "prompt": "Cho $A=\\{x\\in\\mathbb{Z}\\mid (x-2)(x+1)\\le0\\}$ và $B=\\{x\\in\\mathbb{N}\\mid x^2<10\\}$, với $\\mathbb{N}=\\{0;1;2;\\ldots\\}$.",
+          "statements": [
+            "$A=\\{-1;0;1;2\\}$",
+            "$B=\\{1;2;3\\}$",
+            "$0\\in A$ và $0\\in B$",
+            "$\\{-1\\}\\in A$"
+          ],
+          "answer": [
+            true,
+            false,
+            true,
+            false
+          ],
+          "statementSolutions": [
+            "Đúng. Điều kiện tích không dương tương đương $-1\\le x\\le2$; lấy các số nguyên được $-1,0,1,2$.",
+            "Sai. Các số tự nhiên có bình phương nhỏ hơn $10$ là $0,1,2,3$; phát biểu đã bỏ $0$.",
+            "Đúng. Thay $x=0$ vào hai điều kiện được $-2\\le0$ và $0<10$, đồng thời $0$ thuộc cả hai miền số.",
+            "Sai. Các phần tử của $A$ là các số, còn $\\{-1\\}$ là một tập hợp. Đúng phải viết $-1\\in A$ hoặc $\\{-1\\}\\subset A$."
+          ],
+          "solution": "a) Đúng. Điều kiện tích không dương tương đương $-1\\le x\\le2$; lấy các số nguyên được $-1,0,1,2$.\n\nb) Sai. Các số tự nhiên có bình phương nhỏ hơn $10$ là $0,1,2,3$; phát biểu đã bỏ $0$.\n\nc) Đúng. Thay $x=0$ vào hai điều kiện được $-2\\le0$ và $0<10$, đồng thời $0$ thuộc cả hai miền số.\n\nd) Sai. Các phần tử của $A$ là các số, còn $\\{-1\\}$ là một tập hợp. Đúng phải viết $-1\\in A$ hoặc $\\{-1\\}\\subset A$.",
+          "skills": [
+            "Liệt kê theo miền số",
+            "Phân biệt phần tử và tập con"
+          ],
+          "level": 2,
+          "maxMillipoints": 4000,
+          "pointsByCorrectCount": [
+            0,
+            1000,
+            2000,
+            3000,
+            4000
+          ],
+          "id": "g10-c1-b04-ii1",
+          "part": 2,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 4 · II.1",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "short",
+          "mode": "numeric",
+          "prompt": "Tập $A=\\{x\\in\\mathbb{R}\\mid (x^2-5x+6)(x^2-4x+3)=0\\}$ có bao nhiêu phần tử?",
+          "acceptedAnswers": [
+            "3"
+          ],
+          "solution": "Một trong hai nhân tử phải bằng $0$. Nhân tử thứ nhất là $(x-2)(x-3)$, cho $x=2,3$. Nhân tử thứ hai là $(x-1)(x-3)$, cho $x=1,3$. Do tập hợp không lặp phần tử, $A=\\{1;2;3\\}$ có $3$ phần tử; nghiệm $3$ chỉ được đếm một lần. Đáp án: $3$.",
+          "skills": [
+            "Tập nghiệm có phần tử lặp",
+            "Đếm phần tử phân biệt"
+          ],
+          "level": 2,
+          "maxMillipoints": 1500,
+          "id": "g10-c1-b04-iii1",
+          "part": 3,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 4 · III.1",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "short",
+          "mode": "numeric",
+          "prompt": "Tập $A=\\{n\\in\\mathbb{Z}\\mid -4<n\\le5,\\ n^2\\ge9\\}$ có bao nhiêu phần tử?",
+          "acceptedAnswers": [
+            "4"
+          ],
+          "solution": "Từ $n^2\\ge9$ suy ra $n\\le-3$ hoặc $n\\ge3$. Trong miền $-4<n\\le5$, các số nguyên thỏa mãn là $-3,3,4,5$. Giá trị $-4$ bị loại vì điều kiện đầu là dấu $<$; giá trị $5$ được lấy. Vậy tập có $4$ phần tử. Đáp án: $4$.",
+          "skills": [
+            "Giao hai điều kiện đặc trưng",
+            "Dấu ở đầu mút"
+          ],
+          "level": 2,
+          "maxMillipoints": 1500,
+          "id": "g10-c1-b04-iii2",
+          "part": 3,
+          "number": 2,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 4 · III.2",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        }
+      ],
+      "sourceMaterial": {
+        "title": "Bài luyện Chương I: Tập hợp và cách cho tập hợp",
+        "publisher": "Minh Thành Math",
+        "version": "2026-2027-v1-author",
+        "locator": "Bài 4 · 6 nhóm câu · 9 ô đáp án",
+        "sourceType": "ORIGINAL_MTM_AUTHORING",
+        "toanmathPerQuestionAlignment": false
+      },
+      "answerVerificationNote": "Khóa chấm và lời giải đã được đối chiếu độc lập. Thang luyện MTM 10 điểm, đúng–sai tính điểm theo số ý đúng; không phải điểm kỳ thi HSA/TSA chính thức. Bản luyện tập này đang thử trên PC, chưa đăng web.",
+      "versionHash": "3bc3ca684a55602555b0c7e12482d2fc6d08bcf4c6b1a3a9f85b76909ef2d0b8"
+    },
+    "scope": "PC_ONLY",
+    "published": false,
+    "sourceArtifactHash": "582e74597028faa55a6f3ec5633e139492d87f10b30dc321b549bb6725fca04b",
+    "note": "MTM biên soạn mới. Thang điểm luyện tập riêng: trắc nghiệm 3 điểm, đúng/sai 4 điểm (mỗi ý đúng 1 điểm), trả lời ngắn 3 điểm. Chưa gắn nhãn thang điểm thi tốt nghiệp.",
+    "reviewStatus": "AUTHOR_VERIFIED_INDEPENDENT_REVIEW_PENDING",
+    "limits": [
+      "Chờ phản biện toán học độc lập từ bộ đề không có khóa và lời giải.",
+      "Chờ root nghiệm thu bố cục/chấm điểm/history trước tích hợp.",
+      "Nguồn câu hỏi là MTM tự biên soạn; chưa đối chiếu Toanmath từng câu."
+    ],
+    "track": "10",
+    "chapter": "1",
+    "order": 4,
+    "coverage": "Tập hợp và cách cho tập hợp",
+    "admission": {
+      "authorVersionHash": "db09829b407b5569be0e64972846b72c984bc3a63b43c7edfbb6f88879494ba0",
+      "authorId": "mtm-pc-g10-c1-b04-v1",
+      "authorRubric": "MTM-PRACTICE-3MC-1TF-2SA-LINEAR-v1",
+      "mathVerified": true,
+      "engineAndBrowserReceipt": "See final v46 handoff",
+      "legacyFlagsAreNotLivePublication": true
+    }
+  },
+  {
+    "exam": {
+      "id": "mtm-preview-g10-c1-b05-v1",
+      "title": "Toán 10 · Chương I · Bài 5: Tập con và hai tập bằng nhau",
+      "sourceHash": "2938097e512b1438e063e5f2d5295a85324179ba518dd8773471b5716148f728",
+      "sourceRef": "MTM biên soạn mới 2026–2027; chưa đối chiếu Toanmath từng câu",
+      "sourceUrl": "https://www.minhthanhmath.vn",
+      "sourceUrlMeaning": "Trang nhà xuất bản/tác giả MTM; không phải URL từng câu hay nguồn Toanmath",
+      "questionCount": 6,
+      "grade": 10,
+      "period": "GK1",
+      "chapter": 1,
+      "practiceNumber": 5,
+      "topic": "Tập con và hai tập bằng nhau",
+      "durationMinutes": 20,
+      "answerKeyVerified": true,
+      "rubricVerified": true,
+      "questionDisplayVerified": true,
+      "publicationVerified": true,
+      "sections": [
+        {
+          "label": "I · Trắc nghiệm",
+          "kind": "mc",
+          "count": 3
+        },
+        {
+          "label": "II · Đúng/sai",
+          "kind": "tf",
+          "count": 1
+        },
+        {
+          "label": "III · Trả lời ngắn",
+          "kind": "short",
+          "count": 2
+        }
+      ],
+      "rubricVersion": "MTM-FLEX-10-v1",
+      "questions": [
+        {
+          "kind": "mc",
+          "prompt": "Cho $A=\\{-1;0;1\\}$ và $B=\\{-1;0;1;m\\}$. Có bao nhiêu giá trị nguyên $m\\in[-2;2]$ để $A=B$?",
+          "choices": [
+            "1",
+            "2",
+            "3",
+            "5"
+          ],
+          "answer": "C",
+          "solution": "Đẳng thức xảy ra khi phần tử thêm vào $m$ đã thuộc $A$. Vì vậy $m\\in\\{-1;0;1\\}$. Cả ba giá trị đều nằm trong miền đã cho. Với $m=-2$ hoặc $m=2$, $B$ có phần tử ngoài $A$ nên không bằng $A$. Chọn C.",
+          "skills": [
+            "Phần tử lặp trong tập hợp",
+            "Điều kiện hai tập bằng nhau"
+          ],
+          "level": 2,
+          "maxMillipoints": 1000,
+          "id": "g10-c1-b05-i1",
+          "part": 1,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 5 · I.1",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "mc",
+          "prompt": "Cho $A=\\{1;2\\}$ và $B=\\{1;2;3;4\\}$. Có bao nhiêu tập $X$ thỏa $A\\subset X\\subset B$, đồng thời $X\\ne A$ và $X\\ne B$? (Ký hiệu $\\subset$ ở đây cho phép dấu bằng; hai điều kiện cuối loại dấu bằng.)",
+          "choices": [
+            "1",
+            "2",
+            "3",
+            "4"
+          ],
+          "answer": "B",
+          "solution": "Hai phần tử $1,2$ bắt buộc thuộc $X$; với $3,4$ ta được tùy chọn. Bốn khả năng là $A$, $\\{1;2;3\\}$, $\\{1;2;4\\}$ và $B$. Loại $A$ và $B$ theo yêu cầu, còn hai tập. Chọn B.",
+          "skills": [
+            "Đếm tập nằm giữa hai tập",
+            "Diễn đạt rõ tập con và dấu bằng"
+          ],
+          "level": 2,
+          "maxMillipoints": 1000,
+          "id": "g10-c1-b05-i2",
+          "part": 1,
+          "number": 2,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 5 · I.2",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "mc",
+          "prompt": "Cho $A_m=\\{0;m;m^2\\}$ và $B=\\{0;1\\}$, với $m\\in\\mathbb{R}$. Điều kiện để $A_m\\subset B$ là",
+          "choices": [
+            "$m\\in\\{0;1\\}$",
+            "$m\\in\\{-1;0;1\\}$",
+            "$m=1$",
+            "$m\\in[-1;1]$"
+          ],
+          "answer": "A",
+          "solution": "Vì $m$ là phần tử của $A_m$, điều kiện tập con buộc $m\\in B$, tức $m=0$ hoặc $m=1$. Với $m=0$, $A_m=\\{0\\}$; với $m=1$, $A_m=\\{0;1\\}$; cả hai đều là tập con của $B$. Giá trị $m=-1$ không thỏa dù $m^2=1$, vì phần tử $-1$ không thuộc $B$. Chọn A.",
+          "skills": [
+            "Tham số của tập con",
+            "Kiểm mọi phần tử"
+          ],
+          "level": 2,
+          "maxMillipoints": 1000,
+          "id": "g10-c1-b05-i3",
+          "part": 1,
+          "number": 3,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 5 · I.3",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "tf",
+          "prompt": "Cho $A=\\{1;2;3\\}$ và $B=\\{1;2;3;4;5\\}$. Trong bài này $\\subset$ cho phép hai tập bằng nhau.",
+          "statements": [
+            "Có $4$ tập $X$ thỏa $A\\subset X\\subset B$.",
+            "Có $2$ tập $X$ thỏa $A\\subset X\\subset B$ và có đúng $4$ phần tử.",
+            "Có $3$ tập con của $A$ chứa $1$ và khác $A$.",
+            "$1\\subset A$ là cách viết đúng quan hệ phần tử thuộc tập hợp."
+          ],
+          "answer": [
+            true,
+            true,
+            true,
+            false
+          ],
+          "statementSolutions": [
+            "Đúng. Bắt buộc lấy $1,2,3$; chọn lấy hoặc bỏ mỗi phần tử $4,5$, được bốn tập.",
+            "Đúng. Muốn có đúng bốn phần tử thì thêm đúng một trong $4,5$, được $\\{1;2;3;4\\}$ hoặc $\\{1;2;3;5\\}$.",
+            "Đúng. Bốn tập con chứa $1$ là $\\{1\\}$, $\\{1;2\\}$, $\\{1;3\\}$ và $A$. Loại $A$ còn ba tập.",
+            "Sai. $1$ là một số, không là tập hợp; quan hệ thuộc phải viết $1\\in A$. Có thể viết quan hệ tập con $\\{1\\}\\subset A$."
+          ],
+          "solution": "a) Đúng. Bắt buộc lấy $1,2,3$; chọn lấy hoặc bỏ mỗi phần tử $4,5$, được bốn tập.\n\nb) Đúng. Muốn có đúng bốn phần tử thì thêm đúng một trong $4,5$, được $\\{1;2;3;4\\}$ hoặc $\\{1;2;3;5\\}$.\n\nc) Đúng. Bốn tập con chứa $1$ là $\\{1\\}$, $\\{1;2\\}$, $\\{1;3\\}$ và $A$. Loại $A$ còn ba tập.\n\nd) Sai. $1$ là một số, không là tập hợp; quan hệ thuộc phải viết $1\\in A$. Có thể viết quan hệ tập con $\\{1\\}\\subset A$.",
+          "skills": [
+            "Đếm tập con có ràng buộc",
+            "Ký hiệu thuộc và tập con"
+          ],
+          "level": 2,
+          "maxMillipoints": 4000,
+          "pointsByCorrectCount": [
+            0,
+            1000,
+            2000,
+            3000,
+            4000
+          ],
+          "id": "g10-c1-b05-ii1",
+          "part": 2,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 5 · II.1",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "short",
+          "mode": "numeric",
+          "prompt": "Cho $A=\\{a;b;c;d\\}$ gồm bốn phần tử khác nhau. Có bao nhiêu tập con của $A$ chứa $a$ và không chứa $b$?",
+          "acceptedAnswers": [
+            "4"
+          ],
+          "solution": "Phải lấy $a$ và phải bỏ $b$. Với mỗi phần tử còn lại $c,d$, có hai lựa chọn lấy hoặc bỏ, nên có $2\\cdot2=4$ tập: $\\{a\\}$, $\\{a;c\\}$, $\\{a;d\\}$ và $\\{a;c;d\\}$. Đáp án: $4$.",
+          "skills": [
+            "Đếm tập con bằng lựa chọn độc lập"
+          ],
+          "level": 2,
+          "maxMillipoints": 1500,
+          "id": "g10-c1-b05-iii1",
+          "part": 3,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 5 · III.1",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "short",
+          "mode": "numeric",
+          "prompt": "Cho $A=\\{0;1\\}$, $B=\\{0;1;2;3;4\\}$. Có bao nhiêu tập $X$ thỏa $A\\subset X\\subset B$ và $X$ có đúng $4$ phần tử?",
+          "acceptedAnswers": [
+            "3"
+          ],
+          "solution": "Hai phần tử $0,1$ bắt buộc có. Để $X$ có bốn phần tử, phải chọn thêm đúng hai trong $2,3,4$. Ba cách chọn là $\\{2;3\\}$, $\\{2;4\\}$, $\\{3;4\\}$, tương ứng ba tập $X$. Có thể liệt kê trực tiếp, không cần dùng công thức tổ hợp của chương sau. Đáp án: $3$.",
+          "skills": [
+            "Đếm tập con có số phần tử cho trước"
+          ],
+          "level": 3,
+          "maxMillipoints": 1500,
+          "id": "g10-c1-b05-iii2",
+          "part": 3,
+          "number": 2,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 5 · III.2",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        }
+      ],
+      "sourceMaterial": {
+        "title": "Bài luyện Chương I: Tập con và hai tập bằng nhau",
+        "publisher": "Minh Thành Math",
+        "version": "2026-2027-v1-author",
+        "locator": "Bài 5 · 6 nhóm câu · 9 ô đáp án",
+        "sourceType": "ORIGINAL_MTM_AUTHORING",
+        "toanmathPerQuestionAlignment": false
+      },
+      "answerVerificationNote": "Khóa chấm và lời giải đã được đối chiếu độc lập. Thang luyện MTM 10 điểm, đúng–sai tính điểm theo số ý đúng; không phải điểm kỳ thi HSA/TSA chính thức. Bản luyện tập này đang thử trên PC, chưa đăng web.",
+      "versionHash": "7ff1fb044bdf91a99f342600e64efee33c871dc245eb09ccc6666322b2615f28"
+    },
+    "scope": "PC_ONLY",
+    "published": false,
+    "sourceArtifactHash": "2938097e512b1438e063e5f2d5295a85324179ba518dd8773471b5716148f728",
+    "note": "MTM biên soạn mới. Thang điểm luyện tập riêng: trắc nghiệm 3 điểm, đúng/sai 4 điểm (mỗi ý đúng 1 điểm), trả lời ngắn 3 điểm. Chưa gắn nhãn thang điểm thi tốt nghiệp.",
+    "reviewStatus": "AUTHOR_VERIFIED_INDEPENDENT_REVIEW_PENDING",
+    "limits": [
+      "Chờ phản biện toán học độc lập từ bộ đề không có khóa và lời giải.",
+      "Chờ root nghiệm thu bố cục/chấm điểm/history trước tích hợp.",
+      "Nguồn câu hỏi là MTM tự biên soạn; chưa đối chiếu Toanmath từng câu."
+    ],
+    "track": "10",
+    "chapter": "1",
+    "order": 5,
+    "coverage": "Tập con và hai tập bằng nhau",
+    "admission": {
+      "authorVersionHash": "60414d926ba1d016ecc2ab85dd2b6f5f6f2f25a800a651d1f4107b035c263933",
+      "authorId": "mtm-pc-g10-c1-b05-v1",
+      "authorRubric": "MTM-PRACTICE-3MC-1TF-2SA-LINEAR-v1",
+      "mathVerified": true,
+      "engineAndBrowserReceipt": "See final v46 handoff",
+      "legacyFlagsAreNotLivePublication": true
+    }
+  },
+  {
+    "exam": {
+      "id": "mtm-preview-g10-c1-b06-v1",
+      "title": "Toán 10 · Chương I · Bài 6: Giao và hợp các tập hợp",
+      "sourceHash": "d63c00f64b0f43ad7f3535750cee4df104657bf3e951d3da607d8549d228480f",
+      "sourceRef": "MTM biên soạn mới 2026–2027; chưa đối chiếu Toanmath từng câu",
+      "sourceUrl": "https://www.minhthanhmath.vn",
+      "sourceUrlMeaning": "Trang nhà xuất bản/tác giả MTM; không phải URL từng câu hay nguồn Toanmath",
+      "questionCount": 6,
+      "grade": 10,
+      "period": "GK1",
+      "chapter": 1,
+      "practiceNumber": 6,
+      "topic": "Giao và hợp các tập hợp",
+      "durationMinutes": 20,
+      "answerKeyVerified": true,
+      "rubricVerified": true,
+      "questionDisplayVerified": true,
+      "publicationVerified": true,
+      "sections": [
+        {
+          "label": "I · Trắc nghiệm",
+          "kind": "mc",
+          "count": 3
+        },
+        {
+          "label": "II · Đúng/sai",
+          "kind": "tf",
+          "count": 1
+        },
+        {
+          "label": "III · Trả lời ngắn",
+          "kind": "short",
+          "count": 2
+        }
+      ],
+      "rubricVersion": "MTM-FLEX-10-v1",
+      "questions": [
+        {
+          "kind": "mc",
+          "prompt": "Cho $A=\\{n\\in\\mathbb{Z}\\mid -3\\le n\\le4\\}$ và $B$ là tập các số nguyên lẻ từ $-5$ đến $5$. Tập $A\\cap B$ bằng",
+          "choices": [
+            "$\\{-5;-3;-1;1;3;5\\}$",
+            "$\\{-3;-1;1;3\\}$",
+            "$\\{-3;-2;-1;0;1;2;3;4\\}$",
+            "$\\{-1;1\\}$"
+          ],
+          "answer": "B",
+          "solution": "$B=\\{-5;-3;-1;1;3;5\\}$. Giao chỉ giữ các phần tử vừa lẻ vừa nằm trong đoạn nguyên $[-3;4]$. Bỏ $-5$ và $5$, được $\\{-3;-1;1;3\\}$. Chọn B.",
+          "skills": [
+            "Giao hai điều kiện",
+            "Số nguyên lẻ âm"
+          ],
+          "level": 2,
+          "maxMillipoints": 1000,
+          "id": "g10-c1-b06-i1",
+          "part": 1,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 6 · I.1",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "mc",
+          "prompt": "Cho $A=\\{-2;0;2\\}$, $B=\\{0;1;2;3\\}$ và $C=\\{-2;1;3\\}$. Tập $(A\\cup B)\\cap C$ bằng",
+          "choices": [
+            "$\\{-2;0;1;2;3\\}$",
+            "$\\{0;2\\}$",
+            "$\\{-2;1;3\\}$",
+            "$\\{1;3\\}$"
+          ],
+          "answer": "C",
+          "solution": "Trước hết $A\\cup B=\\{-2;0;1;2;3\\}$. Cả ba phần tử của $C$ đều thuộc hợp này, nên lấy giao với $C$ được chính $C=\\{-2;1;3\\}$. Thực hiện phép trong ngoặc trước. Chọn C.",
+          "skills": [
+            "Phép toán tập hợp ghép",
+            "Thứ tự theo ngoặc"
+          ],
+          "level": 2,
+          "maxMillipoints": 1000,
+          "id": "g10-c1-b06-i2",
+          "part": 1,
+          "number": 2,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 6 · I.2",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "mc",
+          "prompt": "Cho $A=[-2;3)$ và $B=(1;5]$. Giao $A\\cap B$ bằng",
+          "choices": [
+            "$[1;3]$",
+            "$(1;3]$",
+            "$[1;3)$",
+            "$(1;3)$"
+          ],
+          "answer": "D",
+          "solution": "Phần tử thuộc giao phải đồng thời thỏa $-2\\le x<3$ và $1<x\\le5$, tức $1<x<3$. Điểm $1$ không thuộc $B$, còn điểm $3$ không thuộc $A$, nên cả hai đầu mút đều mở. Chọn D.",
+          "skills": [
+            "Giao hai khoảng",
+            "Kiểm đầu mút"
+          ],
+          "level": 2,
+          "maxMillipoints": 1000,
+          "id": "g10-c1-b06-i3",
+          "part": 1,
+          "number": 3,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 6 · I.3",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "tf",
+          "prompt": "Cho $A=\\{1;2;3;4\\}$, $B=\\{3;4;5\\}$ và $C=\\{2;4;6\\}$.",
+          "statements": [
+            "$A\\cap B=\\{3;4\\}$",
+            "$(A\\cup B)\\cap C=\\{2;4\\}$",
+            "$(A\\cap C)\\cup(B\\cap C)=\\{2;4;6\\}$",
+            "$A\\cup(B\\cap C)=\\{1;2;3;4\\}$"
+          ],
+          "answer": [
+            true,
+            true,
+            false,
+            true
+          ],
+          "statementSolutions": [
+            "Đúng. Chỉ có $3,4$ xuất hiện đồng thời trong $A$ và $B$.",
+            "Đúng. $A\\cup B=\\{1;2;3;4;5\\}$; giao với $C$ giữ $2,4$ và bỏ $6$.",
+            "Sai. $A\\cap C=\\{2;4\\}$ và $B\\cap C=\\{4\\}$; hợp là $\\{2;4\\}$, không có $6$.",
+            "Đúng. $B\\cap C=\\{4\\}$ đã là tập con của $A$, nên hợp với $A$ vẫn là $A$."
+          ],
+          "solution": "a) Đúng. Chỉ có $3,4$ xuất hiện đồng thời trong $A$ và $B$.\n\nb) Đúng. $A\\cup B=\\{1;2;3;4;5\\}$; giao với $C$ giữ $2,4$ và bỏ $6$.\n\nc) Sai. $A\\cap C=\\{2;4\\}$ và $B\\cap C=\\{4\\}$; hợp là $\\{2;4\\}$, không có $6$.\n\nd) Đúng. $B\\cap C=\\{4\\}$ đã là tập con của $A$, nên hợp với $A$ vẫn là $A$.",
+          "skills": [
+            "Phép giao, hợp ghép",
+            "Kiểm tính phân phối bằng tập hữu hạn"
+          ],
+          "level": 2,
+          "maxMillipoints": 4000,
+          "pointsByCorrectCount": [
+            0,
+            1000,
+            2000,
+            3000,
+            4000
+          ],
+          "id": "g10-c1-b06-ii1",
+          "part": 2,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 6 · II.1",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "short",
+          "mode": "numeric",
+          "prompt": "Trong các số nguyên từ $-5$ đến $5$, gọi $A$ là tập các số chia hết cho $2$ và $B$ là tập các số chia hết cho $3$. Tập $A\\cup B$ có bao nhiêu phần tử?",
+          "acceptedAnswers": [
+            "7"
+          ],
+          "solution": "$A=\\{-4;-2;0;2;4\\}$ có năm phần tử, $B=\\{-3;0;3\\}$ có ba phần tử. Giao chỉ có $0$, vì trong miền đã cho chỉ $0$ chia hết cho $6$. Do đó số phần tử của tập $A\\cup B$ là $5+3-1=7$. Cụ thể hợp là $\\{-4;-3;-2;0;2;3;4\\}$. Đáp án: $7$.",
+          "skills": [
+            "Hợp hai tập với phần tử chung",
+            "Số 0 chia hết cho số khác 0"
+          ],
+          "level": 2,
+          "maxMillipoints": 1500,
+          "id": "g10-c1-b06-iii1",
+          "part": 3,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 6 · III.1",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "short",
+          "mode": "numeric",
+          "prompt": "Cho $A=\\{-2;-1;0;1;2\\}$, $B=\\{-1;1;3\\}$ và $C=\\{0;1;2;3\\}$. Tập $(A\\cap C)\\cup(B\\cap C)$ có bao nhiêu phần tử?",
+          "acceptedAnswers": [
+            "4"
+          ],
+          "solution": "$A\\cap C=\\{0;1;2\\}$, $B\\cap C=\\{1;3\\}$. Hợp hai tập là $\\{0;1;2;3\\}$; phần tử $1$ chung chỉ đếm một lần. Tập này có $4$ phần tử. Cũng có thể dùng $(A\\cap C)\\cup(B\\cap C)=(A\\cup B)\\cap C$. Đáp án: $4$.",
+          "skills": [
+            "Tập hợp ghép và phần tử lặp"
+          ],
+          "level": 2,
+          "maxMillipoints": 1500,
+          "id": "g10-c1-b06-iii2",
+          "part": 3,
+          "number": 2,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 6 · III.2",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        }
+      ],
+      "sourceMaterial": {
+        "title": "Bài luyện Chương I: Giao và hợp các tập hợp",
+        "publisher": "Minh Thành Math",
+        "version": "2026-2027-v1-author",
+        "locator": "Bài 6 · 6 nhóm câu · 9 ô đáp án",
+        "sourceType": "ORIGINAL_MTM_AUTHORING",
+        "toanmathPerQuestionAlignment": false
+      },
+      "answerVerificationNote": "Khóa chấm và lời giải đã được đối chiếu độc lập. Thang luyện MTM 10 điểm, đúng–sai tính điểm theo số ý đúng; không phải điểm kỳ thi HSA/TSA chính thức. Bản luyện tập này đang thử trên PC, chưa đăng web.",
+      "versionHash": "b4cae0e28ee0a858d01d105a2abbebe2eb248c57c7d80898b2ec439464a25d9e"
+    },
+    "scope": "PC_ONLY",
+    "published": false,
+    "sourceArtifactHash": "d63c00f64b0f43ad7f3535750cee4df104657bf3e951d3da607d8549d228480f",
+    "note": "MTM biên soạn mới. Thang điểm luyện tập riêng: trắc nghiệm 3 điểm, đúng/sai 4 điểm (mỗi ý đúng 1 điểm), trả lời ngắn 3 điểm. Chưa gắn nhãn thang điểm thi tốt nghiệp.",
+    "reviewStatus": "AUTHOR_VERIFIED_INDEPENDENT_REVIEW_PENDING",
+    "limits": [
+      "Chờ phản biện toán học độc lập từ bộ đề không có khóa và lời giải.",
+      "Chờ root nghiệm thu bố cục/chấm điểm/history trước tích hợp.",
+      "Nguồn câu hỏi là MTM tự biên soạn; chưa đối chiếu Toanmath từng câu."
+    ],
+    "track": "10",
+    "chapter": "1",
+    "order": 6,
+    "coverage": "Giao và hợp các tập hợp",
+    "admission": {
+      "authorVersionHash": "c47e6f8a94f375294351f65241cfc237d9867b666f079f253a813e43ea71574d",
+      "authorId": "mtm-pc-g10-c1-b06-v1",
+      "authorRubric": "MTM-PRACTICE-3MC-1TF-2SA-LINEAR-v1",
+      "mathVerified": true,
+      "engineAndBrowserReceipt": "See final v46 handoff",
+      "legacyFlagsAreNotLivePublication": true
+    }
+  },
+  {
+    "exam": {
+      "id": "mtm-preview-g10-c1-b07-v1",
+      "title": "Toán 10 · Chương I · Bài 7: Hiệu và phần bù",
+      "sourceHash": "b0220a64a877dc29f573ae6b47aceea2d79cebd2a360d852e5023bcf40bf3a5a",
+      "sourceRef": "MTM biên soạn mới 2026–2027; chưa đối chiếu Toanmath từng câu",
+      "sourceUrl": "https://www.minhthanhmath.vn",
+      "sourceUrlMeaning": "Trang nhà xuất bản/tác giả MTM; không phải URL từng câu hay nguồn Toanmath",
+      "questionCount": 6,
+      "grade": 10,
+      "period": "GK1",
+      "chapter": 1,
+      "practiceNumber": 7,
+      "topic": "Hiệu và phần bù",
+      "durationMinutes": 20,
+      "answerKeyVerified": true,
+      "rubricVerified": true,
+      "questionDisplayVerified": true,
+      "publicationVerified": true,
+      "sections": [
+        {
+          "label": "I · Trắc nghiệm",
+          "kind": "mc",
+          "count": 3
+        },
+        {
+          "label": "II · Đúng/sai",
+          "kind": "tf",
+          "count": 1
+        },
+        {
+          "label": "III · Trả lời ngắn",
+          "kind": "short",
+          "count": 2
+        }
+      ],
+      "rubricVersion": "MTM-FLEX-10-v1",
+      "questions": [
+        {
+          "kind": "mc",
+          "prompt": "Cho $U=\\{n\\in\\mathbb{Z}\\mid -2\\le n\\le5\\}$ và $A=\\{n\\in U\\mid n^2\\le4\\}$. Phần bù $C_UA=U\\setminus A$ bằng",
+          "choices": [
+            "$\\{-2;-1;0;1;2\\}$",
+            "$\\{2;3;4;5\\}$",
+            "$\\{3;4;5\\}$",
+            "$\\{-2;3;4;5\\}$"
+          ],
+          "answer": "C",
+          "solution": "Điều kiện $n^2\\le4$ cho $-2\\le n\\le2$, nên $A=\\{-2;-1;0;1;2\\}$. Phần bù chỉ gồm các phần tử của $U$ không thuộc $A$, tức $\\{3;4;5\\}$. Giá trị $2$ vẫn thuộc $A$ nên phải loại. Chọn C.",
+          "skills": [
+            "Phần bù trong tập vũ trụ hữu hạn",
+            "Xác định miền trước khi lấy phần bù"
+          ],
+          "level": 2,
+          "maxMillipoints": 1000,
+          "id": "g10-c1-b07-i1",
+          "part": 1,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 7 · I.1",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "mc",
+          "prompt": "Cho $A=[-3;4]$ và $B=(-1;2]$. Hiệu $A\\setminus B$ bằng",
+          "choices": [
+            "$[-3;-1]\\cup(2;4]$",
+            "$[-3;-1)\\cup[2;4]$",
+            "$[-3;-1]\\cup[2;4]$",
+            "$(-3;-1)\\cup(2;4)$"
+          ],
+          "answer": "A",
+          "solution": "Bỏ khỏi $A$ tất cả điểm thỏa $-1<x\\le2$. Điểm $-1$ không thuộc $B$ nên còn lại; điểm $2$ thuộc $B$ nên bị loại. Hai biên $-3,4$ của $A$ vẫn được giữ. Vì vậy $A\\setminus B=[-3;-1]\\cup(2;4]$. Chọn A.",
+          "skills": [
+            "Hiệu hai tập trên trục số",
+            "Bốn đầu mút"
+          ],
+          "level": 2,
+          "maxMillipoints": 1000,
+          "id": "g10-c1-b07-i2",
+          "part": 1,
+          "number": 2,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 7 · I.2",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "mc",
+          "prompt": "Cho $U=\\{1;2;3;4;5;6\\}$, $A=\\{1;2;4\\}$, $B=\\{2;3;6\\}$. Tập $C_U(A\\cup B)$ bằng",
+          "choices": [
+            "$\\{2\\}$",
+            "$\\{3;5;6\\}$",
+            "$\\{1;4;5\\}$",
+            "$\\{5\\}$"
+          ],
+          "answer": "D",
+          "solution": "$A\\cup B=\\{1;2;3;4;6\\}$. Trong tập vũ trụ $U$, chỉ phần tử $5$ không thuộc hợp, nên $C_U(A\\cup B)=\\{5\\}$. Cũng có thể kiểm bằng $C_UA\\cap C_UB$: $\\{3;5;6\\}\\cap\\{1;4;5\\}=\\{5\\}$. Chọn D.",
+          "skills": [
+            "Phần bù của hợp",
+            "Đối chiếu bằng hai cách"
+          ],
+          "level": 2,
+          "maxMillipoints": 1000,
+          "id": "g10-c1-b07-i3",
+          "part": 1,
+          "number": 3,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 7 · I.3",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "tf",
+          "prompt": "Cho $U=\\{1;2;3;4;5;6;7;8\\}$, $A=\\{1;2;4;8\\}$ và $B=\\{2;3;5;8\\}$. Ký hiệu $C_UX$ là phần bù của $X$ trong $U$.",
+          "statements": [
+            "$A\\setminus B=\\{1;4\\}$",
+            "$B\\setminus A=\\{3;5\\}$",
+            "$C_UA=\\{3;5;6;7\\}$",
+            "$C_U(A\\cap B)=C_UA\\cap C_UB$"
+          ],
+          "answer": [
+            true,
+            true,
+            true,
+            false
+          ],
+          "statementSolutions": [
+            "Đúng. Loại hai phần tử chung $2,8$ khỏi $A$, còn $1,4$.",
+            "Đúng. Loại hai phần tử chung $2,8$ khỏi $B$, còn $3,5$.",
+            "Đúng. Bỏ $1,2,4,8$ khỏi $U$ được $3,5,6,7$.",
+            "Sai. Vế trái là $U\\setminus\\{2;8\\}=\\{1;3;4;5;6;7\\}$. Vế phải là $\\{3;5;6;7\\}\\cap\\{1;4;6;7\\}=\\{6;7\\}$. Công thức đúng là phần bù của giao bằng hợp của hai phần bù."
+          ],
+          "solution": "a) Đúng. Loại hai phần tử chung $2,8$ khỏi $A$, còn $1,4$.\n\nb) Đúng. Loại hai phần tử chung $2,8$ khỏi $B$, còn $3,5$.\n\nc) Đúng. Bỏ $1,2,4,8$ khỏi $U$ được $3,5,6,7$.\n\nd) Sai. Vế trái là $U\\setminus\\{2;8\\}=\\{1;3;4;5;6;7\\}$. Vế phải là $\\{3;5;6;7\\}\\cap\\{1;4;6;7\\}=\\{6;7\\}$. Công thức đúng là phần bù của giao bằng hợp của hai phần bù.",
+          "skills": [
+            "Hiệu không giao hoán",
+            "Phần bù của giao"
+          ],
+          "level": 3,
+          "maxMillipoints": 4000,
+          "pointsByCorrectCount": [
+            0,
+            1000,
+            2000,
+            3000,
+            4000
+          ],
+          "id": "g10-c1-b07-ii1",
+          "part": 2,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 7 · II.1",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "short",
+          "mode": "numeric",
+          "prompt": "Cho $U=\\{0;1;2;\\ldots;12\\}$. Gọi $A$ là tập các phần tử của $U$ chia hết cho $2$, $B$ là tập các phần tử của $U$ chia hết cho $3$. Tập $(C_UA)\\cap B$ có bao nhiêu phần tử?",
+          "acceptedAnswers": [
+            "2"
+          ],
+          "solution": "$B=\\{0;3;6;9;12\\}$. Lấy giao với phần bù của $A$ nghĩa là chỉ giữ các phần tử của $B$ không chẵn. Trong $B$, các số đó là $3,9$; $0,6,12$ thuộc $A$ nên bị loại. Tập cần tìm có $2$ phần tử. Đáp án: $2$.",
+          "skills": [
+            "Giao với phần bù",
+            "Đếm chia hết có điều kiện"
+          ],
+          "level": 2,
+          "maxMillipoints": 1500,
+          "id": "g10-c1-b07-iii1",
+          "part": 3,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 7 · III.1",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "short",
+          "mode": "numeric",
+          "prompt": "Cho $A=\\{n\\in\\mathbb{Z}\\mid -4\\le n\\le6,\\ n^2\\ge4\\}$ và $B=\\{n\\in\\mathbb{Z}\\mid -2\\le n\\le3\\}$. Tập $A\\setminus B$ có bao nhiêu phần tử?",
+          "acceptedAnswers": [
+            "5"
+          ],
+          "solution": "Điều kiện $n^2\\ge4$ cho $n\\le-2$ hoặc $n\\ge2$. Trong miền đã cho, $A=\\{-4;-3;-2;2;3;4;5;6\\}$. Những phần tử của $A$ đồng thời thuộc $B$ là $-2,2,3$. Loại chúng, còn $\\{-4;-3;4;5;6\\}$ gồm $5$ phần tử. Đáp án: $5$.",
+          "skills": [
+            "Hiệu hai tập cho bởi điều kiện",
+            "Kết hợp ba ràng buộc"
+          ],
+          "level": 3,
+          "maxMillipoints": 1500,
+          "id": "g10-c1-b07-iii2",
+          "part": 3,
+          "number": 2,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 7 · III.2",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        }
+      ],
+      "sourceMaterial": {
+        "title": "Bài luyện Chương I: Hiệu và phần bù",
+        "publisher": "Minh Thành Math",
+        "version": "2026-2027-v1-author",
+        "locator": "Bài 7 · 6 nhóm câu · 9 ô đáp án",
+        "sourceType": "ORIGINAL_MTM_AUTHORING",
+        "toanmathPerQuestionAlignment": false
+      },
+      "answerVerificationNote": "Khóa chấm và lời giải đã được đối chiếu độc lập. Thang luyện MTM 10 điểm, đúng–sai tính điểm theo số ý đúng; không phải điểm kỳ thi HSA/TSA chính thức. Bản luyện tập này đang thử trên PC, chưa đăng web.",
+      "versionHash": "37ca672df5ff55af2ea9cc017675e94f29187e60b373a2ef4b7fef06d331e8c1"
+    },
+    "scope": "PC_ONLY",
+    "published": false,
+    "sourceArtifactHash": "b0220a64a877dc29f573ae6b47aceea2d79cebd2a360d852e5023bcf40bf3a5a",
+    "note": "MTM biên soạn mới. Thang điểm luyện tập riêng: trắc nghiệm 3 điểm, đúng/sai 4 điểm (mỗi ý đúng 1 điểm), trả lời ngắn 3 điểm. Chưa gắn nhãn thang điểm thi tốt nghiệp.",
+    "reviewStatus": "AUTHOR_VERIFIED_INDEPENDENT_REVIEW_PENDING",
+    "limits": [
+      "Chờ phản biện toán học độc lập từ bộ đề không có khóa và lời giải.",
+      "Chờ root nghiệm thu bố cục/chấm điểm/history trước tích hợp.",
+      "Nguồn câu hỏi là MTM tự biên soạn; chưa đối chiếu Toanmath từng câu."
+    ],
+    "track": "10",
+    "chapter": "1",
+    "order": 7,
+    "coverage": "Hiệu và phần bù",
+    "admission": {
+      "authorVersionHash": "40ebd8913849143cf27e704fa0ddeb9f9baac0fa0b856f8989b2bc9b0cbd7e41",
+      "authorId": "mtm-pc-g10-c1-b07-v1",
+      "authorRubric": "MTM-PRACTICE-3MC-1TF-2SA-LINEAR-v1",
+      "mathVerified": true,
+      "engineAndBrowserReceipt": "See final v46 handoff",
+      "legacyFlagsAreNotLivePublication": true
+    }
+  },
+  {
+    "exam": {
+      "id": "mtm-preview-g10-c1-b08-v1",
+      "title": "Toán 10 · Chương I · Bài 8: Khoảng, đoạn và tham số đầu mút",
+      "sourceHash": "f5f6c11b0c9f571a9b8c6c585e600157a5af7b2ec42a774584ee51b495be2b2e",
+      "sourceRef": "MTM biên soạn mới 2026–2027; chưa đối chiếu Toanmath từng câu",
+      "sourceUrl": "https://www.minhthanhmath.vn",
+      "sourceUrlMeaning": "Trang nhà xuất bản/tác giả MTM; không phải URL từng câu hay nguồn Toanmath",
+      "questionCount": 6,
+      "grade": 10,
+      "period": "GK1",
+      "chapter": 1,
+      "practiceNumber": 8,
+      "topic": "Khoảng, đoạn và tham số đầu mút",
+      "durationMinutes": 20,
+      "answerKeyVerified": true,
+      "rubricVerified": true,
+      "questionDisplayVerified": true,
+      "publicationVerified": true,
+      "sections": [
+        {
+          "label": "I · Trắc nghiệm",
+          "kind": "mc",
+          "count": 3
+        },
+        {
+          "label": "II · Đúng/sai",
+          "kind": "tf",
+          "count": 1
+        },
+        {
+          "label": "III · Trả lời ngắn",
+          "kind": "short",
+          "count": 2
+        }
+      ],
+      "rubricVersion": "MTM-FLEX-10-v1",
+      "questions": [
+        {
+          "kind": "mc",
+          "prompt": "Cho $A=(-3;2]$, $B=[1;5)$. Hiệu $A\\setminus B$ bằng",
+          "choices": [
+            "$(-3;1]$",
+            "$(-3;1)$",
+            "$[-3;1)$",
+            "$(1;2]$"
+          ],
+          "answer": "B",
+          "solution": "Phải giữ các điểm $x$ thỏa $-3<x\\le2$ nhưng không thỏa $1\\le x<5$. Trong $A$, phần bị loại là $[1;2]$, nên chỉ còn $-3<x<1$. Đầu $-3$ vốn không thuộc $A$; đầu $1$ bị loại vì thuộc $B$. Chọn B.",
+          "skills": [
+            "Hiệu hai khoảng có đầu mút khác nhau"
+          ],
+          "level": 2,
+          "maxMillipoints": 1000,
+          "id": "g10-c1-b08-i1",
+          "part": 1,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 8 · I.1",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "mc",
+          "prompt": "Cho $A=(-\\infty;2)$ và $B=[-1;+\\infty)$. Cặp kết quả nào đúng?",
+          "choices": [
+            "$A\\cap B=(-1;2)$, $A\\cup B=\\mathbb{R}$",
+            "$A\\cap B=[-1;2]$, $A\\cup B=\\mathbb{R}$",
+            "$A\\cap B=[-1;2)$, $A\\cup B=\\mathbb{R}$",
+            "$A\\cap B=[-1;2)$, $A\\cup B=\\mathbb{R}\\setminus\\{2\\}$"
+          ],
+          "answer": "C",
+          "solution": "Giao gồm $-1\\le x<2$, nên là $[-1;2)$. Hai tập phủ toàn bộ trục số: nếu $x<2$ thì $x\\in A$; nếu $x\\ge2$ thì $x\\in B$. Riêng điểm $2$ không thuộc $A$ nhưng thuộc $B$ nên vẫn thuộc hợp. Chọn C.",
+          "skills": [
+            "Giao và hợp nửa trục",
+            "Phân biệt điểm biên trong giao và hợp"
+          ],
+          "level": 2,
+          "maxMillipoints": 1000,
+          "id": "g10-c1-b08-i2",
+          "part": 1,
+          "number": 2,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 8 · I.2",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "mc",
+          "prompt": "Cho $A=[m;m+2]$ và $B=[1;4]$, với $m\\in\\mathbb{R}$. Điều kiện để $A\\subset B$ là",
+          "choices": [
+            "$m\\in[1;2]$",
+            "$m\\in(1;2)$",
+            "$m\\in[1;4]$",
+            "$m\\in[-1;4]$"
+          ],
+          "answer": "A",
+          "solution": "Đoạn $A$ nằm trong $B$ khi đầu trái không nhỏ hơn $1$ và đầu phải không lớn hơn $4$: $m\\ge1$, $m+2\\le4$. Tương đương $1\\le m\\le2$. Ngược lại, điều kiện này làm mọi $x\\in[m;m+2]$ nằm trong $[1;4]$. Hai đầu mút bằng nhau được phép vì cả hai đoạn đóng. Chọn A.",
+          "skills": [
+            "Điều kiện tập con của hai đoạn",
+            "Hệ điều kiện đầu mút"
+          ],
+          "level": 3,
+          "maxMillipoints": 1000,
+          "id": "g10-c1-b08-i3",
+          "part": 1,
+          "number": 3,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 8 · I.3",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "tf",
+          "prompt": "Cho $A=(-2;3]$ và $B=[1;5)$.",
+          "statements": [
+            "$A\\cap B=[1;3]$",
+            "$A\\cup B=(-2;5)$",
+            "$A\\setminus B=(-2;1]$",
+            "$B\\setminus A=(3;5)$"
+          ],
+          "answer": [
+            true,
+            true,
+            false,
+            true
+          ],
+          "statementSolutions": [
+            "Đúng. Điểm $1$ thuộc cả hai tập và điểm $3$ cũng thuộc cả hai; giao là đoạn $[1;3]$.",
+            "Đúng. Hai tập có phần chung nên hợp liên tục từ $-2$ đến $5$, bỏ cả hai biên vì không tập nào chứa chúng.",
+            "Sai. Điểm $1$ thuộc $B$ nên phải bị loại; hiệu đúng là $(-2;1)$.",
+            "Đúng. Các điểm của $B$ không thuộc $A$ phải lớn hơn $3$ nhưng vẫn nhỏ hơn $5$; điểm $3$ thuộc $A$ nên bị loại."
+          ],
+          "solution": "a) Đúng. Điểm $1$ thuộc cả hai tập và điểm $3$ cũng thuộc cả hai; giao là đoạn $[1;3]$.\n\nb) Đúng. Hai tập có phần chung nên hợp liên tục từ $-2$ đến $5$, bỏ cả hai biên vì không tập nào chứa chúng.\n\nc) Sai. Điểm $1$ thuộc $B$ nên phải bị loại; hiệu đúng là $(-2;1)$.\n\nd) Đúng. Các điểm của $B$ không thuộc $A$ phải lớn hơn $3$ nhưng vẫn nhỏ hơn $5$; điểm $3$ thuộc $A$ nên bị loại.",
+          "skills": [
+            "Bốn phép toán trên hai tập trục số",
+            "Kiểm từng biên"
+          ],
+          "level": 2,
+          "maxMillipoints": 4000,
+          "pointsByCorrectCount": [
+            0,
+            1000,
+            2000,
+            3000,
+            4000
+          ],
+          "id": "g10-c1-b08-ii1",
+          "part": 2,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 8 · II.1",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "short",
+          "mode": "numeric",
+          "prompt": "Cho $A=[m;m+2]$, $B=(0;5)$ và $m\\in\\mathbb{Z}\\cap[-2;5]$. Có bao nhiêu giá trị $m$ để $A\\subset B$?",
+          "acceptedAnswers": [
+            "2"
+          ],
+          "solution": "Hai đầu mút của đoạn $A$ đều thuộc $A$, nhưng hai biên của $B$ bị loại. Vì vậy cần và đủ $m>0$ và $m+2<5$, tức $0<m<3$. Các giá trị nguyên thỏa mãn là $1,2$, gồm $2$ giá trị. Giá trị $m=0$ hoặc $m=3$ làm $A$ chứa một điểm biên không thuộc $B$. Đáp án: $2$.",
+          "skills": [
+            "Tham số tập con với biên mở"
+          ],
+          "level": 3,
+          "maxMillipoints": 1500,
+          "id": "g10-c1-b08-iii1",
+          "part": 3,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 8 · III.1",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "short",
+          "mode": "numeric",
+          "prompt": "Cho $A=(m;m+3)$, $B=[1;4]$ và $m\\in\\mathbb{Z}\\cap[-2;6]$. Có bao nhiêu giá trị $m$ để $A\\cap B=\\varnothing$?",
+          "acceptedAnswers": [
+            "4"
+          ],
+          "solution": "Khoảng $A$ không rỗng vì có độ dài $3$. Nó không giao đoạn $B$ khi nằm hoàn toàn bên trái hoặc bên phải: $m+3\\le1$ hoặc $m\\ge4$. Dấu bằng được phép vì biên của $A$ mở: khi $m=-2$, $A=(-2;1)$ không chứa $1$; khi $m=4$, $A=(4;7)$ không chứa $4$. Do đó $m\\le-2$ hoặc $m\\ge4$. Trong miền đã cho có $m=-2,4,5,6$, gồm $4$ giá trị. Đáp án: $4$.",
+          "skills": [
+            "Giao rỗng có tham số",
+            "Đầu mút mở tiếp xúc đoạn"
+          ],
+          "level": 3,
+          "maxMillipoints": 1500,
+          "id": "g10-c1-b08-iii2",
+          "part": 3,
+          "number": 2,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 8 · III.2",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        }
+      ],
+      "sourceMaterial": {
+        "title": "Bài luyện Chương I: Khoảng, đoạn và tham số đầu mút",
+        "publisher": "Minh Thành Math",
+        "version": "2026-2027-v1-author",
+        "locator": "Bài 8 · 6 nhóm câu · 9 ô đáp án",
+        "sourceType": "ORIGINAL_MTM_AUTHORING",
+        "toanmathPerQuestionAlignment": false
+      },
+      "answerVerificationNote": "Khóa chấm và lời giải đã được đối chiếu độc lập. Thang luyện MTM 10 điểm, đúng–sai tính điểm theo số ý đúng; không phải điểm kỳ thi HSA/TSA chính thức. Bản luyện tập này đang thử trên PC, chưa đăng web.",
+      "versionHash": "0dd9db3c009fcf68ae1ac8da6ff3d8cfb4b092521f5f3cead8ad0d93e2d0e45f"
+    },
+    "scope": "PC_ONLY",
+    "published": false,
+    "sourceArtifactHash": "f5f6c11b0c9f571a9b8c6c585e600157a5af7b2ec42a774584ee51b495be2b2e",
+    "note": "MTM biên soạn mới. Thang điểm luyện tập riêng: trắc nghiệm 3 điểm, đúng/sai 4 điểm (mỗi ý đúng 1 điểm), trả lời ngắn 3 điểm. Chưa gắn nhãn thang điểm thi tốt nghiệp.",
+    "reviewStatus": "AUTHOR_VERIFIED_INDEPENDENT_REVIEW_PENDING",
+    "limits": [
+      "Chờ phản biện toán học độc lập từ bộ đề không có khóa và lời giải.",
+      "Chờ root nghiệm thu bố cục/chấm điểm/history trước tích hợp.",
+      "Nguồn câu hỏi là MTM tự biên soạn; chưa đối chiếu Toanmath từng câu."
+    ],
+    "track": "10",
+    "chapter": "1",
+    "order": 8,
+    "coverage": "Khoảng, đoạn và tham số đầu mút",
+    "admission": {
+      "authorVersionHash": "4d127ed27b709cae0edfef79728d0559b4ccb29153138db14e49ea772033be92",
+      "authorId": "mtm-pc-g10-c1-b08-v1",
+      "authorRubric": "MTM-PRACTICE-3MC-1TF-2SA-LINEAR-v1",
+      "mathVerified": true,
+      "engineAndBrowserReceipt": "See final v46 handoff",
+      "legacyFlagsAreNotLivePublication": true
+    }
+  },
+  {
+    "exam": {
+      "id": "mtm-preview-g10-c1-b09-v1",
+      "title": "Toán 10 · Chương I · Bài 9: Đếm phần tử và sơ đồ Venn",
+      "sourceHash": "ffd295ba240de3b0be45ae164a3d3b63ead588cd1e9f2f8f511d6e6646e3a542",
+      "sourceRef": "MTM biên soạn mới 2026–2027; chưa đối chiếu Toanmath từng câu",
+      "sourceUrl": "https://www.minhthanhmath.vn",
+      "sourceUrlMeaning": "Trang nhà xuất bản/tác giả MTM; không phải URL từng câu hay nguồn Toanmath",
+      "questionCount": 6,
+      "grade": 10,
+      "period": "GK1",
+      "chapter": 1,
+      "practiceNumber": 9,
+      "topic": "Đếm phần tử và sơ đồ Venn",
+      "durationMinutes": 25,
+      "answerKeyVerified": true,
+      "rubricVerified": true,
+      "questionDisplayVerified": true,
+      "publicationVerified": true,
+      "sections": [
+        {
+          "label": "I · Trắc nghiệm",
+          "kind": "mc",
+          "count": 3
+        },
+        {
+          "label": "II · Đúng/sai",
+          "kind": "tf",
+          "count": 1
+        },
+        {
+          "label": "III · Trả lời ngắn",
+          "kind": "short",
+          "count": 2
+        }
+      ],
+      "rubricVersion": "MTM-FLEX-10-v1",
+      "questions": [
+        {
+          "kind": "mc",
+          "prompt": "Một lớp có $40$ học sinh; $24$ bạn tham gia câu lạc bộ Toán, $21$ bạn tham gia câu lạc bộ Tiếng Anh và $10$ bạn tham gia cả hai. Có bao nhiêu bạn không tham gia câu lạc bộ nào trong hai câu lạc bộ này?",
+          "choices": [
+            "3",
+            "4",
+            "5",
+            "10"
+          ],
+          "answer": "C",
+          "solution": "Gọi $A,B$ là hai tập học sinh tham gia. Số bạn tham gia ít nhất một câu lạc bộ, tức số phần tử của tập $A\\cup B$, là $24+21-10=35$. Các bạn không tham gia câu lạc bộ nào là phần bù của hợp trong tập cả lớp, có $40-35=5$ bạn. Chọn C.",
+          "skills": [
+            "Hai tập trong bài toán thực tế",
+            "Phần bù của hợp"
+          ],
+          "level": 2,
+          "maxMillipoints": 1000,
+          "id": "g10-c1-b09-i1",
+          "part": 1,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 9 · I.1",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "mc",
+          "prompt": "Một nhóm có $45$ bạn, ai cũng tham gia ít nhất một trong hai câu lạc bộ Toán và Vật lí. Có $28$ bạn tham gia Toán, $26$ bạn tham gia Vật lí. Có bao nhiêu bạn tham gia đúng một câu lạc bộ?",
+          "choices": [
+            "9",
+            "19",
+            "26",
+            "36"
+          ],
+          "answer": "D",
+          "solution": "Vì tất cả đều tham gia ít nhất một câu lạc bộ, tập $A\\cup B$ có $45$ phần tử. Số bạn tham gia cả hai, tức số phần tử của tập $A\\cap B$, là $28+26-45=9$. Những bạn tham gia đúng một là các bạn trong hợp nhưng không ở giao, có $45-9=36$ bạn. Chọn D.",
+          "skills": [
+            "Suy ra giao từ hợp",
+            "Đúng một trong hai tập"
+          ],
+          "level": 2,
+          "maxMillipoints": 1000,
+          "id": "g10-c1-b09-i2",
+          "part": 1,
+          "number": 2,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 9 · I.2",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "mc",
+          "prompt": "Một nhóm có $50$ bạn; $30$ bạn học Toán nâng cao, $25$ bạn học Vật lí nâng cao, $18$ bạn học cả hai. Có bao nhiêu bạn học đúng một trong hai môn nâng cao?",
+          "choices": [
+            "19",
+            "32",
+            "37",
+            "55"
+          ],
+          "answer": "A",
+          "solution": "Số bạn chỉ học Toán là $30-18=12$; chỉ học Vật lí là $25-18=7$. Hai nhóm này rời nhau, nên số bạn học đúng một môn là $12+7=19$. Không dùng $30+25-18$ vì biểu thức đó đếm cả các bạn học hai môn. Chọn A.",
+          "skills": [
+            "Phân biệt ít nhất một và đúng một"
+          ],
+          "level": 2,
+          "maxMillipoints": 1000,
+          "id": "g10-c1-b09-i3",
+          "part": 1,
+          "number": 3,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 9 · I.3",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "tf",
+          "prompt": "Một lớp có $48$ học sinh. Gọi $A$ là tập $30$ bạn chọn Toán, $B$ là tập $26$ bạn chọn Vật lí; có $14$ bạn chọn cả hai. Gọi $U$ là tập cả lớp.",
+          "statements": [
+            "Tập $A\\cup B$ có $42$ phần tử.",
+            "Có $8$ bạn không chọn môn nào trong hai môn.",
+            "Có $28$ bạn chọn đúng một trong hai môn.",
+            "Tập $C_UA$ có $18$ phần tử."
+          ],
+          "answer": [
+            true,
+            false,
+            true,
+            true
+          ],
+          "statementSolutions": [
+            "Đúng. Số phần tử của tập $A\\cup B$ là $30+26-14=42$.",
+            "Sai. Số bạn không chọn môn nào là $48-42=6$, không phải $8$.",
+            "Đúng. Chỉ chọn Toán có $30-14=16$; chỉ chọn Vật lí có $26-14=12$; tổng là $28$.",
+            "Đúng. Không chọn Toán có $48-30=18$ bạn, gồm cả các bạn chỉ chọn Vật lí và các bạn không chọn môn nào."
+          ],
+          "solution": "a) Đúng. Số phần tử của tập $A\\cup B$ là $30+26-14=42$.\n\nb) Sai. Số bạn không chọn môn nào là $48-42=6$, không phải $8$.\n\nc) Đúng. Chỉ chọn Toán có $30-14=16$; chỉ chọn Vật lí có $26-14=12$; tổng là $28$.\n\nd) Đúng. Không chọn Toán có $48-30=18$ bạn, gồm cả các bạn chỉ chọn Vật lí và các bạn không chọn môn nào.",
+          "skills": [
+            "Phân tích các miền Venn",
+            "Phần bù của một tập và của hợp"
+          ],
+          "level": 2,
+          "maxMillipoints": 4000,
+          "pointsByCorrectCount": [
+            0,
+            1000,
+            2000,
+            3000,
+            4000
+          ],
+          "id": "g10-c1-b09-ii1",
+          "part": 2,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 9 · II.1",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "short",
+          "mode": "numeric",
+          "prompt": "Một nhóm có $60$ bạn. Các tập $A,B,C$ lần lượt có $32,28,25$ bạn. Các tập $A\\cap B$, $A\\cap C$, $B\\cap C$ và $A\\cap B\\cap C$ lần lượt có $15,12,10,5$ phần tử; các giao từng đôi đều tính cả những bạn thuộc cả ba tập. Có bao nhiêu bạn không thuộc tập nào trong $A,B,C$?",
+          "acceptedAnswers": [
+            "7"
+          ],
+          "solution": "Phải tính lại các vùng để không đếm trùng. Thuộc đúng hai tập: chỉ thuộc $A,B$ là $15-5=10$, chỉ thuộc $A,C$ là $12-5=7$, chỉ thuộc $B,C$ là $10-5=5$. Thuộc riêng $A$ có $32-15-12+5=10$; riêng $B$ có $28-15-10+5=8$; riêng $C$ có $25-12-10+5=8$. Vì thế hợp có $10+8+8+10+7+5+5=53$ bạn. Phần ngoài hợp có $60-53=7$ bạn. Tương đương, số phần tử của tập $A\\cup B\\cup C$ là $32+28+25-15-12-10+5=53$. Đáp án: $7$.",
+          "skills": [
+            "Ba tập và nguyên tắc bù trừ",
+            "Diễn đạt rõ giao đôi gồm giao ba"
+          ],
+          "level": 3,
+          "maxMillipoints": 1500,
+          "id": "g10-c1-b09-iii1",
+          "part": 3,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 9 · III.1",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "short",
+          "mode": "numeric",
+          "prompt": "Một nhóm có $50$ bạn. Các tập $A,B,C$ lần lượt có $30,26,24$ bạn; các tập $A\\cap B$, $A\\cap C$, $B\\cap C$ và $A\\cap B\\cap C$ lần lượt có $18,16,14,10$ phần tử. Các số giao từng đôi đã bao gồm giao ba. Có bao nhiêu bạn thuộc đúng hai trong ba tập?",
+          "acceptedAnswers": [
+            "18"
+          ],
+          "solution": "Giao $A\\cap B$ có $18$ bạn nhưng $10$ bạn còn thuộc $C$, nên chỉ thuộc $A,B$ là $18-10=8$. Tương tự, chỉ thuộc $A,C$ có $16-10=6$; chỉ thuộc $B,C$ có $14-10=4$. Ba vùng này rời nhau; tổng là $8+6+4=18$. Không cộng thẳng ba giao đôi vì khi đó mỗi bạn thuộc cả ba bị đếm ba lần. Đáp án: $18$.",
+          "skills": [
+            "Đếm đúng hai trong ba tập"
+          ],
+          "level": 3,
+          "maxMillipoints": 1500,
+          "id": "g10-c1-b09-iii2",
+          "part": 3,
+          "number": 2,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 9 · III.2",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        }
+      ],
+      "sourceMaterial": {
+        "title": "Bài luyện Chương I: Đếm phần tử và sơ đồ Venn",
+        "publisher": "Minh Thành Math",
+        "version": "2026-2027-v1-author",
+        "locator": "Bài 9 · 6 nhóm câu · 9 ô đáp án",
+        "sourceType": "ORIGINAL_MTM_AUTHORING",
+        "toanmathPerQuestionAlignment": false
+      },
+      "answerVerificationNote": "Khóa chấm và lời giải đã được đối chiếu độc lập. Thang luyện MTM 10 điểm, đúng–sai tính điểm theo số ý đúng; không phải điểm kỳ thi HSA/TSA chính thức. Bản luyện tập này đang thử trên PC, chưa đăng web.",
+      "versionHash": "3bd6fb22af5e3b282d52d0a86886ed3b999de6441f2044565cdca543fb250455"
+    },
+    "scope": "PC_ONLY",
+    "published": false,
+    "sourceArtifactHash": "ffd295ba240de3b0be45ae164a3d3b63ead588cd1e9f2f8f511d6e6646e3a542",
+    "note": "MTM biên soạn mới. Thang điểm luyện tập riêng: trắc nghiệm 3 điểm, đúng/sai 4 điểm (mỗi ý đúng 1 điểm), trả lời ngắn 3 điểm. Chưa gắn nhãn thang điểm thi tốt nghiệp.",
+    "reviewStatus": "AUTHOR_VERIFIED_INDEPENDENT_REVIEW_PENDING",
+    "limits": [
+      "Chờ phản biện toán học độc lập từ bộ đề không có khóa và lời giải.",
+      "Chờ root nghiệm thu bố cục/chấm điểm/history trước tích hợp.",
+      "Nguồn câu hỏi là MTM tự biên soạn; chưa đối chiếu Toanmath từng câu."
+    ],
+    "track": "10",
+    "chapter": "1",
+    "order": 9,
+    "coverage": "Đếm phần tử và sơ đồ Venn",
+    "admission": {
+      "authorVersionHash": "a7d7e9d1a987d64b8d4c77b0f3c5143d13ec9893339ab5c9223cf555fc637a55",
+      "authorId": "mtm-pc-g10-c1-b09-v1",
+      "authorRubric": "MTM-PRACTICE-3MC-1TF-2SA-LINEAR-v1",
+      "mathVerified": true,
+      "engineAndBrowserReceipt": "See final v46 handoff",
+      "legacyFlagsAreNotLivePublication": true
+    }
+  },
+  {
+    "exam": {
+      "id": "mtm-preview-g10-c1-b10-v1",
+      "title": "Toán 10 · Chương I · Bài 10: Tổng hợp và vận dụng Chương I",
+      "sourceHash": "9b216c4e3b018bda6c32e319708b33056db7617dd2d70b971ca74648a12eb2b8",
+      "sourceRef": "MTM biên soạn mới 2026–2027; chưa đối chiếu Toanmath từng câu",
+      "sourceUrl": "https://www.minhthanhmath.vn",
+      "sourceUrlMeaning": "Trang nhà xuất bản/tác giả MTM; không phải URL từng câu hay nguồn Toanmath",
+      "questionCount": 6,
+      "grade": 10,
+      "period": "GK1",
+      "chapter": 1,
+      "practiceNumber": 10,
+      "topic": "Tổng hợp và vận dụng Chương I",
+      "durationMinutes": 25,
+      "answerKeyVerified": true,
+      "rubricVerified": true,
+      "questionDisplayVerified": true,
+      "publicationVerified": true,
+      "sections": [
+        {
+          "label": "I · Trắc nghiệm",
+          "kind": "mc",
+          "count": 3
+        },
+        {
+          "label": "II · Đúng/sai",
+          "kind": "tf",
+          "count": 1
+        },
+        {
+          "label": "III · Trả lời ngắn",
+          "kind": "short",
+          "count": 2
+        }
+      ],
+      "rubricVersion": "MTM-FLEX-10-v1",
+      "questions": [
+        {
+          "kind": "mc",
+          "prompt": "Cho $A=\\{x\\in\\mathbb{Z}\\mid x^2-5x+6\\le0\\}$ và $B=\\{x\\in\\mathbb{Z}\\mid x^2-4\\le0\\}$. Tập $A\\cap B$ bằng",
+          "choices": [
+            "$\\{2;3\\}$",
+            "$\\{2\\}$",
+            "$\\{-2;-1;0;1;2\\}$",
+            "$\\varnothing$"
+          ],
+          "answer": "B",
+          "solution": "Điều kiện thứ nhất là $(x-2)(x-3)\\le0$, nên $2\\le x\\le3$; vì nguyên, $A=\\{2;3\\}$. Điều kiện thứ hai là $-2\\le x\\le2$, nên $B=\\{-2;-1;0;1;2\\}$. Phần tử chung duy nhất là $2$, vì các biên đều được lấy. Chọn B.",
+          "skills": [
+            "Tập hợp cho bởi bất đẳng thức",
+            "Giao tập nghiệm"
+          ],
+          "level": 2,
+          "maxMillipoints": 1000,
+          "id": "g10-c1-b10-i1",
+          "part": 1,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 10 · I.1",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "mc",
+          "prompt": "Cho $A_m=(-\\infty;m]$, $B=(2;+\\infty)$ với $m\\in\\mathbb{R}$. Điều kiện nào tương đương với $A_m\\cap B=\\varnothing$?",
+          "choices": [
+            "$m<2$",
+            "$m\\ge2$",
+            "$m\\le2$",
+            "$m>2$"
+          ],
+          "answer": "C",
+          "solution": "Nếu $m\\le2$ thì mọi $x\\in A_m$ đều có $x\\le m\\le2$, nên không thuộc $B$; giao rỗng. Nếu $m>2$ thì $x=m$ thuộc cả hai tập, nên giao không rỗng. Do đó điều kiện cần và đủ là $m\\le2$. Tại $m=2$, biên $2$ thuộc $A_m$ nhưng không thuộc $B$, nên vẫn giao rỗng. Chọn C.",
+          "skills": [
+            "Điều kiện tương đương",
+            "Chứng minh hai chiều và biên"
+          ],
+          "level": 3,
+          "maxMillipoints": 1000,
+          "id": "g10-c1-b10-i2",
+          "part": 1,
+          "number": 2,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 10 · I.2",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "mc",
+          "prompt": "Cho $U=\\{1;2;\\ldots;10\\}$, $A$ là tập các số chẵn trong $U$ và $B$ là tập các số chia hết cho $3$ trong $U$. Có bao nhiêu phần tử $x\\in B$ là phản ví dụ cho mệnh đề “$\\forall x\\in B,\\ x\\in A$”?",
+          "choices": [
+            "1",
+            "2",
+            "3",
+            "5"
+          ],
+          "answer": "B",
+          "solution": "Phản ví dụ phải thuộc $B$ nhưng không thuộc $A$. Ta có $B=\\{3;6;9\\}$; trong đó chỉ $6$ chẵn. Vì vậy $B\\setminus A=\\{3;9\\}$ chứa hai phần tử làm chứng cho phủ định $\\exists x\\in B,\\ x\\notin A$. Chọn B.",
+          "skills": [
+            "Lượng từ kết hợp hiệu tập hợp",
+            "Phản ví dụ và ký hiệu không thuộc"
+          ],
+          "level": 2,
+          "maxMillipoints": 1000,
+          "id": "g10-c1-b10-i3",
+          "part": 1,
+          "number": 3,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 10 · I.3",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "tf",
+          "prompt": "Cho $A=\\{x\\in\\mathbb{Z}\\mid -2\\le x\\le3\\}$, $B=\\{x\\in\\mathbb{Z}\\mid x^2-x-2\\le0\\}$ và $C=\\{-2;0;2;4\\}$.",
+          "statements": [
+            "$B\\subset A$",
+            "$A\\cap C=\\{-2;0;2\\}$",
+            "$A\\setminus B=\\{-2;3\\}$",
+            "$(A\\cup C)\\setminus B=\\{-2;3\\}$"
+          ],
+          "answer": [
+            true,
+            true,
+            true,
+            false
+          ],
+          "statementSolutions": [
+            "Đúng. $B=\\{-1;0;1;2\\}$ do $-1\\le x\\le2$; tất cả các phần tử đều thuộc $A=\\{-2;-1;0;1;2;3\\}$.",
+            "Đúng. Trong bốn phần tử của $C$, chỉ $4$ không thuộc $A$.",
+            "Đúng. Bỏ $-1,0,1,2$ của $B$ khỏi $A$, còn $-2,3$.",
+            "Sai. $A\\cup C$ có thêm phần tử $4$, và $4\\notin B$, nên kết quả đúng là $\\{-2;3;4\\}$."
+          ],
+          "solution": "a) Đúng. $B=\\{-1;0;1;2\\}$ do $-1\\le x\\le2$; tất cả các phần tử đều thuộc $A=\\{-2;-1;0;1;2;3\\}$.\n\nb) Đúng. Trong bốn phần tử của $C$, chỉ $4$ không thuộc $A$.\n\nc) Đúng. Bỏ $-1,0,1,2$ của $B$ khỏi $A$, còn $-2,3$.\n\nd) Sai. $A\\cup C$ có thêm phần tử $4$, và $4\\notin B$, nên kết quả đúng là $\\{-2;3;4\\}$.",
+          "skills": [
+            "Phép toán ghép trên tập điều kiện",
+            "Kiểm phần tử bổ sung"
+          ],
+          "level": 3,
+          "maxMillipoints": 4000,
+          "pointsByCorrectCount": [
+            0,
+            1000,
+            2000,
+            3000,
+            4000
+          ],
+          "id": "g10-c1-b10-ii1",
+          "part": 2,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 10 · II.1",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "short",
+          "mode": "numeric",
+          "prompt": "Có bao nhiêu giá trị nguyên $m\\in[-3;5]$ để mệnh đề “$\\forall x\\in[m;m+2],\\ x\\in(0;6)$” đúng?",
+          "acceptedAnswers": [
+            "3"
+          ],
+          "solution": "Mệnh đề yêu cầu đoạn $[m;m+2]$ là tập con của khoảng $(0;6)$. Vì đoạn chứa cả hai đầu mút, cần $m>0$ và $m+2<6$, tương đương $0<m<4$. Các giá trị nguyên thỏa mãn là $1,2,3$, có $3$ giá trị. Với $m=0$ hoặc $4$, một đầu mút thuộc đoạn nhưng không thuộc khoảng, tạo phản ví dụ. Đáp án: $3$.",
+          "skills": [
+            "Lượng từ, tập con và tham số khoảng"
+          ],
+          "level": 3,
+          "maxMillipoints": 1500,
+          "id": "g10-c1-b10-iii1",
+          "part": 3,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 10 · III.1",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "short",
+          "mode": "numeric",
+          "prompt": "Một nhóm có $55$ bạn. Các tập bạn học Toán, Vật lí, Tin học lần lượt có $32,28,25$ bạn. Có $15$ bạn học cả Toán và Vật lí, $13$ bạn học cả Toán và Tin học, $12$ bạn học cả Vật lí và Tin học; các số này tính cả $6$ bạn học đủ ba môn. Có bao nhiêu bạn học đúng một môn trong ba môn?",
+          "acceptedAnswers": [
+            "23"
+          ],
+          "solution": "Chỉ học Toán: $32-15-13+6=10$ bạn. Phải cộng lại $6$ vì khi trừ hai giao đôi, mỗi bạn học đủ ba môn bị trừ hai lần. Tương tự, chỉ học Vật lí: $28-15-12+6=7$; chỉ học Tin học: $25-13-12+6=6$. Ba nhóm riêng rời nhau nên có $10+7+6=23$ bạn học đúng một môn. Kiểm tính hợp lí: đúng hai môn có $(15-6)+(13-6)+(12-6)=22$ bạn; học đủ ba có $6$; hợp có $23+22+6=51\\le55$, còn $4$ bạn ngoài hợp. Đáp án: $23$.",
+          "skills": [
+            "Venn ba tập",
+            "Đúng một và kiểm nhất quán dữ kiện"
+          ],
+          "level": 3,
+          "maxMillipoints": 1500,
+          "id": "g10-c1-b10-iii2",
+          "part": 3,
+          "number": 2,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Chương I · Bài 10 · III.2",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        }
+      ],
+      "sourceMaterial": {
+        "title": "Bài luyện Chương I: Tổng hợp và vận dụng Chương I",
+        "publisher": "Minh Thành Math",
+        "version": "2026-2027-v1-author",
+        "locator": "Bài 10 · 6 nhóm câu · 9 ô đáp án",
+        "sourceType": "ORIGINAL_MTM_AUTHORING",
+        "toanmathPerQuestionAlignment": false
+      },
+      "answerVerificationNote": "Khóa chấm và lời giải đã được đối chiếu độc lập. Thang luyện MTM 10 điểm, đúng–sai tính điểm theo số ý đúng; không phải điểm kỳ thi HSA/TSA chính thức. Bản luyện tập này đang thử trên PC, chưa đăng web.",
+      "versionHash": "3ae908047812adfb7cea99d9b55175b4e9a8af0db43ce25fc6bea712aa36ec23"
+    },
+    "scope": "PC_ONLY",
+    "published": false,
+    "sourceArtifactHash": "9b216c4e3b018bda6c32e319708b33056db7617dd2d70b971ca74648a12eb2b8",
+    "note": "MTM biên soạn mới. Thang điểm luyện tập riêng: trắc nghiệm 3 điểm, đúng/sai 4 điểm (mỗi ý đúng 1 điểm), trả lời ngắn 3 điểm. Chưa gắn nhãn thang điểm thi tốt nghiệp.",
+    "reviewStatus": "AUTHOR_VERIFIED_INDEPENDENT_REVIEW_PENDING",
+    "limits": [
+      "Chờ phản biện toán học độc lập từ bộ đề không có khóa và lời giải.",
+      "Chờ root nghiệm thu bố cục/chấm điểm/history trước tích hợp.",
+      "Nguồn câu hỏi là MTM tự biên soạn; chưa đối chiếu Toanmath từng câu."
+    ],
+    "track": "10",
+    "chapter": "1",
+    "order": 10,
+    "coverage": "Tổng hợp và vận dụng Chương I",
+    "admission": {
+      "authorVersionHash": "be70143178ac9c3934b177e52f7f70a6746e12d262df9ee594cac848bedbd15d",
+      "authorId": "mtm-pc-g10-c1-b10-v1",
+      "authorRubric": "MTM-PRACTICE-3MC-1TF-2SA-LINEAR-v1",
+      "mathVerified": true,
+      "engineAndBrowserReceipt": "See final v46 handoff",
+      "legacyFlagsAreNotLivePublication": true
+    }
+  },
+  {
+    "exam": {
+      "id": "mtm-preview-g10-c1-final-v1",
+      "title": "Toán 10 · Chương I · Kiểm tra kết thúc chương",
+      "grade": 10,
+      "period": "GK1",
+      "chapter": 1,
+      "chapterEnd": true,
+      "isChapterFinal": true,
+      "practiceNumber": 11,
+      "topic": "Kiểm tra kết thúc Chương I · Mệnh đề và tập hợp",
+      "durationMinutes": 35,
+      "sourceHash": "0b3fe4a878c133e3b983e82eb5c6aab2d20e81575cc5c2782713d939bec9873d",
+      "sourceRef": "MTM biên soạn mới 2026–2027; chưa đối chiếu Toanmath từng câu",
+      "sourceUrl": "https://www.minhthanhmath.vn",
+      "sourceUrlMeaning": "Trang tác giả/nhà xuất bản MTM; không phải nguồn từng câu hoặc URL Toanmath",
+      "questionCount": 12,
+      "answerKeyVerified": true,
+      "rubricVerified": true,
+      "questionDisplayVerified": true,
+      "publicationVerified": true,
+      "sections": [
+        {
+          "label": "I · Trắc nghiệm",
+          "kind": "mc",
+          "count": 6
+        },
+        {
+          "label": "II · Đúng/sai",
+          "kind": "tf",
+          "count": 2
+        },
+        {
+          "label": "III · Trả lời ngắn",
+          "kind": "short",
+          "count": 4
+        }
+      ],
+      "rubricVersion": "MTM-FLEX-10-v1",
+      "questions": [
+        {
+          "kind": "mc",
+          "prompt": "Với $a\\in\\mathbb{Z}$, $-1\\le a\\le5$, đặt $P(a):\\sqrt{(a-2)^2}=a-2$ và $Q(a):a^2\\le9$. Tập tất cả giá trị $a$ làm $P(a)$ đúng và mệnh đề phủ định của $Q(a)$ đúng là",
+          "choices": [
+            "$\\{-1;0;1\\}$",
+            "$\\{4;5\\}$",
+            "$\\{2;3\\}$",
+            "$\\{3;4;5\\}$"
+          ],
+          "answer": "B",
+          "solution": "Ta có $\\sqrt{(a-2)^2}=|a-2|$. Đẳng thức $|a-2|=a-2$ đúng khi $a\\ge2$. Phủ định của $Q(a)$ là $a^2>9$, tương đương $a<-3$ hoặc $a>3$. Kết hợp hai điều kiện và miền nguyên $[-1;5]$, chỉ còn $a=4,5$. Giá trị $3$ không thỏa phủ định vì $3^2=9$. Chọn B.",
+          "skills": [
+            "Giá trị của mệnh đề chứa biến",
+            "Phủ định bất đẳng thức",
+            "Căn bậc hai số học"
+          ],
+          "level": 2,
+          "maxMillipoints": 500,
+          "id": "g10-c1-final-i1",
+          "part": 1,
+          "number": 1,
+          "originalQuestion": true,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Kiểm tra kết thúc Chương I · I.1",
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "mc",
+          "prompt": "Với $n\\in\\mathbb{Z}$, $1\\le n\\le24$, đặt $P(n)$ là “$24$ chia hết cho $n$”, $Q(n)$ là “$36$ chia hết cho $n$”. Cặp số $(a;b)$ nào dưới đây có $a$ là phản ví dụ cho $P(n)\\Rightarrow Q(n)$, còn $b$ là phản ví dụ cho mệnh đề đảo $Q(n)\\Rightarrow P(n)$?",
+          "choices": [
+            "$(8;9)$",
+            "$(6;12)$",
+            "$(9;8)$",
+            "$(8;6)$"
+          ],
+          "answer": "A",
+          "solution": "Một phản ví dụ cho kéo theo phải làm tiền đề đúng và kết luận sai. Với $n=8$, $24$ chia hết cho $8$ nhưng $36$ không chia hết cho $8$, nên $8$ là phản ví dụ của $P\\Rightarrow Q$. Với $n=9$, $36$ chia hết cho $9$ nhưng $24$ không chia hết cho $9$, nên $9$ là phản ví dụ của chiều đảo. Các số $6,12$ đều là ước của cả $24$ và $36$, nên không là phản ví dụ của chiều nào. Chọn A.",
+          "skills": [
+            "Mệnh đề đảo",
+            "Hai phản ví dụ theo hai chiều"
+          ],
+          "level": 2,
+          "maxMillipoints": 500,
+          "id": "g10-c1-final-i2",
+          "part": 1,
+          "number": 2,
+          "originalQuestion": true,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Kiểm tra kết thúc Chương I · I.2",
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "mc",
+          "prompt": "Với $m\\in\\mathbb{R}$, điều kiện nào cần và đủ để mệnh đề “$\\forall x\\in\\mathbb{R},\\ (x-1)^2+(m-2)^2>0$” đúng?",
+          "choices": [
+            "$m\\le2$",
+            "$m\\ge2$",
+            "$m=2$",
+            "$m\\ne2$"
+          ],
+          "answer": "D",
+          "solution": "Nếu $m=2$, chọn $x=1$ thì tổng hai bình phương bằng $0$, nên mệnh đề sai. Nếu $m\\ne2$, ta có $(m-2)^2>0$, còn $(x-1)^2\\ge0$ với mọi số thực $x$; tổng vì vậy luôn dương. Điều kiện cần và đủ là $m\\ne2$, gồm cả $m<2$ và $m>2$. Chọn D.",
+          "skills": [
+            "Lượng từ toàn bộ",
+            "Điều kiện cần và đủ",
+            "Tổng hai bình phương"
+          ],
+          "level": 2,
+          "maxMillipoints": 500,
+          "id": "g10-c1-final-i3",
+          "part": 1,
+          "number": 3,
+          "originalQuestion": true,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Kiểm tra kết thúc Chương I · I.3",
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "mc",
+          "prompt": "Cho $A=\\{0;2\\}$, $B=\\{0;1;2;3;4\\}$. Có bao nhiêu tập $X$ thỏa $A\\subset X\\subset B$, không chứa $1$ và chứa ít nhất một trong hai phần tử $3,4$? Ký hiệu $\\subset$ cho phép hai tập bằng nhau.",
+          "choices": [
+            "4",
+            "2",
+            "3",
+            "6"
+          ],
+          "answer": "C",
+          "solution": "Phải lấy hai phần tử $0,2$ và phải bỏ $1$. Trong hai phần tử $3,4$, phải lấy ít nhất một, nên có ba cách: chỉ lấy $3$, chỉ lấy $4$, hoặc lấy cả hai. Ba tập tương ứng là $\\{0;2;3\\}$, $\\{0;2;4\\}$, $\\{0;2;3;4\\}$. Chọn C.",
+          "skills": [
+            "Tập con có điều kiện",
+            "Ít nhất một và liệt kê không trùng"
+          ],
+          "level": 2,
+          "maxMillipoints": 500,
+          "id": "g10-c1-final-i4",
+          "part": 1,
+          "number": 4,
+          "originalQuestion": true,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Kiểm tra kết thúc Chương I · I.4",
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "mc",
+          "prompt": "Cho $U=\\{0;1;2;\\ldots;8\\}$; $A$ là tập các số chẵn trong $U$, $B=\\{x\\in U\\mid |x-3|\\le1\\}$ và $C$ là tập các số lẻ trong $U$. Tập $(A\\setminus B)\\cup(B\\cap C)$ bằng",
+          "choices": [
+            "$\\{0;6;8\\}$",
+            "$\\{0;3;6;8\\}$",
+            "$\\{2;3;4;6;8\\}$",
+            "$\\{0;1;3;5;6;7;8\\}$"
+          ],
+          "answer": "B",
+          "solution": "$A=\\{0;2;4;6;8\\}$. Điều kiện $|x-3|\\le1$ cho các phần tử trong $U$ là $2,3,4$, nên $B=\\{2;3;4\\}$. Tập $C=\\{1;3;5;7\\}$. Do đó $A\\setminus B=\\{0;6;8\\}$, $B\\cap C=\\{3\\}$; lấy hợp được $\\{0;3;6;8\\}$. Chọn B.",
+          "skills": [
+            "Cách cho tập hợp",
+            "Hiệu, giao, hợp ghép"
+          ],
+          "level": 3,
+          "maxMillipoints": 500,
+          "id": "g10-c1-final-i5",
+          "part": 1,
+          "number": 5,
+          "originalQuestion": true,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Kiểm tra kết thúc Chương I · I.5",
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "mc",
+          "prompt": "Cho $A=(-2;3]$, $B=[1;6)$. Phần bù của tập $A\\cap B$ trong $\\mathbb{R}$ là",
+          "choices": [
+            "$(-\\infty;1]\\cup[3;+\\infty)$",
+            "$[-2;1)\\cup(3;6)$",
+            "$(-\\infty;1)\\cup[3;+\\infty)$",
+            "$(-\\infty;1)\\cup(3;+\\infty)$"
+          ],
+          "answer": "D",
+          "solution": "Trước hết $A\\cap B=[1;3]$ vì cả $1$ và $3$ đều thuộc hai tập. Phần bù trong toàn bộ $\\mathbb{R}$ gồm những số nhỏ hơn $1$ hoặc lớn hơn $3$, nên là $(-\\infty;1)\\cup(3;+\\infty)$. Hai điểm $1,3$ thuộc giao nên phải loại khỏi phần bù. Tập vũ trụ là $\\mathbb{R}$, không phải $A\\cup B$, nên không giới hạn kết quả giữa $-2$ và $6$. Chọn D.",
+          "skills": [
+            "Giao khoảng và đoạn",
+            "Phần bù với tập vũ trụ xác định"
+          ],
+          "level": 2,
+          "maxMillipoints": 500,
+          "id": "g10-c1-final-i6",
+          "part": 1,
+          "number": 6,
+          "originalQuestion": true,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Kiểm tra kết thúc Chương I · I.6",
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "tf",
+          "prompt": "Cho $U=\\{n\\in\\mathbb{Z}\\mid -3\\le n\\le5\\}$, $A=\\{n\\in U\\mid n^2-2n-3=0\\}$, $B=\\{n\\in U\\mid |n-1|\\le2\\}$ và $C$ là tập các phần tử không dương của $U$.",
+          "statements": [
+            "$A\\subset B$",
+            "$A\\cap C=\\{-1\\}$",
+            "Phần bù của $A\\cup C$ trong $U$ là $\\{1;2;3;4;5\\}$.",
+            "$\\forall n\\in B,\\ n\\in A\\cup C$"
+          ],
+          "answer": [
+            true,
+            true,
+            false,
+            false
+          ],
+          "statementSolutions": [
+            "Đúng. $n^2-2n-3=(n-3)(n+1)=0$ cho $A=\\{-1;3\\}$. Điều kiện $|n-1|\\le2$ cho $B=\\{-1;0;1;2;3\\}$, nên mọi phần tử của $A$ thuộc $B$.",
+            "Đúng. $C=\\{-3;-2;-1;0\\}$; trong hai phần tử của $A$, chỉ $-1$ không dương.",
+            "Sai. $A\\cup C=\\{-3;-2;-1;0;3\\}$; phần bù trong $U$ là $\\{1;2;4;5\\}$. Phần tử $3$ thuộc hợp nên không được nằm trong phần bù.",
+            "Sai. Chẳng hạn $n=1$ thuộc $B$ nhưng không thuộc $A\\cup C$, là một phản ví dụ. Số $n=2$ cũng là phản ví dụ."
+          ],
+          "solution": "a) Đúng. $n^2-2n-3=(n-3)(n+1)=0$ cho $A=\\{-1;3\\}$. Điều kiện $|n-1|\\le2$ cho $B=\\{-1;0;1;2;3\\}$, nên mọi phần tử của $A$ thuộc $B$.\n\nb) Đúng. $C=\\{-3;-2;-1;0\\}$; trong hai phần tử của $A$, chỉ $-1$ không dương.\n\nc) Sai. $A\\cup C=\\{-3;-2;-1;0;3\\}$; phần bù trong $U$ là $\\{1;2;4;5\\}$. Phần tử $3$ thuộc hợp nên không được nằm trong phần bù.\n\nd) Sai. Chẳng hạn $n=1$ thuộc $B$ nhưng không thuộc $A\\cup C$, là một phản ví dụ. Số $n=2$ cũng là phản ví dụ.",
+          "skills": [
+            "Tập hợp cho bởi điều kiện",
+            "Tập con, giao, hợp, phần bù",
+            "Lượng từ và phản ví dụ"
+          ],
+          "level": 3,
+          "maxMillipoints": 2000,
+          "pointsByCorrectCount": [
+            0,
+            500,
+            1000,
+            1500,
+            2000
+          ],
+          "id": "g10-c1-final-ii1",
+          "part": 2,
+          "number": 1,
+          "originalQuestion": true,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Kiểm tra kết thúc Chương I · II.1",
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "tf",
+          "prompt": "Một nhóm có $72$ bạn. Gọi $A$ là tập $43$ bạn tham gia câu lạc bộ Toán, $B$ là tập $35$ bạn tham gia câu lạc bộ Vật lí; có $18$ bạn tham gia cả hai.",
+          "statements": [
+            "Có $25$ bạn chỉ tham gia câu lạc bộ Toán.",
+            "Có $10$ bạn không tham gia câu lạc bộ nào trong hai câu lạc bộ.",
+            "Có $42$ bạn tham gia đúng một trong hai câu lạc bộ.",
+            "Tập $B\\setminus A$ có $18$ phần tử."
+          ],
+          "answer": [
+            true,
+            false,
+            true,
+            false
+          ],
+          "statementSolutions": [
+            "Đúng. Chỉ tham gia Toán có $43-18=25$ bạn.",
+            "Sai. Tham gia ít nhất một có $43+35-18=60$ bạn; không tham gia câu lạc bộ nào có $72-60=12$ bạn.",
+            "Đúng. Chỉ Toán có $25$, chỉ Vật lí có $35-18=17$; hai nhóm rời nhau nên tổng là $25+17=42$.",
+            "Sai. $B\\setminus A$ gồm các bạn chỉ tham gia Vật lí, có $35-18=17$ bạn. Số $18$ là số bạn trong giao, không phải trong hiệu."
+          ],
+          "solution": "a) Đúng. Chỉ tham gia Toán có $43-18=25$ bạn.\n\nb) Sai. Tham gia ít nhất một có $43+35-18=60$ bạn; không tham gia câu lạc bộ nào có $72-60=12$ bạn.\n\nc) Đúng. Chỉ Toán có $25$, chỉ Vật lí có $35-18=17$; hai nhóm rời nhau nên tổng là $25+17=42$.\n\nd) Sai. $B\\setminus A$ gồm các bạn chỉ tham gia Vật lí, có $35-18=17$ bạn. Số $18$ là số bạn trong giao, không phải trong hiệu.",
+          "skills": [
+            "Sơ đồ Venn hai tập",
+            "Đúng một và không thuộc hợp",
+            "Ý nghĩa hiệu tập hợp"
+          ],
+          "level": 2,
+          "maxMillipoints": 2000,
+          "pointsByCorrectCount": [
+            0,
+            500,
+            1000,
+            1500,
+            2000
+          ],
+          "id": "g10-c1-final-ii2",
+          "part": 2,
+          "number": 2,
+          "originalQuestion": true,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Kiểm tra kết thúc Chương I · II.2",
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "short",
+          "mode": "numeric",
+          "prompt": "Cho $A_m=(m-1;m+2]$, $B=[-2;5)$ và $m\\in\\mathbb{Z}\\cap[-4;5]$. Tính tổng tất cả giá trị $m$ để $A_m\\subset B$.",
+          "acceptedAnswers": [
+            "2"
+          ],
+          "solution": "Khoảng $A_m$ có độ dài $3$ nên luôn không rỗng. Đầu trái của $A_m$ mở, còn đầu trái của $B$ đóng: cần $m-1\\ge-2$, tức $m\\ge-1$; dấu bằng vẫn phù hợp. Đầu phải của $A_m$ đóng, còn biên phải $5$ của $B$ bị loại: cần $m+2<5$, tức $m<3$. Vậy các giá trị nguyên là $-1,0,1,2$. Tổng bằng $-1+0+1+2=2$. Nếu $m<-1$, khoảng $A_m$ chứa điểm nhỏ hơn $-2$; nếu $m\\ge3$, điểm $m+2\\ge5$ thuộc $A_m$ nhưng không thuộc $B$. Đáp án: $2$.",
+          "skills": [
+            "Tham số tập con của khoảng biên hỗn hợp",
+            "Kiểm hai chiều và tổng giá trị"
+          ],
+          "level": 3,
+          "maxMillipoints": 750,
+          "id": "g10-c1-final-iii1",
+          "part": 3,
+          "number": 1,
+          "originalQuestion": true,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Kiểm tra kết thúc Chương I · III.1",
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "short",
+          "mode": "numeric",
+          "prompt": "Cho $A=\\{1;2;3;4;5\\}$. Có bao nhiêu tập con $X$ của $A$ chứa $1$, chứa đúng một trong hai phần tử $2,3$ và chứa ít nhất một trong hai phần tử $4,5$?",
+          "acceptedAnswers": [
+            "6"
+          ],
+          "solution": "Phần tử $1$ luôn phải lấy. Đối với $2,3$, yêu cầu đúng một cho hai lựa chọn: lấy $2$ hoặc lấy $3$. Đối với $4,5$, yêu cầu ít nhất một cho ba lựa chọn: chỉ $4$, chỉ $5$, hoặc cả $4,5$. Ghép độc lập được $2\\cdot3=6$ tập. Có thể liệt kê: $\\{1;2;4\\}$, $\\{1;2;5\\}$, $\\{1;2;4;5\\}$, $\\{1;3;4\\}$, $\\{1;3;5\\}$, $\\{1;3;4;5\\}$. Đáp án: $6$.",
+          "skills": [
+            "Đếm tập con với hai ràng buộc",
+            "Phân biệt đúng một và ít nhất một"
+          ],
+          "level": 3,
+          "maxMillipoints": 750,
+          "id": "g10-c1-final-iii2",
+          "part": 3,
+          "number": 2,
+          "originalQuestion": true,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Kiểm tra kết thúc Chương I · III.2",
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "kind": "short",
+          "mode": "numeric",
+          "prompt": "Một nhóm có $80$ bạn. Các tập $A,B,C$ lần lượt có $42,38,31$ bạn; các tập $A\\cap B$, $A\\cap C$, $B\\cap C$ và $A\\cap B\\cap C$ lần lượt có $20,16,15,8$ phần tử. Các giao từng đôi đều bao gồm những bạn thuộc cả ba tập. Có bao nhiêu bạn thuộc ít nhất hai trong ba tập?",
+          "acceptedAnswers": [
+            "35"
+          ],
+          "solution": "Chỉ thuộc $A,B$ có $20-8=12$ bạn; chỉ thuộc $A,C$ có $16-8=8$; chỉ thuộc $B,C$ có $15-8=7$. Vậy thuộc đúng hai tập có $12+8+7=27$ bạn. “Ít nhất hai” còn gồm $8$ bạn thuộc cả ba, nên kết quả là $27+8=35$. Kiểm dữ kiện: riêng $A$ có $42-20-16+8=14$, riêng $B$ có $38-20-15+8=11$, riêng $C$ có $31-16-15+8=8$. Hợp có $14+11+8+27+8=68\\le80$, các vùng đều không âm. Đáp án: $35$.",
+          "skills": [
+            "Venn ba tập",
+            "Ít nhất hai và đúng hai",
+            "Kiểm nhất quán dữ kiện"
+          ],
+          "level": 3,
+          "maxMillipoints": 750,
+          "id": "g10-c1-final-iii3",
+          "part": 3,
+          "number": 3,
+          "originalQuestion": true,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Kiểm tra kết thúc Chương I · III.3",
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA",
+          "solutionTables": [
+            {
+              "caption": "Kiểm các vùng của ba tập A, B, C",
+              "headers": [
+                "Vùng",
+                "Số bạn"
+              ],
+              "rows": [
+                [
+                  "Chỉ A",
+                  "14"
+                ],
+                [
+                  "Chỉ B",
+                  "11"
+                ],
+                [
+                  "Chỉ C",
+                  "8"
+                ],
+                [
+                  "Chỉ A và B",
+                  "12"
+                ],
+                [
+                  "Chỉ A và C",
+                  "8"
+                ],
+                [
+                  "Chỉ B và C",
+                  "7"
+                ],
+                [
+                  "Cả ba",
+                  "8"
+                ],
+                [
+                  "Không thuộc tập nào",
+                  "12"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "kind": "short",
+          "mode": "numeric",
+          "prompt": "Có bao nhiêu giá trị nguyên $m\\in[-3;5]$ để mệnh đề “$\\forall n\\in\\{-1;0;2\\},\\ (n-m)^2\\ge4$” đúng?",
+          "acceptedAnswers": [
+            "3"
+          ],
+          "solution": "Với mỗi $n$ trong miền, $(n-m)^2\\ge4$ tương đương $|n-m|\\ge2$. Khi $n=-1$, các giá trị nguyên $m$ làm bất đẳng thức sai là $-2,-1,0$; khi $n=0$, chúng là $-1,0,1$; khi $n=2$, chúng là $1,2,3$. Để mệnh đề “với mọi” đúng, $m$ phải tránh hợp của ba nhóm giá trị sai, tức tránh $\\{-2;-1;0;1;2;3\\}$. Trong đoạn nguyên $[-3;5]$, còn $m=-3,4,5$, gồm $3$ giá trị. Kiểm trực tiếp ba giá trị còn lại cho bình phương nhỏ nhất lần lượt là $4,4,9$, đều không nhỏ hơn $4$. Đáp án: $3$.",
+          "skills": [
+            "Lượng từ toàn bộ trên miền hữu hạn",
+            "Hợp các phản ví dụ",
+            "Tham số và trị tuyệt đối"
+          ],
+          "level": 3,
+          "maxMillipoints": 750,
+          "solutionTables": [
+            {
+              "caption": "Đối chiếu bình phương nhỏ nhất trên miền ba giá trị n",
+              "headers": [
+                "$m$",
+                "−3",
+                "−2",
+                "−1",
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5"
+              ],
+              "rows": [
+                [
+                  "$\\min\\{(-1-m)^2;\\ m^2;\\ (2-m)^2\\}$",
+                  "4",
+                  "1",
+                  "0",
+                  "0",
+                  "1",
+                  "0",
+                  "1",
+                  "4",
+                  "9"
+                ]
+              ]
+            }
+          ],
+          "id": "g10-c1-final-iii4",
+          "part": 3,
+          "number": 4,
+          "originalQuestion": true,
+          "sourceRef": "MTM biên soạn mới 2026–2027 · Kiểm tra kết thúc Chương I · III.4",
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        }
+      ],
+      "sourceMaterial": {
+        "title": "Toán 10 · Chương I · Kiểm tra kết thúc chương",
+        "publisher": "Minh Thành Math",
+        "version": "2026-2027-v1-author",
+        "locator": "Bài kết thúc chương riêng · 12 nhóm · 18 ô đáp án",
+        "sourceType": "ORIGINAL_MTM_AUTHORING",
+        "toanmathPerQuestionAlignment": false
+      },
+      "answerVerificationNote": "Khóa chấm và lời giải đã được đối chiếu độc lập. Thang luyện MTM 10 điểm, đúng–sai tính điểm theo số ý đúng; không phải điểm kỳ thi HSA/TSA chính thức. Bản luyện tập này đang thử trên PC, chưa đăng web.",
+      "versionHash": "03383851b7d4c399603c1b3e3bc16d8d04d381a19efc2467b6b5bbe6f77481d0"
+    },
+    "note": "Bài kiểm tra kết thúc Chương I riêng sau 10 bài luyện. Thang luyện tập: MC 3 điểm, Đ/S 4 điểm (mỗi ý đúng 0,5 điểm), TLN 3 điểm. Chưa gắn nhãn thang điểm thi tốt nghiệp.",
+    "scope": "PC_ONLY",
+    "published": false,
+    "sourceArtifactHash": "0b3fe4a878c133e3b983e82eb5c6aab2d20e81575cc5c2782713d939bec9873d",
+    "reviewStatus": "AUTHOR_VERIFIED_INDEPENDENT_REVIEW_PENDING",
+    "limits": [
+      "Chờ phản biện toán học độc lập từ FINAL_QUESTION_ONLY.json.",
+      "Câu mới MTM biên soạn; chưa đối chiếu Toanmath từng câu.",
+      "Chưa nghiệm thu UI/chấm điểm/history; chưa đăng."
+    ],
+    "track": "10",
+    "chapter": "1",
+    "order": 11,
+    "coverage": "Kiểm tra kết thúc Chương I · Mệnh đề và tập hợp",
+    "isChapterEnd": true,
+    "admission": {
+      "authorVersionHash": "85262a317ae5cdbfc58fb87314096910edb13c1914fc06c9745eabba4151b302",
+      "authorId": "mtm-pc-g10-c1-final-v1",
+      "authorRubric": "MTM-PRACTICE-FINAL-6MC-2TF-4SA-LINEAR-v1",
+      "mathVerified": true,
+      "engineAndBrowserReceipt": "See final v46 handoff",
+      "legacyFlagsAreNotLivePublication": true
+    }
+  },
+  {
+    "exam": {
+      "id": "mtm-preview-practice-hsa-01-v1",
+      "sourceHash": "f24ccc082cb7593e6310e9851486548c25924ec2764f14f06091a8c804ad20b3",
+      "sourceRef": "MTM biên soạn mới · HSA Toán · bài luyện 1",
+      "questionCount": 6,
+      "answerKeyVerified": true,
+      "rubricVerified": true,
+      "grade": 12,
+      "period": "GK1",
+      "title": "HSA · Toán và xử lí số liệu · Bài luyện 1 · MTM 2026–2027",
+      "durationMinutes": 25,
+      "rubricVersion": "MTM-FLEX-10-v1",
+      "sections": [
+        {
+          "label": "I · Trắc nghiệm",
+          "kind": "mc",
+          "count": 3
+        },
+        {
+          "label": "II · Đúng/Sai",
+          "kind": "tf",
+          "count": 1
+        },
+        {
+          "label": "III · Trả lời ngắn",
+          "kind": "short",
+          "count": 2
+        }
+      ],
+      "sourceUrl": "https://www.hsa.edu.vn/huong-dan/dang-thuc-bai-thi",
+      "sourceMaterial": {
+        "title": "Bài luyện Toán HSA số 1 do MTM biên soạn mới",
+        "publisher": "Minh Thành Math",
+        "version": "MTM 2026–2027 · v1 · PC-only",
+        "locator": "6 nhóm câu trong artifact này; URL chỉ đối chiếu nhóm kỹ năng của kỳ thi, không phải nguồn câu hỏi"
+      },
+      "publicationVerified": true,
+      "questionDisplayVerified": true,
+      "answerVerificationNote": "Khóa chấm và lời giải đã được đối chiếu độc lập. Thang luyện MTM 10 điểm, đúng–sai tính điểm theo số ý đúng; không phải điểm kỳ thi HSA/TSA chính thức. Bản luyện tập này đang thử trên PC, chưa đăng web.",
+      "questions": [
+        {
+          "id": "hsa-p1-mc1",
+          "kind": "mc",
+          "part": 1,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới · hsa-p1-mc1",
+          "prompt": "Một sản phẩm được tăng giá $20\\%$ so với giá ban đầu, sau đó giảm $10\\%$ trên giá vừa tăng. Khách trả $270\\,000$ đồng. Giá ban đầu của sản phẩm là bao nhiêu?",
+          "choices": [
+            "$225\\,000$ đồng",
+            "$250\\,000$ đồng",
+            "$275\\,000$ đồng",
+            "$300\\,000$ đồng"
+          ],
+          "answer": "B",
+          "solution": "Gọi giá ban đầu là $x$ đồng, $x>0$. Giá sau khi tăng là $1{,}2x$; sau khi giảm tiếp là $0{,}9\\cdot1{,}2x=1{,}08x$. Ta có $1{,}08x=270\\,000$, suy ra $x=250\\,000$. Kiểm lại: $250\\,000\\cdot1{,}2=300\\,000$ và $300\\,000\\cdot0{,}9=270\\,000$. Chọn B. Hai tỉ lệ tác động liên tiếp, không cộng trừ trực tiếp thành tăng $10\\%$.",
+          "maxMillipoints": 1000,
+          "difficulty": "M2",
+          "authorMathChecked": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "id": "hsa-p1-mc2",
+          "kind": "mc",
+          "part": 1,
+          "number": 2,
+          "sourceRef": "MTM biên soạn mới · hsa-p1-mc2",
+          "prompt": "Một công việc có khối lượng cố định. A làm một mình xong trong $6$ giờ, B làm một mình xong trong $9$ giờ; năng suất của mỗi người không đổi. Hai người cùng làm $2$ giờ, rồi B nghỉ. Từ lúc B nghỉ, A cần làm thêm bao lâu để hoàn thành?",
+          "choices": [
+            "1 giờ 20 phút",
+            "2 giờ",
+            "2 giờ 40 phút",
+            "3 giờ"
+          ],
+          "answer": "C",
+          "solution": "Quy ước cả công việc là $1$. Năng suất của A là $\\frac16$ công việc/giờ, của B là $\\frac19$ công việc/giờ. Sau $2$ giờ cùng làm, khối lượng hoàn thành bằng $2(\\frac16+\\frac19)=\\frac59$. Phần còn lại là $1-\\frac59=\\frac49$. A làm phần này trong $\\frac49: \\frac16=\\frac83$ giờ, bằng $2$ giờ $40$ phút. Đây là thời gian tính từ khi B nghỉ, không phải tổng thời gian. Chọn C.",
+          "maxMillipoints": 1000,
+          "difficulty": "M2",
+          "authorMathChecked": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "id": "hsa-p1-mc3",
+          "kind": "mc",
+          "part": 1,
+          "number": 3,
+          "sourceRef": "MTM biên soạn mới · hsa-p1-mc3",
+          "prompt": "Một nhóm có $40$ học sinh: $28$ bạn tham gia hoạt động A, $24$ bạn tham gia hoạt động B, và $16$ bạn tham gia cả hai. Mỗi bạn có thể tham gia cả hai hoạt động. Có bao nhiêu bạn không tham gia hoạt động nào trong hai hoạt động đó?",
+          "choices": [
+            "$2$",
+            "$4$",
+            "$6$",
+            "$8$"
+          ],
+          "answer": "B",
+          "solution": "Gọi $A,B$ là hai tập học sinh tương ứng. Số bạn thuộc ít nhất một hoạt động là $|A\\cup B|=|A|+|B|-|A\\cap B|=28+24-16=36$. Phải trừ $16$ vì các bạn tham gia cả hai đã được cộng hai lần. Do đó có $40-36=4$ bạn không tham gia hoạt động nào. Kiểm các vùng: chỉ A có $12$, chỉ B có $8$, cả hai có $16$, không tham gia có $4$; tổng bằng $40$. Chọn B.",
+          "maxMillipoints": 1000,
+          "difficulty": "M2",
+          "authorMathChecked": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "id": "hsa-p1-tf1",
+          "kind": "tf",
+          "part": 2,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới · hsa-p1-tf1",
+          "prompt": "Cho cấp số cộng $(u_n)$ với $u_1=7$ và công sai $d=3$. Xét các khẳng định sau; $S_n$ là tổng $n$ số hạng đầu.",
+          "statements": [
+            "$u_5+u_{12}=59$.",
+            "$S_{10}=205$.",
+            "$u_{33}=100$.",
+            "Tổng các số hạng có chỉ số lẻ trong $20$ số hạng đầu là $340$."
+          ],
+          "answer": [
+            true,
+            true,
+            false,
+            true
+          ],
+          "solution": "Công thức số hạng tổng quát: $u_n=7+3(n-1)=3n+4$.\n\na) $u_5=19$, $u_{12}=40$, nên $u_5+u_{12}=59$: đúng.\n\nb) $u_{10}=34$, do đó $S_{10}=\\frac{10(7+34)}2=205$: đúng.\n\nc) $u_{33}=3\\cdot33+4=103$, không phải $100$: sai.\n\nd) Các chỉ số lẻ là $1,3,5,\\ldots,19$, có $10$ số hạng. Chúng tạo cấp số cộng mới có số hạng đầu $u_1=7$, số hạng cuối $u_{19}=61$, nên tổng bằng $\\frac{10(7+61)}2=340$: đúng.",
+          "maxMillipoints": 4000,
+          "pointsByCorrectCount": [
+            0,
+            1000,
+            2000,
+            3000,
+            4000
+          ],
+          "difficulty": "M2",
+          "authorMathChecked": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "id": "hsa-p1-short1",
+          "kind": "short",
+          "part": 3,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới · hsa-p1-short1",
+          "prompt": "Từ các chữ số $0,1,2,3,4$, lập được bao nhiêu số tự nhiên có ba chữ số đôi một khác nhau và chia hết cho $5$? Chỉ nhập số lượng.",
+          "mode": "numeric",
+          "acceptedAnswers": [
+            "12"
+          ],
+          "solution": "Số chia hết cho $5$ phải có chữ số tận cùng là $0$ hoặc $5$. Trong các chữ số được cấp chỉ có $0$, nên hàng đơn vị cố định là $0$. Hàng trăm không được bằng $0$, có $4$ lựa chọn $1,2,3,4$. Hàng chục phải khác chữ số hàng trăm và khác $0$, có $3$ lựa chọn. Theo quy tắc nhân, có $4\\cdot3=12$ số. Không lấy số bắt đầu bằng $0$.",
+          "maxMillipoints": 1500,
+          "difficulty": "M2",
+          "authorMathChecked": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "id": "hsa-p1-short2",
+          "kind": "short",
+          "part": 3,
+          "number": 2,
+          "sourceRef": "MTM biên soạn mới · hsa-p1-short2",
+          "prompt": "Một đơn hàng gồm $36$ món, chỉ có bút giá $8\\,000$ đồng/món và vở giá $12\\,000$ đồng/món. Tổng tiền là $384\\,000$ đồng, không có giảm giá hoặc phụ phí. Đơn hàng có bao nhiêu quyển vở? Chỉ nhập số lượng.",
+          "mode": "numeric",
+          "acceptedAnswers": [
+            "24"
+          ],
+          "solution": "Gọi $x$ là số bút, $y$ là số vở; $x,y$ là số nguyên không âm. Ta có $x+y=36$ và $8x+12y=384$ (đơn vị nghìn đồng). Từ $x=36-y$, suy ra $8(36-y)+12y=384$, tức $288+4y=384$. Vì vậy $y=24$, $x=12$. Kiểm lại: $12+24=36$ món và $12\\cdot8+24\\cdot12=384$ nghìn đồng. Đáp án: $24$.",
+          "maxMillipoints": 1500,
+          "difficulty": "M2",
+          "authorMathChecked": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        }
+      ],
+      "versionHash": "1899a536b19cd8b9f079185be1764af7755deadf4d2b993c4dae3a81a32516f2"
+    },
+    "track": "HSA",
+    "chapter": "1",
+    "order": 1,
+    "coverage": "Tỉ lệ, năng suất, tập hợp, dãy số và quy tắc đếm",
+    "scope": "PC_ONLY",
+    "published": false,
+    "note": "MTM biên soạn mới; không phải đề HSA/TSA chính thức; không IRT. Thang luyện tập riêng 10 điểm.",
+    "limits": [
+      "Bài luyện nhỏ 6 nhóm câu, không mô phỏng toàn bộ phần Toán hay toàn bài HSA/TSA.",
+      "Tổng điểm 10 theo thang luyện MTM: 3 MC × 1; 1 Đ/S tối đa 4; 2 câu ngắn × 1,5.",
+      "TSA chính thức yêu cầu đúng hết các ý trong câu; bài luyện này chia tuyến tính theo ý và không dùng IRT.",
+      "grade=12 chỉ để tương thích engine hiện hành; giao diện phải ghi HSA/TSA, không gọi đây là chương lớp 12."
+    ],
+    "authorCheckStatus": "AUTHOR_MATH_CHECK_COMPLETE_ROOT_BLIND_REVIEW_PENDING",
+    "admittedByOwner": false,
+    "admission": {
+      "authorVersionHash": "b25c9d1d18f2c2ce8170c4ca566512e924612e20c117e05306d92376db5646f2",
+      "authorId": "mtm-preview-practice-hsa-01-v1",
+      "authorRubric": "MTM-FLEX-10-v1",
+      "mathVerified": true,
+      "engineAndBrowserReceipt": "See final v46 handoff",
+      "legacyFlagsAreNotLivePublication": true
+    }
+  },
+  {
+    "exam": {
+      "id": "mtm-preview-practice-tsa-01-v1",
+      "sourceHash": "3a3ef4518022824f37c2b887cf8018d41bb515e3e433c7ce275f363a93b88fbc",
+      "sourceRef": "MTM biên soạn mới · TSA Toán · bài luyện 1",
+      "questionCount": 6,
+      "answerKeyVerified": true,
+      "rubricVerified": true,
+      "grade": 12,
+      "period": "GK1",
+      "title": "TSA · Tư duy Toán học · Bài luyện 1 · MTM 2026–2027",
+      "durationMinutes": 25,
+      "rubricVersion": "MTM-FLEX-10-v1",
+      "sections": [
+        {
+          "label": "I · Trắc nghiệm",
+          "kind": "mc",
+          "count": 3
+        },
+        {
+          "label": "II · Đúng/Sai",
+          "kind": "tf",
+          "count": 1
+        },
+        {
+          "label": "III · Trả lời ngắn",
+          "kind": "short",
+          "count": 2
+        }
+      ],
+      "sourceUrl": "https://ts.hust.edu.vn/en/news/gioi-thieu-ve-ky-thi-danh-gia-tu-duy-tsa",
+      "sourceMaterial": {
+        "title": "Bài luyện Toán TSA số 1 do MTM biên soạn mới",
+        "publisher": "Minh Thành Math",
+        "version": "MTM 2026–2027 · v1 · PC-only",
+        "locator": "6 nhóm câu trong artifact này; URL chỉ đối chiếu nhóm kỹ năng của kỳ thi, không phải nguồn câu hỏi"
+      },
+      "publicationVerified": true,
+      "questionDisplayVerified": true,
+      "answerVerificationNote": "Khóa chấm và lời giải đã được đối chiếu độc lập. Thang luyện MTM 10 điểm, đúng–sai tính điểm theo số ý đúng; không phải điểm kỳ thi HSA/TSA chính thức. Bản luyện tập này đang thử trên PC, chưa đăng web.",
+      "questions": [
+        {
+          "id": "tsa-p1-mc1",
+          "kind": "mc",
+          "part": 1,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới · tsa-p1-mc1",
+          "prompt": "Máy A sản xuất đều $240$ sản phẩm trong $6$ giờ; máy B sản xuất đều $180$ sản phẩm trong $6$ giờ. A chạy trước $2$ giờ, rồi B bắt đầu chạy cùng A. Không có sản phẩm lỗi, hai máy làm độc lập và giữ nguyên năng suất. Từ khi A bắt đầu, sau bao nhiêu giờ có đủ $500$ sản phẩm?",
+          "choices": [
+            "$6$ giờ",
+            "$7$ giờ",
+            "$8$ giờ",
+            "$9$ giờ"
+          ],
+          "answer": "C",
+          "solution": "Năng suất A là $240:6=40$ sản phẩm/giờ; B là $180:6=30$ sản phẩm/giờ. Trong $2$ giờ đầu, A làm $80$ sản phẩm. Khi B bắt đầu, còn cần $500-80=420$ sản phẩm. Hai máy cùng làm với năng suất $40+30=70$ sản phẩm/giờ, cần thêm $420:70=6$ giờ. Tổng thời gian từ khi A bắt đầu là $2+6=8$ giờ. Kiểm: $40\\cdot8+30\\cdot6=500$. Chọn C.",
+          "maxMillipoints": 1000,
+          "difficulty": "M2",
+          "authorMathChecked": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "id": "tsa-p1-mc2",
+          "kind": "mc",
+          "part": 1,
+          "number": 2,
+          "sourceRef": "MTM biên soạn mới · tsa-p1-mc2",
+          "prompt": "Thuê một thiết bị đúng $12$ giờ. Gói A thu phí cố định $20\\,000$ đồng và $5\\,000$ đồng/giờ. Gói B thu phí cố định $50\\,000$ đồng và $3\\,000$ đồng/giờ, sau đó giảm $10\\%$ trên toàn bộ hóa đơn. Không có phí khác. Chọn B thay vì A tiết kiệm bao nhiêu?",
+          "choices": [
+            "$2\\,000$ đồng",
+            "$2\\,600$ đồng",
+            "$6\\,000$ đồng",
+            "$8\\,600$ đồng"
+          ],
+          "answer": "B",
+          "solution": "Gói A có giá $20\\,000+12\\cdot5\\,000=80\\,000$ đồng. Gói B trước giảm có giá $50\\,000+12\\cdot3\\,000=86\\,000$ đồng. Giảm $10\\%$ toàn bộ hóa đơn nên phải trả $0{,}9\\cdot86\\,000=77\\,400$ đồng. Mức tiết kiệm là $80\\,000-77\\,400=2\\,600$ đồng. Kiểm vị trí giảm giá: đề ghi toàn bộ hóa đơn, nên cả phí cố định cũng được giảm. Chọn B.",
+          "maxMillipoints": 1000,
+          "difficulty": "M2",
+          "authorMathChecked": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "id": "tsa-p1-mc3",
+          "kind": "mc",
+          "part": 1,
+          "number": 3,
+          "sourceRef": "MTM biên soạn mới · tsa-p1-mc3",
+          "prompt": "Một người đi hết nửa quãng đường với tốc độ không đổi $40$ km/h, rồi đi nửa quãng đường còn lại với tốc độ không đổi $60$ km/h; không dừng giữa đường. Tốc độ trung bình trên toàn bộ quãng đường là bao nhiêu?",
+          "choices": [
+            "$45$ km/h",
+            "$48$ km/h",
+            "$50$ km/h",
+            "$52$ km/h"
+          ],
+          "answer": "B",
+          "solution": "Gọi mỗi nửa quãng đường dài $s$ km, $s>0$. Tổng quãng đường là $2s$; tổng thời gian là $\\frac{s}{40}+\\frac{s}{60}=\\frac{s}{24}$ giờ. Tốc độ trung bình bằng tổng quãng đường chia tổng thời gian: $v=\\frac{2s}{s/24}=48$ km/h. Không dùng trung bình cộng $(40+60)/2$, vì thời gian đi hai nửa quãng đường khác nhau. Chọn B.",
+          "maxMillipoints": 1000,
+          "difficulty": "M2",
+          "authorMathChecked": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "id": "tsa-p1-tf1",
+          "kind": "tf",
+          "part": 2,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới · tsa-p1-tf1",
+          "prompt": "Một cơ sở dùng điện bốn ngày liên tiếp: ngày 1 là $120$ kWh, ngày 2 là $150$ kWh, ngày 3 là $180$ kWh, ngày 4 là $150$ kWh. Mỗi ngày được tính riêng: $100$ kWh đầu tiên giá $1\\,500$ đồng/kWh, phần vượt $100$ kWh giá $2\\,000$ đồng/kWh. Không thu thuế hoặc phí khác. Xét các khẳng định:",
+          "statements": [
+            "Ngày 3 tiêu thụ nhiều hơn ngày 1 là $50\\%$.",
+            "Hai ngày tiêu thụ $150$ kWh chiếm đúng $50\\%$ tổng điện năng của cả bốn ngày.",
+            "Tiền điện ngày 3 nhiều hơn ngày 2 là $20\\%$.",
+            "Tổng tiền điện bốn ngày là $1\\,000\\,000$ đồng."
+          ],
+          "answer": [
+            true,
+            true,
+            false,
+            true
+          ],
+          "solution": "Tổng điện năng: $120+150+180+150=600$ kWh. Tiền điện từng ngày phải tính với bậc giá riêng theo đề. Ngày 1: $100\\cdot1\\,500+20\\cdot2\\,000=190\\,000$ đồng. Ngày 2 và ngày 4: mỗi ngày $100\\cdot1\\,500+50\\cdot2\\,000=250\\,000$ đồng. Ngày 3: $100\\cdot1\\,500+80\\cdot2\\,000=310\\,000$ đồng.\n\na) $\\frac{180-120}{120}\\cdot100\\%=50\\%$: đúng.\n\nb) $\\frac{150+150}{600}=\\frac12=50\\%$: đúng.\n\nc) $\\frac{310\\,000-250\\,000}{250\\,000}\\cdot100\\%=24\\%$, không phải $20\\%$: sai.\n\nd) $190\\,000+250\\,000+310\\,000+250\\,000=1\\,000\\,000$: đúng. Không áp một lần bậc giá trên tổng $600$ kWh, vì đề quy định mỗi ngày tính riêng.",
+          "maxMillipoints": 4000,
+          "pointsByCorrectCount": [
+            0,
+            1000,
+            2000,
+            3000,
+            4000
+          ],
+          "difficulty": "M2",
+          "authorMathChecked": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "id": "tsa-p1-short1",
+          "kind": "short",
+          "part": 3,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới · tsa-p1-short1",
+          "prompt": "Một xưởng sản xuất $100$ món với chi phí $45\\,000$ đồng/món. Có $95$ món đạt chuẩn, bán hết với giá $60\\,000$ đồng/món; $5$ món còn lại bán thanh lý hết với giá $10\\,000$ đồng/món. Không có khoản thu hoặc chi nào khác. Lợi nhuận là bao nhiêu triệu đồng? Nhập số thập phân, không nhập đơn vị.",
+          "mode": "numeric",
+          "acceptedAnswers": [
+            "1.25"
+          ],
+          "solution": "Chi phí: $100\\cdot45\\,000=4\\,500\\,000$ đồng. Doanh thu hàng đạt chuẩn: $95\\cdot60\\,000=5\\,700\\,000$ đồng. Doanh thu thanh lý: $5\\cdot10\\,000=50\\,000$ đồng. Lợi nhuận là $5\\,700\\,000+50\\,000-4\\,500\\,000=1\\,250\\,000$ đồng, bằng $1{,}25$ triệu đồng. Nhập $1{,}25$ hoặc $1.25$; không nhập $1\\,250\\,000$ vì đề hỏi đơn vị triệu đồng.",
+          "maxMillipoints": 1500,
+          "difficulty": "M2",
+          "authorMathChecked": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        },
+        {
+          "id": "tsa-p1-short2",
+          "kind": "short",
+          "part": 3,
+          "number": 2,
+          "sourceRef": "MTM biên soạn mới · tsa-p1-short2",
+          "prompt": "Một bồn đang có $30$ lít nước. Vòi A chảy vào $12$ lít/phút, vòi B chảy ra $7$ lít/phút; các lưu lượng không đổi. Hai vòi cùng mở trong $6$ phút, sau đó đóng A và để B tiếp tục chảy đến khi bồn còn $25$ lít thì đóng B. Bồn không tràn hoặc cạn trong quá trình này. Tổng thời gian kể từ khi hai vòi bắt đầu mở là bao nhiêu phút? Chỉ nhập số phút.",
+          "mode": "numeric",
+          "acceptedAnswers": [
+            "11"
+          ],
+          "solution": "Trong $6$ phút đầu, lưu lượng tăng ròng là $12-7=5$ lít/phút, nên bồn có $30+6\\cdot5=60$ lít. Sau khi đóng A, chỉ B chảy ra. Để còn $25$ lít, B phải xả $60-25=35$ lít; thời gian cần là $35:7=5$ phút. Tổng thời gian là $6+5=11$ phút. Kiểm: $30+12\\cdot6-7\\cdot11=25$ lít. Đáp án: $11$.",
+          "maxMillipoints": 1500,
+          "difficulty": "M2",
+          "authorMathChecked": true,
+          "contentStatus": "INDEPENDENT_MATH_VERIFIED_PC_UI_QA"
+        }
+      ],
+      "versionHash": "48b229941de04309039b5f8ca3094ca7a28c2cc4922ee044cfb68b984489a23f"
+    },
+    "track": "TSA",
+    "chapter": "1",
+    "order": 1,
+    "coverage": "Tỉ lệ và lập luận định lượng trong ngữ cảnh",
+    "scope": "PC_ONLY",
+    "published": false,
+    "note": "MTM biên soạn mới; không phải đề HSA/TSA chính thức; không IRT. Thang luyện tập riêng 10 điểm.",
+    "limits": [
+      "Bài luyện nhỏ 6 nhóm câu, không mô phỏng toàn bộ phần Toán hay toàn bài HSA/TSA.",
+      "Tổng điểm 10 theo thang luyện MTM: 3 MC × 1; 1 Đ/S tối đa 4; 2 câu ngắn × 1,5.",
+      "TSA chính thức yêu cầu đúng hết các ý trong câu; bài luyện này chia tuyến tính theo ý và không dùng IRT.",
+      "grade=12 chỉ để tương thích engine hiện hành; giao diện phải ghi HSA/TSA, không gọi đây là chương lớp 12."
+    ],
+    "authorCheckStatus": "AUTHOR_MATH_CHECK_COMPLETE_ROOT_BLIND_REVIEW_PENDING",
+    "admittedByOwner": false,
+    "admission": {
+      "authorVersionHash": "3dd15b04c34bc7d82f0a709366a14cd53cd6d283c7387ed14970c7aa214e7712",
+      "authorId": "mtm-preview-practice-tsa-01-v1",
+      "authorRubric": "MTM-FLEX-10-v1",
+      "mathVerified": true,
+      "engineAndBrowserReceipt": "See final v46 handoff",
+      "legacyFlagsAreNotLivePublication": true
+    }
+  }
+]

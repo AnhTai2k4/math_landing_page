@@ -1,0 +1,598 @@
+[
+  {
+    "id": "10",
+    "label": "Toán 10",
+    "description": "9 chương theo Kết nối tri thức. Chương gọn dự kiến 10 đề; chương nhiều dạng dự kiến 20 đề trở lên, từ cơ bản đến nâng cao.",
+    "chapters": [
+      {
+        "id": "1",
+        "title": "Mệnh đề và tập hợp",
+        "forms": [
+          "Nhận biết mệnh đề, mệnh đề chứa biến và giá trị đúng/sai",
+          "Phủ định, mệnh đề kéo theo và mệnh đề đảo",
+          "Liệt kê phần tử và quan hệ tập con",
+          "Giao, hợp, hiệu và phần bù của tập hợp",
+          "Khoảng, đoạn và điều kiện tham số",
+          "Ứng dụng biểu đồ Venn"
+        ],
+        "sourceId": "KNTT_G10_SGV",
+        "plannedPracticeTests": 10,
+        "plannedEndChapterTests": 1,
+        "planOnly": true,
+        "state": "CURRICULUM_VERIFIED_CONTENT_READINESS_OWNER_GATE_REQUIRED",
+        "theoryFoundationTests": 1
+      },
+      {
+        "id": "2",
+        "title": "Bất phương trình và hệ bất phương trình bậc nhất hai ẩn",
+        "forms": [
+          "Kiểm một điểm có thuộc miền nghiệm hay không",
+          "Biểu diễn miền nghiệm của một bất phương trình",
+          "Miền nghiệm của hệ bất phương trình",
+          "Tối ưu biểu thức trên miền đa giác",
+          "Mô hình hóa bài toán thực tế"
+        ],
+        "sourceId": "KNTT_G10_SGV",
+        "plannedPracticeTests": 10,
+        "plannedEndChapterTests": 1,
+        "planOnly": true,
+        "state": "CURRICULUM_VERIFIED_CONTENT_READINESS_OWNER_GATE_REQUIRED",
+        "theoryFoundationTests": 1
+      },
+      {
+        "id": "3",
+        "title": "Hệ thức lượng trong tam giác",
+        "forms": [
+          "Giá trị lượng giác của góc từ0đến180độ",
+          "Dấu và các hệ thức lượng giác",
+          "Định lý cosin và định lý sin",
+          "Diện tích tam giác",
+          "Giải tam giác và ứng dụng đo đạc"
+        ],
+        "sourceId": "KNTT_G10_SGV",
+        "plannedPracticeTests": 10,
+        "plannedEndChapterTests": 1,
+        "planOnly": true,
+        "state": "CURRICULUM_VERIFIED_CONTENT_READINESS_OWNER_GATE_REQUIRED",
+        "theoryFoundationTests": 1
+      },
+      {
+        "id": "4",
+        "title": "Vectơ",
+        "forms": [
+          "Cùng phương, cùng hướng và hai vectơ bằng nhau",
+          "Tổng và hiệu vectơ",
+          "Tích vectơ với một số",
+          "Biểu thức tọa độ và tọa độ điểm",
+          "Tích vô hướng, góc và độ dài",
+          "Vận dụng hình học và lực"
+        ],
+        "sourceId": "KNTT_G10_SGV",
+        "plannedPracticeTests": 20,
+        "plannedEndChapterTests": 1,
+        "planOnly": true,
+        "state": "CURRICULUM_VERIFIED_CONTENT_READINESS_OWNER_GATE_REQUIRED",
+        "theoryFoundationTests": 2
+      },
+      {
+        "id": "5",
+        "title": "Các số đặc trưng của mẫu số liệu không ghép nhóm",
+        "forms": [
+          "Số gần đúng và sai số",
+          "Quy tròn và độ chính xác",
+          "Trung bình, trung vị, tứ phân vị và mốt",
+          "Khoảng biến thiên, khoảng tứ phân vị",
+          "Phương sai, độ lệch chuẩn và so sánh dữ liệu"
+        ],
+        "sourceId": "KNTT_G10_SGV",
+        "plannedPracticeTests": 10,
+        "plannedEndChapterTests": 1,
+        "planOnly": true,
+        "state": "CURRICULUM_VERIFIED_CONTENT_READINESS_OWNER_GATE_REQUIRED",
+        "theoryFoundationTests": 1
+      },
+      {
+        "id": "6",
+        "title": "Hàm số, đồ thị và ứng dụng",
+        "forms": [
+          "Tập xác định và giá trị hàm số",
+          "Đồng biến, nghịch biến và đọc đồ thị",
+          "Hàm số bậc hai, đỉnh và trục đối xứng",
+          "Dấu tam thức bậc hai và bất phương trình bậc hai",
+          "Phương trình quy về phương trình bậc hai",
+          "Ứng dụng thực tế"
+        ],
+        "sourceId": "KNTT_G10_SGV",
+        "plannedPracticeTests": 20,
+        "plannedEndChapterTests": 1,
+        "planOnly": true,
+        "state": "CURRICULUM_VERIFIED_CONTENT_READINESS_OWNER_GATE_REQUIRED",
+        "theoryFoundationTests": 2
+      },
+      {
+        "id": "7",
+        "title": "Phương pháp tọa độ trong mặt phẳng",
+        "forms": [
+          "Phương trình tham số và tổng quát của đường thẳng",
+          "Vị trí tương đối, góc và khoảng cách",
+          "Phương trình đường tròn và tiếp tuyến",
+          "Elip, hypebol và parabol",
+          "Ứng dụng phương pháp tọa độ"
+        ],
+        "sourceId": "KNTT_G10_SGV",
+        "plannedPracticeTests": 20,
+        "plannedEndChapterTests": 1,
+        "planOnly": true,
+        "state": "CURRICULUM_VERIFIED_CONTENT_READINESS_OWNER_GATE_REQUIRED",
+        "theoryFoundationTests": 2
+      },
+      {
+        "id": "8",
+        "title": "Đại số tổ hợp",
+        "forms": [
+          "Quy tắc cộng và quy tắc nhân",
+          "Hoán vị",
+          "Chỉnh hợp và tổ hợp",
+          "Khai triển nhị thức Newton",
+          "Đếm có điều kiện"
+        ],
+        "sourceId": "KNTT_G10_SGV",
+        "plannedPracticeTests": 20,
+        "plannedEndChapterTests": 1,
+        "planOnly": true,
+        "state": "CURRICULUM_VERIFIED_CONTENT_READINESS_OWNER_GATE_REQUIRED",
+        "theoryFoundationTests": 1
+      },
+      {
+        "id": "9",
+        "title": "Tính xác suất theo định nghĩa cổ điển",
+        "forms": [
+          "Phép thử, không gian mẫu và biến cố",
+          "Đếm các kết quả đồng khả năng",
+          "Xác suất theo định nghĩa cổ điển",
+          "Biến cố đối và tính xác suất thực hành"
+        ],
+        "sourceId": "KNTT_G10_SGV",
+        "plannedPracticeTests": 10,
+        "plannedEndChapterTests": 1,
+        "planOnly": true,
+        "state": "CURRICULUM_VERIFIED_CONTENT_READINESS_OWNER_GATE_REQUIRED",
+        "theoryFoundationTests": 1
+      }
+    ],
+    "sourceUrl": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgv-toan-10.4923926308",
+    "sourceLabel": "Mục lục sách giáo viên · NXB Giáo dục",
+    "chapterCountVerified": 9,
+    "groupingBasis": "OFFICIAL_KNTT_SGV_TOC",
+    "testPlanIsMTMDesign": true,
+    "chapterCountExcludes": "Chuyên đề học tập và hoạt động thực hành trải nghiệm không tính thêm thành chương SGK."
+  },
+  {
+    "id": "11",
+    "label": "Toán 11",
+    "description": "9 chương theo Kết nối tri thức. Mỗi chương dự kiến 20 đề, từ cơ bản đến nâng cao.",
+    "chapters": [
+      {
+        "id": "1",
+        "title": "Hàm số lượng giác và phương trình lượng giác",
+        "forms": [
+          "Giá trị lượng giác của góc lượng giác",
+          "Công thức lượng giác",
+          "Hàm số lượng giác",
+          "Phương trình lượng giác cơ bản"
+        ],
+        "sourceId": "KNTT_G11_SGV",
+        "plannedPracticeTests": 20,
+        "plannedEndChapterTests": 1,
+        "planOnly": true,
+        "state": "CURRICULUM_VERIFIED_CONTENT_READINESS_OWNER_GATE_REQUIRED",
+        "theoryFoundationTests": 2
+      },
+      {
+        "id": "2",
+        "title": "Dãy số. Cấp số cộng và cấp số nhân",
+        "forms": [
+          "Dãy số",
+          "Cấp số cộng",
+          "Cấp số nhân"
+        ],
+        "sourceId": "KNTT_G11_SGV",
+        "plannedPracticeTests": 20,
+        "plannedEndChapterTests": 1,
+        "planOnly": true,
+        "state": "CURRICULUM_VERIFIED_CONTENT_READINESS_OWNER_GATE_REQUIRED",
+        "theoryFoundationTests": 1
+      },
+      {
+        "id": "3",
+        "title": "Các số đặc trưng đo xu thế trung tâm của mẫu số liệu ghép nhóm",
+        "forms": [
+          "Mẫu số liệu ghép nhóm",
+          "Số trung bình, trung vị, tứ phân vị và mốt"
+        ],
+        "sourceId": "KNTT_G11_SGV",
+        "plannedPracticeTests": 20,
+        "plannedEndChapterTests": 1,
+        "planOnly": true,
+        "state": "CURRICULUM_VERIFIED_CONTENT_READINESS_OWNER_GATE_REQUIRED",
+        "theoryFoundationTests": 1
+      },
+      {
+        "id": "4",
+        "title": "Quan hệ song song trong không gian",
+        "forms": [
+          "Đường thẳng và mặt phẳng trong không gian",
+          "Hai đường thẳng song song",
+          "Đường thẳng và mặt phẳng song song",
+          "Hai mặt phẳng song song",
+          "Phép chiếu song song"
+        ],
+        "sourceId": "KNTT_G11_SGV",
+        "plannedPracticeTests": 20,
+        "plannedEndChapterTests": 1,
+        "planOnly": true,
+        "state": "CURRICULUM_VERIFIED_CONTENT_READINESS_OWNER_GATE_REQUIRED",
+        "theoryFoundationTests": 2
+      },
+      {
+        "id": "5",
+        "title": "Giới hạn. Hàm số liên tục",
+        "forms": [
+          "Giới hạn của dãy số",
+          "Giới hạn của hàm số",
+          "Hàm số liên tục"
+        ],
+        "sourceId": "KNTT_G11_SGV",
+        "plannedPracticeTests": 20,
+        "plannedEndChapterTests": 1,
+        "planOnly": true,
+        "state": "CURRICULUM_VERIFIED_CONTENT_READINESS_OWNER_GATE_REQUIRED",
+        "theoryFoundationTests": 2
+      },
+      {
+        "id": "6",
+        "title": "Hàm số mũ và hàm số lôgarit",
+        "forms": [
+          "Lũy thừa với số mũ thực",
+          "Lôgarit",
+          "Hàm số mũ và hàm số lôgarit",
+          "Phương trình, bất phương trình mũ và lôgarit"
+        ],
+        "sourceId": "KNTT_G11_SGV",
+        "plannedPracticeTests": 20,
+        "plannedEndChapterTests": 1,
+        "planOnly": true,
+        "state": "CURRICULUM_VERIFIED_CONTENT_READINESS_OWNER_GATE_REQUIRED",
+        "theoryFoundationTests": 2
+      },
+      {
+        "id": "7",
+        "title": "Quan hệ vuông góc trong không gian",
+        "forms": [
+          "Hai đường thẳng vuông góc",
+          "Đường thẳng vuông góc với mặt phẳng",
+          "Phép chiếu vuông góc và góc giữa đường thẳng với mặt phẳng",
+          "Hai mặt phẳng vuông góc",
+          "Khoảng cách",
+          "Thể tích"
+        ],
+        "sourceId": "KNTT_G11_SGV",
+        "plannedPracticeTests": 20,
+        "plannedEndChapterTests": 1,
+        "planOnly": true,
+        "state": "CURRICULUM_VERIFIED_CONTENT_READINESS_OWNER_GATE_REQUIRED",
+        "theoryFoundationTests": 2
+      },
+      {
+        "id": "8",
+        "title": "Các quy tắc tính xác suất",
+        "forms": [
+          "Biến cố hợp, biến cố giao, biến cố độc lập",
+          "Công thức cộng xác suất",
+          "Công thức nhân xác suất cho hai biến cố độc lập"
+        ],
+        "sourceId": "KNTT_G11_SGV",
+        "plannedPracticeTests": 20,
+        "plannedEndChapterTests": 1,
+        "planOnly": true,
+        "state": "CURRICULUM_VERIFIED_CONTENT_READINESS_OWNER_GATE_REQUIRED",
+        "theoryFoundationTests": 1
+      },
+      {
+        "id": "9",
+        "title": "Đạo hàm",
+        "forms": [
+          "Định nghĩa và ý nghĩa của đạo hàm",
+          "Các quy tắc tính đạo hàm",
+          "Đạo hàm cấp hai"
+        ],
+        "sourceId": "KNTT_G11_SGV",
+        "plannedPracticeTests": 20,
+        "plannedEndChapterTests": 1,
+        "planOnly": true,
+        "state": "CURRICULUM_VERIFIED_CONTENT_READINESS_OWNER_GATE_REQUIRED",
+        "theoryFoundationTests": 2
+      }
+    ],
+    "sourceUrl": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgv-toan-11.4926333612",
+    "sourceLabel": "Mục lục sách giáo viên · NXB Giáo dục",
+    "chapterCountVerified": 9,
+    "groupingBasis": "OFFICIAL_KNTT_SGV_TOC",
+    "testPlanIsMTMDesign": true,
+    "chapterCountExcludes": "Chuyên đề học tập và hoạt động thực hành trải nghiệm không tính thêm thành chương SGK."
+  },
+  {
+    "id": "12",
+    "label": "Toán 12",
+    "description": "6 chương theo Kết nối tri thức. Mỗi chương dự kiến 30 đề, từ cơ bản đến nâng cao.",
+    "chapters": [
+      {
+        "id": "1",
+        "title": "Ứng dụng đạo hàm để khảo sát và vẽ đồ thị hàm số",
+        "forms": [
+          "Tính đơn điệu và cực trị của hàm số",
+          "Giá trị lớn nhất và giá trị nhỏ nhất của hàm số",
+          "Đường tiệm cận của đồ thị hàm số",
+          "Khảo sát sự biến thiên và vẽ đồ thị của hàm số",
+          "Ứng dụng đạo hàm để giải quyết một số vấn đề liên quan đến thực tiễn"
+        ],
+        "sourceId": "KNTT_G12_SGV",
+        "plannedPracticeTests": 30,
+        "plannedEndChapterTests": 1,
+        "planOnly": true,
+        "state": "CURRICULUM_VERIFIED_CONTENT_READINESS_OWNER_GATE_REQUIRED",
+        "theoryFoundationTests": 2
+      },
+      {
+        "id": "2",
+        "title": "Vectơ và hệ trục tọa độ trong không gian",
+        "forms": [
+          "Vectơ trong không gian",
+          "Hệ trục tọa độ trong không gian",
+          "Biểu thức tọa độ của các phép toán vectơ"
+        ],
+        "sourceId": "KNTT_G12_SGV",
+        "plannedPracticeTests": 30,
+        "plannedEndChapterTests": 1,
+        "planOnly": true,
+        "state": "CURRICULUM_VERIFIED_CONTENT_READINESS_OWNER_GATE_REQUIRED",
+        "theoryFoundationTests": 1
+      },
+      {
+        "id": "3",
+        "title": "Các số đặc trưng đo mức độ phân tán của mẫu số liệu ghép nhóm",
+        "forms": [
+          "Khoảng biến thiên và khoảng tứ phân vị",
+          "Phương sai và độ lệch chuẩn"
+        ],
+        "sourceId": "KNTT_G12_SGV",
+        "plannedPracticeTests": 30,
+        "plannedEndChapterTests": 1,
+        "planOnly": true,
+        "state": "CURRICULUM_VERIFIED_CONTENT_READINESS_OWNER_GATE_REQUIRED",
+        "theoryFoundationTests": 1
+      },
+      {
+        "id": "4",
+        "title": "Nguyên hàm và tích phân",
+        "forms": [
+          "Nguyên hàm",
+          "Tích phân",
+          "Ứng dụng hình học của tích phân"
+        ],
+        "sourceId": "KNTT_G12_SGV",
+        "plannedPracticeTests": 30,
+        "plannedEndChapterTests": 1,
+        "planOnly": true,
+        "state": "CURRICULUM_VERIFIED_CONTENT_READINESS_OWNER_GATE_REQUIRED",
+        "theoryFoundationTests": 2
+      },
+      {
+        "id": "5",
+        "title": "Phương pháp tọa độ trong không gian",
+        "forms": [
+          "Phương trình mặt phẳng",
+          "Phương trình đường thẳng trong không gian",
+          "Công thức tính góc trong không gian",
+          "Phương trình mặt cầu"
+        ],
+        "sourceId": "KNTT_G12_SGV",
+        "plannedPracticeTests": 30,
+        "plannedEndChapterTests": 1,
+        "planOnly": true,
+        "state": "CURRICULUM_VERIFIED_CONTENT_READINESS_OWNER_GATE_REQUIRED",
+        "theoryFoundationTests": 2
+      },
+      {
+        "id": "6",
+        "title": "Xác suất có điều kiện",
+        "forms": [
+          "Xác suất có điều kiện",
+          "Công thức xác suất toàn phần và công thức Bayes"
+        ],
+        "sourceId": "KNTT_G12_SGV",
+        "plannedPracticeTests": 30,
+        "plannedEndChapterTests": 1,
+        "planOnly": true,
+        "state": "CURRICULUM_VERIFIED_CONTENT_READINESS_OWNER_GATE_REQUIRED",
+        "theoryFoundationTests": 1
+      }
+    ],
+    "sourceUrl": "https://taphuan.nxbgd.vn/tap-huan/doc-sach/sgv-toan-12.4926451409",
+    "sourceLabel": "Mục lục sách giáo viên · NXB Giáo dục",
+    "chapterCountVerified": 6,
+    "groupingBasis": "OFFICIAL_KNTT_SGV_TOC",
+    "testPlanIsMTMDesign": true,
+    "chapterCountExcludes": "Chuyên đề học tập và hoạt động thực hành trải nghiệm không tính thêm thành chương SGK."
+  },
+  {
+    "id": "HSA",
+    "label": "HSA",
+    "description": "Luyện phần Toán của HSA theo nhóm kiến thức chính thức; không gọi các nhóm này là chương SGK.",
+    "chapters": [
+      {
+        "id": "1",
+        "title": "Số học và Đại số",
+        "forms": [
+          "Mệnh đề, tập hợp và biểu thức đại số",
+          "Hàm số, phương trình và bất phương trình",
+          "Lượng giác, lũy thừa, mũ và lôgarit",
+          "Dãy số, cấp số và đại số tổ hợp"
+        ],
+        "sourceId": "HSA_2026",
+        "planOnly": true,
+        "state": "OFFICIAL_DOMAIN_VERIFIED_CONTENT_READINESS_OWNER_GATE_REQUIRED",
+        "theoryFoundationTests": 1
+      },
+      {
+        "id": "2",
+        "title": "Một số yếu tố giải tích",
+        "forms": [
+          "Giới hạn và hàm số liên tục",
+          "Đạo hàm",
+          "Nguyên hàm và tích phân"
+        ],
+        "sourceId": "HSA_2026",
+        "planOnly": true,
+        "state": "OFFICIAL_DOMAIN_VERIFIED_CONTENT_READINESS_OWNER_GATE_REQUIRED",
+        "theoryFoundationTests": 1
+      },
+      {
+        "id": "3",
+        "title": "Hình học phẳng và hình học không gian",
+        "forms": [
+          "Hình học phẳng",
+          "Hình học không gian"
+        ],
+        "sourceId": "HSA_2026",
+        "planOnly": true,
+        "state": "OFFICIAL_DOMAIN_VERIFIED_CONTENT_READINESS_OWNER_GATE_REQUIRED",
+        "theoryFoundationTests": 1
+      },
+      {
+        "id": "4",
+        "title": "Đo lường",
+        "forms": [
+          "Đại lượng và đơn vị",
+          "Mô hình đo đạc trong thực tế"
+        ],
+        "sourceId": "HSA_2026",
+        "planOnly": true,
+        "state": "OFFICIAL_DOMAIN_VERIFIED_CONTENT_READINESS_OWNER_GATE_REQUIRED",
+        "theoryFoundationTests": 1
+      },
+      {
+        "id": "5",
+        "title": "Thống kê và xác suất",
+        "forms": [
+          "Xử lí số liệu",
+          "Thống kê",
+          "Xác suất"
+        ],
+        "sourceId": "HSA_2026",
+        "planOnly": true,
+        "state": "OFFICIAL_DOMAIN_VERIFIED_CONTENT_READINESS_OWNER_GATE_REQUIRED",
+        "theoryFoundationTests": 1
+      },
+      {
+        "id": "6",
+        "title": "Tổng hợp và tư duy Toán học",
+        "forms": [
+          "Lập luận và tư duy logic",
+          "Mô hình hóa và giải quyết vấn đề"
+        ],
+        "sourceId": "HSA_2026",
+        "planOnly": true,
+        "state": "OFFICIAL_DOMAIN_VERIFIED_CONTENT_READINESS_OWNER_GATE_REQUIRED",
+        "theoryFoundationTests": 1
+      }
+    ],
+    "sourceUrl": "https://www.hsa.edu.vn/huong-dan/dang-thuc-bai-thi",
+    "sourceLabel": "Cấu trúc HSA · nguồn chính thức",
+    "groupingBasis": "OFFICIAL_MATH_DOMAINS",
+    "groupNamesVerified": true,
+    "formsAreMTMTopicSummaries": true,
+    "fullExamNotClaimed": true,
+    "nonMathSections": "Chưa biên soạn nội dung Văn học–Ngôn ngữ/Khoa học/Tiếng Anh của HSA hoặc Đọc hiểu/Khoa học của TSA."
+  },
+  {
+    "id": "TSA",
+    "label": "TSA",
+    "description": "Luyện phần Toán của TSA theo nhóm kiến thức chính thức; không gọi các nhóm này là chương SGK.",
+    "chapters": [
+      {
+        "id": "1",
+        "title": "Số học",
+        "forms": [
+          "Số, tỉ lệ và tính toán trong ngữ cảnh"
+        ],
+        "sourceId": "TSA_2026",
+        "planOnly": true,
+        "state": "OFFICIAL_DOMAIN_VERIFIED_CONTENT_READINESS_OWNER_GATE_REQUIRED",
+        "theoryFoundationTests": 1
+      },
+      {
+        "id": "2",
+        "title": "Đại số",
+        "forms": [
+          "Biểu thức, phương trình và lập luận đại số"
+        ],
+        "sourceId": "TSA_2026",
+        "planOnly": true,
+        "state": "OFFICIAL_DOMAIN_VERIFIED_CONTENT_READINESS_OWNER_GATE_REQUIRED",
+        "theoryFoundationTests": 1
+      },
+      {
+        "id": "3",
+        "title": "Hàm số",
+        "forms": [
+          "Hàm số, đồ thị và mô hình biến thiên"
+        ],
+        "sourceId": "TSA_2026",
+        "planOnly": true,
+        "state": "OFFICIAL_DOMAIN_VERIFIED_CONTENT_READINESS_OWNER_GATE_REQUIRED",
+        "theoryFoundationTests": 1
+      },
+      {
+        "id": "4",
+        "title": "Hình học",
+        "forms": [
+          "Hình học và mô hình đo đạc"
+        ],
+        "sourceId": "TSA_2026",
+        "planOnly": true,
+        "state": "OFFICIAL_DOMAIN_VERIFIED_CONTENT_READINESS_OWNER_GATE_REQUIRED",
+        "theoryFoundationTests": 1
+      },
+      {
+        "id": "5",
+        "title": "Thống kê",
+        "forms": [
+          "Bảng, biểu đồ và diễn giải dữ liệu"
+        ],
+        "sourceId": "TSA_2026",
+        "planOnly": true,
+        "state": "OFFICIAL_DOMAIN_VERIFIED_CONTENT_READINESS_OWNER_GATE_REQUIRED",
+        "theoryFoundationTests": 1
+      },
+      {
+        "id": "6",
+        "title": "Xác suất",
+        "forms": [
+          "Biến cố, tính xác suất và lập luận lựa chọn"
+        ],
+        "sourceId": "TSA_2026",
+        "planOnly": true,
+        "state": "OFFICIAL_DOMAIN_VERIFIED_CONTENT_READINESS_OWNER_GATE_REQUIRED",
+        "theoryFoundationTests": 1
+      }
+    ],
+    "sourceUrl": "https://ts.hust.edu.vn/en/news/gioi-thieu-ve-ky-thi-danh-gia-tu-duy-tsa",
+    "sourceLabel": "Cấu trúc TSA · nguồn chính thức",
+    "groupingBasis": "OFFICIAL_MATH_DOMAINS",
+    "groupNamesVerified": true,
+    "formsAreMTMTopicSummaries": true,
+    "fullExamNotClaimed": true,
+    "nonMathSections": "Chưa biên soạn nội dung Văn học–Ngôn ngữ/Khoa học/Tiếng Anh của HSA hoặc Đọc hiểu/Khoa học của TSA."
+  }
+]

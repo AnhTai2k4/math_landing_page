@@ -46,6 +46,10 @@
     {
       "source": "/quan-tri/btvn",
       "destination": "/index.html"
+    },
+    {
+      "source": "/luyen-tap",
+      "destination": "/index.html"
     }
   ]
 }
