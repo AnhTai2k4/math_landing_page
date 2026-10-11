@@ -11,6 +11,8 @@ import ExamConfirm from './ExamConfirm';
 import ExamReview from './ExamReview';
 import {SOURCE_HOLDS} from './source-holds';
 import {erratumFor} from './practice-errata';
+import MtmSourceContent from './MtmSourceContent';
+import MtmSourceQuestion from './MtmSourceQuestion';
 
 export function localStore(): Store | null {
   try { return window.localStorage; } catch { return null; }
@@ -98,6 +100,7 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverr
   const finish = useCallback((automatic: boolean, confirmed=false) => {
     const current = ram.current;
     if (!current || current.submittedAt !== null) return;
+    if(!automatic&&!pdfReady){setNotice('Chưa thể nộp thủ công khi có phần câu hỏi chưa hiển thị. Bài làm vẫn được giữ; hãy tải lại trang để đọc đủ đề.');return;}
     const clock = Date.now();
     const unanswered = exam.questions.filter(q => !isAnswered(exam, q.id, current.answers)).length;
     if (!automatic && remainingMs(current, clock) > 0 && unanswered > 0 && !confirmed) {setConfirmation('submit');return;}
@@ -105,7 +108,7 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverr
     if (!result.ok) { setNotice(result.message); return; }
     setConfirmation(null);setMobilePane('answers');
     persist(result.value); // Sets the ref synchronously before another click/tick.
-  }, [exam, persist]);
+  }, [exam, persist, pdfReady]);
 
   useEffect(() => {
     if (!draft || draft.submittedAt !== null) return;
@@ -167,13 +170,18 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverr
   return <section className="ep-attempt">{leaveConfirmation}
     <Link className="ep-link" href={catalogUrl}>← Danh sách đề</Link>
     <header><p>{audienceLabel??'Lớp '+exam.grade} · {contextLabel??PERIOD_LABELS[exam.period]}</p><h1>{displayTitle??exam.title}</h1><p>{exam.questions.length} câu · {exam.durationMinutes} phút · Thang điểm 10</p></header>
+    {exam.preAttemptNotice&&<div className="ep-notice"><strong>Điều kiện đính chính của bản MTM</strong><p>{exam.preAttemptNotice}</p><p>Bản nguồn và lịch sử cũ được giữ riêng.</p></div>}
     {notice&&<p className="ep-notice" role="alert">{notice}</p>}
     {erratum&&<div className="ep-notice"><strong>Bản luyện tập MTM đính chính v37 · điều kiện áp dụng khi chấm</strong><p>{erratum.condition}</p><p>Thành đã duyệt đính chính này. PDF nguồn giữ nguyên; lượt mới dùng mã phiên bản riêng. Lịch sử cũ giữ điểm theo khóa trước đính chính.</p>{<label className="ep-erratum-accept"><input type="checkbox" checked={acceptedErratum} onChange={event=>setAcceptedErratum(event.target.checked)}/> Tôi đã đọc điều kiện đính chính và làm bài theo điều kiện này.</label>}{legacy?.ok&&legacy.value&&<p>Đã giữ bản lưu trước đính chính. {legacy.value.submittedAt===null?<button type="button" onClick={()=>setExportNotice(exportDraft(legacy.value!)?'Đã yêu cầu tải bản bài cũ.':'Chưa xuất được; hãy giữ trang mở.')}>Xuất bài cũ đang làm</button>:<Link href={catalogUrl}>Xem lượt cũ trong lịch sử</Link>}</p>}</div>}
     {sourceIssue&&<div className="ep-notice" role="alert"><strong>Đề đang chờ đính chính · tạm ngừng lượt mới.</strong><p>{sourceIssue}</p><p>PDF gốc và lịch sử cũ được giữ. Điểm cũ dùng khóa trước khi phát hiện vấn đề này; cần đọc phần đối chiếu để hiểu giới hạn của kết quả.</p>{persisted.current&&persisted.current.submittedAt===null&&<button type="button" onClick={()=>setExportNotice(exportDraft(persisted.current!)?'Đã yêu cầu tải bản bài làm đang lưu.':'Chưa xuất được; hãy giữ trang mở.')}>Xuất bài đang làm để giữ bản cũ</button>}</div>}
     {unsaved&&<p className="ep-notice" role="status">Chưa xác nhận bài làm được lưu bền vững trên trình duyệt. Câu trả lời vẫn giữ trên trang. Hãy xuất JSON trước khi đóng hoặc tải lại trang.</p>}
     <div className="ep-mobile-panes" role="group" aria-label="Chọn vùng làm bài"><button type="button" aria-pressed={mobilePane==='pdf'} onClick={()=>setMobilePane('pdf')}>{exam.sourcePdf?'Đọc đề PDF':'Đọc câu hỏi'}</button><button type="button" aria-pressed={mobilePane==='answers'} onClick={()=>setMobilePane('answers')}>{submitted?'Kết quả và lời giải':'Phiếu trả lời'}</button>{draft&&!submitted&&<span className="ep-mobile-timer" role="timer" aria-label="Thời gian còn lại" aria-live="off">Còn {Math.floor(seconds/60)}:{String(seconds%60).padStart(2,'0')}</span>}</div>
     <div className="ep-desktop-layout" role="group" aria-label="Bố cục đọc đề và phiếu trả lời"><span>Bố cục làm bài</span>{([['balanced','Cân đối'],['reading','Ưu tiên đọc đề'],['answers','Ưu tiên phiếu']] as const).map(([value,label])=><button key={value} type="button" aria-pressed={desktopLayout===value} onClick={()=>setDesktopLayout(value)}>{label}</button>)}</div>
-    <div className={`ep-exam-layout ep-pane-${mobilePane}${submitted&&questionReader?' ep-chapter-submitted':''}`} data-layout={desktopLayout}>
+    <div className={`ep-exam-layout ep-pane-${mobilePane}${submitted&&questionReader?' ep-chapter-submitted':''}`} data-layout={desktopLayout} onErrorCapture={event=>{
+      if(!submitted&&event.target instanceof HTMLImageElement&&event.target.closest('.mtm-source-content')){
+        setPdfReady(false);setNotice('Có phần câu hỏi chưa tải được. Bài làm đang nhập được giữ nguyên; hãy tải lại trang để đọc đủ đề trước khi tiếp tục.');
+      }
+    }}>
       <div className="ep-pdf-pane">
         {submitted&&questionReader?<details className="ep-read-again"><summary>Đọc lại toàn bộ đề bài</summary>{questionReader}</details>:questionReader}
         {exam.sourcePdf&&<Suspense fallback={<p role="status">Đang mở bản câu hỏi…</p>}><QuestionPdf file={exam.sourcePdf} title={exam.title} onReady={setPdfReady}/></Suspense>}
@@ -206,14 +214,14 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverr
               const section=sections.find(s=>index>=s.from&&index<s.to)!,part=section.name,number=index-section.from+1;
               return <section className="ep-question ep-card" key={q.id} id={`ep-question-${index}`} tabIndex={-1} aria-labelledby={`ep-heading-${index}`}>
                 <h3 id={`ep-heading-${index}`}>{part} · Câu {number} <small>({formatPoints(q.maxMillipoints)} điểm)</small></h3>
-                {(q.prompt||q.text)&&<p className="ep-source-text">{renderText?renderText(q.prompt??q.text!):q.prompt??q.text}</p>}<p className="ep-source-ref">MTM sưu tầm và biên soạn</p>
+                {(q.prompt||q.text)&&<p className="ep-source-text">{renderText?renderText(q.prompt??q.text!):q.prompt??q.text}</p>}{q.sourceContent&&<MtmSourceQuestion question={q}/>}<p className="ep-source-ref">MTM sưu tầm và biên soạn</p>
                 {q.kind==='mc'&&<fieldset disabled={!pdfReady} className="ep-mc-grid"><legend>Chọn đáp án câu {number}</legend>{q.choices.map((choice,i)=><label className={`ep-option ${answer===letters[i]?'is-selected':''}`} key={letters[i]}><input type="radio" name={`ep-mc-${index}`} value={letters[i]} checked={answer===letters[i]} onChange={()=>changeAnswer(q.id,letters[i])}/><span>{letters[i]}{choice!==letters[i]?<>{'. '}{renderText?renderText(choice):choice}</>:''}</span>{answer===letters[i]&&<span aria-hidden="true">✓</span>}</label>)}<button type="button" className="ep-clear-answer" onClick={()=>changeAnswer(q.id,null)}>Bỏ chọn</button></fieldset>}
-                {q.kind==='tf'&&<div>{statementLetters.map((letter,i)=><fieldset key={letter} disabled={!pdfReady}><legend className="ep-source-text">Ý {letter}: {renderText&&q.statements?.[i]?renderText(q.statements[i]):q.statements?.[i]??`${q.sourceRef}, ý ${letter}`}</legend>{[true,false,null].map(value=><label className={`ep-tf-option ${tfAnswers[i]===value?'is-selected':''}`} key={String(value)}><input type="radio" name={`ep-tf-${index}-${i}`} checked={tfAnswers[i]===value} onChange={()=>{const next=[...tfAnswers] as (boolean|null)[];next[i]=value;changeAnswer(q.id,next);}}/>{value===null?'Chưa chọn':value?'Đúng':'Sai'}</label>)}</fieldset>)}</div>}
+                {q.kind==='tf'&&<div>{statementLetters.map((letter,i)=><fieldset key={letter} disabled={!pdfReady}><legend className="ep-source-text">Ý {letter}: {renderText&&q.statements?.[i]?renderText(q.statements[i]):q.statements?.[i]??(q.sourceContent?`Xem ý ${letter} trong đề ở trên`:`${q.sourceRef}, ý ${letter}`)}</legend>{[true,false,null].map(value=><label className={`ep-tf-option ${tfAnswers[i]===value?'is-selected':''}`} key={String(value)}><input type="radio" name={`ep-tf-${index}-${i}`} checked={tfAnswers[i]===value} onChange={()=>{const next=[...tfAnswers] as (boolean|null)[];next[i]=value;changeAnswer(q.id,next);}}/>{value===null?'Chưa chọn':value?'Đúng':'Sai'}</label>)}</fieldset>)}</div>}
                 {q.kind==='short'&&<div><label htmlFor={`ep-short-${index}`}>Trả lời câu {number}</label><input id={`ep-short-${index}`} className="ep-short" type="text" disabled={!pdfReady} maxLength={MAX_SHORT_LENGTH} autoComplete="off" spellCheck={false} value={typeof answer==='string'?answer:''} aria-describedby={`ep-help-${index}`} onChange={event=>changeAnswer(q.id,event.target.value)}/><p id={`ep-help-${index}`}>{q.mode==='numeric'?'Nhập số thập phân bằng dấu phẩy hoặc dấu chấm; không nhập biểu thức hoặc phân số.':q.mode==='rational'?'Nhập số nguyên, số thập phân hoặc phân số, ví dụ -3/4; không nhập đơn vị hay biểu thức.':'Nhập câu trả lời chính xác theo yêu cầu đề (phân biệt chữ hoa/thường).'}</p></div>}
               </section>;
             })}
             <div className="ep-question-step"><button type="button" disabled={activeQuestion===0} onClick={()=>{setActiveQuestion(i=>i-1);setQuestionFocus(true);}}>Câu trước</button><button type="button" disabled={activeQuestion===exam.questions.length-1} onClick={()=>{setActiveQuestion(i=>i+1);setQuestionFocus(true);}}>Câu tiếp</button></div>
-            <div className="ep-submit-row"><Link className="ep-link" href={catalogUrl}>Rời bài thi</Link><button type="button" className="ep-primary" onClick={()=>finish(false)}>Nộp bài</button></div>
+            <div className="ep-submit-row"><Link className="ep-link" href={catalogUrl}>Rời bài thi</Link><button type="button" className="ep-primary" disabled={!pdfReady} onClick={()=>finish(false)}>Nộp bài</button></div>
           </>}
           <div className="ep-toolbar"><button type="button" onClick={()=>setExportNotice(exportDraft(draft)?'Đã yêu cầu tải tệp JSON bài làm.':'Chưa xuất được tệp. Hãy giữ trang mở và thử lại.')}>Xuất bài làm JSON</button>{unsaved&&!conflict.current&&<button type="button" onClick={()=>persist(draft)}>Thử lưu lại</button>}</div>
         </>}

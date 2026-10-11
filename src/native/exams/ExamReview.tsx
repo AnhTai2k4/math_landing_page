@@ -3,6 +3,8 @@ import {examSections} from './flexible-profile';
 import React,{lazy,Suspense,useEffect,useId,useState,type ReactNode} from 'react';
 import type {PracticeExam,PracticeQuestion} from './data';
 import type {Draft} from './store';
+import MtmSourceContent from './MtmSourceContent';
+import MtmSourceQuestion from './MtmSourceQuestion';
 import {displayAnswer,formatPoints,reviewRows,statementLetters,STATUS_LABELS} from './review';
 const DetailedSolution=lazy(()=>import('./DetailedSolution'));
 const SolutionPdf=lazy(()=>import('../admin/SolutionPdf'));
@@ -19,6 +21,7 @@ export default function ExamReview({exam,draft,initialQuestionId,renderText,rend
   const allOpen=visible.length>0&&visible.every(r=>expanded.has(r.q.id));
   return <section className="ep-result-review" aria-label="Đối chiếu bài đã nộp">
     {exam.id.startsWith('mtm-custom-')&&<Suspense fallback={<p>Đang mở công cụ lời giải…</p>}><SolutionPdf examId={exam.id} kind="questions"/><SolutionPdf examId={exam.id}/></Suspense>}
+    {exam.mtmDocuments&&<p><a href={exam.mtmDocuments.solutions.url} target="_blank" rel="noopener noreferrer">Tải đáp án và lời giải PDF theo mẫu MTM</a></p>}{exam.solutionInstructions&&<details><summary>Hướng dẫn lời giải</summary><MtmSourceContent segments={exam.solutionInstructions} assetBase="/practice-media/source-crops" label="Hướng dẫn giải" kind="solution"/></details>}
     {showSummary&&<ResultSummary exam={exam} draft={draft}/>}
     <h2>Tổng quan câu trả lời</h2>
     <nav className="ep-question-nav ep-result-nav" aria-label="Tổng quan đúng sai">{rows.map(r=><button type="button" key={r.q.id} className={`ep-verdict-${r.status}`} aria-label={`Câu ${r.index+1}: ${STATUS_LABELS[r.status]}`} onClick={()=>{setFilter('all');setFocusQuestion(r.index);}}>{r.index+1}</button>)}</nav>
@@ -35,7 +38,7 @@ export default function ExamReview({exam,draft,initialQuestionId,renderText,rend
       <h3 id={`${instance}-q-${index}`}>Câu {index+1} <small>({formatPoints(q.maxMillipoints)} điểm)</small></h3>
       <p className={`ep-verdict ep-verdict-${status}`}>{STATUS_LABELS[status]}</p>
       {(q.prompt||q.text)&&<p className="ep-source-text">{renderText?renderText(q.prompt??q.text!):q.prompt??q.text}</p>}
-      <p className="ep-source-ref">MTM sưu tầm và biên soạn</p>
+      {q.sourceContent&&<MtmSourceQuestion question={q}/>}<p className="ep-source-ref">MTM sưu tầm và biên soạn</p>
       <div className="ep-review">
         <p><strong>Bài làm:</strong> {displayAnswer(answer)}</p>
         <p><strong>Đáp án:</strong> {q.kind==='mc'?q.answer:q.kind==='tf'?q.answer.map((v,i)=>`${statementLetters[i]}) ${v?'Đúng':'Sai'}`).join('; '):q.acceptedAnswers.join(' hoặc ')}</p>
@@ -46,6 +49,8 @@ export default function ExamReview({exam,draft,initialQuestionId,renderText,rend
         {invalidNumeric&&<p>Câu trả lời không đúng định dạng số: 0 điểm.</p>}
         <p><strong>Điểm câu này:</strong> {status==='unscored'?'Chưa tính được':formatPoints(earned)} / {formatPoints(q.maxMillipoints)}</p>
       </div>
+      {q.correctionNote&&<p className="ep-source-erratum"><strong>Đính chính MTM:</strong> {renderText?renderText(q.correctionNote):q.correctionNote}</p>}
+      {q.sourceContent&&<details className="ep-solution" open={expanded.has(q.id)} onToggle={event=>{const open=event.currentTarget.open;setExpanded(previous=>{if(previous.has(q.id)===open)return previous;const next=new Set(previous);open?next.add(q.id):next.delete(q.id);return next;});}}><summary>Đáp án và lời giải đầy đủ theo mẫu MTM</summary>{expanded.has(q.id)&&<MtmSourceContent segments={q.sourceContent.solutions} assetBase="/practice-media/source-crops" label={q.sourceRef} kind="solution"/>}</details>}
       {q.solution&&<details className="ep-solution" open={expanded.has(q.id)} onToggle={event=>{const open=event.currentTarget.open;setExpanded(previous=>{if(previous.has(q.id)===open)return previous;const next=new Set(previous);open?next.add(q.id):next.delete(q.id);return next;});}}><summary>Lời giải câu {index+1}</summary>{expanded.has(q.id)&&<Suspense fallback={<p>Đang mở lời giải…</p>}><DetailedSolution examId={exam.id} versionHash={exam.versionHash} questionId={q.id} fallback={q.solution}/>{renderSolutionExtra?.(q)}</Suspense>}</details>}
     </section>)}
   </section>;

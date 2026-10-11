@@ -6,6 +6,8 @@ import {readHistory} from '../exams/store';
 import {resultFor} from '../exams/result';
 import {validatePracticeExam,type PracticeExam,type PracticeQuestion} from '../exams/data';
 import MathText from '../math/MathText';
+import MtmSourceContent from '../exams/MtmSourceContent';
+import MtmSourceQuestion from '../exams/MtmSourceQuestion';
 
 import '../exams/exams.css';
 import './chapters.css';
@@ -22,12 +24,12 @@ function TheorySummary({exam}:{exam:PracticeExam}){const theory=(exam as Practic
 
 function QuestionReader({exam}:{exam:PracticeExam}) {
   return <section className="cp-reader" aria-label="Đề bài luyện chương">
-    <TheorySummary exam={exam}/><h2>Đề bài</h2><p>Cuộn vùng này để đọc các câu. Điền bài làm ở phiếu trả lời.</p>
+    <TheorySummary exam={exam}/><h2>Đề bài</h2><p>Cuộn vùng này để đọc các câu. Điền bài làm ở phiếu trả lời.</p>{exam.mtmDocuments&&<p><a href={exam.mtmDocuments.questions.url} target="_blank" rel="noopener noreferrer">Tải đề PDF theo mẫu MTM</a></p>}{exam.sourceInstructions&&<details><summary>Hướng dẫn làm ba phần</summary><MtmSourceContent segments={exam.sourceInstructions} assetBase="/practice-media/source-crops" label="Hướng dẫn đề" kind="question"/></details>}
     {(exam.questions as DisplayQuestion[]).map((q,index)=><article key={q.id} className="cp-source-question">
       <h3>Câu {index+1} · {points(q.maxMillipoints)} điểm</h3>
-      <p><MathText text={q.prompt??q.text??''}/></p><Tables tables={q.questionTables}/>
-      {q.kind==='mc'&&<ol className="cp-choices" type="A">{q.choices.map((choice,i)=><li key={i}><MathText text={choice}/></li>)}</ol>}
-      {q.kind==='tf'&&<ol className="cp-statements" type="a">{q.statements?.map((statement,i)=><li key={i}><MathText text={statement}/></li>)}</ol>}
+      <p><MathText text={q.prompt??q.text??''}/></p>{q.sourceContent&&<MtmSourceQuestion question={q}/>}<Tables tables={q.questionTables}/>
+      {q.kind==='mc'&&!q.sourceContent&&<ol className="cp-choices" type="A">{q.choices.map((choice,i)=><li key={i}><MathText text={choice}/></li>)}</ol>}
+      {q.kind==='tf'&&!q.sourceContent&&<ol className="cp-statements" type="a">{q.statements?.map((statement,i)=><li key={i}><MathText text={statement}/></li>)}</ol>}
       {q.image&&(q.imageAlt?<figure><img loading="lazy" src={q.image} alt={q.imageAlt}/><figcaption>{q.imageAlt}</figcaption></figure>:<details><summary>Xem ảnh câu trong nguồn</summary><img loading="lazy" src={q.image} alt={`Câu ${index+1} trong PDF gốc; nội dung đã chép ở trên`}/></details>)}
       <p className="cp-question-source"><small>MTM sưu tầm và biên soạn</small></p>
     </article>)}

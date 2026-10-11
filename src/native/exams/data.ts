@@ -1,5 +1,6 @@
 import verifiedCatalog from './catalog.json';
 import type {Assessment, Question, Validation} from './assessment';
+import type {SourceSegment} from './MtmSourceContent';
 import {validatePracticeProfile,type ExamSection} from './flexible-profile';
 
 export const GRADES = [10, 11, 12] as const;
@@ -15,6 +16,9 @@ export type PracticeQuestion = Exclude<Question, {kind: 'essay'}> & {
   solution?: string;
   /** Optional verbatim statement texts; otherwise sourceRef + a/b/c/d locates them. */
   statements?: [string, string, string, string];
+  sourceContent?:{questions:SourceSegment[];solutions:SourceSegment[]};
+  correctionNote?:string;
+
 };
 export interface PracticeExam extends Assessment {
   sections?:ExamSection[];
@@ -29,9 +33,13 @@ export interface PracticeExam extends Assessment {
   questionDisplayVerified: true;
   sourceMaterial: {title: string; publisher: string; version: string; locator: string};
   answerVerificationNote?: string;
+  preAttemptNotice?: string;
   /** Only expose a PDF before submission when it is separately verified to
    * contain questions only, without an answer key or solutions. */
   sourcePdf?: {url: string; verified: true; sha256: string; bytes: number; totalPages: number; questionPages: number[]};
+  sourceInstructions?:SourceSegment[];
+  solutionInstructions?:SourceSegment[];
+  mtmDocuments?:{questions:{url:string;sha256:string};solutions:{url:string;sha256:string}};
   questions: PracticeQuestion[];
 }
 
@@ -55,6 +63,10 @@ export function validSourcePdf(value:unknown):boolean {
   if(!isRecord(value)||value.verified!==true||!validPdfUrl(value.url,value.sha256)||!Number.isSafeInteger(value.bytes)||(value.bytes as number)<8||(value.bytes as number)>15*1024*1024||!Number.isSafeInteger(value.totalPages)||(value.totalPages as number)<1||(value.totalPages as number)>200)return false;
   return Array.isArray(value.questionPages)&&value.questionPages.length>0&&new Set(value.questionPages).size===value.questionPages.length&&Array.from(value.questionPages).every(p=>Number.isSafeInteger(p)&&p>=1&&p<=(value.totalPages as number));
 }
+export function validSourceSegments(value:unknown):value is SourceSegment[] {
+  if(!Array.isArray(value)||value.length<1||value.length>12)return false;
+  return value.every(segment=>isRecord(segment)&&typeof segment.path==='string'&&segment.path.length<=300&&/^[a-zA-Z0-9][a-zA-Z0-9_/-]*\.png$/.test(segment.path)&&!segment.path.includes('//')&&!segment.path.split('/').includes('..')&&isSha256(segment.sha256)&&Number.isSafeInteger(segment.sourcePage)&&(segment.sourcePage as number)>=1&&Number.isSafeInteger(segment.width)&&(segment.width as number)>=1&&(segment.width as number)<=20000&&Number.isSafeInteger(segment.height)&&(segment.height as number)>=1&&(segment.height as number)<=30000)&&new Set(value.map(segment=>segment.path)).size===value.length;
+}
 export function validatePracticeExam(input: unknown): Validation {
   const gate = validatePracticeProfile(input);
   if (!gate.valid || !isRecord(input)) return gate;
@@ -68,16 +80,28 @@ export function validatePracticeExam(input: unknown): Validation {
   const material = input.sourceMaterial;
   if (!isRecord(material) || !['title', 'publisher', 'version', 'locator'].every(key => boundedText(material[key], 1000))) errors.push('Incomplete source material');
   if (input.answerVerificationNote !== undefined && !boundedText(input.answerVerificationNote, 2000)) errors.push('Invalid answer verification note');
+  if (input.preAttemptNotice !== undefined && !boundedText(input.preAttemptNotice, 2000)) errors.push('Invalid pre-attempt notice');
   if (input.sourcePdf !== undefined && !validSourcePdf(input.sourcePdf)) errors.push('PDF question-page asset not verified');
+  if(input.sourceInstructions!==undefined&&!validSourceSegments(input.sourceInstructions))errors.push('Invalid question instructions');
+  if(input.solutionInstructions!==undefined&&!validSourceSegments(input.solutionInstructions))errors.push('Invalid solution instructions');
+  if(input.mtmDocuments!==undefined){
+    const files=input.mtmDocuments;
+    if(!isRecord(files)||!isRecord(files.questions)||!isRecord(files.solutions)||!validPdfUrl(files.questions.url,files.questions.sha256)||!validPdfUrl(files.solutions.url,files.solutions.sha256)||files.questions.sha256===files.solutions.sha256)errors.push('Invalid separate MTM documents');
+  }
   for (const q of (input as unknown as PracticeExam).questions) {
     if (!boundedText(q.id, 120) || ['__proto__', 'constructor', 'prototype'].includes(q.id)) errors.push('Unsafe question id');
     if (!boundedText(q.prompt ?? q.text ?? q.sourceRef, 20000)) errors.push('Missing question text or source locator');
     if (q.prompt !== undefined && !boundedText(q.prompt, 20000)) errors.push('Invalid prompt');
     if (q.text !== undefined && !boundedText(q.text, 20000)) errors.push('Invalid text');
     if (q.solution !== undefined && !boundedText(q.solution, 20000)) errors.push('Invalid solution');
+    if(q.correctionNote!==undefined&&!boundedText(q.correctionNote,2000))errors.push('Invalid correction note');
+    if(q.sourceContent!==undefined){
+      if(!isRecord(q.sourceContent)||!validSourceSegments(q.sourceContent.questions)||!validSourceSegments(q.sourceContent.solutions))errors.push('Invalid complete source fragments');
+      else if(q.sourceContent.solutions.some(segment=>q.sourceContent!.questions.some(question=>question.path===segment.path||question.sha256.toLowerCase()===segment.sha256.toLowerCase())))errors.push('Question and solution fragments must be separate');
+    }
     if (q.kind === 'short' && !q.acceptedAnswers.every(answer => boundedText(answer, 500))) errors.push('Short answer exceeds input limit');
     if (q.statements !== undefined && (q.kind !== 'tf' || !Array.isArray(q.statements) || q.statements.length !== 4 || !Array.from(q.statements).every(s => boundedText(s, 10000)))) errors.push('Invalid statement texts');
-    if(input.sourcePdf===undefined&&(!boundedText(q.prompt??q.text,20000)||(q.kind==='tf'&&!q.statements)))errors.push('Question content is missing; a source locator is insufficient');
+    if(input.sourcePdf===undefined&&q.sourceContent===undefined&&(!boundedText(q.prompt??q.text,20000)||(q.kind==='tf'&&!q.statements)))errors.push('Question content is missing; a source locator is insufficient');
   }
   return {valid: errors.length === 0, errors};
 }

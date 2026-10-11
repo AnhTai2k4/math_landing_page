@@ -1,0 +1,867 @@
+[
+  {
+    "exam": {
+      "id": "mtm-drive-g10-c1-t04-mtm-errata-v1",
+      "title": "Toán 10 · Chương I · Bài 4: Tập hợp và các phép toán trên tập hợp",
+      "sourceHash": "ce7a930fc98aa63c758ec10d96cda2baa34cfb902cdf39659e35772d71cacb71",
+      "sourceRef": "MTM · Bộ luyện theo chương · Bài 4",
+      "questionCount": 22,
+      "answerKeyVerified": true,
+      "rubricVerified": true,
+      "grade": 10,
+      "period": "GK1",
+      "durationMinutes": 90,
+      "rubricVersion": "MTM-22-12MC-4TF-6SA-3-4-3-v1",
+      "sourceUrl": "https://drive.google.com/drive/folders/16sSSPSdRbqYeBS_s6cJEw9jLQkLEa-D3",
+      "publicationVerified": true,
+      "questionDisplayVerified": true,
+      "sourceMaterial": {
+        "title": "Bộ luyện theo chương · Toán 10 · Chương I · Đề 04",
+        "publisher": "Minh Thành Math",
+        "version": "MTM đính chính 12/10/2026, giữ bản gốc đối chiếu",
+        "locator": "Câu hỏi trang 32–34; lời giải 35–40; nguồn gốc được lưu riêng"
+      },
+      "answerVerificationNote": "Đã đối chiếu đủ 22 nhóm câu và 34 ô trả lời; bản MTM đính chính I.7, lời giải II.4 và bổ sung điều kiện III.4 theo Thành duyệt.",
+      "sourceInstructions": [
+        {
+          "path": "t04-corrected/question-I-instructions-reference.png",
+          "width": 1498,
+          "height": 89,
+          "sha256": "2ab8127aa6e6d1a5bb782c84400aa90f27b45e0986c49f7adec382cc670c148b",
+          "sourcePage": 32
+        },
+        {
+          "path": "t04-corrected/question-II-instructions-reference.png",
+          "width": 1498,
+          "height": 89,
+          "sha256": "33d945fe55292c7a33100d6c7222c0f8c48ad5c10cf6c0b7ad38a3d807162817",
+          "sourcePage": 33
+        },
+        {
+          "path": "t04-corrected/question-III-instructions-reference.png",
+          "width": 1498,
+          "height": 45,
+          "sha256": "98271a08a6ef3b0dcdf5c812ee89dd16dc66122f260cf5db2a8b60db01921180",
+          "sourcePage": 34
+        }
+      ],
+      "solutionInstructions": [
+        {
+          "path": "t04-corrected/solution-prefix-reference.png",
+          "width": 1498,
+          "height": 134,
+          "sha256": "4a784122ac86ae5c78f8f0a5c9db59c1b310c0f4e356d23de2283393420c7c48",
+          "sourcePage": 35
+        },
+        {
+          "path": "t04-corrected/solution-II-instructions-reference-01.png",
+          "width": 1498,
+          "height": 89,
+          "sha256": "449f6af54c68b74e002efe2be294126c50ca3c3d6ab08a53c852b5c0ef5515c4",
+          "sourcePage": 37
+        },
+        {
+          "path": "t04-corrected/solution-III-instructions-reference-01.png",
+          "width": 1498,
+          "height": 45,
+          "sha256": "a8d23722eaf1a64187699db21db839b623ce353ce971877e9825069e3b809d32",
+          "sourcePage": 38
+        }
+      ],
+      "mtmDocuments": {
+        "questions": {
+          "url": "/exam-assets/7f73b237da86af9cc90cb9a8b2ee76d6f94bc5d69564cf5f3b004c392ca9ce81.pdf",
+          "sha256": "7f73b237da86af9cc90cb9a8b2ee76d6f94bc5d69564cf5f3b004c392ca9ce81"
+        },
+        "solutions": {
+          "url": "/exam-assets/8b22dd248f91b3e126def466417d561cb015f42f2d52cf34bf17a23744c67d15.pdf",
+          "sha256": "8b22dd248f91b3e126def466417d561cb015f42f2d52cf34bf17a23744c67d15"
+        }
+      },
+      "sections": [
+        {
+          "label": "I · Trắc nghiệm nhiều phương án",
+          "kind": "mc",
+          "count": 12
+        },
+        {
+          "label": "II · Đúng/sai",
+          "kind": "tf",
+          "count": 4
+        },
+        {
+          "label": "III · Trả lời ngắn",
+          "kind": "short",
+          "count": 6
+        }
+      ],
+      "questions": [
+        {
+          "id": "mtm-drive-g10-c1-t04-mtm-errata-v1-I1",
+          "sourceRef": "Phần I · Câu 1",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "t04-corrected/I-01-question-01.png",
+                "width": 1498,
+                "height": 101,
+                "sha256": "f7b64f0f9e03206c2e72d00315046c13cc518969c36f3a83a93aad2c04d7f645",
+                "sourcePage": 32
+              }
+            ],
+            "solutions": [
+              {
+                "path": "t04-corrected/I-01-solution-01.png",
+                "width": 1498,
+                "height": 198,
+                "sha256": "009cab2aa58f93876d0038376fb4e8ace20c77d5f53f435fb3919898ecf300c4",
+                "sourcePage": 35
+              }
+            ]
+          },
+          "kind": "mc",
+          "choices": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "answer": "C",
+          "maxMillipoints": 250
+        },
+        {
+          "id": "mtm-drive-g10-c1-t04-mtm-errata-v1-I2",
+          "sourceRef": "Phần I · Câu 2",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "t04-corrected/I-02-question-01.png",
+                "width": 1498,
+                "height": 160,
+                "sha256": "5fd3dd38899b2f44ee5d490b5bb59582379d9b84a6e2f6e7ca5ce21862027f12",
+                "sourcePage": 32
+              }
+            ],
+            "solutions": [
+              {
+                "path": "t04-corrected/I-02-solution-01.png",
+                "width": 1498,
+                "height": 346,
+                "sha256": "99b82158eb76a1054d33538a5885d08ca7f9229dfca8ee5a787b8cac02c43414",
+                "sourcePage": 35
+              }
+            ]
+          },
+          "kind": "mc",
+          "choices": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "answer": "B",
+          "maxMillipoints": 250
+        },
+        {
+          "id": "mtm-drive-g10-c1-t04-mtm-errata-v1-I3",
+          "sourceRef": "Phần I · Câu 3",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "t04-corrected/I-03-question-01.png",
+                "width": 1498,
+                "height": 106,
+                "sha256": "a101bd71b6ca7e0c3b08c5b1923df4ed3e28e633673410e163b4b8b8c36816cd",
+                "sourcePage": 32
+              }
+            ],
+            "solutions": [
+              {
+                "path": "t04-corrected/I-03-solution-01.png",
+                "width": 1498,
+                "height": 246,
+                "sha256": "fe5b9641110ef5db2aa241f4eb96464e6e16ee88c9d8584d58ccf0a2d80520b3",
+                "sourcePage": 35
+              }
+            ]
+          },
+          "kind": "mc",
+          "choices": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "answer": "B",
+          "maxMillipoints": 250
+        },
+        {
+          "id": "mtm-drive-g10-c1-t04-mtm-errata-v1-I4",
+          "sourceRef": "Phần I · Câu 4",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "t04-corrected/I-04-question-01.png",
+                "width": 1498,
+                "height": 112,
+                "sha256": "839a930142f7d926af50588e04a67f351800acf46c5ad9c42c91284dd8ac3bb0",
+                "sourcePage": 32
+              }
+            ],
+            "solutions": [
+              {
+                "path": "t04-corrected/I-04-solution-01.png",
+                "width": 1498,
+                "height": 216,
+                "sha256": "1d498d85bec2de40dc4c48cceac5f42fe85766952b21de5fac9ba40c21f20eb9",
+                "sourcePage": 35
+              }
+            ]
+          },
+          "kind": "mc",
+          "choices": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "answer": "A",
+          "maxMillipoints": 250
+        },
+        {
+          "id": "mtm-drive-g10-c1-t04-mtm-errata-v1-I5",
+          "sourceRef": "Phần I · Câu 5",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "t04-corrected/I-05-question-01.png",
+                "width": 1498,
+                "height": 375,
+                "sha256": "a1663448ac1d2d29806842f6aca738bf60f4ae839ce8371d634268ac4bc2caaf",
+                "sourcePage": 32
+              }
+            ],
+            "solutions": [
+              {
+                "path": "t04-corrected/I-05-solution-01.png",
+                "width": 1498,
+                "height": 478,
+                "sha256": "c943bd93bcd6479852fd26800db892eb7fc828be956f23ac46dabf690d77351c",
+                "sourcePage": 35
+              }
+            ]
+          },
+          "kind": "mc",
+          "choices": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "answer": "B",
+          "maxMillipoints": 250
+        },
+        {
+          "id": "mtm-drive-g10-c1-t04-mtm-errata-v1-I6",
+          "sourceRef": "Phần I · Câu 6",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "t04-corrected/I-06-question-01.png",
+                "width": 1498,
+                "height": 116,
+                "sha256": "d72618b9c510a9823350d0b82a1f883b4c495683aeee523a71a0c20e0e687eb1",
+                "sourcePage": 32
+              }
+            ],
+            "solutions": [
+              {
+                "path": "t04-corrected/I-06-solution-01.png",
+                "width": 1498,
+                "height": 398,
+                "sha256": "6f7829289218d133563aff8d64296991765d3e4974a0ae2a78370f49ec3da4c0",
+                "sourcePage": 35
+              }
+            ]
+          },
+          "kind": "mc",
+          "choices": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "answer": "B",
+          "maxMillipoints": 250
+        },
+        {
+          "id": "mtm-drive-g10-c1-t04-mtm-errata-v1-I7",
+          "sourceRef": "Phần I · Câu 7",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "t04-corrected/I-07-question-01.png",
+                "width": 1498,
+                "height": 442,
+                "sha256": "e35a0e7dc709b4070a3b5f802bdd786312c922f9c63097bbbae2e025f7b2a5cc",
+                "sourcePage": 32
+              }
+            ],
+            "solutions": [
+              {
+                "path": "t04-corrected/I-07-solution-01.png",
+                "width": 1498,
+                "height": 595,
+                "sha256": "a0608ad58095df27aa21a43fe806d7f3c29ed7d19154b23a524acb8b81b3a46d",
+                "sourcePage": 36
+              }
+            ]
+          },
+          "kind": "mc",
+          "choices": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "answer": "B",
+          "maxMillipoints": 250,
+          "correctionNote": "Vùng gạch nằm trong cả $A$ và $B$, ngoài $C$: $(A\\cap B)\\setminus C$. Chọn B. Bản MTM đã sửa dấu chọn đáp án trong lời giải."
+        },
+        {
+          "id": "mtm-drive-g10-c1-t04-mtm-errata-v1-I8",
+          "sourceRef": "Phần I · Câu 8",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "t04-corrected/I-08-question-01.png",
+                "width": 1498,
+                "height": 119,
+                "sha256": "cd121d5d6d99ebc9df07088e4dd1f4139dab03f64e97041140fcb061d4c07dcd",
+                "sourcePage": 33
+              }
+            ],
+            "solutions": [
+              {
+                "path": "t04-corrected/I-08-solution-01.png",
+                "width": 1498,
+                "height": 228,
+                "sha256": "3f78d36e185c2bc4f68fa52c79fed0e0fc79a24af473a93f67669590f6f49d5f",
+                "sourcePage": 36
+              }
+            ]
+          },
+          "kind": "mc",
+          "choices": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "answer": "D",
+          "maxMillipoints": 250
+        },
+        {
+          "id": "mtm-drive-g10-c1-t04-mtm-errata-v1-I9",
+          "sourceRef": "Phần I · Câu 9",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "t04-corrected/I-09-question-01.png",
+                "width": 1498,
+                "height": 112,
+                "sha256": "1f330a942e17f4677e35cb433929c9e39a4a24e37556fe3c79d01e2b5d7808ce",
+                "sourcePage": 33
+              }
+            ],
+            "solutions": [
+              {
+                "path": "t04-corrected/I-09-solution-01.png",
+                "width": 1498,
+                "height": 366,
+                "sha256": "df4dcd5072442bc3597ab4e7abd00d5530dfaa8b8c9b8de41b1c936455658e6e",
+                "sourcePage": 36
+              }
+            ]
+          },
+          "kind": "mc",
+          "choices": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "answer": "A",
+          "maxMillipoints": 250
+        },
+        {
+          "id": "mtm-drive-g10-c1-t04-mtm-errata-v1-I10",
+          "sourceRef": "Phần I · Câu 10",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "t04-corrected/I-10-question-01.png",
+                "width": 1498,
+                "height": 111,
+                "sha256": "ce6b4ae84de855bf0488fe59a939a924d1b0372b29c75b8d6d99a3b245b4a5ca",
+                "sourcePage": 33
+              }
+            ],
+            "solutions": [
+              {
+                "path": "t04-corrected/I-10-solution-01.png",
+                "width": 1498,
+                "height": 215,
+                "sha256": "a128f61c4789d95dc71245bb34f0ed238ae855d5a6552df53abbde134f74b98b",
+                "sourcePage": 36
+              }
+            ]
+          },
+          "kind": "mc",
+          "choices": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "answer": "A",
+          "maxMillipoints": 250
+        },
+        {
+          "id": "mtm-drive-g10-c1-t04-mtm-errata-v1-I11",
+          "sourceRef": "Phần I · Câu 11",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "t04-corrected/I-11-question-01.png",
+                "width": 1498,
+                "height": 174,
+                "sha256": "0941b691dd2e59cc04b6d6f57035028a803065df4c6836e947abe318c3a3432a",
+                "sourcePage": 33
+              }
+            ],
+            "solutions": [
+              {
+                "path": "t04-corrected/I-11-solution-01.png",
+                "width": 1498,
+                "height": 505,
+                "sha256": "948109f39532868875bc0d70a0dad1ae78f165542a6d74e726eb343ad96fcb60",
+                "sourcePage": 36
+              }
+            ]
+          },
+          "kind": "mc",
+          "choices": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "answer": "B",
+          "maxMillipoints": 250
+        },
+        {
+          "id": "mtm-drive-g10-c1-t04-mtm-errata-v1-I12",
+          "sourceRef": "Phần I · Câu 12",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "t04-corrected/I-12-question-01.png",
+                "width": 1498,
+                "height": 174,
+                "sha256": "08d5c13d908cfec3f0ff3679bbec327d6d7c9d1685fd2e590b6e80f270ffb0c0",
+                "sourcePage": 33
+              }
+            ],
+            "solutions": [
+              {
+                "path": "t04-corrected/I-12-solution-01.png",
+                "width": 1498,
+                "height": 359,
+                "sha256": "3ba0189727edea100611f00c081d8491b98ad127807610a2175ac11c68c00c06",
+                "sourcePage": 37
+              }
+            ]
+          },
+          "kind": "mc",
+          "choices": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "answer": "A",
+          "maxMillipoints": 250
+        },
+        {
+          "id": "mtm-drive-g10-c1-t04-mtm-errata-v1-II1",
+          "sourceRef": "Phần II · Câu 1",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "t04-corrected/II-01-question-01.png",
+                "width": 1498,
+                "height": 244,
+                "sha256": "b16db8eb6d11e8ab72a243df56acb2bde8f4ff3bac350f353eea22c168f4489a",
+                "sourcePage": 33
+              }
+            ],
+            "solutions": [
+              {
+                "path": "t04-corrected/II-01-solution-01.png",
+                "width": 1498,
+                "height": 533,
+                "sha256": "7420ad2cd0948035b359492476d3a9ca81f6e86c316c705c1cdfd8dd1c295b90",
+                "sourcePage": 37
+              }
+            ]
+          },
+          "kind": "tf",
+          "answer": [
+            false,
+            true,
+            true,
+            false
+          ],
+          "pointsByCorrectCount": [
+            0,
+            100,
+            250,
+            500,
+            1000
+          ],
+          "maxMillipoints": 1000
+        },
+        {
+          "id": "mtm-drive-g10-c1-t04-mtm-errata-v1-II2",
+          "sourceRef": "Phần II · Câu 2",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "t04-corrected/II-02-question-01.png",
+                "width": 1498,
+                "height": 304,
+                "sha256": "5ecb0ef27a43ed89c8b60a2d6589eaa1e7ac72bfb36cc9dcf93e2f3d9859fa32",
+                "sourcePage": 33
+              }
+            ],
+            "solutions": [
+              {
+                "path": "t04-corrected/II-02-solution-01.png",
+                "width": 1498,
+                "height": 929,
+                "sha256": "82a09dbb70d54c59a35f3ffba155161b00954b132edd374a3cd1660d7f391943",
+                "sourcePage": 37
+              }
+            ]
+          },
+          "kind": "tf",
+          "answer": [
+            true,
+            true,
+            false,
+            true
+          ],
+          "pointsByCorrectCount": [
+            0,
+            100,
+            250,
+            500,
+            1000
+          ],
+          "maxMillipoints": 1000
+        },
+        {
+          "id": "mtm-drive-g10-c1-t04-mtm-errata-v1-II3",
+          "sourceRef": "Phần II · Câu 3",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "t04-corrected/II-03-question-01.png",
+                "width": 1498,
+                "height": 271,
+                "sha256": "47cebf55cdcd9b07ef03e045bc5f0b4c346f2c144de291f460e18577432a1c4b",
+                "sourcePage": 33
+              }
+            ],
+            "solutions": [
+              {
+                "path": "t04-corrected/II-03-solution-01.png",
+                "width": 1498,
+                "height": 120,
+                "sha256": "22492d246c3101cefc0a63819bb9ba94aae77413265105d6824b8d59d3b60e23",
+                "sourcePage": 37
+              },
+              {
+                "path": "t04-corrected/II-03-solution-02.png",
+                "width": 1498,
+                "height": 754,
+                "sha256": "bc61c8ef47109eacc0fbfb5de2a1e83e970424c0e6146c7d9ec42766ce234af4",
+                "sourcePage": 38
+              }
+            ]
+          },
+          "kind": "tf",
+          "answer": [
+            false,
+            false,
+            true,
+            false
+          ],
+          "pointsByCorrectCount": [
+            0,
+            100,
+            250,
+            500,
+            1000
+          ],
+          "maxMillipoints": 1000
+        },
+        {
+          "id": "mtm-drive-g10-c1-t04-mtm-errata-v1-II4",
+          "sourceRef": "Phần II · Câu 4",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "t04-corrected/II-04-question-01.png",
+                "width": 1498,
+                "height": 318,
+                "sha256": "b5b2c0ff70fd2977a3e9959539c6260b336f02cfcd5977828bc4e85110d1dbb0",
+                "sourcePage": 33
+              }
+            ],
+            "solutions": [
+              {
+                "path": "t04-corrected/II-04-solution-01.png",
+                "width": 1498,
+                "height": 855,
+                "sha256": "ae756ce33734fd356c5b6626a23a4e9adece307577cacf71b8a5be51e25fc7b2",
+                "sourcePage": 38
+              }
+            ]
+          },
+          "kind": "tf",
+          "answer": [
+            true,
+            true,
+            false,
+            false
+          ],
+          "pointsByCorrectCount": [
+            0,
+            100,
+            250,
+            500,
+            1000
+          ],
+          "maxMillipoints": 1000,
+          "correctionNote": "Vì $B=\\{x\\in\\mathbb{N}^{*}:x<2\\}=\\{1\\}$, $B$ có một phần tử và $2^1=2$ tập con. Khóa của bốn ý vẫn là Đúng, Đúng, Sai, Sai."
+        },
+        {
+          "id": "mtm-drive-g10-c1-t04-mtm-errata-v1-III1",
+          "sourceRef": "Phần III · Câu 1",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "t04-corrected/III-01-question-01.png",
+                "width": 1498,
+                "height": 55,
+                "sha256": "49b9d0943e969eaa2c1ab031e506de33a8a627caa87962d193bbdc6a0bc81785",
+                "sourcePage": 34
+              }
+            ],
+            "solutions": [
+              {
+                "path": "t04-corrected/III-01-solution-01.png",
+                "width": 1498,
+                "height": 260,
+                "sha256": "8d25dc7d22d1dd552243ea248bc33fc24a60bec7a79591d57cd886d2c8f79a27",
+                "sourcePage": 38
+              }
+            ]
+          },
+          "kind": "short",
+          "mode": "numeric",
+          "acceptedAnswers": [
+            "1"
+          ],
+          "maxMillipoints": 500
+        },
+        {
+          "id": "mtm-drive-g10-c1-t04-mtm-errata-v1-III2",
+          "sourceRef": "Phần III · Câu 2",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "t04-corrected/III-02-question-01.png",
+                "width": 1498,
+                "height": 52,
+                "sha256": "1d61c19a9f24b61c80e32c121d1d3c93b43a1dd2e396fc9939332628274cdca4",
+                "sourcePage": 34
+              }
+            ],
+            "solutions": [
+              {
+                "path": "t04-corrected/III-02-solution-01.png",
+                "width": 1498,
+                "height": 104,
+                "sha256": "e9a6c640982845f8d5a9906daa7e66be895ecf5b12d0a77fc85b9ad0a1b355d9",
+                "sourcePage": 38
+              },
+              {
+                "path": "t04-corrected/III-02-solution-02.png",
+                "width": 1498,
+                "height": 152,
+                "sha256": "73d066779a93141795dd54d16180827edd0a37856afa6f2956f2ff51d3dc19de",
+                "sourcePage": 39
+              }
+            ]
+          },
+          "kind": "short",
+          "mode": "numeric",
+          "acceptedAnswers": [
+            "9"
+          ],
+          "maxMillipoints": 500
+        },
+        {
+          "id": "mtm-drive-g10-c1-t04-mtm-errata-v1-III3",
+          "sourceRef": "Phần III · Câu 3",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "t04-corrected/III-03-question-01.png",
+                "width": 1498,
+                "height": 53,
+                "sha256": "d3671d4ba9dcb23f4f674e4441c00c19ffa608607bc974197742bd9a20f8695b",
+                "sourcePage": 34
+              }
+            ],
+            "solutions": [
+              {
+                "path": "t04-corrected/III-03-solution-01.png",
+                "width": 1498,
+                "height": 564,
+                "sha256": "0d1aadbbcf0d36aa9845333d0499ed2787f14b9ff434cf7e969709c12fe107cf",
+                "sourcePage": 39
+              }
+            ]
+          },
+          "kind": "short",
+          "mode": "numeric",
+          "acceptedAnswers": [
+            "18"
+          ],
+          "maxMillipoints": 500
+        },
+        {
+          "id": "mtm-drive-g10-c1-t04-mtm-errata-v1-III4",
+          "sourceRef": "Phần III · Câu 4",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "t04-corrected/III-04-question-01.png",
+                "width": 1498,
+                "height": 136,
+                "sha256": "0de98f6a72ee7dd9ecf9af87018e355ab3419177fd70c93a4b6738a79fb087e3",
+                "sourcePage": 34
+              }
+            ],
+            "solutions": [
+              {
+                "path": "t04-corrected/III-04-solution-01.png",
+                "width": 1498,
+                "height": 313,
+                "sha256": "1341ab67ebd820b06f2095a094fec296eeddc4d424bedba5a76b9bba6c8063dd",
+                "sourcePage": 39
+              }
+            ]
+          },
+          "kind": "short",
+          "mode": "numeric",
+          "acceptedAnswers": [
+            "45"
+          ],
+          "maxMillipoints": 500,
+          "prompt": "Đính chính điều kiện: 8 học sinh chỉ đăng ký môn khác; mỗi học sinh đã đăng ký ít nhất một môn.",
+          "correctionNote": "8 học sinh chỉ đăng ký môn khác; mỗi học sinh đã đăng ký ít nhất một môn. Số học sinh đăng ký bóng đá hoặc cầu lông là $24+20-7=37$. Sĩ số lớp là $37+8=45$ học sinh. Điều kiện đã được Thành duyệt bổ sung; bản nguồn được giữ riêng."
+        },
+        {
+          "id": "mtm-drive-g10-c1-t04-mtm-errata-v1-III5",
+          "sourceRef": "Phần III · Câu 5",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "t04-corrected/III-05-question-01.png",
+                "width": 1498,
+                "height": 129,
+                "sha256": "8c81d3913df70f0dd4b3a7954cf58d4ac4d921d896350f4a7b5cbf989ee1ede5",
+                "sourcePage": 34
+              }
+            ],
+            "solutions": [
+              {
+                "path": "t04-corrected/III-05-solution-01.png",
+                "width": 1498,
+                "height": 934,
+                "sha256": "cb70273d3fa0a35afd2c75172c3a362a4a0fc14b0d29f3d4672ea868f10d5839",
+                "sourcePage": 39
+              }
+            ]
+          },
+          "kind": "short",
+          "mode": "numeric",
+          "acceptedAnswers": [
+            "10"
+          ],
+          "maxMillipoints": 500
+        },
+        {
+          "id": "mtm-drive-g10-c1-t04-mtm-errata-v1-III6",
+          "sourceRef": "Phần III · Câu 6",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "t04-corrected/III-06-question-01.png",
+                "width": 1498,
+                "height": 221,
+                "sha256": "0c0f9465ede786db06c78fa979c842a9d117d92cd4a7f4f49b929fd373cec89b",
+                "sourcePage": 34
+              }
+            ],
+            "solutions": [
+              {
+                "path": "t04-corrected/III-06-solution-01.png",
+                "width": 1498,
+                "height": 1278,
+                "sha256": "fc215ae069cfe13382c6d80f1cfc01167d7893d97d0d8094b953d3ed7ca623f4",
+                "sourcePage": 40
+              }
+            ]
+          },
+          "kind": "short",
+          "mode": "numeric",
+          "acceptedAnswers": [
+            "65"
+          ],
+          "maxMillipoints": 500
+        }
+      ],
+      "preAttemptNotice": "Câu III.4: 8 học sinh chỉ đăng ký môn khác; mỗi học sinh đã đăng ký ít nhất một môn. Thành đã duyệt bổ sung điều kiện này để câu hỏi có đáp án xác định.",
+      "versionHash": "4de47da54e2c3648dac89c07634a336ea5d1eab7afbb18b24cb4a6debbbddf60"
+    },
+    "sourceEdition": true,
+    "track": "10",
+    "chapter": "1",
+    "order": 4,
+    "coverage": "Tập hợp và các phép toán trên tập hợp · đủ hình và sơ đồ",
+    "isFoundation": false,
+    "isChapterEnd": false,
+    "note": "22 câu, 3 phần. Giữ đủ chữ, ký hiệu và hình; đính chính I.7, II.4 và điều kiện III.4 được ghi rõ.",
+    "limits": [
+      "Lịch sử lưu trên trình duyệt này; chưa đồng bộ giữa các thiết bị."
+    ],
+    "scope": "LOCAL_EXACT_EDITION_QA_PENDING",
+    "published": false
+  }
+]

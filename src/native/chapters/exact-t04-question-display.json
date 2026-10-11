@@ -1,0 +1,553 @@
+{
+  "sourceSha256": "ce7a930fc98aa63c758ec10d96cda2baa34cfb902cdf39659e35772d71cacb71",
+  "nativeQuestionDisplay": [
+    {
+      "id": "I-01",
+      "section": "I",
+      "number": 1,
+      "prompt": "Cho tập hợp $A$. Trong các mệnh đề sau, mệnh đề nào sai?",
+      "sourcePage": 32,
+      "sourceOriginalCrop": "b04/I-01-question-01.png",
+      "sourceOriginalCropSha256": "f7b64f0f9e03206c2e72d00315046c13cc518969c36f3a83a93aad2c04d7f645",
+      "choices": [
+        {
+          "label": "A",
+          "text": "$\\varnothing\\subset A$."
+        },
+        {
+          "label": "B",
+          "text": "$A\\ne\\{A\\}$."
+        },
+        {
+          "label": "C",
+          "text": "$A\\in A$."
+        },
+        {
+          "label": "D",
+          "text": "$A\\subset A$."
+        }
+      ]
+    },
+    {
+      "id": "I-02",
+      "section": "I",
+      "number": 2,
+      "prompt": "Hãy liệt kê các phần tử của tập hợp $X=\\left\\{x\\in\\mathbb Z/2x^2-3x+1=0\\right\\}$",
+      "sourcePage": 32,
+      "sourceOriginalCrop": "b04/I-02-question-01.png",
+      "sourceOriginalCropSha256": "5fd3dd38899b2f44ee5d490b5bb59582379d9b84a6e2f6e7ca5ce21862027f12",
+      "choices": [
+        {
+          "label": "A",
+          "text": "$X=\\left\\{1;\\dfrac{1}{2}\\right\\}$."
+        },
+        {
+          "label": "B",
+          "text": "$X=\\{1\\}$."
+        },
+        {
+          "label": "C",
+          "text": "$X=\\left\\{1;\\dfrac{3}{2}\\right\\}$."
+        },
+        {
+          "label": "D",
+          "text": "$X=\\{0\\}$."
+        }
+      ]
+    },
+    {
+      "id": "I-03",
+      "section": "I",
+      "number": 3,
+      "prompt": "Cho $a,b\\in\\mathbb R$, $a<b$, cách viết nào đúng?",
+      "sourcePage": 32,
+      "sourceOriginalCrop": "b04/I-03-question-01.png",
+      "sourceOriginalCropSha256": "a101bd71b6ca7e0c3b08c5b1923df4ed3e28e633673410e163b4b8b8c36816cd",
+      "choices": [
+        {
+          "label": "A",
+          "text": "$a\\subset[a;b]$."
+        },
+        {
+          "label": "B",
+          "text": "$\\{a\\}\\subset[a;b]$."
+        },
+        {
+          "label": "C",
+          "text": "$\\{a\\}\\in[a;b]$."
+        },
+        {
+          "label": "D",
+          "text": "$a\\in(a;b]$."
+        }
+      ]
+    },
+    {
+      "id": "I-04",
+      "section": "I",
+      "number": 4,
+      "prompt": "Cho tập hợp $A=\\left\\{x\\in\\mathbb R\\mid4\\le x\\le9\\right\\}$, tập $A$ là tập nào sau đây?",
+      "sourcePage": 32,
+      "sourceOriginalCrop": "b04/I-04-question-01.png",
+      "sourceOriginalCropSha256": "839a930142f7d926af50588e04a67f351800acf46c5ad9c42c91284dd8ac3bb0",
+      "choices": [
+        {
+          "label": "A",
+          "text": "$A=[4;9]$."
+        },
+        {
+          "label": "B",
+          "text": "$A=(4;9)$."
+        },
+        {
+          "label": "C",
+          "text": "$A=[4;9)$."
+        },
+        {
+          "label": "D",
+          "text": "$A=(4;9]$."
+        }
+      ]
+    },
+    {
+      "id": "I-05",
+      "section": "I",
+      "number": 5,
+      "prompt": "Biểu đồ Ven dưới đây là biểu diễn cho tập hợp nào?",
+      "sourcePage": 32,
+      "sourceOriginalCrop": "b04/I-05-question-01.png",
+      "sourceOriginalCropSha256": "a1663448ac1d2d29806842f6aca738bf60f4ae839ce8371d634268ac4bc2caaf",
+      "choices": [
+        {
+          "label": "A",
+          "text": "$A\\setminus B$."
+        },
+        {
+          "label": "B",
+          "text": "$A\\cup B$."
+        },
+        {
+          "label": "C",
+          "text": "$A\\cap B$."
+        },
+        {
+          "label": "D",
+          "text": "$B\\setminus A$."
+        }
+      ],
+      "figureRef": {
+        "path": "t04-corrected/figures/I-05-venn.png",
+        "width": 420,
+        "height": 280,
+        "dpi": 200,
+        "sha256": "93f51ba4ac3288aea362f7dfccbfbaa08ee363291dad38de4e1f3b93f51acde2",
+        "sourcePage": 32,
+        "sourceCropPixelBox": [
+          600,
+          52,
+          1020,
+          332
+        ],
+        "sourcePagePixelBox": [
+          677,
+          1201,
+          1097,
+          1481
+        ],
+        "sourcePageBBoxPt": [
+          243.72,
+          308.76,
+          394.92,
+          409.55999999999995
+        ],
+        "pixelEquality": "PASS_EXACT_SOURCE_CROP",
+        "alt": "Biểu đồ Ven nguyên bản với nhãn A, B."
+      }
+    },
+    {
+      "id": "I-06",
+      "section": "I",
+      "number": 6,
+      "prompt": "Cho hai tập hợp $A=[-2;3]$ và $B=(1;+\\infty)$. Tìm $A\\cap B$.",
+      "sourcePage": 32,
+      "sourceOriginalCrop": "b04/I-06-question-01.png",
+      "sourceOriginalCropSha256": "d72618b9c510a9823350d0b82a1f883b4c495683aeee523a71a0c20e0e687eb1",
+      "choices": [
+        {
+          "label": "A",
+          "text": "$A\\cap B=[-2;+\\infty)$."
+        },
+        {
+          "label": "B",
+          "text": "$A\\cap B=(1;3]$."
+        },
+        {
+          "label": "C",
+          "text": "$A\\cap B=[1;3]$."
+        },
+        {
+          "label": "D",
+          "text": "$A\\cap B=(1;3)$."
+        }
+      ]
+    },
+    {
+      "id": "I-07",
+      "section": "I",
+      "number": 7,
+      "prompt": "Cho $A,B,C$ là ba tập được minh họa như hình vẽ. Phần gạch sọc trong hình vẽ bên là tập hợp nào sau đây?",
+      "sourcePage": 32,
+      "sourceOriginalCrop": "b04/I-07-question-01.png",
+      "sourceOriginalCropSha256": "e35a0e7dc709b4070a3b5f802bdd786312c922f9c63097bbbae2e025f7b2a5cc",
+      "choices": [
+        {
+          "label": "A",
+          "text": "$(A\\cup B)\\setminus C$."
+        },
+        {
+          "label": "B",
+          "text": "$(A\\cap B)\\setminus C$."
+        },
+        {
+          "label": "C",
+          "text": "$(A\\setminus C)\\cup(A\\setminus B)$."
+        },
+        {
+          "label": "D",
+          "text": "$(A\\cap B)\\cap C$"
+        }
+      ],
+      "figureRef": {
+        "path": "t04-corrected/figures/I-07-venn.png",
+        "width": 340,
+        "height": 298,
+        "dpi": 200,
+        "sha256": "46c2f46fcb997312ebe5976fed17c725016cd8e1df9f6ba80f9085cd40018e41",
+        "sourcePage": 32,
+        "sourceCropPixelBox": [
+          610,
+          92,
+          950,
+          390
+        ],
+        "sourcePagePixelBox": [
+          687,
+          1747,
+          1027,
+          2045
+        ],
+        "sourcePageBBoxPt": [
+          247.32000000000002,
+          105.71999999999991,
+          369.72,
+          212.9999999999999
+        ],
+        "pixelEquality": "PASS_EXACT_SOURCE_CROP",
+        "alt": "Biểu đồ Ven nguyên bản với nhãn A, B, C."
+      }
+    },
+    {
+      "id": "I-08",
+      "section": "I",
+      "number": 8,
+      "prompt": "Cho tập hợp $A=(-\\infty;-1]$ và tập $B=(-3;+\\infty)$. Khi đó $A\\cup B$ là tập hợp nào sau đây?",
+      "sourcePage": 33,
+      "sourceOriginalCrop": "b04/I-08-question-01.png",
+      "sourceOriginalCropSha256": "cd121d5d6d99ebc9df07088e4dd1f4139dab03f64e97041140fcb061d4c07dcd",
+      "choices": [
+        {
+          "label": "A",
+          "text": "$\\varnothing$"
+        },
+        {
+          "label": "B",
+          "text": "$(-3;-1]$"
+        },
+        {
+          "label": "C",
+          "text": "$(-3;+\\infty)$"
+        },
+        {
+          "label": "D",
+          "text": "$\\mathbb R$"
+        }
+      ]
+    },
+    {
+      "id": "I-09",
+      "section": "I",
+      "number": 9,
+      "prompt": "Cho hai tập hợp $A=[-2;3],B=(1;+\\infty)$. Khi đó $A\\setminus B$ bằng",
+      "sourcePage": 33,
+      "sourceOriginalCrop": "b04/I-09-question-01.png",
+      "sourceOriginalCropSha256": "1f330a942e17f4677e35cb433929c9e39a4a24e37556fe3c79d01e2b5d7808ce",
+      "choices": [
+        {
+          "label": "A",
+          "text": "$[-2;1]$."
+        },
+        {
+          "label": "B",
+          "text": "$(-2;1]$."
+        },
+        {
+          "label": "C",
+          "text": "$[-2;1)$."
+        },
+        {
+          "label": "D",
+          "text": "$(-2;-1)$."
+        }
+      ]
+    },
+    {
+      "id": "I-10",
+      "section": "I",
+      "number": 10,
+      "prompt": "Cho tập hợp $A=(2023;+\\infty)$. Khi đó $C_{\\mathbb R}A$ là",
+      "sourcePage": 33,
+      "sourceOriginalCrop": "b04/I-10-question-01.png",
+      "sourceOriginalCropSha256": "ce6b4ae84de855bf0488fe59a939a924d1b0372b29c75b8d6d99a3b245b4a5ca",
+      "choices": [
+        {
+          "label": "A",
+          "text": "$(-\\infty;2023]$."
+        },
+        {
+          "label": "B",
+          "text": "$[2023;+\\infty)$."
+        },
+        {
+          "label": "C",
+          "text": "$(-\\infty;2022]$."
+        },
+        {
+          "label": "D",
+          "text": "$(2023;+\\infty)$."
+        }
+      ]
+    },
+    {
+      "id": "I-11",
+      "section": "I",
+      "number": 11,
+      "prompt": "Lớp 10A có 47 học sinh trong đó có 10 học sinh thích chơi bóng đá, 18 học sinh thích chơi bóng rổ, 9 học sinh thích chơi cả 2 môn. Số học sinh không thích chơi môn nào trong cả 2 môn thể thao trên là bao nhiêu?",
+      "sourcePage": 33,
+      "sourceOriginalCrop": "b04/I-11-question-01.png",
+      "sourceOriginalCropSha256": "0941b691dd2e59cc04b6d6f57035028a803065df4c6836e947abe318c3a3432a",
+      "choices": [
+        {
+          "label": "A",
+          "text": "24."
+        },
+        {
+          "label": "B",
+          "text": "28."
+        },
+        {
+          "label": "C",
+          "text": "27."
+        },
+        {
+          "label": "D",
+          "text": "19."
+        }
+      ]
+    },
+    {
+      "id": "I-12",
+      "section": "I",
+      "number": 12,
+      "prompt": "Trong một hội diễn văn nghệ, một đội gồm 8 nghệ sĩ tham gia tiết mục hát hoặc tiết mục múa. Biết rằng có 3 nghệ sĩ tham gia cả hai tiết mục hát, múa và 2 nghệ sĩ chỉ tham gia tiết mục múa. Số nghệ sĩ chỉ tham gia tiết mục hát là",
+      "sourcePage": 33,
+      "sourceOriginalCrop": "b04/I-12-question-01.png",
+      "sourceOriginalCropSha256": "08d5c13d908cfec3f0ff3679bbec327d6d7c9d1685fd2e590b6e80f270ffb0c0",
+      "choices": [
+        {
+          "label": "A",
+          "text": "3."
+        },
+        {
+          "label": "B",
+          "text": "8."
+        },
+        {
+          "label": "C",
+          "text": "6."
+        },
+        {
+          "label": "D",
+          "text": "5."
+        }
+      ]
+    },
+    {
+      "id": "II-01",
+      "section": "II",
+      "number": 1,
+      "prompt": "Cho hai tập hợp $A=\\left\\{n\\in\\mathbb N/(n^2-2n-3)(n^2-1)=0\\right\\}$ và $B=\\left\\{x\\in\\mathbb R/2x^2-x+3=0\\right\\}$.",
+      "sourcePage": 33,
+      "sourceOriginalCrop": "b04/II-01-question-01.png",
+      "sourceOriginalCropSha256": "b16db8eb6d11e8ab72a243df56acb2bde8f4ff3bac350f353eea22c168f4489a",
+      "statements": [
+        {
+          "label": "a",
+          "text": "Tập hợp $A$ có 3 phần tử."
+        },
+        {
+          "label": "b",
+          "text": "Số tập hợp con của tập hợp $A$ là 4 tập hợp."
+        },
+        {
+          "label": "c",
+          "text": "Tập hợp $B$ là tập hợp rỗng."
+        },
+        {
+          "label": "d",
+          "text": "Tổng các phần tử của tập hợp $A$ và tập hợp $B$ là 3."
+        }
+      ]
+    },
+    {
+      "id": "II-02",
+      "section": "II",
+      "number": 2,
+      "prompt": "Cho tập hợp $A=\\left\\{x\\in\\mathbb R\\mid|x|>4\\right\\}$; $B=\\left\\{x\\in\\mathbb R\\mid-5\\le x-1<5\\right\\}$.",
+      "sourcePage": 33,
+      "sourceOriginalCrop": "b04/II-02-question-01.png",
+      "sourceOriginalCropSha256": "5ecb0ef27a43ed89c8b60a2d6589eaa1e7ac72bfb36cc9dcf93e2f3d9859fa32",
+      "statements": [
+        {
+          "label": "a",
+          "text": "$B\\setminus A=[-4;4]$."
+        },
+        {
+          "label": "b",
+          "text": "$A\\cap B=(4;6)$."
+        },
+        {
+          "label": "c",
+          "text": "$\\mathbb R\\setminus(A\\cap B)=(-\\infty;4)\\cup[6;+\\infty)$."
+        },
+        {
+          "label": "d",
+          "text": "$\\mathbb R\\setminus(A\\cup B)=\\varnothing$."
+        }
+      ]
+    },
+    {
+      "id": "II-03",
+      "section": "II",
+      "number": 3,
+      "prompt": "Cho ba tập hợp $A=\\left\\{x\\in\\mathbb N\\mid(2x+1)(x^2-7x+10)=0\\right\\}$, $B=\\left\\{x\\in\\mathbb R\\mid2<x\\le5\\right\\}$ và $C=\\{2;m;5\\}$",
+      "sourcePage": 33,
+      "sourceOriginalCrop": "b04/II-03-question-01.png",
+      "sourceOriginalCropSha256": "47cebf55cdcd9b07ef03e045bc5f0b4c346f2c144de291f460e18577432a1c4b",
+      "statements": [
+        {
+          "label": "a",
+          "text": "Tập hợp $A$ có hai tập hợp con khác rỗng."
+        },
+        {
+          "label": "b",
+          "text": "$A\\subset B$."
+        },
+        {
+          "label": "c",
+          "text": "$\\{3;4;5\\}\\subset B$."
+        },
+        {
+          "label": "d",
+          "text": "Không có giá trị nào của $m$ để $A=C$."
+        }
+      ]
+    },
+    {
+      "id": "II-04",
+      "section": "II",
+      "number": 4,
+      "prompt": "Cho các tập hợp $A=\\left\\{x\\in\\mathbb N,2x^2-3x+1=0\\right\\}$, $B=\\left\\{x\\in\\mathbb N^*,x<2\\right\\}$, $X=\\left\\{x\\in\\mathbb Z,|x|<3\\right\\}$ và $Y=\\left\\{y\\in\\mathbb R,(y^2-1)(y^2-4)=0\\right\\}$. Ta có",
+      "sourcePage": 33,
+      "sourceOriginalCrop": "b04/II-04-question-01.png",
+      "sourceOriginalCropSha256": "b5b2c0ff70fd2977a3e9959539c6260b336f02cfcd5977828bc4e85110d1dbb0",
+      "statements": [
+        {
+          "label": "a",
+          "text": "$A\\subset B$."
+        },
+        {
+          "label": "b",
+          "text": "$B\\subset X$."
+        },
+        {
+          "label": "c",
+          "text": "Tập $B$ có tất cả 8 tập con."
+        },
+        {
+          "label": "d",
+          "text": "$X=Y$"
+        }
+      ]
+    },
+    {
+      "id": "III-01",
+      "section": "III",
+      "number": 1,
+      "prompt": "Cho hai tập hợp $A=\\left\\{x\\in\\mathbb Z\\mid-1\\le x\\le3\\right\\}$; $B=\\left\\{x\\in\\mathbb N\\mid x\\le4\\right\\}$. Tìm số phần tử của $A\\setminus B$.",
+      "sourcePage": 34,
+      "sourceOriginalCrop": "b04/III-01-question-01.png",
+      "sourceOriginalCropSha256": "49b9d0943e969eaa2c1ab031e506de33a8a627caa87962d193bbdc6a0bc81785"
+    },
+    {
+      "id": "III-02",
+      "section": "III",
+      "number": 2,
+      "prompt": "Cho các tập hợp $A=(-3;10]$; $B=(0;5)$. Số phần tử của tập $(A\\setminus B)\\cap\\mathbb Z$ là",
+      "sourcePage": 34,
+      "sourceOriginalCrop": "b04/III-02-question-01.png",
+      "sourceOriginalCropSha256": "1d61c19a9f24b61c80e32c121d1d3c93b43a1dd2e396fc9939332628274cdca4"
+    },
+    {
+      "id": "III-03",
+      "section": "III",
+      "number": 3,
+      "prompt": "Biết rằng $C_{\\mathbb R}A=[-3;11)$ và $C_{\\mathbb R}B=(-8;1]$. Khi đó, số phần tử của tập hợp $\\mathbb Z\\cap C_{\\mathbb R}(A\\cap B)$ bằng",
+      "sourcePage": 34,
+      "sourceOriginalCrop": "b04/III-03-question-01.png",
+      "sourceOriginalCropSha256": "d3671d4ba9dcb23f4f674e4441c00c19ffa608607bc974197742bd9a20f8695b"
+    },
+    {
+      "id": "III-04",
+      "section": "III",
+      "number": 4,
+      "prompt": "Khi cho học sinh một lớp đăng kí môn thể thao mà bản thân yêu thích thì thu được kết quả: 24 học sinh đăng ký môn bóng đá, 20 học sinh đăng kí cầu lông, 7 học sinh đăng ký cả hai môn bóng đá và cầu lông, 8 học sinh đăng kí một số môn khác. Hỏi sĩ số của lớp này là bao nhiêu?",
+      "sourcePage": 34,
+      "sourceOriginalCrop": "b04/III-04-question-01.png",
+      "sourceOriginalCropSha256": "0de98f6a72ee7dd9ecf9af87018e355ab3419177fd70c93a4b6738a79fb087e3",
+      "approvedErratum": {
+        "label": "Đính chính MTM đã được Thành duyệt",
+        "text": "8 học sinh chỉ đăng ký môn khác; mỗi học sinh đã đăng ký ít nhất một môn.",
+        "sourcePromptUnchanged": true,
+        "mustDisplayBeforeAttempt": true
+      }
+    },
+    {
+      "id": "III-05",
+      "section": "III",
+      "number": 5,
+      "prompt": "Lớp 10A có 7 học sinh giỏi Toán, 5 học sinh giỏi Lý, 6 học sinh giỏi Hoá, 3 học sinh giỏi cả Toán và Lý, 4 học sinh giỏi cả Toán và Hoá, 2 học sinh giỏi cả Lý và Hoá, 1 học sinh giỏi cả ba môn Toán, Lý, Hoá. Số học sinh giỏi ít nhất 1 môn của lớp 10A là",
+      "sourcePage": 34,
+      "sourceOriginalCrop": "b04/III-05-question-01.png",
+      "sourceOriginalCropSha256": "8c81d3913df70f0dd4b3a7954cf58d4ac4d921d896350f4a7b5cbf989ee1ede5"
+    },
+    {
+      "id": "III-06",
+      "section": "III",
+      "number": 6,
+      "prompt": "Trong Kỳ thi tốt nghiệp phổ thông, ở một trường kết quả số thí sinh đạt danh hiệu xuất sắc như sau: Về môn Toán: 48 thí sinh; Về môn Vật lý: 37 thí sinh; Về môn Văn: 42 thí sinh; Về môn Toán hoặc môn Vật lý: 75 thí sinh; Về môn Toán hoặc môn Văn: 76 thí sinh; Về môn Vật lý hoặc môn Văn: 66 thí sinh; Về cả 3 môn: 4 thí sinh. Vậy có bao nhiêu học sinh nhận được danh hiệu xuất sắc về một môn?",
+      "sourcePage": 34,
+      "sourceOriginalCrop": "b04/III-06-question-01.png",
+      "sourceOriginalCropSha256": "0c0f9465ede786db06c78fa979c842a9d117d92cd4a7f4f49b929fd373cec89b"
+    }
+  ]
+}
