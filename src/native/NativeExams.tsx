@@ -18,7 +18,7 @@ import './exams/exams.css';
 function SavedAttemptReview({exam,draft}:{exam:PracticeExam;draft:Draft}) {
   const [open,setOpen]=useState(false);
   return <details open={open} onToggle={event=>setOpen(event.currentTarget.open)}><summary>Xem lại lượt đã nộp</summary>{open&&<>
-    <p>Nguồn: {exam.sourceMaterial.title} · {exam.sourceMaterial.version}</p>
+    <p>MTM sưu tầm và biên soạn</p>
     {exam.answerVerificationNote&&<p>{exam.answerVerificationNote}</p>}
     {erratumFor(exam.id)&&<p className="ep-notice">{exam.id===originalExamId(exam.id)?'Lượt trước đính chính: điểm giữ theo khóa cũ, cần đọc giới hạn điều kiện.':'Lượt dùng bản MTM đính chính v37.'} {erratumFor(exam.id)!.condition}</p>}
     {SOURCE_HOLDS[exam.id]&&<p className="ep-notice">Đề đang chờ đính chính. Điểm lượt cũ dùng khóa trước khi phát hiện vấn đề: {SOURCE_HOLDS[exam.id]}</p>}

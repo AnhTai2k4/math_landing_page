@@ -35,7 +35,7 @@ export default function ExamReview({exam,draft,initialQuestionId,renderText,rend
       <h3 id={`${instance}-q-${index}`}>Câu {index+1} <small>({formatPoints(q.maxMillipoints)} điểm)</small></h3>
       <p className={`ep-verdict ep-verdict-${status}`}>{STATUS_LABELS[status]}</p>
       {(q.prompt||q.text)&&<p className="ep-source-text">{renderText?renderText(q.prompt??q.text!):q.prompt??q.text}</p>}
-      <p className="ep-source-ref">{q.sourceRef}</p>
+      <p className="ep-source-ref">MTM sưu tầm và biên soạn</p>
       <div className="ep-review">
         <p><strong>Bài làm:</strong> {displayAnswer(answer)}</p>
         <p><strong>Đáp án:</strong> {q.kind==='mc'?q.answer:q.kind==='tf'?q.answer.map((v,i)=>`${statementLetters[i]}) ${v?'Đúng':'Sai'}`).join('; '):q.acceptedAnswers.join(' hoặc ')}</p>

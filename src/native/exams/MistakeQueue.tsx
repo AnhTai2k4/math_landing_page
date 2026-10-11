@@ -37,7 +37,7 @@ export default function MistakeQueue({history}:{history:ReviewHistory}) {
     {!summary.items.length&&<p role="status">{uncertain?'Chưa đủ dữ liệu để kết luận các câu cần ôn.':summary.attempts?'Trong các lượt hợp lệ còn lưu, không còn câu chưa đủ điểm ở lần nộp gần nhất của từng phiên bản.':'Chưa có lượt đã nộp hợp lệ để tổng hợp. Làm và nộp một đề để xem các câu cần ôn.'}</p>}
     {active&&<div className="ep-mistake-review" aria-label="Lượt làm dùng để ôn lại">
       <p><strong>Đang đối chiếu:</strong> {active.exam.title} · {new Date(active.draft.submittedAt!).toLocaleString('vi-VN')}</p>
-      <p>Nguồn: {active.exam.sourceMaterial.title} · {active.exam.sourceMaterial.version}</p>
+      <p>MTM sưu tầm và biên soạn</p>
       {active.exam.answerVerificationNote&&<p>{active.exam.answerVerificationNote}</p>}
       {erratumFor(active.exam.id)&&<p className="ep-notice">{active.exam.id===originalExamId(active.exam.id)?'Lượt trước đính chính: điểm giữ theo khóa cũ.':'Lượt theo điều kiện đính chính MTM.'} {erratumFor(active.exam.id)!.condition}</p>}
       {SOURCE_HOLDS[active.exam.id]&&<p className="ep-notice">Điểm lượt cũ dùng khóa trước khi phát hiện vấn đề: {SOURCE_HOLDS[active.exam.id]}</p>}

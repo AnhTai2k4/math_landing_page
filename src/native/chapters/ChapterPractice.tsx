@@ -29,7 +29,7 @@ function QuestionReader({exam}:{exam:PracticeExam}) {
       {q.kind==='mc'&&<ol className="cp-choices" type="A">{q.choices.map((choice,i)=><li key={i}><MathText text={choice}/></li>)}</ol>}
       {q.kind==='tf'&&<ol className="cp-statements" type="a">{q.statements?.map((statement,i)=><li key={i}><MathText text={statement}/></li>)}</ol>}
       {q.image&&(q.imageAlt?<figure><img loading="lazy" src={q.image} alt={q.imageAlt}/><figcaption>{q.imageAlt}</figcaption></figure>:<details><summary>Xem ảnh câu trong nguồn</summary><img loading="lazy" src={q.image} alt={`Câu ${index+1} trong PDF gốc; nội dung đã chép ở trên`}/></details>)}
-      <details className="cp-question-source"><summary>Nguồn đối chiếu kiến thức</summary><small>{q.sourceRef}</small></details>
+      <p className="cp-question-source"><small>MTM sưu tầm và biên soạn</small></p>
     </article>)}
   </section>;
 }
@@ -76,8 +76,8 @@ export default function ChapterPractice({additionalBank=[],catalogUrl='/luyen-ta
   return <div className="mig-container cp-attempt ep-root">
     <section className="cp-intake mig-panel"><p><strong>Đề luyện tập Minh Thành Math</strong></p><p>{pilot.note}</p>
       <p>Đúng–sai: {tf?.kind==='tf'&&tf.pointsByCorrectCount.map((value,count)=>`${count} ý đúng: ${points(value)} điểm`).join(' · ')}. Điểm trắc nghiệm và trả lời ngắn ghi tại từng câu.</p>
-      <p>{pilot.exam.sourceMaterial.publisher} · {pilot.exam.sourceMaterial.version}</p>
+      <p>MTM sưu tầm và biên soạn</p>
     </section>
-    <PracticeAttempt key={pilot.exam.id} exam={pilot.exam} displayTitle={pilot.presentationTitle} catalogUrl={catalogUrl} contextLabel={contextLabel} audienceLabel={audienceLabel} sourceLinkLabel={additionalBank.some(p=>p.exam.id===pilot.exam.id)?contextLabel==='Luyện tập theo chủ đề'?'Nguồn cấu trúc kỳ thi đối chiếu':pilot.exam.sourceUrl.includes('drive.google.com')?'Nguồn kiến thức đối chiếu':'Website Minh Thành Math':undefined} renderText={rich} renderSolutionExtra={q=><ExtraSolution question={q}/>} questionReader={<QuestionReader exam={pilot.exam}/>}/>
+    <PracticeAttempt key={pilot.exam.id} exam={pilot.exam} displayTitle={pilot.presentationTitle} catalogUrl={catalogUrl} contextLabel={contextLabel} audienceLabel={audienceLabel} renderText={rich} renderSolutionExtra={q=><ExtraSolution question={q}/>} questionReader={<QuestionReader exam={pilot.exam}/>}/>
   </div>;
 }
