@@ -1,0 +1,1900 @@
+{
+  "schemaVersion": "MTM_THEORY_TABLES_v52_1",
+  "createdAt": "2026-10-11T22:15:46.698Z",
+  "owner": "Codex / ChatGPT artifact owner",
+  "baseVersion": "V51",
+  "scope": "Six existing theoryRecall exam IDs; five distinct concise theory tables. No questions, grading, IDs, versions or history edited.",
+  "tables": [
+    {
+      "id": "g10-c1",
+      "examIds": [
+        "mtm-practice-g10-c1-foundation-v1"
+      ],
+      "grade": 10,
+      "chapter": 1,
+      "title": "Hệ thống kiến thức Chương I: Mệnh đề và tập hợp",
+      "headers": [
+        "Chủ đề",
+        "Công thức và điều kiện",
+        "Cách dùng, lưu ý"
+      ],
+      "rows": [
+        {
+          "id": "proposition",
+          "topic": "Mệnh đề",
+          "formulaLines": [
+            "$P:\\ $một khẳng định đúng hoặc sai"
+          ],
+          "usageLines": [
+            "Câu hỏi và câu ra lệnh không phải mệnh đề. Mệnh đề chứa biến cần gán biến trong đúng miền."
+          ],
+          "sourceSectionIds": [
+            "propositions"
+          ]
+        },
+        {
+          "id": "negation",
+          "topic": "Phủ định",
+          "formulaLines": [
+            "$\\overline{(a=b)}:\\ a\\ne b$",
+            "$\\overline{(a<b)}:\\ a\\ge b$",
+            "$\\overline{(a\\le b)}:\\ a>b$"
+          ],
+          "usageLines": [
+            "Phủ định phải đổi đúng quan hệ, giữ nguyên đối tượng và miền."
+          ],
+          "sourceSectionIds": [
+            "negation"
+          ]
+        },
+        {
+          "id": "logic-negation",
+          "topic": "Phủ định “và”, “hoặc”",
+          "formulaLines": [
+            "$\\overline{P\\land Q}=\\overline P\\lor\\overline Q$",
+            "$\\overline{P\\lor Q}=\\overline P\\land\\overline Q$"
+          ],
+          "usageLines": [
+            "“Hoặc” trong Toán cho phép cả hai cùng đúng."
+          ],
+          "sourceSectionIds": [
+            "negation"
+          ]
+        },
+        {
+          "id": "implication",
+          "topic": "Kéo theo",
+          "formulaLines": [
+            "$P\\Rightarrow Q$"
+          ],
+          "usageLines": [
+            "Chỉ sai khi P đúng, Q sai. Khi kéo theo đúng: P là điều kiện đủ, Q là điều kiện cần. Mệnh đề đảo chưa chắc đúng."
+          ],
+          "sourceSectionIds": [
+            "implication"
+          ]
+        },
+        {
+          "id": "equivalence",
+          "topic": "Tương đương",
+          "formulaLines": [
+            "$P\\Leftrightarrow Q$"
+          ],
+          "usageLines": [
+            "Đúng khi P, Q cùng đúng hoặc cùng sai. Để chứng minh cần chứng minh cả hai chiều."
+          ],
+          "sourceSectionIds": [
+            "implication"
+          ]
+        },
+        {
+          "id": "quantifiers",
+          "topic": "Lượng từ và phủ định",
+          "formulaLines": [
+            "$\\overline{\\bigl(\\forall x\\in X,\\ P(x)\\bigr)}:\\ \\exists x\\in X,\\ \\overline{P(x)}$",
+            "$\\overline{\\bigl(\\exists x\\in X,\\ P(x)\\bigr)}:\\ \\forall x\\in X,\\ \\overline{P(x)}$"
+          ],
+          "usageLines": [
+            "Bác bỏ “mọi” bằng một phản ví dụ; chứng minh “tồn tại” bằng một giá trị hợp lệ."
+          ],
+          "sourceSectionIds": [
+            "quantifiers"
+          ]
+        },
+        {
+          "id": "element",
+          "topic": "Phần tử, tập rỗng",
+          "formulaLines": [
+            "$a\\in A;\\quad a\\notin A$",
+            "$\\varnothing\\ne\\{\\varnothing\\}$"
+          ],
+          "usageLines": [
+            "Tập rỗng không có phần tử; tập chứa tập rỗng có một phần tử. Không dùng dấu tập con cho một phần tử."
+          ],
+          "sourceSectionIds": [
+            "set-definition"
+          ]
+        },
+        {
+          "id": "subset",
+          "topic": "Tập con, hai tập bằng nhau",
+          "formulaLines": [
+            "$A\\subset B\\iff\\forall x\\in A,\\ x\\in B$",
+            "$A=B\\iff A\\subset B\\ $và$\\ B\\subset A$",
+            "$A\\subsetneq B\\iff A\\subset B\\ $và$\\ A\\ne B$"
+          ],
+          "usageLines": [
+            "Theo quy ước sách phổ thông, $\\subset$ chỉ tập con và cho phép bằng nhau. $\\subsetneq$ chỉ tập con thực sự; không nhầm với $\\in$."
+          ],
+          "sourceSectionIds": [
+            "subset"
+          ]
+        },
+        {
+          "id": "subset-count",
+          "topic": "Đếm tập con",
+          "formulaLines": [
+            "$|A|=k\\Rightarrow $số tập con$=2^k$"
+          ],
+          "usageLines": [
+            "Mỗi phần tử có hai lựa chọn: lấy hoặc không lấy. Không đếm lặp phần tử."
+          ],
+          "sourceSectionIds": [
+            "subset"
+          ]
+        },
+        {
+          "id": "operations",
+          "topic": "Giao, hợp, hiệu",
+          "formulaLines": [
+            "$A\\cap B=\\{x\\mid x\\in A\\ $và$\\ x\\in B\\}$",
+            "$A\\cup B=\\{x\\mid x\\in A\\ $hoặc$\\ x\\in B\\}$",
+            "$A\\setminus B=\\{x\\mid x\\in A,\\ x\\notin B\\}$"
+          ],
+          "usageLines": [
+            "Giao: cả hai. Hợp: ít nhất một. Hiệu: thuộc tập đầu, không thuộc tập sau."
+          ],
+          "sourceSectionIds": [
+            "set-operations"
+          ]
+        },
+        {
+          "id": "complement",
+          "topic": "Phần bù",
+          "formulaLines": [
+            "$C_UA=U\\setminus A\\quad(A\\subseteq U)$",
+            "$C_U(A\\cup B)=C_UA\\cap C_UB$",
+            "$C_U(A\\cap B)=C_UA\\cup C_UB$"
+          ],
+          "usageLines": [
+            "Chỉ xét các phần tử trong tập vũ trụ U."
+          ],
+          "sourceSectionIds": [
+            "set-operations"
+          ]
+        },
+        {
+          "id": "number-sets",
+          "topic": "Tập hợp số",
+          "formulaLines": [
+            "$\\mathbb N=\\{0;1;2;\\ldots\\}$",
+            "$\\mathbb N^*=\\{1;2;3;\\ldots\\}$",
+            "$\\mathbb Q=\\left\\{\\frac{a}{b}\\mid a,b\\in\\mathbb Z,\\ b\\ne0\\right\\}$",
+            "$\\mathbb N\\subsetneq\\mathbb Z\\subsetneq\\mathbb Q\\subsetneq\\mathbb R$"
+          ],
+          "usageLines": [
+            "Luôn kiểm miền đã cho của biến."
+          ],
+          "sourceSectionIds": [
+            "number-sets"
+          ]
+        },
+        {
+          "id": "intervals",
+          "topic": "Khoảng, đoạn, nửa khoảng",
+          "formulaLines": [
+            "$(a;b):\\ a<x<b$",
+            "$[a;b]:\\ a\\le x\\le b$",
+            "$[a;b):\\ a\\le x<b$",
+            "$(a;b]:\\ a<x\\le b$"
+          ],
+          "usageLines": [
+            "Với $a<b$: ngoặc vuông nhận đầu mút, ngoặc tròn loại đầu mút. Vô cực luôn dùng ngoặc tròn."
+          ],
+          "sourceSectionIds": [
+            "intervals"
+          ]
+        },
+        {
+          "id": "venn",
+          "topic": "Đếm bằng biểu đồ Venn",
+          "formulaLines": [
+            "$|A\\cup B|=|A|+|B|-|A\\cap B|$",
+            "$|A\\setminus B|=|A|-|A\\cap B|$"
+          ],
+          "usageLines": [
+            "Các tập hữu hạn. Chia vùng rời nhau rồi cộng mỗi vùng một lần; phần giao đã bị đếm hai lần nên trừ một lần."
+          ],
+          "sourceSectionIds": [
+            "venn"
+          ]
+        },
+        {
+          "id": "venn-three",
+          "topic": "Ba tập hữu hạn",
+          "formulaLines": [
+            "$\\begin{aligned}&|A\\cup B\\cup C|=|A|+|B|+|C|\\\\&\\quad-|A\\cap B|-|A\\cap C|\\\\&\\quad-|B\\cap C|+|A\\cap B\\cap C|\\end{aligned}$"
+          ],
+          "usageLines": [
+            "Đếm tổng ba tập, trừ các giao đôi rồi cộng lại giao ba. Giao đôi đã gồm giao ba, trừ khi đề nói “chỉ hai”."
+          ],
+          "sourceSectionIds": [
+            "venn"
+          ]
+        }
+      ],
+      "referenceTables": [
+        {
+          "caption": "Bảng giá trị logic",
+          "headers": [
+            "$P$",
+            "$Q$",
+            "$P\\Rightarrow Q$",
+            "$Q\\Rightarrow P$",
+            "$P\\Leftrightarrow Q$"
+          ],
+          "rows": [
+            [
+              "Đúng",
+              "Đúng",
+              "Đúng",
+              "Đúng",
+              "Đúng"
+            ],
+            [
+              "Đúng",
+              "Sai",
+              "Sai",
+              "Đúng",
+              "Sai"
+            ],
+            [
+              "Sai",
+              "Đúng",
+              "Đúng",
+              "Sai",
+              "Sai"
+            ],
+            [
+              "Sai",
+              "Sai",
+              "Đúng",
+              "Đúng",
+              "Đúng"
+            ]
+          ],
+          "sourceSectionId": "implication"
+        },
+        {
+          "caption": "Các tập con thường dùng của tập số thực",
+          "headers": [
+            "Ký hiệu",
+            "Điều kiện của $x\\in\\mathbb R$"
+          ],
+          "rows": [
+            [
+              "$(a;b)$",
+              "$a<x<b$"
+            ],
+            [
+              "$[a;b]$",
+              "$a\\le x\\le b$"
+            ],
+            [
+              "$[a;b)$",
+              "$a\\le x<b$"
+            ],
+            [
+              "$(a;b]$",
+              "$a<x\\le b$"
+            ],
+            [
+              "$(a;+\\infty)$",
+              "$x>a$"
+            ],
+            [
+              "$[a;+\\infty)$",
+              "$x\\ge a$"
+            ],
+            [
+              "$(-\\infty;b)$",
+              "$x<b$"
+            ],
+            [
+              "$(-\\infty;b]$",
+              "$x\\le b$"
+            ]
+          ],
+          "sourceSectionId": "intervals"
+        }
+      ],
+      "sourceStatus": "SOURCE_ALIGNED_MTM_SUMMARY_PENDING_INDEPENDENT_REVIEW"
+    },
+    {
+      "id": "g10-c3",
+      "examIds": [
+        "mtm-practice-g10-c3-b01-v1"
+      ],
+      "grade": 10,
+      "chapter": 3,
+      "title": "Chương III · Hệ thống công thức và cách dùng",
+      "headers": [
+        "Chủ đề",
+        "Công thức và điều kiện",
+        "Cách dùng, lưu ý"
+      ],
+      "rows": [
+        {
+          "id": "notation",
+          "topic": "Kí hiệu tam giác",
+          "formulaLines": [
+            "$a=BC,\\ b=CA,\\ c=AB$",
+            "$A+B+C=180^\\circ$",
+            "$p=\\frac{a+b+c}{2}$"
+          ],
+          "usageLines": [
+            "Tam giác ABC không suy biến, cạnh dương. a đối diện góc A; S là diện tích, R/r là bán kính ngoại/nội tiếp."
+          ],
+          "sourceSectionIds": [
+            "notation"
+          ]
+        },
+        {
+          "id": "signs",
+          "topic": "Dấu lượng giác",
+          "formulaLines": [
+            "$0^\\circ<\\alpha<180^\\circ\\Rightarrow\\sin\\alpha>0$",
+            "$90^\\circ<\\alpha<180^\\circ\\Rightarrow\\cos\\alpha<0$"
+          ],
+          "usageLines": [
+            "Trên nửa đường tròn đơn vị: cos là hoành độ, sin là tung độ. Các góc ở biên tính riêng."
+          ],
+          "sourceSectionIds": [
+            "semicircle"
+          ]
+        },
+        {
+          "id": "tan-cot",
+          "topic": "Tang và côtang",
+          "formulaLines": [
+            "$\\tan\\alpha=\\frac{\\sin\\alpha}{\\cos\\alpha}\\quad(\\cos\\alpha\\ne0)$",
+            "$\\cot\\alpha=\\frac{\\cos\\alpha}{\\sin\\alpha}\\quad(\\sin\\alpha\\ne0)$"
+          ],
+          "usageLines": [
+            "Trên [0°;180°]: tang loại 90°; côtang loại 0° và 180°."
+          ],
+          "sourceSectionIds": [
+            "tan-cot"
+          ]
+        },
+        {
+          "id": "special-sin",
+          "topic": "Góc đặc biệt: sin",
+          "formulaLines": [
+            "$\\sin0^\\circ=0;\\quad\\sin30^\\circ=\\frac{1}{2}$",
+            "$\\sin45^\\circ=\\frac{\\sqrt2}{2};\\quad\\sin60^\\circ=\\frac{\\sqrt3}{2}$",
+            "$\\sin90^\\circ=1$"
+          ],
+          "usageLines": [
+            "Các giá trị chính xác, không làm tròn khi chưa cần."
+          ],
+          "sourceSectionIds": [
+            "special"
+          ]
+        },
+        {
+          "id": "special-cos",
+          "topic": "Góc đặc biệt: cos",
+          "formulaLines": [
+            "$\\cos0^\\circ=1;\\quad\\cos30^\\circ=\\frac{\\sqrt3}{2}$",
+            "$\\cos45^\\circ=\\frac{\\sqrt2}{2};\\quad\\cos60^\\circ=\\frac{1}{2}$",
+            "$\\cos90^\\circ=0$"
+          ],
+          "usageLines": [
+            "Tính tang/côtang bằng tỉ số khi mẫu khác 0."
+          ],
+          "sourceSectionIds": [
+            "special"
+          ]
+        },
+        {
+          "id": "related",
+          "topic": "Góc bù, góc phụ",
+          "formulaLines": [
+            "$\\sin(180^\\circ-\\alpha)=\\sin\\alpha$",
+            "$\\cos(180^\\circ-\\alpha)=-\\cos\\alpha$",
+            "$\\sin(90^\\circ-\\alpha)=\\cos\\alpha$",
+            "$\\cos(90^\\circ-\\alpha)=\\sin\\alpha$"
+          ],
+          "usageLines": [
+            "Góc phụ dùng trong [0°;90°]. Góc bù giữ sin, đổi dấu cos."
+          ],
+          "sourceSectionIds": [
+            "supplement"
+          ]
+        },
+        {
+          "id": "identity",
+          "topic": "Hệ thức cơ bản",
+          "formulaLines": [
+            "$\\sin^2\\alpha+\\cos^2\\alpha=1$",
+            "$1+\\tan^2\\alpha=\\frac{1}{\\cos^2\\alpha}\\quad(\\cos\\alpha\\ne0)$",
+            "$1+\\cot^2\\alpha=\\frac{1}{\\sin^2\\alpha}\\quad(\\sin\\alpha\\ne0)$"
+          ],
+          "usageLines": [
+            "Khi lấy căn phải chọn dấu theo góc. Cos của góc tù âm."
+          ],
+          "sourceSectionIds": [
+            "identity"
+          ]
+        },
+        {
+          "id": "cosine",
+          "topic": "Định lí cosin",
+          "formulaLines": [
+            "$a^2=b^2+c^2-2bc\\cos A$",
+            "$\\cos A=\\frac{b^2+c^2-a^2}{2bc}$"
+          ],
+          "usageLines": [
+            "Biết hai cạnh và góc xen giữa: tìm cạnh thứ ba. Đổi a,b,c và A,B,C theo vòng để có công thức còn lại."
+          ],
+          "sourceSectionIds": [
+            "cosine"
+          ]
+        },
+        {
+          "id": "sine",
+          "topic": "Định lí sin",
+          "formulaLines": [
+            "$\\frac{a}{\\sin A}=\\frac{b}{\\sin B}=\\frac{c}{\\sin C}=2R$"
+          ],
+          "usageLines": [
+            "Ghép đúng cạnh với góc đối diện. Biết hai góc và một cạnh: tìm góc thứ ba rồi dùng sin."
+          ],
+          "sourceSectionIds": [
+            "sine"
+          ]
+        },
+        {
+          "id": "area",
+          "topic": "Diện tích và đường cao",
+          "formulaLines": [
+            "$S=\\frac{1}{2}ah_a=\\frac{1}{2}bc\\sin A$",
+            "$h_a=\\frac{2S}{a}$"
+          ],
+          "usageLines": [
+            "Hai cạnh b,c phải kẹp góc A. Đường cao đo tới đường thẳng chứa cạnh, có thể ở ngoài tam giác."
+          ],
+          "sourceSectionIds": [
+            "area"
+          ]
+        },
+        {
+          "id": "heron",
+          "topic": "Hê-rông và bán kính",
+          "formulaLines": [
+            "$S=\\sqrt{p(p-a)(p-b)(p-c)}$",
+            "$S=pr=\\frac{abc}{4R}$",
+            "$r=\\frac{S}{p};\\quad R=\\frac{abc}{4S}$"
+          ],
+          "usageLines": [
+            "Chỉ dùng cho tam giác không suy biến. Diện tích dùng đơn vị bình phương."
+          ],
+          "sourceSectionIds": [
+            "heron-radius"
+          ]
+        },
+        {
+          "id": "two-solutions",
+          "topic": "Giải tam giác: kiểm hai nghiệm",
+          "formulaLines": [
+            "$\\sin B=\\frac{b\\sin A}{a}$",
+            "$B_2=180^\\circ-B_1$"
+          ],
+          "usageLines": [
+            "Khi biết hai cạnh và góc không xen giữa, kiểm cả hai góc; chỉ giữ góc thỏa $A+B<180^\\circ$."
+          ],
+          "sourceSectionIds": [
+            "solve"
+          ]
+        },
+        {
+          "id": "median",
+          "topic": "Trung tuyến và diện tích lớn nhất",
+          "formulaLines": [
+            "$m_a^2=\\frac{2b^2+2c^2-a^2}{4}$",
+            "$S\\le\\frac{1}{2}bc$"
+          ],
+          "usageLines": [
+            "Hệ quả của cosin/diện tích. Với b,c cố định, dấu bằng diện tích khi $A=90^\\circ$."
+          ],
+          "sourceSectionIds": [
+            "extension"
+          ]
+        },
+        {
+          "id": "measure",
+          "topic": "Đo đạc, làm tròn",
+          "formulaLines": [
+            "Góc ghi ${}^\\circ\\Rightarrow$chế độ DEG"
+          ],
+          "usageLines": [
+            "Vẽ đúng vị trí/góc nâng, giữ đơn vị và chiều cao máy đo. Giữ số chưa làm tròn tới kết quả cuối."
+          ],
+          "sourceSectionIds": [
+            "measure"
+          ]
+        }
+      ],
+      "referenceTables": [
+        {
+          "caption": "Dấu trên hai khoảng góc; các góc ở biên phải tính riêng",
+          "headers": [
+            "Giá trị",
+            "$0^\\circ<\\alpha<90^\\circ$",
+            "$90^\\circ<\\alpha<180^\\circ$"
+          ],
+          "rows": [
+            [
+              "$\\sin\\alpha$",
+              "Dương",
+              "Dương"
+            ],
+            [
+              "$\\cos\\alpha$",
+              "Dương",
+              "Âm"
+            ],
+            [
+              "$\\tan\\alpha$",
+              "Dương",
+              "Âm"
+            ],
+            [
+              "$\\cot\\alpha$",
+              "Dương",
+              "Âm"
+            ]
+          ],
+          "sourceSectionId": "semicircle"
+        },
+        {
+          "caption": "Các góc đặc biệt; KXĐ nghĩa là không xác định",
+          "headers": [
+            "Góc",
+            "$0^\\circ$",
+            "$30^\\circ$",
+            "$45^\\circ$",
+            "$60^\\circ$",
+            "$90^\\circ$"
+          ],
+          "rows": [
+            [
+              "$\\sin\\alpha$",
+              "$0$",
+              "$\\frac{1}{2}$",
+              "$\\frac{\\sqrt2}{2}$",
+              "$\\frac{\\sqrt3}{2}$",
+              "$1$"
+            ],
+            [
+              "$\\cos\\alpha$",
+              "$1$",
+              "$\\frac{\\sqrt3}{2}$",
+              "$\\frac{\\sqrt2}{2}$",
+              "$\\frac{1}{2}$",
+              "$0$"
+            ],
+            [
+              "$\\tan\\alpha$",
+              "$0$",
+              "$\\frac{\\sqrt3}{3}$",
+              "$1$",
+              "$\\sqrt3$",
+              "KXĐ"
+            ],
+            [
+              "$\\cot\\alpha$",
+              "KXĐ",
+              "$\\sqrt3$",
+              "$1$",
+              "$\\frac{\\sqrt3}{3}$",
+              "$0$"
+            ]
+          ],
+          "sourceSectionId": "special"
+        }
+      ],
+      "sourceStatus": "SOURCE_ALIGNED_MTM_SUMMARY_PENDING_INDEPENDENT_REVIEW"
+    },
+    {
+      "id": "g11-c1-foundation01",
+      "examIds": [
+        "mtm-practice-g11-c1-foundation-01-v1"
+      ],
+      "grade": 11,
+      "chapter": 1,
+      "title": "Chương I · Góc và công thức lượng giác",
+      "headers": [
+        "Chủ đề",
+        "Công thức và điều kiện",
+        "Cách dùng, lưu ý"
+      ],
+      "rows": [
+        {
+          "id": "angle",
+          "topic": "Góc lượng giác",
+          "formulaLines": [
+            "$\\alpha+2k\\pi\\quad(k\\in\\mathbb Z)$",
+            "$\\alpha+k\\cdot360^\\circ\\quad(k\\in\\mathbb Z)$"
+          ],
+          "usageLines": [
+            "Các góc cùng tia đầu/cuối khác nhau số nguyên vòng. Chiều dương ngược kim đồng hồ."
+          ],
+          "sourceSectionIds": [
+            "angle-orientation"
+          ]
+        },
+        {
+          "id": "units",
+          "topic": "Đổi độ ↔ rađian",
+          "formulaLines": [
+            "$180^\\circ=\\pi\\ \\text{rad}$",
+            "$a^\\circ=\\frac{a\\pi}{180}\\ \\text{rad}$",
+            "$b\\ \\text{rad}=\\frac{180b}{\\pi}{}^\\circ$"
+          ],
+          "usageLines": [
+            "Không cộng số đo độ với số đo rađian."
+          ],
+          "sourceSectionIds": [
+            "angle-units"
+          ]
+        },
+        {
+          "id": "arc",
+          "topic": "Độ dài cung",
+          "formulaLines": [
+            "$\\ell=R\\alpha\\quad(\\alpha\\ge0,\\ \\alpha$ đo bằng rad$)$",
+            "$\\ell=\\frac{\\pi Ra}{180}\\quad(a\\ge0,\\ $số đo độ$)$"
+          ],
+          "usageLines": [
+            "R và ℓ cùng đơn vị độ dài. Bánh xe lăn không trượt n vòng đi được n·2πR."
+          ],
+          "sourceSectionIds": [
+            "arc-length"
+          ]
+        },
+        {
+          "id": "chasles",
+          "topic": "Góc liên tiếp",
+          "formulaLines": [
+            "$\\begin{aligned}&\\text{sđ}(Ou;Ow)={}\\\\&\\text{sđ}(Ou;Ov)\\\\&+\\text{sđ}(Ov;Ow)+2k\\pi\\end{aligned}$",
+            "$k\\in\\mathbb Z$"
+          ],
+          "usageLines": [
+            "sđ là số đo góc. Ba tia chung gốc. Nếu dùng độ, thay $2k\\pi$ bằng $k\\cdot360^\\circ$."
+          ],
+          "sourceSectionIds": [
+            "chasles"
+          ]
+        },
+        {
+          "id": "circle",
+          "topic": "Đường tròn lượng giác",
+          "formulaLines": [
+            "$M(\\cos\\alpha;\\sin\\alpha)$"
+          ],
+          "usageLines": [
+            "Cos là hoành độ, sin là tung độ. Điểm gốc góc 0 là (1;0). Dấu của tọa độ cho dấu lượng giác."
+          ],
+          "sourceSectionIds": [
+            "unit-circle"
+          ]
+        },
+        {
+          "id": "domain",
+          "topic": "Điều kiện tang/côtang",
+          "formulaLines": [
+            "$\\tan\\alpha=\\frac{\\sin\\alpha}{\\cos\\alpha}$",
+            "$\\alpha\\ne\\frac{\\pi}{2}+k\\pi\\quad(k\\in\\mathbb Z)$",
+            "$\\cot\\alpha=\\frac{\\cos\\alpha}{\\sin\\alpha}$",
+            "$\\alpha\\ne k\\pi\\quad(k\\in\\mathbb Z)$"
+          ],
+          "usageLines": [
+            "Hai dòng đầu dành cho tang; hai dòng sau cho côtang. Không gán số tại điểm không xác định."
+          ],
+          "sourceSectionIds": [
+            "definitions-domain"
+          ]
+        },
+        {
+          "id": "basic",
+          "topic": "Hệ thức cơ bản",
+          "formulaLines": [
+            "$\\sin^2\\alpha+\\cos^2\\alpha=1$",
+            "$1+\\tan^2\\alpha=\\frac{1}{\\cos^2\\alpha}\\quad(\\cos\\alpha\\ne0)$",
+            "$1+\\cot^2\\alpha=\\frac{1}{\\sin^2\\alpha}\\quad(\\sin\\alpha\\ne0)$"
+          ],
+          "usageLines": [
+            "Nếu suy từ bình phương, chọn dấu bằng vị trí phần tư."
+          ],
+          "sourceSectionIds": [
+            "basic-identities"
+          ]
+        },
+        {
+          "id": "special",
+          "topic": "Góc thường gặp",
+          "formulaLines": [
+            "$\\sin\\frac{\\pi}{6}=\\frac{1}{2}$",
+            "$\\cos\\frac{\\pi}{6}=\\frac{\\sqrt3}{2}$",
+            "$\\sin\\frac{\\pi}{4}=\\cos\\frac{\\pi}{4}=\\frac{\\sqrt2}{2}$",
+            "$\\sin\\frac{\\pi}{3}=\\frac{\\sqrt3}{2}$",
+            "$\\cos\\frac{\\pi}{3}=\\frac{1}{2}$"
+          ],
+          "usageLines": [
+            "Các giá trị chính xác; dùng góc liên quan và dấu để tìm góc khác."
+          ],
+          "sourceSectionIds": [
+            "special-values"
+          ]
+        },
+        {
+          "id": "opposite",
+          "topic": "Góc đối, góc bù",
+          "formulaLines": [
+            "$\\sin(-\\alpha)=-\\sin\\alpha$",
+            "$\\cos(-\\alpha)=\\cos\\alpha$",
+            "$\\sin(\\pi-\\alpha)=\\sin\\alpha$",
+            "$\\cos(\\pi-\\alpha)=-\\cos\\alpha$"
+          ],
+          "usageLines": [
+            "Đối: sin đổi dấu, cos giữ dấu. Bù: sin giữ dấu, cos đổi dấu."
+          ],
+          "sourceSectionIds": [
+            "related-angles"
+          ]
+        },
+        {
+          "id": "half",
+          "topic": "Góc phụ và hơn kém π",
+          "formulaLines": [
+            "$\\sin\\left(\\frac{\\pi}{2}-\\alpha\\right)=\\cos\\alpha$",
+            "$\\cos\\left(\\frac{\\pi}{2}-\\alpha\\right)=\\sin\\alpha$",
+            "$\\sin(\\pi+\\alpha)=-\\sin\\alpha$",
+            "$\\cos(\\pi+\\alpha)=-\\cos\\alpha$"
+          ],
+          "usageLines": [
+            "Góc phụ đổi tên sin/cos; hơn kém π đổi dấu cả sin/cos."
+          ],
+          "sourceSectionIds": [
+            "related-angles"
+          ]
+        },
+        {
+          "id": "sin-add",
+          "topic": "Cộng, trừ: sin",
+          "formulaLines": [
+            "$\\begin{aligned}&\\sin(\\alpha+\\beta)={}\\\\&\\sin\\alpha\\cos\\beta+\\cos\\alpha\\sin\\beta\\end{aligned}$",
+            "$\\begin{aligned}&\\sin(\\alpha-\\beta)={}\\\\&\\sin\\alpha\\cos\\beta-\\cos\\alpha\\sin\\beta\\end{aligned}$"
+          ],
+          "usageLines": [
+            "Sin giữ dấu cộng/trừ của góc."
+          ],
+          "sourceSectionIds": [
+            "addition-formulas"
+          ]
+        },
+        {
+          "id": "cos-add",
+          "topic": "Cộng, trừ: cos",
+          "formulaLines": [
+            "$\\begin{aligned}&\\cos(\\alpha+\\beta)={}\\\\&\\cos\\alpha\\cos\\beta-\\sin\\alpha\\sin\\beta\\end{aligned}$",
+            "$\\begin{aligned}&\\cos(\\alpha-\\beta)={}\\\\&\\cos\\alpha\\cos\\beta+\\sin\\alpha\\sin\\beta\\end{aligned}$"
+          ],
+          "usageLines": [
+            "Cos đổi dấu: góc cộng thì công thức trừ."
+          ],
+          "sourceSectionIds": [
+            "addition-formulas"
+          ]
+        },
+        {
+          "id": "tan-add",
+          "topic": "Cộng, trừ: tang",
+          "formulaLines": [
+            "$\\tan(\\alpha+\\beta)=\\frac{\\tan\\alpha+\\tan\\beta}{1-\\tan\\alpha\\tan\\beta}$",
+            "$\\tan(\\alpha-\\beta)=\\frac{\\tan\\alpha-\\tan\\beta}{1+\\tan\\alpha\\tan\\beta}$"
+          ],
+          "usageLines": [
+            "Tang của từng góc phải xác định; mẫu tương ứng khác 0."
+          ],
+          "sourceSectionIds": [
+            "addition-formulas"
+          ]
+        },
+        {
+          "id": "double",
+          "topic": "Nhân đôi",
+          "formulaLines": [
+            "$\\sin2\\alpha=2\\sin\\alpha\\cos\\alpha$",
+            "$\\cos2\\alpha=2\\cos^2\\alpha-1=1-2\\sin^2\\alpha$",
+            "$\\tan2\\alpha=\\frac{2\\tan\\alpha}{1-\\tan^2\\alpha}$"
+          ],
+          "usageLines": [
+            "Công thức tang cần tang α xác định và $1-\\tan^2\\alpha$ khác 0."
+          ],
+          "sourceSectionIds": [
+            "double-angle"
+          ]
+        },
+        {
+          "id": "power",
+          "topic": "Hạ bậc",
+          "formulaLines": [
+            "$\\sin^2\\alpha=\\frac{1-\\cos2\\alpha}{2}$",
+            "$\\cos^2\\alpha=\\frac{1+\\cos2\\alpha}{2}$"
+          ],
+          "usageLines": [
+            "Thay góc α bởi 2α thì góc trong cos trở thành 4α."
+          ],
+          "sourceSectionIds": [
+            "power-reduction"
+          ]
+        },
+        {
+          "id": "product-sum",
+          "topic": "Tích thành tổng",
+          "formulaLines": [
+            "$\\begin{aligned}&2\\sin\\alpha\\cos\\beta={}\\\\&\\sin(\\alpha+\\beta)+\\sin(\\alpha-\\beta)\\end{aligned}$",
+            "$\\begin{aligned}&2\\cos\\alpha\\cos\\beta={}\\\\&\\cos(\\alpha+\\beta)+\\cos(\\alpha-\\beta)\\end{aligned}$",
+            "$\\begin{aligned}&2\\sin\\alpha\\sin\\beta={}\\\\&\\cos(\\alpha-\\beta)-\\cos(\\alpha+\\beta)\\end{aligned}$"
+          ],
+          "usageLines": [
+            "Sin nhân sin: cos của hiệu trừ cos của tổng."
+          ],
+          "sourceSectionIds": [
+            "product-to-sum"
+          ]
+        },
+        {
+          "id": "sum-product-sin",
+          "topic": "Tổng/hiệu sin thành tích",
+          "formulaLines": [
+            "$\\begin{aligned}&\\sin\\alpha+\\sin\\beta={}\\\\&2\\sin\\frac{\\alpha+\\beta}{2}\\cos\\frac{\\alpha-\\beta}{2}\\end{aligned}$",
+            "$\\begin{aligned}&\\sin\\alpha-\\sin\\beta={}\\\\&2\\cos\\frac{\\alpha+\\beta}{2}\\sin\\frac{\\alpha-\\beta}{2}\\end{aligned}$"
+          ],
+          "usageLines": [
+            "Góc mới là nửa tổng và nửa hiệu."
+          ],
+          "sourceSectionIds": [
+            "sum-to-product"
+          ]
+        },
+        {
+          "id": "sum-product-cos",
+          "topic": "Tổng/hiệu cos thành tích",
+          "formulaLines": [
+            "$\\begin{aligned}&\\cos\\alpha+\\cos\\beta={}\\\\&2\\cos\\frac{\\alpha+\\beta}{2}\\cos\\frac{\\alpha-\\beta}{2}\\end{aligned}$",
+            "$\\begin{aligned}&\\cos\\alpha-\\cos\\beta={}\\\\&-2\\sin\\frac{\\alpha+\\beta}{2}\\sin\\frac{\\alpha-\\beta}{2}\\end{aligned}$"
+          ],
+          "usageLines": [
+            "Hiệu cos có dấu âm ở phía trước."
+          ],
+          "sourceSectionIds": [
+            "sum-to-product"
+          ]
+        }
+      ],
+      "referenceTables": [
+        {
+          "caption": "Các góc thường gặp",
+          "columns": [
+            "Độ",
+            "Rađian"
+          ],
+          "rows": [
+            [
+              "$0^\\circ$",
+              "$0$"
+            ],
+            [
+              "$30^\\circ$",
+              "$\\frac{\\pi}{6}$"
+            ],
+            [
+              "$45^\\circ$",
+              "$\\frac{\\pi}{4}$"
+            ],
+            [
+              "$60^\\circ$",
+              "$\\frac{\\pi}{3}$"
+            ],
+            [
+              "$90^\\circ$",
+              "$\\frac{\\pi}{2}$"
+            ],
+            [
+              "$180^\\circ$",
+              "$\\pi$"
+            ],
+            [
+              "$360^\\circ$",
+              "$2\\pi$"
+            ]
+          ],
+          "headers": [
+            "Độ",
+            "Rađian"
+          ],
+          "sourceSectionId": "angle-units"
+        },
+        {
+          "caption": "Dấu trong bốn phần tư",
+          "columns": [
+            "Phần tư",
+            "Khoảng đại diện",
+            "sin",
+            "cos",
+            "tan và cot"
+          ],
+          "rows": [
+            [
+              "I",
+              "$0<\\alpha<\\frac{\\pi}{2}$",
+              "+",
+              "+",
+              "+"
+            ],
+            [
+              "II",
+              "$\\frac{\\pi}{2}<\\alpha<\\pi$",
+              "+",
+              "−",
+              "−"
+            ],
+            [
+              "III",
+              "$\\pi<\\alpha<\\frac{3\\pi}{2}$",
+              "−",
+              "−",
+              "+"
+            ],
+            [
+              "IV",
+              "$\\frac{3\\pi}{2}<\\alpha<2\\pi$",
+              "−",
+              "+",
+              "−"
+            ]
+          ],
+          "headers": [
+            "Phần tư",
+            "Khoảng đại diện",
+            "sin",
+            "cos",
+            "tan và cot"
+          ],
+          "sourceSectionId": "unit-circle"
+        },
+        {
+          "caption": "Bảng giá trị lượng giác",
+          "columns": [
+            "Góc",
+            "$0$",
+            "$\\frac{\\pi}{6}$",
+            "$\\frac{\\pi}{4}$",
+            "$\\frac{\\pi}{3}$",
+            "$\\frac{\\pi}{2}$"
+          ],
+          "rows": [
+            [
+              "sin",
+              "$0$",
+              "$\\frac{1}{2}$",
+              "$\\frac{\\sqrt2}{2}$",
+              "$\\frac{\\sqrt3}{2}$",
+              "$1$"
+            ],
+            [
+              "cos",
+              "$1$",
+              "$\\frac{\\sqrt3}{2}$",
+              "$\\frac{\\sqrt2}{2}$",
+              "$\\frac{1}{2}$",
+              "$0$"
+            ],
+            [
+              "tan",
+              "$0$",
+              "$\\frac{\\sqrt3}{3}$",
+              "$1$",
+              "$\\sqrt3$",
+              "Không xác định"
+            ],
+            [
+              "cot",
+              "Không xác định",
+              "$\\sqrt3$",
+              "$1$",
+              "$\\frac{\\sqrt3}{3}$",
+              "$0$"
+            ]
+          ],
+          "headers": [
+            "Góc",
+            "$0$",
+            "$\\frac{\\pi}{6}$",
+            "$\\frac{\\pi}{4}$",
+            "$\\frac{\\pi}{3}$",
+            "$\\frac{\\pi}{2}$"
+          ],
+          "sourceSectionId": "special-values"
+        },
+        {
+          "caption": "Đối, bù, hơn kém π và phụ nhau · Chỉ dùng khi các biểu thức đều xác định",
+          "columns": [
+            "Góc",
+            "sin",
+            "cos",
+            "tan",
+            "cot"
+          ],
+          "rows": [
+            [
+              "$-\\alpha$",
+              "$-\\sin\\alpha$",
+              "$\\cos\\alpha$",
+              "$-\\tan\\alpha$",
+              "$-\\cot\\alpha$"
+            ],
+            [
+              "$\\pi-\\alpha$",
+              "$\\sin\\alpha$",
+              "$-\\cos\\alpha$",
+              "$-\\tan\\alpha$",
+              "$-\\cot\\alpha$"
+            ],
+            [
+              "$\\pi+\\alpha$",
+              "$-\\sin\\alpha$",
+              "$-\\cos\\alpha$",
+              "$\\tan\\alpha$",
+              "$\\cot\\alpha$"
+            ],
+            [
+              "$\\frac{\\pi}{2}-\\alpha$",
+              "$\\cos\\alpha$",
+              "$\\sin\\alpha$",
+              "$\\cot\\alpha$",
+              "$\\tan\\alpha$"
+            ],
+            [
+              "$\\frac{\\pi}{2}+\\alpha$",
+              "$\\cos\\alpha$",
+              "$-\\sin\\alpha$",
+              "$-\\cot\\alpha$",
+              "$-\\tan\\alpha$"
+            ]
+          ],
+          "headers": [
+            "Góc",
+            "sin",
+            "cos",
+            "tan",
+            "cot"
+          ],
+          "sourceSectionId": "related-angles"
+        }
+      ],
+      "sourceStatus": "SOURCE_ALIGNED_MTM_SUMMARY_PENDING_INDEPENDENT_REVIEW"
+    },
+    {
+      "id": "g11-c1-foundation02",
+      "examIds": [
+        "mtm-practice-g11-c1-foundation-02-v1"
+      ],
+      "grade": 11,
+      "chapter": 1,
+      "title": "Chương I · Hàm số và phương trình lượng giác",
+      "headers": [
+        "Chủ đề",
+        "Công thức và điều kiện",
+        "Cách dùng, lưu ý"
+      ],
+      "rows": [
+        {
+          "id": "domain",
+          "topic": "Miền xác định",
+          "formulaLines": [
+            "$\\sin x,\\cos x:\\ D=\\mathbb R$",
+            "$\\tan u:\\ u\\ne\\frac{\\pi}{2}+k\\pi$",
+            "$\\cot u:\\ u\\ne k\\pi\\quad(k\\in\\mathbb Z)$"
+          ],
+          "usageLines": [
+            "Nếu u chứa x, giải điều kiện theo x trước biến đổi."
+          ],
+          "sourceSectionIds": [
+            "domain"
+          ]
+        },
+        {
+          "id": "range",
+          "topic": "Tập giá trị",
+          "formulaLines": [
+            "$-1\\le\\sin x\\le1$",
+            "$-1\\le\\cos x\\le1$",
+            "$y=d+a\\sin(bx+c),\\ b\\ne0$",
+            "$d-|a|\\le y\\le d+|a|$"
+          ],
+          "usageLines": [
+            "Trên toàn R, hai biên đều đạt; công thức tương tự cho cos. Tan/cot nhận mọi số thực."
+          ],
+          "sourceSectionIds": [
+            "range"
+          ]
+        },
+        {
+          "id": "parity",
+          "topic": "Chẵn/lẻ",
+          "formulaLines": [
+            "$\\sin(-x)=-\\sin x$",
+            "$\\cos(-x)=\\cos x$",
+            "$\\tan(-x)=-\\tan x$",
+            "$\\cot(-x)=-\\cot x$"
+          ],
+          "usageLines": [
+            "Miền phải đối xứng qua 0. Sin, tan, cot lẻ; cos chẵn."
+          ],
+          "sourceSectionIds": [
+            "parity-period"
+          ]
+        },
+        {
+          "id": "period",
+          "topic": "Chu kì cơ bản",
+          "formulaLines": [
+            "$T_{\\sin(bx+c)}=T_{\\cos(bx+c)}=\\frac{2\\pi}{|b|}$",
+            "$T_{\\tan(bx+c)}=T_{\\cot(bx+c)}=\\frac{\\pi}{|b|}$",
+            "$b\\ne0$"
+          ],
+          "usageLines": [
+            "Nhân thêm biên độ a≠0 không đổi chu kì. Hàm hằng không có chu kì dương nhỏ nhất."
+          ],
+          "sourceSectionIds": [
+            "parity-period"
+          ]
+        },
+        {
+          "id": "monotonic",
+          "topic": "Khoảng đơn điệu cơ bản",
+          "formulaLines": [
+            "$\\sin x:\\ $tăng trên $\\left[-\\frac{\\pi}{2};\\frac{\\pi}{2}\\right]$",
+            "$\\cos x:\\ $giảm trên $[0;\\pi]$",
+            "$\\tan x:\\ $tăng trên $\\left(-\\frac{\\pi}{2};\\frac{\\pi}{2}\\right)$",
+            "$\\cot x:\\ $giảm trên $(0;\\pi)$"
+          ],
+          "usageLines": [
+            "Có thể tịnh tiến theo chu kì. Không nối khoảng qua điểm không xác định của tan/cot."
+          ],
+          "sourceSectionIds": [
+            "monotonic"
+          ]
+        },
+        {
+          "id": "sin",
+          "topic": "Phương trình sin",
+          "formulaLines": [
+            "$\\sin u=m$ có nghiệm khi và chỉ khi $|m|\\le1$.",
+            "Chọn $\\alpha$ sao cho $\\sin\\alpha=m$.",
+            "$\\sin u=\\sin\\alpha$ khi và chỉ khi:",
+            "$u=\\alpha+2k\\pi$ hoặc $u=\\pi-\\alpha+2k\\pi$",
+            "$k\\in\\mathbb Z$"
+          ],
+          "usageLines": [
+            "Giữ hai họ nghiệm nếu khác nhau; giải tiếp u theo ẩn."
+          ],
+          "sourceSectionIds": [
+            "sin-roots"
+          ]
+        },
+        {
+          "id": "sin-special",
+          "topic": "Sin: trường hợp đặc biệt",
+          "formulaLines": [
+            "$\\sin u=0\\iff u=k\\pi$",
+            "$\\sin u=1\\iff u=\\frac{\\pi}{2}+2k\\pi$",
+            "$\\sin u=-1\\iff u=-\\frac{\\pi}{2}+2k\\pi$",
+            "$k\\in\\mathbb Z$"
+          ],
+          "usageLines": [
+            "Tại ±1, hai họ tổng quát trùng nhau; không đếm hai lần."
+          ],
+          "sourceSectionIds": [
+            "sin-roots"
+          ]
+        },
+        {
+          "id": "cos",
+          "topic": "Phương trình cos",
+          "formulaLines": [
+            "$\\cos u=m$ có nghiệm khi và chỉ khi $|m|\\le1$.",
+            "Chọn $\\alpha$ sao cho $\\cos\\alpha=m$.",
+            "$\\cos u=\\cos\\alpha\\iff u=\\pm\\alpha+2k\\pi$",
+            "$k\\in\\mathbb Z$"
+          ],
+          "usageLines": [
+            "Có thể chọn α trong [0;π]. Hai dấu cho hai họ; bỏ trùng khi cần."
+          ],
+          "sourceSectionIds": [
+            "cos-roots"
+          ]
+        },
+        {
+          "id": "cos-special",
+          "topic": "Cos: trường hợp đặc biệt",
+          "formulaLines": [
+            "$\\cos u=0\\iff u=\\frac{\\pi}{2}+k\\pi$",
+            "$\\cos u=1\\iff u=2k\\pi$",
+            "$\\cos u=-1\\iff u=\\pi+2k\\pi$",
+            "$k\\in\\mathbb Z$"
+          ],
+          "usageLines": [
+            "Lọc nghiệm theo đúng đoạn/khoảng được hỏi."
+          ],
+          "sourceSectionIds": [
+            "cos-roots"
+          ]
+        },
+        {
+          "id": "tan-cot",
+          "topic": "Phương trình tang/côtang",
+          "formulaLines": [
+            "$\\tan u=\\tan\\alpha\\iff u=\\alpha+k\\pi$",
+            "$\\cot u=\\cot\\alpha\\iff u=\\alpha+k\\pi$",
+            "$k\\in\\mathbb Z$"
+          ],
+          "usageLines": [
+            "Các biểu thức đều phải xác định. Họ nghiệm có chu kì π."
+          ],
+          "sourceSectionIds": [
+            "tan-cot-roots"
+          ]
+        },
+        {
+          "id": "equivalence",
+          "topic": "Giữ tập nghiệm",
+          "formulaLines": [
+            "$A^2=0\\iff A=0$"
+          ],
+          "usageLines": [
+            "Chia cho biểu thức có thể bằng 0 làm mất nghiệm; nhân có thể thêm nghiệm. Giữ điều kiện và thế lại."
+          ],
+          "sourceSectionIds": [
+            "equivalence"
+          ]
+        },
+        {
+          "id": "filter",
+          "topic": "Lọc nghiệm, tham số",
+          "formulaLines": [
+            "$\\sin u=m\\ $hoặc$\\ \\cos u=m:\\ -1\\le m\\le1$"
+          ],
+          "usageLines": [
+            "Đổi điều kiện khoảng thành bất đẳng thức của số nguyên k; kiểm đầu mút và nghiệm trùng. Góc theo độ: dùng 360°/180°."
+          ],
+          "sourceSectionIds": [
+            "units-interval-parameters"
+          ]
+        }
+      ],
+      "referenceTables": [],
+      "sourceStatus": "SOURCE_ALIGNED_MTM_SUMMARY_PENDING_INDEPENDENT_REVIEW"
+    },
+    {
+      "id": "g12-c1",
+      "examIds": [
+        "mtm-practice-g12-c1-system01-v1",
+        "mtm-practice-g12-c1-system02-v1"
+      ],
+      "grade": 12,
+      "chapter": 1,
+      "title": "Chương I · Ứng dụng đạo hàm để khảo sát và vẽ đồ thị",
+      "headers": [
+        "Chủ đề",
+        "Công thức và điều kiện",
+        "Cách dùng, lưu ý"
+      ],
+      "rows": [
+        {
+          "id": "domain",
+          "topic": "Miền xác định",
+          "formulaLines": [
+            "$\\frac{u(x)}{v(x)}:\\ v(x)\\ne0$",
+            "$\\sqrt{u(x)}:\\ u(x)\\ge0$",
+            "$\\frac{1}{\\sqrt{u(x)}}:\\ u(x)>0$",
+            "$\\log_a u(x):\\ u(x)>0,\\ a>0,\\ a\\ne1$"
+          ],
+          "usageLines": [
+            "Các điều kiện phải đồng thời đúng. Sau rút gọn vẫn giữ điểm bị loại của hàm gốc."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-domain"
+          ]
+        },
+        {
+          "id": "derivative-power",
+          "topic": "Đạo hàm lũy thừa, căn",
+          "formulaLines": [
+            "$(x^n)'=nx^{n-1}\\quad(n\\in\\mathbb N^*)$",
+            "$(\\sqrt{x})'=\\frac{1}{2\\sqrt{x}}\\quad(x>0)$"
+          ],
+          "usageLines": [
+            "Hàm căn có thể xác định ở 0 nhưng công thức đạo hàm này chỉ dùng khi $x>0$."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-domain"
+          ]
+        },
+        {
+          "id": "derivative-trig",
+          "topic": "Đạo hàm lượng giác",
+          "formulaLines": [
+            "$(\\sin x)'=\\cos x$",
+            "$(\\cos x)'=-\\sin x$",
+            "$(\\tan x)'=\\frac{1}{\\cos^2x}\\quad(\\cos x\\ne0)$",
+            "$(\\cot x)'=-\\frac{1}{\\sin^2x}\\quad(\\sin x\\ne0)$"
+          ],
+          "usageLines": [
+            "Biến góc đo bằng rađian. Không bỏ dấu âm ở đạo hàm cos/cot."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-domain"
+          ]
+        },
+        {
+          "id": "derivative-exp",
+          "topic": "Đạo hàm mũ, logarit",
+          "formulaLines": [
+            "$(e^x)'=e^x$",
+            "$(a^x)'=a^x\\ln a$",
+            "Điều kiện: $a>0,\\ a\\ne1$",
+            "$(\\ln x)'=\\frac{1}{x}\\quad(x>0)$",
+            "$(\\log_a x)'=\\frac{1}{x\\ln a}$",
+            "Điều kiện: $x>0,\\ a>0,\\ a\\ne1$"
+          ],
+          "usageLines": [
+            "Giữ cơ số a và điều kiện của đối số x."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-domain"
+          ]
+        },
+        {
+          "id": "derivative-rules",
+          "topic": "Tổng, tích, thương",
+          "formulaLines": [
+            "$(u\\pm v)'=u'\\pm v'$",
+            "$(uv)'=u'v+uv'$",
+            "$\\left(\\frac{u}{v}\\right)'=\\frac{u'v-uv'}{v^2}\\quad(v\\ne0)$"
+          ],
+          "usageLines": [
+            "u,v có đạo hàm tại điểm đang xét. Tử của đạo hàm thương: đạo hàm tử × mẫu, trừ tử × đạo hàm mẫu."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-domain"
+          ]
+        },
+        {
+          "id": "derivative-chain",
+          "topic": "Hàm hợp",
+          "formulaLines": [
+            "$[F(u(x))]'=F'(u(x))\\,u'(x)$",
+            "$(\\ln|u|)'=\\frac{u'}{u}\\quad(u\\ne0)$"
+          ],
+          "usageLines": [
+            "u có đạo hàm, F có đạo hàm tại u(x). Nếu dùng ln u cần thêm $u>0$. Đừng quên nhân $u'$."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-domain"
+          ]
+        },
+        {
+          "id": "monotonic",
+          "topic": "Đồng biến, nghịch biến",
+          "formulaLines": [
+            "$f'(x)>0\\ $trên $K\\Rightarrow f$ đồng biến trên $K$",
+            "$f'(x)<0\\ $trên $K\\Rightarrow f$ nghịch biến trên $K$"
+          ],
+          "usageLines": [
+            "f có đạo hàm trên khoảng K nằm trong miền. Đạo hàm không âm và chỉ bằng 0 tại hữu hạn điểm vẫn cho đồng biến."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-monotonic"
+          ]
+        },
+        {
+          "id": "monotonic-zero",
+          "topic": "Đạo hàm bằng 0 và hàm hợp",
+          "formulaLines": [
+            "$g(x)=f(u(x))$",
+            "$g'(x)=f'(u(x))u'(x)$"
+          ],
+          "usageLines": [
+            "Không kết luận tăng nghiêm ngặt chỉ từ $f'\\ge0$: hàm hằng là phản ví dụ. Xét miền và dấu của cả hai nhân tử."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-monotonic"
+          ]
+        },
+        {
+          "id": "extrema",
+          "topic": "Cực trị: tiêu chuẩn đủ qua dấu đạo hàm",
+          "formulaLines": [
+            "$f':\\ +\\longrightarrow-\\Rightarrow$cực đại",
+            "$f':\\ -\\longrightarrow+\\Rightarrow$cực tiểu"
+          ],
+          "usageLines": [
+            "Hàm liên tục quanh điểm xét, có đạo hàm ở hai phía. Khi dùng tiêu chuẩn này, kiểm dấu đạo hàm ở hai phía; $f'(x_0)=0$ chưa đủ kết luận."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-extrema"
+          ]
+        },
+        {
+          "id": "names",
+          "topic": "Gọi đúng cực trị",
+          "formulaLines": [
+            "Hoành độ cực trị: $x_0$",
+            "Giá trị cực trị: $f(x_0)$",
+            "Điểm cực trị đồ thị: $(x_0;f(x_0))$"
+          ],
+          "usageLines": [
+            "Điểm không thuộc miền không phải cực trị. Cực trị chỉ là so sánh gần điểm đó, khác GTLN/GTNN toàn miền."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-extrema"
+          ]
+        },
+        {
+          "id": "maxmin",
+          "topic": "GTLN, GTNN phải đạt được",
+          "formulaLines": [
+            "$M=\\max_D f$ khi và chỉ khi đồng thời:",
+            "$f(x)\\le M\\quad(\\forall x\\in D)$",
+            "$\\exists x_0\\in D:\\ f(x_0)=M$",
+            "$m=\\min_D f$ khi và chỉ khi đồng thời:",
+            "$f(x)\\ge m\\quad(\\forall x\\in D)$",
+            "$\\exists x_0\\in D:\\ f(x_0)=m$"
+          ],
+          "usageLines": [
+            "Giới hạn ở đầu mút bị loại không tự là giá trị lớn nhất/nhỏ nhất."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-maxmin"
+          ]
+        },
+        {
+          "id": "closed",
+          "topic": "Tìm GTLN/GTNN trên đoạn",
+          "formulaLines": [
+            "$f$ liên tục trên $[a;b]\\Rightarrow$đạt GTLN, GTNN"
+          ],
+          "usageLines": [
+            "So sánh f tại a,b, các nghiệm $f'=0$ và điểm hàm xác định nhưng không có đạo hàm trong đoạn. Dùng bảng biến thiên khi tập điểm tới hạn không hữu hạn."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-maxmin"
+          ]
+        },
+        {
+          "id": "substitution",
+          "topic": "Đổi biến khi tối ưu",
+          "formulaLines": [
+            "$t=u(x),\\quad x\\in D\\Rightarrow t\\in u(D)$"
+          ],
+          "usageLines": [
+            "Tìm đúng miền của t; kiểm x hợp lệ đạt được t tối ưu. Không tự mở rộng miền."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-maxmin"
+          ]
+        },
+        {
+          "id": "vertical",
+          "topic": "Tiệm cận đứng",
+          "formulaLines": [
+            "$x=x_0:\\ \\lim_{x\\to x_0^-}f(x)=\\pm\\infty$",
+            "hoặc $\\lim_{x\\to x_0^+}f(x)=\\pm\\infty$"
+          ],
+          "usageLines": [
+            "Chỉ cần một phía thuộc miền. Mẫu bằng 0 chỉ là ứng viên; điểm khuyết có giới hạn hữu hạn không là tiệm cận đứng."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-asymptote"
+          ]
+        },
+        {
+          "id": "horizontal",
+          "topic": "Tiệm cận ngang",
+          "formulaLines": [
+            "$y=L:\\ \\lim_{x\\to+\\infty}f(x)=L$",
+            "hoặc $\\lim_{x\\to-\\infty}f(x)=L\\quad(L\\in\\mathbb R)$"
+          ],
+          "usageLines": [
+            "Hai hướng có thể cho hai đường khác nhau; cùng L chỉ đếm một đường. Đồ thị có thể cắt tiệm cận ngang."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-asymptote"
+          ]
+        },
+        {
+          "id": "degree",
+          "topic": "Phân thức: tiệm cận ngang",
+          "formulaLines": [
+            "$f(x)=\\frac{P(x)}{Q(x)}$",
+            "$\\deg P<\\deg Q\\Rightarrow y=0$",
+            "$\\deg P=\\deg Q\\Rightarrow y=\\frac{p_n}{q_n}$"
+          ],
+          "usageLines": [
+            "P,Q là đa thức, Q không đồng nhất 0; $p_n,q_n$ là hệ số cao nhất. Nếu bậc tử lớn hơn bậc mẫu: không có tiệm cận ngang. Giữ miền gốc."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-asymptote"
+          ]
+        },
+        {
+          "id": "slant",
+          "topic": "Tiệm cận xiên",
+          "formulaLines": [
+            "$y=ax+b,\\quad a\\ne0$",
+            "$\\lim_{x\\to+\\infty}[f(x)-(ax+b)]=0$",
+            "hoặc $\\lim_{x\\to-\\infty}[f(x)-(ax+b)]=0$"
+          ],
+          "usageLines": [
+            "Chọn một hướng vô cực, kiểm hiệu về 0 ở đúng hướng đó. Nếu $a=0$ thì là ngang."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-slant"
+          ]
+        },
+        {
+          "id": "slant-find",
+          "topic": "Tìm hệ số tiệm cận xiên",
+          "formulaLines": [
+            "$a=\\lim_{x\\to+\\infty}\\frac{f(x)}{x}$",
+            "$b=\\lim_{x\\to+\\infty}[f(x)-ax]$"
+          ],
+          "usageLines": [
+            "Các giới hạn phải hữu hạn, a≠0; sau đó kiểm lại hiệu. Nếu xét −∞, thay đồng thời hướng của cả hai giới hạn."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-slant"
+          ]
+        },
+        {
+          "id": "division",
+          "topic": "Chia đa thức",
+          "formulaLines": [
+            "$\\frac{P(x)}{Q(x)}=ax+b+\\frac{r(x)}{Q(x)}$",
+            "$\\deg P=\\deg Q+1,\\quad\\deg r<\\deg Q$"
+          ],
+          "usageLines": [
+            "Thương ax+b là đường xiên khi a≠0. Tiệm cận đứng kiểm riêng bằng giới hạn."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-slant"
+          ]
+        },
+        {
+          "id": "cubic",
+          "topic": "Hàm bậc ba",
+          "formulaLines": [
+            "$f(x)=ax^3+bx^2+cx+d$",
+            "Điều kiện: $a\\ne0$",
+            "$f'(x)=3ax^2+2bx+c$",
+            "$\\Delta'=b^2-3ac$",
+            "$x_{1,2}=\\frac{-b\\pm\\sqrt{\\Delta'}}{3a}$",
+            "Áp dụng khi $\\Delta'>0$"
+          ],
+          "usageLines": [
+            "$\\Delta'>0$: hai cực trị; $\\Delta'\\le0$: không có cực trị. Sắp nghiệm tăng dần, nhất là khi $a<0$."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-cubic"
+          ]
+        },
+        {
+          "id": "cubic-limits",
+          "topic": "Giới hạn hàm bậc ba",
+          "formulaLines": [
+            "$a>0:\\ \\lim_{x\\to-\\infty}f(x)=-\\infty$",
+            "$\\phantom{a>0:}\\ \\lim_{x\\to+\\infty}f(x)=+\\infty$"
+          ],
+          "usageLines": [
+            "Khi $a<0$ đảo hai dấu vô cực. Không bỏ toán tử lim khi viết giới hạn."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-cubic"
+          ]
+        },
+        {
+          "id": "cubic-symmetry",
+          "topic": "Tâm đồ thị bậc ba",
+          "formulaLines": [
+            "$x_0=-\\frac{b}{3a}$",
+            "$I(x_0;f(x_0))$"
+          ],
+          "usageLines": [
+            "Hệ quả MTM từ khai triển:",
+            "$f(x_0+t)+f(x_0-t)$",
+            "$=2f(x_0)$."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-cubic"
+          ]
+        },
+        {
+          "id": "parameter",
+          "topic": "Tham số: tam thức không âm",
+          "formulaLines": [
+            "$Ax^2+Bx+C\\ge0\\quad(\\forall x\\in\\mathbb R)$",
+            "$A>0:\\ B^2-4AC\\le0$"
+          ],
+          "usageLines": [
+            "Dùng cho đạo hàm bậc hai. Nếu $A=0$ phải xét riêng; không áp dụng điều kiện này máy móc."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-cubic"
+          ]
+        },
+        {
+          "id": "quartic",
+          "topic": "Hàm trùng phương",
+          "formulaLines": [
+            "$f(x)=ax^4+bx^2+c,\\quad a\\ne0$",
+            "$f'(x)=2x(2ax^2+b)$",
+            "$x=0;\\quad x=\\pm\\sqrt{-\\frac{b}{2a}}\\ (ab<0)$"
+          ],
+          "usageLines": [
+            "$ab<0$: ba cực trị; $ab\\ge0$: một cực trị tại 0. Đồ thị đối xứng trục tung."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-cubic"
+          ]
+        },
+        {
+          "id": "linear-rational",
+          "topic": "Phân thức bậc nhất/bậc nhất",
+          "formulaLines": [
+            "$f(x)=\\frac{ax+b}{cx+d},\\quad c\\ne0$",
+            "$D=\\mathbb R\\setminus\\left\\{-\\frac{d}{c}\\right\\}$",
+            "$f'(x)=\\frac{ad-bc}{(cx+d)^2}$"
+          ],
+          "usageLines": [
+            "Dấu đạo hàm theo ad−bc. Nếu định thức bằng 0: hàm hằng trên miền gốc, điểm bị loại là điểm khuyết."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-rational"
+          ]
+        },
+        {
+          "id": "linear-asymptotes",
+          "topic": "Hai tiệm cận phân thức bậc nhất",
+          "formulaLines": [
+            "$ad-bc\\ne0:\\quad x=-\\frac{d}{c},\\quad y=\\frac{a}{c}$",
+            "$I\\left(-\\frac{d}{c};\\frac{a}{c}\\right)$"
+          ],
+          "usageLines": [
+            "Điều kiện ad−bc≠0 quyết định có tiệm cận đứng; a≠0 không thay được điều kiện này."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-rational"
+          ]
+        },
+        {
+          "id": "quadratic-rational",
+          "topic": "Phân thức bậc hai/bậc nhất",
+          "formulaLines": [
+            "$f(x)=\\frac{ax^2+bx+c}{dx+e}$",
+            "Điều kiện: $a\\ne0,\\ d\\ne0$",
+            "$A=\\frac{a}{d};\\quad B=\\frac{bd-ae}{d^2}$",
+            "$R=\\frac{cd^2-bde+ae^2}{d^2}$",
+            "$f(x)=Ax+B+\\frac{R}{dx+e}$"
+          ],
+          "usageLines": [
+            "Miền loại $-\\frac{e}{d}$. Đường xiên $y=Ax+B$; có tiệm cận đứng $x=-\\frac{e}{d}$ khi $R\\ne0$. $R=0$: đường thẳng khuyết điểm."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-rational"
+          ]
+        },
+        {
+          "id": "quadratic-extrema",
+          "topic": "Cực trị phân thức bậc hai",
+          "formulaLines": [
+            "$f'(x)=A-\\frac{dR}{(dx+e)^2}$",
+            "$f'(x)=0\\iff(dx+e)^2=\\frac{d^2R}{a}$",
+            "$x\\in D,\\quad dx+e\\ne0$"
+          ],
+          "usageLines": [
+            "Dùng kí hiệu dòng trên. $aR>0$: hai cực trị; $aR<0$ hoặc $R=0$: không có cực trị."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-rational"
+          ]
+        },
+        {
+          "id": "variation",
+          "topic": "Bảng biến thiên: đủ ba hàng",
+          "formulaLines": [
+            "$x:\\ $mốc theo thứ tự, điểm loại",
+            "$f':\\ $dấu, nghiệm, nơi không xác định",
+            "$f:\\ $mũi tên, giá trị, giới hạn"
+          ],
+          "usageLines": [
+            "Ngăn rõ nhánh tại điểm không thuộc miền. Mũi tên ở hàng f là chiều biến thiên, không thay cho kí hiệu giới hạn."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-table"
+          ]
+        },
+        {
+          "id": "graph",
+          "topic": "Quy trình khảo sát, vẽ đồ thị",
+          "formulaLines": [
+            "$D\\ \\to\\ f'\\ \\to\\ $giới hạn, tiệm cận",
+            "$\\to\\ $bảng biến thiên$\\ \\to\\ $điểm đặc biệt$\\ \\to\\ $đồ thị"
+          ],
+          "usageLines": [
+            "Tìm giao trục và điểm đối xứng khi thích hợp. Thế tọa độ để kiểm điểm; vẽ đúng nhánh và miền."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-table"
+          ]
+        },
+        {
+          "id": "intersections",
+          "topic": "Giao điểm",
+          "formulaLines": [
+            "$f(x)=g(x),\\quad x\\in D_f\\cap D_g$",
+            "$M(x;f(x))$"
+          ],
+          "usageLines": [
+            "Mỗi nghiệm thực phân biệt hợp lệ là một giao điểm. Sau khử mẫu/bình phương phải thế lại."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-intersection"
+          ]
+        },
+        {
+          "id": "tangent",
+          "topic": "Tiếp tuyến",
+          "formulaLines": [
+            "$y=f(x_0)+f'(x_0)(x-x_0)$"
+          ],
+          "usageLines": [
+            "f có đạo hàm tại $x_0$. Hệ số góc $f'(x_0)$; $f'(x_0)=0$ cho tiếp tuyến ngang, chưa đủ kết luận cực trị."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-intersection"
+          ]
+        },
+        {
+          "id": "contact",
+          "topic": "Điều kiện tiếp xúc",
+          "formulaLines": [
+            "$\\begin{cases}f(x_0)=kx_0+m,\\\\f'(x_0)=k.\\end{cases}$"
+          ],
+          "usageLines": [
+            "Đường $y=kx+m$ phải đồng thời qua điểm và cùng hệ số góc. Kiểm $x_0$ thuộc miền."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-intersection"
+          ]
+        },
+        {
+          "id": "optimization",
+          "topic": "Tối ưu trong thực tế",
+          "formulaLines": [
+            "Biến, đơn vị$\\to$miền$\\to$hàm mục tiêu",
+            "$\\to$bảng biến thiên$\\to$biên, tính đạt$\\to$kết luận"
+          ],
+          "usageLines": [
+            "Số lượng nguyên: so sánh các ứng viên nguyên hợp lệ; không tự làm tròn nghiệm liên tục."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-optimization"
+          ]
+        },
+        {
+          "id": "revenue",
+          "topic": "Doanh thu, lợi nhuận",
+          "formulaLines": [
+            "$R(q)=q\\,p(q)$",
+            "$P(q)=R(q)-C(q)$",
+            "$\\overline C(q)=\\frac{C(q)}{q}\\quad(q>0)$"
+          ],
+          "usageLines": [
+            "Giữ chi phí cố định, đơn vị tiền và miền số lượng. Doanh thu khác lợi nhuận."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-optimization"
+          ]
+        },
+        {
+          "id": "box",
+          "topic": "Hộp đáy vuông",
+          "formulaLines": [
+            "$V=x^2h\\quad(x>0,\\ h>0)$",
+            "$S_1=2x^2+4xh$",
+            "$S_2=x^2+4xh$"
+          ],
+          "usageLines": [
+            "$S_1$: hộp kín; $S_2$: hộp không nắp. Thể tích cố định: $h=\\frac{V}{x^2}$ rồi tối ưu theo $x>0$."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-optimization"
+          ]
+        },
+        {
+          "id": "cut-box",
+          "topic": "Cắt tấm bìa thành hộp",
+          "formulaLines": [
+            "$V(x)=x(L-2x)(W-2x)$",
+            "$0<x<\\frac{\\min(L,W)}{2}$",
+            "Điều kiện: $L>0,\\ W>0$"
+          ],
+          "usageLines": [
+            "Cắt bốn góc vuông cạnh x. Nghiệm ngoài miền hoặc làm kích thước bằng 0 không là hộp hợp lệ."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-optimization"
+          ]
+        },
+        {
+          "id": "motion",
+          "topic": "Vận tốc, gia tốc",
+          "formulaLines": [
+            "$v(t)=s'(t)$",
+            "$a(t)=v'(t)=s''(t)$",
+            "Tốc độ$=|v(t)|$"
+          ],
+          "usageLines": [
+            "Các đạo hàm phải tồn tại. Tốc độ không âm, vận tốc có dấu; giữ đơn vị và miền thời gian."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-optimization"
+          ]
+        },
+        {
+          "id": "checklist",
+          "topic": "Tự kiểm trước khi nộp",
+          "formulaLines": [
+            "Miền$\\to$đạo hàm$\\to$dấu$\\to$giá trị đạt",
+            "$\\to$giới hạn$\\to$nghiệm hợp lệ$\\to$đơn vị"
+          ],
+          "usageLines": [
+            "Cực trị: kiểm điều kiện của tiêu chuẩn đã dùng; GTLN/GTNN cần điểm đạt; tiệm cận cần giới hạn; nghiệm sau biến đổi cần thế lại."
+          ],
+          "sourceSectionIds": [
+            "g12-c1-theory-checklist"
+          ]
+        }
+      ],
+      "referenceTables": [],
+      "sourceStatus": "SOURCE_ALIGNED_MTM_SUMMARY_PENDING_INDEPENDENT_REVIEW"
+    }
+  ],
+  "revision": "Root corrections after independent review: sin/cos implications, full inclusion-exclusion, extremum sufficient-condition wording"
+}

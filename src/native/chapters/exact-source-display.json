@@ -1,0 +1,2599 @@
+[
+  {
+    "id": "I-01",
+    "section": "I",
+    "number": 1,
+    "prompt": "Cho tập hợp $A$. Trong các mệnh đề sau, mệnh đề nào sai?",
+    "sourcePage": 32,
+    "sourceOriginalCrop": "b04/I-01-question-01.png",
+    "sourceOriginalCropSha256": "f7b64f0f9e03206c2e72d00315046c13cc518969c36f3a83a93aad2c04d7f645",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$\\varnothing\\subset A$."
+      },
+      {
+        "label": "B",
+        "text": "$A\\ne\\{A\\}$."
+      },
+      {
+        "label": "C",
+        "text": "$A\\in A$."
+      },
+      {
+        "label": "D",
+        "text": "$A\\subset A$."
+      }
+    ],
+    "questionId": "mtm-drive-g10-c1-t04-mtm-errata-v1-I1",
+    "sourceDisplayCropSha256": "f7b64f0f9e03206c2e72d00315046c13cc518969c36f3a83a93aad2c04d7f645"
+  },
+  {
+    "id": "I-02",
+    "section": "I",
+    "number": 2,
+    "prompt": "Hãy liệt kê các phần tử của tập hợp $X=\\left\\{x\\in\\mathbb Z/2x^2-3x+1=0\\right\\}$",
+    "sourcePage": 32,
+    "sourceOriginalCrop": "b04/I-02-question-01.png",
+    "sourceOriginalCropSha256": "5fd3dd38899b2f44ee5d490b5bb59582379d9b84a6e2f6e7ca5ce21862027f12",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$X=\\left\\{1;\\dfrac{1}{2}\\right\\}$."
+      },
+      {
+        "label": "B",
+        "text": "$X=\\{1\\}$."
+      },
+      {
+        "label": "C",
+        "text": "$X=\\left\\{1;\\dfrac{3}{2}\\right\\}$."
+      },
+      {
+        "label": "D",
+        "text": "$X=\\{0\\}$."
+      }
+    ],
+    "questionId": "mtm-drive-g10-c1-t04-mtm-errata-v1-I2",
+    "sourceDisplayCropSha256": "5fd3dd38899b2f44ee5d490b5bb59582379d9b84a6e2f6e7ca5ce21862027f12"
+  },
+  {
+    "id": "I-03",
+    "section": "I",
+    "number": 3,
+    "prompt": "Cho $a,b\\in\\mathbb R$, $a<b$, cách viết nào đúng?",
+    "sourcePage": 32,
+    "sourceOriginalCrop": "b04/I-03-question-01.png",
+    "sourceOriginalCropSha256": "a101bd71b6ca7e0c3b08c5b1923df4ed3e28e633673410e163b4b8b8c36816cd",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$a\\subset[a;b]$."
+      },
+      {
+        "label": "B",
+        "text": "$\\{a\\}\\subset[a;b]$."
+      },
+      {
+        "label": "C",
+        "text": "$\\{a\\}\\in[a;b]$."
+      },
+      {
+        "label": "D",
+        "text": "$a\\in(a;b]$."
+      }
+    ],
+    "questionId": "mtm-drive-g10-c1-t04-mtm-errata-v1-I3",
+    "sourceDisplayCropSha256": "a101bd71b6ca7e0c3b08c5b1923df4ed3e28e633673410e163b4b8b8c36816cd"
+  },
+  {
+    "id": "I-04",
+    "section": "I",
+    "number": 4,
+    "prompt": "Cho tập hợp $A=\\left\\{x\\in\\mathbb R\\mid4\\le x\\le9\\right\\}$, tập $A$ là tập nào sau đây?",
+    "sourcePage": 32,
+    "sourceOriginalCrop": "b04/I-04-question-01.png",
+    "sourceOriginalCropSha256": "839a930142f7d926af50588e04a67f351800acf46c5ad9c42c91284dd8ac3bb0",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$A=[4;9]$."
+      },
+      {
+        "label": "B",
+        "text": "$A=(4;9)$."
+      },
+      {
+        "label": "C",
+        "text": "$A=[4;9)$."
+      },
+      {
+        "label": "D",
+        "text": "$A=(4;9]$."
+      }
+    ],
+    "questionId": "mtm-drive-g10-c1-t04-mtm-errata-v1-I4",
+    "sourceDisplayCropSha256": "839a930142f7d926af50588e04a67f351800acf46c5ad9c42c91284dd8ac3bb0"
+  },
+  {
+    "id": "I-05",
+    "section": "I",
+    "number": 5,
+    "prompt": "Biểu đồ Ven dưới đây là biểu diễn cho tập hợp nào?",
+    "sourcePage": 32,
+    "sourceOriginalCrop": "b04/I-05-question-01.png",
+    "sourceOriginalCropSha256": "a1663448ac1d2d29806842f6aca738bf60f4ae839ce8371d634268ac4bc2caaf",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$A\\setminus B$."
+      },
+      {
+        "label": "B",
+        "text": "$A\\cup B$."
+      },
+      {
+        "label": "C",
+        "text": "$A\\cap B$."
+      },
+      {
+        "label": "D",
+        "text": "$B\\setminus A$."
+      }
+    ],
+    "figureRef": {
+      "path": "t04-corrected/figures/I-05-venn.png",
+      "width": 420,
+      "height": 280,
+      "dpi": 200,
+      "sha256": "93f51ba4ac3288aea362f7dfccbfbaa08ee363291dad38de4e1f3b93f51acde2",
+      "sourcePage": 32,
+      "sourceCropPixelBox": [
+        600,
+        52,
+        1020,
+        332
+      ],
+      "sourcePagePixelBox": [
+        677,
+        1201,
+        1097,
+        1481
+      ],
+      "sourcePageBBoxPt": [
+        243.72,
+        308.76,
+        394.92,
+        409.55999999999995
+      ],
+      "pixelEquality": "PASS_EXACT_SOURCE_CROP",
+      "alt": "Biểu đồ Ven nguyên bản với nhãn A, B."
+    },
+    "questionId": "mtm-drive-g10-c1-t04-mtm-errata-v1-I5",
+    "sourceDisplayCropSha256": "a1663448ac1d2d29806842f6aca738bf60f4ae839ce8371d634268ac4bc2caaf"
+  },
+  {
+    "id": "I-06",
+    "section": "I",
+    "number": 6,
+    "prompt": "Cho hai tập hợp $A=[-2;3]$ và $B=(1;+\\infty)$. Tìm $A\\cap B$.",
+    "sourcePage": 32,
+    "sourceOriginalCrop": "b04/I-06-question-01.png",
+    "sourceOriginalCropSha256": "d72618b9c510a9823350d0b82a1f883b4c495683aeee523a71a0c20e0e687eb1",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$A\\cap B=[-2;+\\infty)$."
+      },
+      {
+        "label": "B",
+        "text": "$A\\cap B=(1;3]$."
+      },
+      {
+        "label": "C",
+        "text": "$A\\cap B=[1;3]$."
+      },
+      {
+        "label": "D",
+        "text": "$A\\cap B=(1;3)$."
+      }
+    ],
+    "questionId": "mtm-drive-g10-c1-t04-mtm-errata-v1-I6",
+    "sourceDisplayCropSha256": "d72618b9c510a9823350d0b82a1f883b4c495683aeee523a71a0c20e0e687eb1"
+  },
+  {
+    "id": "I-07",
+    "section": "I",
+    "number": 7,
+    "prompt": "Cho $A,B,C$ là ba tập được minh họa như hình vẽ. Phần gạch sọc trong hình vẽ bên là tập hợp nào sau đây?",
+    "sourcePage": 32,
+    "sourceOriginalCrop": "b04/I-07-question-01.png",
+    "sourceOriginalCropSha256": "e35a0e7dc709b4070a3b5f802bdd786312c922f9c63097bbbae2e025f7b2a5cc",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$(A\\cup B)\\setminus C$."
+      },
+      {
+        "label": "B",
+        "text": "$(A\\cap B)\\setminus C$."
+      },
+      {
+        "label": "C",
+        "text": "$(A\\setminus C)\\cup(A\\setminus B)$."
+      },
+      {
+        "label": "D",
+        "text": "$(A\\cap B)\\cap C$"
+      }
+    ],
+    "figureRef": {
+      "path": "t04-corrected/figures/I-07-venn.png",
+      "width": 340,
+      "height": 298,
+      "dpi": 200,
+      "sha256": "46c2f46fcb997312ebe5976fed17c725016cd8e1df9f6ba80f9085cd40018e41",
+      "sourcePage": 32,
+      "sourceCropPixelBox": [
+        610,
+        92,
+        950,
+        390
+      ],
+      "sourcePagePixelBox": [
+        687,
+        1747,
+        1027,
+        2045
+      ],
+      "sourcePageBBoxPt": [
+        247.32000000000002,
+        105.71999999999991,
+        369.72,
+        212.9999999999999
+      ],
+      "pixelEquality": "PASS_EXACT_SOURCE_CROP",
+      "alt": "Biểu đồ Ven nguyên bản với nhãn A, B, C."
+    },
+    "questionId": "mtm-drive-g10-c1-t04-mtm-errata-v1-I7",
+    "sourceDisplayCropSha256": "e35a0e7dc709b4070a3b5f802bdd786312c922f9c63097bbbae2e025f7b2a5cc"
+  },
+  {
+    "id": "I-08",
+    "section": "I",
+    "number": 8,
+    "prompt": "Cho tập hợp $A=(-\\infty;-1]$ và tập $B=(-3;+\\infty)$. Khi đó $A\\cup B$ là tập hợp nào sau đây?",
+    "sourcePage": 33,
+    "sourceOriginalCrop": "b04/I-08-question-01.png",
+    "sourceOriginalCropSha256": "cd121d5d6d99ebc9df07088e4dd1f4139dab03f64e97041140fcb061d4c07dcd",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$\\varnothing$"
+      },
+      {
+        "label": "B",
+        "text": "$(-3;-1]$"
+      },
+      {
+        "label": "C",
+        "text": "$(-3;+\\infty)$"
+      },
+      {
+        "label": "D",
+        "text": "$\\mathbb R$"
+      }
+    ],
+    "questionId": "mtm-drive-g10-c1-t04-mtm-errata-v1-I8",
+    "sourceDisplayCropSha256": "cd121d5d6d99ebc9df07088e4dd1f4139dab03f64e97041140fcb061d4c07dcd"
+  },
+  {
+    "id": "I-09",
+    "section": "I",
+    "number": 9,
+    "prompt": "Cho hai tập hợp $A=[-2;3],B=(1;+\\infty)$. Khi đó $A\\setminus B$ bằng",
+    "sourcePage": 33,
+    "sourceOriginalCrop": "b04/I-09-question-01.png",
+    "sourceOriginalCropSha256": "1f330a942e17f4677e35cb433929c9e39a4a24e37556fe3c79d01e2b5d7808ce",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$[-2;1]$."
+      },
+      {
+        "label": "B",
+        "text": "$(-2;1]$."
+      },
+      {
+        "label": "C",
+        "text": "$[-2;1)$."
+      },
+      {
+        "label": "D",
+        "text": "$(-2;-1)$."
+      }
+    ],
+    "questionId": "mtm-drive-g10-c1-t04-mtm-errata-v1-I9",
+    "sourceDisplayCropSha256": "1f330a942e17f4677e35cb433929c9e39a4a24e37556fe3c79d01e2b5d7808ce"
+  },
+  {
+    "id": "I-10",
+    "section": "I",
+    "number": 10,
+    "prompt": "Cho tập hợp $A=(2023;+\\infty)$. Khi đó $C_{\\mathbb R}A$ là",
+    "sourcePage": 33,
+    "sourceOriginalCrop": "b04/I-10-question-01.png",
+    "sourceOriginalCropSha256": "ce6b4ae84de855bf0488fe59a939a924d1b0372b29c75b8d6d99a3b245b4a5ca",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$(-\\infty;2023]$."
+      },
+      {
+        "label": "B",
+        "text": "$[2023;+\\infty)$."
+      },
+      {
+        "label": "C",
+        "text": "$(-\\infty;2022]$."
+      },
+      {
+        "label": "D",
+        "text": "$(2023;+\\infty)$."
+      }
+    ],
+    "questionId": "mtm-drive-g10-c1-t04-mtm-errata-v1-I10",
+    "sourceDisplayCropSha256": "ce6b4ae84de855bf0488fe59a939a924d1b0372b29c75b8d6d99a3b245b4a5ca"
+  },
+  {
+    "id": "I-11",
+    "section": "I",
+    "number": 11,
+    "prompt": "Lớp 10A có 47 học sinh trong đó có 10 học sinh thích chơi bóng đá, 18 học sinh thích chơi bóng rổ, 9 học sinh thích chơi cả 2 môn. Số học sinh không thích chơi môn nào trong cả 2 môn thể thao trên là bao nhiêu?",
+    "sourcePage": 33,
+    "sourceOriginalCrop": "b04/I-11-question-01.png",
+    "sourceOriginalCropSha256": "0941b691dd2e59cc04b6d6f57035028a803065df4c6836e947abe318c3a3432a",
+    "choices": [
+      {
+        "label": "A",
+        "text": "24."
+      },
+      {
+        "label": "B",
+        "text": "28."
+      },
+      {
+        "label": "C",
+        "text": "27."
+      },
+      {
+        "label": "D",
+        "text": "19."
+      }
+    ],
+    "questionId": "mtm-drive-g10-c1-t04-mtm-errata-v1-I11",
+    "sourceDisplayCropSha256": "0941b691dd2e59cc04b6d6f57035028a803065df4c6836e947abe318c3a3432a"
+  },
+  {
+    "id": "I-12",
+    "section": "I",
+    "number": 12,
+    "prompt": "Trong một hội diễn văn nghệ, một đội gồm 8 nghệ sĩ tham gia tiết mục hát hoặc tiết mục múa. Biết rằng có 3 nghệ sĩ tham gia cả hai tiết mục hát, múa và 2 nghệ sĩ chỉ tham gia tiết mục múa. Số nghệ sĩ chỉ tham gia tiết mục hát là",
+    "sourcePage": 33,
+    "sourceOriginalCrop": "b04/I-12-question-01.png",
+    "sourceOriginalCropSha256": "08d5c13d908cfec3f0ff3679bbec327d6d7c9d1685fd2e590b6e80f270ffb0c0",
+    "choices": [
+      {
+        "label": "A",
+        "text": "3."
+      },
+      {
+        "label": "B",
+        "text": "8."
+      },
+      {
+        "label": "C",
+        "text": "6."
+      },
+      {
+        "label": "D",
+        "text": "5."
+      }
+    ],
+    "questionId": "mtm-drive-g10-c1-t04-mtm-errata-v1-I12",
+    "sourceDisplayCropSha256": "08d5c13d908cfec3f0ff3679bbec327d6d7c9d1685fd2e590b6e80f270ffb0c0"
+  },
+  {
+    "id": "II-01",
+    "section": "II",
+    "number": 1,
+    "prompt": "Cho hai tập hợp $A=\\left\\{\\begin{gathered}n\\in\\mathbb N/\\\\(n^2-2n-3)(n^2-1)=0\\end{gathered}\\right\\}$ và $B=\\left\\{x\\in\\mathbb R/2x^2-x+3=0\\right\\}$.",
+    "sourcePage": 33,
+    "sourceOriginalCrop": "b04/II-01-question-01.png",
+    "sourceOriginalCropSha256": "b16db8eb6d11e8ab72a243df56acb2bde8f4ff3bac350f353eea22c168f4489a",
+    "statements": [
+      {
+        "label": "a",
+        "text": "Tập hợp $A$ có 3 phần tử."
+      },
+      {
+        "label": "b",
+        "text": "Số tập hợp con của tập hợp $A$ là 4 tập hợp."
+      },
+      {
+        "label": "c",
+        "text": "Tập hợp $B$ là tập hợp rỗng."
+      },
+      {
+        "label": "d",
+        "text": "Tổng các phần tử của tập hợp $A$ và tập hợp $B$ là 3."
+      }
+    ],
+    "questionId": "mtm-drive-g10-c1-t04-mtm-errata-v1-II1",
+    "sourceDisplayCropSha256": "b16db8eb6d11e8ab72a243df56acb2bde8f4ff3bac350f353eea22c168f4489a"
+  },
+  {
+    "id": "II-02",
+    "section": "II",
+    "number": 2,
+    "prompt": "Cho tập hợp $A=\\left\\{x\\in\\mathbb R\\mid|x|>4\\right\\}$; $B=\\left\\{x\\in\\mathbb R\\mid-5\\le x-1<5\\right\\}$.",
+    "sourcePage": 33,
+    "sourceOriginalCrop": "b04/II-02-question-01.png",
+    "sourceOriginalCropSha256": "5ecb0ef27a43ed89c8b60a2d6589eaa1e7ac72bfb36cc9dcf93e2f3d9859fa32",
+    "statements": [
+      {
+        "label": "a",
+        "text": "$B\\setminus A=[-4;4]$."
+      },
+      {
+        "label": "b",
+        "text": "$A\\cap B=(4;6)$."
+      },
+      {
+        "label": "c",
+        "text": "$\\begin{aligned}&\\mathbb R\\setminus(A\\cap B)={}\\\\&(-\\infty;4)\\cup[6;+\\infty)\\end{aligned}$."
+      },
+      {
+        "label": "d",
+        "text": "$\\mathbb R\\setminus(A\\cup B)=\\varnothing$."
+      }
+    ],
+    "questionId": "mtm-drive-g10-c1-t04-mtm-errata-v1-II2",
+    "sourceDisplayCropSha256": "5ecb0ef27a43ed89c8b60a2d6589eaa1e7ac72bfb36cc9dcf93e2f3d9859fa32"
+  },
+  {
+    "id": "II-03",
+    "section": "II",
+    "number": 3,
+    "prompt": "Cho ba tập hợp $A=\\left\\{\\begin{gathered}x\\in\\mathbb N\\mid\\\\(2x+1)(x^2-7x+10)=0\\end{gathered}\\right\\}$, $B=\\left\\{x\\in\\mathbb R\\mid2<x\\le5\\right\\}$ và $C=\\{2;m;5\\}$",
+    "sourcePage": 33,
+    "sourceOriginalCrop": "b04/II-03-question-01.png",
+    "sourceOriginalCropSha256": "47cebf55cdcd9b07ef03e045bc5f0b4c346f2c144de291f460e18577432a1c4b",
+    "statements": [
+      {
+        "label": "a",
+        "text": "Tập hợp $A$ có hai tập hợp con khác rỗng."
+      },
+      {
+        "label": "b",
+        "text": "$A\\subset B$."
+      },
+      {
+        "label": "c",
+        "text": "$\\{3;4;5\\}\\subset B$."
+      },
+      {
+        "label": "d",
+        "text": "Không có giá trị nào của $m$ để $A=C$."
+      }
+    ],
+    "questionId": "mtm-drive-g10-c1-t04-mtm-errata-v1-II3",
+    "sourceDisplayCropSha256": "47cebf55cdcd9b07ef03e045bc5f0b4c346f2c144de291f460e18577432a1c4b"
+  },
+  {
+    "id": "II-04",
+    "section": "II",
+    "number": 4,
+    "prompt": "Cho các tập hợp $A=\\left\\{x\\in\\mathbb N,2x^2-3x+1=0\\right\\}$, $B=\\left\\{x\\in\\mathbb N^*,x<2\\right\\}$, $X=\\left\\{x\\in\\mathbb Z,|x|<3\\right\\}$ và $Y=\\left\\{y\\in\\mathbb R,(y^2-1)(y^2-4)=0\\right\\}$. Ta có",
+    "sourcePage": 33,
+    "sourceOriginalCrop": "b04/II-04-question-01.png",
+    "sourceOriginalCropSha256": "b5b2c0ff70fd2977a3e9959539c6260b336f02cfcd5977828bc4e85110d1dbb0",
+    "statements": [
+      {
+        "label": "a",
+        "text": "$A\\subset B$."
+      },
+      {
+        "label": "b",
+        "text": "$B\\subset X$."
+      },
+      {
+        "label": "c",
+        "text": "Tập $B$ có tất cả 8 tập con."
+      },
+      {
+        "label": "d",
+        "text": "$X=Y$"
+      }
+    ],
+    "questionId": "mtm-drive-g10-c1-t04-mtm-errata-v1-II4",
+    "sourceDisplayCropSha256": "b5b2c0ff70fd2977a3e9959539c6260b336f02cfcd5977828bc4e85110d1dbb0"
+  },
+  {
+    "id": "III-01",
+    "section": "III",
+    "number": 1,
+    "prompt": "Cho hai tập hợp $A=\\left\\{x\\in\\mathbb Z\\mid-1\\le x\\le3\\right\\}$; $B=\\left\\{x\\in\\mathbb N\\mid x\\le4\\right\\}$. Tìm số phần tử của $A\\setminus B$.",
+    "sourcePage": 34,
+    "sourceOriginalCrop": "b04/III-01-question-01.png",
+    "sourceOriginalCropSha256": "49b9d0943e969eaa2c1ab031e506de33a8a627caa87962d193bbdc6a0bc81785",
+    "questionId": "mtm-drive-g10-c1-t04-mtm-errata-v1-III1",
+    "sourceDisplayCropSha256": "49b9d0943e969eaa2c1ab031e506de33a8a627caa87962d193bbdc6a0bc81785"
+  },
+  {
+    "id": "III-02",
+    "section": "III",
+    "number": 2,
+    "prompt": "Cho các tập hợp $A=(-3;10]$; $B=(0;5)$. Số phần tử của tập $(A\\setminus B)\\cap\\mathbb Z$ là",
+    "sourcePage": 34,
+    "sourceOriginalCrop": "b04/III-02-question-01.png",
+    "sourceOriginalCropSha256": "1d61c19a9f24b61c80e32c121d1d3c93b43a1dd2e396fc9939332628274cdca4",
+    "questionId": "mtm-drive-g10-c1-t04-mtm-errata-v1-III2",
+    "sourceDisplayCropSha256": "1d61c19a9f24b61c80e32c121d1d3c93b43a1dd2e396fc9939332628274cdca4"
+  },
+  {
+    "id": "III-03",
+    "section": "III",
+    "number": 3,
+    "prompt": "Biết rằng $C_{\\mathbb R}A=[-3;11)$ và $C_{\\mathbb R}B=(-8;1]$. Khi đó, số phần tử của tập hợp $\\mathbb Z\\cap C_{\\mathbb R}(A\\cap B)$ bằng",
+    "sourcePage": 34,
+    "sourceOriginalCrop": "b04/III-03-question-01.png",
+    "sourceOriginalCropSha256": "d3671d4ba9dcb23f4f674e4441c00c19ffa608607bc974197742bd9a20f8695b",
+    "questionId": "mtm-drive-g10-c1-t04-mtm-errata-v1-III3",
+    "sourceDisplayCropSha256": "d3671d4ba9dcb23f4f674e4441c00c19ffa608607bc974197742bd9a20f8695b"
+  },
+  {
+    "id": "III-04",
+    "section": "III",
+    "number": 4,
+    "prompt": "Khi cho học sinh một lớp đăng kí môn thể thao mà bản thân yêu thích thì thu được kết quả: 24 học sinh đăng ký môn bóng đá, 20 học sinh đăng kí cầu lông, 7 học sinh đăng ký cả hai môn bóng đá và cầu lông, 8 học sinh đăng kí một số môn khác. Hỏi sĩ số của lớp này là bao nhiêu?",
+    "sourcePage": 34,
+    "sourceOriginalCrop": "b04/III-04-question-01.png",
+    "sourceOriginalCropSha256": "0de98f6a72ee7dd9ecf9af87018e355ab3419177fd70c93a4b6738a79fb087e3",
+    "approvedErratum": {
+      "label": "Đính chính MTM đã được Thành duyệt",
+      "text": "8 học sinh chỉ đăng ký môn khác; mỗi học sinh đã đăng ký ít nhất một môn.",
+      "sourcePromptUnchanged": true,
+      "mustDisplayBeforeAttempt": true
+    },
+    "questionId": "mtm-drive-g10-c1-t04-mtm-errata-v1-III4",
+    "sourceDisplayCropSha256": "0de98f6a72ee7dd9ecf9af87018e355ab3419177fd70c93a4b6738a79fb087e3"
+  },
+  {
+    "id": "III-05",
+    "section": "III",
+    "number": 5,
+    "prompt": "Lớp 10A có 7 học sinh giỏi Toán, 5 học sinh giỏi Lý, 6 học sinh giỏi Hoá, 3 học sinh giỏi cả Toán và Lý, 4 học sinh giỏi cả Toán và Hoá, 2 học sinh giỏi cả Lý và Hoá, 1 học sinh giỏi cả ba môn Toán, Lý, Hoá. Số học sinh giỏi ít nhất 1 môn của lớp 10A là",
+    "sourcePage": 34,
+    "sourceOriginalCrop": "b04/III-05-question-01.png",
+    "sourceOriginalCropSha256": "8c81d3913df70f0dd4b3a7954cf58d4ac4d921d896350f4a7b5cbf989ee1ede5",
+    "questionId": "mtm-drive-g10-c1-t04-mtm-errata-v1-III5",
+    "sourceDisplayCropSha256": "8c81d3913df70f0dd4b3a7954cf58d4ac4d921d896350f4a7b5cbf989ee1ede5"
+  },
+  {
+    "id": "III-06",
+    "section": "III",
+    "number": 6,
+    "prompt": "Trong Kỳ thi tốt nghiệp phổ thông, ở một trường kết quả số thí sinh đạt danh hiệu xuất sắc như sau: Về môn Toán: 48 thí sinh; Về môn Vật lý: 37 thí sinh; Về môn Văn: 42 thí sinh; Về môn Toán hoặc môn Vật lý: 75 thí sinh; Về môn Toán hoặc môn Văn: 76 thí sinh; Về môn Vật lý hoặc môn Văn: 66 thí sinh; Về cả 3 môn: 4 thí sinh. Vậy có bao nhiêu học sinh nhận được danh hiệu xuất sắc về một môn?",
+    "sourcePage": 34,
+    "sourceOriginalCrop": "b04/III-06-question-01.png",
+    "sourceOriginalCropSha256": "0c0f9465ede786db06c78fa979c842a9d117d92cd4a7f4f49b929fd373cec89b",
+    "questionId": "mtm-drive-g10-c1-t04-mtm-errata-v1-III6",
+    "sourceDisplayCropSha256": "0c0f9465ede786db06c78fa979c842a9d117d92cd4a7f4f49b929fd373cec89b"
+  },
+  {
+    "id": "I-01",
+    "section": "I",
+    "number": 1,
+    "prompt": "Cho góc hình học $uOv$ có số đo $50^\\circ$ (hình vẽ). Xác định số đo của các góc lượng giác $(Ou;Ov)$.",
+    "sourcePage": 1,
+    "sourceOriginalCrop": "b01/I-01-question-01.png",
+    "sourceOriginalCropSha256": "5ab022a771db4ea0f8a9fec661919cd7cc33e9b881d936ebe0636fd996153b4d",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$\\operatorname{sđ}(Ou;Ov)=50^\\circ+k360^\\circ$, $k\\in\\mathbb Z$."
+      },
+      {
+        "label": "B",
+        "text": "$\\operatorname{sđ}(Ou;Ov)=50^\\circ+k180^\\circ$, $k\\in\\mathbb Z$."
+      },
+      {
+        "label": "C",
+        "text": "$\\operatorname{sđ}(Ou;Ov)=-50^\\circ+k360^\\circ$, $k\\in\\mathbb Z$."
+      },
+      {
+        "label": "D",
+        "text": "$\\operatorname{sđ}(Ou;Ov)=-50^\\circ+k180^\\circ$, $k\\in\\mathbb Z$."
+      }
+    ],
+    "figureRef": {
+      "path": "g11-t01/figures/I-01-source-figure.png",
+      "width": 380,
+      "height": 288,
+      "sha256": "5f30487f7f11982dfe799932481ca91a1db78d9a0ba35daff81b2c0cc34f4d07",
+      "sourcePage": 1,
+      "sourceOriginalCrop": "b01/I-01-question-01.png",
+      "sourceCropPixelBox": [
+        570,
+        105,
+        950,
+        393
+      ],
+      "pixelEquality": "PASS_EXACT_SOURCE_CROP",
+      "alt": "Hình nguyên bản I-01 với đầy đủ nhãn và dữ kiện."
+    },
+    "sourceDisplayCropSha256": "4079e43fe3e0fa31c9fbf6411e2f4272ea2db30663ce403b98d2091bdcadb90d",
+    "questionId": "mtm-drive-g11-c1-t01-mtm-errata-v1-I1"
+  },
+  {
+    "id": "I-02",
+    "section": "I",
+    "number": 2,
+    "prompt": "Bánh xe của người đi xe đạp quay được 2 vòng trong 6 giây. Hỏi trong 1 giây, bánh xe quay được bao nhiêu độ:",
+    "sourcePage": 1,
+    "sourceOriginalCrop": "b01/I-02-question-01.png",
+    "sourceOriginalCropSha256": "7d5d3f0f759328717c028f719e95996cb9c721ed0a6a3dab4e24e381f26a1dd8",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$60^\\circ$."
+      },
+      {
+        "label": "B",
+        "text": "$72^\\circ$."
+      },
+      {
+        "label": "C",
+        "text": "$240^\\circ$."
+      },
+      {
+        "label": "D",
+        "text": "$120^\\circ$."
+      }
+    ],
+    "sourceDisplayCropSha256": "0f02bfe3a06baf09ec8082342c8857b588f653bb698f890fa8c7c198c73edc21",
+    "questionId": "mtm-drive-g11-c1-t01-mtm-errata-v1-I2"
+  },
+  {
+    "id": "I-03",
+    "section": "I",
+    "number": 3,
+    "prompt": "Cho góc lượng giác $(Ou,Ov)$ có số đo là $\\dfrac{\\pi}{4}$. Số đo của góc lượng giác nào sau đây có cùng tia đầu là $Ou$ và tia cuối là $Ov$?",
+    "sourcePage": 1,
+    "sourceOriginalCrop": "b01/I-03-question-01.png",
+    "sourceOriginalCropSha256": "a46a87b4b3197cc96833d565caf16e68b26eff1e4759d542adad7a43745c0b5e",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$\\dfrac{3\\pi}{4}$."
+      },
+      {
+        "label": "B",
+        "text": "$\\dfrac{17\\pi}{4}$."
+      },
+      {
+        "label": "C",
+        "text": "$\\dfrac{7\\pi}{4}$."
+      },
+      {
+        "label": "D",
+        "text": "$\\dfrac{5\\pi}{4}$."
+      }
+    ],
+    "sourceDisplayCropSha256": "3ad66633688128384af9cc255fab1132ea9234f2ba4f79cadb604abc572db33c",
+    "questionId": "mtm-drive-g11-c1-t01-mtm-errata-v1-I3"
+  },
+  {
+    "id": "I-04",
+    "section": "I",
+    "number": 4,
+    "prompt": "Đổi số đo góc $105^\\circ$ sang radian, ta được",
+    "sourcePage": 1,
+    "sourceOriginalCrop": "b01/I-04-question-01.png",
+    "sourceOriginalCropSha256": "cf62104f5ae1fa050d2b6fcbf2aa9ae1dbbc9df82bcfdbcd69cba24f1aa21e1b",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$\\dfrac{5\\pi}{12}\\,\\mathrm{rad}$."
+      },
+      {
+        "label": "B",
+        "text": "$\\dfrac{7\\pi}{12}\\,\\mathrm{rad}$."
+      },
+      {
+        "label": "C",
+        "text": "$\\dfrac{9\\pi}{12}\\,\\mathrm{rad}$."
+      },
+      {
+        "label": "D",
+        "text": "$\\dfrac{5\\pi}{8}\\,\\mathrm{rad}$."
+      }
+    ],
+    "sourceDisplayCropSha256": "8f4b38c05dc60abffd5eded5d015abac4b9f32fed3672213bfffdfea092e6496",
+    "questionId": "mtm-drive-g11-c1-t01-mtm-errata-v1-I4"
+  },
+  {
+    "id": "I-05",
+    "section": "I",
+    "number": 5,
+    "prompt": "Cho góc $\\alpha$ thỏa mãn $0<\\alpha<\\dfrac{\\pi}{2}$ và $\\cos\\alpha=\\dfrac{1}{3}$. Tính $\\sin\\alpha$.",
+    "sourcePage": 1,
+    "sourceOriginalCrop": "b01/I-05-question-01.png",
+    "sourceOriginalCropSha256": "f3fe945e2edb9de465f53737b59fe2288eea2f8e296eb335ede57fa63d26b18b",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$\\dfrac{-2\\sqrt2}{3}$."
+      },
+      {
+        "label": "B",
+        "text": "$\\dfrac{2\\sqrt2}{3}$."
+      },
+      {
+        "label": "C",
+        "text": "$-\\dfrac{\\sqrt2}{3}$."
+      },
+      {
+        "label": "D",
+        "text": "$\\dfrac{\\sqrt2}{3}$."
+      }
+    ],
+    "sourceDisplayCropSha256": "7a479fdc5c736fe04f3b6b99543d5835a29097a2df7359da20478cbaa390b43a",
+    "questionId": "mtm-drive-g11-c1-t01-mtm-errata-v1-I5"
+  },
+  {
+    "id": "I-06",
+    "section": "I",
+    "number": 6,
+    "prompt": "Bánh xe của người đi xe đạp quay được 13 vòng trong 4 giây. Tính độ dài quãng đường mà người đi xe đạp đã đi được trong 2 phút, biết rằng đường kính của bánh xe đạp là $580\\,\\mathrm{mm}$, lấy $\\pi\\approx3{,}14$.",
+    "sourcePage": 1,
+    "sourceOriginalCrop": "b01/I-06-question-01.png",
+    "sourceOriginalCropSha256": "cfdc256f679eecab9c671eb2dde560ef5d8ec2669c9e2e0913fd5bff43ddc003",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$710{,}6283\\,\\mathrm{km}$."
+      },
+      {
+        "label": "B",
+        "text": "$1421{,}2565\\,\\mathrm{m}$."
+      },
+      {
+        "label": "C",
+        "text": "$710{,}268\\,\\mathrm{m}$."
+      },
+      {
+        "label": "D",
+        "text": "$1421{,}2565\\,\\mathrm{km}$."
+      }
+    ],
+    "approvedErratum": {
+      "label": "Đính chính MTM đã được Thành duyệt",
+      "text": "Phương án C sửa thành 710,268 m để phù hợp với yêu cầu lấy π≈3,14.",
+      "sourceChoiceC": "$710{,}6283\\,\\mathrm{m}$.",
+      "mustDisplayBeforeAttempt": true
+    },
+    "sourceDisplayCropSha256": "772651903e81a1c2aabbd9831b80a6a8e83c40d311170ee05b4a49dd2f9cc140",
+    "questionId": "mtm-drive-g11-c1-t01-mtm-errata-v1-I6"
+  },
+  {
+    "id": "I-07",
+    "section": "I",
+    "number": 7,
+    "prompt": "Trên đường tròn lượng giác, số đo của các góc lượng giác có tia đầu $OA$, tia cuối $OB$ là",
+    "sourcePage": 2,
+    "sourceOriginalCrop": "b01/I-07-question-01-text.png",
+    "sourceOriginalCropSha256": "b13c2b4d4ec63f34815409a0225d8e56964394f08b08ef0fba33183b08e441b5",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$\\dfrac{\\pi}{2}+k\\pi$, $k\\in\\mathbb Z$."
+      },
+      {
+        "label": "B",
+        "text": "$\\dfrac{\\pi}{4}+k2\\pi$, $k\\in\\mathbb Z$."
+      },
+      {
+        "label": "C",
+        "text": "$-\\dfrac{\\pi}{2}+k2\\pi$, $k\\in\\mathbb Z$."
+      },
+      {
+        "label": "D",
+        "text": "$\\dfrac{\\pi}{2}+k2\\pi$, $k\\in\\mathbb Z$."
+      }
+    ],
+    "figureRef": {
+      "path": "g11-t01/figures/I-07-source-figure.png",
+      "width": 573,
+      "height": 378,
+      "sha256": "f351f7e55e0b0aa229aac8e50b248bdf21359b095a8884ba6f29dcd6b9b74ed5",
+      "sourcePage": 2,
+      "sourceOriginalCrop": "b01/I-07-question-02-circle.png",
+      "sourceCropPixelBox": [
+        0,
+        0,
+        573,
+        378
+      ],
+      "pixelEquality": "PASS_EXACT_SOURCE_CROP",
+      "alt": "Hình nguyên bản I-07 với đầy đủ nhãn và dữ kiện."
+    },
+    "sourceDisplayCropSha256": "0b41ca741f81f65f93b4d116f9286ed5813cac4347c8e573c67359787acb0d6e",
+    "questionId": "mtm-drive-g11-c1-t01-mtm-errata-v1-I7"
+  },
+  {
+    "id": "I-08",
+    "section": "I",
+    "number": 8,
+    "prompt": "Cho $\\sin\\alpha=\\dfrac{4}{5}$ và $\\dfrac{\\pi}{2}<\\alpha<\\pi$. Tính $\\cos\\alpha$.",
+    "sourcePage": 2,
+    "sourceOriginalCrop": "b01/I-08-question-01-stem.png",
+    "sourceOriginalCropSha256": "7cac29e1374065aede8df1013be72470467a7e63eaa0d05d3f116b5ce25a4bcc",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$\\dfrac{3}{5}$."
+      },
+      {
+        "label": "B",
+        "text": "$\\dfrac{1}{5}$."
+      },
+      {
+        "label": "C",
+        "text": "$-\\dfrac{1}{5}$."
+      },
+      {
+        "label": "D",
+        "text": "$-\\dfrac{3}{5}$."
+      }
+    ],
+    "sourceDisplayCropSha256": "54053a431ef1d2d4450311397602a378953978104152cf05542d0dbf348acb5f",
+    "questionId": "mtm-drive-g11-c1-t01-mtm-errata-v1-I8"
+  },
+  {
+    "id": "I-09",
+    "section": "I",
+    "number": 9,
+    "prompt": "Cho một góc lượng giác $(Ox,Ou)$ có số đo là $-120^\\circ$ và một góc lượng giác $(Ox,Ov)$ có số đo $230^\\circ$. Số đo của các góc lượng giác $(Ou,Ov)$ là:",
+    "sourcePage": 2,
+    "sourceOriginalCrop": "b01/I-09-question-01.png",
+    "sourceOriginalCropSha256": "b031756bbf7e58da7c01c717cbe716c8fc78cc06a97ab8a7578ee7a946292504",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$\\begin{aligned}&\\operatorname{sđ}(Ou,Ov)={}\\\\&350^\\circ+k\\cdot360^\\circ\\end{aligned}$ $(k\\in\\mathbb Z)$."
+      },
+      {
+        "label": "B",
+        "text": "$\\begin{aligned}&\\operatorname{sđ}(Ou,Ov)={}\\\\&110^\\circ+k\\cdot360^\\circ\\end{aligned}$ $(k\\in\\mathbb Z)$."
+      },
+      {
+        "label": "C",
+        "text": "$\\begin{aligned}&\\operatorname{sđ}(Ou,Ov)={}\\\\&-350^\\circ+k\\cdot360^\\circ\\end{aligned}$ $(k\\in\\mathbb Z)$."
+      },
+      {
+        "label": "D",
+        "text": "$\\begin{aligned}&\\operatorname{sđ}(Ou,Ov)={}\\\\&-110^\\circ+k\\cdot360^\\circ\\end{aligned}$ $(k\\in\\mathbb Z)$."
+      }
+    ],
+    "sourceDisplayCropSha256": "4ad72044e0a88fcf882f4f999f2ada7a758e23c94c6c0eb9c4845e3e382bf8ea",
+    "questionId": "mtm-drive-g11-c1-t01-mtm-errata-v1-I9"
+  },
+  {
+    "id": "I-10",
+    "section": "I",
+    "number": 10,
+    "prompt": "Trên đường tròn bán kính $r=15$, độ dài của cung có số đo $\\alpha=50^\\circ$ là",
+    "sourcePage": 2,
+    "sourceOriginalCrop": "b01/I-10-question-01.png",
+    "sourceOriginalCropSha256": "1d6e645c95081aadf4be9a6fb18eea880f002688995c49f40bcdbc591b13ab17",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$l=750$."
+      },
+      {
+        "label": "B",
+        "text": "$l=15\\cdot\\dfrac{180}{\\pi}$."
+      },
+      {
+        "label": "C",
+        "text": "$l=\\dfrac{15\\pi}{180}$."
+      },
+      {
+        "label": "D",
+        "text": "$l=\\dfrac{25\\pi}{6}$."
+      }
+    ],
+    "sourceDisplayCropSha256": "4b19cf47e4dd62cbc444f8baec4f11d3d6802c77777c5ebbab27fc014e1859f8",
+    "questionId": "mtm-drive-g11-c1-t01-mtm-errata-v1-I10"
+  },
+  {
+    "id": "I-11",
+    "section": "I",
+    "number": 11,
+    "prompt": "Cho $\\cos\\alpha=\\dfrac{2}{3}$ và $\\alpha\\in\\left(\\dfrac{3\\pi}{2};2\\pi\\right)$. Tính $\\cot\\alpha$.",
+    "sourcePage": 2,
+    "sourceOriginalCrop": "b01/I-11-question-01.png",
+    "sourceOriginalCropSha256": "846fafd86720fccb4d1d3a41c363c7593af406dbf4f117a0dd03fdc17dfc2e7a",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$\\dfrac{2\\sqrt5}{5}$."
+      },
+      {
+        "label": "B",
+        "text": "$-\\dfrac{2\\sqrt5}{5}$."
+      },
+      {
+        "label": "C",
+        "text": "$\\dfrac{\\sqrt5}{3}$."
+      },
+      {
+        "label": "D",
+        "text": "$-\\dfrac{\\sqrt5}{3}$."
+      }
+    ],
+    "sourceDisplayCropSha256": "6045372b4e12b54cfb805c630d53c450d77c608fa2fc9fd54ea6e07b7b520f6a",
+    "questionId": "mtm-drive-g11-c1-t01-mtm-errata-v1-I11"
+  },
+  {
+    "id": "I-12",
+    "section": "I",
+    "number": 12,
+    "prompt": "Cho $\\cos\\alpha=\\dfrac{3}{7}$ và $\\dfrac{3\\pi}{2}<\\alpha<2\\pi$. Khi đó $\\sin\\alpha$ bằng",
+    "sourcePage": 2,
+    "sourceOriginalCrop": "b01/I-12-question-01.png",
+    "sourceOriginalCropSha256": "c974919a737036354b0c2ef295e9a43c3b42eca6d3d9a4364a89bb59b24ed4a0",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$\\dfrac{4}{7}$."
+      },
+      {
+        "label": "B",
+        "text": "$-\\dfrac{4}{7}$."
+      },
+      {
+        "label": "C",
+        "text": "$-\\dfrac{2\\sqrt{10}}{7}$."
+      },
+      {
+        "label": "D",
+        "text": "$\\dfrac{2\\sqrt{10}}{7}$."
+      }
+    ],
+    "sourceDisplayCropSha256": "003529bd3e0c6711f36f754d4585429fc572a963ddb8cfebb48ce741bebf8e42",
+    "questionId": "mtm-drive-g11-c1-t01-mtm-errata-v1-I12"
+  },
+  {
+    "id": "II-01",
+    "section": "II",
+    "number": 1,
+    "prompt": "Cho hình vẽ sau:",
+    "sourcePage": 2,
+    "sourceOriginalCrop": "b01/II-01-question-01.png",
+    "sourceOriginalCropSha256": "ea3448f6f496cd094ea8a60113cc96ddc617d508d1d11e8e6419b098e22acb79",
+    "statements": [
+      {
+        "label": "a",
+        "text": "Số đo góc lượng giác $(OM,OA)$ là $\\operatorname{sđ}(OM,OA)=\\dfrac{\\pi}{3}+k2\\pi$ $(k\\in\\mathbb Z)$."
+      },
+      {
+        "label": "b",
+        "text": "$\\begin{aligned}&\\operatorname{sđ}(ON,OA)={}\\\\&\\operatorname{sđ}(ON,OM)-\\operatorname{sđ}(OA,OM)\\end{aligned}$."
+      },
+      {
+        "label": "c",
+        "text": "Độ dài cung tròn $AM$ lớn là: $l_{AM}=\\dfrac{2\\pi}{3}$."
+      },
+      {
+        "label": "d",
+        "text": "Hai điểm $M,N$ biểu diễn các cung có số đo là: $x=\\dfrac{\\pi}{3}+k\\pi$ $(k\\in\\mathbb Z)$."
+      }
+    ],
+    "figureRef": {
+      "path": "g11-t01/figures/II-01-source-figure.png",
+      "width": 400,
+      "height": 396,
+      "sha256": "4ddd06a6897193ab5be1f131eb5737fe145b079959a1ca0bf33aec26ab1df7b8",
+      "sourcePage": 2,
+      "sourceOriginalCrop": "b01/II-01-question-01.png",
+      "sourceCropPixelBox": [
+        970,
+        82,
+        1370,
+        478
+      ],
+      "pixelEquality": "PASS_EXACT_SOURCE_CROP",
+      "alt": "Hình nguyên bản II-01 với đầy đủ nhãn và dữ kiện."
+    },
+    "sourceDisplayCropSha256": "f8f71806eaa93c71a2415a81c7fb81db3692c7dee38a4ecb2d4e082f14d1fe56",
+    "questionId": "mtm-drive-g11-c1-t01-mtm-errata-v1-II1"
+  },
+  {
+    "id": "II-02",
+    "section": "II",
+    "number": 2,
+    "prompt": "Cho góc lượng giác $\\alpha$ có số đo theo đơn vị radian là $\\dfrac{3\\pi}{4}$.",
+    "sourcePage": 3,
+    "sourceOriginalCrop": "b01/II-02-question-01.png",
+    "sourceOriginalCropSha256": "e740232fc5647a0b356264267d1cb089a00e2a24814061b1679295d1925f5d22",
+    "statements": [
+      {
+        "label": "a",
+        "text": "Góc lượng giác $\\alpha$ có số đo theo đơn vị độ là $155^\\circ$."
+      },
+      {
+        "label": "b",
+        "text": "Điểm biểu diễn góc lượng giác $\\alpha$ là điểm $M$ trên đường tròn lượng giác thuộc góc phần tư thứ I."
+      },
+      {
+        "label": "c",
+        "text": "Góc lượng giác $-\\dfrac{5\\pi}{4}$ có cùng điểm biểu diễn trên đường tròn lượng giác với góc $\\alpha$."
+      },
+      {
+        "label": "d",
+        "text": "Góc lượng giác $855^\\circ$ có cùng điểm biểu diễn trên đường tròn lượng giác với góc $\\alpha$."
+      }
+    ],
+    "sourceDisplayCropSha256": "f55add7afb8e8b277f01ce0d7fd11977d6bcea02c2379dae2e372364f9b1c416",
+    "questionId": "mtm-drive-g11-c1-t01-mtm-errata-v1-II2"
+  },
+  {
+    "id": "II-03",
+    "section": "II",
+    "number": 3,
+    "prompt": "Cho góc $\\alpha$ thỏa mãn $\\cos\\alpha=\\dfrac{3}{5}$ và $-\\dfrac{\\pi}{2}<\\alpha<0$.",
+    "sourcePage": 3,
+    "sourceOriginalCrop": "b01/II-03-question-01.png",
+    "sourceOriginalCropSha256": "cbdacadeee083016d024e9fcd281ebbd8a6809c58e6242b2db85ee76ee885218",
+    "statements": [
+      {
+        "label": "a",
+        "text": "$\\sin\\alpha>0$."
+      },
+      {
+        "label": "b",
+        "text": "$\\tan\\alpha<0$."
+      },
+      {
+        "label": "c",
+        "text": "$\\sin\\alpha=-\\dfrac{4}{5}$."
+      },
+      {
+        "label": "d",
+        "text": "$\\sin\\left(\\dfrac{\\pi}{2}-\\alpha\\right)-\\sin(-\\alpha)=\\dfrac{7}{5}$."
+      }
+    ],
+    "sourceDisplayCropSha256": "f171a99339b4d285450fb10caf5aee580ead2b1c3b9720f26c47e2dc8169dcd1",
+    "questionId": "mtm-drive-g11-c1-t01-mtm-errata-v1-II3"
+  },
+  {
+    "id": "II-04",
+    "section": "II",
+    "number": 4,
+    "prompt": "Cho góc $\\alpha$ $(0^\\circ<\\alpha<180^\\circ)$ thỏa mãn $\\tan\\alpha=3$.",
+    "sourcePage": 3,
+    "sourceOriginalCrop": "b01/II-04-question-01.png",
+    "sourceOriginalCropSha256": "ffd1ec71a581a43e3038bccb0f2fea53931500af643233661fb945e22e78369e",
+    "statements": [
+      {
+        "label": "a",
+        "text": "$\\cot\\alpha=\\dfrac{1}{\\sqrt3}$."
+      },
+      {
+        "label": "b",
+        "text": "$\\cos\\alpha>0$."
+      },
+      {
+        "label": "c",
+        "text": "$\\sin\\alpha=\\dfrac{3\\sqrt{10}}{10}$."
+      },
+      {
+        "label": "d",
+        "text": "$P=\\dfrac{2\\sin\\alpha-3\\cos\\alpha}{3\\sin\\alpha+2\\cos\\alpha}=-\\dfrac{3}{11}$."
+      }
+    ],
+    "sourceDisplayCropSha256": "ceeecd5b1dde43d4578cd7eed68da75680bc3567c3005f26e37b7c693f10863e",
+    "questionId": "mtm-drive-g11-c1-t01-mtm-errata-v1-II4"
+  },
+  {
+    "id": "III-01",
+    "section": "III",
+    "number": 1,
+    "prompt": "Cho $\\cos x=\\dfrac{1}{3}$. Tính giá trị biểu thức $P=3\\sin^2x+4\\cos^2x$. (kết quả làm tròn đến hàng phần mười)",
+    "sourcePage": 3,
+    "sourceOriginalCrop": "b01/III-01-question-01.png",
+    "sourceOriginalCropSha256": "b04109ec27d0218828e38e516b2f4eb05e0a115e805afb714b489320ca0ca28b",
+    "sourceDisplayCropSha256": "5847b7d3072ba0d4c5577534985d8054377eb692e71a5917f960bc7bad6795f5",
+    "questionId": "mtm-drive-g11-c1-t01-mtm-errata-v1-III1"
+  },
+  {
+    "id": "III-02",
+    "section": "III",
+    "number": 2,
+    "prompt": "Cho $\\tan\\alpha=2$, Giá trị biểu thức $P=\\dfrac{4\\sin\\alpha+5\\cos\\alpha}{2\\sin\\alpha-3\\cos\\alpha}$ là",
+    "sourcePage": 3,
+    "sourceOriginalCrop": "b01/III-02-question-01.png",
+    "sourceOriginalCropSha256": "de06b7ed87f93fc108efb4e66b8256910ba7cf41fd1c4e40e125acd0018c55c0",
+    "sourceDisplayCropSha256": "46b2182e9ef46371a5866012341088f1437d4abbfc10a6e8ad19e1f555cb2b3c",
+    "questionId": "mtm-drive-g11-c1-t01-mtm-errata-v1-III2"
+  },
+  {
+    "id": "III-03",
+    "section": "III",
+    "number": 3,
+    "prompt": "Cho biết $\\cot x=\\dfrac{1}{2}$. Tính giá trị của biểu thức $A=\\dfrac{2}{\\sin^2x-\\sin x\\cdot\\cos x-\\cos^2x}$.",
+    "sourcePage": 3,
+    "sourceOriginalCrop": "b01/III-03-question-01.png",
+    "sourceOriginalCropSha256": "68dda8d5a644c7413b02cd68d9b1e7958bc9f42eee7fa2a6766c7f90fe6ee8e4",
+    "sourceDisplayCropSha256": "3f3091b7dffd2a4e165344728dabbc764ac8b94e601d2d0f21476ad671ac8a4f",
+    "questionId": "mtm-drive-g11-c1-t01-mtm-errata-v1-III3"
+  },
+  {
+    "id": "III-04",
+    "section": "III",
+    "number": 4,
+    "prompt": "Bánh xe đạp của người đi xe đạp quay được 2 vòng trong 5 giây. Hỏi trong 2 giây, bánh xe quay được 1 góc bao nhiêu rad (kết quả làm tròn đến hàng phần mười)?",
+    "sourcePage": 3,
+    "sourceOriginalCrop": "b01/III-04-question-01.png",
+    "sourceOriginalCropSha256": "e0949e91ee3e46aaa198abb0f4e05d6bd4979c2293e6e30e4b7fec69805aafe4",
+    "approvedErratum": {
+      "label": "Đính chính MTM đã được Thành duyệt",
+      "text": "Giữ yêu cầu làm tròn đến hàng phần mười; lỗi làm tròn trong lời giải gốc đã được đính chính, xem sau khi nộp bài.",
+      "mustDisplayBeforeAttempt": true
+    },
+    "sourceDisplayCropSha256": "7462aaf409a714f6b7bfe288e4d6a2af9204d75efb55ecb2e208e2400f0ed84c",
+    "questionId": "mtm-drive-g11-c1-t01-mtm-errata-v1-III4"
+  },
+  {
+    "id": "III-05",
+    "section": "III",
+    "number": 5,
+    "prompt": "Một bánh xe đạp quay được 25 vòng trong 10 giây. Tính độ dài quãng đường mà người đi xe thực hiện được trong $2{,}35$ phút, biết rằng bán kính bánh xe bằng $340\\,\\mathrm{mm}$. (Tính theo đơn vị mét, kết quả được làm tròn đến hàng đơn vị).",
+    "sourcePage": 3,
+    "sourceOriginalCrop": "b01/III-05-question-01.png",
+    "sourceOriginalCropSha256": "5703281b156491a0e1f2a0ed4d26014a88af57da754eb9ece4988113fcbc6e5c",
+    "figureRef": {
+      "path": "g11-t01/figures/III-05-source-figure.png",
+      "width": 501,
+      "height": 306,
+      "sha256": "d602c1c9130180419e3888cc64d2907ed3473e25af1d5740cb87b6c8a5b3eff5",
+      "sourcePage": 3,
+      "sourceOriginalCrop": "b01/III-05-question-01.png",
+      "sourceCropPixelBox": [
+        565,
+        39,
+        1066,
+        345
+      ],
+      "pixelEquality": "PASS_EXACT_SOURCE_CROP",
+      "alt": "Hình nguyên bản III-05 với đầy đủ nhãn và dữ kiện."
+    },
+    "sourceDisplayCropSha256": "f8effa50d76435693f32d5f08cfcffc7ef90e0044a412cae3d03444b14066d6b",
+    "questionId": "mtm-drive-g11-c1-t01-mtm-errata-v1-III5"
+  },
+  {
+    "id": "III-06",
+    "section": "III",
+    "number": 6,
+    "prompt": "Một chiếc đu quay có bán kính $75\\,\\mathrm{m}$, tâm của vòng quay ở độ cao $90\\,\\mathrm{m}$ so với mặt đất, thời gian thực hiện mỗi vòng quay của đu quay là 30 phút. Nếu một người vào cabin tại vị trí thấp nhất của vòng quay, thì sau 20 phút quay, người đó ở độ cao bao nhiêu mét so với mặt đất?",
+    "sourcePage": 4,
+    "sourceOriginalCrop": "b01/III-06-question-01.png",
+    "sourceOriginalCropSha256": "5c03ddf5cf22bde87ab72958498d156bf7f10b1df8ecd1fefb63633ac8254542",
+    "figureRef": {
+      "path": "g11-t01/figures/III-06-source-figure.png",
+      "width": 620,
+      "height": 594,
+      "sha256": "efdaa3cc437ad8eee33b143560ae96ffd07bdb276605e9a4ac6e121904b8506f",
+      "sourcePage": 4,
+      "sourceOriginalCrop": "b01/III-06-question-01.png",
+      "sourceCropPixelBox": [
+        510,
+        133,
+        1130,
+        727
+      ],
+      "pixelEquality": "PASS_EXACT_SOURCE_CROP",
+      "alt": "Hình nguyên bản III-06 với đầy đủ nhãn và dữ kiện."
+    },
+    "sourceDisplayCropSha256": "b451e7a169cca9b918470a25b074597a063e6e5c77a93c4c1fd3cd29877e6a3b",
+    "questionId": "mtm-drive-g11-c1-t01-mtm-errata-v1-III6"
+  },
+  {
+    "id": "I-01",
+    "section": "I",
+    "number": 1,
+    "prompt": "Hàm số $y=f(x)$ liên tục trên $\\mathbb R$ có bảng biến thiên hàm số $y=f^{\\prime}(x)$ như hình dưới:",
+    "sourcePage": 1,
+    "sourceOriginalCrop": "b02/I-01-question-01.png",
+    "sourceOriginalCropSha256": "2844a3dbfb91054ed93f135f3c19af2e7829376224f4a4412e57b026de300832",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$4$."
+      },
+      {
+        "label": "B",
+        "text": "$1$."
+      },
+      {
+        "label": "C",
+        "text": "$2$."
+      },
+      {
+        "label": "D",
+        "text": "$3$."
+      }
+    ],
+    "promptAfterFigure": "Số điểm cực trị của hàm số $y=f(x)$ là",
+    "figureRef": {
+      "path": "g12-t01/figures/I-01-source-table.png",
+      "width": 896,
+      "height": 240,
+      "sha256": "2ff8d8f90958db8523768c8a6220f632b53047575d73c408e75faeb15794b10d",
+      "sourcePage": 1,
+      "sourceOriginalCrop": "b02/I-01-question-01.png",
+      "sourceCropPixelBox": [
+        372,
+        52,
+        1268,
+        292
+      ],
+      "pixelEquality": "PASS_EXACT_SOURCE_CROP",
+      "alt": "Hình hoặc bảng nguyên bản I-01 với đầy đủ nhãn, trục và dữ kiện.",
+      "kind": "table"
+    },
+    "sourceDisplayCropSha256": "db2ec784db4368f0ecb47e11ace66e5f36b2208bb9d7f6e17fc6c3b80db081f3",
+    "questionTables": [
+      {
+        "caption": "Bảng biến thiên của đạo hàm trong đề",
+        "headerLabel": "$x$",
+        "headers": [
+          "$x$",
+          "$-\\infty$",
+          "",
+          "$-3$",
+          "",
+          "$0$",
+          "",
+          "$2$",
+          "",
+          "$+\\infty$"
+        ],
+        "rows": [
+          [
+            "$f^{\\prime}(x)$",
+            "$+\\infty$",
+            "$\\searrow$",
+            "$-4$",
+            "$\\nearrow$",
+            "$0$",
+            "$\\searrow$",
+            "$-2$",
+            "$\\nearrow$",
+            "$+\\infty$"
+          ]
+        ],
+        "sourceMeaning": "Variation of f-prime, not a sign row of f-prime or f-double-prime. Nodes -3,0,2 align with derivative values -4,0,-2.",
+        "tableKind": "variation",
+        "sourcePage": 1,
+        "sourceFigureRef": {
+          "path": "g12-t01/figures/I-01-source-table.png",
+          "width": 896,
+          "height": 240,
+          "sha256": "2ff8d8f90958db8523768c8a6220f632b53047575d73c408e75faeb15794b10d",
+          "sourcePage": 1,
+          "sourceOriginalCrop": "b02/I-01-question-01.png",
+          "sourceCropPixelBox": [
+            372,
+            52,
+            1268,
+            292
+          ],
+          "pixelEquality": "PASS_EXACT_SOURCE_CROP",
+          "alt": "Hình hoặc bảng nguyên bản I-01 với đầy đủ nhãn, trục và dữ kiện.",
+          "kind": "table"
+        },
+        "exactSourceTranscription": true,
+        "nativeTableQA": "ROOT_INDEPENDENT_REVIEW_PENDING"
+      }
+    ],
+    "questionId": "mtm-drive-g12-c1-t01-mtm-errata-v1-I1"
+  },
+  {
+    "id": "I-02",
+    "section": "I",
+    "number": 2,
+    "prompt": "Cho hàm số bậc bốn $y=f(x)$ có đồ thị là đường cong trong hình dưới đây:",
+    "sourcePage": 1,
+    "sourceOriginalCrop": "b02/I-02-question-01.png",
+    "sourceOriginalCropSha256": "4d575621b35b78939d051524ed8bf8fc1ec548ccea81461c4f7355e195d44c74",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$(7;+\\infty)$."
+      },
+      {
+        "label": "B",
+        "text": "$(-2;3)$."
+      },
+      {
+        "label": "C",
+        "text": "$(-\\infty;-2)$."
+      },
+      {
+        "label": "D",
+        "text": "$(-2;0)$."
+      }
+    ],
+    "promptAfterFigure": "Hàm số đã cho đồng biến trên khoảng nào dưới đây?",
+    "figureRef": {
+      "path": "g12-t01/figures/I-02-source-graph.png",
+      "width": 513,
+      "height": 355,
+      "sha256": "8b2bb7f1fa5d30805e26f0b14ca0faadaec7294d43e07cbcb9d988d8f3fab950",
+      "sourcePage": 1,
+      "sourceOriginalCrop": "b02/I-02-question-01.png",
+      "sourceCropPixelBox": [
+        512,
+        50,
+        1025,
+        405
+      ],
+      "pixelEquality": "PASS_EXACT_SOURCE_CROP",
+      "alt": "Hình hoặc bảng nguyên bản I-02 với đầy đủ nhãn, trục và dữ kiện.",
+      "kind": "graph"
+    },
+    "sourceDisplayCropSha256": "38041ad74a1e59e7f8e8f98cb451285f441b01b33f120284eb09dc304e344755",
+    "questionId": "mtm-drive-g12-c1-t01-mtm-errata-v1-I2"
+  },
+  {
+    "id": "I-03",
+    "section": "I",
+    "number": 3,
+    "prompt": "Cho hàm số $y=f(x)$ có bảng biến thiên như sau:",
+    "sourcePage": 1,
+    "sourceOriginalCrop": "b02/I-03-question-01.png",
+    "sourceOriginalCropSha256": "5eeabbb5e7a544cd78ec24f3a75870f326bc5ce1b8a98dfdb99583193c355117",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$(-2;0)$."
+      },
+      {
+        "label": "B",
+        "text": "$(-\\infty;0)$."
+      },
+      {
+        "label": "C",
+        "text": "$(1;3)$."
+      },
+      {
+        "label": "D",
+        "text": "$(3;+\\infty)$."
+      }
+    ],
+    "promptAfterFigure": "Hàm số đã cho nghịch biến trên khoảng nào dưới đây?",
+    "figureRef": {
+      "path": "g12-t01/figures/I-03-source-table.png",
+      "width": 680,
+      "height": 241,
+      "sha256": "ff9ea335b534d5c062d0c4fbd2d533cb1e8f0c0aecabea3a071e35c90193123e",
+      "sourcePage": 1,
+      "sourceOriginalCrop": "b02/I-03-question-01.png",
+      "sourceCropPixelBox": [
+        420,
+        49,
+        1100,
+        290
+      ],
+      "pixelEquality": "PASS_EXACT_SOURCE_CROP",
+      "alt": "Hình hoặc bảng nguyên bản I-03 với đầy đủ nhãn, trục và dữ kiện.",
+      "kind": "table"
+    },
+    "sourceDisplayCropSha256": "8ed57bfafe241476feb8870ebd3ffc391f4b47073446fcff1605c81ea071d819",
+    "questionTables": [
+      {
+        "caption": "Bảng biến thiên trong đề",
+        "headerLabel": "$x$",
+        "headers": [
+          "$x$",
+          "$-\\infty$",
+          "",
+          "$1$",
+          "",
+          "$3$",
+          "",
+          "$+\\infty$"
+        ],
+        "rows": [
+          [
+            "$y^{\\prime}$",
+            "",
+            "$+$",
+            "$0$",
+            "$-$",
+            "$0$",
+            "$+$",
+            ""
+          ],
+          [
+            "$y$",
+            "$-\\infty$",
+            "$\\nearrow$",
+            "$0$",
+            "$\\searrow$",
+            "$-2$",
+            "$\\nearrow$",
+            "$+\\infty$"
+          ]
+        ],
+        "sourceMeaning": "Derivative signs +,0,-,0,+ at intervals/nodes1,3; function values -infinity,0,-2,+infinity.",
+        "tableKind": "variation",
+        "sourcePage": 1,
+        "sourceFigureRef": {
+          "path": "g12-t01/figures/I-03-source-table.png",
+          "width": 680,
+          "height": 241,
+          "sha256": "ff9ea335b534d5c062d0c4fbd2d533cb1e8f0c0aecabea3a071e35c90193123e",
+          "sourcePage": 1,
+          "sourceOriginalCrop": "b02/I-03-question-01.png",
+          "sourceCropPixelBox": [
+            420,
+            49,
+            1100,
+            290
+          ],
+          "pixelEquality": "PASS_EXACT_SOURCE_CROP",
+          "alt": "Hình hoặc bảng nguyên bản I-03 với đầy đủ nhãn, trục và dữ kiện.",
+          "kind": "table"
+        },
+        "exactSourceTranscription": true,
+        "nativeTableQA": "ROOT_INDEPENDENT_REVIEW_PENDING"
+      }
+    ],
+    "questionId": "mtm-drive-g12-c1-t01-mtm-errata-v1-I3"
+  },
+  {
+    "id": "I-04",
+    "section": "I",
+    "number": 4,
+    "prompt": "Cho hàm số $y=f^{\\prime}(x)$ có đồ thị là đường cong trong hình vẽ dưới đây:",
+    "sourcePage": 2,
+    "sourceOriginalCrop": "b02/I-04-question-01.png",
+    "sourceOriginalCropSha256": "a52182c8462200bd8ec3df9f0dff6eb970be8c447711649c87ba1b0cbe41ef43",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$(-\\infty;-1)$."
+      },
+      {
+        "label": "B",
+        "text": "$(-1;1)$."
+      },
+      {
+        "label": "C",
+        "text": "$(1;4)$."
+      },
+      {
+        "label": "D",
+        "text": "$(1;+\\infty)$."
+      }
+    ],
+    "promptAfterFigure": "Hàm số $y=f(x)$ đồng biến trên khoảng nào sau đây?",
+    "figureRef": {
+      "path": "g12-t01/figures/I-04-source-graph.png",
+      "width": 485,
+      "height": 293,
+      "sha256": "696b118bb2302e5ef8421b2b2d032443b88fe9117d97233cbd41fe6434213602",
+      "sourcePage": 2,
+      "sourceOriginalCrop": "b02/I-04-question-01.png",
+      "sourceCropPixelBox": [
+        516,
+        50,
+        1001,
+        343
+      ],
+      "pixelEquality": "PASS_EXACT_SOURCE_CROP",
+      "alt": "Hình hoặc bảng nguyên bản I-04 với đầy đủ nhãn, trục và dữ kiện.",
+      "kind": "graph"
+    },
+    "sourceDisplayCropSha256": "49a7ab51e90fe43bdf47f54331dd5974d1dad2e9a62ae092cf03085cae1ef697",
+    "questionId": "mtm-drive-g12-c1-t01-mtm-errata-v1-I4"
+  },
+  {
+    "id": "I-05",
+    "section": "I",
+    "number": 5,
+    "prompt": "Hàm số nào sau đây nghịch biến trên $\\mathbb R$?",
+    "sourcePage": 2,
+    "sourceOriginalCrop": "b02/I-05-question-01.png",
+    "sourceOriginalCropSha256": "6cd2f5915e976b5730ab5a04326a09d19d39083fd55a8889d2449aafcbf1577d",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$y=-x^3+3x^2-9x$."
+      },
+      {
+        "label": "B",
+        "text": "$y=-x^3+x+1$."
+      },
+      {
+        "label": "C",
+        "text": "$y=\\dfrac{x-1}{x-2}$."
+      },
+      {
+        "label": "D",
+        "text": "$y=2x^2+3x+2$."
+      }
+    ],
+    "sourceDisplayCropSha256": "4d28beb41bc933af4512d98fbd5837705228d4eb4154a8249ea846f6c49bffe2",
+    "questionId": "mtm-drive-g12-c1-t01-mtm-errata-v1-I5"
+  },
+  {
+    "id": "I-06",
+    "section": "I",
+    "number": 6,
+    "prompt": "Cho hàm số $y=f(x)$ có đồ thị là đường cong như hình vẽ bên dưới:",
+    "sourcePage": 2,
+    "sourceOriginalCrop": "b02/I-06-question-01.png",
+    "sourceOriginalCropSha256": "e92cedb583bef4fdcf0a826d38f45d8bb151da8e3fe16f0a6ff396d38b022728",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$x=1$."
+      },
+      {
+        "label": "B",
+        "text": "$x=-1$."
+      },
+      {
+        "label": "C",
+        "text": "$y=3$."
+      },
+      {
+        "label": "D",
+        "text": "$M(-1;3)$."
+      }
+    ],
+    "promptAfterFigure": "Hàm số $f(x)$ đạt cực đại tại điểm nào sau đây?",
+    "figureRef": {
+      "path": "g12-t01/figures/I-06-source-graph.png",
+      "width": 288,
+      "height": 369,
+      "sha256": "963c0766292c4afe49a90ed0487119c0cc46f994f2e8d541d0f312eb106d882a",
+      "sourcePage": 2,
+      "sourceOriginalCrop": "b02/I-06-question-01.png",
+      "sourceCropPixelBox": [
+        620,
+        45,
+        908,
+        414
+      ],
+      "pixelEquality": "PASS_EXACT_SOURCE_CROP",
+      "alt": "Hình hoặc bảng nguyên bản I-06 với đầy đủ nhãn, trục và dữ kiện.",
+      "kind": "graph"
+    },
+    "sourceDisplayCropSha256": "3f7d287dc7a44ec1bcfb8e90fcbf77b2184058c7ec39fd4aeab711942a15eb14",
+    "questionId": "mtm-drive-g12-c1-t01-mtm-errata-v1-I6"
+  },
+  {
+    "id": "I-07",
+    "section": "I",
+    "number": 7,
+    "prompt": "Cho hàm số $y=f(x)$ xác định trên $\\mathbb R$ và có bảng biến thiên như hình vẽ sau:",
+    "sourcePage": 2,
+    "sourceOriginalCrop": "b02/I-07-question-01.png",
+    "sourceOriginalCropSha256": "428346e2dffa69e0d7566fd722a6626f8348b898a24cd6c8d96dc8b1ee99c7d4",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$-10$."
+      },
+      {
+        "label": "B",
+        "text": "$11$."
+      },
+      {
+        "label": "C",
+        "text": "$6$."
+      },
+      {
+        "label": "D",
+        "text": "$-20$."
+      }
+    ],
+    "promptAfterFigure": "Giá trị cực tiểu của hàm số $y=f(x)$ là",
+    "figureRef": {
+      "path": "g12-t01/figures/I-07-source-table.png",
+      "width": 873,
+      "height": 307,
+      "sha256": "4f2aac3370eb20a6b4c2710e03d9ef1429e066cb0805f992794ba12d39fb049c",
+      "sourcePage": 2,
+      "sourceOriginalCrop": "b02/I-07-question-01.png",
+      "sourceCropPixelBox": [
+        334,
+        49,
+        1207,
+        356
+      ],
+      "pixelEquality": "PASS_EXACT_SOURCE_CROP",
+      "alt": "Hình hoặc bảng nguyên bản I-07 với đầy đủ nhãn, trục và dữ kiện.",
+      "kind": "table"
+    },
+    "sourceDisplayCropSha256": "f2d98446693de4dbaadefdf8b7846459db00a73cb7724ba463a23f61406ecace",
+    "questionTables": [
+      {
+        "caption": "Bảng biến thiên trong đề",
+        "headerLabel": "$x$",
+        "headers": [
+          "$x$",
+          "$-\\infty$",
+          "",
+          "$6$",
+          "",
+          "$11$",
+          "",
+          "$+\\infty$"
+        ],
+        "rows": [
+          [
+            "$y^{\\prime}$",
+            "",
+            "$+$",
+            "$0$",
+            "$-$",
+            "$0$",
+            "$+$",
+            ""
+          ],
+          [
+            "$y$",
+            "$-\\infty$",
+            "$\\nearrow$",
+            "$-10$",
+            "$\\searrow$",
+            "$-20$",
+            "$\\nearrow$",
+            "$+\\infty$"
+          ]
+        ],
+        "sourceMeaning": "Derivative signs +,0,-,0,+ at intervals/nodes6,11; function values -infinity,-10,-20,+infinity.",
+        "tableKind": "variation",
+        "sourcePage": 2,
+        "sourceFigureRef": {
+          "path": "g12-t01/figures/I-07-source-table.png",
+          "width": 873,
+          "height": 307,
+          "sha256": "4f2aac3370eb20a6b4c2710e03d9ef1429e066cb0805f992794ba12d39fb049c",
+          "sourcePage": 2,
+          "sourceOriginalCrop": "b02/I-07-question-01.png",
+          "sourceCropPixelBox": [
+            334,
+            49,
+            1207,
+            356
+          ],
+          "pixelEquality": "PASS_EXACT_SOURCE_CROP",
+          "alt": "Hình hoặc bảng nguyên bản I-07 với đầy đủ nhãn, trục và dữ kiện.",
+          "kind": "table"
+        },
+        "exactSourceTranscription": true,
+        "nativeTableQA": "ROOT_INDEPENDENT_REVIEW_PENDING"
+      }
+    ],
+    "questionId": "mtm-drive-g12-c1-t01-mtm-errata-v1-I7"
+  },
+  {
+    "id": "I-08",
+    "section": "I",
+    "number": 8,
+    "prompt": "Cho hàm số $y=\\dfrac{x-2}{x+1}$, khẳng định nào sau đây đúng?",
+    "sourcePage": 2,
+    "sourceOriginalCrop": "b02/I-08-question-01.png",
+    "sourceOriginalCropSha256": "f9d51e3dfc92c04cac3b6b5060b17c171fe6c90f09bfd77a21983b6dfea4e594",
+    "choices": [
+      {
+        "label": "A",
+        "text": "Hàm số đồng biến trên $(-\\infty;-1)\\cup(-1;+\\infty)$."
+      },
+      {
+        "label": "B",
+        "text": "Hàm số đồng biến trên $(-\\infty;-1)$ và $(-1;+\\infty)$."
+      },
+      {
+        "label": "C",
+        "text": "Hàm số đồng biến trên $\\mathbb R\\setminus\\{-1\\}$."
+      },
+      {
+        "label": "D",
+        "text": "Hàm số đồng biến trên $(-\\infty;1)$."
+      }
+    ],
+    "sourceDisplayCropSha256": "d1f4f000fd875b3ce5cc1a5c082c056ef5f9dd5d1d3d2f976da70fd25d0ba021",
+    "questionId": "mtm-drive-g12-c1-t01-mtm-errata-v1-I8"
+  },
+  {
+    "id": "I-09",
+    "section": "I",
+    "number": 9,
+    "prompt": "Hàm số $y=\\dfrac{x^2-3x+5}{x+1}$ nghịch biến trên các khoảng nào?",
+    "sourcePage": 3,
+    "sourceOriginalCrop": "b02/I-09-question-01.png",
+    "sourceOriginalCropSha256": "389bd0de813c3a0aaaf194f8c89662fb41012fa807206b1e8523bd7859041789",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$(-4;2)$."
+      },
+      {
+        "label": "B",
+        "text": "$(-\\infty;-2)$."
+      },
+      {
+        "label": "C",
+        "text": "$(-\\infty;-1)$ và $(-1;+\\infty)$."
+      },
+      {
+        "label": "D",
+        "text": "$(-4;-1)$."
+      }
+    ],
+    "sourceDisplayCropSha256": "c5f966669249840012baaf6f1ddf3d44575f6a532ff3a349dc8674d79db7c33c",
+    "questionId": "mtm-drive-g12-c1-t01-mtm-errata-v1-I9"
+  },
+  {
+    "id": "I-10",
+    "section": "I",
+    "number": 10,
+    "prompt": "Cho hàm số $y=f(x)$ xác định trên $\\mathbb R$ và có đạo hàm $f^{\\prime}(x)=12x^{2025}(x+1)(3-x)$, $\\forall x\\in\\mathbb R$. Hàm số đã cho đồng biến trên khoảng nào sau đây?",
+    "sourcePage": 3,
+    "sourceOriginalCrop": "b02/I-10-question-01.png",
+    "sourceOriginalCropSha256": "0202c1dcaf0ec13dab81e9752e0bc03dde7da2139aa7c95034c82da763ea4af8",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$(-\\infty;-1)$."
+      },
+      {
+        "label": "B",
+        "text": "$(-1;3)$."
+      },
+      {
+        "label": "C",
+        "text": "$(3;+\\infty)$."
+      },
+      {
+        "label": "D",
+        "text": "$(-\\infty;0)$."
+      }
+    ],
+    "sourceDisplayCropSha256": "e4724956f3224fd616f8108d26d3f510eab4adfda819ed2b29a9128868f721af",
+    "questionId": "mtm-drive-g12-c1-t01-mtm-errata-v1-I10"
+  },
+  {
+    "id": "I-11",
+    "section": "I",
+    "number": 11,
+    "prompt": "Cho hàm số $y=\\dfrac{x^2-2x-7}{x-4}$. Phát biểu nào sau đây là đúng?",
+    "sourcePage": 3,
+    "sourceOriginalCrop": "b02/I-11-question-01.png",
+    "sourceOriginalCropSha256": "e07c6ffa25b8e2b37b21b1b31898ceb51589634a4ac290860e97e9af47719186",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$x_{CT}=3$, $x_{\\text{CĐ}}=5$."
+      },
+      {
+        "label": "B",
+        "text": "$x_{CT}=-3$, $x_{\\text{CĐ}}=5$."
+      },
+      {
+        "label": "C",
+        "text": "$x_{CT}=5$, $x_{\\text{CĐ}}=3$."
+      },
+      {
+        "label": "D",
+        "text": "$x_{CT}=5$, $x_{\\text{CĐ}}=-3$."
+      }
+    ],
+    "sourceDisplayCropSha256": "dcb3f55e4bb99cd475a8b7bf1e939f2df5dda9445a872d0ff117ea1a84b05b68",
+    "questionId": "mtm-drive-g12-c1-t01-mtm-errata-v1-I11"
+  },
+  {
+    "id": "I-12",
+    "section": "I",
+    "number": 12,
+    "prompt": "Điểm cực tiểu của hàm số $y=\\dfrac{-x^2+2x-1}{x+2}$ là",
+    "sourcePage": 3,
+    "sourceOriginalCrop": "b02/I-12-question-01.png",
+    "sourceOriginalCropSha256": "9b60ef829ac9e1c26ecf87b4a929c1428824e69244696c278fa6de51fc6d238a",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$x=1$."
+      },
+      {
+        "label": "B",
+        "text": "$x=-5$."
+      },
+      {
+        "label": "C",
+        "text": "$x=2$."
+      },
+      {
+        "label": "D",
+        "text": "$x=5$."
+      }
+    ],
+    "sourceDisplayCropSha256": "7a48124416eab4ae4f105245718f72aa516d16b9a904b7150349d8b46ee8efa6",
+    "questionId": "mtm-drive-g12-c1-t01-mtm-errata-v1-I12"
+  },
+  {
+    "id": "II-01",
+    "section": "II",
+    "number": 1,
+    "prompt": "Cho hàm số bậc bốn $y=f(x)$. Hàm số $y=f^{\\prime}(x)$ có đồ thị như hình dưới đây",
+    "sourcePage": 3,
+    "sourceOriginalCrop": "b02/II-01-question-01.png",
+    "sourceOriginalCropSha256": "caa930668292af086c5ebe880bdd59e075646d776c7633a617e2197a76e5f6d7",
+    "statements": [
+      {
+        "label": "a",
+        "text": "Hàm số $y=f(x)$ đồng biến trên khoảng $(-\\infty;0)$,"
+      },
+      {
+        "label": "b",
+        "text": "Hàm số $y=f(x)$ đồng biến trên khoảng $(-1;1)$."
+      },
+      {
+        "label": "c",
+        "text": "Hàm số $y=f(x)$ nghịch biến trên khoảng $(-\\infty;0)$."
+      },
+      {
+        "label": "d",
+        "text": "Hàm số $y=f(x)$ nghịch biến trên khoảng $(1;2)$."
+      }
+    ],
+    "figureRef": {
+      "path": "g12-t01/figures/II-01-source-graph.png",
+      "width": 434,
+      "height": 353,
+      "sha256": "350caf61e5f662ce8f45cf98e1855f8a172f5fdc9e860b0e8c9df27797bbc5c7",
+      "sourcePage": 3,
+      "sourceOriginalCrop": "b02/II-01-question-01.png",
+      "sourceCropPixelBox": [
+        635,
+        48,
+        1069,
+        401
+      ],
+      "pixelEquality": "PASS_EXACT_SOURCE_CROP",
+      "alt": "Hình hoặc bảng nguyên bản II-01 với đầy đủ nhãn, trục và dữ kiện.",
+      "kind": "graph"
+    },
+    "sourceDisplayCropSha256": "c89223a2a795f11cf3e94b4a1e12df55cda6e16becbc6941e8b7b5b88b7d619a",
+    "questionId": "mtm-drive-g12-c1-t01-mtm-errata-v1-II1"
+  },
+  {
+    "id": "II-02",
+    "section": "II",
+    "number": 2,
+    "prompt": "Cho hàm số $y=f(x)=\\dfrac{x^2+3x}{x-1}$.",
+    "sourcePage": 3,
+    "sourceOriginalCrop": "b02/II-02-question-01.png",
+    "sourceOriginalCropSha256": "6a6ceeba68aa0faa4bc2d6e87dda8ef724010eb3a09e30305691f0168cac9b47",
+    "statements": [
+      {
+        "label": "a",
+        "text": "Hàm số $f(x)$ đồng biến trên khoảng $(-\\infty;1)$."
+      },
+      {
+        "label": "b",
+        "text": "Cực đại của hàm số $f(x)$ là $1$."
+      },
+      {
+        "label": "c",
+        "text": "Hàm số $f(x)$ có ba điểm cực trị."
+      },
+      {
+        "label": "d",
+        "text": "Hàm số $f(x)$ nghịch biến trên khoảng $(-1;3)$."
+      }
+    ],
+    "sourceDisplayCropSha256": "0f33e84b1c853d74284ed201bb2267ddc57085878a28099f24cce9a6fbe6463c",
+    "questionId": "mtm-drive-g12-c1-t01-mtm-errata-v1-II2"
+  },
+  {
+    "id": "II-03",
+    "section": "II",
+    "number": 3,
+    "prompt": "Cho hàm số $y=2^{x^2-3x+\\frac{13}{4}}$.",
+    "sourcePage": 3,
+    "sourceOriginalCrop": "b02/II-03-question-01.png",
+    "sourceOriginalCropSha256": "8b3dfe71392be3435e07c278dbd4b3a03f604772ef12aec6e40fdd9cb39a8a06",
+    "statements": [
+      {
+        "label": "a",
+        "text": "Hàm số nghịch biến trên khoảng $(-1;0)$."
+      },
+      {
+        "label": "b",
+        "text": "Hàm số đồng biến trên khoảng $(0;1)$."
+      },
+      {
+        "label": "c",
+        "text": "Hàm số có giá trị cực tiểu $y_{CT}=2$."
+      },
+      {
+        "label": "d",
+        "text": "Hàm số có $2$ điểm cực trị."
+      }
+    ],
+    "sourceDisplayCropSha256": "94c1007b6e4b56483018a2d09c3438718ae358230dd8fc6725a5b197a27580b5",
+    "questionId": "mtm-drive-g12-c1-t01-mtm-errata-v1-II3"
+  },
+  {
+    "id": "II-04",
+    "section": "II",
+    "number": 4,
+    "prompt": "Cho hàm số $y=\\log_2(x^2-4x+5)$ có đồ thị là $(C)$.",
+    "sourcePage": 4,
+    "sourceOriginalCrop": "b02/II-04-question-01.png",
+    "sourceOriginalCropSha256": "a55e03635fedc4803bd792d3c17c1cc45825bfe734231b3565c7c45bba2556a8",
+    "statements": [
+      {
+        "label": "a",
+        "text": "Hàm số có tập xác định là $D=\\mathbb R$."
+      },
+      {
+        "label": "b",
+        "text": "Hàm số đồng biến trên $\\mathbb R$."
+      },
+      {
+        "label": "c",
+        "text": "Hàm số đạt cực tiểu tại $x=2$."
+      },
+      {
+        "label": "d",
+        "text": "Giả sử đồ thị hàm số $(C)$ cắt đường thẳng $(d):y=1$ tại hai điểm $A,B$ và có điểm cực trị là $M$. Bán kính đường tròn ngoại tiếp tam giác $MAB$ bằng $2$."
+      }
+    ],
+    "sourceDisplayCropSha256": "ea54ffddd0938c0c2b756572203fd5e7dbdebeb2af156021ddada96261dcd994",
+    "questionId": "mtm-drive-g12-c1-t01-mtm-errata-v1-II4"
+  },
+  {
+    "id": "III-01",
+    "section": "III",
+    "number": 1,
+    "prompt": "Biết rằng tất cả các khoảng nghịch biến của hàm số $y=\\dfrac{x^2+2x+2}{x+1}$ là hai khoảng $(a;b),(b;c)$ với $a<b<c$. Tính $T=a+b+c$.",
+    "sourcePage": 4,
+    "sourceOriginalCrop": "b02/III-01-question-01.png",
+    "sourceOriginalCropSha256": "9940ce94b493362221f7b4f21132ad07d05348d990f271a261cf1a3179a58293",
+    "sourceDisplayCropSha256": "e47d74b7c006ed854c9a137b7eb8b8bc080eddb8b620e3098ea6d0d410bc109e",
+    "questionId": "mtm-drive-g12-c1-t01-mtm-errata-v1-III1"
+  },
+  {
+    "id": "III-02",
+    "section": "III",
+    "number": 2,
+    "prompt": "Biết rằng đồ thị hàm số $y=x^4-2ax^2+b$ có một điểm cực trị là $(1;2)$. Tính khoảng cách giữa điểm cực đại và điểm cực tiểu của đồ thị hàm số đã cho (quy tròn đến hàng phần trăm).",
+    "sourcePage": 4,
+    "sourceOriginalCrop": "b02/III-02-question-01.png",
+    "sourceOriginalCropSha256": "5fd2b37cea6d0134dcc4877511278f11d1fcc6ff0b59ed34c107ec12c7db1dc0",
+    "sourceDisplayCropSha256": "ce00733b0efae7c9a68e823d9df9f5e07e8753ffda54ba62b3ad2efadbec7849",
+    "questionId": "mtm-drive-g12-c1-t01-mtm-errata-v1-III2"
+  },
+  {
+    "id": "III-03",
+    "section": "III",
+    "number": 3,
+    "prompt": "Biết rằng hai điểm cực trị của đồ thị hàm số $y=\\dfrac{x^2+2x-3}{x^2+1}$ cùng với điểm $I(-\\sqrt5;-\\sqrt5)$ tạo thành một tam giác. Diện tích tam giác đó bằng (kết quả làm tròn đến hàng phần trăm)",
+    "sourcePage": 4,
+    "sourceOriginalCrop": "b02/III-03-question-01.png",
+    "sourceOriginalCropSha256": "664282b68f990547b1c8afc18e7434865ab607a0cbc7d3ccb873b2c02e17952b",
+    "sourceDisplayCropSha256": "bc640de373340da584b4cee9f60f1e815852230116f374954a8c4f56a5d3e374",
+    "questionId": "mtm-drive-g12-c1-t01-mtm-errata-v1-III3"
+  },
+  {
+    "id": "III-04",
+    "section": "III",
+    "number": 4,
+    "prompt": "Xí nghiệp $A$ sản xuất độc quyền một loại sản phẩm. Biết rằng hàm tổng chi phí sản xuất là $TC=x^3-77x^2+1000x+40000$ và hàm doanh thu là $TR=-2x^2+1312x$, với $x$ là số sản phẩm. Lợi nhuận của xí nghiệp $A$ được xác định bằng hàm số $f(x)=TR-TC$, cực đại lợi nhuận của xí nghiệp $A$ khi đó đạt bao nhiêu sản phẩm?",
+    "sourcePage": 4,
+    "sourceOriginalCrop": "b02/III-04-question-01.png",
+    "sourceOriginalCropSha256": "2ff8f4857f2989005090b663205fabc07387c5adcdb1eb906ee0d18d87ae8227",
+    "sourceDisplayCropSha256": "30db84eb73ef16a9178801bca184a31f7ca41956447fe35cec20d8d798ef9c35",
+    "questionId": "mtm-drive-g12-c1-t01-mtm-errata-v1-III4"
+  },
+  {
+    "id": "III-05",
+    "section": "III",
+    "number": 5,
+    "prompt": "Hàm số $y=\\log_3(x^2-2x)$ nghịch biến trên khoảng $(-\\infty;a)$ lớn nhất theo quan hệ bao hàm. Khi đó $a$ bằng?",
+    "sourcePage": 4,
+    "sourceOriginalCrop": "b02/III-05-question-01.png",
+    "sourceOriginalCropSha256": "e21a4a165315814b1a3eef3d2a30ab109e04f3b227534b6d087058d751f97135",
+    "approvedErratum": {
+      "label": "Đính chính MTM đã được Thành duyệt",
+      "text": "Thay “có độ dài lớn nhất” bằng “lớn nhất theo quan hệ bao hàm”.",
+      "sourceWording": "có độ dài lớn nhất",
+      "mustDisplayBeforeAttempt": true,
+      "approvalEvidence": "Parent direct task message: Thành approved relation-by-inclusion wording on12/10/2026."
+    },
+    "sourceDisplayCropSha256": "3196033cf674b878129e146c48e6d7a005fb634b59f14c392c26fda6770a6350",
+    "questionId": "mtm-drive-g12-c1-t01-mtm-errata-v1-III5"
+  },
+  {
+    "id": "III-06",
+    "section": "III",
+    "number": 6,
+    "prompt": "Lát cắt ngang của một vùng đất ven biển được mô hình hoá thành một hàm số bậc ba $y=f(x)$ có đồ thị như hình vẽ (đơn vị độ dài trên các trục là km).",
+    "sourcePage": 4,
+    "sourceOriginalCrop": "b02/III-06-question-01.png",
+    "sourceOriginalCropSha256": "c06e0070e98d3983324572de225879202da901ae94717be7c5f42e087d80b360",
+    "promptAfterFigure": "Biết khoảng cách hai bên chân đồi $OA=2\\,\\mathrm{km}$, độ rộng của hồ $AB=1\\,\\mathrm{km}$ và ngọn đồi cao $528\\,\\mathrm{m}$. Tìm độ sâu của hồ (tính bằng mét) tại điểm sâu nhất? (làm tròn đến hàng đơn vị).",
+    "figureRef": {
+      "path": "g12-t01/figures/III-06-source-figure.png",
+      "width": 759,
+      "height": 462,
+      "sha256": "92a17006b3943283fae86b32ff94576e9e14319b592d1bfafe83133d22649aeb",
+      "sourcePage": 4,
+      "sourceOriginalCrop": "b02/III-06-question-01.png",
+      "sourceCropPixelBox": [
+        447,
+        98,
+        1206,
+        560
+      ],
+      "pixelEquality": "PASS_EXACT_SOURCE_CROP",
+      "alt": "Hình hoặc bảng nguyên bản III-06 với đầy đủ nhãn, trục và dữ kiện.",
+      "kind": "figure"
+    },
+    "sourceDisplayCropSha256": "ce5a2f1bfe7b288da87983ad4bab7b6422d38e01905b0a14763766ae0c938abe",
+    "questionId": "mtm-drive-g12-c1-t01-mtm-errata-v1-III6"
+  },
+  {
+    "id": "I-01",
+    "section": "I",
+    "number": 1,
+    "prompt": "Mệnh đề nào sau đây là mệnh đề đúng?",
+    "sourcePage": 50,
+    "sourceOriginalCrop": "b06/I-01-question-01.png",
+    "sourceOriginalCropSha256": "b1d3889f04f96e3d1b1fcf8f5c79a3ca58c0870a17d2d5dcd13e16b275142017",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$\\exists x\\in\\mathbb R:x^2\\leq x$."
+      },
+      {
+        "label": "B",
+        "text": "$\\exists x\\in\\mathbb N:x^2+8x+7=0$."
+      },
+      {
+        "label": "C",
+        "text": "$\\forall x\\in\\mathbb R:|x|>0$."
+      },
+      {
+        "label": "D",
+        "text": "$\\exists x\\in\\mathbb R:-x^2>0$."
+      }
+    ],
+    "sourceDisplayCropSha256": "05fd4cb833ff2ea312cf0471e6c4e37f0dcf73c88c890fe81c1b280de5b172ef",
+    "questionId": "mtm-drive-g10-c1-t06-mtm-errata-v1-I1"
+  },
+  {
+    "id": "I-02",
+    "section": "I",
+    "number": 2,
+    "prompt": "Cho mệnh đề kéo theo: “Nếu tứ giác là hình chữ nhật thì nó có hai đường chéo bằng nhau”. Sử dụng khái niệm “điều kiện cần”, “điều kiện đủ” để phát biểu mệnh đề trên. Hãy chọn phát biểu đúng?",
+    "sourcePage": 50,
+    "sourceOriginalCrop": "b06/I-02-question-01.png",
+    "sourceOriginalCropSha256": "30abe6921d93e06394e91ee3bfcec3fc9c00220f8a60892e49a86377343249cf",
+    "choices": [
+      {
+        "label": "A",
+        "text": "Tứ giác là hình chữ nhật là điều kiện cần và đủ để nó có hai đường chéo bằng nhau."
+      },
+      {
+        "label": "B",
+        "text": "Tứ giác là hình chữ nhật là điều kiện cần để nó có hai đường chéo bằng nhau."
+      },
+      {
+        "label": "C",
+        "text": "Tứ giác là hình chữ nhật là điều kiện đủ để nó có hai đường chéo bằng nhau."
+      },
+      {
+        "label": "D",
+        "text": "Tứ giác có hai đường chéo bằng nhau là điều kiện đủ để nó là hình chữ nhật."
+      }
+    ],
+    "sourceDisplayCropSha256": "0e157219bf5a87cacf7654ca54b9671c2ea94224ada3fcf7f656e83b1297ca84",
+    "questionId": "mtm-drive-g10-c1-t06-mtm-errata-v1-I2"
+  },
+  {
+    "id": "I-03",
+    "section": "I",
+    "number": 3,
+    "prompt": "Tìm mệnh đề phủ định của mệnh đề: $\\forall x\\in\\mathbb R,x^2+x+5>0$.",
+    "sourcePage": 50,
+    "sourceOriginalCrop": "b06/I-03-question-01.png",
+    "sourceOriginalCropSha256": "96f49d39cd9b5a20208b74ac1d17c1cd4a41c654d45d291c2911d396e01d85ef",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$\\exists x\\in\\mathbb R,x^2+x+5\\leq0$."
+      },
+      {
+        "label": "B",
+        "text": "$\\forall x\\in\\mathbb R,x^2+x+5<0$."
+      },
+      {
+        "label": "C",
+        "text": "$\\forall x\\in\\mathbb R,x^2+x+5\\leq0$."
+      },
+      {
+        "label": "D",
+        "text": "$\\exists x\\in\\mathbb R,x^2+x+5<0$."
+      }
+    ],
+    "sourceDisplayCropSha256": "8ed6588465e028296c0f4126d33060a8446f36c097bdb84f1e9fa369bdf66b36",
+    "questionId": "mtm-drive-g10-c1-t06-mtm-errata-v1-I3"
+  },
+  {
+    "id": "I-04",
+    "section": "I",
+    "number": 4,
+    "prompt": "Cho hai tập hợp $A=(-1;+\\infty)$, $B=(-\\infty;3]$. Khẳng định nào dưới đây đúng?",
+    "sourcePage": 50,
+    "sourceOriginalCrop": "b06/I-04-question-01.png",
+    "sourceOriginalCropSha256": "53396e2f846263e6f5ac33c3b0c54b098c79a877a151da472497eafa8d0ff800",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$A\\setminus B=(3;+\\infty)$."
+      },
+      {
+        "label": "B",
+        "text": "$A\\setminus B=(-1;3)$."
+      },
+      {
+        "label": "C",
+        "text": "$A\\setminus B=[3;+\\infty)$."
+      },
+      {
+        "label": "D",
+        "text": "$A\\setminus B=(-\\infty;1]$."
+      }
+    ],
+    "sourceDisplayCropSha256": "22149c72a8c51031fc655822c273c3e449674cf4adab0808e80711cb5e99e533",
+    "questionId": "mtm-drive-g10-c1-t06-mtm-errata-v1-I4"
+  },
+  {
+    "id": "I-05",
+    "section": "I",
+    "number": 5,
+    "prompt": "Hãy liệt kê các phần tử của tập hợp $D=\\{2k+1\\mid k\\in\\mathbb Z,|k|\\leq2\\}$.",
+    "sourcePage": 50,
+    "sourceOriginalCrop": "b06/I-05-question-01.png",
+    "sourceOriginalCropSha256": "e7e970accfbde6c049b3b576eb4e9048f58720707094651bbcd24b5db1556f57",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$A=\\{-2;-1;0;1;2\\}$."
+      },
+      {
+        "label": "B",
+        "text": "$A=\\{0;1;2\\}$."
+      },
+      {
+        "label": "C",
+        "text": "$A=\\{1;3;5\\}$."
+      },
+      {
+        "label": "D",
+        "text": "$A=\\{-3;-1;1;3;5\\}$."
+      }
+    ],
+    "sourceDisplayCropSha256": "4d97fecf2357a956ffe62a9f78652052f9dc4bf842e07e6ad4a95d7cb2f5672e",
+    "questionId": "mtm-drive-g10-c1-t06-mtm-errata-v1-I5"
+  },
+  {
+    "id": "I-06",
+    "section": "I",
+    "number": 6,
+    "prompt": "Cho tập hợp $X=\\{1;3;9\\}$. Hỏi tập hợp $X$ có bao nhiêu tập hợp con khác rỗng?",
+    "sourcePage": 50,
+    "sourceOriginalCrop": "b06/I-06-question-01.png",
+    "sourceOriginalCropSha256": "35a779f91998eeb412b86a1f15fdb57dc5d338724ff2edf3168ce3fbd5b6b698",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$7$."
+      },
+      {
+        "label": "B",
+        "text": "$6$."
+      },
+      {
+        "label": "C",
+        "text": "$8$."
+      },
+      {
+        "label": "D",
+        "text": "$9$."
+      }
+    ],
+    "sourceDisplayCropSha256": "019279855f614dafe726f4bcf1e1b74fb4094606c5b96d46abb468323045c2e6",
+    "questionId": "mtm-drive-g10-c1-t06-mtm-errata-v1-I6"
+  },
+  {
+    "id": "I-07",
+    "section": "I",
+    "number": 7,
+    "prompt": "Cho hai tập hợp $A=\\{1;2;5;7\\}$ và $B=\\{1;2;3\\}$. Có tất cả bao nhiêu tập $X$ thỏa $X\\subset A$ và $X\\subset B$?",
+    "sourcePage": 50,
+    "sourceOriginalCrop": "b06/I-07-question-01.png",
+    "sourceOriginalCropSha256": "612ddca971b2ec8d61d32cebd9ebc030f13df28fd2a0a4d71a70ccb9d608f538",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$1$."
+      },
+      {
+        "label": "B",
+        "text": "$2$."
+      },
+      {
+        "label": "C",
+        "text": "$3$."
+      },
+      {
+        "label": "D",
+        "text": "$4$."
+      }
+    ],
+    "sourceDisplayCropSha256": "bf413b1e30e5f0c85c81109684a1afda1c9b11d3451f129f0b92a1bc51043780",
+    "questionId": "mtm-drive-g10-c1-t06-mtm-errata-v1-I7"
+  },
+  {
+    "id": "I-08",
+    "section": "I",
+    "number": 8,
+    "prompt": "Sử dụng các kí hiệu đoạn, khoảng, nửa khoảng để viết tập hợp $A=\\{x\\in\\mathbb R\\mid|x|\\leq3\\}$.",
+    "sourcePage": 50,
+    "sourceOriginalCrop": "b06/I-08-question-01.png",
+    "sourceOriginalCropSha256": "15ea5be307f31978437ff9ddca38f759cc93f5b66fe25da18d0daf1cc00c1319",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$A=[3;+\\infty)$."
+      },
+      {
+        "label": "B",
+        "text": "$A=(-\\infty;-3]\\cup[3;+\\infty)$."
+      },
+      {
+        "label": "C",
+        "text": "$A=[-3;3]$."
+      },
+      {
+        "label": "D",
+        "text": "$A=(-3;3)$."
+      }
+    ],
+    "sourceDisplayCropSha256": "b9a2d78c58420d0982a7e8cdd7594b9d0463930ef64fc06602d6f49169f2faad",
+    "questionId": "mtm-drive-g10-c1-t06-mtm-errata-v1-I8"
+  },
+  {
+    "id": "I-09",
+    "section": "I",
+    "number": 9,
+    "prompt": "Biết $A$ là mệnh đề sai và $B$ là mệnh đề đúng. Mệnh đề nào sau đây đúng?",
+    "sourcePage": 51,
+    "sourceOriginalCrop": "b06/I-09-question-01.png",
+    "sourceOriginalCropSha256": "00aafe1ae38e074fff3cfc9b3ab734863e167a2ea72c173aa456d14dd62cc425",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$B\\Rightarrow\\overline A$."
+      },
+      {
+        "label": "B",
+        "text": "$B\\Leftrightarrow A$."
+      },
+      {
+        "label": "C",
+        "text": "$\\overline A\\Leftrightarrow\\overline B$."
+      },
+      {
+        "label": "D",
+        "text": "$B\\Rightarrow A$."
+      }
+    ],
+    "sourceDisplayCropSha256": "7133c3f80c07c208589bd5647df0a26fc1d98d6a529f7a8217f84941e9b923e3",
+    "questionId": "mtm-drive-g10-c1-t06-mtm-errata-v1-I9"
+  },
+  {
+    "id": "I-10",
+    "section": "I",
+    "number": 10,
+    "prompt": "Cho hai đa thức $f(x)$ và $g(x)$. Xét các tập hợp $A=\\{x\\in\\mathbb R\\mid f(x)=0\\}$, $B=\\{x\\in\\mathbb R\\mid g(x)=0\\}$, $C=\\left\\{\\begin{gathered}x\\in\\mathbb R\\mid\\\\ f^2(x)+g^2(x)=0\\end{gathered}\\right\\}$. Khẳng định nào sau đây đúng?",
+    "sourcePage": 51,
+    "sourceOriginalCrop": "b06/I-10-question-01.png",
+    "sourceOriginalCropSha256": "3d6bee00da10987e211b82b44e72dd83306a21ab0451373e6b9fd972fcf618cf",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$C=A\\cup B$."
+      },
+      {
+        "label": "B",
+        "text": "$C=A\\cap B$."
+      },
+      {
+        "label": "C",
+        "text": "$C=A\\setminus B$."
+      },
+      {
+        "label": "D",
+        "text": "$C=B\\setminus A$."
+      }
+    ],
+    "sourceDisplayCropSha256": "caad9a1918a94adb4639ff7cf36729dfab0bd882819713b4952e8fe2907314f2",
+    "questionId": "mtm-drive-g10-c1-t06-mtm-errata-v1-I10"
+  },
+  {
+    "id": "I-11",
+    "section": "I",
+    "number": 11,
+    "prompt": "Cho hai tập hợp $A=[-2;3]$, $B=(1;+\\infty)$. Khi đó $C_{\\mathbb R}(A\\cup B)$ bằng:",
+    "sourcePage": 51,
+    "sourceOriginalCrop": "b06/I-11-question-01.png",
+    "sourceOriginalCropSha256": "6648f22cf276a5ff8a243fc0da7e72c5bdda00d7bdf0cd44ede768d91d1cecec",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$[3;+\\infty)$."
+      },
+      {
+        "label": "B",
+        "text": "$(-\\infty;-2)$."
+      },
+      {
+        "label": "C",
+        "text": "$(-\\infty;1]\\cup[3;+\\infty)$."
+      },
+      {
+        "label": "D",
+        "text": "$(1;3)$."
+      }
+    ],
+    "sourceDisplayCropSha256": "aa91265e230b8fc2e1f9641aa8b9f7fcc0662d43af95674c4e265121d43d4fc1",
+    "questionId": "mtm-drive-g10-c1-t06-mtm-errata-v1-I11"
+  },
+  {
+    "id": "I-12",
+    "section": "I",
+    "number": 12,
+    "prompt": "Một lớp học có 25 học sinh học khá các môn tự nhiên, 24 học sinh học khá các môn xã hội, 10 học sinh học khá cả môn tự nhiên lẫn môn xã hội, đặc biệt vẫn còn 3 học sinh chưa học khá cả hai nhóm môn ấy. Hỏi lớp có bao nhiêu học sinh chỉ khá đúng một nhóm môn (tự nhiên hoặc xã hội).",
+    "sourcePage": 51,
+    "sourceOriginalCrop": "b06/I-12-question-01.png",
+    "sourceOriginalCropSha256": "69cd4fb082b2ae47a487dce384417cec1f1c23dc4a7d3607e0ee0da92d112517",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$39$."
+      },
+      {
+        "label": "B",
+        "text": "$26$."
+      },
+      {
+        "label": "C",
+        "text": "$29$."
+      },
+      {
+        "label": "D",
+        "text": "$36$."
+      }
+    ],
+    "sourceDisplayCropSha256": "4b60832f97ee3c6198decf9cf092f0aba335355dc69c8f3665cf387844d20f8e",
+    "questionId": "mtm-drive-g10-c1-t06-mtm-errata-v1-I12"
+  },
+  {
+    "id": "II-01",
+    "section": "II",
+    "number": 1,
+    "prompt": "Cho $P(n)=n^2-6n+10$ với $n$ là số tự nhiên.",
+    "sourcePage": 51,
+    "sourceOriginalCrop": "b06/II-01-question-01.png",
+    "sourceOriginalCropSha256": "fa05852c406e1674baf342ceb81bd16539e4509937584d4d278d8242f4395bdf",
+    "statements": [
+      {
+        "label": "a",
+        "text": "$P(1)$ chia hết cho $3$."
+      },
+      {
+        "label": "b",
+        "text": "$P(2)$ là số lẻ."
+      },
+      {
+        "label": "c",
+        "text": "$P(2n)>P(n)-1$ với $n=1$."
+      },
+      {
+        "label": "d",
+        "text": "Tồn tại số tự nhiên $n$ thỏa mãn điều kiện $\\dfrac{2P(n)-1}{n-3}$ là số nguyên."
+      }
+    ],
+    "sourceDisplayCropSha256": "c63f1337611008a55f252a60e09db498e6cc392813f5d360d0b8f17ae063e01c",
+    "questionId": "mtm-drive-g10-c1-t06-mtm-errata-v1-II1"
+  },
+  {
+    "id": "II-02",
+    "section": "II",
+    "number": 2,
+    "prompt": "Cho các tập hợp khác rỗng $A=[m;10-m)$ và $B=(2m;2m+1]$.",
+    "sourcePage": 51,
+    "sourceOriginalCrop": "b06/II-02-question-01.png",
+    "sourceOriginalCropSha256": "81bc14558c2eaf22bb13676fbca2db94597995e896176692980170f484f96829",
+    "statements": [
+      {
+        "label": "a",
+        "text": "Có $5$ giá trị nguyên dương của $m$ để hai tập hợp trên khác rỗng."
+      },
+      {
+        "label": "b",
+        "text": "Có vô số giá trị nguyên của $m$ để $B\\subset A$."
+      },
+      {
+        "label": "c",
+        "text": "Với $m=2$ thì tập $A=[2;8)$."
+      },
+      {
+        "label": "d",
+        "text": "Có $21$ giá trị nguyên của $m$ thuộc $[-20;20]$ để $A\\subset C_{\\mathbb R}B$."
+      }
+    ],
+    "sourceDisplayCropSha256": "64ca131f0f9377a3fc424b20df87e513e62f0ad49a9e3802ec019a3a568ac3fa",
+    "questionId": "mtm-drive-g10-c1-t06-mtm-errata-v1-II2"
+  },
+  {
+    "id": "II-03",
+    "section": "II",
+    "number": 3,
+    "prompt": "Cho $A=\\{n\\in\\mathbb N\\mid n\\mathrel{\\vdots}2\\}$, $B=\\{n\\in\\mathbb N\\mid n\\mathrel{\\vdots}4\\}$, $C=\\{n\\in\\mathbb N\\mid n\\mathrel{\\vdots}5\\}$.",
+    "sourcePage": 51,
+    "sourceOriginalCrop": "b06/II-03-question-01.png",
+    "sourceOriginalCropSha256": "152b650a835079d1a16374b28f7a02606de0a33c279c41f105da60e5b1d7ba0c",
+    "statements": [
+      {
+        "label": "a",
+        "text": "$A\\cap B=A$."
+      },
+      {
+        "label": "b",
+        "text": "$C\\setminus A=\\{10k+5\\mid k\\in\\mathbb N\\}$."
+      },
+      {
+        "label": "c",
+        "text": "$B\\cap C=\\{n\\in\\mathbb N\\mid n\\mathrel{\\vdots}20\\}$."
+      },
+      {
+        "label": "d",
+        "text": "Tập hợp $A\\cup C$ có $60$ phần tử nhỏ hơn $100$."
+      }
+    ],
+    "sourceDisplayCropSha256": "9dd7b1d387da13a5885b576e24efbf3c9174ae3a6f9de5070f842b87863f9b7e",
+    "questionId": "mtm-drive-g10-c1-t06-mtm-errata-v1-II3"
+  },
+  {
+    "id": "II-04",
+    "section": "II",
+    "number": 4,
+    "prompt": "Lớp 10B có 7 học sinh giỏi Toán, 5 học sinh giỏi Lý, 6 học sinh giỏi Hóa, 3 học sinh giỏi cả Toán và Lý, 4 học sinh giỏi cả Toán và Hóa, 2 học sinh giỏi cả Lý và Hóa, 1 học sinh giỏi cả ba môn Toán, Lý, Hóa và không có học sinh nào không giỏi một trong ba môn Toán, Lý, Hóa.",
+    "sourcePage": 52,
+    "sourceOriginalCrop": "b06/II-04-question-01.png",
+    "sourceOriginalCropSha256": "89dbadfd7718f94ccd59c5e40f351e1b5cd88c3efd07ce2db841c8a8f14fd023",
+    "statements": [
+      {
+        "label": "a",
+        "text": "Lớp 10B không có học sinh giỏi Toán."
+      },
+      {
+        "label": "b",
+        "text": "Lớp 10B không có học sinh giỏi cả ba môn Toán, Lý, Hóa."
+      },
+      {
+        "label": "c",
+        "text": "Số học sinh giỏi Toán và Lý hoặc giỏi Toán và Hóa của lớp 10B không bằng 7."
+      },
+      {
+        "label": "d",
+        "text": "Số học sinh giỏi ít nhất một môn trong ba môn Toán, Lý, Hóa của lớp 10B không lớn hơn 10."
+      }
+    ],
+    "sourceDisplayCropSha256": "a744e4d42d5efbc1929ba87dc9059f6433952f0c49dda19931485de8d45b1025",
+    "questionId": "mtm-drive-g10-c1-t06-mtm-errata-v1-II4"
+  },
+  {
+    "id": "III-01",
+    "section": "III",
+    "number": 1,
+    "prompt": "Cho hai tập hợp $A=(0;5]$ và $B=\\{-2;1;3;6\\}$. Số phần tử của $(A\\cup B)\\cap\\mathbb Z$ bằng bao nhiêu?",
+    "sourcePage": 52,
+    "sourceOriginalCrop": "b06/III-01-question-01.png",
+    "sourceOriginalCropSha256": "7db49b837a2bca023118743172fb9650c00f3fa58c0f40985ce2774ac5b3b274",
+    "sourceDisplayCropSha256": "9b9a628674175b32a9c41455cd3bf3525220f6091a5b0b400fcdfbb09cc420cc",
+    "questionId": "mtm-drive-g10-c1-t06-mtm-errata-v1-III1"
+  },
+  {
+    "id": "III-02",
+    "section": "III",
+    "number": 2,
+    "prompt": "Cho tập $A=\\left\\{\\begin{gathered}x\\in\\mathbb N\\mid\\\\(x^2-3x+2)(x+3)=0\\end{gathered}\\right\\}$ và $B=\\{0;1;2;3;4;5\\}$. Có bao nhiêu tập $X$ thỏa mãn $A\\cup X=B$?",
+    "sourcePage": 52,
+    "sourceOriginalCrop": "b06/III-02-question-01.png",
+    "sourceOriginalCropSha256": "8b06b21c5e885cba13314a4e43bce5dfa4d0191747b0e51b0d80f866d4129cc0",
+    "sourceDisplayCropSha256": "31713288ff6a3bc85aa95d29faaf5d05fc88025ed2efefae4354dd44225351f4",
+    "questionId": "mtm-drive-g10-c1-t06-mtm-errata-v1-III2"
+  },
+  {
+    "id": "III-03",
+    "section": "III",
+    "number": 3,
+    "prompt": "Cho hai tập hợp $A=[-3;-1]\\cup[2;4]$, $B=(m-1;m+2)$. Có bao nhiêu giá trị nguyên của tham số $m$ để $A\\cap B\\neq\\varnothing$?",
+    "sourcePage": 52,
+    "sourceOriginalCrop": "b06/III-03-question-01.png",
+    "sourceOriginalCropSha256": "ecda77ec23894f9274a897c2e23f24487425eb10982c11885c36d94538d664cc",
+    "sourceDisplayCropSha256": "8e0c2ef795d47f10879f1e076655a6d0b1766e2530046a5373bd097e246d6726",
+    "questionId": "mtm-drive-g10-c1-t06-mtm-errata-v1-III3"
+  },
+  {
+    "id": "III-04",
+    "section": "III",
+    "number": 4,
+    "prompt": "Trong đợt hội diễn văn nghệ chào mừng 20/11, lớp 10A đăng kí 3 tiết mục là hát tốp ca, múa và diễn kịch. Trong danh sách đăng kí, có 7 học sinh đăng kí tiết mục hát tốp ca, 6 học sinh đăng kí tiết mục múa, 8 học sinh đăng kí diễn kịch, trong đó có 3 học sinh đăng kí cả tiết mục hát tốp ca và tiết mục múa, 4 học sinh đăng kí cả tiết mục hát tốp ca và diễn kịch, 2 học sinh đăng kí cả tiết mục múa và diễn kịch, 1 học sinh đăng kí cả 3 tiết mục. Hỏi lớp 10A có tất cả bao nhiêu học sinh đăng kí tham gia hội diễn văn nghệ?",
+    "sourcePage": 52,
+    "sourceOriginalCrop": "b06/III-04-question-01.png",
+    "sourceOriginalCropSha256": "800d427686867cfc126e6fc5618ced303da090ef9a3dbfe1eeb6fae12085fcc7",
+    "sourceDisplayCropSha256": "28bf00d241aaeb69b733d19f3871e744074a0b7e492ce29e5fd1d140d15d9e4d",
+    "questionId": "mtm-drive-g10-c1-t06-mtm-errata-v1-III4"
+  },
+  {
+    "id": "III-05",
+    "section": "III",
+    "number": 5,
+    "prompt": "Trong đợt quyên góp ủng hộ đồng bào bị lũ lụt năm 2020, có 25 học sinh lớp 12A đã tham gia ủng hộ, mỗi học sinh ủng hộ nhiều nhất 2 tờ tiền khác nhau trong ba loại tờ tiền mệnh giá 5.000 đồng, 10.000 đồng và 20.000 đồng. Biết rằng số học sinh đã tham gia ủng hộ thỏa đồng thời ba kết quả sau:\n\n(1) Số học sinh chỉ ủng hộ một tờ 5.000 đồng bằng tổng số học sinh chỉ ủng hộ một tờ 10.000 đồng và số học sinh chỉ ủng hộ một tờ 20.000 đồng.\n\n(2) Trong số học sinh không ủng hộ tờ 5.000 đồng thì số học sinh có ủng hộ tờ 10.000 đồng nhiều gấp hai lần số học sinh có ủng hộ tờ 20.000 đồng.\n\n(3) Số học sinh chỉ ủng hộ một tờ 5.000 đồng nhiều hơn số học sinh ủng hộ tờ 5.000 đồng và một tờ khác là 1 học sinh.\n\nHỏi có bao nhiêu học sinh lớp 12A chỉ ủng hộ một tờ 10.000 đồng?",
+    "sourcePage": 52,
+    "sourceOriginalCrop": "b06/III-05-question-01.png",
+    "sourceOriginalCropSha256": "4ab7effa4585d2bae91201a884719709aa281ae0667d3ede8b7386e3daf68179",
+    "sourceDisplayCropSha256": "db8e515e13b4d84da16a7287ab1ac2425b9a4f0636dfb72bebab02d718d634f4",
+    "questionId": "mtm-drive-g10-c1-t06-mtm-errata-v1-III5"
+  },
+  {
+    "id": "III-06",
+    "section": "III",
+    "number": 6,
+    "prompt": "Ngày 18/12/2021, một số trung tâm y tế được phân phát vacxin tiêm phòng Covid-19. Có 3 loại vacxin: Vero cell, AstraZeneca, và Pfizer. Trong 140 trung tâm y tế, có 7 trung tâm được phân phát cả 3 loại, 34 trung tâm được phát Vero Cell và AstraZeneca, 22 trung tâm được phát Vero Cell và Pfizer, 19 trung tâm được phát AstraZeneca và Pfizer, 76 trung tâm được phát Vero Cell, 62 trung tâm được phát AstraZeneca và 46 trung tâm được phát Pfizer. Có bao nhiêu trung tâm y tế không được nhận bất kỳ loại vacxin nào?",
+    "sourcePage": 52,
+    "sourceOriginalCrop": "b06/III-06-question-01.png",
+    "sourceOriginalCropSha256": "4d05bad10ae6a65f36435fbd5f9937d8af031346272dc8718d46b37b479f80fe",
+    "sourceDisplayCropSha256": "17d9c21b472a53ce1a91143986ba4acd0fe6aa021ab129709a39be28110df114",
+    "questionId": "mtm-drive-g10-c1-t06-mtm-errata-v1-III6"
+  }
+]

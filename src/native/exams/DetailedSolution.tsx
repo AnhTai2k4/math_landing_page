@@ -3,11 +3,13 @@ import katex from 'katex';
 import 'katex/dist/katex.min.css';
 import bank from './detailed-solutions.json';
 import {schoolLatex,schoolText} from './notation';
+import {authoredFormula} from '../math/MathText';
 type Block={type:'text';text:string}|{type:'math';latex:string}|{type:'table';headers:string[];rows:string[][]};
 type DetailedExam={examId:string;versionHash:string;questions:{id:string;sourceRef:string;blocks:Block[];answer:string}[]};
 export function Formula({latex,inline=false}:{latex:string;inline?:boolean}) {
-  const html=useMemo(()=>{try{return katex.renderToString(schoolLatex(latex),{displayMode:!inline,output:'htmlAndMathml',throwOnError:true,trust:false,maxSize:20,maxExpand:1000,strict:'warn',macros:{}});}catch{return null;}},[latex,inline]);
-  return html?<span className={inline?'ep-inline-math':'ep-formula'} dangerouslySetInnerHTML={{__html:html}}/>:<code className="ep-formula-source">{latex}</code>;
+  const mathml=authoredFormula(latex);
+  const html=useMemo(()=>{if(mathml)return mathml;try{return katex.renderToString(schoolLatex(latex),{displayMode:!inline,output:'htmlAndMathml',throwOnError:true,trust:false,maxSize:20,maxExpand:1000,strict:'warn',macros:{}});}catch{return null;}},[latex,inline,mathml]);
+  return html?<span className={`${inline?'ep-inline-math':'ep-formula'}${mathml?' mtm-math-authored':''}`} data-math-author={mathml?'MathType Web':undefined} dangerouslySetInnerHTML={{__html:html}}/>:<code className="ep-formula-source">{latex}</code>;
 }
 function RichText({text}:{text:string}) {
   return <>{schoolText(text).split(/(\$[^$\n]+\$)/g).map((part,i)=>part.startsWith('$')&&part.endsWith('$')?<Formula key={i} latex={part.slice(1,-1)} inline/>:part)}</>;

@@ -8,6 +8,7 @@ import {validatePracticeExam,type PracticeExam,type PracticeQuestion} from '../e
 import MathText from '../math/MathText';
 import MtmSourceContent from '../exams/MtmSourceContent';
 import MtmSourceQuestion from '../exams/MtmSourceQuestion';
+import TheorySummary from './TheorySummary';
 
 import '../exams/exams.css';
 import './chapters.css';
@@ -18,9 +19,6 @@ export type PracticeBankItem={exam:PracticeExam;note:string;limits:string[];scop
 const originalBank:PracticeBankItem[]=[];
 const rich=(text:string):ReactNode=><MathText text={text}/>;
 const points=(value:number)=>(value/1000).toLocaleString('vi-VN',{maximumFractionDigits:3});
-
-type TheoryRecall={title:string;scope?:string;notationConvention?:string;sections:{id?:string;title:string;body:string;tables?:VariationTable[]}[]};
-function TheorySummary({exam}:{exam:PracticeExam}){const theory=(exam as PracticeExam&{theoryRecall?:TheoryRecall}).theoryRecall;if(!theory)return null;return <details className="cp-theory"><summary>Ôn công thức và lý thuyết của chương</summary><h3>{theory.title}</h3>{theory.scope&&<p>{theory.scope}</p>}{theory.sections.map((section,index)=><section key={section.id??index}><h4>{section.title}</h4><p><MathText text={section.body}/></p><Tables tables={section.tables}/></section>)}{theory.notationConvention&&<p className="cp-notation"><MathText text={theory.notationConvention}/></p>}</details>;}
 
 function QuestionReader({exam}:{exam:PracticeExam}) {
   return <section className="cp-reader" aria-label="Đề bài luyện chương">
