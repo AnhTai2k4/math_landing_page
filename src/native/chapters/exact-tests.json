@@ -3599,5 +3599,914 @@
     "scope": "LOCAL_V52_SOURCE_ADMISSION_BROWSER_PENDING",
     "published": false,
     "presentationTitle": "Toán 10 · Chương I · Ôn tập cuối chương · Đề Test 02"
+  },
+  {
+    "exam": {
+      "id": "mtm-drive-g10-c1-t02-mtm-errata-v1",
+      "title": "Toán 10 · Chương I · Bài 1: Mệnh đề · Đề Test 02",
+      "sourceHash": "ce7a930fc98aa63c758ec10d96cda2baa34cfb902cdf39659e35772d71cacb71",
+      "sourceRef": "MTM sưu tầm và biên soạn",
+      "questionCount": 22,
+      "answerKeyVerified": true,
+      "rubricVerified": true,
+      "grade": 10,
+      "period": "GK1",
+      "durationMinutes": 90,
+      "rubricVersion": "MTM-22-12MC-4TF-6SA-3-4-3-v1",
+      "sourceUrl": "https://drive.google.com/drive/folders/16sSSPSdRbqYeBS_s6cJEw9jLQkLEa-D3",
+      "publicationVerified": true,
+      "questionDisplayVerified": true,
+      "sourceMaterial": {
+        "title": "Toán 10 · Chương I · Bài 1: Mệnh đề · Đề Test 02",
+        "publisher": "Minh Thành Math",
+        "version": "Bản tác giả MTM chờ kiểm 12/10/2026",
+        "locator": "Đề trang12–15; giải trang16–22"
+      },
+      "preAttemptNotice": "Bản MTM có đính chính khóa chấm và lời giải nguồn; nội dung đính chính hiển thị sau khi nộp bài. Câu hỏi và các phương án gốc được giữ nguyên.",
+      "sourceInstructions": [
+        {
+          "path": "g10-t02/question-I-instructions-reference.png",
+          "width": 1498,
+          "height": 89,
+          "sha256": "8fd56ce431fef32127d068970d28b9bbf78bf7b69ac74501f184ebfa04dc0552",
+          "sourcePage": 12
+        },
+        {
+          "path": "g10-t02/question-II-instructions-reference.png",
+          "width": 1498,
+          "height": 89,
+          "sha256": "3f4fbc1fccd08ec4c045bbadff1050df783da3b5d0f238a9fd005b920ea6816f",
+          "sourcePage": 13
+        },
+        {
+          "path": "g10-t02/question-III-instructions-reference.png",
+          "width": 1498,
+          "height": 43,
+          "sha256": "2a4011e4674cc82d9de79329dd716237e9d568c583b6dfe41d8ac599d74ed4d0",
+          "sourcePage": 14
+        }
+      ],
+      "solutionInstructions": [
+        {
+          "path": "g10-t02/solution-prefix-reference.png",
+          "width": 1498,
+          "height": 134,
+          "sha256": "a167c9842f14b0ff0e952093064b99d571b34a26025d9d1c7eb43d6bb0311866",
+          "sourcePage": 16
+        },
+        {
+          "path": "g10-t02/solution-II-instructions-reference-01.png",
+          "width": 1498,
+          "height": 89,
+          "sha256": "934541b077e3a7c60ddee09c80594b78df7f1b484e4f0b00dc9218c52db90810",
+          "sourcePage": 18
+        },
+        {
+          "path": "g10-t02/solution-III-instructions-reference-01.png",
+          "width": 1498,
+          "height": 43,
+          "sha256": "babc174ad08c1926a2bd607b49429931188107f17efa43e2f394e039308c4f8d",
+          "sourcePage": 19
+        }
+      ],
+      "sections": [
+        {
+          "label": "I · Trắc nghiệm nhiều phương án",
+          "kind": "mc",
+          "count": 12
+        },
+        {
+          "label": "II · Đúng/sai",
+          "kind": "tf",
+          "count": 4
+        },
+        {
+          "label": "III · Trả lời ngắn",
+          "kind": "short",
+          "count": 6
+        }
+      ],
+      "questions": [
+        {
+          "id": "mtm-drive-g10-c1-t02-mtm-errata-v1-I1",
+          "sourceRef": "Phần I · Câu 1",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "g10-t02/I-01-question-01.png",
+                "width": 1498,
+                "height": 133,
+                "sha256": "5eae51c76f5bbc42bfe5a6a9bead7dee9b3c8c086b7cc9600980fb07216440ce",
+                "sourcePage": 12
+              }
+            ],
+            "solutions": [
+              {
+                "path": "g10-t02/I-01-solution-01.png",
+                "width": 1498,
+                "height": 222,
+                "sha256": "8077aac42c899a30251f0f4c02705ff8ae77a0397bc9cea26aa14227c461591e",
+                "sourcePage": 16
+              }
+            ]
+          },
+          "kind": "mc",
+          "choices": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "answer": "B",
+          "maxMillipoints": 250
+        },
+        {
+          "id": "mtm-drive-g10-c1-t02-mtm-errata-v1-I2",
+          "sourceRef": "Phần I · Câu 2",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "g10-t02/I-02-question-01.png",
+                "width": 1498,
+                "height": 143,
+                "sha256": "6e42a9270d75925ac4195c0ace34220b11eedeca29ce0410029ccd282961c5e4",
+                "sourcePage": 12
+              }
+            ],
+            "solutions": [
+              {
+                "path": "g10-t02/I-02-solution-01.png",
+                "width": 1498,
+                "height": 239,
+                "sha256": "8dede975f07fb41869c1a383343257f226ed5f76cec82748768a551c743a73d8",
+                "sourcePage": 16
+              }
+            ]
+          },
+          "kind": "mc",
+          "choices": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "answer": "A",
+          "maxMillipoints": 250
+        },
+        {
+          "id": "mtm-drive-g10-c1-t02-mtm-errata-v1-I3",
+          "sourceRef": "Phần I · Câu 3",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "g10-t02/I-03-question-01.png",
+                "width": 1498,
+                "height": 114,
+                "sha256": "fd57013bcce62486775502a2c96b8d958d2f2bc0c2d2c664f2de09129f0e1008",
+                "sourcePage": 12
+              }
+            ],
+            "solutions": [
+              {
+                "path": "g10-t02/I-03-solution-01.png",
+                "width": 1498,
+                "height": 371,
+                "sha256": "dfe978dbbdc5cf6fc951d9b42ae16e0ebe6f5d97ceaaa5ffed7e5de442c3e187",
+                "sourcePage": 16
+              }
+            ]
+          },
+          "kind": "mc",
+          "choices": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "answer": "A",
+          "maxMillipoints": 250,
+          "correctionNote": "Đính chính lời giải MTM: tính giá trị n²+1 thay cách ghi P(n) như một số; giữ nguyên câu hỏi và khóa A.",
+          "solution": "Bổ sung bản MTM: Tính các giá trị: $4^2+1=17$; $2^2+1=5$; $3^2+1=10$; $7^2+1=50$. Số 17 không chia hết cho 5 nên $P(4)$ Sai. Các số 5, 10, 50 chia hết cho 5 nên $P(2)$, $P(3)$, $P(7)$ Đúng. Chọn A. Các mệnh đề trong đề được giữ nguyên."
+        },
+        {
+          "id": "mtm-drive-g10-c1-t02-mtm-errata-v1-I4",
+          "sourceRef": "Phần I · Câu 4",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "g10-t02/I-04-question-01.png",
+                "width": 1498,
+                "height": 269,
+                "sha256": "32e3b552c457a5bc6475e2023fbd281638e4333b77b4784dce539b565d877aed",
+                "sourcePage": 12
+              }
+            ],
+            "solutions": [
+              {
+                "path": "g10-t02/I-04-solution-01.png",
+                "width": 1498,
+                "height": 357,
+                "sha256": "30e970f1371ad8f23f7b6c47fa3db98e5535831bcf8d55e4e69dc43d4babff8f",
+                "sourcePage": 16
+              }
+            ]
+          },
+          "kind": "mc",
+          "choices": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "answer": "B",
+          "maxMillipoints": 250
+        },
+        {
+          "id": "mtm-drive-g10-c1-t02-mtm-errata-v1-I5",
+          "sourceRef": "Phần I · Câu 5",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "g10-t02/I-05-question-01.png",
+                "width": 1498,
+                "height": 271,
+                "sha256": "fcb7e125ddf607ed744a88de68f22ddf329e7cdd4e23a2a9444396228edb274c",
+                "sourcePage": 12
+              }
+            ],
+            "solutions": [
+              {
+                "path": "g10-t02/I-05-solution-01.png",
+                "width": 1498,
+                "height": 409,
+                "sha256": "702793cdaae7e88a9646390ee972ff2caedc2b9a2f7e4e870c5d0970db7d927f",
+                "sourcePage": 16
+              }
+            ]
+          },
+          "kind": "mc",
+          "choices": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "answer": "C",
+          "maxMillipoints": 250
+        },
+        {
+          "id": "mtm-drive-g10-c1-t02-mtm-errata-v1-I6",
+          "sourceRef": "Phần I · Câu 6",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "g10-t02/I-06-question-01.png",
+                "width": 1498,
+                "height": 270,
+                "sha256": "977860697095bb9cd8ff84cacf2a8f8e99dffddd72f8f8dc151d86d2a01095bd",
+                "sourcePage": 12
+              }
+            ],
+            "solutions": [
+              {
+                "path": "g10-t02/I-06-solution-01.png",
+                "width": 1498,
+                "height": 411,
+                "sha256": "bcc876b4c2eb11b7a6c7ebd41e5bf40336d2a132026b0e1ab4ea5570f096f8b4",
+                "sourcePage": 16
+              }
+            ]
+          },
+          "kind": "mc",
+          "choices": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "answer": "B",
+          "maxMillipoints": 250
+        },
+        {
+          "id": "mtm-drive-g10-c1-t02-mtm-errata-v1-I7",
+          "sourceRef": "Phần I · Câu 7",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "g10-t02/I-07-question-01.png",
+                "width": 1498,
+                "height": 96,
+                "sha256": "333d745120262dd6d10d42b16a65d12b1319758e7976fc09728a54c7d2c81d9e",
+                "sourcePage": 12
+              }
+            ],
+            "solutions": [
+              {
+                "path": "g10-t02/I-07-solution-01.png",
+                "width": 1498,
+                "height": 47,
+                "sha256": "a9cb870618319dbdbb1383e13ebfa4636576749c7847d0778dde61f3827458a7",
+                "sourcePage": 16
+              },
+              {
+                "path": "g10-t02/I-07-solution-02.png",
+                "width": 1498,
+                "height": 148,
+                "sha256": "071ebe98bd8e206ce9e43f3186b36ac0112150f71edb4a8b3f9dbf8b5c9f5985",
+                "sourcePage": 17
+              }
+            ]
+          },
+          "kind": "mc",
+          "choices": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "answer": "D",
+          "maxMillipoints": 250
+        },
+        {
+          "id": "mtm-drive-g10-c1-t02-mtm-errata-v1-I8",
+          "sourceRef": "Phần I · Câu 8",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "g10-t02/I-08-question-01.png",
+                "width": 1498,
+                "height": 162,
+                "sha256": "9751935fbad2d3aefaf3a409cfdfd1b41968820505bdf7cbf97b9f68b5601392",
+                "sourcePage": 12
+              }
+            ],
+            "solutions": [
+              {
+                "path": "g10-t02/I-08-solution-01.png",
+                "width": 1498,
+                "height": 264,
+                "sha256": "0193778d35065bd90e1d0903c8a30966187e68ef37f4caef613ac8d75bbb83a8",
+                "sourcePage": 17
+              }
+            ]
+          },
+          "kind": "mc",
+          "choices": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "answer": "B",
+          "maxMillipoints": 250
+        },
+        {
+          "id": "mtm-drive-g10-c1-t02-mtm-errata-v1-I9",
+          "sourceRef": "Phần I · Câu 9",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "g10-t02/I-09-question-01.png",
+                "width": 1498,
+                "height": 343,
+                "sha256": "3426492ef21defcc0d9be5ea256e6368a13b9c3992c0095f817335b0383abc90",
+                "sourcePage": 13
+              }
+            ],
+            "solutions": [
+              {
+                "path": "g10-t02/I-09-solution-01.png",
+                "width": 1498,
+                "height": 877,
+                "sha256": "58e61910203aea4e81d1f62fdec8d3b09d1d72933a7e7c4159da513e8d0f8d25",
+                "sourcePage": 17
+              }
+            ]
+          },
+          "kind": "mc",
+          "choices": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "answer": "D",
+          "maxMillipoints": 250,
+          "correctionNote": "Đính chính khóa MTM: chọn D; định lý đảo là tam giác vuông thì có một góc 90°. Giữ lời giải nguồn đúng chiều đảo."
+        },
+        {
+          "id": "mtm-drive-g10-c1-t02-mtm-errata-v1-I10",
+          "sourceRef": "Phần I · Câu 10",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "g10-t02/I-10-question-01.png",
+                "width": 1498,
+                "height": 104,
+                "sha256": "ac128deb87efe5c0f034ae89da04da45b5966b63c4fd3be334f8e222bdc51796",
+                "sourcePage": 13
+              }
+            ],
+            "solutions": [
+              {
+                "path": "g10-t02/I-10-solution-01.png",
+                "width": 1498,
+                "height": 277,
+                "sha256": "2ee86c6887b47bbb456731b02d5f6b37e64ab1e77495c98b861d7500ab736e34",
+                "sourcePage": 17
+              }
+            ]
+          },
+          "kind": "mc",
+          "choices": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "answer": "A",
+          "maxMillipoints": 250
+        },
+        {
+          "id": "mtm-drive-g10-c1-t02-mtm-errata-v1-I11",
+          "sourceRef": "Phần I · Câu 11",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "g10-t02/I-11-question-01.png",
+                "width": 1498,
+                "height": 362,
+                "sha256": "a947605acaaef41d95b01909e147bbae71cba9f249701966da81f8a11980a32f",
+                "sourcePage": 13
+              }
+            ],
+            "solutions": [
+              {
+                "path": "g10-t02/I-11-solution-01.png",
+                "width": 1498,
+                "height": 588,
+                "sha256": "2f675bd9590b685fd20127b62af716a152bbe19d0ce16cce6ebcbc32f7a8f550",
+                "sourcePage": 17
+              }
+            ]
+          },
+          "kind": "mc",
+          "choices": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "answer": "C",
+          "maxMillipoints": 250
+        },
+        {
+          "id": "mtm-drive-g10-c1-t02-mtm-errata-v1-I12",
+          "sourceRef": "Phần I · Câu 12",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "g10-t02/I-12-question-01.png",
+                "width": 1498,
+                "height": 222,
+                "sha256": "a961509e254b2abff7e932673b8f26029ec962bf3cbcb4a00d9629fa6ed4f2c6",
+                "sourcePage": 13
+              }
+            ],
+            "solutions": [
+              {
+                "path": "g10-t02/I-12-solution-01.png",
+                "width": 1498,
+                "height": 46,
+                "sha256": "1ce3d8077d77abfa6f93e4c6fc4d921c14ff2ffb635530fe10a133a52cbd9406",
+                "sourcePage": 17
+              },
+              {
+                "path": "g10-t02/I-12-solution-02.png",
+                "width": 1498,
+                "height": 724,
+                "sha256": "9a363d0a67a10318227c2d506c09af42fd3ca8e3a3acc4ca8705b756d522ca92",
+                "sourcePage": 18
+              }
+            ]
+          },
+          "kind": "mc",
+          "choices": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "answer": "B",
+          "maxMillipoints": 250
+        },
+        {
+          "id": "mtm-drive-g10-c1-t02-mtm-errata-v1-II1",
+          "sourceRef": "Phần II · Câu 1",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "g10-t02/II-01-question-01.png",
+                "width": 1498,
+                "height": 299,
+                "sha256": "79c090a4af232e36d537b7089f2e6102d706c02b3905a78a81fe465a27220664",
+                "sourcePage": 13
+              }
+            ],
+            "solutions": [
+              {
+                "path": "g10-t02/II-01-solution-01.png",
+                "width": 1498,
+                "height": 801,
+                "sha256": "d16720a11648f3e3d2b22636b5869a90c9e173b98f8a67c6e77aaf77e92bc9a1",
+                "sourcePage": 18
+              }
+            ]
+          },
+          "kind": "tf",
+          "answer": [
+            false,
+            false,
+            false,
+            true
+          ],
+          "maxMillipoints": 1000,
+          "pointsByCorrectCount": [
+            0,
+            100,
+            250,
+            500,
+            1000
+          ],
+          "correctionNote": "Đính chính MTM: ý c Sai; B đúng với n=3. Ý d giữ Đúng; dùng n=1 để chứng minh tồn tại, thay witness n=3 sai của nguồn.",
+          "solution": "Bổ sung bản MTM:\nÝ b: Phủ định đúng phải đổi “mọi” thành “tồn tại” và lấy phủ định của dấu lớn hơn: $\\exists x\\in\\mathbb R:x-3\\le0$. Bản gốc đã ghi đúng dấu này trong lời giải.\nÝ c: $n=3:\\sqrt{2^3+1}=3\\in\\mathbb Z$. B đúng với n=3, nên phát biểu “B sai” là Sai.\nÝ d: Chọn $n=1:\\quad1^2=1$. Tiền đề “$n^2$ chia hết cho $9$” sai, nên mệnh đề kéo theo đúng. Đây là ví dụ chứng minh tồn tại; không dùng n=3."
+        },
+        {
+          "id": "mtm-drive-g10-c1-t02-mtm-errata-v1-II2",
+          "sourceRef": "Phần II · Câu 2",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "g10-t02/II-02-question-01.png",
+                "width": 1498,
+                "height": 330,
+                "sha256": "6265ccf2911c393b2242a4180703207857a5158ced6ba76dea4e8ccc2bc34fe6",
+                "sourcePage": 13
+              }
+            ],
+            "solutions": [
+              {
+                "path": "g10-t02/II-02-solution-01.png",
+                "width": 1498,
+                "height": 764,
+                "sha256": "72e83fd04f6fdf4f9c3ba2d56d612e1de45ce7a36ea5952702d0cb1ac23cc288",
+                "sourcePage": 18
+              },
+              {
+                "path": "g10-t02/II-02-solution-02.png",
+                "width": 1498,
+                "height": 98,
+                "sha256": "d0d2ca7c1f7ce8568f1a2e6e82cb0ef47ce2e658e946ba02249f8950b62f633b",
+                "sourcePage": 19
+              }
+            ]
+          },
+          "kind": "tf",
+          "answer": [
+            true,
+            false,
+            false,
+            false
+          ],
+          "maxMillipoints": 1000,
+          "pointsByCorrectCount": [
+            0,
+            100,
+            250,
+            500,
+            1000
+          ],
+          "correctionNote": "Đính chính bảng khóa MTM: ý b Sai vì 7 là số nguyên tố. Phần lời giải dưới bảng của nguồn đã ghi đúng."
+        },
+        {
+          "id": "mtm-drive-g10-c1-t02-mtm-errata-v1-II3",
+          "sourceRef": "Phần II · Câu 3",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "g10-t02/II-03-question-01.png",
+                "width": 1498,
+                "height": 261,
+                "sha256": "f3f0c66c637c2d1473c0ed7556f50e6c95f556c2f4b89bcd5486a5d7b2629ee9",
+                "sourcePage": 13
+              }
+            ],
+            "solutions": [
+              {
+                "path": "g10-t02/II-03-solution-01.png",
+                "width": 1498,
+                "height": 970,
+                "sha256": "f44761cda8aae9375ac935f8b983c40ea0dc9449ab3bfbf9b57d1ab24ae76be3",
+                "sourcePage": 19
+              }
+            ]
+          },
+          "kind": "tf",
+          "answer": [
+            true,
+            false,
+            true,
+            false
+          ],
+          "maxMillipoints": 1000,
+          "pointsByCorrectCount": [
+            0,
+            100,
+            250,
+            500,
+            1000
+          ],
+          "correctionNote": "Đính chính khai triển lời giải MTM: n²+3n=9k²+6kr+r²+9k+3r; r=0 mới cho chia hết3 trong các lớp dư0,1,2. Giữ ý d Sai.",
+          "solution": "Bổ sung bản MTM cho ý d: Xét các số dư 0, 1, 2 khi chia n cho 3. Khi đó $n^2+3n$ có số dư tương ứng là 0, 1, 1 khi chia cho 3. Phép khai triển đầy đủ đã được sửa đúng trong hình lời giải phía trên. Với $n=3$, biểu thức chia hết cho 3; vì vậy B Đúng và phủ định của B Sai. Giữ khóa ý d Sai."
+        },
+        {
+          "id": "mtm-drive-g10-c1-t02-mtm-errata-v1-II4",
+          "sourceRef": "Phần II · Câu 4",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "g10-t02/II-04-question-01.png",
+                "width": 1498,
+                "height": 327,
+                "sha256": "ecd56ff41c9f0703fe03814dab1f9748c53dc3c9509b849b4d495583bb5cabf7",
+                "sourcePage": 14
+              }
+            ],
+            "solutions": [
+              {
+                "path": "g10-t02/II-04-solution-01.png",
+                "width": 1498,
+                "height": 665,
+                "sha256": "0e851e81d0590e70a1ad1c1dc17543c52fcec0bcb0d150793671b5d920602a6d",
+                "sourcePage": 19
+              }
+            ]
+          },
+          "kind": "tf",
+          "answer": [
+            true,
+            false,
+            false,
+            false
+          ],
+          "maxMillipoints": 1000,
+          "pointsByCorrectCount": [
+            0,
+            100,
+            250,
+            500,
+            1000
+          ]
+        },
+        {
+          "id": "mtm-drive-g10-c1-t02-mtm-errata-v1-III1",
+          "sourceRef": "Phần III · Câu 1",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "g10-t02/III-01-question-01.png",
+                "width": 1498,
+                "height": 403,
+                "sha256": "de29f79d59211d9ecd0d792a2207b4769b505b432c9bd736c5ddc75947cf0853",
+                "sourcePage": 14
+              }
+            ],
+            "solutions": [
+              {
+                "path": "g10-t02/III-01-solution-01.png",
+                "width": 1498,
+                "height": 448,
+                "sha256": "5d19b6273142ddeef28ba25c7a23597a477ede77d6e4b63e63e0b39b61d4e7d0",
+                "sourcePage": 19
+              },
+              {
+                "path": "g10-t02/III-01-solution-02.png",
+                "width": 1498,
+                "height": 171,
+                "sha256": "d0dea736a8188442498dd7307b5b71034e08347a42b28dabe7e6ea71369cc45e",
+                "sourcePage": 20
+              }
+            ]
+          },
+          "kind": "short",
+          "mode": "numeric",
+          "acceptedAnswers": [
+            "6"
+          ],
+          "maxMillipoints": 500
+        },
+        {
+          "id": "mtm-drive-g10-c1-t02-mtm-errata-v1-III2",
+          "sourceRef": "Phần III · Câu 2",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "g10-t02/III-02-question-01.png",
+                "width": 1498,
+                "height": 452,
+                "sha256": "9469ac53386268be880765aa1065fc584a37bbb0880bd5735288dd533e692d91",
+                "sourcePage": 14
+              }
+            ],
+            "solutions": [
+              {
+                "path": "g10-t02/III-02-solution-01.png",
+                "width": 1498,
+                "height": 636,
+                "sha256": "befe918ddcacb0ba783f32eb736c3deb6260e2cf8a4b6f04e5198d949a4004ca",
+                "sourcePage": 20
+              }
+            ]
+          },
+          "kind": "short",
+          "mode": "numeric",
+          "acceptedAnswers": [
+            "4"
+          ],
+          "maxMillipoints": 500
+        },
+        {
+          "id": "mtm-drive-g10-c1-t02-mtm-errata-v1-III3",
+          "sourceRef": "Phần III · Câu 3",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "g10-t02/III-03-question-01.png",
+                "width": 1498,
+                "height": 438,
+                "sha256": "3c413ba41bb54ad5732c365eee5882b30a7294edf556644bb8b9553ca7d8cb55",
+                "sourcePage": 14
+              }
+            ],
+            "solutions": [
+              {
+                "path": "g10-t02/III-03-solution-01.png",
+                "width": 1498,
+                "height": 813,
+                "sha256": "b46e4d6dfc496bd91c48ba9eb49693307d1db8289bbcfc123864f25af4317fde",
+                "sourcePage": 20
+              }
+            ]
+          },
+          "kind": "short",
+          "mode": "numeric",
+          "acceptedAnswers": [
+            "4"
+          ],
+          "maxMillipoints": 500
+        },
+        {
+          "id": "mtm-drive-g10-c1-t02-mtm-errata-v1-III4",
+          "sourceRef": "Phần III · Câu 4",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "g10-t02/III-04-question-01.png",
+                "width": 1498,
+                "height": 387,
+                "sha256": "5593e7f10e31ce2c240433861ec5f4b6245075179c4bc43c4f4f26a4c71f0632",
+                "sourcePage": 14
+              }
+            ],
+            "solutions": [
+              {
+                "path": "g10-t02/III-04-solution-01.png",
+                "width": 1498,
+                "height": 429,
+                "sha256": "d3468da6beae107a7d1695230621323d08f99fa261b1a32b958650ca9c5bf7d3",
+                "sourcePage": 20
+              },
+              {
+                "path": "g10-t02/III-04-solution-02.png",
+                "width": 1498,
+                "height": 728,
+                "sha256": "84b43e99328e8411c33f40c74cec9aceb882ca9602f3d88bc6a56093c78578a7",
+                "sourcePage": 21
+              }
+            ]
+          },
+          "kind": "short",
+          "mode": "numeric",
+          "acceptedAnswers": [
+            "4"
+          ],
+          "maxMillipoints": 500
+        },
+        {
+          "id": "mtm-drive-g10-c1-t02-mtm-errata-v1-III5",
+          "sourceRef": "Phần III · Câu 5",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "g10-t02/III-05-question-01.png",
+                "width": 1498,
+                "height": 347,
+                "sha256": "24a9e2b62a2376dfdacb97cabb15ae8f28d65ef74efc206e00a96a79ce540de1",
+                "sourcePage": 15
+              }
+            ],
+            "solutions": [
+              {
+                "path": "g10-t02/III-05-solution-01.png",
+                "width": 1498,
+                "height": 1289,
+                "sha256": "6eb0645b4f37222d37e6a04c35852b7160ba9ad7f04c1b35f774232b2f6c724b",
+                "sourcePage": 21
+              },
+              {
+                "path": "g10-t02/III-05-solution-02.png",
+                "width": 1498,
+                "height": 686,
+                "sha256": "fccbf981826ffbcbc2499a8ef96087e87427be905b998c3c24895bfa6cbc16fb",
+                "sourcePage": 22
+              }
+            ]
+          },
+          "kind": "short",
+          "mode": "numeric",
+          "acceptedAnswers": [
+            "4"
+          ],
+          "maxMillipoints": 500,
+          "correctionNote": "Đính chính lời giải MTM: dòng n=4k dùng16k²+1; dòng lớp dư cuối là n=4k+3. Giữ khóa4.",
+          "solution": "Bổ sung bản MTM: Hai dòng bị in sai trong lời giải gốc được sửa thành:\nNếu $n=4k$ thì\n$n^2+1=16k^2+1$.\nNếu $n=4k+3$ thì\n$n^2+1=16k^2+24k+10$.\nĐối chiếu đủ bốn số dư 0, 1, 2, 3 trong lời giải: $n^2+1$ không chia hết cho 4. Kết quả đếm vẫn là 4."
+        },
+        {
+          "id": "mtm-drive-g10-c1-t02-mtm-errata-v1-III6",
+          "sourceRef": "Phần III · Câu 6",
+          "sourceContent": {
+            "questions": [
+              {
+                "path": "g10-t02/III-06-question-01.png",
+                "width": 1498,
+                "height": 164,
+                "sha256": "38aae5269cf145f36cb74f61e9d857825f2dbb941c85d4f88706df756fbce65b",
+                "sourcePage": 15
+              }
+            ],
+            "solutions": [
+              {
+                "path": "g10-t02/III-06-solution-01.png",
+                "width": 1503,
+                "height": 857,
+                "sha256": "e4674e5c6ebe8f57265609ec38322dced70b964160444bf730429cdb8e27e568",
+                "sourcePage": 22
+              }
+            ]
+          },
+          "kind": "short",
+          "mode": "numeric",
+          "acceptedAnswers": [
+            "1"
+          ],
+          "maxMillipoints": 500
+        }
+      ],
+      "mtmDocuments": {
+        "questions": {
+          "url": "/exam-assets/201a21d3dbddacda211c6c3b06a3fab46a677ad16439247d7b2c6529383907bf.pdf",
+          "sha256": "201a21d3dbddacda211c6c3b06a3fab46a677ad16439247d7b2c6529383907bf"
+        },
+        "solutions": {
+          "url": "/exam-assets/c515438e84bb7e3f6a84eb017f3fbe53caa6460a946196e18ba0fb2763fe2540.pdf",
+          "sha256": "c515438e84bb7e3f6a84eb017f3fbe53caa6460a946196e18ba0fb2763fe2540"
+        }
+      },
+      "answerVerificationNote": "Đã kiểm nguyên đề và khóa chấm; bản MTM đính chính rõ các lỗi đã đối chiếu, giữ PDF gốc và lịch sử.",
+      "versionHash": "4bae87e924601ac0e9a3eb26e3d5ab67b10ef2095e44a3d313e7d72a943828c2"
+    },
+    "sourceEdition": true,
+    "track": "10",
+    "chapter": "1",
+    "order": 2,
+    "sourceLesson": "BÀI 1: MỆNH ĐỀ",
+    "sourceTestNumber": 2,
+    "sourceSequence": {
+      "fileId": "1F4J_piFG9sH1LeZOz0dC90-XjmDgPCcH",
+      "lesson": "1",
+      "test": "02",
+      "sequence": 2,
+      "lessonTitle": "Mệnh đề"
+    },
+    "coverage": "Mệnh đề, phủ định, lượng từ, đảo, điều kiện cần/đủ, logic và kiểm bằng phản ví dụ",
+    "isFoundation": false,
+    "isChapterEnd": false,
+    "note": "22 nhóm/34 ô từ đúng Drive. Đề không có hình; giữ nguyên tam giác và hai bảng chân trị ở lời giải.",
+    "limits": [
+      "MathType/rootbrowser/independentartifact pending"
+    ],
+    "scope": "LOCAL_V53_SOURCE_ADMISSION_BROWSER_PENDING",
+    "published": false,
+    "presentationTitle": "Toán 10 · Chương I · Bài 1: Mệnh đề · Đề 02"
   }
 ]

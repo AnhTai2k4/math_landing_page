@@ -2595,5 +2595,535 @@
     "sourceOriginalCropSha256": "4d05bad10ae6a65f36435fbd5f9937d8af031346272dc8718d46b37b479f80fe",
     "sourceDisplayCropSha256": "17d9c21b472a53ce1a91143986ba4acd0fe6aa021ab129709a39be28110df114",
     "questionId": "mtm-drive-g10-c1-t06-mtm-errata-v1-III6"
+  },
+  {
+    "id": "I-01",
+    "section": "I",
+    "number": 1,
+    "prompt": "Phát biểu nào sau đây là một mệnh đề?",
+    "sourcePage": 12,
+    "sourceOriginalCrop": "b02/I-01-question-01.png",
+    "sourceOriginalCropSha256": "3acc2f18e006cb5a565a00f2df2d6844b7f4d529d8b24f107192f05385dd4d06",
+    "choices": [
+      {
+        "label": "A",
+        "text": "Trời hôm nay đẹp quá!"
+      },
+      {
+        "label": "B",
+        "text": "New York là thủ đô của Việt Nam."
+      },
+      {
+        "label": "C",
+        "text": "Con đang làm gì đó?"
+      },
+      {
+        "label": "D",
+        "text": "Số 3 có phải là số tự nhiên không?"
+      }
+    ],
+    "sourceDisplayCropSha256": "5eae51c76f5bbc42bfe5a6a9bead7dee9b3c8c086b7cc9600980fb07216440ce",
+    "questionId": "mtm-drive-g10-c1-t02-mtm-errata-v1-I1"
+  },
+  {
+    "id": "I-02",
+    "section": "I",
+    "number": 2,
+    "prompt": "Trong các câu sau, câu nào không là một mệnh đề chứa biến?",
+    "sourcePage": 12,
+    "sourceOriginalCrop": "b02/I-02-question-01.png",
+    "sourceOriginalCropSha256": "0b4dffac1d59f8725606895ec85ff345aa2e7a6b2528bf64ab01b9d04078b4e9",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$2+5=6$."
+      },
+      {
+        "label": "B",
+        "text": "$4x^2-7x-9=0$."
+      },
+      {
+        "label": "C",
+        "text": "$4x-y=1$."
+      },
+      {
+        "label": "D",
+        "text": "$2x+1$ chia hết cho $5$."
+      }
+    ],
+    "sourceDisplayCropSha256": "6e42a9270d75925ac4195c0ace34220b11eedeca29ce0410029ccd282961c5e4",
+    "questionId": "mtm-drive-g10-c1-t02-mtm-errata-v1-I2"
+  },
+  {
+    "id": "I-03",
+    "section": "I",
+    "number": 3,
+    "prompt": "Cho mệnh đề chứa biến $P(n)$: \"$n^2+1$ chia hết cho $5$\". Trong các mệnh đề sau, mệnh đề nào sai?",
+    "sourcePage": 12,
+    "sourceOriginalCrop": "b02/I-03-question-01.png",
+    "sourceOriginalCropSha256": "298a37e57d284a7a9ef9bd805a4cf21601c88ad66961b0ded52f73a273b87e7c",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$P(4)$."
+      },
+      {
+        "label": "B",
+        "text": "$P(2)$."
+      },
+      {
+        "label": "C",
+        "text": "$P(3)$."
+      },
+      {
+        "label": "D",
+        "text": "$P(7)$."
+      }
+    ],
+    "sourceDisplayCropSha256": "fd57013bcce62486775502a2c96b8d958d2f2bc0c2d2c664f2de09129f0e1008",
+    "questionId": "mtm-drive-g10-c1-t02-mtm-errata-v1-I3"
+  },
+  {
+    "id": "I-04",
+    "section": "I",
+    "number": 4,
+    "prompt": "Cho mệnh đề: “Có một học sinh trong lớp 10B không thích học môn Toán”. Mệnh đề phủ định của mệnh đề này là",
+    "sourcePage": 12,
+    "sourceOriginalCrop": "b02/I-04-question-01.png",
+    "sourceOriginalCropSha256": "ef367f60316a37103d78394859bbd4b933ecf5fabfe64caf06a92b60a7e90297",
+    "choices": [
+      {
+        "label": "A",
+        "text": "“Có một học sinh trong lớp 10B không thích học môn Toán”."
+      },
+      {
+        "label": "B",
+        "text": "“Mọi học sinh trong lớp 10B đều thích học môn Toán”."
+      },
+      {
+        "label": "C",
+        "text": "“Mọi học sinh trong lớp 10B đều không thích học môn Toán”."
+      },
+      {
+        "label": "D",
+        "text": "“Có ít nhất một học sinh trong lớp 10B thích học môn Toán”."
+      }
+    ],
+    "sourceDisplayCropSha256": "32e3b552c457a5bc6475e2023fbd281638e4333b77b4784dce539b565d877aed",
+    "questionId": "mtm-drive-g10-c1-t02-mtm-errata-v1-I4"
+  },
+  {
+    "id": "I-05",
+    "section": "I",
+    "number": 5,
+    "prompt": "Cho mệnh đề $P$: “Nếu hai tam giác bằng nhau thì diện tích của chúng bằng nhau”. Một phát biểu khác của mệnh đề $P$ là",
+    "sourcePage": 12,
+    "sourceOriginalCrop": "b02/I-05-question-01.png",
+    "sourceOriginalCropSha256": "866b66cfc4d3019a76e79e35f9693a0df8b6f64478ab6322d1ff701d905015bb",
+    "choices": [
+      {
+        "label": "A",
+        "text": "Hai tam giác bằng nhau là điều kiện cần để diện tích của chúng bằng nhau."
+      },
+      {
+        "label": "B",
+        "text": "Hai tam giác bằng nhau là điều kiện cần và đủ để diện tích của chúng bằng nhau."
+      },
+      {
+        "label": "C",
+        "text": "Hai tam giác có diện tích bằng nhau là điều kiện cần để chúng bằng nhau."
+      },
+      {
+        "label": "D",
+        "text": "Hai tam giác có diện tích bằng nhau là điều kiện đủ để chúng bằng nhau."
+      }
+    ],
+    "sourceDisplayCropSha256": "fcb7e125ddf607ed744a88de68f22ddf329e7cdd4e23a2a9444396228edb274c",
+    "questionId": "mtm-drive-g10-c1-t02-mtm-errata-v1-I5"
+  },
+  {
+    "id": "I-06",
+    "section": "I",
+    "number": 6,
+    "prompt": "Phát biểu nào sau đây có cùng nội dung với mệnh đề “Nếu $a$ và $b$ chia hết cho $c$ thì $a+b$ chia hết cho $c$.”",
+    "sourcePage": 12,
+    "sourceOriginalCrop": "b02/I-06-question-01.png",
+    "sourceOriginalCropSha256": "194f6729e8bdf821deb6a6aa5a74b1713a95c58fa2ea4cf11671e85943e316ce",
+    "choices": [
+      {
+        "label": "A",
+        "text": "Nếu $a+b$ chia hết cho $c$ thì $a$ và $b$ chia hết cho $c$."
+      },
+      {
+        "label": "B",
+        "text": "$a$ và $b$ chia hết cho $c$ là điều kiện đủ để $a+b$ chia hết cho $c$."
+      },
+      {
+        "label": "C",
+        "text": "$a$ và $b$ chia hết cho $c$ là điều kiện cần để $a+b$ chia hết cho $c$."
+      },
+      {
+        "label": "D",
+        "text": "$a+b$ chia hết cho $c$ là điều kiện đủ để $a$ và $b$ chia hết cho $c$."
+      }
+    ],
+    "sourceDisplayCropSha256": "977860697095bb9cd8ff84cacf2a8f8e99dffddd72f8f8dc151d86d2a01095bd",
+    "questionId": "mtm-drive-g10-c1-t02-mtm-errata-v1-I6"
+  },
+  {
+    "id": "I-07",
+    "section": "I",
+    "number": 7,
+    "prompt": "Viết mệnh đề sau bằng kí hiệu $\\forall$ hoặc $\\exists$: “Có một số nguyên bằng bình phương của chính nó”",
+    "sourcePage": 12,
+    "sourceOriginalCrop": "b02/I-07-question-01.png",
+    "sourceOriginalCropSha256": "a6bab3da9976e4db96fccd13e04f9b57d931cee5782e26bd05dc95372182a6b9",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$\\exists x\\in\\mathbb R,x^2-x=0$."
+      },
+      {
+        "label": "B",
+        "text": "$\\exists x\\in\\mathbb R,x=x^2$."
+      },
+      {
+        "label": "C",
+        "text": "$\\forall x\\in\\mathbb Z,x^2=x$."
+      },
+      {
+        "label": "D",
+        "text": "$\\exists x\\in\\mathbb Z,x=x^2$."
+      }
+    ],
+    "sourceDisplayCropSha256": "333d745120262dd6d10d42b16a65d12b1319758e7976fc09728a54c7d2c81d9e",
+    "questionId": "mtm-drive-g10-c1-t02-mtm-errata-v1-I7"
+  },
+  {
+    "id": "I-08",
+    "section": "I",
+    "number": 8,
+    "prompt": "Cho mệnh đề $P$: \"$\\forall x\\in\\mathbb R,3x-5=0$\". Mệnh đề phủ định của $P$ là",
+    "sourcePage": 12,
+    "sourceOriginalCrop": "b02/I-08-question-01.png",
+    "sourceOriginalCropSha256": "71823cfe3860e43d626b5ab775344d8ffd74897faebbb70d0637ed741572faf6",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$\\overline P$: \"$\\forall x\\in\\mathbb R,3x-5\\ne0$\"."
+      },
+      {
+        "label": "B",
+        "text": "$\\overline P$: \"$\\exists x\\in\\mathbb R,3x-5\\ne0$\"."
+      },
+      {
+        "label": "C",
+        "text": "$\\overline P$: \"$\\exists x\\in\\mathbb R,3x-5=0$\"."
+      },
+      {
+        "label": "D",
+        "text": "$\\overline P$: \"$\\forall x\\in\\mathbb R,3x-5=0$\"."
+      }
+    ],
+    "sourceDisplayCropSha256": "9751935fbad2d3aefaf3a409cfdfd1b41968820505bdf7cbf97b9f68b5601392",
+    "questionId": "mtm-drive-g10-c1-t02-mtm-errata-v1-I8"
+  },
+  {
+    "id": "I-09",
+    "section": "I",
+    "number": 9,
+    "prompt": "Phát biểu định lý đảo của định lý “Nếu một tam giác có một góc bằng $90^\\circ$ thì tam giác đó là tam giác vuông”.",
+    "sourcePage": 13,
+    "sourceOriginalCrop": "b02/I-09-question-01.png",
+    "sourceOriginalCropSha256": "d8c49dba1895ae3ddc6c2545157a6c9275fb0ab7a2b8eb35303eda4bfb18affa",
+    "choices": [
+      {
+        "label": "A",
+        "text": "Một tam giác là tam giác vuông là điều kiện cần và đủ để tam giác đó có một góc bằng $90^\\circ$."
+      },
+      {
+        "label": "B",
+        "text": "Một tam giác có một góc bằng $90^\\circ$ khi và chỉ khi tam giác đó là tam giác vuông."
+      },
+      {
+        "label": "C",
+        "text": "Một tam giác có một góc bằng $90^\\circ$ là điều kiện đủ để tam giác đó là tam giác vuông."
+      },
+      {
+        "label": "D",
+        "text": "Một tam giác là tam giác vuông là điều kiện đủ để tam giác đó có một góc bằng $90^\\circ$."
+      }
+    ],
+    "sourceDisplayCropSha256": "3426492ef21defcc0d9be5ea256e6368a13b9c3992c0095f817335b0383abc90",
+    "questionId": "mtm-drive-g10-c1-t02-mtm-errata-v1-I9"
+  },
+  {
+    "id": "I-10",
+    "section": "I",
+    "number": 10,
+    "prompt": "Cho $P\\Leftrightarrow Q$ là mệnh đề đúng. Khẳng định nào sau đây sai?",
+    "sourcePage": 13,
+    "sourceOriginalCrop": "b02/I-10-question-01.png",
+    "sourceOriginalCropSha256": "77a7ce3ac245d683f7b3ef7973714f10c736b855aafbde8efc61624514250d60",
+    "choices": [
+      {
+        "label": "A",
+        "text": "$\\overline P\\Leftrightarrow\\overline Q$ sai."
+      },
+      {
+        "label": "B",
+        "text": "$\\overline P\\Leftrightarrow\\overline Q$ đúng."
+      },
+      {
+        "label": "C",
+        "text": "$\\overline P\\Leftrightarrow Q$ sai."
+      },
+      {
+        "label": "D",
+        "text": "$\\overline Q\\Leftrightarrow P$ sai."
+      }
+    ],
+    "sourceDisplayCropSha256": "ac128deb87efe5c0f034ae89da04da45b5966b63c4fd3be334f8e222bdc51796",
+    "questionId": "mtm-drive-g10-c1-t02-mtm-errata-v1-I10"
+  },
+  {
+    "id": "I-11",
+    "section": "I",
+    "number": 11,
+    "prompt": "Cho tứ giác $ABCD$. Xét hai mệnh đề:\n$P$: “Tứ giác $ABCD$ là hình thoi”.\n$Q$: “Tứ giác $ABCD$ có hai đường chéo vuông góc”.\nPhát biểu mệnh đề $P\\Leftrightarrow Q$.",
+    "sourcePage": 13,
+    "sourceOriginalCrop": "b02/I-11-question-01.png",
+    "sourceOriginalCropSha256": "8e9627a31b15c1d06b549bc7278285ce9226cbc2b0a364239fa280a7e14b521f",
+    "choices": [
+      {
+        "label": "A",
+        "text": "Tứ giác $ABCD$ có hai đường chéo vuông góc thì nó là hình thoi."
+      },
+      {
+        "label": "B",
+        "text": "Tứ giác $ABCD$ là hình thoi thì nó có hai đường chéo vuông góc."
+      },
+      {
+        "label": "C",
+        "text": "Tứ giác $ABCD$ là hình thoi là điều kiện cần và đủ để tứ giác đó có hai đường chéo vuông góc."
+      },
+      {
+        "label": "D",
+        "text": "Tứ giác $ABCD$ là hình thoi nếu nó có hai đường chéo vuông góc."
+      }
+    ],
+    "sourceDisplayCropSha256": "a947605acaaef41d95b01909e147bbae71cba9f249701966da81f8a11980a32f",
+    "questionId": "mtm-drive-g10-c1-t02-mtm-errata-v1-I11"
+  },
+  {
+    "id": "I-12",
+    "section": "I",
+    "number": 12,
+    "prompt": "Trong các mệnh đề sau, mệnh đề nào có mệnh đề đảo đúng?",
+    "sourcePage": 13,
+    "sourceOriginalCrop": "b02/I-12-question-01.png",
+    "sourceOriginalCropSha256": "7551e7fca678ac9a08245e19cd98b856352a1f2916e16d1bccef5a045e19d037",
+    "choices": [
+      {
+        "label": "A",
+        "text": "Nếu tổng hai số $a+b>2$ thì có ít nhất một số lớn hơn $1$."
+      },
+      {
+        "label": "B",
+        "text": "Trong một tam giác cân hai đường cao bằng nhau."
+      },
+      {
+        "label": "C",
+        "text": "Nếu tứ giác là hình vuông thì hai đường chéo vuông góc với nhau."
+      },
+      {
+        "label": "D",
+        "text": "Nếu một số tự nhiên chia hết cho 6 thì nó chia hết cho 3."
+      }
+    ],
+    "sourceDisplayCropSha256": "a961509e254b2abff7e932673b8f26029ec962bf3cbcb4a00d9629fa6ed4f2c6",
+    "questionId": "mtm-drive-g10-c1-t02-mtm-errata-v1-I12"
+  },
+  {
+    "id": "II-01",
+    "section": "II",
+    "number": 1,
+    "prompt": "Cho các mệnh đề: $A$: \"$\\forall x\\in\\mathbb R:x-3>0$\"; $B$: \"$\\exists n\\in\\mathbb Z:\\sqrt{2^n+1}$\" là số nguyên; $C$: \"$\\exists n\\in\\mathbb N,n^2\\mathrel{\\vdots}9\\Rightarrow n\\mathrel{\\vdots}9$\". Trong các câu khẳng định sau câu nào đúng?",
+    "sourcePage": 13,
+    "sourceOriginalCrop": "b02/II-01-question-01.png",
+    "sourceOriginalCropSha256": "9bd49e21d451703d1edcd0c5bcbfc9fb5f04c7cad6ecb7ec7cadb35958af60ed",
+    "statements": [
+      {
+        "label": "a",
+        "text": "Mệnh đề A đúng."
+      },
+      {
+        "label": "b",
+        "text": "Mệnh đề phủ định của A là: $\\overline A:\\exists x\\in\\mathbb R:x-3<0$."
+      },
+      {
+        "label": "c",
+        "text": "Mệnh đề B sai."
+      },
+      {
+        "label": "d",
+        "text": "Mệnh đề C đúng."
+      }
+    ],
+    "sourceDisplayCropSha256": "79c090a4af232e36d537b7089f2e6102d706c02b3905a78a81fe465a27220664",
+    "questionId": "mtm-drive-g10-c1-t02-mtm-errata-v1-II1"
+  },
+  {
+    "id": "II-02",
+    "section": "II",
+    "number": 2,
+    "prompt": "Cho hai mệnh đề sau:\n$P$: “Hình bình hành có một góc vuông là hình chữ nhật”.\n$Q$: “Số 7 là hợp số”.",
+    "sourcePage": 13,
+    "sourceOriginalCrop": "b02/II-02-question-01.png",
+    "sourceOriginalCropSha256": "9703d55d14b88a94fa955fc675f08ebb5f0a7aee2cab9eb3a90a9abc4310091f",
+    "statements": [
+      {
+        "label": "a",
+        "text": "Mệnh đề $P$ là mệnh đề đúng."
+      },
+      {
+        "label": "b",
+        "text": "Mệnh đề $Q$ là mệnh đề đúng."
+      },
+      {
+        "label": "c",
+        "text": "Mệnh đề $P\\Rightarrow Q$ là mệnh đề đúng."
+      },
+      {
+        "label": "d",
+        "text": "Mệnh đề $Q\\Rightarrow P$ là mệnh đề sai."
+      }
+    ],
+    "sourceDisplayCropSha256": "6265ccf2911c393b2242a4180703207857a5158ced6ba76dea4e8ccc2bc34fe6",
+    "questionId": "mtm-drive-g10-c1-t02-mtm-errata-v1-II2"
+  },
+  {
+    "id": "II-03",
+    "section": "II",
+    "number": 3,
+    "prompt": "Cho hai mệnh đề sau: $A$: \"$\\forall n\\in\\mathbb N,n^2>n$.\" và $B$: \"$\\exists n\\in\\mathbb N:n^2+3n$ chia hết cho $3$.\"",
+    "sourcePage": 13,
+    "sourceOriginalCrop": "b02/II-03-question-01.png",
+    "sourceOriginalCropSha256": "ee686725e1e0c7b3ddb5a5c0ea5f9e96d522e6f57939927b2b67dd8b8ac95cf4",
+    "statements": [
+      {
+        "label": "a",
+        "text": "Mệnh đề A sai."
+      },
+      {
+        "label": "b",
+        "text": "Mệnh đề phủ định của mệnh đề $A$ là $\\overline A$: “$\\forall n\\in\\mathbb N,n^2\\le n$”."
+      },
+      {
+        "label": "c",
+        "text": "Mệnh đề phủ định của mệnh đề $B$ là $\\overline B$: “$\\forall n\\in\\mathbb N:n^2+3n$ không chia hết cho $3$”."
+      },
+      {
+        "label": "d",
+        "text": "Mệnh đề $\\overline B$ là mệnh đề đúng."
+      }
+    ],
+    "sourceDisplayCropSha256": "f3f0c66c637c2d1473c0ed7556f50e6c95f556c2f4b89bcd5486a5d7b2629ee9",
+    "questionId": "mtm-drive-g10-c1-t02-mtm-errata-v1-II3"
+  },
+  {
+    "id": "II-04",
+    "section": "II",
+    "number": 4,
+    "prompt": "Cho các mệnh đề: $A$: “$\\exists n\\in\\mathbb Z,n^2-8=0$”, $B$: “$\\forall x\\in\\mathbb R,(x-2)^2\\ne x-2$”, $C$: “$\\exists n\\in\\mathbb N,n^2+11n+2$ chia hết cho $11$”. Khi đó:",
+    "sourcePage": 14,
+    "sourceOriginalCrop": "b02/II-04-question-01.png",
+    "sourceOriginalCropSha256": "090b738c434ecb41d859fce72054ea22c14d51b63fcf53d1ee57334df799eea1",
+    "statements": [
+      {
+        "label": "a",
+        "text": "Mệnh đề $A$ sai."
+      },
+      {
+        "label": "b",
+        "text": "Mệnh đề $B$ đúng."
+      },
+      {
+        "label": "c",
+        "text": "Mệnh đề phủ định của mệnh đề $C$ là: $\\overline C$: “$\\exists n\\in\\mathbb N,n^2+11n+2$ không chia hết cho $11$”."
+      },
+      {
+        "label": "d",
+        "text": "Mệnh đề $\\overline C$ đúng."
+      }
+    ],
+    "sourceDisplayCropSha256": "ecd56ff41c9f0703fe03814dab1f9748c53dc3c9509b849b4d495583bb5cabf7",
+    "questionId": "mtm-drive-g10-c1-t02-mtm-errata-v1-II4"
+  },
+  {
+    "id": "III-01",
+    "section": "III",
+    "number": 1,
+    "prompt": "Trong các phát biểu sau, có bao nhiêu phát biểu là mệnh đề?\n1. $2x-1<0$.\n2. 2024 là số nguyên tố.\n3. $3+\\pi>5$.\n4. Cầu Trường Tiền bắc qua sông Hương.\n5. Số 17 chia hết cho 3.\n6. Hình thoi có hai đường chéo vuông góc.\n7. London là thủ đô của Pháp.\n8. Hôm nay thời tiết mát!",
+    "sourcePage": 14,
+    "sourceOriginalCrop": "b02/III-01-question-01.png",
+    "sourceOriginalCropSha256": "5c3a926218bc38f7554b66d0caf43300ba3a7e751a2c31fcecc67eaf88033268",
+    "sourceDisplayCropSha256": "de29f79d59211d9ecd0d792a2207b4769b505b432c9bd736c5ddc75947cf0853",
+    "questionId": "mtm-drive-g10-c1-t02-mtm-errata-v1-III1"
+  },
+  {
+    "id": "III-02",
+    "section": "III",
+    "number": 2,
+    "prompt": "Trong các câu sau, có bao nhiêu câu là mệnh đề toán học?\na) Huế là một thành phố của Việt Nam.\nb) Sông Hương chảy ngang qua thành phố Huế.\nc) Hãy trả lời câu hỏi này !\nd) $5+19=24$.\ne) $6+81=25$.\nf) Bạn có rỗi tối nay không ?\ng) $x+2=11$.\nh) $2^{10}-1$ chia hết cho $11$.\nk) 19 là hợp số.",
+    "sourcePage": 14,
+    "sourceOriginalCrop": "b02/III-02-question-01.png",
+    "sourceOriginalCropSha256": "7cced214938ed5f4735e2d10838c5b4a04c9c8da6e0b06a7c3893befa73c9f60",
+    "sourceDisplayCropSha256": "9469ac53386268be880765aa1065fc584a37bbb0880bd5735288dd533e692d91",
+    "questionId": "mtm-drive-g10-c1-t02-mtm-errata-v1-III2"
+  },
+  {
+    "id": "III-03",
+    "section": "III",
+    "number": 3,
+    "prompt": "Cho các mệnh đề sau:\n(1) Mọi số tự nhiên chia hết cho 2 và 3 chia hết cho 6.\n(2) Với $a\\in\\mathbb N:a\\mathrel{\\vdots}3\\Leftrightarrow a\\mathrel{\\vdots}9$.\n(3) Trong tam giác vuông bình phương cạnh huyền bằng tổng bình phương hai cạnh góc vuông.\n(4) $\\exists n\\in\\mathbb Z:\\sqrt{2^n+1}$ là số nguyên.\n(5) $\\forall n\\in\\mathbb N:n^2>0$.\n(6) Một tam giác là tam giác vuông khi và chỉ khi đường trung tuyến ứng với cạnh huyền bằng một nửa cạnh huyền.\nCó bao nhiêu mệnh đề đúng trong các mệnh đề trên?",
+    "sourcePage": 14,
+    "sourceOriginalCrop": "b02/III-03-question-01.png",
+    "sourceOriginalCropSha256": "61de70e18e0d9405db7aada71543dc5c722601b75a44d6b35cfc898b3d87d286",
+    "sourceDisplayCropSha256": "3c413ba41bb54ad5732c365eee5882b30a7294edf556644bb8b9553ca7d8cb55",
+    "questionId": "mtm-drive-g10-c1-t02-mtm-errata-v1-III3"
+  },
+  {
+    "id": "III-04",
+    "section": "III",
+    "number": 4,
+    "prompt": "Cho các mệnh đề sau:\n(1) “$\\sqrt2$ là số hữu tỉ”.\n(2) “8 không chia hết cho 3”.\n(3) “Tứ giác có tổng số đo các góc bằng $360^\\circ$”.\n(4) “Hình bình hành có hai đường chéo luôn luôn bằng nhau”.\n(5) $P$: \"$\\forall x\\in\\mathbb R,x^2\\ge x$\".\n(6) $Q$: \"$\\forall x\\in\\mathbb R,2x^2-3x+1\\ne0$\".\nSố mệnh đề có mệnh đề phủ định đúng là",
+    "sourcePage": 14,
+    "sourceOriginalCrop": "b02/III-04-question-01.png",
+    "sourceOriginalCropSha256": "760debf9343ef3ac3be869d83a9e6220869f05f2778486ee289dd8a65365a0d6",
+    "sourceDisplayCropSha256": "5593e7f10e31ce2c240433861ec5f4b6245075179c4bc43c4f4f26a4c71f0632",
+    "questionId": "mtm-drive-g10-c1-t02-mtm-errata-v1-III4"
+  },
+  {
+    "id": "III-05",
+    "section": "III",
+    "number": 5,
+    "prompt": "Trong các mệnh đề sau có bao nhiêu mệnh đề sai?\nNếu $n$ là một số nguyên tố lớn hơn $3$ thì $n^2+20$ là một hợp số.\nNăm 2100 là năm nhuận.\nCó đúng 2 cặp số hữu tỉ dương $x,y$ thỏa mãn $x+y$ và $\\frac1x+\\frac1y$ là số nguyên.\n$\\forall n\\in\\mathbb N^*,n^2+n+1$ là số nguyên tố.\n$Q$: “$\\exists n\\in\\mathbb N,(n^2+1)$ chia hết cho $4$”.",
+    "sourcePage": 15,
+    "sourceOriginalCrop": "b02/III-05-question-01.png",
+    "sourceOriginalCropSha256": "e23a1bc319cb73f1788d8d746256844dcef0b77680a9d2cf3a9ef2eb67d4570c",
+    "sourceDisplayCropSha256": "24a9e2b62a2376dfdacb97cabb15ae8f28d65ef74efc206e00a96a79ce540de1",
+    "questionId": "mtm-drive-g10-c1-t02-mtm-errata-v1-III5"
+  },
+  {
+    "id": "III-06",
+    "section": "III",
+    "number": 6,
+    "prompt": "Cho các mệnh đề $P$: “Số 4 là số chẵn”, $Q$: “Số 4 chia hết cho 2”, $R$: “Số 4 là số nguyên tố”.\nXét các mệnh đề sau, hỏi có bao nhiêu mệnh đề đúng?\n(1) “$P\\Rightarrow\\overline Q$”; (2) “$\\overline Q\\Leftrightarrow\\overline R$”; (3) “$(P\\Rightarrow Q)\\Rightarrow R$”; (4) “$(\\overline P\\Rightarrow Q)\\Leftrightarrow Q$”.",
+    "sourcePage": 15,
+    "sourceOriginalCrop": "b02/III-06-question-01.png",
+    "sourceOriginalCropSha256": "35ffcf769dd44363633d785fd80c8f0feb6f7bda57c578dbae814f4cc1235e02",
+    "sourceDisplayCropSha256": "38aae5269cf145f36cb74f61e9d857825f2dbb941c85d4f88706df756fbce65b",
+    "questionId": "mtm-drive-g10-c1-t02-mtm-errata-v1-III6"
   }
 ]

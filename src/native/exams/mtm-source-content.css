@@ -7,7 +7,7 @@
 .mtm-source-watermark text{fill:#233463;opacity:.09;font:700 24px Arial,sans-serif;letter-spacing:1px}
 .mtm-native-source{position:relative;min-width:0;margin:12px 0;font-size:1rem;line-height:1.75}
 .mtm-native-question-text{position:relative;z-index:1;overflow-wrap:break-word}
-.mtm-native-question-text p{margin:12px 0}
+.mtm-native-question-text p{margin:12px 0;white-space:pre-line}
 .mtm-native-choices,.mtm-native-statements{margin:12px 0;padding-left:1.7em}
 .mtm-native-choices{list-style-type:upper-alpha}
 .mtm-native-statements{list-style-type:lower-alpha}
