@@ -22,15 +22,19 @@ export function shortFormatMessage(mode: string): string {
     : 'Chưa đúng định dạng: câu này chỉ nhận số thập phân, ví dụ 0,5 hoặc -2,75 (không nhận phân số như 1/2 hay biểu thức). Nếu nộp như vậy, câu này được 0 điểm.';
 }
 
-export type AnswerState = 'answered' | 'blank' | 'invalid';
+export type AnswerState = 'answered' | 'blank' | 'partial' | 'invalid';
 
-/** "Đã trả lời đầy đủ" khi có câu trả lời VÀ hợp lệ định dạng; câu ngắn sai định dạng tách riêng. */
+/** "Đã trả lời đầy đủ" khi có câu trả lời VÀ hợp lệ định dạng; câu ngắn sai định dạng tách riêng;
+ * câu Đ/S mới chọn một phần các ý là "partial". */
 export function answerState(exam: PracticeExam, q: PracticeQuestion, answers: Answers): AnswerState {
   if (q.kind === 'short') {
     const status = shortAnswerStatus(q.mode, answers[q.id]);
     return status === 'valid' ? 'answered' : status === 'invalid' ? 'invalid' : 'blank';
   }
-  return isAnswered(exam, q.id, answers) ? 'answered' : 'blank';
+  if (isAnswered(exam, q.id, answers)) return 'answered';
+  const value = answers[q.id];
+  // Đ/S đã chọn một vài ý: chưa đủ nhưng không phải "trống" (review Codex đợt 2).
+  return q.kind === 'tf' && Array.isArray(value) && value.some(v => typeof v === 'boolean') ? 'partial' : 'blank';
 }
 
 /** Nhãn câu theo phần, cùng một kiểu ở phiếu trả lời, hộp nộp và màn xem lại: "II · Đúng/sai · Câu 1". */

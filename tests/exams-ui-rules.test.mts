@@ -63,7 +63,8 @@ test('LT-02: ô số câu không còn tô "đã trả lời" khi nhập 1/2 (lu�
 });
 test('LT-02: Đ/S và trắc nghiệm giữ đúng quy tắc cũ (Đ/S đủ 4 ý mới là đã trả lời)', () => {
   const tf = exam1201.questions.find(q => q.kind === 'tf')!, mc = exam1201.questions.find(q => q.kind === 'mc')!;
-  assert.equal(answerState(exam1201, tf, {[tf.id]: [true, false, null, true]}), 'blank');
+  assert.equal(answerState(exam1201, tf, {[tf.id]: [true, false, null, true]}), 'partial', 'Đ/S làm 3/4 ý không gọi là trống (review Codex)');
+  assert.equal(answerState(exam1201, tf, {[tf.id]: [null, null, null, null]}), 'blank');
   assert.equal(answerState(exam1201, tf, {[tf.id]: [true, false, false, true]}), 'answered');
   assert.equal(answerState(exam1201, mc, {[mc.id]: 'C'}), 'answered');
   assert.equal(answerState(exam1201, mc, {[mc.id]: null}), 'blank');
@@ -91,7 +92,7 @@ test('TT-01: hộp nộp liệt kê đúng câu trống và sai định dạng, 
   answers[q[18].id] = '1/2';                    // trả lời ngắn câu 3 sai định dạng
   delete answers[q[21].id];                     // trả lời ngắn câu 6 bỏ trống
   const pending = pendingQuestions(exam1201, answers);
-  assert.deepEqual(pending.map(p => [p.index, p.state]), [[2, 'blank'], [13, 'blank'], [18, 'invalid'], [21, 'blank']]);
+  assert.deepEqual(pending.map(p => [p.index, p.state]), [[2, 'blank'], [13, 'partial'], [18, 'invalid'], [21, 'blank']]);
   assert.deepEqual(pending.map(p => p.label), ['I · Trắc nghiệm · Câu 3', 'II · Đúng/sai · Câu 2', 'III · Trả lời ngắn · Câu 3', 'III · Trả lời ngắn · Câu 6']);
   assert.ok(pending.every(p => exam1201.questions[p.index].id === p.id), 'chỉ số nhảy tới phải trỏ đúng câu');
 });
