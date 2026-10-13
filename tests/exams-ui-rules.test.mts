@@ -9,6 +9,9 @@ import {createDraft, submitDraft, validateDraft, isAnswered, type Answers, type 
 import {answerState, displayKeyAnswer, draftExportFile, pendingQuestions, questionLabel, shortAnswerStatus, shortFormatMessage, visibleBuckets} from '../src/native/exams/attempt-ui';
 import {canonicalNumeric, canonicalRational} from '../src/native/exams/assessment';
 import {GRADES, PERIODS, PRACTICE_EXAMS, readFilters, filterSearch, readyExams, type PracticeExam, type PracticeQuestion} from '../src/native/exams/data';
+import {isWarmup, WARMUP_LABEL} from '../src/native/chapters/library-rules';
+import practiceTests from '../src/native/chapters/practice-tests.json';
+import exactTests from '../src/native/chapters/exact-tests.json';
 import {suite} from './exams-harness.mts';
 
 const {test, finish} = suite('U');
@@ -163,6 +166,17 @@ test('QT-01: /thi-thu không còn nút "Quản trị đề thi"; App vẫn mở 
   assert.ok(!exams.includes('Quản trị đề thi'));
   const app = readFileSync(join(root, 'src/App.tsx'), 'utf8');
   assert.ok(app.includes("path==='/quan-tri/de-thi'?<AdminExams/>"), 'App không còn route quản trị');
+});
+
+// ---------- DL-06: nhãn bài làm quen HSA/TSA ----------
+type BankRow = {track: string; reviewStatus?: string; exam: PracticeExam};
+const bankRows = [...practiceTests, ...exactTests] as unknown as BankRow[];
+test('DL-06: đúng 2 bài HSA/TSA 6 câu mang nhãn "Bài làm quen, chưa phải đề thi"; đề 22 câu không mang nhãn', () => {
+  const warm = bankRows.filter(isWarmup);
+  assert.deepEqual(warm.map(p => p.exam.id).sort(), ['mtm-preview-practice-hsa-01-v1', 'mtm-preview-practice-tsa-01-v1']);
+  assert.ok(warm.every(p => p.exam.questions.length === 6));
+  assert.ok(bankRows.filter(p => p.exam.questions.length === 22).every(p => !isWarmup(p)));
+  assert.equal(WARMUP_LABEL, 'Bài làm quen, chưa phải đề thi');
 });
 
 finish();

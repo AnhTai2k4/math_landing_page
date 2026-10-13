@@ -11,13 +11,14 @@ import MtmSourceQuestion from '../exams/MtmSourceQuestion';
 import TheorySummary from './TheorySummary';
 import {questionLabel} from '../exams/attempt-ui';
 import questionPdfs from './mtm-question-pdfs.json';
+import {isWarmup,WARMUP_LABEL} from './library-rules';
 
 import '../exams/exams.css';
 import './chapters.css';
 
 type VariationTable={caption:string;headers:string[];rows:string[][]};
 type DisplayQuestion=PracticeQuestion&{image?:string;imageAlt?:string;solutionTables?:VariationTable[];questionTables?:VariationTable[];statementSolutions?:string[]};
-export type PracticeBankItem={exam:PracticeExam;note:string;limits:string[];scope:string;published:boolean;presentationTitle?:string};
+export type PracticeBankItem={exam:PracticeExam;note:string;limits:string[];scope:string;published:boolean;presentationTitle?:string;track?:string};
 const originalBank:PracticeBankItem[]=[];
 const rich=(text:string):ReactNode=><MathText text={text}/>;
 const QuestionPdf=lazy(()=>import('../exams/QuestionPdf'));
@@ -88,7 +89,7 @@ export default function ChapterPractice({additionalBank=[],catalogUrl='/luyen-ta
   if(!gate.valid)return <section className="mig-container mig-panel" role="alert"><h1>Bài chưa đủ điều kiện mở</h1><p>Giữ bản lưu cũ; cần kiểm lại cấu trúc đề và điểm.</p><Link href={catalogUrl}>Chọn bài khác</Link></section>;
   const tf=pilot.exam.questions.find(q=>q.kind==='tf');
   return <div className="mig-container cp-attempt ep-root">
-    <section className="cp-intake mig-panel"><p><strong>Đề luyện tập Minh Thành Math</strong></p><p>{pilot.note}</p>
+    <section className="cp-intake mig-panel"><p><strong>{isWarmup(pilot)?WARMUP_LABEL:'Đề luyện tập Minh Thành Math'}</strong></p>{isWarmup(pilot)&&<p>{pilot.exam.questions.length} câu ngắn để làm quen dạng bài; điểm theo thang luyện tập riêng, không quy đổi sang điểm HSA/TSA.</p>}<p>{pilot.note}</p>
       <p>Đúng–sai: {tf?.kind==='tf'&&tf.pointsByCorrectCount.map((value,count)=>`${count} ý đúng: ${points(value)} điểm`).join(' · ')}. Điểm trắc nghiệm và trả lời ngắn ghi tại từng câu.</p>
       <p>MTM sưu tầm và biên soạn</p>
     </section>

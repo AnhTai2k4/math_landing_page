@@ -6,6 +6,7 @@ import curriculum from './curriculum.json';
 import tests from './practice-tests.json';
 import archives from './archived-tests.json';
 import exactTests from './exact-tests.json';
+import {isWarmup,WARMUP_LABEL} from './library-rules';
 import './chapters.css';
 
 type Chapter={id:string;title:string;forms:string[];plannedPracticeTests?:number};
@@ -65,7 +66,7 @@ export default function PracticeLibrary(){
         <details className="cp-previous-bank" open={thpt?undefined:true}><summary>{thpt?'Các bài luyện đã có · giữ riêng với lịch sử cũ':'Các bài luyện đang có'}</summary>
         <p className="cp-ready-count" role="status">{available.length}/{targetCount} bài luyện đã mở.</p>
         {available.length>0?<ol className="cp-test-grid">{available.map(p=><li key={p.exam.id}><article>
-          <span className="cp-test-index">Bài {p.order}/{targetCount}</span><h3>{p.coverage}</h3><p>{p.exam.questions.length} câu · {p.exam.durationMinutes} phút · thang 10</p>
+          <span className="cp-test-index">Bài {p.order}/{targetCount}</span>{isWarmup(p)&&<span className="cp-warmup-badge">{WARMUP_LABEL}</span>}<h3>{p.coverage}</h3><p>{p.exam.questions.length} câu · {p.exam.durationMinutes} phút · thang 10</p>
           <p>{entries.filter(e=>e.exam.id===p.exam.id).length} lượt đã nộp</p>
           <Link className="mig-button cp-action-button" href={practiceURL(selected.id,chapter.id,p.exam.id)}>{actionLabel(p)}<span aria-hidden="true">→</span></Link>
         </article></li>)}</ol>:<div className="cp-empty"><h3>{['HSA','TSA'].includes(selected.id)?'Chủ đề':'Chương'} này chưa có bộ bài đã kiểm</h3><p>Bài sẽ được mở khi đề, đáp án và lời giải đã được đối chiếu. Có thể chọn Chương I lớp 10 để luyện ngay.</p><Link href={practiceURL('10','1')} className="mig-button outline">Luyện Mệnh đề và tập hợp</Link></div>}
