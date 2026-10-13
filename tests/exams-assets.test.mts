@@ -42,5 +42,13 @@ test('PDF nội bộ /exam-assets và /qa-exam-assets: có tệp và đúng SHA-
 test('PDF ở máy chủ ngoài chỉ được dùng https (danh sách ghi vào báo cáo, DL-12 sẽ chép về)', () => {
   assert.ok(pdfs.filter(p => !p.url.startsWith('/')).every(p => p.url.startsWith('https://')));
 });
+test('DL-12: không còn đề nào tải PDF từ kho GitHub cũ; 2 đề Thi thử dùng /exam-assets đúng SHA-256', () => {
+  assert.deepEqual(pdfs.filter(p => p.url.includes('githubusercontent.com')).map(p => p.exam), []);
+  for (const id of ['mtm-g11-gk1-2024-2025-code101', 'mtm-g12-gk1-2025-2026-code1201']) {
+    const pdf = pdfs.find(p => p.exam === id)!;
+    assert.equal(pdf.url, `/exam-assets/${pdf.sha256}.pdf`);
+    assert.equal(sha(join(root, 'public', pdf.url)), pdf.sha256);
+  }
+});
 
 finish({segments: segments.length, uniqueFiles: cache.size, localPdfs: pdfs.filter(p => p.url.startsWith('/')).length, externalPdfs: external});
