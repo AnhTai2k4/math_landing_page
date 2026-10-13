@@ -52,7 +52,7 @@ function QuestionReader({exam}:{exam:PracticeExam}) {
 function Tables({tables}:{tables?:VariationTable[]}){return <>{tables?.map((table,index)=><div className="ep-table-wrap" key={index}><table className="ep-solution-table"><caption><MathText text={table.caption}/></caption><thead><tr>{table.headers.map((cell,i)=><th scope="col" key={i}><MathText text={cell}/></th>)}</tr></thead><tbody>{table.rows.map((row,i)=><tr key={i}>{row.map((cell,j)=>j===0?<th scope="row" key={j}><MathText text={cell}/></th>:<td key={j}><MathText text={cell}/></td>)}</tr>)}</tbody></table></div>)}</>;}
 function ExtraSolution({question}:{question:PracticeQuestion}) {const q=question as DisplayQuestion;return <>{q.statementSolutions&&<ol className="cp-statements">{q.statementSolutions.map((text,index)=><li key={index}><MathText text={text}/></li>)}</ol>}<Tables tables={q.solutionTables}/></>;}
 
-export default function ChapterPractice({additionalBank=[],catalogUrl='/luyen-tap',contextLabel='Luyện Chương I',audienceLabel}:{additionalBank?:PracticeBankItem[];catalogUrl?:string;contextLabel?:string;audienceLabel?:string}) {
+export default function ChapterPractice({additionalBank=[],catalogUrl='/luyen-tap',contextLabel='Luyện Chương I',audienceLabel,closedNotice}:{additionalBank?:PracticeBankItem[];catalogUrl?:string;contextLabel?:string;audienceLabel?:string;closedNotice?:(examId:string)=>string|undefined}) {
   const bank=[...originalBank,...additionalBank];
   const route=useRoute(),id=new URLSearchParams(route.search).get('id');
   const history=readHistory(localStore(),bank.map(p=>p.exam));
@@ -93,6 +93,6 @@ export default function ChapterPractice({additionalBank=[],catalogUrl='/luyen-ta
       <p>Đúng–sai: {tf?.kind==='tf'&&tf.pointsByCorrectCount.map((value,count)=>`${count} ý đúng: ${points(value)} điểm`).join(' · ')}. Điểm trắc nghiệm và trả lời ngắn ghi tại từng câu.</p>
       <p>MTM sưu tầm và biên soạn</p>
     </section>
-    <PracticeAttempt key={pilot.exam.id} exam={pilot.exam} displayTitle={pilot.presentationTitle} catalogUrl={catalogUrl} contextLabel={contextLabel} audienceLabel={audienceLabel} renderText={rich} renderSolutionExtra={q=><ExtraSolution question={q}/>} questionReader={<QuestionReader exam={pilot.exam}/>}/>
+    <PracticeAttempt key={pilot.exam.id} newAttemptsClosed={closedNotice?.(pilot.exam.id)} exam={pilot.exam} displayTitle={pilot.presentationTitle} catalogUrl={catalogUrl} contextLabel={contextLabel} audienceLabel={audienceLabel} renderText={rich} renderSolutionExtra={q=><ExtraSolution question={q}/>} questionReader={<QuestionReader exam={pilot.exam}/>}/>
   </div>;
 }

@@ -42,7 +42,7 @@ function exportDraft(draft: Draft): boolean {
 }
 
 /** kind: 'exam' cho Thi thử (/thi-thu), 'practice' (mặc định) cho Luyện tập; chỉ đổi chữ hiển thị. */
-export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverride,questionReader,renderText,renderSolutionExtra,contextLabel,audienceLabel,displayTitle,kind='practice'}: {exam: PracticeExam; previousExam?:PracticeExam; catalogUrl: string; storeOverride?:Store;questionReader?:ReactNode;renderText?:(text:string)=>ReactNode;renderSolutionExtra?:(q:PracticeQuestion)=>ReactNode;contextLabel?:string;audienceLabel?:string;displayTitle?:string;kind?:'practice'|'exam'}) {
+export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverride,questionReader,renderText,renderSolutionExtra,contextLabel,audienceLabel,displayTitle,kind='practice',newAttemptsClosed}: {exam: PracticeExam; previousExam?:PracticeExam; catalogUrl: string; storeOverride?:Store;questionReader?:ReactNode;renderText?:(text:string)=>ReactNode;renderSolutionExtra?:(q:PracticeQuestion)=>ReactNode;contextLabel?:string;audienceLabel?:string;displayTitle?:string;kind?:'practice'|'exam';newAttemptsClosed?:string}) {
   const getStore=useCallback(()=>storeOverride??localStore(),[storeOverride]);
   const sourceIssue=SOURCE_HOLDS[exam.id];
   const erratum=erratumFor(exam.id);
@@ -131,6 +131,7 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverr
     if(!pdfReady){setNotice('Chưa mở làm bài khi bản câu hỏi chưa hiển thị.');return;}
     if (ram.current) return;
     const old = persisted.current;
+    if (!old && newAttemptsClosed) return; // DL-01: không mở lượt mới; bài dở và lượt đã nộp vẫn mở.
     if (old) {
       if (old.submittedAt !== null) { persist(old); return; }
       const resumed = validateDraft({...old, updatedAt: Math.max(old.updatedAt, Date.now()), revision: old.revision + 1}, exam);
@@ -160,7 +161,7 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverr
   const answered = states.filter(state => state === 'answered').length, invalidCount = states.filter(state => state === 'invalid').length;
   const seconds = draft ? Math.ceil(remainingMs(draft, now) / 1000) : 0;
   const retake=(confirmed=false)=>{
-    if(sourceIssue)return;
+    if(sourceIssue||newAttemptsClosed)return;
     const old=ram.current;if(!old||old.submittedAt===null||dirty.current||conflict.current)return;
     if(!pdfReady)return;
     if(!confirmed){setConfirmation('retake');return;}
@@ -175,6 +176,7 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverr
     <Link className="ep-link" href={catalogUrl}>← Danh sách đề</Link>
     <header><p>{audienceLabel??'Lớp '+exam.grade} · {contextLabel??PERIOD_LABELS[exam.period]}</p><h1>{displayTitle??exam.title}</h1><p>{exam.questions.length} câu · {exam.durationMinutes} phút · Thang điểm 10</p></header>
     {exam.preAttemptNotice&&<div className="ep-notice"><strong>Điều kiện đính chính của bản MTM</strong><p>{exam.preAttemptNotice}</p><p>Bản nguồn và lịch sử cũ được giữ riêng.</p></div>}
+    {newAttemptsClosed&&<div className="ep-notice" role="status"><strong>Tạm chưa mở lượt mới</strong><p>{newAttemptsClosed}</p></div>}
     {notice&&<p className="ep-notice" role="alert">{notice}</p>}
     {erratum&&<div className="ep-notice"><strong>Bản luyện tập MTM đính chính v37 · điều kiện áp dụng khi chấm</strong><p>{erratum.condition}</p><p>Thành đã duyệt đính chính này. PDF nguồn giữ nguyên; lượt mới dùng mã phiên bản riêng. Lịch sử cũ giữ điểm theo khóa trước đính chính.</p>{<label className="ep-erratum-accept"><input type="checkbox" checked={acceptedErratum} onChange={event=>setAcceptedErratum(event.target.checked)}/> Tôi đã đọc điều kiện đính chính và làm bài theo điều kiện này.</label>}{legacy?.ok&&legacy.value&&<p>Đã giữ bản lưu trước đính chính. {legacy.value.submittedAt===null?<button type="button" onClick={()=>setExportNotice(exportDraft(legacy.value!)?'Đã yêu cầu tải bản lưu bài cũ.':'Chưa tải được bản lưu; hãy giữ trang mở.')}>Tải bản lưu bài cũ đang làm</button>:<Link href={catalogUrl}>Xem lượt cũ trong lịch sử</Link>}</p>}</div>}
     {sourceIssue&&<div className="ep-notice" role="alert"><strong>Đề đang chờ đính chính · tạm ngừng lượt mới.</strong><p>{sourceIssue}</p><p>PDF gốc và lịch sử cũ được giữ. Điểm cũ dùng khóa trước khi phát hiện vấn đề này; cần đọc phần đối chiếu để hiểu giới hạn của kết quả.</p>{persisted.current&&persisted.current.submittedAt===null&&<button type="button" onClick={()=>setExportNotice(exportDraft(persisted.current!)?'Đã yêu cầu tải bản lưu bài đang làm.':'Chưa tải được bản lưu; hãy giữ trang mở.')}>Tải bản lưu bài đang làm</button>}</div>}
@@ -197,7 +199,7 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverr
           <h2>Phiếu trả lời</h2><p>{storeOverride?'Bản xem thử chỉ giữ trong bộ nhớ của trang quản trị, không ghi lịch sử học sinh.':'Bài làm và kết quả lưu trên trình duyệt này. Thời gian tiếp tục tính khi bạn rời trang.'}</p>
           <p>{sections.map(s=>`${s.name}: ${s.count} câu`).join(' · ')}</p>
           {persisted.current&&<p>Đã có bài đang làm. Hạn nộp: {new Date(persisted.current.deadline).toLocaleString('vi-VN')}.</p>}
-          <button type="button" className="ep-primary ep-wide" disabled={!pdfReady||!!sourceIssue||!!erratum&&!acceptedErratum} onClick={begin}>{sourceIssue?'Chờ đính chính điều kiện':persisted.current?'Tiếp tục làm bài':'Bắt đầu làm bài'}</button>
+          <button type="button" className="ep-primary ep-wide" disabled={!pdfReady||!!sourceIssue||!!erratum&&!acceptedErratum||!!newAttemptsClosed&&!persisted.current} onClick={begin}>{sourceIssue?'Chờ đính chính điều kiện':persisted.current?'Tiếp tục làm bài':newAttemptsClosed?'Chờ phản biện · chưa mở lượt mới':'Bắt đầu làm bài'}</button>
         </section>:<>
           <div className="ep-toolbar ep-answer-toolbar">
             {submitted?<strong role="status">{unsaved?'Đã nộp trên trang · chưa xác nhận lưu':'Đã nộp và lưu kết quả'}</strong>:<><span role="timer" aria-label="Thời gian còn lại" aria-live="off">Còn {Math.floor(seconds/60)}:{String(seconds%60).padStart(2,'0')}</span><span>{answered}/{exam.questions.length} câu đã trả lời đầy đủ{invalidCount>0?` · ${invalidCount} câu sai định dạng`:''}</span></>}
@@ -206,7 +208,7 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverr
             <section className="ep-card" aria-label="Kết quả"><h2 ref={resultHeading} tabIndex={-1}>{kind==='exam'?'Kết quả thi thử':'Kết quả luyện tập'}</h2><ResultSummary exam={exam} draft={draft}/>{!score?.ok&&<p role="alert">Chưa tính được điểm. Bài làm vẫn giữ nguyên để đối chiếu.</p>}
               <p>Nộp lúc {new Date(draft.submittedAt!).toLocaleString('vi-VN')}.</p>{exam.answerVerificationNote&&<p>{questionReader?'Câu hỏi, đáp án và lời giải đã được đối chiếu. Điểm được tính theo thang ghi tại từng câu.':exam.answerVerificationNote}</p>}
               <p><Link className="ep-link" href={catalogUrl}>Trở về danh sách đề</Link></p>
-              <button type="button" disabled={unsaved||conflict.current||!pdfReady||!!sourceIssue||!!erratum&&!acceptedErratum} onClick={()=>retake()}>Làm lại đề · giữ bài cũ trong lịch sử</button>
+              {newAttemptsClosed?<p>Bài đang chờ phản biện nên chưa mở lượt làm lại; lượt này vẫn giữ trong lịch sử.</p>:<button type="button" disabled={unsaved||conflict.current||!pdfReady||!!sourceIssue||!!erratum&&!acceptedErratum} onClick={()=>retake()}>Làm lại đề · giữ bài cũ trong lịch sử</button>}
             </section>
             <ExamReview key={draft.attemptId} exam={exam} draft={draft} showSummary={false} renderText={renderText} renderSolutionExtra={renderSolutionExtra}/>
           </>:<>

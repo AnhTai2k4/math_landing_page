@@ -9,7 +9,9 @@ import {createDraft, submitDraft, validateDraft, isAnswered, type Answers, type 
 import {answerState, displayKeyAnswer, draftExportFile, pendingQuestions, questionLabel, shortAnswerStatus, shortFormatMessage, visibleBuckets} from '../src/native/exams/attempt-ui';
 import {canonicalNumeric, canonicalRational} from '../src/native/exams/assessment';
 import {GRADES, PERIODS, PRACTICE_EXAMS, readFilters, filterSearch, readyExams, type PracticeExam, type PracticeQuestion} from '../src/native/exams/data';
-import {isWarmup, WARMUP_LABEL} from '../src/native/chapters/library-rules';
+import {awaitingReview, isWarmup, shelfVisible, WARMUP_LABEL} from '../src/native/chapters/library-rules';
+import {FakeStore} from './exams-harness.mts';
+import {readHistory, saveDraft, draftKey} from '../src/native/exams/store';
 import practiceTests from '../src/native/chapters/practice-tests.json';
 import exactTests from '../src/native/chapters/exact-tests.json';
 import {suite} from './exams-harness.mts';
@@ -177,6 +179,41 @@ test('DL-06: đúng 2 bài HSA/TSA 6 câu mang nhãn "Bài làm quen, chưa ph�
   assert.ok(warm.every(p => p.exam.questions.length === 6));
   assert.ok(bankRows.filter(p => p.exam.questions.length === 22).every(p => !isWarmup(p)));
   assert.equal(WARMUP_LABEL, 'Bài làm quen, chưa phải đề thi');
+});
+
+// ---------- DL-01: ẩn lượt mới cho 22 bài chờ phản biện, lịch sử cũ vẫn xem được ----------
+test('DL-01: đúng 22 bài trong practice-tests.json bị đóng lượt mới (g10-c1 và g12-c1, kể cả 2 bài kết thúc chương)', () => {
+  const closed = (practiceTests as unknown as BankRow[]).filter(awaitingReview).map(p => p.exam.id).sort();
+  assert.equal(closed.length, 22);
+  assert.ok(closed.every(id => /^mtm-practice-g(10|12)-c1-(b\d\d|final)-v[12]$/.test(id)), closed.join(','));
+  assert.equal((exactTests as unknown as BankRow[]).filter(awaitingReview).length, 0, 'đề nguồn Drive không bị đóng');
+  for (const id of ['mtm-drive-g10-c1-t02', 'mtm-drive-g10-c1-t04', 'mtm-drive-g10-c1-t06', 'mtm-drive-g11-c1-t01', 'mtm-drive-g12-c1-t01'])
+    assert.ok(!bankRows.some(p => p.exam.id.startsWith(id) && awaitingReview(p)), '5 đề V53 không bị ảnh hưởng: ' + id);
+});
+test('DL-01: kệ ẩn bài chờ phản biện khi chưa có lượt; vẫn hiện khi có bài dở hoặc lượt đã nộp', () => {
+  const pending = (practiceTests as unknown as BankRow[]).find(awaitingReview)!, open = (practiceTests as unknown as BankRow[]).find(p => !awaitingReview(p))!;
+  assert.equal(shelfVisible(pending, false), false);
+  assert.equal(shelfVisible(pending, true), true);
+  assert.equal(shelfVisible(open, false), true);
+});
+test('DL-01: lượt đã nộp của bài chờ phản biện vẫn đọc lại được trong lịch sử và chấm như cũ', () => {
+  const pending = (practiceTests as unknown as BankRow[]).find(p => p.exam.id === 'mtm-practice-g12-c1-b01-v1')!.exam;
+  const store = new FakeStore();
+  const made = createDraft(pending, 'synthetic-dl01-1', T0);
+  assert.ok(made.ok);
+  const answered = validateDraft({...made.value, answers: {[pending.questions[0].id]: (pending.questions[0] as {answer: string}).answer as Response}, updatedAt: T0 + 1000, revision: 1}, pending);
+  assert.ok(answered.ok);
+  const done = submitDraft(pending, answered.value, T0 + 60000);
+  assert.ok(done.ok);
+  assert.ok(saveDraft(store, pending, done.value, null).ok);
+  assert.ok(store.data.has(draftKey(pending.id)), 'khoá lưu cũ không đổi');
+  const bank = bankRows.map(p => p.exam);
+  const history = readHistory(store, bank);
+  const item = history.items.find(i => i.draft.attemptId === 'synthetic-dl01-1');
+  assert.ok(item, 'lịch sử phải còn lượt đã nộp');
+  const result = resultFor(item!.exam, item!.draft)!;
+  assert.ok(result.score.ok);
+  assert.equal(result.score.ok && result.score.earnedMillipoints, pending.questions[0].maxMillipoints);
 });
 
 finish();
