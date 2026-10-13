@@ -13,7 +13,7 @@ import {SOURCE_HOLDS} from './source-holds';
 import {erratumFor} from './practice-errata';
 import MtmSourceContent from './MtmSourceContent';
 import MtmSourceQuestion from './MtmSourceQuestion';
-import {answerState, pendingQuestions, shortAnswerStatus, shortFormatMessage} from './attempt-ui';
+import {answerState, draftExportFile, pendingQuestions, shortAnswerStatus, shortFormatMessage} from './attempt-ui';
 
 export function localStore(): Store | null {
   try { return window.localStorage; } catch { return null; }
@@ -29,10 +29,11 @@ function displayAnswer(value: Response | undefined): string {
 function exportDraft(draft: Draft): boolean {
   let url: string | undefined;
   try {
-    url = URL.createObjectURL(new Blob([JSON.stringify(draft, null, 2)], {type: 'application/json'}));
+    const file = draftExportFile(draft);
+    url = URL.createObjectURL(new Blob([file.text], {type: 'application/json'}));
     const anchor = document.createElement('a');
     anchor.href = url;
-    anchor.download = `bai-lam-${draft.examId}-${draft.startedAt}.json`;
+    anchor.download = file.name;
     anchor.click();
     const exportedUrl = url;
     window.setTimeout(() => URL.revokeObjectURL(exportedUrl), 1000);
@@ -227,7 +228,7 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverr
             <div className="ep-question-step"><button type="button" disabled={activeQuestion===0} onClick={()=>{setActiveQuestion(i=>i-1);setQuestionFocus(true);}}>Câu trước</button><button type="button" disabled={activeQuestion===exam.questions.length-1} onClick={()=>{setActiveQuestion(i=>i+1);setQuestionFocus(true);}}>Câu tiếp</button></div>
             <div className="ep-submit-row"><Link className="ep-link" href={catalogUrl}>Rời bài thi</Link><button type="button" className="ep-primary" disabled={!pdfReady} onClick={()=>finish(false)}>Nộp bài</button></div>
           </>}
-          <div className="ep-toolbar"><button type="button" onClick={()=>setExportNotice(exportDraft(draft)?'Đã yêu cầu tải tệp JSON bài làm.':'Chưa xuất được tệp. Hãy giữ trang mở và thử lại.')}>Xuất bài làm JSON</button>{unsaved&&!conflict.current&&<button type="button" onClick={()=>persist(draft)}>Thử lưu lại</button>}</div>
+          <div className="ep-toolbar ep-backup-row">{unsaved&&!conflict.current&&<button type="button" onClick={()=>persist(draft)}>Thử lưu lại</button>}<details className="ep-backup" open={unsaved||conflict.current||undefined}><summary>Bản lưu bài làm</summary><p>Tải một tệp dự phòng bài làm về máy này, dùng khi trình duyệt bị xóa dữ liệu. Tệp chỉ nằm trên máy, không tự gửi đi đâu.</p><button type="button" onClick={()=>setExportNotice(exportDraft(draft)?'Đã yêu cầu tải bản lưu bài làm.':'Chưa tải được bản lưu. Hãy giữ trang mở và thử lại.')}>Tải bản lưu bài làm</button></details></div>
         </>}
       </div>
     </div>

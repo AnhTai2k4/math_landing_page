@@ -1,10 +1,12 @@
 // Đợt 2 (claude/sua-loi-luyen-thi): test các quy tắc hiển thị thuần của màn luyện tập/thi thử.
 // Chỉ dữ liệu đề có sẵn và câu trả lời tổng hợp; không dữ liệu học sinh, không đổi luật chấm.
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {join} from 'node:path';
 
 import {resultFor} from '../src/native/exams/result';
 import {createDraft, submitDraft, validateDraft, isAnswered, type Answers, type Draft, type Response} from '../src/native/exams/store';
-import {answerState, displayKeyAnswer, pendingQuestions, questionLabel, shortAnswerStatus, shortFormatMessage, visibleBuckets} from '../src/native/exams/attempt-ui';
+import {answerState, displayKeyAnswer, draftExportFile, pendingQuestions, questionLabel, shortAnswerStatus, shortFormatMessage, visibleBuckets} from '../src/native/exams/attempt-ui';
 import {canonicalNumeric, canonicalRational} from '../src/native/exams/assessment';
 import {GRADES, PERIODS, PRACTICE_EXAMS, readFilters, filterSearch, readyExams, type PracticeExam, type PracticeQuestion} from '../src/native/exams/data';
 import {suite} from './exams-harness.mts';
@@ -139,6 +141,18 @@ test('TH-07: đáp án thập phân hiện dấu phẩy, giá trị không đổ
     assert.equal(canon(shown), canon(key), exam.id + ' ' + key);
     assert.ok(!/^[+-]?d+.d+$/.test(shown), 'còn dấu chấm: ' + shown);
   }
+});
+
+// ---------- DL-08: đổi chữ/vị trí nút, tệp tải về giữ y hệt ----------
+test('DL-08: tệp "Tải bản lưu bài làm" giống từng byte cách xuất cũ, với bài dở thật định dạng V67', () => {
+  const fixture = JSON.parse(readFileSync(join(process.env.MTM_ROOT ?? process.cwd(), 'tests/fixtures/lich-su-v67.json'), 'utf8')) as {localStorage: Record<string, string>};
+  const raw = fixture.localStorage['mtm:exam:v1:mtm-drive-g12-c1-t01-mtm-errata-v1'];
+  const draft = JSON.parse(raw) as Draft;
+  const file = draftExportFile(draft);
+  // Công thức cũ trong PracticeAttempt.tsx tại f790f85 (exportDraft):
+  assert.equal(file.text, JSON.stringify(draft, null, 2));
+  assert.equal(file.name, `bai-lam-${draft.examId}-${draft.startedAt}.json`);
+  assert.deepEqual(JSON.parse(file.text), JSON.parse(raw), 'đọc lại tệp phải ra đúng bản nháp');
 });
 
 finish();

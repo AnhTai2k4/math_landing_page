@@ -61,3 +61,9 @@ export function visibleBuckets<G, P>(exams: readonly {grade: G; period: P}[], gr
 export function displayKeyAnswer(mode: string, value: string): string {
   return mode !== 'exact' && /^[+-]?\d+\.\d+$/.test(value.trim()) ? value.trim().replace('.', ',') : value;
 }
+
+/** DL-08: nội dung và tên tệp "Tải bản lưu bài làm" giữ y hệt nút "Xuất bài làm JSON" cũ
+ * (JSON.stringify(draft, null, 2), tên bai-lam-<examId>-<startedAt>.json) để khôi phục được. */
+export function draftExportFile(draft: {examId: string; startedAt: number}): {name: string; text: string} {
+  return {name: `bai-lam-${draft.examId}-${draft.startedAt}.json`, text: JSON.stringify(draft, null, 2)};
+}
