@@ -4,7 +4,7 @@ import {lazy,Suspense,useCallback, useEffect, useRef, useState,type ReactNode} f
 import {Link} from '../../migration/navigation';
 import type {Choice} from './assessment';
 import {PERIOD_LABELS, type PracticeExam,type PracticeQuestion} from './data';
-import {createDraft, matchingStorageEvent, retakeDraft, isAnswered, MAX_SHORT_LENGTH, readDraft, remainingMs, saveDraft, submitDraft, validateDraft, type Draft, type Response, type Store} from './store';
+import {createDraft, matchingStorageEvent, retakeDraft, MAX_SHORT_LENGTH, readDraft, remainingMs, saveDraft, submitDraft, validateDraft, type Draft, type Response, type Store} from './store';
 import {resultFor} from './result';
 import {useUnsavedGuard} from './navigation-guard';
 import ExamConfirm from './ExamConfirm';
@@ -13,6 +13,7 @@ import {SOURCE_HOLDS} from './source-holds';
 import {erratumFor} from './practice-errata';
 import MtmSourceContent from './MtmSourceContent';
 import MtmSourceQuestion from './MtmSourceQuestion';
+import {answerState, shortAnswerStatus, shortFormatMessage} from './attempt-ui';
 
 export function localStore(): Store | null {
   try { return window.localStorage; } catch { return null; }
@@ -102,7 +103,7 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverr
     if (!current || current.submittedAt !== null) return;
     if(!automatic&&!pdfReady){setNotice('Chưa thể nộp thủ công khi có phần câu hỏi chưa hiển thị. Bài làm vẫn được giữ; hãy tải lại trang để đọc đủ đề.');return;}
     const clock = Date.now();
-    const unanswered = exam.questions.filter(q => !isAnswered(exam, q.id, current.answers)).length;
+    const unanswered = exam.questions.filter(q => answerState(exam, q, current.answers) !== 'answered').length;
     if (!automatic && remainingMs(current, clock) > 0 && unanswered > 0 && !confirmed) {setConfirmation('submit');return;}
     const result = submitDraft(exam, current, Date.now());
     if (!result.ok) { setNotice(result.message); return; }
@@ -153,7 +154,8 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverr
   const result = draft && submitted ? resultFor(exam, draft) : null;
   const score = result?.score;
   const sections=examSections(exam);
-  const answered = draft ? exam.questions.filter(q => isAnswered(exam, q.id, draft.answers)).length : 0;
+  const states = draft ? exam.questions.map(q => answerState(exam, q, draft.answers)) : [];
+  const answered = states.filter(state => state === 'answered').length, invalidCount = states.filter(state => state === 'invalid').length;
   const seconds = draft ? Math.ceil(remainingMs(draft, now) / 1000) : 0;
   const retake=(confirmed=false)=>{
     if(sourceIssue)return;
@@ -195,7 +197,7 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverr
           <button type="button" className="ep-primary ep-wide" disabled={!pdfReady||!!sourceIssue||!!erratum&&!acceptedErratum} onClick={begin}>{sourceIssue?'Chờ đính chính điều kiện':persisted.current?'Tiếp tục làm bài':'Bắt đầu làm bài'}</button>
         </section>:<>
           <div className="ep-toolbar ep-answer-toolbar">
-            {submitted?<strong role="status">{unsaved?'Đã nộp trên trang · chưa xác nhận lưu':'Đã nộp và lưu kết quả'}</strong>:<><span role="timer" aria-label="Thời gian còn lại" aria-live="off">Còn {Math.floor(seconds/60)}:{String(seconds%60).padStart(2,'0')}</span><span>{answered}/{exam.questions.length} câu đã trả lời đầy đủ</span></>}
+            {submitted?<strong role="status">{unsaved?'Đã nộp trên trang · chưa xác nhận lưu':'Đã nộp và lưu kết quả'}</strong>:<><span role="timer" aria-label="Thời gian còn lại" aria-live="off">Còn {Math.floor(seconds/60)}:{String(seconds%60).padStart(2,'0')}</span><span>{answered}/{exam.questions.length} câu đã trả lời đầy đủ{invalidCount>0?` · ${invalidCount} câu sai định dạng`:''}</span></>}
           </div>
           {submitted?<>
             <section className="ep-card" aria-label="Kết quả"><h2 ref={resultHeading} tabIndex={-1}>Kết quả luyện tập</h2><ResultSummary exam={exam} draft={draft}/>{!score?.ok&&<p role="alert">Chưa tính được điểm. Bài làm vẫn giữ nguyên để đối chiếu.</p>}
@@ -206,8 +208,8 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverr
             <ExamReview key={draft.attemptId} exam={exam} draft={draft} showSummary={false} renderText={renderText} renderSolutionExtra={renderSolutionExtra}/>
           </>:<>
             <h2>Phiếu trả lời</h2>
-            <nav aria-label="Chuyển đến câu hỏi">{sections.map(part=><section key={part.name}><h3>{part.name}</h3><div className="ep-question-nav">{exam.questions.slice(part.from,part.to).map((q,j)=>{const index=part.from+j;return <button type="button" key={q.id} className={isAnswered(exam,q.id,draft.answers)?'is-answered':''} aria-current={activeQuestion===index?'step':undefined} aria-label={`${part.name}, câu ${j+1}: ${isAnswered(exam,q.id,draft.answers)?'đã trả lời đầy đủ':'chưa trả lời đầy đủ'}`} onClick={()=>{setActiveQuestion(index);setQuestionFocus(true);}}>{j+1}</button>;})}</div></section>)}</nav>
-            <p className="ep-source-ref">Ô tô màu: đã trả lời đầy đủ. Viền nổi: câu đang chọn.</p>
+            <nav aria-label="Chuyển đến câu hỏi">{sections.map(part=><section key={part.name}><h3>{part.name}</h3><div className="ep-question-nav">{exam.questions.slice(part.from,part.to).map((q,j)=>{const index=part.from+j;return <button type="button" key={q.id} className={states[index]==='answered'?'is-answered':states[index]==='invalid'?'is-invalid':''} aria-current={activeQuestion===index?'step':undefined} aria-label={`${part.name}, câu ${j+1}: ${states[index]==='answered'?'đã trả lời đầy đủ':states[index]==='invalid'?'sai định dạng, chưa được tính':'chưa trả lời đầy đủ'}`} onClick={()=>{setActiveQuestion(index);setQuestionFocus(true);}}>{j+1}</button>;})}</div></section>)}</nav>
+            <p className="ep-source-ref">Ô tô màu: đã trả lời đầy đủ. Ô viền đỏ: sai định dạng. Viền nổi: câu đang chọn.</p>
             {exam.questions.map((q,index)=>{
               if(index!==activeQuestion)return null;
               const answer=draft.answers[q.id],tfAnswers=Array.isArray(answer)?answer:[null,null,null,null];
@@ -217,7 +219,7 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverr
                 {(q.prompt||q.text)&&<p className="ep-source-text">{renderText?renderText(q.prompt??q.text!):q.prompt??q.text}</p>}{q.sourceContent&&<MtmSourceQuestion question={q}/>}<p className="ep-source-ref">MTM sưu tầm và biên soạn</p>
                 {q.kind==='mc'&&<fieldset disabled={!pdfReady} className="ep-mc-grid"><legend>Chọn đáp án câu {number}</legend>{q.choices.map((choice,i)=><label className={`ep-option ${answer===letters[i]?'is-selected':''}`} key={letters[i]}><input type="radio" name={`ep-mc-${index}`} value={letters[i]} checked={answer===letters[i]} onChange={()=>changeAnswer(q.id,letters[i])}/><span>{letters[i]}{choice!==letters[i]?<>{'. '}{renderText?renderText(choice):choice}</>:''}</span>{answer===letters[i]&&<span aria-hidden="true">✓</span>}</label>)}<button type="button" className="ep-clear-answer" onClick={()=>changeAnswer(q.id,null)}>Bỏ chọn</button></fieldset>}
                 {q.kind==='tf'&&<div>{statementLetters.map((letter,i)=><fieldset key={letter} disabled={!pdfReady}><legend className="ep-source-text">Ý {letter}: {renderText&&q.statements?.[i]?renderText(q.statements[i]):q.statements?.[i]??(q.sourceContent?`Xem ý ${letter} trong đề ở trên`:`${q.sourceRef}, ý ${letter}`)}</legend>{[true,false,null].map(value=><label className={`ep-tf-option ${tfAnswers[i]===value?'is-selected':''}`} key={String(value)}><input type="radio" name={`ep-tf-${index}-${i}`} checked={tfAnswers[i]===value} onChange={()=>{const next=[...tfAnswers] as (boolean|null)[];next[i]=value;changeAnswer(q.id,next);}}/>{value===null?'Chưa chọn':value?'Đúng':'Sai'}</label>)}</fieldset>)}</div>}
-                {q.kind==='short'&&<div><label htmlFor={`ep-short-${index}`}>Trả lời câu {number}</label><input id={`ep-short-${index}`} className="ep-short" type="text" disabled={!pdfReady} maxLength={MAX_SHORT_LENGTH} autoComplete="off" spellCheck={false} value={typeof answer==='string'?answer:''} aria-describedby={`ep-help-${index}`} onChange={event=>changeAnswer(q.id,event.target.value)}/><p id={`ep-help-${index}`}>{q.mode==='numeric'?'Nhập số thập phân bằng dấu phẩy hoặc dấu chấm; không nhập biểu thức hoặc phân số.':q.mode==='rational'?'Nhập số nguyên, số thập phân hoặc phân số, ví dụ -3/4; không nhập đơn vị hay biểu thức.':'Nhập câu trả lời chính xác theo yêu cầu đề (phân biệt chữ hoa/thường).'}</p></div>}
+                {q.kind==='short'&&<div><label htmlFor={`ep-short-${index}`}>Trả lời câu {number}</label><input id={`ep-short-${index}`} className="ep-short" type="text" disabled={!pdfReady} maxLength={MAX_SHORT_LENGTH} autoComplete="off" spellCheck={false} value={typeof answer==='string'?answer:''} aria-invalid={shortAnswerStatus(q.mode,answer)==='invalid'||undefined} aria-describedby={`ep-format-${index} ep-help-${index}`} onChange={event=>changeAnswer(q.id,event.target.value)}/><p id={`ep-format-${index}`} className="ep-format-error" aria-live="polite">{shortAnswerStatus(q.mode,answer)==='invalid'?shortFormatMessage(q.mode):''}</p><p id={`ep-help-${index}`}>{q.mode==='numeric'?'Nhập số thập phân bằng dấu phẩy hoặc dấu chấm; không nhập biểu thức hoặc phân số.':q.mode==='rational'?'Nhập số nguyên, số thập phân hoặc phân số, ví dụ -3/4; không nhập đơn vị hay biểu thức.':'Nhập câu trả lời chính xác theo yêu cầu đề (phân biệt chữ hoa/thường).'}</p></div>}
               </section>;
             })}
             <div className="ep-question-step"><button type="button" disabled={activeQuestion===0} onClick={()=>{setActiveQuestion(i=>i-1);setQuestionFocus(true);}}>Câu trước</button><button type="button" disabled={activeQuestion===exam.questions.length-1} onClick={()=>{setActiveQuestion(i=>i+1);setQuestionFocus(true);}}>Câu tiếp</button></div>
