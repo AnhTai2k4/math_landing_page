@@ -1,6 +1,9 @@
 import {courses,findCourse,type Course,type Lesson} from '../migration/catalogue';
 import snapshot from './public-content.json';
 export const publicSnapshot=snapshot;
+/** Đề metadata rác trong bản chụp nguồn (tên "uyuyuyuyuyu", không có nội dung): ẩn khỏi giao diện,
+ * giữ URL /thi-thu/<id> mở được (không 404) để không gãy link cũ. Không sửa public-content.json. */
+export const HIDDEN_SNAPSHOT_EXAMS:ReadonlySet<string>=new Set(['6ac3bb971b13b84fcf748153']);
 export function nativeLessonUrl(course:Course,lesson:Lesson){return '/bai-hoc/'+encodeURIComponent(lesson.slug)+'?courseSlug='+encodeURIComponent(course.slug);}
 export function resolveNativeLesson(pathname:string,search:string){
  if(!pathname.startsWith('/bai-hoc/'))return undefined;

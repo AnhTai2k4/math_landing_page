@@ -14,6 +14,8 @@ import {FakeStore} from './exams-harness.mts';
 import {readHistory, saveDraft, draftKey} from '../src/native/exams/store';
 import practiceTests from '../src/native/chapters/practice-tests.json';
 import exactTests from '../src/native/chapters/exact-tests.json';
+import {HIDDEN_SNAPSHOT_EXAMS, nativeRouteKnown, publicSnapshot} from '../src/native/model';
+import {routeMetadata} from '../src/migration/route-policy';
 import {suite} from './exams-harness.mts';
 
 const {test, finish} = suite('U');
@@ -214,6 +216,19 @@ test('DL-01: lượt đã nộp của bài chờ phản biện vẫn đọc lạ
   const result = resultFor(item!.exam, item!.draft)!;
   assert.ok(result.score.ok);
   assert.equal(result.score.ok && result.score.earnedMillipoints, pending.questions[0].maxMillipoints);
+});
+
+// ---------- Đề metadata rác "uyuyuyuyuyu": ẩn khỏi giao diện, giữ URL ----------
+test('Đề rác: chỉ ẩn đúng 1 mục tên "uyuyuyuyuyu"; URL vẫn mở (không 404), tiêu đề trang không lộ tên rác', () => {
+  const junk = publicSnapshot.exams.filter(e => HIDDEN_SNAPSHOT_EXAMS.has(e.id));
+  assert.deepEqual(junk.map(e => e.title), ['uyuyuyuyuyu']);
+  const path = '/thi-thu/' + junk[0].id;
+  assert.equal(nativeRouteKnown(path, ''), true, 'URL cũ phải còn mở');
+  const meta = routeMetadata(path, 'www.minhthanhmath.vn');
+  assert.ok(meta.known);
+  assert.ok(!meta.title.includes('uyuy'), meta.title);
+  assert.equal(meta.robots, 'noindex, follow');
+  for (const e of publicSnapshot.exams.filter(x => !HIDDEN_SNAPSHOT_EXAMS.has(x.id))) assert.ok(routeMetadata('/thi-thu/' + e.id, 'www.minhthanhmath.vn').title.startsWith(e.title), e.id);
 });
 
 finish();
