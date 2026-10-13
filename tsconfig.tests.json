@@ -1,0 +1,5 @@
+{
+  "extends": "./tsconfig.migration.json",
+  "compilerOptions": {"allowImportingTsExtensions": true, "noEmit": true},
+  "include": ["tests/exams-*.mts", "tests/fixtures/*.mts"]
+}

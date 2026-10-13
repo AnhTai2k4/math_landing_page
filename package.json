@@ -62,6 +62,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "test": "node scripts/run-tests.mjs"
+    "test": "node scripts/run-tests.mjs",
+    "check:bundle": "node scripts/check-bundle-budget.mjs"
   }
 }
