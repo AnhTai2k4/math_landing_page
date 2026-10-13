@@ -1,4 +1,4 @@
-import type {ReactNode} from 'react';
+import {lazy,Suspense,useMemo,useState,type ReactNode} from 'react';
 import {Link,useRoute} from '../../migration/navigation';
 import PracticeAttempt,{localStore} from '../exams/PracticeAttempt';
 import ExamReview from '../exams/ExamReview';
@@ -9,6 +9,7 @@ import MathText from '../math/MathText';
 import MtmSourceContent from '../exams/MtmSourceContent';
 import MtmSourceQuestion from '../exams/MtmSourceQuestion';
 import TheorySummary from './TheorySummary';
+import questionPdfs from './mtm-question-pdfs.json';
 
 import '../exams/exams.css';
 import './chapters.css';
@@ -18,11 +19,23 @@ type DisplayQuestion=PracticeQuestion&{image?:string;imageAlt?:string;solutionTa
 export type PracticeBankItem={exam:PracticeExam;note:string;limits:string[];scope:string;published:boolean;presentationTitle?:string};
 const originalBank:PracticeBankItem[]=[];
 const rich=(text:string):ReactNode=><MathText text={text}/>;
+const QuestionPdf=lazy(()=>import('../exams/QuestionPdf'));
+const pdfMeta=questionPdfs as Record<string,{bytes:number;totalPages:number}>;
+/** Bản đề MTM dạng trang (logo, watermark) cho khung đọc đề; null khi chưa có số trang đã kiểm. */
+function mtmQuestionPdf(exam:PracticeExam){
+  const doc=exam.mtmDocuments?.questions,meta=doc&&pdfMeta[doc.sha256.toLowerCase()];
+  return doc&&meta?{url:doc.url,sha256:doc.sha256,bytes:meta.bytes,totalPages:meta.totalPages,questionPages:Array.from({length:meta.totalPages},(_,i)=>i+1),verified:true as const}:null;
+}
+const wideScreen=()=>typeof matchMedia==='function'&&matchMedia('(min-width: 900px)').matches;
+const noop=()=>{};
 const points=(value:number)=>(value/1000).toLocaleString('vi-VN',{maximumFractionDigits:3});
 
 function QuestionReader({exam}:{exam:PracticeExam}) {
+  const pdf=useMemo(()=>mtmQuestionPdf(exam),[exam]);
+  const [mode,setMode]=useState<'pages'|'questions'>(()=>pdf&&wideScreen()?'pages':'questions');
   return <section className="cp-reader" aria-label="Đề bài luyện chương">
-    <TheorySummary exam={exam}/><h2>Đề bài</h2><p>Cuộn vùng này để đọc các câu. Điền bài làm ở phiếu trả lời.</p>{exam.mtmDocuments&&<p><a href={exam.mtmDocuments.questions.url} target="_blank" rel="noopener noreferrer">Tải đề PDF theo mẫu MTM</a></p>}{exam.sourceInstructions&&<details><summary>Hướng dẫn làm ba phần</summary><MtmSourceContent segments={exam.sourceInstructions} assetBase="/practice-media/source-crops" label="Hướng dẫn đề" kind="question"/></details>}
+    <TheorySummary exam={exam}/><h2>Đề bài</h2>{pdf&&<div className="cp-reader-mode" role="group" aria-label="Cách đọc đề"><button type="button" aria-pressed={mode==='pages'} onClick={()=>setMode('pages')}>Bản đề theo trang</button><button type="button" aria-pressed={mode==='questions'} onClick={()=>setMode('questions')}>Từng câu</button></div>}
+    {mode==='pages'&&pdf?<Suspense fallback={<p role="status">Đang mở bản đề…</p>}><QuestionPdf file={pdf} title={exam.title} onReady={noop}/></Suspense>:<><p>Cuộn vùng này để đọc các câu. Điền bài làm ở phiếu trả lời.</p>{exam.mtmDocuments&&<p><a href={exam.mtmDocuments.questions.url} target="_blank" rel="noopener noreferrer">Tải đề PDF theo mẫu MTM</a></p>}{exam.sourceInstructions&&<details><summary>Hướng dẫn làm ba phần</summary><MtmSourceContent segments={exam.sourceInstructions} assetBase="/practice-media/source-crops" label="Hướng dẫn đề" kind="question"/></details>}
     {(exam.questions as DisplayQuestion[]).map((q,index)=><article key={q.id} className="cp-source-question">
       <h3>Câu {index+1} · {points(q.maxMillipoints)} điểm</h3>
       <p><MathText text={q.prompt??q.text??''}/></p>{q.sourceContent&&<MtmSourceQuestion question={q}/>}<Tables tables={q.questionTables}/>
@@ -30,7 +43,7 @@ function QuestionReader({exam}:{exam:PracticeExam}) {
       {q.kind==='tf'&&!q.sourceContent&&<ol className="cp-statements" type="a">{q.statements?.map((statement,i)=><li key={i}><MathText text={statement}/></li>)}</ol>}
       {q.image&&(q.imageAlt?<figure><img loading="lazy" src={q.image} alt={q.imageAlt}/><figcaption>{q.imageAlt}</figcaption></figure>:<details><summary>Xem ảnh câu trong nguồn</summary><img loading="lazy" src={q.image} alt={`Câu ${index+1} trong PDF gốc; nội dung đã chép ở trên`}/></details>)}
       <p className="cp-question-source"><small>MTM sưu tầm và biên soạn</small></p>
-    </article>)}
+    </article>)}</>}
   </section>;
 }
 

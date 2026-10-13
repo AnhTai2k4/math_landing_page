@@ -14,9 +14,13 @@ type PracticeItem=PracticeBankItem&{track:string;chapter:string;order:number;cov
 const tracks=curriculum as Track[];
 const rawBank=[...tests,...exactTests] as unknown as PracticeItem[];
 const foundationLabel=(p:PracticeItem)=>p.track==='10'?'Hệ thống công thức và lý thuyết cả chương':p.track==='11'?p.order===1?'Góc và công thức lượng giác':'Hàm số và phương trình lượng giác':p.order===1?'Đạo hàm, biến thiên và cực trị':'Khảo sát đồ thị và bài toán ứng dụng';
-const bank=rawBank.map(p=>{const coverage=p.isFoundation?foundationLabel(p):p.coverage;return {...p,coverage,presentationTitle:p.presentationTitle??(["HSA","TSA"].includes(p.track)?p.exam.title:`Toán ${p.track} · Chương ${p.chapter} · ${p.isChapterEnd?"Kiểm tra kết thúc chương":"Bài "+p.order+": "+coverage}`)};});
+// Tên bài từ file nguồn thường in hoa và có tiền tố "BÀI."; hiển thị lại dạng câu thường.
+const lessonName=(raw:string)=>{const s=raw.replace(/\s+/g,' ').trim().replace(/^BÀI\s*[.:]\s*/i,'');return s===s.toLocaleUpperCase('vi')&&/\p{L}/u.test(s)?s.charAt(0)+s.slice(1).toLocaleLowerCase('vi'):s;};
+const bank=rawBank.map(p=>{const coverage=p.isFoundation?foundationLabel(p):p.sourceEdition?lessonName(p.coverage):p.coverage;return {...p,coverage,presentationTitle:p.presentationTitle??(["HSA","TSA"].includes(p.track)?p.exam.title:`Toán ${p.track} · Chương ${p.chapter} · ${p.isChapterEnd?"Kiểm tra kết thúc chương":"Bài "+p.order+": "+coverage}`)};});
 const currentIds=new Set(bank.map(p=>p.exam.id));
 const pilotBank=(archives as unknown as PracticeItem[]).filter(p=>!currentIds.has(p.exam.id));
+// "ĐỀ TEST SỐ 01" hoặc "01" → "Đề test số 01"; nhãn khác giữ nguyên.
+const testLabel=(label:string)=>{const s=label.trim(),n=s.match(/^(?:ĐỀ TEST SỐ\s*)?(\d+)$/i)?.[1];return n?'Đề test số '+n.padStart(2,'0'):s;};
 export const practiceURL=(track:string,chapter:string,id?:string)=>'/luyen-tap?'+new URLSearchParams({nhom:track,chuong:chapter,...(id?{id}:{})}).toString();
 
 export default function PracticeLibrary(){
@@ -43,7 +47,7 @@ export default function PracticeLibrary(){
   const entries=history.items.filter(p=>visibleIds.has(p.exam.id));
   const thpt=['10','11','12'].includes(selected.id);
   const sourceGroups=Array.from(new Set(exact.map(p=>`${p.sourceSequence?.fileId??p.exam.sourceHash}:${p.sourceSequence?.lesson??p.order}`))).map(key=>exact.filter(p=>`${p.sourceSequence?.fileId??p.exam.sourceHash}:${p.sourceSequence?.lesson??p.order}`===key).sort((a,b)=>(a.sourceSequence?.sequence??a.order)-(b.sourceSequence?.sequence??b.order)));
-  const sourceAction=(p:PracticeItem)=>`${attempts.get(p.exam.id)?.submittedAt===null?'Làm tiếp':attempts.get(p.exam.id)?.submittedAt!=null?'Xem kết quả':'Làm'} đề ${p.sourceSequence?.test??p.order}`;
+  const sourceAction=(p:PracticeItem)=>`${attempts.get(p.exam.id)?.submittedAt===null?'Làm tiếp':attempts.get(p.exam.id)?.submittedAt!=null?'Xem kết quả':'Làm'} bài ${p.sourceSequence?.sequence??p.order}`;
   return <section className="mig-container cp-library ep-root">
     <header className="cp-library-intro"><p className="mig-eyebrow">MINH THÀNH MATH · LUYỆN TỪNG DẠNG</p><h1>Luyện tập</h1>
       <p>Chọn chương đang học, luyện từng dạng rồi tự kiểm tra đáp án và lời giải sau khi nộp.</p>
@@ -57,7 +61,7 @@ export default function PracticeLibrary(){
       </aside>
       <div className="cp-chapter-content">
         <h2>{chapter.title}</h2><p>{chapter.forms.join(' · ')}</p>
-        {thpt&&<section className="cp-exact-list" aria-label="Đề theo bộ tài liệu MTM"><h3>Luyện theo thứ tự tài liệu</h3><p>Mỗi đề giữ trọn câu hỏi, hình và bảng; đi theo từng bài của file nguồn rồi đến ôn tập cuối chương.</p>{sourceGroups.length?sourceGroups.map(group=><section key={`${group[0].sourceSequence?.fileId}:${group[0].sourceSequence?.lesson}`}><h4>{group[0].sourceSequence?.lessonTitle??group[0].coverage}</h4><ol className="cp-test-grid">{group.map(p=><li key={p.exam.id}><article><span className="cp-test-index">Đề {p.sourceSequence?.test??p.order} · bản MTM</span><h3>{p.coverage}</h3><p>{p.exam.questions.length} câu · 3 phần · {p.exam.durationMinutes} phút · thang 10</p><p>{entries.filter(e=>e.exam.id===p.exam.id).length} lượt đã nộp</p><Link className="mig-button cp-action-button" href={practiceURL(selected.id,chapter.id,p.exam.id)}>{sourceAction(p)}<span aria-hidden="true">→</span></Link></article></li>)}</ol></section>):<p>Đề theo tài liệu của chương này đang được đối chiếu đủ câu, hình và lời giải trước khi mở.</p>}</section>}
+        {thpt&&<section className="cp-exact-list" aria-label="Đề theo bộ tài liệu MTM"><h3>Luyện theo thứ tự tài liệu</h3><p>Mỗi đề giữ trọn câu hỏi, hình và bảng; đi theo từng bài của file nguồn rồi đến ôn tập cuối chương.</p>{sourceGroups.length?sourceGroups.map(group=><section key={`${group[0].sourceSequence?.fileId}:${group[0].sourceSequence?.lesson}`}><h4>{lessonName(group[0].sourceSequence?.lessonTitle??group[0].coverage)}</h4><ol className="cp-test-grid">{group.map(p=><li key={p.exam.id}><article><span className="cp-test-index">Bài {p.sourceSequence?.sequence??p.order}{p.sourceSequence?.test?<> · {testLabel(p.sourceSequence.test)}</>:null}</span><h3>{p.coverage}</h3><p>{p.exam.questions.length} câu · 3 phần · {p.exam.durationMinutes} phút · thang 10</p><p>{entries.filter(e=>e.exam.id===p.exam.id).length} lượt đã nộp</p><Link className="mig-button cp-action-button" href={practiceURL(selected.id,chapter.id,p.exam.id)}>{sourceAction(p)}<span aria-hidden="true">→</span></Link></article></li>)}</ol></section>):<p>Đề theo tài liệu của chương này đang được đối chiếu đủ câu, hình và lời giải trước khi mở.</p>}</section>}
         <details className="cp-previous-bank" open={thpt?undefined:true}><summary>{thpt?'Các bài luyện đã có · giữ riêng với lịch sử cũ':'Các bài luyện đang có'}</summary>
         <p className="cp-ready-count" role="status">{available.length}/{targetCount} bài luyện đã mở.</p>
         {available.length>0?<ol className="cp-test-grid">{available.map(p=><li key={p.exam.id}><article>
