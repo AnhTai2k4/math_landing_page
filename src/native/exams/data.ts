@@ -65,7 +65,7 @@ export function validSourcePdf(value:unknown):boolean {
 }
 export function validSourceSegments(value:unknown):value is SourceSegment[] {
   if(!Array.isArray(value)||value.length<1||value.length>12)return false;
-  return value.every(segment=>isRecord(segment)&&typeof segment.path==='string'&&segment.path.length<=300&&/^[a-zA-Z0-9][a-zA-Z0-9_/-]*\.png$/.test(segment.path)&&!segment.path.includes('//')&&!segment.path.split('/').includes('..')&&isSha256(segment.sha256)&&Number.isSafeInteger(segment.sourcePage)&&(segment.sourcePage as number)>=1&&Number.isSafeInteger(segment.width)&&(segment.width as number)>=1&&(segment.width as number)<=20000&&Number.isSafeInteger(segment.height)&&(segment.height as number)>=1&&(segment.height as number)<=30000)&&new Set(value.map(segment=>segment.path)).size===value.length;
+  return value.every(segment=>isRecord(segment)&&typeof segment.path==='string'&&segment.path.length<=300&&/^[a-zA-Z0-9][a-zA-Z0-9_/-]*\.png$/.test(segment.path)&&!segment.path.includes('//')&&!segment.path.split('/').includes('..')&&isSha256(segment.sha256)&&Number.isSafeInteger(segment.sourcePage)&&((segment.sourcePage as number)>=1||(segment.mtmAuthored===true&&segment.sourcePage===0))&&Number.isSafeInteger(segment.width)&&(segment.width as number)>=1&&(segment.width as number)<=20000&&Number.isSafeInteger(segment.height)&&(segment.height as number)>=1&&(segment.height as number)<=30000)&&new Set(value.map(segment=>segment.path)).size===value.length;
 }
 export function validatePracticeExam(input: unknown): Validation {
   const gate = validatePracticeProfile(input);

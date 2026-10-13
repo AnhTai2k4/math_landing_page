@@ -1,7 +1,7 @@
 import React, {useId, useState} from 'react';
 import './mtm-source-content.css';
 
-export type SourceSegment = {path: string; width: number; height: number; sha256: string; sourcePage: number};
+export type SourceSegment = {path: string; width: number; height: number; sha256: string; sourcePage: number; mtmAuthored?: true};
 
 /** The raster preserves source glyphs and figures; branding is a separate, reversible layer. */
 export default function MtmSourceContent({segments, assetBase, label, kind}: {
