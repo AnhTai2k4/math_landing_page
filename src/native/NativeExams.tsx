@@ -13,6 +13,7 @@ import {historySummary} from './exams/history-summary';
 import {formatPoints} from './exams/review';
 import {SOURCE_HOLDS} from './exams/source-holds';
 import {erratumFor,originalExamId,practiceVersion} from './exams/practice-errata';
+import {visibleBuckets} from './exams/attempt-ui';
 import './exams/exams.css';
 
 function SavedAttemptReview({exam,draft}:{exam:PracticeExam;draft:Draft}) {
@@ -85,7 +86,7 @@ export default function NativeExams({pathname, search, catalog = PRACTICE_EXAMS,
         <label>Tìm theo tên đề<input type="search" maxLength={120} value={filters.q} placeholder="Nhập tên đề…" onChange={event => changeFilters({q: event.target.value})}/></label>
         <button type="button" onClick={() => changeFilters({lop: 'all', ky: 'all', q: ''})}>Xóa bộ lọc</button>
       </div>
-      <section aria-label="Đề theo lớp và kỳ" className="ep-buckets">{GRADES.flatMap(grade => PERIODS.map(period => <button type="button" className="ep-bucket" key={`${grade}-${period}`} aria-pressed={filters.lop === String(grade) && filters.ky === period} onClick={() => changeFilters({lop: String(grade) as Filters['lop'], ky: period})}><span>Lớp {grade} · {PERIOD_LABELS[period]}</span><strong>{ready.filter(item => item.grade === grade && item.period === period).length} đề</strong></button>))}</section>
+      <section aria-label="Đề theo lớp và kỳ" className="ep-buckets">{visibleBuckets(ready, GRADES, PERIODS, {grade: filters.lop === 'all' ? 'all' : Number(filters.lop) as typeof GRADES[number], period: filters.ky}).map(({grade, period, count}) => <button type="button" className="ep-bucket" key={`${grade}-${period}`} aria-pressed={filters.lop === String(grade) && filters.ky === period} onClick={() => changeFilters({lop: String(grade) as Filters['lop'], ky: period})}><span>Lớp {grade} · {PERIOD_LABELS[period]}</span><strong>{count} đề</strong></button>)}</section>
       <p role="status" aria-live="polite">{matches.length} đề phù hợp bộ lọc</p>
       <p>Trên trình duyệt này: đã làm {localSummary.completedExams} đề, {localSummary.totalAttempts} lượt đã nộp.</p>
       <div className="ep-catalog">{matches.map(item => {const saved=localSummary.exams.find(e=>e.examId===item.id);return <article className="ep-card" key={item.id}><p>Lớp {item.grade} · {PERIOD_LABELS[item.period]}</p><h2>{item.title}</h2><p>{item.questions.length} câu · {item.durationMinutes} phút</p>{erratumFor(item.id)&&<p className="ep-notice">Bản MTM đính chính v37 · giữ PDF nguồn</p>}{SOURCE_HOLDS[item.id]&&<p className="ep-notice">Chờ đính chính điều kiện · chưa mở lượt mới</p>}<p className="ep-progress-label">{saved?.count?`Đã làm ${saved.count} lượt`: 'Chưa có lượt đã nộp'}{saved?.inProgress?' · Có bài đang làm':''}</p>{saved&&saved.count>0&&<p>Gần nhất: {saved.latestScore===null?'Chưa tính được':formatPoints(saved.latestScore)} / 10 · Cao nhất: {saved.best===null?'Chưa tính được':formatPoints(saved.best)} / 10</p>}<Link className="ep-link" href={`/thi-thu/${encodeURIComponent(item.id)}${normalizedSearch}`}>{saved?.inProgress?'Tiếp tục làm bài →':'Mở đề luyện tập →'}</Link></article>;})}</div>

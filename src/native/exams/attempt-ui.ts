@@ -48,3 +48,10 @@ export function pendingQuestions(exam: PracticeExam, answers: Answers): {index: 
     return state === 'answered' ? [] : [{index, id: q.id, label: questionLabel(exam, index).full, state}];
   });
 }
+
+/** TT-12: ô "Lớp x · kỳ" chỉ hiện khi có đề; ô đang chọn (từ URL cũ như ?lop=12&ky=CK1) vẫn hiện để
+ * học sinh thấy mình đang lọc gì. Bộ lọc kỳ và URL ?ky= không đổi. */
+export function visibleBuckets<G, P>(exams: readonly {grade: G; period: P}[], grades: readonly G[], periods: readonly P[], selected: {grade: G | 'all'; period: P | 'all'}): {grade: G; period: P; count: number}[] {
+  return grades.flatMap(grade => periods.map(period => ({grade, period, count: exams.filter(e => e.grade === grade && e.period === period).length})))
+    .filter(b => b.count > 0 || (b.grade === selected.grade && b.period === selected.period));
+}

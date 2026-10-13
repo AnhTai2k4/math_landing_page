@@ -1,10 +1,11 @@
 // Đợt 2 (claude/sua-loi-luyen-thi): test các quy tắc hiển thị thuần của màn luyện tập/thi thử.
 // Chỉ dữ liệu đề có sẵn và câu trả lời tổng hợp; không dữ liệu học sinh, không đổi luật chấm.
 import assert from 'node:assert/strict';
-import {PRACTICE_EXAMS, type PracticeExam, type PracticeQuestion} from '../src/native/exams/data';
+
 import {resultFor} from '../src/native/exams/result';
 import {createDraft, submitDraft, validateDraft, isAnswered, type Answers, type Draft, type Response} from '../src/native/exams/store';
-import {answerState, pendingQuestions, questionLabel, shortAnswerStatus, shortFormatMessage} from '../src/native/exams/attempt-ui';
+import {answerState, pendingQuestions, questionLabel, shortAnswerStatus, shortFormatMessage, visibleBuckets} from '../src/native/exams/attempt-ui';
+import {GRADES, PERIODS, PRACTICE_EXAMS, readFilters, filterSearch, readyExams, type PracticeExam, type PracticeQuestion} from '../src/native/exams/data';
 import {suite} from './exams-harness.mts';
 
 const {test, finish} = suite('U');
@@ -94,6 +95,27 @@ test('TT-01: nhãn câu theo phần cũng đúng cho bài HSA/TSA cấu trúc ri
   assert.equal(questionLabel(flexible, 3).full, 'II · Đúng/Sai · Câu 1');
   assert.equal(questionLabel(flexible, 5).full, 'III · Trả lời ngắn · Câu 2');
   assert.equal(questionLabel(flexible, 9).full, 'Câu 10');
+});
+
+// ---------- TT-12: ẩn ô kỳ 0 đề, URL cũ ?ky= vẫn chạy ----------
+test('TT-12: chỉ hiện ô có đề; mọi ô hiện ra có số đề > 0 và tổng khớp số đề mở', () => {
+  const ready = readyExams(PRACTICE_EXAMS);
+  const shown = visibleBuckets(ready, GRADES, PERIODS, {grade: 'all', period: 'all'});
+  assert.ok(shown.length > 0 && shown.length < GRADES.length * PERIODS.length, 'phải ẩn bớt ô 0 đề');
+  assert.ok(shown.every(b => b.count > 0));
+  assert.equal(shown.reduce((s, b) => s + b.count, 0), ready.length);
+});
+test('TT-12: URL cũ ?lop=12&ky=CK1 vẫn đọc được bộ lọc, ô đang chọn vẫn hiện dù 0 đề', () => {
+  const filters = readFilters('?lop=12&ky=CK1&q=');
+  assert.equal(filters.ky, 'CK1');
+  assert.equal(filters.lop, '12');
+  assert.equal(filterSearch(filters), '?lop=12&ky=CK1&q=');
+  const ready = readyExams(PRACTICE_EXAMS);
+  const zero = ready.filter(e => e.grade === 12 && e.period === 'CK1').length;
+  const shown = visibleBuckets(ready, GRADES, PERIODS, {grade: 12, period: 'CK1'});
+  const selected = shown.find(b => b.grade === 12 && b.period === 'CK1');
+  assert.ok(selected, 'ô đang chọn phải hiện');
+  assert.equal(selected!.count, zero);
 });
 
 finish();
