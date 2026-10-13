@@ -53,11 +53,21 @@ test('Đọc: không có bộ nhớ, lỗi đọc, JSON hỏng, sai cấu trúc,
 });
 
 // ---------- Ghi bản nháp ----------
-test('Ghi bình thường: lưu, đọc lại khớp, ghi lặp y hệt không ghi thêm', () => {
-  const s = new FakeStore(), d0 = started(s), d1 = must(saveDraft(s, exam, edit(d0, q0, 'C', T0 + 1000), d0));
-  assert.deepEqual(must(readDraft(s, exam)), d1);
-  const before = s.sets;
-  assert.ok(saveDraft(s, exam, d1, d0).ok);
+test('Ghi bình thường: lưu đúng câu định lưu, câu cũ còn nguyên, ghi lặp y hệt không ghi thêm', () => {
+  const s = new FakeStore(), d0 = started(s);
+  const want1 = edit(d0, q0, 'C', T0 + 1000), d1 = must(saveDraft(s, exam, want1, d0));
+  // So với bản ĐỊNH LƯU (độc lập với giá trị saveDraft trả về) và với chuỗi thật trong bộ nhớ.
+  assert.deepEqual(d1, want1);
+  assert.deepEqual(must(readDraft(s, exam)), want1);
+  assert.deepEqual(JSON.parse(s.data.get(draftKey(exam.id))!).answers, {[q0]: 'C'});
+  const want2 = edit(d1, q1, 'D', T0 + 2000), d2 = must(saveDraft(s, exam, want2, d1));
+  assert.deepEqual(d2, want2);
+  assert.deepEqual(JSON.parse(s.data.get(draftKey(exam.id))!).answers, {[q0]: 'C', [q1]: 'D'});
+  const tf = exam.questions[12].id, want3 = edit(d2, tf, [true, null, false, null], T0 + 3000);
+  must(saveDraft(s, exam, want3, d2));
+  assert.deepEqual(must(readDraft(s, exam))!.answers, {[q0]: 'C', [q1]: 'D', [tf]: [true, null, false, null]});
+  const current = must(readDraft(s, exam))!, before = s.sets;
+  assert.ok(saveDraft(s, exam, current, d2).ok, 'ghi lặp đúng bản đang có là hợp lệ');
   assert.equal(s.sets, before, 'ghi lặp không được ghi thêm');
 });
 test('Đầy bộ nhớ (QuotaExceeded) khi lưu câu: báo lỗi "write", bản đã lưu trước đó còn nguyên', () => {
@@ -197,6 +207,10 @@ test('Lịch sử mẫu V67: bài đang làm dở mở tiếp được và lưu 
   assert.ok(d); assert.equal(d!.attemptId, fx.expected.inProgress[g12.id]); assert.equal(d!.submittedAt, null);
   const next = must(validateDraft({...d!, answers: {...d!.answers, [g12.questions[1].id]: 'B'}, updatedAt: d!.updatedAt + 1000, revision: d!.revision + 1}, g12));
   assert.ok(saveDraft(s, g12, next, d!).ok);
+  const back = must(readDraft(s, g12))!;
+  assert.deepEqual(back, next);
+  // 2 câu đã làm trong mẫu V67 còn nguyên, câu mới được thêm.
+  assert.deepEqual(back.answers, {[g12.questions[0].id]: (g12.questions[0] as {answer: string}).answer, [g12.questions[12].id]: [true, null, false, null], [g12.questions[1].id]: 'B'});
 });
 test('Lịch sử mẫu V67: thêm lượt mới vào lịch sử giữ nguyên từng lượt cũ', () => {
   const s = new FakeStore(fx.localStorage), before = JSON.parse(fx.localStorage[HISTORY_KEY]).entries;
@@ -210,6 +224,21 @@ test('Lịch sử mẫu V67: sổ câu sai đọc được, không lẫn lượt
   const s = new FakeStore(fx.localStorage), m = mistakeSummary(readHistory(s, bank));
   assert.equal(m.excluded, 0); assert.equal(m.attempts, fx.expected.historyAttempts.length);
   assert.ok(m.items.every(i => i.draft.submittedAt !== null));
+  // Đếm tay theo mẫu: đề tổng hợp đúng hết (0 câu cần ôn); g10-t02 làm đúng 5/22 (17 câu trống);
+  // g11-t01 đúng III.1, "1/2" ở III.2 là sai, 20 câu trống; Thi thử mã 157 đúng II-2, 21 câu trống.
+  const byExam = (id: string) => m.items.filter(i => i.exam.id === id);
+  assert.equal(m.items.length, 17 + 21 + 21);
+  assert.equal(byExam('mtm-practice-fixture-tong-hop-v1').length, 0);
+  assert.equal(byExam('mtm-drive-g10-c1-t02-mtm-errata-v1').length, 17);
+  assert.ok(byExam('mtm-drive-g10-c1-t02-mtm-errata-v1').every(i => i.status === 'unanswered'));
+  const g11 = byExam('mtm-drive-g11-c1-t01-mtm-errata-v1');
+  assert.equal(g11.length, 21);
+  const g11q = bank.find(e => e.id === 'mtm-drive-g11-c1-t01-mtm-errata-v1')!.questions;
+  assert.deepEqual(g11.filter(i => i.status === 'wrong').map(i => [i.questionId, i.part, i.questionNumber]), [[g11q[17].id, 'III · Trả lời ngắn', 2]]);
+  assert.ok(!g11.some(i => i.questionId === g11q[16].id), 'câu đúng không được vào sổ câu sai');
+  const t157 = byExam('mtm-tm-modern-supplement-11-GK1-47-code157');
+  assert.equal(t157.length, 21); assert.ok(!t157.some(i => i.questionId === 'II-2'));
+  assert.ok(m.items.every(i => i.attemptCount === 1 && i.occurrences[i.status] === 1));
 });
 
 finish();
