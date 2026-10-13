@@ -13,7 +13,7 @@ import {SOURCE_HOLDS} from './source-holds';
 import {erratumFor} from './practice-errata';
 import MtmSourceContent from './MtmSourceContent';
 import MtmSourceQuestion from './MtmSourceQuestion';
-import {answerState, draftExportFile, pendingQuestions, shortAnswerStatus, shortFormatMessage} from './attempt-ui';
+import {answerState, draftExportFile, pendingQuestions, questionLabel, shortAnswerStatus, shortFormatMessage} from './attempt-ui';
 
 export function localStore(): Store | null {
   try { return window.localStorage; } catch { return null; }
@@ -235,7 +235,7 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverr
       </div>
     </div>
     {exportNotice&&<p role="status">{exportNotice}</p>}
-    {confirmation==='submit'&&draft&&(()=>{const pending=pendingQuestions(exam,draft.answers),blank=pending.filter(p=>p.state==='blank').length,invalid=pending.length-blank;return <ExamConfirm title="Nộp bài khi còn câu chưa xong?" message={`Còn ${pending.length} câu chưa trả lời đầy đủ${invalid?` (${blank} câu trống, ${invalid} câu sai định dạng)`:''}. Bấm vào một câu để quay lại làm; nộp bài sẽ kết thúc lượt này.`} itemsLabel="Câu chưa trả lời đầy đủ" items={pending.map(p=>({key:p.id,label:p.label,detail:p.state==='invalid'?'sai định dạng':'chưa trả lời',onSelect:()=>{setConfirmation(null);setActiveQuestion(p.index);setMobilePane('answers');setQuestionFocus(true);}}))} cancelLabel="Ở lại làm tiếp" confirmLabel="Vẫn nộp bài" onCancel={()=>setConfirmation(null)} onConfirm={()=>finish(false,true)}/>;})()}
+    {confirmation==='submit'&&draft&&(()=>{const pending=pendingQuestions(exam,draft.answers),blank=pending.filter(p=>p.state==='blank').length,invalid=pending.length-blank;return <ExamConfirm title="Nộp bài khi còn câu chưa xong?" message={`Còn ${pending.length} câu chưa trả lời đầy đủ${invalid?` (${blank} câu trống, ${invalid} câu sai định dạng)`:''}. Bấm vào một câu để quay lại làm; nộp bài sẽ kết thúc lượt này.`} itemsLabel="Câu chưa trả lời đầy đủ" items={pending.map(p=>{const label=questionLabel(exam,p.index);return {key:p.id,group:label.part,label:`Câu ${label.number}`,detail:p.state==='invalid'?'sai định dạng':undefined,warn:p.state==='invalid',ariaLabel:`${label.full}: ${p.state==='invalid'?'sai định dạng':'chưa trả lời'}`,onSelect:()=>{setConfirmation(null);setActiveQuestion(p.index);setMobilePane('answers');setQuestionFocus(true);}};})} cancelLabel="Ở lại làm tiếp" confirmLabel="Vẫn nộp bài" onCancel={()=>setConfirmation(null)} onConfirm={()=>finish(false,true)}/>;})()}
     {confirmation==='retake'&&<ExamConfirm title="Làm một lượt mới?" message="Bài đã nộp giữ trong lịch sử trước khi bắt đầu lượt mới." confirmLabel="Bắt đầu lượt mới" onCancel={()=>setConfirmation(null)} onConfirm={()=>retake(true)}/>}
   </section>;
 }
