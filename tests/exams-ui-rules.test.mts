@@ -139,7 +139,7 @@ test('TH-07: đáp án thập phân hiện dấu phẩy, giá trị không đổ
     const shown = displayKeyAnswer(q.mode, key);
     const canon: (v: string) => string | null = q.mode === 'numeric' ? canonicalNumeric : canonicalRational;
     assert.equal(canon(shown), canon(key), exam.id + ' ' + key);
-    assert.ok(!/^[+-]?d+.d+$/.test(shown), 'còn dấu chấm: ' + shown);
+    assert.ok(!/^[+-]?\d+\.\d+$/.test(shown), 'còn dấu chấm: ' + shown);
   }
 });
 
@@ -153,6 +153,16 @@ test('DL-08: tệp "Tải bản lưu bài làm" giống từng byte cách xuất
   assert.equal(file.text, JSON.stringify(draft, null, 2));
   assert.equal(file.name, `bai-lam-${draft.examId}-${draft.startedAt}.json`);
   assert.deepEqual(JSON.parse(file.text), JSON.parse(raw), 'đọc lại tệp phải ra đúng bản nháp');
+});
+
+// ---------- QT-01: gỡ lối vào quản trị khỏi trang học sinh, trang quản trị vẫn có đường dẫn ----------
+test('QT-01: /thi-thu không còn nút "Quản trị đề thi"; App vẫn mở /quan-tri/de-thi', () => {
+  const root = process.env.MTM_ROOT ?? process.cwd();
+  const exams = readFileSync(join(root, 'src/native/NativeExams.tsx'), 'utf8');
+  assert.ok(!exams.includes('/quan-tri/de-thi'), 'NativeExams còn link quản trị');
+  assert.ok(!exams.includes('Quản trị đề thi'));
+  const app = readFileSync(join(root, 'src/App.tsx'), 'utf8');
+  assert.ok(app.includes("path==='/quan-tri/de-thi'?<AdminExams/>"), 'App không còn route quản trị');
 });
 
 finish();
