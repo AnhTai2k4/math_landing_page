@@ -9,6 +9,7 @@ import MathText from '../math/MathText';
 import MtmSourceContent from '../exams/MtmSourceContent';
 import MtmSourceQuestion from '../exams/MtmSourceQuestion';
 import TheorySummary from './TheorySummary';
+import {questionLabel} from '../exams/attempt-ui';
 import questionPdfs from './mtm-question-pdfs.json';
 
 import '../exams/exams.css';
@@ -37,7 +38,7 @@ function QuestionReader({exam}:{exam:PracticeExam}) {
     <TheorySummary exam={exam}/><h2>Đề bài</h2>{pdf&&<div className="cp-reader-mode" role="group" aria-label="Cách đọc đề"><button type="button" aria-pressed={mode==='pages'} onClick={()=>setMode('pages')}>Bản đề theo trang</button><button type="button" aria-pressed={mode==='questions'} onClick={()=>setMode('questions')}>Từng câu</button></div>}
     {mode==='pages'&&pdf?<Suspense fallback={<p role="status">Đang mở bản đề…</p>}><QuestionPdf file={pdf} title={exam.title} onReady={noop}/></Suspense>:<><p>Cuộn vùng này để đọc các câu. Điền bài làm ở phiếu trả lời.</p>{exam.mtmDocuments&&<p><a href={exam.mtmDocuments.questions.url} target="_blank" rel="noopener noreferrer">Tải đề PDF theo mẫu MTM</a></p>}{exam.sourceInstructions&&<details><summary>Hướng dẫn làm ba phần</summary><MtmSourceContent segments={exam.sourceInstructions} assetBase="/practice-media/source-crops" label="Hướng dẫn đề" kind="question"/></details>}
     {(exam.questions as DisplayQuestion[]).map((q,index)=><article key={q.id} className="cp-source-question">
-      <h3>Câu {index+1} · {points(q.maxMillipoints)} điểm</h3>
+      <h3>{questionLabel(exam,index).full} · {points(q.maxMillipoints)} điểm</h3>
       <p><MathText text={q.prompt??q.text??''}/></p>{q.sourceContent&&<MtmSourceQuestion question={q}/>}<Tables tables={q.questionTables}/>
       {q.kind==='mc'&&!q.sourceContent&&<ol className="cp-choices" type="A">{q.choices.map((choice,i)=><li key={i}><MathText text={choice}/></li>)}</ol>}
       {q.kind==='tf'&&!q.sourceContent&&<ol className="cp-statements" type="a">{q.statements?.map((statement,i)=><li key={i}><MathText text={statement}/></li>)}</ol>}

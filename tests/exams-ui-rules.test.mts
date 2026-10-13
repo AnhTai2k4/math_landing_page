@@ -4,7 +4,8 @@ import assert from 'node:assert/strict';
 
 import {resultFor} from '../src/native/exams/result';
 import {createDraft, submitDraft, validateDraft, isAnswered, type Answers, type Draft, type Response} from '../src/native/exams/store';
-import {answerState, pendingQuestions, questionLabel, shortAnswerStatus, shortFormatMessage, visibleBuckets} from '../src/native/exams/attempt-ui';
+import {answerState, displayKeyAnswer, pendingQuestions, questionLabel, shortAnswerStatus, shortFormatMessage, visibleBuckets} from '../src/native/exams/attempt-ui';
+import {canonicalNumeric, canonicalRational} from '../src/native/exams/assessment';
 import {GRADES, PERIODS, PRACTICE_EXAMS, readFilters, filterSearch, readyExams, type PracticeExam, type PracticeQuestion} from '../src/native/exams/data';
 import {suite} from './exams-harness.mts';
 
@@ -116,6 +117,28 @@ test('TT-12: URL cũ ?lop=12&ky=CK1 vẫn đọc được bộ lọc, ô đang c
   const selected = shown.find(b => b.grade === 12 && b.period === 'CK1');
   assert.ok(selected, 'ô đang chọn phải hiện');
   assert.equal(selected!.count, zero);
+});
+
+// ---------- TH-07: một kiểu đánh số theo phần, đáp án số hiện dấu phẩy ----------
+test('TH-07: nhãn câu ở xem lại trùng với phiếu trả lời (I/II/III, đánh số lại từ 1 mỗi phần)', () => {
+  assert.equal(questionLabel(exam1201, 0).full, 'I · Trắc nghiệm · Câu 1');
+  assert.equal(questionLabel(exam1201, 12).full, 'II · Đúng/sai · Câu 1');
+  assert.equal(questionLabel(exam1201, 21).full, 'III · Trả lời ngắn · Câu 6');
+});
+test('TH-07: đáp án thập phân hiện dấu phẩy, giá trị không đổi; phân số và mode exact giữ nguyên', () => {
+  assert.equal(displayKeyAnswer('numeric', '0.5'), '0,5');
+  assert.equal(displayKeyAnswer('numeric', '-4.47'), '-4,47');
+  assert.equal(displayKeyAnswer('numeric', '1012'), '1012');
+  assert.equal(displayKeyAnswer('rational', '-3/4'), '-3/4');
+  assert.equal(displayKeyAnswer('exact', 'x.y'), 'x.y');
+  assert.equal(displayKeyAnswer('exact', '2.5'), '2.5');
+  // Mọi đáp án số của toàn bộ đề hiện bằng dấu phẩy vẫn được lõi chấm hiểu đúng như bản gốc.
+  for (const exam of PRACTICE_EXAMS) for (const q of exam.questions) if (q.kind === 'short' && q.mode !== 'exact') for (const key of q.acceptedAnswers) {
+    const shown = displayKeyAnswer(q.mode, key);
+    const canon: (v: string) => string | null = q.mode === 'numeric' ? canonicalNumeric : canonicalRational;
+    assert.equal(canon(shown), canon(key), exam.id + ' ' + key);
+    assert.ok(!/^[+-]?d+.d+$/.test(shown), 'còn dấu chấm: ' + shown);
+  }
 });
 
 finish();

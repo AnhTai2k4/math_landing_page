@@ -55,3 +55,9 @@ export function visibleBuckets<G, P>(exams: readonly {grade: G; period: P}[], gr
   return grades.flatMap(grade => periods.map(period => ({grade, period, count: exams.filter(e => e.grade === grade && e.period === period).length})))
     .filter(b => b.count > 0 || (b.grade === selected.grade && b.period === selected.period));
 }
+
+/** TH-07: số thập phân trong đáp án hiện bằng dấu phẩy như cách học sinh viết ("0.5" -> "0,5").
+ * Chỉ đổi chữ hiển thị; khoá chấm trong dữ liệu đề giữ nguyên. Mode exact giữ nguyên văn. */
+export function displayKeyAnswer(mode: string, value: string): string {
+  return mode !== 'exact' && /^[+-]?\d+\.\d+$/.test(value.trim()) ? value.trim().replace('.', ',') : value;
+}
