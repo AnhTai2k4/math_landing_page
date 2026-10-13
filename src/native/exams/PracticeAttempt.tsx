@@ -74,7 +74,7 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverr
     if (conflict.current) {
       dirty.current = true;
       setUnsaved(true);
-      setNotice('Bản lưu đã thay đổi ở nơi khác. Câu trả lời trên trang này được giữ nguyên và chưa được lưu. Hãy xuất bài làm trước khi rời trang.');
+      setNotice('Bản lưu đã thay đổi ở nơi khác. Câu trả lời trên trang này được giữ nguyên và chưa được lưu. Hãy tải bản lưu bài làm (mục "Bản lưu bài làm" bên dưới) trước khi rời trang.');
     } else {
       const saved = saveDraft(getStore(), exam, next, persisted.current);
       dirty.current = !saved.ok;
@@ -94,7 +94,7 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverr
       if (!matchingStorageEvent(event,captured,exam.id)) return;
       conflict.current = true;
       if (ram.current) { dirty.current = true; setUnsaved(true); }
-      setNotice('Bản lưu đã thay đổi hoặc bị xóa ở cửa sổ khác. Bài đang mở được giữ nguyên. Hãy xuất bài làm trước khi tải lại trang.');
+      setNotice('Bản lưu đã thay đổi hoặc bị xóa ở cửa sổ khác. Bài đang mở được giữ nguyên. Hãy tải bản lưu bài làm (mục "Bản lưu bài làm" bên dưới) trước khi tải lại trang.');
     };
     window.addEventListener('storage', changed);
     return () => window.removeEventListener('storage', changed);
@@ -176,9 +176,9 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverr
     <header><p>{audienceLabel??'Lớp '+exam.grade} · {contextLabel??PERIOD_LABELS[exam.period]}</p><h1>{displayTitle??exam.title}</h1><p>{exam.questions.length} câu · {exam.durationMinutes} phút · Thang điểm 10</p></header>
     {exam.preAttemptNotice&&<div className="ep-notice"><strong>Điều kiện đính chính của bản MTM</strong><p>{exam.preAttemptNotice}</p><p>Bản nguồn và lịch sử cũ được giữ riêng.</p></div>}
     {notice&&<p className="ep-notice" role="alert">{notice}</p>}
-    {erratum&&<div className="ep-notice"><strong>Bản luyện tập MTM đính chính v37 · điều kiện áp dụng khi chấm</strong><p>{erratum.condition}</p><p>Thành đã duyệt đính chính này. PDF nguồn giữ nguyên; lượt mới dùng mã phiên bản riêng. Lịch sử cũ giữ điểm theo khóa trước đính chính.</p>{<label className="ep-erratum-accept"><input type="checkbox" checked={acceptedErratum} onChange={event=>setAcceptedErratum(event.target.checked)}/> Tôi đã đọc điều kiện đính chính và làm bài theo điều kiện này.</label>}{legacy?.ok&&legacy.value&&<p>Đã giữ bản lưu trước đính chính. {legacy.value.submittedAt===null?<button type="button" onClick={()=>setExportNotice(exportDraft(legacy.value!)?'Đã yêu cầu tải bản bài cũ.':'Chưa xuất được; hãy giữ trang mở.')}>Xuất bài cũ đang làm</button>:<Link href={catalogUrl}>Xem lượt cũ trong lịch sử</Link>}</p>}</div>}
-    {sourceIssue&&<div className="ep-notice" role="alert"><strong>Đề đang chờ đính chính · tạm ngừng lượt mới.</strong><p>{sourceIssue}</p><p>PDF gốc và lịch sử cũ được giữ. Điểm cũ dùng khóa trước khi phát hiện vấn đề này; cần đọc phần đối chiếu để hiểu giới hạn của kết quả.</p>{persisted.current&&persisted.current.submittedAt===null&&<button type="button" onClick={()=>setExportNotice(exportDraft(persisted.current!)?'Đã yêu cầu tải bản bài làm đang lưu.':'Chưa xuất được; hãy giữ trang mở.')}>Xuất bài đang làm để giữ bản cũ</button>}</div>}
-    {unsaved&&<p className="ep-notice" role="status">Chưa xác nhận bài làm được lưu bền vững trên trình duyệt. Câu trả lời vẫn giữ trên trang. Hãy xuất JSON trước khi đóng hoặc tải lại trang.</p>}
+    {erratum&&<div className="ep-notice"><strong>Bản luyện tập MTM đính chính v37 · điều kiện áp dụng khi chấm</strong><p>{erratum.condition}</p><p>Thành đã duyệt đính chính này. PDF nguồn giữ nguyên; lượt mới dùng mã phiên bản riêng. Lịch sử cũ giữ điểm theo khóa trước đính chính.</p>{<label className="ep-erratum-accept"><input type="checkbox" checked={acceptedErratum} onChange={event=>setAcceptedErratum(event.target.checked)}/> Tôi đã đọc điều kiện đính chính và làm bài theo điều kiện này.</label>}{legacy?.ok&&legacy.value&&<p>Đã giữ bản lưu trước đính chính. {legacy.value.submittedAt===null?<button type="button" onClick={()=>setExportNotice(exportDraft(legacy.value!)?'Đã yêu cầu tải bản lưu bài cũ.':'Chưa tải được bản lưu; hãy giữ trang mở.')}>Tải bản lưu bài cũ đang làm</button>:<Link href={catalogUrl}>Xem lượt cũ trong lịch sử</Link>}</p>}</div>}
+    {sourceIssue&&<div className="ep-notice" role="alert"><strong>Đề đang chờ đính chính · tạm ngừng lượt mới.</strong><p>{sourceIssue}</p><p>PDF gốc và lịch sử cũ được giữ. Điểm cũ dùng khóa trước khi phát hiện vấn đề này; cần đọc phần đối chiếu để hiểu giới hạn của kết quả.</p>{persisted.current&&persisted.current.submittedAt===null&&<button type="button" onClick={()=>setExportNotice(exportDraft(persisted.current!)?'Đã yêu cầu tải bản lưu bài đang làm.':'Chưa tải được bản lưu; hãy giữ trang mở.')}>Tải bản lưu bài đang làm</button>}</div>}
+    {unsaved&&<p className="ep-notice" role="status">Chưa xác nhận bài làm được lưu bền vững trên trình duyệt. Câu trả lời vẫn giữ trên trang. Hãy tải bản lưu bài làm trước khi đóng hoặc tải lại trang.</p>}
     <div className="ep-mobile-panes" role="group" aria-label="Chọn vùng làm bài"><button type="button" aria-pressed={mobilePane==='pdf'} onClick={()=>setMobilePane('pdf')}>{exam.sourcePdf?'Đọc đề PDF':'Đọc câu hỏi'}</button><button type="button" aria-pressed={mobilePane==='answers'} onClick={()=>setMobilePane('answers')}>{submitted?'Kết quả và lời giải':'Phiếu trả lời'}</button>{draft&&!submitted&&<span className="ep-mobile-timer" role="timer" aria-label="Thời gian còn lại" aria-live="off">Còn {Math.floor(seconds/60)}:{String(seconds%60).padStart(2,'0')}</span>}</div>
     {!submitted&&<div className="ep-desktop-layout" role="group" aria-label="Bố cục đọc đề và phiếu trả lời"><span>Bố cục làm bài</span>{([['balanced','Cân đối'],['reading','Ưu tiên đọc đề'],['answers','Ưu tiên phiếu']] as const).map(([value,label])=><button key={value} type="button" aria-pressed={desktopLayout===value} onClick={()=>setDesktopLayout(value)}>{label}</button>)}</div>}
     <div className={`ep-exam-layout ep-pane-${mobilePane}${submitted?questionReader?' ep-chapter-submitted':' ep-submitted':''}`} data-layout={desktopLayout} onErrorCapture={event=>{
@@ -204,7 +204,7 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverr
           </div>
           {submitted?<>
             <section className="ep-card" aria-label="Kết quả"><h2 ref={resultHeading} tabIndex={-1}>{kind==='exam'?'Kết quả thi thử':'Kết quả luyện tập'}</h2><ResultSummary exam={exam} draft={draft}/>{!score?.ok&&<p role="alert">Chưa tính được điểm. Bài làm vẫn giữ nguyên để đối chiếu.</p>}
-              <p>Nộp lúc {new Date(draft.submittedAt!).toLocaleString('vi-VN')}.</p>{exam.answerVerificationNote&&<p>{questionReader?'Câu hỏi, khóa chấm và lời giải đã được đối chiếu. Điểm được tính theo thang ghi tại từng câu.':exam.answerVerificationNote}</p>}
+              <p>Nộp lúc {new Date(draft.submittedAt!).toLocaleString('vi-VN')}.</p>{exam.answerVerificationNote&&<p>{questionReader?'Câu hỏi, đáp án và lời giải đã được đối chiếu. Điểm được tính theo thang ghi tại từng câu.':exam.answerVerificationNote}</p>}
               <p><Link className="ep-link" href={catalogUrl}>Trở về danh sách đề</Link></p>
               <button type="button" disabled={unsaved||conflict.current||!pdfReady||!!sourceIssue||!!erratum&&!acceptedErratum} onClick={()=>retake()}>Làm lại đề · giữ bài cũ trong lịch sử</button>
             </section>
@@ -226,7 +226,7 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverr
               </section>;
             })}
             <div className="ep-question-step"><button type="button" disabled={activeQuestion===0} onClick={()=>{setActiveQuestion(i=>i-1);setQuestionFocus(true);}}>Câu trước</button><button type="button" disabled={activeQuestion===exam.questions.length-1} onClick={()=>{setActiveQuestion(i=>i+1);setQuestionFocus(true);}}>Câu tiếp</button></div>
-            <div className="ep-submit-row"><Link className="ep-link" href={catalogUrl}>Rời bài thi</Link><button type="button" className="ep-primary" disabled={!pdfReady} onClick={()=>finish(false)}>Nộp bài</button></div>
+            <div className="ep-submit-row"><Link className="ep-link" href={catalogUrl}>{kind==='exam'?'Rời bài thi':'Rời bài luyện'}</Link><button type="button" className="ep-primary" disabled={!pdfReady} onClick={()=>finish(false)}>Nộp bài</button></div>
           </>}
           <div className="ep-toolbar ep-backup-row">{unsaved&&!conflict.current&&<button type="button" onClick={()=>persist(draft)}>Thử lưu lại</button>}<details className="ep-backup" open={unsaved||conflict.current||undefined}><summary>Bản lưu bài làm</summary><p>Tải một tệp dự phòng bài làm về máy này, dùng khi trình duyệt bị xóa dữ liệu. Tệp chỉ nằm trên máy, không tự gửi đi đâu.</p><button type="button" onClick={()=>setExportNotice(exportDraft(draft)?'Đã yêu cầu tải bản lưu bài làm.':'Chưa tải được bản lưu. Hãy giữ trang mở và thử lại.')}>Tải bản lưu bài làm</button></details></div>
         </>}
