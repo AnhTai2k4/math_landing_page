@@ -3,8 +3,8 @@
 import assert from 'node:assert/strict';
 import {PRACTICE_EXAMS, type PracticeExam, type PracticeQuestion} from '../src/native/exams/data';
 import {resultFor} from '../src/native/exams/result';
-import {createDraft, submitDraft, validateDraft, isAnswered, type Answers, type Draft} from '../src/native/exams/store';
-import {answerState, shortAnswerStatus, shortFormatMessage} from '../src/native/exams/attempt-ui';
+import {createDraft, submitDraft, validateDraft, isAnswered, type Answers, type Draft, type Response} from '../src/native/exams/store';
+import {answerState, pendingQuestions, questionLabel, shortAnswerStatus, shortFormatMessage} from '../src/native/exams/attempt-ui';
 import {suite} from './exams-harness.mts';
 
 const {test, finish} = suite('U');
@@ -64,6 +64,36 @@ test('LT-02: lời báo nêu rõ quy tắc và hậu quả, không chứa đáp 
   assert.match(message, /0 điểm/);
   for (const accepted of q.acceptedAnswers) assert.ok(!message.includes(accepted) || /^\d$/.test(accepted), 'lộ đáp án ' + accepted);
   assert.match(shortFormatMessage('rational'), /-3\/4/);
+});
+
+// ---------- TT-01 (phần hộp nộp): liệt kê đúng câu trống/sai định dạng, nhảy đúng câu ----------
+test('TT-01: hộp nộp liệt kê đúng câu trống và sai định dạng, theo thứ tự, kèm vị trí câu để nhảy tới', () => {
+  const q = exam1201.questions;
+  const answers: Record<string, Response> = {};
+  q.forEach((item, i) => {
+    if (item.kind === 'mc') answers[item.id] = (item as {answer: string}).answer as 'A';
+    if (item.kind === 'tf') answers[item.id] = [true, true, true, true];
+    if (item.kind === 'short') answers[item.id] = '1';
+  });
+  answers[q[2].id] = null;                      // trắc nghiệm câu 3 bỏ trống
+  answers[q[13].id] = [true, null, true, true]; // Đ/S câu 2 thiếu 1 ý
+  answers[q[18].id] = '1/2';                    // trả lời ngắn câu 3 sai định dạng
+  delete answers[q[21].id];                     // trả lời ngắn câu 6 bỏ trống
+  const pending = pendingQuestions(exam1201, answers);
+  assert.deepEqual(pending.map(p => [p.index, p.state]), [[2, 'blank'], [13, 'blank'], [18, 'invalid'], [21, 'blank']]);
+  assert.deepEqual(pending.map(p => p.label), ['I · Trắc nghiệm · Câu 3', 'II · Đúng/sai · Câu 2', 'III · Trả lời ngắn · Câu 3', 'III · Trả lời ngắn · Câu 6']);
+  assert.ok(pending.every(p => exam1201.questions[p.index].id === p.id), 'chỉ số nhảy tới phải trỏ đúng câu');
+});
+test('TT-01: bài làm đủ thì không còn câu nào trong hộp nộp; bài trống liệt kê đủ 22 câu', () => {
+  assert.equal(pendingQuestions(exam1201, {}).length, exam1201.questions.length);
+  const full: Answers = Object.fromEntries(exam1201.questions.map(item => [item.id, item.kind === 'tf' ? [false, false, false, false] : item.kind === 'mc' ? 'B' : '2,5']));
+  assert.deepEqual(pendingQuestions(exam1201, full), []);
+});
+test('TT-01: nhãn câu theo phần cũng đúng cho bài HSA/TSA cấu trúc riêng (3/1/2 câu)', () => {
+  const flexible = {questions: new Array(6).fill({kind: 'mc'}), sections: [{label: 'I · Trắc nghiệm', kind: 'mc' as const, count: 3}, {label: 'II · Đúng/Sai', kind: 'tf' as const, count: 1}, {label: 'III · Trả lời ngắn', kind: 'short' as const, count: 2}]} as unknown as PracticeExam;
+  assert.equal(questionLabel(flexible, 3).full, 'II · Đúng/Sai · Câu 1');
+  assert.equal(questionLabel(flexible, 5).full, 'III · Trả lời ngắn · Câu 2');
+  assert.equal(questionLabel(flexible, 9).full, 'Câu 10');
 });
 
 finish();

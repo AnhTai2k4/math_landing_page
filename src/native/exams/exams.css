@@ -67,3 +67,4 @@
 .ep-root .ep-mistake-review{border-top:2px solid #cbd5e1;margin-top:1.25rem;padding-top:1rem;min-width:0}
 .ep-root .ep-mistake-queue button:focus-visible{outline:3px solid #1d4ed8;outline-offset:3px}
 .ep-root .ep-question-nav .is-invalid{background:#fff1f2;color:#9f1239;border:2px solid #be123c}.ep-format-error{color:#9f1239;font-weight:600;margin:8px 0 0}.ep-format-error:empty{margin:0}.ep-root .ep-short[aria-invalid=true]{border:2px solid #be123c;background:#fff7f8}
+.ep-confirm{max-height:calc(100vh - 32px);overflow:auto}.ep-confirm-list ul{list-style:none;padding:0;margin:12px 0;display:flex;flex-wrap:wrap;gap:8px}.ep-confirm-list button{min-height:44px;border:1px solid #64748b;border-radius:8px;background:#fff;color:#172033;padding:8px 12px;text-align:left}.ep-confirm-list button:focus-visible{outline:3px solid #1d4ed8;outline-offset:2px}.ep-confirm-list small{color:#9f1239}

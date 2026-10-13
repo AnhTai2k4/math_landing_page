@@ -3,6 +3,7 @@
 import {normalizedShort} from './assessment';
 import {isAnswered, type Answers} from './store';
 import type {PracticeExam, PracticeQuestion} from './data';
+import {examSections} from './flexible-profile';
 
 export type ShortStatus = 'empty' | 'valid' | 'invalid';
 
@@ -30,4 +31,20 @@ export function answerState(exam: PracticeExam, q: PracticeQuestion, answers: An
     return status === 'valid' ? 'answered' : status === 'invalid' ? 'invalid' : 'blank';
   }
   return isAnswered(exam, q.id, answers) ? 'answered' : 'blank';
+}
+
+/** Nhãn câu theo phần, cùng một kiểu ở phiếu trả lời, hộp nộp và màn xem lại: "II · Đúng/sai · Câu 1". */
+export function questionLabel(exam: Pick<PracticeExam, 'questions' | 'sections'>, index: number): {part: string; number: number; full: string} {
+  const section = examSections(exam).find(s => index >= s.from && index < s.to);
+  if (!section) return {part: '', number: index + 1, full: `Câu ${index + 1}`};
+  const number = index - section.from + 1;
+  return {part: section.name, number, full: `${section.name} · Câu ${number}`};
+}
+
+/** Danh sách câu chưa trả lời đầy đủ cho hộp xác nhận nộp bài (TT-01): trống hoặc sai định dạng. */
+export function pendingQuestions(exam: PracticeExam, answers: Answers): {index: number; id: string; label: string; state: Exclude<AnswerState, 'answered'>}[] {
+  return exam.questions.flatMap((q, index) => {
+    const state = answerState(exam, q, answers);
+    return state === 'answered' ? [] : [{index, id: q.id, label: questionLabel(exam, index).full, state}];
+  });
 }
