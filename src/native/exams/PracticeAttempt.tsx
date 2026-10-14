@@ -159,6 +159,8 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverr
   const states = draft ? exam.questions.map(q => answerState(exam, q, draft.answers)) : [];
   const answered = states.filter(state => state === 'answered').length, invalidCount = states.filter(state => state === 'invalid').length;
   const seconds = draft ? Math.ceil(remainingMs(draft, now) / 1000) : 0;
+  const startDisabled=!pdfReady||!!sourceIssue||!!erratum&&!acceptedErratum||!!newAttemptsClosed&&!persisted.current;
+  const startLabel=sourceIssue?'Chờ đính chính điều kiện':persisted.current?'Tiếp tục làm bài':newAttemptsClosed?'Chờ phản biện · chưa mở lượt mới':'Bắt đầu làm bài';
   const retake=(confirmed=false)=>{
     if(sourceIssue||newAttemptsClosed)return;
     const old=ram.current;if(!old||old.submittedAt===null||dirty.current||conflict.current)return;
@@ -174,6 +176,9 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverr
   return <section className="ep-attempt">{leaveConfirmation}
     <Link className="ep-link" href={catalogUrl}>← Danh sách đề</Link>
     <header><p>{audienceLabel??'Lớp '+exam.grade} · {contextLabel??PERIOD_LABELS[exam.period]}</p><h1>{displayTitle??exam.title}</h1><p>{exam.questions.length} câu · {exam.durationMinutes} phút · Thang điểm 10</p></header>
+    {/* LT-15 (Đợt 4): trên điện thoại phiếu trả lời (có nút Bắt đầu) bị ẩn sau thẻ "Đọc câu hỏi"; nút này đưa việc bắt đầu lên màn đầu.
+        Cùng điều kiện và cùng hàm begin() với nút trong phiếu; chỉ hiện ở màn hẹp (exams.css). */}
+    {!draft&&<div className="ep-mobile-start"><button type="button" className="ep-primary ep-wide" disabled={startDisabled} onClick={begin}>{startLabel}</button><p>{persisted.current?`Hạn nộp bài đang làm: ${new Date(persisted.current.deadline).toLocaleString('vi-VN')}.`:`Đồng hồ ${exam.durationMinutes} phút chỉ chạy khi bấm nút. Có thể đọc đề trước ở mục bên dưới.`}{erratum&&!acceptedErratum?' Hãy đọc và đánh dấu điều kiện đính chính ở ngay dưới trước khi bắt đầu.':''}</p></div>}
     {exam.preAttemptNotice&&<div className="ep-notice"><strong>Điều kiện đính chính của bản MTM</strong><p>{exam.preAttemptNotice}</p><p>Bản nguồn và lịch sử cũ được giữ riêng.</p></div>}
     {newAttemptsClosed&&<div className="ep-notice" role="status"><strong>Tạm chưa mở lượt mới</strong><p>{newAttemptsClosed}</p></div>}
     {notice&&<p className="ep-notice" role="alert">{notice}</p>}
@@ -198,7 +203,7 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverr
           <h2>Phiếu trả lời</h2><p>{storeOverride?'Bản xem thử chỉ giữ trong bộ nhớ của trang quản trị, không ghi lịch sử học sinh.':'Bài làm và kết quả lưu trên trình duyệt này. Thời gian tiếp tục tính khi bạn rời trang.'}</p>
           <p>{sections.map(s=>`${s.name}: ${s.count} câu`).join(' · ')}</p>
           {persisted.current&&<p>Đã có bài đang làm. Hạn nộp: {new Date(persisted.current.deadline).toLocaleString('vi-VN')}.</p>}
-          <button type="button" className="ep-primary ep-wide" disabled={!pdfReady||!!sourceIssue||!!erratum&&!acceptedErratum||!!newAttemptsClosed&&!persisted.current} onClick={begin}>{sourceIssue?'Chờ đính chính điều kiện':persisted.current?'Tiếp tục làm bài':newAttemptsClosed?'Chờ phản biện · chưa mở lượt mới':'Bắt đầu làm bài'}</button>
+          <button type="button" className="ep-primary ep-wide" disabled={startDisabled} onClick={begin}>{startLabel}</button>
         </section>:<>
           <div className="ep-toolbar ep-answer-toolbar">
             {submitted?<strong role="status">{unsaved?'Đã nộp trên trang · chưa xác nhận lưu':'Đã nộp và lưu kết quả'}</strong>:<><span role="timer" aria-label="Thời gian còn lại" aria-live="off">Còn {Math.floor(seconds/60)}:{String(seconds%60).padStart(2,'0')}</span><span>{answered}/{exam.questions.length} câu đã trả lời đầy đủ{invalidCount>0?` · ${invalidCount} câu sai định dạng`:''}</span></>}

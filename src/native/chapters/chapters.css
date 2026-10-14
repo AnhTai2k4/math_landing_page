@@ -12,3 +12,5 @@
 
 /* KT-06 (Đợt 3): chỗ giữ cho danh sách bài trong lúc ngân hàng đề đang nạp; đủ cao để chân trang không nhảy vào màn hình. */
 .cp-shelf-loading{min-height:60vh;display:flex;align-items:flex-start;justify-content:center;padding-top:48px;color:#56657b;font-size:14px}
+/* LT-15 (Đợt 4): khối giới thiệu đề gọn một dòng, chi tiết mở khi cần. */
+.cp-intake-more summary{display:flex;align-items:center;min-height:44px;cursor:pointer;color:#233463;font-weight:600;text-decoration:underline;text-underline-offset:3px}.cp-intake-more summary:focus-visible{outline:3px solid #d7a93a;outline-offset:3px}.cp-intake-more p{line-height:1.7}@media(max-width:950px){.cp-intake{margin-bottom:12px}.cp-attempt{padding-top:16px}}

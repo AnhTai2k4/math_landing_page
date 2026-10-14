@@ -72,3 +72,5 @@
 .ep-result-nav-wrap h3{font-size:.95rem;margin:12px 0 0}.ep-result-nav-wrap .ep-result-nav{margin:8px 0 12px}
 .ep-tf-empty{display:inline-flex;align-items:center;min-height:44px;padding:0 10px;color:#64748b;font-style:italic}.ep-root .ep-tf-clear{margin-left:6px;border-style:dashed;color:#475569;background:#fff}
 .ep-backup-row{flex-direction:column;align-items:flex-start}.ep-backup{width:100%}.ep-backup p{margin:4px 0 10px;color:#475569}.ep-root .ep-backup summary{font-weight:600;color:#334155}
+/* LT-15 (Đợt 4): nút Bắt đầu ở màn đầu trên màn hẹp; màn rộng giữ nút trong phiếu trả lời như cũ. */
+.ep-mobile-start{display:none}@media(max-width:950px){.ep-mobile-start{display:block;margin:4px 0 16px}.ep-mobile-start .ep-primary{min-height:52px;font-size:1.05rem}.ep-mobile-start p{margin:8px 0 0;font-size:.9rem;line-height:1.6;color:#475569}.ep-attempt>header p{margin:4px 0}.ep-attempt>header h1{font-size:1.3rem;line-height:1.4;margin:6px 0}}
