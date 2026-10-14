@@ -70,12 +70,12 @@
       ],
       "mtmDocuments": {
         "questions": {
-          "url": "/exam-assets/2343fe3fd25e92f04751574d4ef3c51c02f5d5b154adc238966f8f92286bd396.pdf",
-          "sha256": "2343fe3fd25e92f04751574d4ef3c51c02f5d5b154adc238966f8f92286bd396"
+          "url": "/exam-assets/d680fd01e443e625617b049877ae4ff0547dcd9f0d989dff1e0c479e402fe4c2.pdf",
+          "sha256": "d680fd01e443e625617b049877ae4ff0547dcd9f0d989dff1e0c479e402fe4c2"
         },
         "solutions": {
-          "url": "/exam-assets/e45e650c71fe7b7624cc4fde8e28b6395add21b9797eef6c4b4b75090ee9e071.pdf",
-          "sha256": "e45e650c71fe7b7624cc4fde8e28b6395add21b9797eef6c4b4b75090ee9e071"
+          "url": "/exam-assets/2669b3aba83d477cdd00e409eab0e490ee7e57f8cc953ba1374f76d5c563d00e.pdf",
+          "sha256": "2669b3aba83d477cdd00e409eab0e490ee7e57f8cc953ba1374f76d5c563d00e"
         }
       },
       "sections": [
@@ -3566,12 +3566,12 @@
       "versionHash": "d993bb58aa95f66e1c23c4aa73463f407493662654627508ed4e8e30ba6bf11e",
       "mtmDocuments": {
         "questions": {
-          "url": "/exam-assets/029c266268e0527e2fb722bab2a51e9bac4e4179f0467af98717a35a63d3eaea.pdf",
-          "sha256": "029c266268e0527e2fb722bab2a51e9bac4e4179f0467af98717a35a63d3eaea"
+          "url": "/exam-assets/010bae2e85257774f26f472088f46f05ad0514336d8a75b19bd4d140d8ef4a47.pdf",
+          "sha256": "010bae2e85257774f26f472088f46f05ad0514336d8a75b19bd4d140d8ef4a47"
         },
         "solutions": {
-          "url": "/exam-assets/36a38d011f5cee9e4fd788a539e7792ade69c09cc8e461aa44a495cb1eaf6cd9.pdf",
-          "sha256": "36a38d011f5cee9e4fd788a539e7792ade69c09cc8e461aa44a495cb1eaf6cd9"
+          "url": "/exam-assets/270a26a4d04bfbec77cdbc2d38630f563082773c9dc7c2bb4f8fee584bba2595.pdf",
+          "sha256": "270a26a4d04bfbec77cdbc2d38630f563082773c9dc7c2bb4f8fee584bba2595"
         }
       },
       "answerVerificationNote": "Đã đối chiếu nguyên đề, hình/bảng và khóa chấm của bản MTM đính chính; xem ghi chú từng câu sau khi nộp."
@@ -5431,12 +5431,12 @@
       ],
       "mtmDocuments": {
         "questions": {
-          "url": "/exam-assets/cbf48fd85664b2f9c60e172fdd40ac156307654d0bd6220c553fe6c6519f4d8c.pdf",
-          "sha256": "cbf48fd85664b2f9c60e172fdd40ac156307654d0bd6220c553fe6c6519f4d8c"
+          "url": "/exam-assets/fecd8ae6f12a8605651a19963abfa32b0565880ceddd6c8faac39b20e49bcff1.pdf",
+          "sha256": "fecd8ae6f12a8605651a19963abfa32b0565880ceddd6c8faac39b20e49bcff1"
         },
         "solutions": {
-          "url": "/exam-assets/3ae67d7ea3986549d0c64cac559c8265bb7d69c61aa90aef51941dbebc5d6921.pdf",
-          "sha256": "3ae67d7ea3986549d0c64cac559c8265bb7d69c61aa90aef51941dbebc5d6921"
+          "url": "/exam-assets/ea1474da5788beb0ded63ea6882751292e293e48a1d97b99fb9766f54a0b3146.pdf",
+          "sha256": "ea1474da5788beb0ded63ea6882751292e293e48a1d97b99fb9766f54a0b3146"
         }
       },
       "versionHash": "be7a71137e6f5b2cda95d98cdd1bd87f6bed4ea00eb20dd04f82c745bda743ac"
@@ -11024,12 +11024,12 @@
       ],
       "mtmDocuments": {
         "questions": {
-          "url": "/exam-assets/a687b7899893e64eeba95e13fe53f311b28bfd9af2c135d003cd079b3ab26728.pdf",
-          "sha256": "a687b7899893e64eeba95e13fe53f311b28bfd9af2c135d003cd079b3ab26728"
+          "url": "/exam-assets/93d70bda5f5e6f439e5f5c1ea011392f18b6e7522fdf8c923cbeda044a027584.pdf",
+          "sha256": "93d70bda5f5e6f439e5f5c1ea011392f18b6e7522fdf8c923cbeda044a027584"
         },
         "solutions": {
-          "url": "/exam-assets/e947f7e29040cf2882fd7b38df9fa302dc3f91f5389364c9e22b58d26b0befa4.pdf",
-          "sha256": "e947f7e29040cf2882fd7b38df9fa302dc3f91f5389364c9e22b58d26b0befa4"
+          "url": "/exam-assets/a5ec12b4dc5d1c25b5d07d546b75d9b3877942186db401f658d4a41141f82b5e.pdf",
+          "sha256": "a5ec12b4dc5d1c25b5d07d546b75d9b3877942186db401f658d4a41141f82b5e"
         }
       },
       "versionHash": "f0e16ebeae173ae9c90f92930ce81d22f3a9a2dceed4d8d85d7eaf5c303ee2d6"
@@ -14798,13 +14798,13 @@
       ],
       "mtmDocuments": {
         "questions": {
-          "url": "/exam-assets/bf90eeee13c94ee2aad529357a0c094a7a100c7178ced6b63ec91658c492f352.pdf",
-          "sha256": "bf90eeee13c94ee2aad529357a0c094a7a100c7178ced6b63ec91658c492f352",
+          "url": "/exam-assets/84a2c53bc1c01463529d82cf3c34bf80294e4fe711918c40dd9ab42a6c6d6b3e.pdf",
+          "sha256": "84a2c53bc1c01463529d82cf3c34bf80294e4fe711918c40dd9ab42a6c6d6b3e",
           "localPath": "T:\\Work\\MTM\\Website-Native\\work\\practice-v61\\artifacts\\g10-c4-t02\\output\\pdf\\MTM-Toan10-Chuong4-Test02-MTM-v61-question.pdf"
         },
         "solutions": {
-          "url": "/exam-assets/6c38d0d73e0cec8946a4688864ac21dbbd30ccc5fd96fafaeb08bb1208515e87.pdf",
-          "sha256": "6c38d0d73e0cec8946a4688864ac21dbbd30ccc5fd96fafaeb08bb1208515e87",
+          "url": "/exam-assets/ddc3aa6c62544336b11da35d6db0c271bca33a261dd03fd3fff27cfb85f4ae71.pdf",
+          "sha256": "ddc3aa6c62544336b11da35d6db0c271bca33a261dd03fd3fff27cfb85f4ae71",
           "localPath": "T:\\Work\\MTM\\Website-Native\\work\\practice-v61\\artifacts\\g10-c4-t02\\output\\pdf\\MTM-Toan10-Chuong4-Test02-MTM-v61-solution.pdf"
         }
       },
@@ -24349,12 +24349,12 @@
       ],
       "mtmDocuments": {
         "questions": {
-          "url": "/exam-assets/a3136d888c367797e6ae44718aed2d3b936c1ad6120d2a65f3915e6bf19ea989.pdf",
-          "sha256": "a3136d888c367797e6ae44718aed2d3b936c1ad6120d2a65f3915e6bf19ea989"
+          "url": "/exam-assets/986f332fd634b00419c127be5d3c55bfe7be2e538c58b505ed3375c4ee649759.pdf",
+          "sha256": "986f332fd634b00419c127be5d3c55bfe7be2e538c58b505ed3375c4ee649759"
         },
         "solutions": {
-          "url": "/exam-assets/0984b72983fa73589b770e183dc6742cd93fd2bcf50329794c1550f8dcaf3242.pdf",
-          "sha256": "0984b72983fa73589b770e183dc6742cd93fd2bcf50329794c1550f8dcaf3242"
+          "url": "/exam-assets/fb0a0a93794c15d0e906a45924623f675b7de70448f5a32c40f6364de8b1e29f.pdf",
+          "sha256": "fb0a0a93794c15d0e906a45924623f675b7de70448f5a32c40f6364de8b1e29f"
         }
       },
       "preAttemptNotice": "Bản MTM bổ sung yêu cầu làm tròn ở câu III.6. Hãy làm theo nội dung trong đề này; chi tiết đính chính và lời giải được xem sau khi nộp bài.",
@@ -26573,12 +26573,12 @@
       ],
       "mtmDocuments": {
         "questions": {
-          "url": "/exam-assets/653d70a02735a1a896b6c8d91632dac5917c2b33353b7d0aadb210705264ce59.pdf",
-          "sha256": "653d70a02735a1a896b6c8d91632dac5917c2b33353b7d0aadb210705264ce59"
+          "url": "/exam-assets/8d7f3f0b7a4e7c41e46dcaf807690a9c0a54119b683b256baad84b09ca2f6a3e.pdf",
+          "sha256": "8d7f3f0b7a4e7c41e46dcaf807690a9c0a54119b683b256baad84b09ca2f6a3e"
         },
         "solutions": {
-          "url": "/exam-assets/888d6129d1ca880e4b776ebf4c8f5d75f7175b6ba22744ed9404ec485d79db39.pdf",
-          "sha256": "888d6129d1ca880e4b776ebf4c8f5d75f7175b6ba22744ed9404ec485d79db39"
+          "url": "/exam-assets/53498e489a6024ab3e5fef2c2e6850fbd2f8f7c4df68e1e06981ca388e7f3c68.pdf",
+          "sha256": "53498e489a6024ab3e5fef2c2e6850fbd2f8f7c4df68e1e06981ca388e7f3c68"
         }
       },
       "preAttemptNotice": "Bản MTM ghi rõ điều kiện của đề nguồn ở câu II.3 (ý c) và câu III.1. Hãy làm theo nội dung trong đề này; chi tiết đính chính và lời giải được xem sau khi nộp bài.",
@@ -28843,12 +28843,12 @@
       ],
       "mtmDocuments": {
         "questions": {
-          "url": "/exam-assets/452b5d1a43fe0de446d74965e510a5e62d5015f0e6c499b47c263b8462ca73ef.pdf",
-          "sha256": "452b5d1a43fe0de446d74965e510a5e62d5015f0e6c499b47c263b8462ca73ef"
+          "url": "/exam-assets/4d01226fedb1420bc9041f5ba08e7632bc5848d7ea75548c251f94623fe9c578.pdf",
+          "sha256": "4d01226fedb1420bc9041f5ba08e7632bc5848d7ea75548c251f94623fe9c578"
         },
         "solutions": {
-          "url": "/exam-assets/8bacc19e9afacd5f00db71ad190b22ceb3279617fdb908440be805331c90843d.pdf",
-          "sha256": "8bacc19e9afacd5f00db71ad190b22ceb3279617fdb908440be805331c90843d"
+          "url": "/exam-assets/abd7e16d0f8cc485242b151ee254135d1d6b14c4545e0ddfa0e7202a139ed9f8.pdf",
+          "sha256": "abd7e16d0f8cc485242b151ee254135d1d6b14c4545e0ddfa0e7202a139ed9f8"
         }
       },
       "versionHash": "1b1a68666e4d5ca30e0c36299c2fa2e8681b5459f9896ba875f12e79f0f80fd0"
@@ -31036,12 +31036,12 @@
       ],
       "mtmDocuments": {
         "questions": {
-          "url": "/exam-assets/ca3d2c2b75e1b341dfedfa96ce1b51fbb982afe021c443d16f98e538fcfd856c.pdf",
-          "sha256": "ca3d2c2b75e1b341dfedfa96ce1b51fbb982afe021c443d16f98e538fcfd856c"
+          "url": "/exam-assets/3f64755bd22a074b078d9c070e3ccfa9f9692ffb6f9d5ce96b18c9d45ab92138.pdf",
+          "sha256": "3f64755bd22a074b078d9c070e3ccfa9f9692ffb6f9d5ce96b18c9d45ab92138"
         },
         "solutions": {
-          "url": "/exam-assets/dc2188ec3f2c0173e37fd7a9c17b1040ce3388a29953fefed8469686b56b31c0.pdf",
-          "sha256": "dc2188ec3f2c0173e37fd7a9c17b1040ce3388a29953fefed8469686b56b31c0"
+          "url": "/exam-assets/2c0c16c1b75e9242a7c71398bb55c25f8aab94c811a0681680e0f1dcc7e339c7.pdf",
+          "sha256": "2c0c16c1b75e9242a7c71398bb55c25f8aab94c811a0681680e0f1dcc7e339c7"
         }
       },
       "preAttemptNotice": "Bản MTM ghi rõ một lỗi gõ của đề nguồn ở câu I.9; hãy làm theo nội dung trong đề này. Chi tiết đính chính và lời giải được xem sau khi nộp bài.",
@@ -35540,12 +35540,12 @@
       ],
       "mtmDocuments": {
         "questions": {
-          "url": "/exam-assets/2612a0b117e316b0a42bb1207b374bbe89aec7cc8dd1ad741e7348016dce4396.pdf",
-          "sha256": "2612a0b117e316b0a42bb1207b374bbe89aec7cc8dd1ad741e7348016dce4396"
+          "url": "/exam-assets/c37de441291ca420632dd2d3fae97c034a37bd83c9623fdf0f4a7c1c39a6744e.pdf",
+          "sha256": "c37de441291ca420632dd2d3fae97c034a37bd83c9623fdf0f4a7c1c39a6744e"
         },
         "solutions": {
-          "url": "/exam-assets/67a375d2b99d9142d1ea901e47acbcf9243805746fe6a0ab143f9811fdd4e8d0.pdf",
-          "sha256": "67a375d2b99d9142d1ea901e47acbcf9243805746fe6a0ab143f9811fdd4e8d0"
+          "url": "/exam-assets/d72d5ca33737b92e13f5507b3584f0e791eae4397de7bc550f3888a4eee55809.pdf",
+          "sha256": "d72d5ca33737b92e13f5507b3584f0e791eae4397de7bc550f3888a4eee55809"
         }
       },
       "preAttemptNotice": "Bản MTM bổ sung một dữ kiện bị thiếu của đề nguồn ở câu II.2; hãy làm theo nội dung trong đề này. Chi tiết đính chính và lời giải được xem sau khi nộp bài.",
@@ -39960,12 +39960,12 @@
       ],
       "mtmDocuments": {
         "questions": {
-          "url": "/exam-assets/e771e4d864d1ba50911732c5f5d83b24c2c3f0d91ad9ad5102d175cdf1c62b28.pdf",
-          "sha256": "e771e4d864d1ba50911732c5f5d83b24c2c3f0d91ad9ad5102d175cdf1c62b28"
+          "url": "/exam-assets/bc0eb48ef572a680ce580469bb445201ed28986b2eef8b7cd186c06ffce699d2.pdf",
+          "sha256": "bc0eb48ef572a680ce580469bb445201ed28986b2eef8b7cd186c06ffce699d2"
         },
         "solutions": {
-          "url": "/exam-assets/b0e69856f1871b4f4a03eb812df5952ce3ed4402aead0fef942d9458a7774078.pdf",
-          "sha256": "b0e69856f1871b4f4a03eb812df5952ce3ed4402aead0fef942d9458a7774078"
+          "url": "/exam-assets/3df893cd62d5e37e9f5fac6b55728e3bf9df6f2c2d5815fa2b140fdde78d5ac5.pdf",
+          "sha256": "3df893cd62d5e37e9f5fac6b55728e3bf9df6f2c2d5815fa2b140fdde78d5ac5"
         }
       },
       "preAttemptNotice": "Bản MTM ghi rõ một lỗi gõ của đề nguồn ở câu II.4 ý d; hãy làm theo nội dung trong đề này. Chi tiết đính chính và lời giải được xem sau khi nộp bài.",
@@ -55502,12 +55502,12 @@
       ],
       "mtmDocuments": {
         "questions": {
-          "url": "/exam-assets/56c534865086a7fe006e3330b13eb7f3f527352e24c3a9861b63404e5e49b0ed.pdf",
-          "sha256": "56c534865086a7fe006e3330b13eb7f3f527352e24c3a9861b63404e5e49b0ed"
+          "url": "/exam-assets/30954b0176724d5b503f9b731dc3e9423472e69a50755f1c8b116e047c5ac023.pdf",
+          "sha256": "30954b0176724d5b503f9b731dc3e9423472e69a50755f1c8b116e047c5ac023"
         },
         "solutions": {
-          "url": "/exam-assets/007ddecfa4967bb399c56185fc9bebc3852292a4994cfd555f8350003de3f71c.pdf",
-          "sha256": "007ddecfa4967bb399c56185fc9bebc3852292a4994cfd555f8350003de3f71c"
+          "url": "/exam-assets/d2455b6b645ad8428348957d595021df44ec65d5bf133345ef8e600905de25c2.pdf",
+          "sha256": "d2455b6b645ad8428348957d595021df44ec65d5bf133345ef8e600905de25c2"
         }
       },
       "versionHash": "792fa457114ca67b426ebf611da7d8e7d403a9d10ed7761a0b8176c99a0af099"
@@ -56413,12 +56413,12 @@
       ],
       "mtmDocuments": {
         "questions": {
-          "url": "/exam-assets/49c6a92ea7ed1ee397e55e4f44e7be950bbbdde06fc1b6f85ad8b6225c59419c.pdf",
-          "sha256": "49c6a92ea7ed1ee397e55e4f44e7be950bbbdde06fc1b6f85ad8b6225c59419c"
+          "url": "/exam-assets/ae233422281a7e98be8c6b664512e14fc946aa0422bbff8c2d319626a54a8ed3.pdf",
+          "sha256": "ae233422281a7e98be8c6b664512e14fc946aa0422bbff8c2d319626a54a8ed3"
         },
         "solutions": {
-          "url": "/exam-assets/532bd7a6f030659ddac6b47457ffcd3a93fb77e2b67f7a3c6d50a2354336f053.pdf",
-          "sha256": "532bd7a6f030659ddac6b47457ffcd3a93fb77e2b67f7a3c6d50a2354336f053"
+          "url": "/exam-assets/ef903951aaa193aaabbc17003aa19b92a210946d3ab487a8cb895d9528c47d05.pdf",
+          "sha256": "ef903951aaa193aaabbc17003aa19b92a210946d3ab487a8cb895d9528c47d05"
         }
       },
       "versionHash": "0107cae2b1ba82c19fd3d6bf6a9a19ddbbf1969e7e684c255a80e6c84e1ffac7"
@@ -88176,12 +88176,12 @@
       ],
       "mtmDocuments": {
         "questions": {
-          "url": "/exam-assets/eaf4684b0c06bf9b6971f4f834086f3d08e5e5f67bd835e09015fe251975d117.pdf",
-          "sha256": "eaf4684b0c06bf9b6971f4f834086f3d08e5e5f67bd835e09015fe251975d117"
+          "url": "/exam-assets/4b25ff2b71515ec0f5ac25c9f2e9444151bee3bed936dc1ab3997567617ce29e.pdf",
+          "sha256": "4b25ff2b71515ec0f5ac25c9f2e9444151bee3bed936dc1ab3997567617ce29e"
         },
         "solutions": {
-          "url": "/exam-assets/c670fd546ff4249fc4c60a0e285979360229706d3ea02093230f0cbefa297463.pdf",
-          "sha256": "c670fd546ff4249fc4c60a0e285979360229706d3ea02093230f0cbefa297463"
+          "url": "/exam-assets/8cf9d34991a95e44aed9b34d640e823d5ccca84764a50440b4ef4aa4713a84a6.pdf",
+          "sha256": "8cf9d34991a95e44aed9b34d640e823d5ccca84764a50440b4ef4aa4713a84a6"
         }
       },
       "versionHash": "493e85fa91d9e6a29ba578660bc95f5557ed811094f6f2d379f182fe81e19c9c"
@@ -91809,12 +91809,12 @@
       ],
       "mtmDocuments": {
         "questions": {
-          "url": "/exam-assets/1ab38a42e9410f930fbe9c5008c37d8dac306e8e5c218a53f32abf510ac5095d.pdf",
-          "sha256": "1ab38a42e9410f930fbe9c5008c37d8dac306e8e5c218a53f32abf510ac5095d"
+          "url": "/exam-assets/529c4d587e2de730ce49eb16048d987de36213748fc7dd6b752b29f13142c7cd.pdf",
+          "sha256": "529c4d587e2de730ce49eb16048d987de36213748fc7dd6b752b29f13142c7cd"
         },
         "solutions": {
-          "url": "/exam-assets/08cecb012fdb6c87d31d6dd45f028cc559a50eb0e515ef44f1795d92d0347dc7.pdf",
-          "sha256": "08cecb012fdb6c87d31d6dd45f028cc559a50eb0e515ef44f1795d92d0347dc7"
+          "url": "/exam-assets/342283d921eabb61b474cc9847f76ef80842b6b04cd4cb6dee7a70db323d9051.pdf",
+          "sha256": "342283d921eabb61b474cc9847f76ef80842b6b04cd4cb6dee7a70db323d9051"
         }
       },
       "preAttemptNotice": "Bản MTM làm rõ đề câu I.10; hãy làm theo nội dung trong đề này. Chi tiết đính chính và lời giải được xem sau khi nộp bài.",
@@ -95589,12 +95589,12 @@
       ],
       "mtmDocuments": {
         "questions": {
-          "url": "/exam-assets/2b494c64f81c1bc3c1574d8c73d9947112f05225c9ba0c4d7caa176520baac39.pdf",
-          "sha256": "2b494c64f81c1bc3c1574d8c73d9947112f05225c9ba0c4d7caa176520baac39"
+          "url": "/exam-assets/85769c091a9460ee4be4d0c4c5975dfdbe3baf746168bf83ecee34dbfa93b3c9.pdf",
+          "sha256": "85769c091a9460ee4be4d0c4c5975dfdbe3baf746168bf83ecee34dbfa93b3c9"
         },
         "solutions": {
-          "url": "/exam-assets/2fa387b647669ac8246a765ee6733e40b0b201979b2cc144c68c4e89d074f398.pdf",
-          "sha256": "2fa387b647669ac8246a765ee6733e40b0b201979b2cc144c68c4e89d074f398"
+          "url": "/exam-assets/771ad5d7aebf52601be5b043041b4528441e5028603c1b067ac675dbb0eaf4a4.pdf",
+          "sha256": "771ad5d7aebf52601be5b043041b4528441e5028603c1b067ac675dbb0eaf4a4"
         }
       },
       "preAttemptNotice": "Bản MTM có ghi chú làm rõ ở câu I.4; hãy làm theo nội dung trong đề này. Chi tiết đính chính và lời giải được xem sau khi nộp bài.",
@@ -105150,12 +105150,12 @@
       ],
       "mtmDocuments": {
         "questions": {
-          "url": "/exam-assets/66f06f668443e672f0201cade8f84f30d5e7dbbfc31665446fbf98fae293357b.pdf",
-          "sha256": "66f06f668443e672f0201cade8f84f30d5e7dbbfc31665446fbf98fae293357b"
+          "url": "/exam-assets/25d2174dba4ac314bf7b82fad6be76005e3397d468a62f4d28143d60358d009f.pdf",
+          "sha256": "25d2174dba4ac314bf7b82fad6be76005e3397d468a62f4d28143d60358d009f"
         },
         "solutions": {
-          "url": "/exam-assets/9a18ad10aed2ddaab4da3cb40ce8df1b2cef5bc80708a63b34205f62ee434bdc.pdf",
-          "sha256": "9a18ad10aed2ddaab4da3cb40ce8df1b2cef5bc80708a63b34205f62ee434bdc"
+          "url": "/exam-assets/1edac0858223720f2b8c49558934b361cafc45695c50ddd33fc64211d1cc3ded.pdf",
+          "sha256": "1edac0858223720f2b8c49558934b361cafc45695c50ddd33fc64211d1cc3ded"
         }
       },
       "preAttemptNotice": "Bản MTM có ghi chú ở câu I.9, I.12, II.1 và đánh lại nhãn Câu 6 Phần III (đề nguồn in \"Câu 22\"); hãy làm theo nội dung và ghi chú trong đề này. Chi tiết đính chính và lời giải được xem sau khi nộp bài.",
@@ -107129,12 +107129,12 @@
       ],
       "mtmDocuments": {
         "questions": {
-          "url": "/exam-assets/120cba14e5de9153e34178f10f740d248000a7d17291aab8bfa1b34b58f013fd.pdf",
-          "sha256": "120cba14e5de9153e34178f10f740d248000a7d17291aab8bfa1b34b58f013fd"
+          "url": "/exam-assets/4475683c6ca32843c1c4f54ef6df3d6fa84c70cfcbf775f1190a2383a4e15599.pdf",
+          "sha256": "4475683c6ca32843c1c4f54ef6df3d6fa84c70cfcbf775f1190a2383a4e15599"
         },
         "solutions": {
-          "url": "/exam-assets/84ac98589148a0863e27f56b6f829ab9be0a28ab636c2fd48b846bc9ddb08f87.pdf",
-          "sha256": "84ac98589148a0863e27f56b6f829ab9be0a28ab636c2fd48b846bc9ddb08f87"
+          "url": "/exam-assets/600249f89f1e043da10738216bcbd0b32c594260e22588e6ab45698a143aafa6.pdf",
+          "sha256": "600249f89f1e043da10738216bcbd0b32c594260e22588e6ab45698a143aafa6"
         }
       },
       "preAttemptNotice": "Bản MTM hiệu chỉnh phương án ở câu I.6, I.10 và ghi rõ cách hiểu ở câu II.1, II.2, III.4, III.5. Hãy làm theo nội dung trong đề này; chi tiết đính chính và lời giải được xem sau khi nộp bài.",
@@ -109010,12 +109010,12 @@
       ],
       "mtmDocuments": {
         "questions": {
-          "url": "/exam-assets/7397e4b90defe714a0935a9f30ee5e457f7612bddcd6b21f50c181624ba1a989.pdf",
-          "sha256": "7397e4b90defe714a0935a9f30ee5e457f7612bddcd6b21f50c181624ba1a989"
+          "url": "/exam-assets/4a1ada0c2ef4327cc9723373711a60c69ee502bde6e8a2649f5bc72ec08e2c5f.pdf",
+          "sha256": "4a1ada0c2ef4327cc9723373711a60c69ee502bde6e8a2649f5bc72ec08e2c5f"
         },
         "solutions": {
-          "url": "/exam-assets/b7ba08cc88f1c84ac07576f1150b03738fc03548dbe5489874310fce27fa4728.pdf",
-          "sha256": "b7ba08cc88f1c84ac07576f1150b03738fc03548dbe5489874310fce27fa4728"
+          "url": "/exam-assets/94943df06bc1c518e91140828ebfb1eb70dd33bd4a809929e9836a33d77c5492.pdf",
+          "sha256": "94943df06bc1c518e91140828ebfb1eb70dd33bd4a809929e9836a33d77c5492"
         }
       },
       "versionHash": "31eb34c7a030e25204be9be7dcdf26ebaeca253a0dd70969e3824d96d4ca431b"
@@ -110898,12 +110898,12 @@
       ],
       "mtmDocuments": {
         "questions": {
-          "url": "/exam-assets/042c4d67f2cf65b445046ddd2642da53ed3425ce8b142aa0aafd6111f9360f54.pdf",
-          "sha256": "042c4d67f2cf65b445046ddd2642da53ed3425ce8b142aa0aafd6111f9360f54"
+          "url": "/exam-assets/ce32c56d50ed9a1d97bf04ad4c1238f0b4766ada6dd05b2ec425d32a0035a7d3.pdf",
+          "sha256": "ce32c56d50ed9a1d97bf04ad4c1238f0b4766ada6dd05b2ec425d32a0035a7d3"
         },
         "solutions": {
-          "url": "/exam-assets/c96e5c8f222c10ebcec33cdc1e5b9d3b47db50d0d5c99071f48108ef7ff67ac6.pdf",
-          "sha256": "c96e5c8f222c10ebcec33cdc1e5b9d3b47db50d0d5c99071f48108ef7ff67ac6"
+          "url": "/exam-assets/d5d5a2b4ddba183cb22788a7a0a7551ebcf8cca8ec7660ad5fa1737b83eec884.pdf",
+          "sha256": "d5d5a2b4ddba183cb22788a7a0a7551ebcf8cca8ec7660ad5fa1737b83eec884"
         }
       },
       "preAttemptNotice": "Bản MTM ghi chú cách in ký hiệu ở câu I.7; hãy làm theo nội dung trong đề này. Chi tiết đính chính và lời giải được xem sau khi nộp bài.",
@@ -112807,12 +112807,12 @@
       ],
       "mtmDocuments": {
         "questions": {
-          "url": "/exam-assets/84026564d02e9071dbfe64faa62a3d5de34952ef413a9211e75315b9f2fa4a36.pdf",
-          "sha256": "84026564d02e9071dbfe64faa62a3d5de34952ef413a9211e75315b9f2fa4a36"
+          "url": "/exam-assets/d889a3673c9544b4202e459c90cad99cb5b26c9c795c64d78ae7bdecb6a918b6.pdf",
+          "sha256": "d889a3673c9544b4202e459c90cad99cb5b26c9c795c64d78ae7bdecb6a918b6"
         },
         "solutions": {
-          "url": "/exam-assets/b5606385257c4a0ec1e45b674129f0abaeed9efb1442f5f63e99566049dd8dab.pdf",
-          "sha256": "b5606385257c4a0ec1e45b674129f0abaeed9efb1442f5f63e99566049dd8dab"
+          "url": "/exam-assets/4f36b628a23d269af54763629e678fd0d2dde07ad22d652551168b37a7dc024f.pdf",
+          "sha256": "4f36b628a23d269af54763629e678fd0d2dde07ad22d652551168b37a7dc024f"
         }
       },
       "preAttemptNotice": "Bản MTM ghi rõ nhãn câu ở Phần III (đề nguồn in đảo nhãn \"Câu 6\" và \"Câu 5\") và làm rõ hình vẽ câu I.4. Hãy làm theo nội dung trong đề này. Chi tiết đính chính và lời giải được xem sau khi nộp bài.",
@@ -114692,12 +114692,12 @@
       ],
       "mtmDocuments": {
         "questions": {
-          "url": "/exam-assets/5086b263cad317131aa0614fcf86e090d3c74425cba3d8f66eea4e402f82f3a2.pdf",
-          "sha256": "5086b263cad317131aa0614fcf86e090d3c74425cba3d8f66eea4e402f82f3a2"
+          "url": "/exam-assets/d86f076963179243777917dac550cfca78ef51da1b7c6c9aa4954742ac3b9419.pdf",
+          "sha256": "d86f076963179243777917dac550cfca78ef51da1b7c6c9aa4954742ac3b9419"
         },
         "solutions": {
-          "url": "/exam-assets/e0a9bca8ba56ce2dd0a842c9118bb55da11eecfd5b8be341dbe8b533d081d430.pdf",
-          "sha256": "e0a9bca8ba56ce2dd0a842c9118bb55da11eecfd5b8be341dbe8b533d081d430"
+          "url": "/exam-assets/40fb83837fc48f103841ca8f40f6ceb3ae8195c6b57cf2dacf7f52e063e10c6a.pdf",
+          "sha256": "40fb83837fc48f103841ca8f40f6ceb3ae8195c6b57cf2dacf7f52e063e10c6a"
         }
       },
       "preAttemptNotice": "Bản MTM ghi chú câu I.3, câu II.4 ý c) và làm rõ cách hiểu câu III.4; hãy làm theo nội dung trong đề này. Chi tiết đính chính và lời giải được xem sau khi nộp bài.",
@@ -119826,12 +119826,12 @@
       ],
       "mtmDocuments": {
         "questions": {
-          "url": "/exam-assets/773c15e2e0563000ce0966b280ba7c4f1f29003fa0cab33a41a5fbf355e22483.pdf",
-          "sha256": "773c15e2e0563000ce0966b280ba7c4f1f29003fa0cab33a41a5fbf355e22483"
+          "url": "/exam-assets/a6614cfbe5c4c2e93a3668153a597a6346f410f6bfc5b84a0bffa2cebb243ae7.pdf",
+          "sha256": "a6614cfbe5c4c2e93a3668153a597a6346f410f6bfc5b84a0bffa2cebb243ae7"
         },
         "solutions": {
-          "url": "/exam-assets/7e61673e7c911c4a4a1888fac64fee4d63327f8077aa177da18319015b875ff4.pdf",
-          "sha256": "7e61673e7c911c4a4a1888fac64fee4d63327f8077aa177da18319015b875ff4"
+          "url": "/exam-assets/752b0326d554726807a85fac845dae907443aabc8a9631d6fec66a0a893a79e5.pdf",
+          "sha256": "752b0326d554726807a85fac845dae907443aabc8a9631d6fec66a0a893a79e5"
         }
       },
       "preAttemptNotice": "Bản MTM ghi chú câu I.4, I.6, I.8 và làm rõ cách ghi đáp số câu III.6; hãy làm theo nội dung trong đề này. Chi tiết đính chính và lời giải được xem sau khi nộp bài.",

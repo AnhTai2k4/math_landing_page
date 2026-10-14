@@ -81,3 +81,8 @@
 .mtm-community-photo figcaption small{font-size:13px;color:#52617f;margin-left:auto}
 .mtm-community-photo a:focus-visible{outline:4px solid #bf8500;outline-offset:-4px}
 @media(max-width:767px){.mtm-hero-community .mtm-lead{font-size:16px}.mtm-hero-community .mtm-hero-grid{grid-template-columns:1fr;gap:25px}.mtm-hero-community .mtm-community-photo{border-radius:18px;box-shadow:4px 5px 0 #e7edf8}.mtm-community-photo>a{aspect-ratio:16/9}.mtm-community-photo figcaption{padding:16px;gap:10px}.mtm-community-photo figcaption strong{font-size:18px}.mtm-community-photo figcaption small{margin-left:0}}
+
+/* Lộ trình chương: tiêu đề nhóm bài học/chuyên đề (V75) */
+.cp-route-group{margin-top:1.25rem}
+.cp-route-group>h4{font-weight:700;font-size:1.05rem;color:var(--mtm-navy,#233463);margin:0 0 .25rem}
+.cp-route-group>p{margin:0 0 .75rem;opacity:.8}

@@ -1,62 +1,572 @@
 {
-  "10:1": [
-    "mtm-practice-g10-c1-foundation-v1",
-    "mtm-drive-g10-c1-t01-mtm-errata-v1",
-    "mtm-drive-g10-c1-t02-mtm-errata-v1",
-    "mtm-src-g10-c1-s01-v1",
-    "mtm-drive-g10-c1-t03-mtm-errata-v1",
-    "mtm-drive-g10-c1-t04-mtm-errata-v1",
-    "mtm-src-g10-c1-s02-v1",
-    "mtm-src-g10-c1-s03-v1",
-    "mtm-drive-g10-c1-t05-mtm-errata-v1",
-    "mtm-drive-g10-c1-t06-mtm-errata-v1",
-    "mtm-src-g10-c1-s04-v1"
-  ],
-  "10:2": [
-    "mtm-practice-g10-c2-b01-v1",
-    "mtm-src-g10-c2-s01-v1",
-    "mtm-src-g10-c2-s02-v1",
-    "mtm-drive-g10-c2-t01-mtm-errata-v1",
-    "mtm-drive-g10-c2-t02-mtm-errata-v56",
-    "mtm-drive-g10-c2-t03-mtm-errata-v62",
-    "mtm-drive-g10-c2-t04-mtm-errata-v63",
-    "mtm-src-g10-c2-s03-v1",
-    "mtm-src-g10-c2-s04-v1",
-    "mtm-src-g10-c2-s05-v1"
-  ],
-  "10:3": [
-    "mtm-practice-g10-c3-b01-v1",
-    "mtm-drive-g10-c3-t01-mtm-errata-v1",
-    "mtm-drive-g10-c3-t02-mtm-errata-v57",
-    "mtm-src-g10-c3-s01-v1",
-    "mtm-drive-g10-c3-t03-mtm-errata-v60",
-    "mtm-drive-g10-c3-t04-mtm-v1",
-    "mtm-drive-g10-c3-t05-mtm-v1",
-    "mtm-drive-g10-c3-t06-mtm-v1",
-    "mtm-src-g10-c3-s02-v1",
-    "mtm-src-g10-c3-s03-v1",
-    "mtm-src-g10-c3-s04-v1"
-  ],
-  "10:4": [
-    "mtm-practice-g10-c4-b01-v1",
-    "mtm-practice-g10-c4-b02-v1",
-    "mtm-drive-g10-c4-t01-mtm-errata-v1",
-    "mtm-drive-g10-c4-t02-mtm-errata-v61",
-    "mtm-src-g10-c4-s01-v1",
-    "mtm-drive-g10-c4-t03-mtm-v1",
-    "mtm-drive-g10-c4-t04-mtm-v1",
-    "mtm-src-g10-c4-s02-v1",
-    "mtm-practice-g10-c4-d01-v1",
-    "mtm-drive-g10-c4-t05-mtm-v1",
-    "mtm-drive-g10-c4-t06-mtm-v1",
-    "mtm-src-g10-c4-s03-v1",
-    "mtm-drive-g10-c4-t07-mtm-v1",
-    "mtm-drive-g10-c4-t08-mtm-v1",
-    "mtm-practice-g10-c4-d02-v1",
-    "mtm-drive-g10-c4-t09-mtm-v1",
-    "mtm-drive-g10-c4-t10-mtm-v1",
-    "mtm-practice-g10-c4-d03-v1",
-    "mtm-drive-g10-c4-t11-mtm-v1",
-    "mtm-drive-g10-c4-t12-mtm-v1"
-  ]
+  "10:1": {
+    "groups": [
+      {
+        "title": "Hệ thống công thức và lý thuyết",
+        "items": [
+          {
+            "id": "mtm-practice-g10-c1-foundation-v1"
+          }
+        ]
+      },
+      {
+        "title": "Mệnh đề (SGK bài 1)",
+        "note": "Các đề trong nhóm xếp từ dễ đến khó.",
+        "items": [
+          {
+            "id": "mtm-drive-g10-c1-t01-mtm-errata-v1",
+            "dangs": [
+              "nhận biết mệnh đề, mệnh đề chứa biến",
+              "mệnh đề phủ định và lượng từ",
+              "mệnh đề đảo, điều kiện cần và đủ",
+              "xét tính đúng sai mệnh đề có lượng từ"
+            ]
+          },
+          {
+            "id": "mtm-drive-g10-c1-t02-mtm-errata-v1",
+            "dangs": [
+              "mệnh đề chứa biến, mệnh đề toán học",
+              "phủ định mệnh đề có lượng từ",
+              "mệnh đề kéo theo, tương đương, đảo",
+              "đếm mệnh đề đúng sai (số học, hình học)"
+            ]
+          },
+          {
+            "id": "mtm-src-g10-c1-s01-v1",
+            "dangs": [
+              "xác định mệnh đề, mệnh đề toán học",
+              "phủ định, mệnh đề đảo, điều kiện cần đủ",
+              "kí hiệu với mọi, tồn tại",
+              "suy luận logic tìm mật khẩu"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Tập hợp và các phép toán trên tập hợp (SGK bài 2)",
+        "note": "Các đề trong nhóm xếp từ dễ đến khó.",
+        "items": [
+          {
+            "id": "mtm-drive-g10-c1-t03-mtm-errata-v1",
+            "dangs": [
+              "liệt kê phần tử, tập con",
+              "phép toán giao hợp hiệu trên khoảng đoạn",
+              "phần bù, biểu diễn trục số",
+              "bài toán đếm bằng biểu đồ Ven"
+            ]
+          },
+          {
+            "id": "mtm-src-g10-c1-s02-v1",
+            "dangs": [
+              "liệt kê phần tử, biểu diễn khoảng đoạn",
+              "phép toán giao hợp hiệu, phần bù",
+              "tập con và điều kiện tham số m",
+              "bài toán đếm số ngày mưa nắng"
+            ]
+          },
+          {
+            "id": "mtm-drive-g10-c1-t04-mtm-errata-v1",
+            "dangs": [
+              "số tập con, tập hợp bằng nhau",
+              "phép toán trên khoảng đoạn và biểu đồ Ven",
+              "phần bù, hiệu tập hợp",
+              "bài toán đếm hai và ba tập hợp"
+            ]
+          },
+          {
+            "id": "mtm-src-g10-c1-s03-v1",
+            "dangs": [
+              "tập hợp liệt kê, số tập con",
+              "biểu đồ Ven và phép toán",
+              "tham số m với giao hợp khoảng",
+              "bài toán đếm ba môn thể thao, khảo sát"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Kiểm tra cuối chương",
+        "note": "Các đề trong nhóm xếp từ dễ đến khó.",
+        "items": [
+          {
+            "id": "mtm-src-g10-c1-s04-v1",
+            "dangs": [
+              "mệnh đề, điều kiện cần đủ",
+              "tập hợp, tập con, số phần tử",
+              "tham số m với khoảng đoạn",
+              "đếm bằng Ven hai và ba tập hợp"
+            ]
+          },
+          {
+            "id": "mtm-drive-g10-c1-t05-mtm-errata-v1",
+            "dangs": [
+              "mệnh đề, phủ định, điều kiện cần đủ",
+              "tập hợp bằng nhau, khoảng đoạn",
+              "phép toán trên tập hợp, phần bù",
+              "bài toán đếm với biểu đồ Ven"
+            ]
+          },
+          {
+            "id": "mtm-drive-g10-c1-t06-mtm-errata-v1",
+            "dangs": [
+              "mệnh đề, lượng từ, đảo, tương đương",
+              "phép toán tập hợp với đa thức",
+              "tham số m với khoảng và đoạn",
+              "đếm ba tập hợp, hệ điều kiện số học sinh"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "10:2": {
+    "groups": [
+      {
+        "title": "Hệ thống công thức và lý thuyết",
+        "items": [
+          {
+            "id": "mtm-practice-g10-c2-b01-v1"
+          }
+        ]
+      },
+      {
+        "title": "Bất phương trình bậc nhất hai ẩn (SGK bài 3)",
+        "note": null,
+        "items": [
+          {
+            "id": "mtm-src-g10-c2-s01-v1",
+            "dangs": [
+              "nhận biết bất phương trình bậc nhất hai ẩn, nghiệm",
+              "miền nghiệm và bờ miền nghiệm",
+              "chọn bất phương trình từ hình vẽ",
+              "lập bất phương trình từ tình huống thực tế"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Hệ bất phương trình bậc nhất hai ẩn (SGK bài 4)",
+        "note": "Các đề trong nhóm xếp từ dễ đến khó.",
+        "items": [
+          {
+            "id": "mtm-drive-g10-c2-t01-mtm-errata-v1",
+            "dangs": [
+              "xét điểm thuộc miền nghiệm, chọn hình biểu diễn",
+              "hệ bất phương trình từ hình vẽ",
+              "tìm GTLN GTNN biểu thức trên miền",
+              "bài toán thuê xe, sản xuất tối ưu"
+            ]
+          },
+          {
+            "id": "mtm-drive-g10-c2-t02-mtm-errata-v56",
+            "dangs": [
+              "nhận biết bất phương trình và hệ bậc nhất hai ẩn",
+              "miền nghiệm trên hình, miền tam giác",
+              "tham số m để là hệ bậc nhất hai ẩn",
+              "bài toán tối ưu: thuê xe, thực phẩm, trồng trọt"
+            ]
+          },
+          {
+            "id": "mtm-src-g10-c2-s02-v1",
+            "dangs": [
+              "nghiệm và miền nghiệm của hệ",
+              "nhận biết hệ bậc nhất hai ẩn, chọn hệ từ hình",
+              "tìm GTLN GTNN trên miền đa giác",
+              "bài toán tối ưu thực tế quy hoạch tuyến tính"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Luyện chung các bài trong chương",
+        "note": "Các đề trong nhóm xếp từ dễ đến khó.",
+        "items": [
+          {
+            "id": "mtm-drive-g10-c2-t03-mtm-errata-v62",
+            "dangs": [
+              "nghiệm và miền nghiệm của bất phương trình, hệ",
+              "tham số m để là bất phương trình bậc nhất hai ẩn",
+              "lập bất phương trình từ tình huống mua sắm",
+              "bài toán tối ưu sản xuất, pha chế, điểm thưởng"
+            ]
+          },
+          {
+            "id": "mtm-drive-g10-c2-t04-mtm-errata-v63",
+            "dangs": [
+              "nghiệm, miền nghiệm của bất phương trình và hệ",
+              "lập bất phương trình từ thực tế",
+              "miền nghiệm là đa giác, tính diện tích",
+              "tối ưu quảng cáo, đầu tư, nông nghiệp"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Kiểm tra cuối chương",
+        "note": "Các đề trong nhóm xếp từ dễ đến khó.",
+        "items": [
+          {
+            "id": "mtm-src-g10-c2-s03-v1",
+            "dangs": [
+              "nghiệm và miền nghiệm của bất phương trình",
+              "hệ bất phương trình từ hình vẽ",
+              "lập bất phương trình từ cước viễn thông, mua sắm",
+              "tối ưu đa giác miền nghiệm, xưởng sản xuất"
+            ]
+          },
+          {
+            "id": "mtm-src-g10-c2-s04-v1",
+            "dangs": [
+              "lý thuyết bất phương trình bậc nhất hai ẩn",
+              "nghiệm và miền nghiệm của hệ",
+              "tìm cực trị F(x;y) trên đa giác",
+              "bài toán thực tế: thuê ghe, kim cương, thực phẩm"
+            ]
+          },
+          {
+            "id": "mtm-src-g10-c2-s05-v1",
+            "dangs": [
+              "nhận biết bất phương trình, hệ bậc nhất hai ẩn",
+              "điểm thuộc miền nghiệm, miền nghiệm từ hình",
+              "tham số m với bất phương trình bậc nhất hai ẩn",
+              "tối ưu sản xuất, đếm đỉnh đa giác miền nghiệm"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "10:3": {
+    "groups": [
+      {
+        "title": "Hệ thống công thức và lý thuyết",
+        "items": [
+          {
+            "id": "mtm-practice-g10-c3-b01-v1"
+          }
+        ]
+      },
+      {
+        "title": "Giá trị lượng giác của một góc từ 0° đến 180° (SGK bài 5)",
+        "note": "Các đề trong nhóm xếp từ dễ đến khó.",
+        "items": [
+          {
+            "id": "mtm-drive-g10-c3-t01-mtm-errata-v1",
+            "dangs": [
+              "giá trị lượng giác góc trên nửa đường tròn đơn vị",
+              "góc phụ, góc bù",
+              "rút gọn biểu thức lượng giác",
+              "tính biểu thức biết tan hoặc cot"
+            ]
+          },
+          {
+            "id": "mtm-drive-g10-c3-t02-mtm-errata-v57",
+            "dangs": [
+              "góc phụ, góc bù",
+              "tổng và tích giá trị lượng giác đặc biệt",
+              "rút gọn biểu thức lượng giác",
+              "biểu thức đối xứng sin, cos, tan, cot"
+            ]
+          },
+          {
+            "id": "mtm-src-g10-c3-s01-v1",
+            "dangs": [
+              "rút gọn biểu thức lượng giác",
+              "tính biểu thức biết tan hoặc cot",
+              "góc phụ, góc bù",
+              "tổng bình phương sin, cos nhiều góc"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Hệ thức lượng trong tam giác (SGK bài 6)",
+        "note": "Các đề trong nhóm xếp từ dễ đến khó.",
+        "items": [
+          {
+            "id": "mtm-drive-g10-c3-t04-mtm-v1",
+            "dangs": [
+              "định lí côsin, sin",
+              "công thức diện tích, bán kính đường tròn",
+              "giải tam giác thực tế",
+              "đo khoảng cách, chiều cao"
+            ]
+          },
+          {
+            "id": "mtm-drive-g10-c3-t03-mtm-errata-v60",
+            "dangs": [
+              "định lí côsin, sin",
+              "công thức diện tích, bán kính đường tròn",
+              "đường trung tuyến, phân giác",
+              "giải tam giác thực tế"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Kiểm tra cuối chương",
+        "note": "Các đề trong nhóm xếp từ dễ đến khó.",
+        "items": [
+          {
+            "id": "mtm-src-g10-c3-s03-v1",
+            "dangs": [
+              "định lí côsin, sin",
+              "công thức diện tích, đường cao",
+              "nhận dạng tam giác",
+              "giải tam giác thực tế"
+            ]
+          },
+          {
+            "id": "mtm-src-g10-c3-s04-v1",
+            "dangs": [
+              "giá trị lượng giác, rút gọn biểu thức",
+              "định lí côsin, sin",
+              "trung tuyến, trọng tâm, phân giác",
+              "giải tam giác thực tế"
+            ]
+          },
+          {
+            "id": "mtm-drive-g10-c3-t06-mtm-v1",
+            "dangs": [
+              "giá trị lượng giác góc đặc biệt, góc bù",
+              "định lí côsin, sin",
+              "công thức diện tích, đường cao",
+              "giải tam giác thực tế"
+            ]
+          },
+          {
+            "id": "mtm-src-g10-c3-s02-v1",
+            "dangs": [
+              "giá trị lượng giác góc bù, góc phụ",
+              "hệ thức tan A + tan B + tan C",
+              "định lí côsin, sin, diện tích",
+              "giải tam giác thực tế"
+            ]
+          },
+          {
+            "id": "mtm-drive-g10-c3-t05-mtm-v1",
+            "dangs": [
+              "hệ thức lượng tam giác",
+              "giá trị lượng giác biết sin, tan",
+              "định lí côsin, sin, diện tích",
+              "giải tam giác thực tế"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "10:4": {
+    "groups": [
+      {
+        "title": "Hệ thống công thức và lý thuyết",
+        "items": [
+          {
+            "id": "mtm-practice-g10-c4-b01-v1"
+          },
+          {
+            "id": "mtm-practice-g10-c4-b02-v1"
+          }
+        ]
+      },
+      {
+        "title": "Các khái niệm mở đầu về vectơ (SGK bài 7)",
+        "note": "Các đề trong nhóm xếp từ dễ đến khó.",
+        "items": [
+          {
+            "id": "mtm-drive-g10-c4-t01-mtm-errata-v1",
+            "dangs": [
+              "vectơ cùng hướng, ngược hướng",
+              "vectơ bằng nhau",
+              "đếm vectơ trong hình",
+              "độ dài vectơ trong hình đặc biệt"
+            ]
+          },
+          {
+            "id": "mtm-src-g10-c4-s01-v1",
+            "dangs": [
+              "vectơ cùng phương, bằng nhau",
+              "đếm vectơ",
+              "độ dài vectơ",
+              "vectơ trong tình huống thực tế"
+            ]
+          },
+          {
+            "id": "mtm-drive-g10-c4-t02-mtm-errata-v61",
+            "dangs": [
+              "vectơ bằng nhau, cùng phương",
+              "đếm vectơ trong hình",
+              "trực tâm và điểm đối xứng",
+              "độ dài vectơ"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Tổng và hiệu của hai vectơ (SGK bài 8)",
+        "note": "Các đề trong nhóm xếp từ dễ đến khó.",
+        "items": [
+          {
+            "id": "mtm-src-g10-c4-s02-v1",
+            "dangs": [
+              "quy tắc cộng, trừ vectơ",
+              "trung điểm, trọng tâm",
+              "hợp lực",
+              "vận tốc tàu và dòng nước"
+            ]
+          },
+          {
+            "id": "mtm-drive-g10-c4-t04-mtm-v1",
+            "dangs": [
+              "quy tắc ba điểm, hình bình hành",
+              "trung điểm, trọng tâm",
+              "độ dài tổng hiệu vectơ",
+              "hợp lực và vận tốc"
+            ]
+          },
+          {
+            "id": "mtm-drive-g10-c4-t03-mtm-v1",
+            "dangs": [
+              "quy tắc ba điểm, hình bình hành",
+              "tính chất trung điểm, trọng tâm",
+              "rút gọn biểu thức vectơ",
+              "hợp lực và vận tốc"
+            ]
+          },
+          {
+            "id": "mtm-practice-g10-c4-d01-v1",
+            "dangs": [
+              "tính tổng, hiệu vectơ",
+              "độ dài tổng, hiệu vectơ",
+              "trung điểm, trọng tâm",
+              "hợp lực và vận tốc"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Tích của một vectơ với một số (SGK bài 9)",
+        "note": "Các đề trong nhóm xếp từ dễ đến khó.",
+        "items": [
+          {
+            "id": "mtm-src-g10-c4-s03-v1",
+            "dangs": [
+              "đẳng thức vectơ trung điểm, trọng tâm",
+              "phân tích vectơ",
+              "ba điểm thẳng hàng",
+              "tìm tham số"
+            ]
+          },
+          {
+            "id": "mtm-drive-g10-c4-t06-mtm-v1",
+            "dangs": [
+              "biểu diễn vectơ qua hai vectơ",
+              "trọng tâm, trực tâm",
+              "ba điểm thẳng hàng",
+              "tập hợp điểm"
+            ]
+          },
+          {
+            "id": "mtm-drive-g10-c4-t05-mtm-v1",
+            "dangs": [
+              "phân tích vectơ theo hai vectơ",
+              "trọng tâm, trung điểm",
+              "ba điểm thẳng hàng",
+              "tập hợp điểm"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Vectơ trong mặt phẳng tọa độ (SGK bài 10)",
+        "note": "Các đề trong nhóm xếp từ dễ đến khó.",
+        "items": [
+          {
+            "id": "mtm-practice-g10-c4-d02-v1",
+            "dangs": [
+              "biểu thị vectơ theo i, j",
+              "tọa độ vectơ, phép toán",
+              "hai vectơ cùng phương",
+              "tìm điểm để hình bình hành"
+            ]
+          },
+          {
+            "id": "mtm-drive-g10-c4-t08-mtm-v1",
+            "dangs": [
+              "biểu diễn tọa độ vectơ",
+              "độ dài và khoảng cách",
+              "hai vectơ cùng phương, ba điểm thẳng hàng",
+              "hình bình hành, tìm điểm"
+            ]
+          },
+          {
+            "id": "mtm-drive-g10-c4-t07-mtm-v1",
+            "dangs": [
+              "tọa độ vectơ, tọa độ điểm",
+              "trung điểm, hình bình hành",
+              "độ dài đoạn thẳng",
+              "cực trị tọa độ"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Tích vô hướng của hai vectơ (SGK bài 11)",
+        "note": "Các đề trong nhóm xếp từ dễ đến khó.",
+        "items": [
+          {
+            "id": "mtm-drive-g10-c4-t09-mtm-v1",
+            "dangs": [
+              "góc giữa hai vectơ",
+              "tích vô hướng trong hình đặc biệt",
+              "tập hợp điểm",
+              "công và hợp lực"
+            ]
+          },
+          {
+            "id": "mtm-drive-g10-c4-t10-mtm-v1",
+            "dangs": [
+              "góc giữa hai vectơ",
+              "tích vô hướng trong hình đặc biệt",
+              "vuông góc, tìm tham số",
+              "công và hợp lực"
+            ]
+          },
+          {
+            "id": "mtm-practice-g10-c4-d03-v1",
+            "dangs": [
+              "góc giữa hai vectơ",
+              "biểu thức tọa độ của tích vô hướng",
+              "tam giác vuông, trực tâm, chân đường cao",
+              "tập hợp điểm"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Kiểm tra cuối chương",
+        "note": "Các đề trong nhóm xếp từ dễ đến khó.",
+        "items": [
+          {
+            "id": "mtm-drive-g10-c4-t11-mtm-v1",
+            "dangs": [
+              "vectơ bằng nhau, cùng hướng",
+              "tổng hiệu vectơ",
+              "phân tích vectơ, thẳng hàng",
+              "tích vô hướng"
+            ]
+          },
+          {
+            "id": "mtm-drive-g10-c4-t12-mtm-v1",
+            "dangs": [
+              "đếm vectơ, vectơ bằng nhau",
+              "phân tích vectơ",
+              "tích vô hướng, góc",
+              "thẳng hàng với tham số"
+            ]
+          }
+        ]
+      }
+    ]
+  }
 }
