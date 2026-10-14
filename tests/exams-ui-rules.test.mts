@@ -227,7 +227,7 @@ test('DL-01: bài chờ phản biện chỉ còn lượt trong lịch sử thì 
   assert.equal(historyOnlyAttempt(pending, true, subs), undefined, 'còn bản nháp hiện hành thì đi đường cũ ?id=');
   assert.equal(historyOnlyAttempt(pending, false, []), undefined);
   assert.equal(historyOnlyAttempt(open, false, subs), undefined, 'bài mở bình thường không đổi');
-  const lib = readFileSync(join(process.env.MTM_ROOT ?? process.cwd(), 'src/native/chapters/PracticeLibrary.tsx'), 'utf8');
+  const lib = readFileSync(join(process.env.MTM_ROOT ?? process.cwd(), 'src/native/chapters/PracticeShelf.tsx'), 'utf8'); // KT-06: phần thẻ bài chuyển từ PracticeLibrary.tsx sang đây
   assert.ok(lib.includes('href={cardHref(p)}') && lib.includes('href={cardHref(final)}'), 'thẻ thường và bài kết thúc chương đều dùng cardHref');
   assert.ok(lib.includes("'&luot='+encodeURIComponent(luot)"), 'dẫn tới ?luot= như danh sách lịch sử');
 });
@@ -268,6 +268,20 @@ test('Đề rác: chỉ ẩn đúng 1 mục tên "uyuyuyuyuyu"; URL vẫn mở (
   assert.ok(!meta.title.includes('uyuy'), meta.title);
   assert.equal(meta.robots, 'noindex, follow');
   for (const e of publicSnapshot.exams.filter(x => !HIDDEN_SNAPSHOT_EXAMS.has(x.id))) assert.ok(routeMetadata('/thi-thu/' + e.id, 'www.minhthanhmath.vn').title.startsWith(e.title), e.id);
+});
+
+// ---------- KT-06 (Đợt 3): khung trang Luyện tập không nhập tĩnh ngân hàng đề ----------
+test('KT-06: PracticeLibrary.tsx không nhập tĩnh JSON đề; ngân hàng đề chỉ nạp qua import() động', () => {
+  // Chỉ xét các dòng import (chú thích được phép nhắc tên tệp).
+  const imports = (rel: string) => src(rel).split(/\r?\n/).filter(l => /^\s*import\s/.test(l)).join('\n');
+  const shell = imports('src/native/chapters/PracticeLibrary.tsx'), shared = imports('src/native/chapters/practice-shared.ts');
+  for (const f of ['practice-tests.json', 'exact-tests.json', 'archived-tests.json', 'practice-bank', "from './PracticeShelf'", "from './ChapterPractice'"]) assert.ok(!shell.includes(f), 'khung trang không được nhập ' + f);
+  for (const f of ['practice-tests.json', 'exact-tests.json', 'archived-tests.json', 'practice-bank', 'PracticeShelf']) assert.ok(!shared.includes(f), 'practice-shared không được nhập ' + f);
+  assert.equal(shared.match(/from '\.\/ChapterPractice'/g)?.length, 1);
+  assert.ok(shared.includes("import type {PracticeBankItem} from './ChapterPractice'"), 'practice-shared chỉ nhập KIỂU từ ChapterPractice');
+  assert.ok(src('src/native/chapters/PracticeLibrary.tsx').includes("import('./PracticeShelf')"), 'ngân hàng đề nạp bằng import() động');
+  const bankSrc = src('src/native/chapters/practice-bank.ts');
+  for (const f of ['practice-tests.json', 'exact-tests.json', 'archived-tests.json']) assert.ok(bankSrc.includes(f), 'practice-bank vẫn đọc ' + f);
 });
 
 finish();

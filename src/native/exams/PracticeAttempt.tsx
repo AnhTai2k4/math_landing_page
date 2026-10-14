@@ -15,9 +15,8 @@ import MtmSourceContent from './MtmSourceContent';
 import MtmSourceQuestion from './MtmSourceQuestion';
 import {answerState, draftExportFile, pendingQuestions, questionLabel, shortAnswerStatus, shortFormatMessage} from './attempt-ui';
 
-export function localStore(): Store | null {
-  try { return window.localStorage; } catch { return null; }
-}
+import {localStore} from './local-store';
+export {localStore};
 const letters: Choice[] = ['A', 'B', 'C', 'D'];
 const statementLetters = ['a', 'b', 'c', 'd'];
 const QuestionPdf=lazy(()=>import('./QuestionPdf'));

@@ -10,7 +10,8 @@ const BUDGET = {
   entryJs: 430_000,          // JS tải ngay khi mở trang (index.html + import tĩnh)
   entryJsGzip: 135_000,
   entryCss: 125_000,
-  practiceLibrary: 4_500_000, // ngân hàng đề còn nhập thêm; Đợt 3 (KT-06) sẽ tách nạp sau
+  practiceLibrary: 4_500_000, // ngân hàng đề còn nhập thêm (từ Đợt 3 nằm ở PracticeShelf-*, nạp bằng import())
+  practiceShell: 60_000,      // KT-06: khung trang /luyen-tap phải nhẹ, không được kéo ngân hàng đề vào lại
   otherChunk: 600_000,       // mọi chunk JS khác
   totalJs: 7_500_000,
 };
@@ -47,9 +48,12 @@ check('JS vào trang ' + entryJs.join(', '), entryJs.reduce((s, f) => s + size(f
 check('JS vào trang (gzip)', entryJs.reduce((s, f) => s + gzipSync(readFileSync(join(assets, f))).length, 0), BUDGET.entryJsGzip);
 check('CSS vào trang ' + entryCss.join(', '), entryCss.reduce((s, f) => s + size(f), 0), BUDGET.entryCss);
 const js = files.filter(x => x.f.endsWith('.js'));
-const lib = js.filter(x => x.f.startsWith('PracticeLibrary-'));
-check('PracticeLibrary (ngân hàng đề)', lib.reduce((s, x) => s + x.bytes, 0), BUDGET.practiceLibrary);
-const others = js.filter(x => !entryJs.includes(x.f) && !x.f.startsWith('PracticeLibrary-')).sort((a, b) => b.bytes - a.bytes);
+// KT-06 (Đợt 3): ngân hàng đề tách sang PracticeShelf-*; PracticeLibrary-* chỉ còn khung trang.
+const isBank = (f) => f.startsWith('PracticeLibrary-') || f.startsWith('PracticeShelf-');
+const lib = js.filter(x => isBank(x.f));
+check('PracticeLibrary + PracticeShelf (ngân hàng đề)', lib.reduce((s, x) => s + x.bytes, 0), BUDGET.practiceLibrary);
+check('khung trang Luyện tập PracticeLibrary', js.filter(x => x.f.startsWith('PracticeLibrary-')).reduce((s, x) => s + x.bytes, 0), BUDGET.practiceShell);
+const others = js.filter(x => !entryJs.includes(x.f) && !isBank(x.f)).sort((a, b) => b.bytes - a.bytes);
 if (others[0]) check('chunk khác lớn nhất ' + others[0].f, others[0].bytes, BUDGET.otherChunk);
 check('tổng JS (' + js.length + ' tệp)', js.reduce((s, x) => s + x.bytes, 0), BUDGET.totalJs);
 for (const f of missing) problems.push('thiếu tệp ' + f + ' (index.html hoặc import tĩnh có tham chiếu)');
