@@ -43,11 +43,13 @@ function ZoomDialog({src,alt,width,height,label,watermark,onClose}:{src:string;a
   },[]);
   // Giữ điểm giữa vùng đang xem khi đổi mức phóng, để không bị nhảy về góc trên trái.
   const zoomTo=(next:number)=>{
-    const box=area.current;if(next===level||next<0||next>=LEVELS.length)return;
+    // Review Codex đợt 4 vòng cuối: ảnh nhỏ hơn vùng xem thì nằm giữa (margin:auto), nên tính điểm theo toạ độ trong ảnh:
+    // trừ khoảng căn giữa trước khi đổi, cộng khoảng căn giữa mới (đo lại sau khi vẽ) khi trả vị trí.
+    const box=area.current,canvas=box?.firstElementChild as HTMLElement|null;if(next===level||next<0||next>=LEVELS.length)return;
     const ratio=LEVELS[next]/LEVELS[level];
-    const cx=box?(box.scrollLeft+box.clientWidth/2)*ratio-box.clientWidth/2:0,cy=box?(box.scrollTop+box.clientHeight/2)*ratio-box.clientHeight/2:0;
+    const px=box&&canvas?(box.scrollLeft+box.clientWidth/2-canvas.offsetLeft)*ratio:0,py=box&&canvas?(box.scrollTop+box.clientHeight/2-canvas.offsetTop)*ratio:0;
     setLevel(next);
-    window.setTimeout(()=>{if(box){box.scrollLeft=Math.max(0,cx);box.scrollTop=Math.max(0,cy);}},0);
+    window.setTimeout(()=>{if(box&&canvas){box.scrollLeft=Math.max(0,px+canvas.offsetLeft-box.clientWidth/2);box.scrollTop=Math.max(0,py+canvas.offsetTop-box.clientHeight/2);}},0);
   };
   const reset=(element:HTMLElement|null)=>{if(element){element.style.transform='';element.style.opacity='';}};
   return createPortal(<dialog ref={dialog} className="ep-zoom-dialog" aria-label={`Xem lớn ${label}`} onCancel={event=>{event.preventDefault();onClose();}}>

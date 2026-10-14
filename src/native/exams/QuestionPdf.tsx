@@ -15,14 +15,14 @@ export default function QuestionPdf({file,title,onReady}:{file:QuestionPdfFile;t
   const host=useRef<HTMLElement>(null),sheet=useRef<HTMLDivElement>(null),fullButton=useRef<HTMLButtonElement>(null),ready=useRef(onReady);ready.current=onReady;
   const [placeholder,setPlaceholder]=useState(0);
   // Trang đang hiển thị thật (để biết lúc nào "bản đề đã hiện"), và vị trí cuộn cần giữ khi đổi chế độ toàn màn hình.
-  const shown=useRef<{index:number;canvas:HTMLCanvasElement}|null>(null),scrollMemo=useRef<{x:number;y:number;cx:number;cy:number}|null>(null),restorePending=useRef(false);
+  const shown=useRef<{index:number;canvas:HTMLCanvasElement}|null>(null),scrollMemo=useRef<{x:number;y:number;cx:number;cy:number}|null>(null),restorePending=useRef(false),restoredAt=useRef(-1e9);
   // Review Codex đợt 4 vòng 2: vị trí đang đọc tính theo PHẦN TRANG ĐỀ ĐANG NHÌN THẤY (điểm giữa, tỉ lệ theo canvas),
   // đi qua mọi khung cuộn chứa trang (khung đề, .ep-pdf-pane/.cp-reader, cả trang), nên đúng cả khi khung cha cuộn chứ không phải khung đề.
   const scrollers=(el:HTMLElement)=>{const list:HTMLElement[]=[];for(let e:HTMLElement|null=el;e&&e!==document.body&&e!==document.documentElement;e=e.parentElement){const st=getComputedStyle(e);if(/(auto|scroll)/.test(st.overflowX+st.overflowY))list.push(e);}if(el.closest('.ep-pdf-full'))return list;/* toàn màn hình: không cuộn trang nền đang khoá */const root=document.scrollingElement;if(root instanceof HTMLElement)list.push(root);return list;};
   const visibleBox=(el:HTMLElement)=>{let l=0,t=0,r=innerWidth,b=innerHeight;for(const s of scrollers(el)){if(s===document.scrollingElement)continue;const c=s.getBoundingClientRect();l=Math.max(l,c.left+s.clientLeft);t=Math.max(t,c.top+s.clientTop);r=Math.min(r,c.left+s.clientLeft+s.clientWidth);b=Math.min(b,c.top+s.clientTop+s.clientHeight);}return {l,t,r,b};};
   const captureScroll=()=>{const target=sheet.current,canvas=target?.querySelector('canvas');if(!target||!canvas){scrollMemo.current=null;return;}const c=canvas.getBoundingClientRect();if(!c.width||!c.height){scrollMemo.current=null;return;}const v=visibleBox(target),l=Math.max(v.l,c.left),t=Math.max(v.t,c.top),r=Math.min(v.r,c.right),b=Math.min(v.b,c.bottom);
     scrollMemo.current=r>l&&b>t?{x:((l+r)/2-c.left)/c.width,y:((t+b)/2-c.top)/c.height,cx:(l+r)/2,cy:(t+b)/2}:null;};
-  const restoreScroll=(target:HTMLElement)=>{const m=scrollMemo.current,canvas=target.querySelector('canvas');if(!m||!canvas)return;const c=canvas.getBoundingClientRect();let x=c.left+m.x*c.width,y=c.top+m.y*c.height;
+  const restoreScroll=(target:HTMLElement)=>{const m=scrollMemo.current,canvas=target.querySelector('canvas');if(!m||!canvas)return;restoredAt.current=performance.now();const c=canvas.getBoundingClientRect();let x=c.left+m.x*c.width,y=c.top+m.y*c.height;
     // Từ khung trong ra ngoài: mỗi khung cuộn phần còn thiếu để điểm đang đọc về đúng chỗ cũ trên màn hình
     // (đổi mức phóng thì trang nền không nhảy); chỗ cũ nằm ngoài khung (vừa vào/ra toàn màn hình) thì về giữa khung.
     for(const s of scrollers(target)){const page=s===document.scrollingElement,box=page?{left:0,top:0,width:innerWidth,height:innerHeight}:(()=>{const r=s.getBoundingClientRect(),left=Math.max(0,r.left+s.clientLeft),top=Math.max(0,r.top+s.clientTop);/* chỉ phần khung đang nằm trong màn hình */return {left,top,width:Math.max(0,Math.min(innerWidth,r.left+s.clientLeft+s.clientWidth)-left),height:Math.max(0,Math.min(innerHeight,r.top+s.clientTop+s.clientHeight)-top)};})();
@@ -52,6 +52,13 @@ export default function QuestionPdf({file,title,onReady}:{file:QuestionPdfFile;t
       if(active&&sheet.current){sheet.current.replaceChildren(canvas);canvas.dataset.questionPage=String(pageNumber);shown.current={index,canvas};restorePending.current=true;setBusy(false);ready.current(true);}
     }catch(e){if(active){setError(e instanceof Error?e.message:'Chưa hiển thị được trang đề.');setBusy(false);ready.current(false);}}})();return()=>{active=false;render?.cancel();};
   },[doc,file,index,width,zoom,full]);
+  // Review Codex đợt 4 vòng cuối: người đọc tự cuộn trong lúc trang đang vẽ lại thì cập nhật điểm giữ theo chỗ mới nhất
+  // (đo trên trang đang hiện), không kéo về chỗ lúc bấm. Chỉ tính lần cuộn ngay sau thao tác tay/phím, không tính cuộn do mã.
+  useEffect(()=>{let userAt=-1e9;const mark=()=>{userAt=performance.now();};const onScroll=()=>{const now=performance.now();if(scrollMemo.current&&now-userAt<600&&now-restoredAt.current>200)captureScroll();};
+    const options={capture:true,passive:true},gestures=['wheel','touchmove','keydown','pointerdown'] as const;
+    for(const type of gestures)document.addEventListener(type,mark,options);document.addEventListener('scroll',onScroll,options);
+    return()=>{for(const type of gestures)document.removeEventListener(type,mark,options);document.removeEventListener('scroll',onScroll,options);};
+  },[]);
   // Trả điểm đang đọc SAU khi dòng "Đang hiển thị bản đề…" đã gỡ (dòng đó đẩy khung đề xuống), trước khi trình duyệt vẽ.
   useLayoutEffect(()=>{if(busy||!restorePending.current||!sheet.current)return;restorePending.current=false;restoreScroll(sheet.current);scrollMemo.current=null;},[busy]);
   // Toàn màn hình: khoá cuộn trang nền, Esc để thoát, Tab chỉ đi trong khung; thoát xong trả tiêu điểm về nút.

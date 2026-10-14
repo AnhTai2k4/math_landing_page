@@ -33,6 +33,7 @@ export default function FitTable({table,renderCell,rowHeaders=true}:{table:Table
       <thead><tr>{table.headers.map((cell,i)=><th scope="col" key={i}>{renderCell(cell)}</th>)}</tr></thead>
       <tbody>{table.rows.map((row,i)=><tr key={i}>{row.map((cell,j)=>j===0&&rowHeaders?<th scope="row" key={j}>{renderCell(cell)}</th>:<td key={j}>{renderCell(cell)}</td>)}</tr>)}</tbody>
     </table>}
-    {canTranspose&&(showVertical||keepWide)&&<button type="button" className="ep-table-toggle" aria-pressed={keepWide} onClick={()=>{setKeepWide(k=>!k);if(keepWide)setVertical(false);}}>{keepWide?'Xem dạng dọc vừa màn hình':'Xem dạng ngang (cuộn ngang)'}</button>}
+    {/* Review Codex đợt 4 vòng cuối: trở lại dạng dọc chỉ tắt keepWide (vertical vẫn đúng) nên nút không bị gỡ, giữ tiêu điểm bàn phím. */}
+    {canTranspose&&(showVertical||keepWide)&&<button type="button" className="ep-table-toggle" aria-pressed={keepWide} onClick={()=>setKeepWide(k=>!k)}>{keepWide?'Xem dạng dọc vừa màn hình':'Xem dạng ngang (cuộn ngang)'}</button>}
   </div>;
 }
