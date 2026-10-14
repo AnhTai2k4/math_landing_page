@@ -6,9 +6,11 @@
 @font-face{font-family:'Be Vietnam Pro';src:url('/fonts/BeVietnamPro-SemiBold.woff2') format('woff2'),url('/fonts/BeVietnamPro-SemiBold.ttf') format('truetype');font-weight:600;font-display:swap}
 @font-face{font-family:'Be Vietnam Pro';src:url('/fonts/BeVietnamPro-Bold.woff2') format('woff2'),url('/fonts/BeVietnamPro-Bold.ttf') format('truetype');font-weight:700;font-display:swap}
 /* KT-18 (Đợt 3): chữ dự phòng có số đo chỉnh theo Be Vietnam Pro (tính từ bảng hmtx/hhea của font, mẫu chữ tiếng Việt)
-   để lúc đổi font (font-display:swap) chữ không xô dòng. Chỉ dùng khi máy có Arial; không có thì bỏ qua. */
-@font-face{font-family:'Be Vietnam Pro Fallback';src:local('Arial'),local('ArialMT');font-weight:400;size-adjust:107.38%;ascent-override:93.12%;descent-override:24.68%;line-gap-override:0%}
-@font-face{font-family:'Be Vietnam Pro Fallback';src:local('Arial Bold'),local('Arial-BoldMT');font-weight:700;size-adjust:103.79%;ascent-override:96.35%;descent-override:25.53%;line-gap-override:0%}
+   để lúc đổi font (font-display:swap) chữ không xô dòng. Chỉ dùng khi máy có Arial; không có thì bỏ qua.
+   unicode-range = đúng bảng ký tự của Be Vietnam Pro (cả 4 độ đậm như nhau), nên ký tự font không có (→, ký hiệu Toán...)
+   vẫn rơi về Segoe UI/Arial như trước. */
+@font-face{font-family:'Be Vietnam Pro Fallback';src:local('Arial'),local('ArialMT');font-weight:400;size-adjust:107.38%;ascent-override:93.12%;descent-override:24.68%;line-gap-override:0%;unicode-range:U+000D,U+0020-007E,U+00A0-0107,U+010A-0113,U+0116-011B,U+011E-0121,U+0126-012B,U+012E-0131,U+0139-013A,U+013D-013E,U+0141-0144,U+0147-0148,U+014C-014D,U+0150-0155,U+0158-015B,U+015E-016B,U+016E-017E,U+01A0-01A1,U+01AF-01B0,U+01E6-01E7,U+02C6-02C7,U+02D8-02DC,U+0300-0304,U+0306-030C,U+0312,U+031B,U+0323,U+0326-0328,U+1E20-1E21,U+1E80-1E85,U+1E9E,U+1EA0-1EF9,U+2013-2014,U+2018-201A,U+201C-201E,U+2020-2022,U+2026,U+2030,U+2039-203A,U+2044,U+2070,U+2074-2079,U+2080-2089,U+20AB-20AC,U+2122,U+215B-215E,U+2212,U+2215,U+2248,U+2260,U+2264-2265}
+@font-face{font-family:'Be Vietnam Pro Fallback';src:local('Arial Bold'),local('Arial-BoldMT');font-weight:700;size-adjust:103.79%;ascent-override:96.35%;descent-override:25.53%;line-gap-override:0%;unicode-range:U+000D,U+0020-007E,U+00A0-0107,U+010A-0113,U+0116-011B,U+011E-0121,U+0126-012B,U+012E-0131,U+0139-013A,U+013D-013E,U+0141-0144,U+0147-0148,U+014C-014D,U+0150-0155,U+0158-015B,U+015E-016B,U+016E-017E,U+01A0-01A1,U+01AF-01B0,U+01E6-01E7,U+02C6-02C7,U+02D8-02DC,U+0300-0304,U+0306-030C,U+0312,U+031B,U+0323,U+0326-0328,U+1E20-1E21,U+1E80-1E85,U+1E9E,U+1EA0-1EF9,U+2013-2014,U+2018-201A,U+201C-201E,U+2020-2022,U+2026,U+2030,U+2039-203A,U+2044,U+2070,U+2074-2079,U+2080-2089,U+20AB-20AC,U+2122,U+215B-215E,U+2212,U+2215,U+2248,U+2260,U+2264-2265}
 
 /* Public landing hero: a real photograph, clear learning offer, separate account navigation. */
 .mtm-shell{width:min(1240px,calc(100% - 48px))}
