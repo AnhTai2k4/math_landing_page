@@ -4,12 +4,11 @@ import {lazy} from 'react';
 import {Link,useRoute} from '../../migration/navigation';
 import {readHistory,readDraft} from '../exams/store';
 import {localStore} from '../exams/local-store';
-import {bank,pilotBank,sequences,sequenceNumber} from './practice-bank';
+import {readItems,chapterIds,savedExamId,metadata,sequences,sequenceNumber} from './practice-loader';
 import {lessonName,routeGroupsOf,practiceURL,testLabel,tracks,type Chapter,type PracticeItem,type Track} from './practice-shared';
 import {awaitingReview,AWAITING_REVIEW_NOTICE,historyOnlyAttempt,isWarmup,shelfVisible,WARMUP_LABEL} from './library-rules';
 
 const ChapterPractice=lazy(()=>import('./ChapterPractice'));
-const allItems=()=>[...bank,...pilotBank];
 
 /** Trang một bài (?id=) hoặc một lượt đã lưu (?luot=). */
 export function PracticeDetail(){
@@ -17,21 +16,23 @@ export function PracticeDetail(){
   const selected=tracks.find(t=>t.id===params.get('nhom'))??tracks[0];
   const chapter=selected?.chapters.find(c=>c.id===params.get('chuong'))??selected?.chapters[0];
   const requested=params.get('id'),view=params.get('luot');
-  const history=readHistory(localStore(),allItems().map(p=>p.exam));
-  const savedId=view?history.items.find(p=>p.draft.attemptId===view)?.exam.id:undefined;
-  const resolvedId=view?savedId:requested;
+  const resolvedId=view?savedExamId(localStore(),view):requested;
+  const items=readItems('exam:'+resolvedId,resolvedId?[resolvedId]:[]);
+  const bank=items.filter(p=>!metadata[p.exam.id]?.archived),pilotBank=items.filter(p=>metadata[p.exam.id]?.archived);
   const item=bank.find(p=>p.exam.id===resolvedId),pilot=pilotBank.find(p=>p.exam.id===resolvedId);
   const actualTrack=item?.track??(pilot?pilot.track:selected?.id??'10');
   const actualChapter=item?.chapter??(pilot?pilot.chapter:chapter?.id??'1');
   const returnURL=practiceURL(actualTrack,actualChapter);
   // DL-01: chỉ ngân hàng hiện hành (practice-tests + exact-tests) dùng cổng chờ phản biện; bản lưu trữ giữ như cũ.
   const closedNotice=(id:string)=>{const p=bank.find(b=>b.exam.id===id);return p&&awaitingReview(p)?AWAITING_REVIEW_NOTICE:undefined;};
-  return <ChapterPractice closedNotice={closedNotice} additionalBank={allItems()} catalogUrl={returnURL} contextLabel={['HSA','TSA'].includes(actualTrack)?'Luyện tập theo chủ đề':'Luyện tập theo chương'} audienceLabel={tracks.find(t=>t.id===actualTrack)?.label}/>;
+  return <ChapterPractice closedNotice={closedNotice} additionalBank={items} catalogUrl={returnURL} contextLabel={['HSA','TSA'].includes(actualTrack)?'Luyện tập theo chủ đề':'Luyện tập theo chương'} audienceLabel={tracks.find(t=>t.id===actualTrack)?.label}/>;
 }
 
 /** Phần thân một chương (sau tiêu đề chương): đề theo tài liệu, bài luyện, bài kết thúc chương, lịch sử. */
 export function ChapterShelf({selected,chapter}:{selected:Track;chapter:Chapter}){
-  const history=readHistory(localStore(),allItems().map(p=>p.exam));
+  const items=readItems('chapter:'+selected.id+':'+chapter.id,chapterIds(selected.id,chapter.id));
+  const bank=items.filter(p=>!metadata[p.exam.id].archived),pilotBank=items.filter(p=>metadata[p.exam.id].archived);
+  const history=readHistory(localStore(),items.map(p=>p.exam));
   const returnURL=practiceURL(selected.id,chapter.id);
   const chapterBank=bank.filter(p=>p.track===selected.id&&p.chapter===chapter.id).sort((a,b)=>a.order-b.order);
   const routeGroups=routeGroupsOf(sequences[`${selected.id}:${chapter.id}`]).map(g=>({...g,items:g.items.flatMap(it=>{const p=bank.find(b=>b.exam.id===it.id);return p?[{...it,p}]:[];})})).filter(g=>g.items.length>0);

@@ -2,3 +2,8 @@ node_modules/
 dist/
 .env
 .env.*
+
+# KT06: du lieu sinh lai va QA local
+src/native/chapters/generated-bank/
+.qa-build/
+.qa-kt06-*.log

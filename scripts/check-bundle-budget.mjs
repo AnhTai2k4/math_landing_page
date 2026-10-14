@@ -5,15 +5,17 @@
 import {existsSync, readFileSync, readdirSync, statSync} from 'node:fs';
 import {join, resolve} from 'node:path';
 import {gzipSync} from 'node:zlib';
+import {fileURLToPath} from 'node:url';
 
 const BUDGET = {
   entryJs: 430_000,          // JS tải ngay khi mở trang (index.html + import tĩnh)
   entryJsGzip: 135_000,
   entryCss: 125_000,
-  practiceLibrary: 9_000_000, // ngân hàng đề (PracticeShelf-*, nạp bằng import()); nâng từ 4.500 kB khi gộp V77 vì V69-V76 thêm khoảng 140 đề (5.819 kB). V78 nâng tiếp lên 9.000 kB (8.708 kB, +96 đề lớp 12 và lớp 10 chương V). Giảm lại bằng KT-06 bước 2: chia ngân hàng theo chương (việc kế tiếp)
+  practiceLibrary: 1_700_000, // khung, bộ nạp và dữ liệu chương lớn nhất; đo KT06: 1.666,9 kB
+  chapterBank: 1_500_000,     // cộng mọi chunk đề của một chương, không chỉ một tệp
   practiceShell: 100_000,     // KT-06: khung trang /luyen-tap (gồm mã ChapterPractice, khoảng 78 kB) không được kéo ngân hàng đề vào lại
   otherChunk: 600_000,       // mọi chunk JS khác
-  totalJs: 12_000_000,        // nâng từ 7.500 kB khi gộp V77 cùng lý do dữ liệu đề tăng (8.879 kB)
+  totalJs: 13_000_000,        // tổng mọi chunk JS trên site (không phải lượng tải mỗi lần mở trang: từ V79 mỗi chương chỉ nạp phần của mình). Nâng 12.000 lên 13.000 kB ở V80 (+24 đề lớp 11)
 };
 const dir = resolve(process.argv[2] ?? 'build');
 const assets = join(dir, 'assets');
@@ -48,17 +50,33 @@ check('JS vào trang ' + entryJs.join(', '), entryJs.reduce((s, f) => s + size(f
 check('JS vào trang (gzip)', entryJs.reduce((s, f) => s + gzipSync(readFileSync(join(assets, f))).length, 0), BUDGET.entryJsGzip);
 check('CSS vào trang ' + entryCss.join(', '), entryCss.reduce((s, f) => s + size(f), 0), BUDGET.entryCss);
 const js = files.filter(x => x.f.endsWith('.js'));
-// KT-06 (Đợt 3): ngân hàng đề tách sang PracticeShelf-*; PracticeLibrary-* chỉ còn khung trang.
-const isBank = (f) => f.startsWith('PracticeLibrary-') || f.startsWith('PracticeShelf-');
-const lib = js.filter(x => isBank(x.f));
-check('PracticeLibrary + PracticeShelf (ngân hàng đề)', lib.reduce((s, x) => s + x.bytes, 0), BUDGET.practiceLibrary);
-check('khung trang Luyện tập PracticeLibrary', js.filter(x => x.f.startsWith('PracticeLibrary-')).reduce((s, x) => s + x.bytes, 0), BUDGET.practiceShell);
-const others = js.filter(x => !entryJs.includes(x.f) && !isBank(x.f)).sort((a, b) => b.bytes - a.bytes);
-if (others[0]) check('chunk khác lớn nhất ' + others[0].f, others[0].bytes, BUDGET.otherChunk);
-check('tổng JS (' + js.length + ' tệp)', js.reduce((s, x) => s + x.bytes, 0), BUDGET.totalJs);
-for (const f of missing) problems.push('thiếu tệp ' + f + ' (index.html hoặc import tĩnh có tham chiếu)');
-
+// KT06 bước 2: cộng toàn bộ chunk đề của chương; manifest phải chứa đủ tệp đã sinh.
+const root=fileURLToPath(new URL('../',import.meta.url));
+const manifest=JSON.parse(readFileSync(join(dir,'.vite/manifest.json'),'utf8'));
+for(const f of readdirSync(join(root,'src/native/chapters/generated-bank')).filter(f=>/^exam-\d+\.json$/.test(f))) {
+  if(!manifest['src/native/chapters/generated-bank/'+f])problems.push('thiếu đề trong manifest '+f);
+}
+const chapterFiles=new Map(), bankFiles=new Set();
+for(const [source,chunk] of Object.entries(manifest)) {
+  if(!source.includes('/generated-bank/exam-'))continue;
+  const item=JSON.parse(readFileSync(join(root,source),'utf8'));
+  const key=item.track+':'+item.chapter;
+  if(!chapterFiles.has(key))chapterFiles.set(key,new Set());
+  for(const f of initialJs([chunk.file.replace(/^assets\//,'')])){chapterFiles.get(key).add(f);bankFiles.add(f);}
+}
+if(!chapterFiles.size)problems.push('không tìm thấy ngân hàng chương tách trong manifest');
+const chapterSizes=[...chapterFiles].map(([key,fs])=>({key,bytes:[...fs].reduce((n,f)=>n+size(f),0)})).sort((a,b)=>b.bytes-a.bytes);
+const largest=chapterSizes[0]??{key:'thiếu',bytes:0};
+check('ngân hàng 1 chương lớn nhất '+largest.key,largest.bytes,BUDGET.chapterBank);
+const isBank=f=>f.startsWith('PracticeLibrary-')||f.startsWith('PracticeShelf-')||bankFiles.has(f);
+const lib=js.filter(x=>x.f.startsWith('PracticeLibrary-')||x.f.startsWith('PracticeShelf-'));
+check('Luyện tập: khung + ngân hàng chương lớn nhất',lib.reduce((s,x)=>s+x.bytes,0)+largest.bytes,BUDGET.practiceLibrary);
+check('khung trang Luyện tập PracticeLibrary',js.filter(x=>x.f.startsWith('PracticeLibrary-')).reduce((s,x)=>s+x.bytes,0),BUDGET.practiceShell);
+const others=js.filter(x=>!entryJs.includes(x.f)&&!isBank(x.f)).sort((a,b)=>b.bytes-a.bytes);
+if(others[0])check('chunk khác lớn nhất '+others[0].f,others[0].bytes,BUDGET.otherChunk);
+check('tổng JS ('+js.length+' tệp)',js.reduce((s,x)=>s+x.bytes,0),BUDGET.totalJs);
+for(const f of missing)problems.push('thiếu tệp '+f+' (import tĩnh hoặc index.html)');
 console.log(rows.join('\n'));
-for (const p of problems.filter(p => p.startsWith('thiếu') || p.startsWith('không tìm'))) console.log('LỖI ' + p);
-console.log(problems.length ? `Ngân sách gói: KHÔNG ĐẠT ở ${problems.length} mục.` : 'Ngân sách gói: đạt.');
-process.exit(problems.length ? 1 : 0);
+for(const p of problems.filter(p=>p.startsWith('thiếu')||p.startsWith('không tìm')))console.log('LỖI '+p);
+console.log(problems.length?`Ngân sách gói: KHÔNG ĐẠT ở ${problems.length} mục.`:'Ngân sách gói: đạt.');
+process.exit(problems.length?1:0);
