@@ -4,6 +4,7 @@ import 'katex/dist/katex.min.css';
 import bank from './detailed-solutions.json';
 import {schoolLatex,schoolText} from './notation';
 import {authoredFormula} from '../math/MathText';
+import FitTable from './FitTable';
 type Block={type:'text';text:string}|{type:'math';latex:string}|{type:'table';headers:string[];rows:string[][]};
 type DetailedExam={examId:string;versionHash:string;questions:{id:string;sourceRef:string;blocks:Block[];answer:string}[]};
 export function Formula({latex,inline=false}:{latex:string;inline?:boolean}) {
@@ -17,5 +18,5 @@ function RichText({text}:{text:string}) {
 export default function DetailedSolution({examId,versionHash,questionId,fallback}:{examId:string;versionHash:string;questionId:string;fallback:string}) {
   const question=(bank as unknown as DetailedExam[]).find(exam=>exam.examId===examId&&exam.versionHash===versionHash)?.questions.find(q=>q.id===questionId);
   if(!question)return <div className="ep-math-text">{fallback.split(/\r?\n/).map((line,i)=><p key={i}><RichText text={line}/></p>)}</div>;
-  return <div className="ep-detailed-solution">{question.blocks.map((block,i)=>block.type==='text'?<p key={i}><RichText text={block.text}/></p>:block.type==='math'?<div className="ep-formula-line" key={i}><Formula latex={block.latex}/></div>:<div className="ep-table-wrap" key={i}><table className="ep-solution-table"><thead><tr>{block.headers.map((header,j)=><th key={j} scope="col"><RichText text={header}/></th>)}</tr></thead><tbody>{block.rows.map((row,j)=><tr key={j}>{row.map((cell,k)=><td key={k}><RichText text={cell}/></td>)}</tr>)}</tbody></table></div>)}</div>;
+  return <div className="ep-detailed-solution">{question.blocks.map((block,i)=>block.type==='text'?<p key={i}><RichText text={block.text}/></p>:block.type==='math'?<div className="ep-formula-line" key={i}><Formula latex={block.latex}/></div>:<FitTable key={i} table={block} rowHeaders={false} renderCell={text=><RichText text={text}/>}/>)}</div>;
 }

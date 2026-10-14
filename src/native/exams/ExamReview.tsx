@@ -6,6 +6,7 @@ import type {Draft} from './store';
 import MtmSourceContent from './MtmSourceContent';
 import MtmSourceQuestion from './MtmSourceQuestion';
 import {displayAnswer,formatPoints,reviewRows,statementLetters,STATUS_LABELS} from './review';
+import {displayKeyAnswer,questionLabel} from './attempt-ui';
 const DetailedSolution=lazy(()=>import('./DetailedSolution'));
 const SolutionPdf=lazy(()=>import('../admin/SolutionPdf'));
 
@@ -24,7 +25,7 @@ export default function ExamReview({exam,draft,initialQuestionId,renderText,rend
     {exam.mtmDocuments&&<p><a href={exam.mtmDocuments.solutions.url} target="_blank" rel="noopener noreferrer">Tải đáp án và lời giải PDF theo mẫu MTM</a></p>}{exam.solutionInstructions&&<details><summary>Hướng dẫn lời giải</summary><MtmSourceContent segments={exam.solutionInstructions} assetBase="/practice-media/source-crops" label="Hướng dẫn giải" kind="solution"/></details>}
     {showSummary&&<ResultSummary exam={exam} draft={draft}/>}
     <h2>Tổng quan câu trả lời</h2>
-    <nav className="ep-question-nav ep-result-nav" aria-label="Tổng quan đúng sai">{rows.map(r=><button type="button" key={r.q.id} className={`ep-verdict-${r.status}`} aria-label={`Câu ${r.index+1}: ${STATUS_LABELS[r.status]}`} onClick={()=>{setFilter('all');setFocusQuestion(r.index);}}>{r.index+1}</button>)}</nav>
+    <nav className="ep-result-nav-wrap" aria-label="Tổng quan đúng sai">{examSections(exam).map(part=><section key={part.name}><h3>{part.name}</h3><div className="ep-question-nav ep-result-nav">{rows.slice(part.from,part.to).map(r=><button type="button" key={r.q.id} className={`ep-verdict-${r.status}`} aria-label={`${questionLabel(exam,r.index).full}: ${STATUS_LABELS[r.status]}`} onClick={()=>{setFilter('all');setFocusQuestion(r.index);}}>{r.index-part.from+1}</button>)}</div></section>)}</nav>
     <p>Đúng toàn bộ: {rows.filter(r=>r.status==='correct').length} · Đúng một phần: {rows.filter(r=>r.status==='partial').length} · Chưa đúng: {rows.filter(r=>r.status==='wrong').length} · Bỏ trống: {blank}.</p>
     <div className="ep-review-filters" role="group" aria-label="Lọc câu đã nộp">
       <button type="button" aria-pressed={filter==='all'} onClick={()=>setFilter('all')}>Tất cả câu ({rows.length})</button>
@@ -35,13 +36,13 @@ export default function ExamReview({exam,draft,initialQuestionId,renderText,rend
     <p role="status">Đang xem {visible.length}/{rows.length} câu. Câu đúng/sai được đối chiếu từng ý; câu đúng một phần vẫn nằm trong mục chưa đủ điểm.</p>
     {!visible.length&&<p>Không có câu trong mục này.</p>}
     {visible.map(({q,index,answer,earned,status,invalidNumeric})=><section className="ep-question ep-card" key={q.id} id={`${instance}-card-${index}`} tabIndex={-1} aria-labelledby={`${instance}-q-${index}`}>
-      <h3 id={`${instance}-q-${index}`}>Câu {index+1} <small>({formatPoints(q.maxMillipoints)} điểm)</small></h3>
+      <h3 id={`${instance}-q-${index}`}>{questionLabel(exam,index).full} <small>({formatPoints(q.maxMillipoints)} điểm)</small></h3>
       <p className={`ep-verdict ep-verdict-${status}`}>{STATUS_LABELS[status]}</p>
       {(q.prompt||q.text)&&<p className="ep-source-text">{renderText?renderText(q.prompt??q.text!):q.prompt??q.text}</p>}
       {q.sourceContent&&<MtmSourceQuestion question={q}/>}<p className="ep-source-ref">MTM sưu tầm và biên soạn</p>
       <div className="ep-review">
         <p><strong>Bài làm:</strong> {displayAnswer(answer)}</p>
-        <p><strong>Đáp án:</strong> {q.kind==='mc'?q.answer:q.kind==='tf'?q.answer.map((v,i)=>`${statementLetters[i]}) ${v?'Đúng':'Sai'}`).join('; '):q.acceptedAnswers.join(' hoặc ')}</p>
+        <p><strong>Đáp án:</strong> {q.kind==='mc'?q.answer:q.kind==='tf'?q.answer.map((v,i)=>`${statementLetters[i]}) ${v?'Đúng':'Sai'}`).join('; '):q.acceptedAnswers.map(value=>displayKeyAnswer(q.mode,value)).join(' hoặc ')}</p>
         {q.kind==='tf'&&<ul className="ep-statement-review">{q.answer.map((expected,i)=>{
           const value=Array.isArray(answer)?answer[i]:null;
           return <li key={i}><strong>Ý {statementLetters[i]}:</strong> {value===null?'Chưa trả lời':value===expected?'Khớp đáp án':'Chưa khớp đáp án'}{q.statements?.[i]&&<p>{renderText?renderText(q.statements[i]):q.statements[i]}</p>}</li>;
@@ -51,7 +52,7 @@ export default function ExamReview({exam,draft,initialQuestionId,renderText,rend
       </div>
       {q.correctionNote&&<p className="ep-source-erratum"><strong>Đính chính MTM:</strong> {renderText?renderText(q.correctionNote):q.correctionNote}</p>}
       {q.sourceContent&&<details className="ep-solution" open={expanded.has(q.id)} onToggle={event=>{const open=event.currentTarget.open;setExpanded(previous=>{if(previous.has(q.id)===open)return previous;const next=new Set(previous);open?next.add(q.id):next.delete(q.id);return next;});}}><summary>Đáp án và lời giải đầy đủ theo mẫu MTM</summary>{expanded.has(q.id)&&<MtmSourceContent segments={q.sourceContent.solutions} assetBase="/practice-media/source-crops" label={q.sourceRef} kind="solution"/>}</details>}
-      {q.solution&&<details className="ep-solution" open={expanded.has(q.id)} onToggle={event=>{const open=event.currentTarget.open;setExpanded(previous=>{if(previous.has(q.id)===open)return previous;const next=new Set(previous);open?next.add(q.id):next.delete(q.id);return next;});}}><summary>Lời giải câu {index+1}</summary>{expanded.has(q.id)&&<Suspense fallback={<p>Đang mở lời giải…</p>}><DetailedSolution examId={exam.id} versionHash={exam.versionHash} questionId={q.id} fallback={q.solution}/>{renderSolutionExtra?.(q)}</Suspense>}</details>}
+      {q.solution&&<details className="ep-solution" open={expanded.has(q.id)} onToggle={event=>{const open=event.currentTarget.open;setExpanded(previous=>{if(previous.has(q.id)===open)return previous;const next=new Set(previous);open?next.add(q.id):next.delete(q.id);return next;});}}><summary>Lời giải · {questionLabel(exam,index).full}</summary>{expanded.has(q.id)&&<Suspense fallback={<p>Đang mở lời giải…</p>}><DetailedSolution examId={exam.id} versionHash={exam.versionHash} questionId={q.id} fallback={q.solution}/>{renderSolutionExtra?.(q)}</Suspense>}</details>}
     </section>)}
   </section>;
 }

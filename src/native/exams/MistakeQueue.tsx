@@ -18,8 +18,8 @@ export default function MistakeQueue({history}:{history:ReviewHistory}) {
   const uncertain=history.messages.length>0||summary.excluded>0;
   return <section className="ep-card ep-mistake-queue" aria-labelledby="ep-mistake-heading">
     <h2 id="ep-mistake-heading" ref={heading} tabIndex={-1}>Câu cần ôn trên trình duyệt này</h2>
-    <p>Tổng hợp các lượt đã nộp còn lưu ở đây, không phụ thuộc bộ lọc đề phía trên. Mỗi phiên bản dùng đáp án của chính phiên bản đó; câu đạt đủ điểm ở lượt gần nhất sẽ rời danh sách.</p>
-    <p>Chỉ đọc lịch sử, giữ nguyên điểm và bài làm. Chưa đồng bộ sang thiết bị khác. Kho lưu lượt cũ có giới hạn {HISTORY_LIMIT} lượt; danh sách không đại diện cho toàn bộ quá trình học.</p>
+    <p>Tổng hợp các lượt đã nộp còn lưu ở đây, không phụ thuộc bộ lọc đề phía trên. Mỗi lượt được chấm theo đáp án của đúng bản đề đã làm; câu đạt đủ điểm ở lượt gần nhất sẽ rời danh sách.</p>
+    <p>Chỉ đọc lịch sử, giữ nguyên điểm và bài làm. Chưa đồng bộ sang thiết bị khác. Kho lịch sử trên trình duyệt giữ tối đa {HISTORY_LIMIT} lượt; khi đầy, lượt cũ được giữ nguyên và chưa bắt đầu được lượt làm lại.</p>
     {history.messages.map((message,index)=><p key={index} className="ep-notice" role="status">{message}</p>)}
     {summary.excluded>0&&<p className="ep-notice">Có {summary.excluded} bản lưu chưa đủ điều kiện đối chiếu; chưa tính vào danh sách.</p>}
     {!!summary.items.length&&<>

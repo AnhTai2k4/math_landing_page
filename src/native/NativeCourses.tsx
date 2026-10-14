@@ -1,6 +1,6 @@
 import {createElement,useMemo,useRef,useState,type ReactNode} from 'react';
 import {Search,ChevronDown,LockKeyhole,ArrowLeft,ArrowRight,BookOpen,MessageCircle} from 'lucide-react';
-import {Link,navigate} from '../migration/navigation';
+import {Link,navigate} from '../migration/navigation';import {WebpPicture} from '../migration/WebpPicture';
 import {courses,filterCourses,lessonCount,type Course} from '../migration/catalogue';
 import {parseCatalogQuery,catalogURL} from '../migration/route-policy';
 import {nativeCourseMetadata,nativeLessonUrl,resolveNativeLesson,publicSnapshot} from './model';
@@ -17,7 +17,7 @@ export function NativeCatalogue({search}:{search:string}){
  const change=(patch:Partial<typeof state>,replace=false)=>navigate(catalogURL({...state,...patch}),{replace});
  return <div className="native-ui"><SnapshotNotice/><section className="ne-catalog"><div className="ne-grades" aria-label="Chọn lớp">{['10','11','12'].map(grade=><button key={grade} aria-pressed={state.grade===grade} onClick={()=>change({grade:grade as typeof state.grade})}>Lớp {grade}</button>)}</div><h1 className="ne-roadmap-title">{state.grade==='all'?'Danh mục khóa học Toán':<>Lộ trình luyện thi {year} <span>dành cho {group}</span></>}</h1>
  <div className="ne-filter-toggle"><button onClick={()=>setAdvanced(!advanced)} aria-expanded={advanced}><Search size={15}/> Tìm và lọc khóa học</button></div>{(advanced||state.query||state.grade==='all')&&<div className="ne-search-row"><input aria-label="Tìm khóa học" placeholder="Tên khóa học hoặc chủ đề…" maxLength={120} value={state.query} onChange={e=>change({query:e.target.value},true)}/><select aria-label="Sắp xếp khóa học" value={state.order} onChange={e=>change({order:e.target.value as typeof state.order})}><option value="roadmap">Theo lộ trình</option><option value="name">Theo tên</option></select><button onClick={()=>change({grade:'all',query:''})}>Tất cả</button></div>}
- {list.length?<div className="ne-course-grid">{list.map(c=>{const raw=nativeCourseMetadata(c);return <article key={c.slug} className="ne-course-card"><Link href={'/khoa-hoc/'+c.slug}><img src={c.image} alt={c.title} width={1012} height={566} loading="lazy"/><h2>{c.title}</h2></Link><p>{raw?.overview||''}</p></article>;})}</div>:<div className="ne-empty"><h2>Không tìm thấy khóa học</h2><button onClick={()=>change({query:'',grade:'all'})}>Xóa bộ lọc</button></div>}
+ {list.length?<div className="ne-course-grid">{list.map(c=>{const raw=nativeCourseMetadata(c);return <article key={c.slug} className="ne-course-card"><Link href={'/khoa-hoc/'+c.slug}><WebpPicture src={c.image} sizes="(max-width: 767px) 92vw, 400px" alt={c.title} width={1012} height={566} loading="lazy"/><h2>{c.title}</h2></Link><p>{raw?.overview||''}</p></article>;})}</div>:<div className="ne-empty"><h2>Không tìm thấy khóa học</h2><button onClick={()=>change({query:'',grade:'all'})}>Xóa bộ lọc</button></div>}
  </section></div>;
 }
 export function NativeCourseDetail({course:c}:{course:Course}){
