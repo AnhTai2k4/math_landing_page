@@ -2,6 +2,7 @@ import React, {useId, useState} from 'react';
 import MathText from '../math/MathText';
 import type {PracticeQuestion} from './data';
 import MtmSourceContent from './MtmSourceContent';
+import ZoomableImage from './ZoomableImage';
 import display from '../chapters/exact-source-display.json';
 
 type SourceStatement={label:string;text:string};
@@ -42,7 +43,7 @@ export default function MtmSourceQuestion({question}:{question:PracticeQuestion}
   return <section className="mtm-source-content mtm-native-source" aria-label={`Đề ${question.sourceRef}`}>
     <div className="mtm-native-question-text">
       <p><MathText text={entry.prompt}/></p>
-      {entry.figureRef&&<figure className="mtm-native-figure" style={{maxWidth:entry.figureRef.width>600?640:420}}>{figureFailed?<p role="alert">Không tải được hình của {question.sourceRef}. Hãy tải lại trang để đọc đủ câu hỏi.</p>:<img src={`/practice-media/source-crops/${entry.figureRef.path}`} width={entry.figureRef.width} height={entry.figureRef.height} loading="lazy" decoding="async" alt={entry.figureRef.alt??`Hình gốc ${question.sourceRef}`} onError={()=>setFigureFailed(true)}/>}</figure>}
+      {entry.figureRef&&<figure className="mtm-native-figure" style={{maxWidth:entry.figureRef.width>600?640:420}}>{figureFailed?<p role="alert">Không tải được hình của {question.sourceRef}. Hãy tải lại trang để đọc đủ câu hỏi.</p>:<ZoomableImage src={`/practice-media/source-crops/${entry.figureRef.path}`} width={entry.figureRef.width} height={entry.figureRef.height} label={`Hình ${question.sourceRef}`} alt={entry.figureRef.alt??`Hình gốc ${question.sourceRef}`} onError={()=>setFigureFailed(true)}/>}</figure>}
       {entry.promptAfterFigure&&<p><MathText text={entry.promptAfterFigure}/></p>}
       {entry.choices&&<ol className="mtm-native-choices" type="A">{entry.choices.map(choice=><li key={choice.label}><MathText text={choice.text}/></li>)}</ol>}
       {entry.statements&&statementBlocks(entry)}

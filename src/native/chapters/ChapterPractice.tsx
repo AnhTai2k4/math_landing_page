@@ -9,6 +9,7 @@ import MathText from '../math/MathText';
 import MtmSourceContent from '../exams/MtmSourceContent';
 import MtmSourceQuestion from '../exams/MtmSourceQuestion';
 import TheorySummary from './TheorySummary';
+import ZoomableImage from '../exams/ZoomableImage';
 import {questionLabel} from '../exams/attempt-ui';
 import questionPdfs from './mtm-question-pdfs.json';
 import {isWarmup,WARMUP_LABEL} from './library-rules';
@@ -42,7 +43,7 @@ function QuestionReader({exam}:{exam:PracticeExam}) {
       <p><MathText text={q.prompt??q.text??''}/></p>{q.sourceContent&&<MtmSourceQuestion question={q}/>}<Tables tables={q.questionTables}/>
       {q.kind==='mc'&&!q.sourceContent&&<ol className="cp-choices" type="A">{q.choices.map((choice,i)=><li key={i}><MathText text={choice}/></li>)}</ol>}
       {q.kind==='tf'&&!q.sourceContent&&<ol className="cp-statements" type="a">{q.statements?.map((statement,i)=><li key={i}><MathText text={statement}/></li>)}</ol>}
-      {q.image&&(q.imageAlt?<figure><img loading="lazy" src={q.image} alt={q.imageAlt}/><figcaption>{q.imageAlt}</figcaption></figure>:<details><summary>Xem ảnh câu trong nguồn</summary><img loading="lazy" src={q.image} alt={`Câu ${index+1} trong PDF gốc; nội dung đã chép ở trên`}/></details>)}
+      {q.image&&(q.imageAlt?<figure><ZoomableImage src={q.image} alt={q.imageAlt} label={`Hình ${questionLabel(exam,index).full}`}/><figcaption>{q.imageAlt}</figcaption></figure>:<details><summary>Xem ảnh câu trong nguồn</summary><ZoomableImage src={q.image} alt={`Câu ${index+1} trong PDF gốc; nội dung đã chép ở trên`} label={`Ảnh ${questionLabel(exam,index).full}`}/></details>)}
       <p className="cp-question-source"><small>MTM sưu tầm và biên soạn</small></p>
     </article>)}</>}
   </section>;

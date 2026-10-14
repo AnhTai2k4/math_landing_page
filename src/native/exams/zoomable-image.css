@@ -1,0 +1,25 @@
+/* TH-02 (Đợt 4): phóng to ảnh câu hỏi. Ảnh trong bài giữ nguyên cách hiển thị cũ; chỉ thêm nút và con trỏ phóng. */
+.ep-zoomable{cursor:zoom-in}
+/* Nút nằm dưới ảnh, không đè lên chữ của đề. */
+.ep-zoom-row{position:relative;z-index:2;display:flex;justify-content:flex-end;margin-top:6px}
+.ep-root .ep-zoom-open,.ep-zoom-open{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:6px 14px;border:1px solid #233463;border-radius:999px;background:rgba(255,255,255,.94);color:#233463;font:600 .85rem/1.2 inherit;cursor:pointer;box-shadow:0 1px 4px rgba(15,23,42,.18)}
+.ep-root .ep-zoom-open:hover,.ep-zoom-open:hover{background:#233463;color:#fff}
+.ep-zoom-open:focus-visible{outline:3px solid #d7a93a;outline-offset:2px}
+.ep-zoom-open span{font-size:1rem}
+.ep-zoom-dialog{position:fixed;inset:0;width:100vw;height:100vh;height:100dvh;max-width:none;max-height:none;margin:0;padding:0;border:0;background:#0f172a;color:#fff;display:flex;flex-direction:column;overflow:hidden}
+.ep-zoom-dialog:not([open]){display:none}
+.ep-zoom-dialog::backdrop{background:rgba(15,23,42,.85)}
+.ep-zoom-bar{display:flex;align-items:center;gap:8px;padding:8px 12px;padding-top:max(8px,env(safe-area-inset-top));background:#172033;border-bottom:3px solid #d7a93a;flex:0 0 auto}
+.ep-zoom-title{flex:1 1 auto;min-width:0;margin:0;font-weight:700;font-size:.95rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ep-zoom-tools{display:flex;align-items:center;gap:6px;flex:0 0 auto}
+.ep-zoom-tools span{min-width:72px;text-align:center;font-size:.85rem;font-variant-numeric:tabular-nums}
+.ep-zoom-dialog button{min-width:44px;min-height:44px;border:1px solid #94a3b8;border-radius:10px;background:#fff;color:#172033;font:700 1.1rem/1 inherit;cursor:pointer;padding:0 12px}
+.ep-zoom-dialog button:disabled{opacity:.45;cursor:default}
+.ep-zoom-dialog button:focus-visible,.ep-zoom-area:focus-visible{outline:3px solid #d7a93a;outline-offset:2px}
+.ep-zoom-dialog .ep-zoom-close{font-size:.95rem;white-space:nowrap;background:#d7a93a;border-color:#d7a93a;color:#172033}
+.ep-zoom-area{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:100%;grid-template-rows:100%;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;background:#fff;touch-action:pan-x pan-y pinch-zoom}
+/* margin:auto trong lưới: ảnh nhỏ hơn vùng xem thì nằm giữa; ảnh lớn hơn thì bắt đầu từ mép, không bị cắt mất phần trái/trên. */
+.ep-zoom-area img{display:block;max-width:none;height:auto;margin:auto;transition:opacity .15s}
+.ep-zoom-hint{margin:0;padding:8px 12px;padding-bottom:max(8px,env(safe-area-inset-bottom));font-size:.85rem;line-height:1.5;background:#172033;color:#e2e8f0;flex:0 0 auto}
+@media(max-width:420px){.ep-zoom-title{font-size:.85rem}.ep-zoom-tools span{min-width:60px;font-size:.8rem}.ep-zoom-bar{gap:6px;padding-left:8px;padding-right:8px}}
+@media(prefers-reduced-motion:reduce){.ep-zoom-area img{transition:none}}
