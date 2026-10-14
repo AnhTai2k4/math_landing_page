@@ -11,7 +11,7 @@ const BUDGET = {
   entryJsGzip: 135_000,
   entryCss: 125_000,
   practiceLibrary: 4_500_000, // ngân hàng đề còn nhập thêm (từ Đợt 3 nằm ở PracticeShelf-*, nạp bằng import())
-  practiceShell: 60_000,      // KT-06: khung trang /luyen-tap phải nhẹ, không được kéo ngân hàng đề vào lại
+  practiceShell: 100_000,     // KT-06: khung trang /luyen-tap (gồm mã ChapterPractice, khoảng 78 kB) không được kéo ngân hàng đề vào lại
   otherChunk: 600_000,       // mọi chunk JS khác
   totalJs: 7_500_000,
 };
