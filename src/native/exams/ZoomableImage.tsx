@@ -7,17 +7,10 @@ import './zoomable-image.css';
 // Bấm ảnh (hoặc nút "Phóng to") mở khung xem toàn màn: ảnh vừa bề ngang, phóng tới 3 lần và cuộn hai chiều.
 // Đóng bằng nút, phím Esc hoặc vuốt xuống khi đang ở cỡ vừa màn. Khung xem chỉ là lớp hiển thị: không đổi
 // trạng thái bài làm, không đổi URL, không ghi bộ nhớ, nên đáp án đang nhập giữ nguyên.
-const LEVELS=[1,1.5,2,3,4] as const;
+import {IMAGE_ZOOM_LEVELS as LEVELS,initialZoomLevel as initialLevel} from './reading-tools';
 const levelText=(level:number)=>'Phóng ×'+String(LEVELS[level]).replace('.',',');
-// Ảnh đề là dải rộng (1562 px) nên "vừa bề ngang" trên điện thoại vẫn chỉ còn khoảng 24% cỡ gốc. Khi mở, chọn mức
-// phóng nhỏ nhất đưa ảnh về từ 55% cỡ gốc trở lên (chữ đọc được); ảnh hình nhỏ hoặc màn rộng thì giữ vừa màn.
-const READABLE_SCALE=.55;
-export function initialLevel(areaWidth:number,naturalWidth:number|undefined){
-  if(!naturalWidth||areaWidth<=0)return 0;
-  const fit=Math.min(areaWidth,naturalWidth);
-  const index=LEVELS.findIndex(level=>fit*level/naturalWidth>=READABLE_SCALE);
-  return index<0?LEVELS.length-1:index;
-}
+// Ảnh đề là dải rộng (1562 px) nên "vừa bề ngang" trên điện thoại chỉ còn khoảng 24% cỡ gốc: khi mở chọn sẵn mức
+// đọc được (initialZoomLevel); ảnh hình nhỏ hoặc màn rộng thì giữ vừa màn.
 
 type Props={src:string;alt:string;width?:number;height?:number;label:string;loading?:'lazy'|'eager';onError?:(event:SyntheticEvent<HTMLImageElement>)=>void};
 
