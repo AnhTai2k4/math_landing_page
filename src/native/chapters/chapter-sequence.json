@@ -1,0 +1,62 @@
+{
+  "10:1": [
+    "mtm-practice-g10-c1-foundation-v1",
+    "mtm-drive-g10-c1-t01-mtm-errata-v1",
+    "mtm-drive-g10-c1-t02-mtm-errata-v1",
+    "mtm-src-g10-c1-s01-v1",
+    "mtm-drive-g10-c1-t03-mtm-errata-v1",
+    "mtm-drive-g10-c1-t04-mtm-errata-v1",
+    "mtm-src-g10-c1-s02-v1",
+    "mtm-src-g10-c1-s03-v1",
+    "mtm-drive-g10-c1-t05-mtm-errata-v1",
+    "mtm-drive-g10-c1-t06-mtm-errata-v1",
+    "mtm-src-g10-c1-s04-v1"
+  ],
+  "10:2": [
+    "mtm-practice-g10-c2-b01-v1",
+    "mtm-src-g10-c2-s01-v1",
+    "mtm-src-g10-c2-s02-v1",
+    "mtm-drive-g10-c2-t01-mtm-errata-v1",
+    "mtm-drive-g10-c2-t02-mtm-errata-v56",
+    "mtm-drive-g10-c2-t03-mtm-errata-v62",
+    "mtm-drive-g10-c2-t04-mtm-errata-v63",
+    "mtm-src-g10-c2-s03-v1",
+    "mtm-src-g10-c2-s04-v1",
+    "mtm-src-g10-c2-s05-v1"
+  ],
+  "10:3": [
+    "mtm-practice-g10-c3-b01-v1",
+    "mtm-drive-g10-c3-t01-mtm-errata-v1",
+    "mtm-drive-g10-c3-t02-mtm-errata-v57",
+    "mtm-src-g10-c3-s01-v1",
+    "mtm-drive-g10-c3-t03-mtm-errata-v60",
+    "mtm-drive-g10-c3-t04-mtm-v1",
+    "mtm-drive-g10-c3-t05-mtm-v1",
+    "mtm-drive-g10-c3-t06-mtm-v1",
+    "mtm-src-g10-c3-s02-v1",
+    "mtm-src-g10-c3-s03-v1",
+    "mtm-src-g10-c3-s04-v1"
+  ],
+  "10:4": [
+    "mtm-practice-g10-c4-b01-v1",
+    "mtm-practice-g10-c4-b02-v1",
+    "mtm-drive-g10-c4-t01-mtm-errata-v1",
+    "mtm-drive-g10-c4-t02-mtm-errata-v61",
+    "mtm-src-g10-c4-s01-v1",
+    "mtm-drive-g10-c4-t03-mtm-v1",
+    "mtm-drive-g10-c4-t04-mtm-v1",
+    "mtm-src-g10-c4-s02-v1",
+    "mtm-practice-g10-c4-d01-v1",
+    "mtm-drive-g10-c4-t05-mtm-v1",
+    "mtm-drive-g10-c4-t06-mtm-v1",
+    "mtm-src-g10-c4-s03-v1",
+    "mtm-drive-g10-c4-t07-mtm-v1",
+    "mtm-drive-g10-c4-t08-mtm-v1",
+    "mtm-practice-g10-c4-d02-v1",
+    "mtm-drive-g10-c4-t09-mtm-v1",
+    "mtm-drive-g10-c4-t10-mtm-v1",
+    "mtm-practice-g10-c4-d03-v1",
+    "mtm-drive-g10-c4-t11-mtm-v1",
+    "mtm-drive-g10-c4-t12-mtm-v1"
+  ]
+}

@@ -59669,5 +59669,2580 @@
       "tiệm cận PDF1–2, nhãn in167–168",
       "khảo sát PDF1–2, nhãn in197–198"
     ]
+  },
+  {
+    "exam": {
+      "id": "mtm-practice-g10-c2-b01-v1",
+      "title": "Toán 10 · Chương II · Bài 1: Hệ thống công thức và lí thuyết toàn chương",
+      "grade": 10,
+      "period": "GK1",
+      "chapter": 2,
+      "practiceNumber": 1,
+      "topic": "Hệ thống công thức và lí thuyết toàn chương",
+      "questionCount": 22,
+      "durationMinutes": 90,
+      "sourceHash": "15b9407343884a70989f7ad0b3fc8a21fdf36a7bcdf7efee8989b91d4473e324",
+      "sourceHashMeaning": "SHA256 của VERIFY.py (bản kiểm toán độc lập của tác giả); đề tự soạn, không có PDF nguồn; không phải chứng nhận đáp án",
+      "sourceRef": "MTM biên soạn mới 14/10/2026; câu hỏi và lời giải tự soạn theo SGK Kết nối tri thức Toán 10, Chương II (Bài 3, Bài 4). Không chép câu hỏi hoặc đáp án nguồn.",
+      "sourceUrl": "https://www.minhthanhmath.vn",
+      "instructions": "Mỗi câu phần I chọn một phương án; mỗi nhóm phần II chọn đúng/sai độc lập cho bốn ý; phần III nhập số (số nguyên, có thể âm) và chỉ làm tròn khi câu hỏi yêu cầu. Phần I/II/III lần lượt tối đa 3/4/3 điểm.",
+      "sections": [
+        {
+          "label": "I · Trắc nghiệm",
+          "kind": "mc",
+          "count": 12
+        },
+        {
+          "label": "II · Đúng/sai",
+          "kind": "tf",
+          "count": 4
+        },
+        {
+          "label": "III · Trả lời ngắn",
+          "kind": "short",
+          "count": 6
+        }
+      ],
+      "rubricVersion": "MTM-PRACTICE-22-12MC-4TF-6SA-v2",
+      "answerKeyVerified": true,
+      "rubricVerified": true,
+      "questionDisplayVerified": true,
+      "publicationVerified": true,
+      "independentMathVerified": true,
+      "sourceMaterial": {
+        "title": "Bất phương trình và hệ bất phương trình bậc nhất hai ẩn · hệ thống lí thuyết",
+        "publisher": "Minh Thành Math (câu hỏi mới)",
+        "version": "14/10/2026 · v1 · khóa chấm tác giả kiểm bằng Python, chờ kiểm độc lập",
+        "locator": "SGK Kết nối tri thức Toán 10, Chương II: Bài 3, Bài 4; câu hỏi mới MTM theo đề và số câu",
+        "sourceType": "ORIGINAL_MTM_AUTHORING",
+        "sourceQuestionReuse": false,
+        "sourceAnswerKeyReuse": false
+      },
+      "questions": [
+        {
+          "kind": "mc",
+          "prompt": "Bất phương trình nào sau đây là bất phương trình bậc nhất hai ẩn?",
+          "choices": [
+            "$2x+3y^2\\le5$",
+            "$x^2-y>1$",
+            "$3x-2y<7$",
+            "$\\dfrac1x+y\\ge2$"
+          ],
+          "answer": "C",
+          "solution": "Bất phương trình bậc nhất hai ẩn $x,y$ có dạng $ax+by<c$ (hoặc $ax+by>c$, $ax+by\\le c$, $ax+by\\ge c$), trong đó $a,b,c$ là các số cho trước, $a$ và $b$ không đồng thời bằng $0$. Phương án A chứa $y^2$, phương án B chứa $x^2$, phương án D chứa $\\dfrac1x$ nên đều không phải bậc nhất. Bất phương trình $3x-2y<7$ có dạng trên với $a=3$, $b=-2$, $c=7$. Chọn C.",
+          "skills": [
+            "Khái niệm bất phương trình bậc nhất hai ẩn"
+          ],
+          "level": 1,
+          "maxMillipoints": 250,
+          "id": "g10-c2-b01-v1-i1",
+          "part": 1,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "mc",
+          "prompt": "Hệ nào sau đây là hệ bất phương trình bậc nhất hai ẩn?",
+          "choices": [
+            "$\\begin{cases}2x-y>1\\\\x+3y\\le6\\end{cases}$",
+            "$\\begin{cases}x+y\\le3\\\\x-y^2>0\\end{cases}$",
+            "$\\begin{cases}xy\\ge1\\\\x+y<4\\end{cases}$",
+            "$\\begin{cases}x+y\\le2\\\\x^2+y\\ge0\\end{cases}$"
+          ],
+          "answer": "A",
+          "solution": "Hệ bất phương trình bậc nhất hai ẩn gồm một số bất phương trình mà mỗi bất phương trình đều là bất phương trình bậc nhất hai ẩn. Hệ B có $y^2$, hệ C có $xy$, hệ D có $x^2$ nên đều không thỏa. Hệ A gồm $2x-y>1$ và $x+3y\\le6$, cả hai đều bậc nhất hai ẩn. Chọn A.",
+          "skills": [
+            "Khái niệm hệ bất phương trình bậc nhất hai ẩn"
+          ],
+          "level": 1,
+          "maxMillipoints": 250,
+          "id": "g10-c2-b01-v1-i2",
+          "part": 1,
+          "number": 2,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "mc",
+          "prompt": "Cặp số nào sau đây là một nghiệm của bất phương trình $2x-y>3$?",
+          "choices": [
+            "$(1;-1)$",
+            "$(0;-2)$",
+            "$(1;0)$",
+            "$(2;0)$"
+          ],
+          "answer": "D",
+          "solution": "Thay từng cặp vào vế trái $2x-y$. Với $(1;-1)$: $2\\cdot1-(-1)=3$, mà $3>3$ sai (dấu ngặt). Với $(0;-2)$: $0-(-2)=2$, $2>3$ sai. Với $(1;0)$: $2$, $2>3$ sai. Với $(2;0)$: $2\\cdot2-0=4$, $4>3$ đúng. Chọn D.",
+          "skills": [
+            "Nghiệm của bất phương trình bậc nhất hai ẩn"
+          ],
+          "level": 1,
+          "maxMillipoints": 250,
+          "id": "g10-c2-b01-v1-i3",
+          "part": 1,
+          "number": 3,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "mc",
+          "prompt": "Điểm nào sau đây KHÔNG thuộc miền nghiệm của bất phương trình $x+2y\\le4$?",
+          "choices": [
+            "$O(0;0)$",
+            "$N(1;2)$",
+            "$M(2;1)$",
+            "$P(4;0)$"
+          ],
+          "answer": "B",
+          "solution": "Tính $x+2y$ tại từng điểm rồi so với $4$. Tại $O$: $0\\le4$, thuộc. Tại $N$: $1+2\\cdot2=5$, $5\\le4$ sai, không thuộc. Tại $M$: $2+2\\cdot1=4\\le4$, thuộc (điểm nằm trên bờ, bờ được kể vì dấu $\\le$). Tại $P$: $4+0=4\\le4$, thuộc. Chọn B.",
+          "skills": [
+            "Điểm thuộc miền nghiệm"
+          ],
+          "level": 1,
+          "maxMillipoints": 250,
+          "id": "g10-c2-b01-v1-i4",
+          "part": 1,
+          "number": 4,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "mc",
+          "prompt": "Miền nghiệm của bất phương trình $3x-2y<6$ là",
+          "choices": [
+            "nửa mặt phẳng bờ $d:3x-2y=6$ chứa gốc tọa độ $O$, kể cả bờ $d$.",
+            "nửa mặt phẳng bờ $d:3x-2y=6$ chứa gốc tọa độ $O$, không kể bờ $d$.",
+            "nửa mặt phẳng bờ $d:3x-2y=6$ không chứa gốc tọa độ $O$, không kể bờ $d$.",
+            "nửa mặt phẳng bờ $d:3x-2y=6$ không chứa gốc tọa độ $O$, kể cả bờ $d$."
+          ],
+          "answer": "B",
+          "solution": "Bờ là $d:3x-2y=6$. Gốc $O$ không nằm trên $d$ vì $3\\cdot0-2\\cdot0=0\\ne6$, nên dùng $O$ làm điểm thử: $0<6$ đúng, do đó nửa mặt phẳng chứa $O$ là miền nghiệm. Dấu $<$ là dấu ngặt nên các điểm trên $d$ (cho $3x-2y=6$) không là nghiệm: không kể bờ. Chọn B.",
+          "skills": [
+            "Xác định miền nghiệm",
+            "Kể bờ hay không kể bờ"
+          ],
+          "level": 2,
+          "maxMillipoints": 250,
+          "id": "g10-c2-b01-v1-i5",
+          "part": 1,
+          "number": 5,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "mc",
+          "prompt": "Khi biểu diễn miền nghiệm của bất phương trình $x-y\\ge1$, đường thẳng bờ $d:x-y=1$ được vẽ như thế nào?",
+          "choices": [
+            "Nét đứt, vì các điểm trên $d$ không là nghiệm.",
+            "Nét liền, vì $O(0;0)$ là một nghiệm.",
+            "Nét liền, vì mọi điểm trên $d$ đều là nghiệm.",
+            "Nét đứt, vì $O(0;0)$ không là nghiệm."
+          ],
+          "answer": "C",
+          "solution": "Mỗi điểm trên $d$ thỏa $x-y=1$, do đó thỏa $x-y\\ge1$: bờ thuộc miền nghiệm, vẽ nét liền. Phương án A sai vì các điểm trên $d$ là nghiệm. Phương án B sai lí do: tại $O$ có $0\\ge1$ sai, nên $O$ không là nghiệm. Phương án D nêu đúng việc $O$ không là nghiệm, nhưng điều đó chỉ cho biết miền nghiệm là nửa mặt phẳng không chứa $O$, không quyết định nét vẽ của bờ. Chọn C.",
+          "skills": [
+            "Biểu diễn miền nghiệm",
+            "Kể bờ hay không kể bờ"
+          ],
+          "level": 2,
+          "maxMillipoints": 250,
+          "id": "g10-c2-b01-v1-i6",
+          "part": 1,
+          "number": 6,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "mc",
+          "prompt": "Trong mặt phẳng $Oxy$, miền nghiệm của bất phương trình $y>2$ (bất phương trình bậc nhất hai ẩn với $a=0$, $b=1$) là",
+          "choices": [
+            "nửa mặt phẳng phía trên đường thẳng $y=2$, không kể đường thẳng $y=2$.",
+            "nửa mặt phẳng phía dưới đường thẳng $y=2$, không kể đường thẳng $y=2$.",
+            "nửa mặt phẳng phía trên đường thẳng $y=2$, kể cả đường thẳng $y=2$.",
+            "nửa mặt phẳng bên phải đường thẳng $x=2$, không kể đường thẳng $x=2$."
+          ],
+          "answer": "A",
+          "solution": "Bờ là đường thẳng $y=2$, song song với trục $Ox$. Điểm $O(0;0)$ không thuộc bờ và $0>2$ sai, nên miền nghiệm là nửa mặt phẳng không chứa $O$, tức phía trên đường thẳng $y=2$ (ví dụ $(0;3)$ thỏa $3>2$). Dấu $>$ ngặt nên không kể bờ. Phương án D dùng nhầm đường thẳng $x=2$. Chọn A.",
+          "skills": [
+            "Trường hợp a = 0 hoặc b = 0"
+          ],
+          "level": 2,
+          "maxMillipoints": 250,
+          "id": "g10-c2-b01-v1-i7",
+          "part": 1,
+          "number": 7,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "mc",
+          "prompt": "Cặp số nào sau đây là nghiệm của hệ bất phương trình $\\begin{cases}x+y\\le4\\\\x-y>0\\\\y\\ge0\\end{cases}$?",
+          "choices": [
+            "$(2;2)$",
+            "$(5;0)$",
+            "$(1;-1)$",
+            "$(3;1)$"
+          ],
+          "answer": "D",
+          "solution": "Nghiệm của hệ phải thỏa đồng thời cả ba bất phương trình. Với $(2;2)$: $x-y=0$, $0>0$ sai. Với $(5;0)$: $x+y=5$, $5\\le4$ sai. Với $(1;-1)$: $y=-1$, $-1\\ge0$ sai. Với $(3;1)$: $3+1=4\\le4$, $3-1=2>0$, $1\\ge0$, cả ba đều đúng. Chọn D.",
+          "skills": [
+            "Nghiệm của hệ bất phương trình"
+          ],
+          "level": 2,
+          "maxMillipoints": 250,
+          "id": "g10-c2-b01-v1-i8",
+          "part": 1,
+          "number": 8,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "mc",
+          "prompt": "Miền nghiệm của hệ bất phương trình $\\begin{cases}x\\ge0\\\\y\\ge0\\\\x+y\\le3\\end{cases}$ là",
+          "choices": [
+            "đoạn thẳng $AB$ với $A(3;0)$, $B(0;3)$.",
+            "nửa mặt phẳng bờ $x+y=3$ chứa gốc tọa độ $O$, kể cả bờ.",
+            "miền tam giác $OAB$ (kể cả các cạnh) với $O(0;0)$, $A(3;0)$, $B(0;3)$.",
+            "miền tam giác $OAB$ (kể cả các cạnh) với $O(0;0)$, $A(-3;0)$, $B(0;3)$."
+          ],
+          "answer": "C",
+          "solution": "$x\\ge0$ cho nửa mặt phẳng bên phải trục $Oy$ (kể cả trục); $y\\ge0$ cho nửa mặt phẳng phía trên trục $Ox$ (kể cả trục); $x+y\\le3$ cho nửa mặt phẳng bờ $x+y=3$ chứa $O$ (vì $0\\le3$), kể cả bờ. Miền nghiệm của hệ là phần chung: tam giác có đỉnh $O(0;0)$, giao của $x+y=3$ với $Ox$ là $A(3;0)$, với $Oy$ là $B(0;3)$. Phương án A chỉ là một cạnh; phương án B bỏ qua hai điều kiện $x\\ge0$, $y\\ge0$; phương án D chứa điểm có $x<0$. Chọn C.",
+          "skills": [
+            "Miền nghiệm của hệ",
+            "Miền đa giác"
+          ],
+          "level": 2,
+          "maxMillipoints": 250,
+          "id": "g10-c2-b01-v1-i9",
+          "part": 1,
+          "number": 9,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "mc",
+          "prompt": "Cho biểu thức $F=ax+by$ và một miền đa giác (gồm các điểm nằm bên trong và trên các cạnh của đa giác) trong mặt phẳng $Oxy$. Giá trị lớn nhất và giá trị nhỏ nhất của $F$ trên miền đa giác đó đạt được tại",
+          "choices": [
+            "tâm của đa giác.",
+            "một trong các đỉnh của đa giác.",
+            "giao điểm hai đường chéo của đa giác.",
+            "gốc tọa độ $O$."
+          ],
+          "answer": "B",
+          "solution": "Theo kết quả trong SGK: giá trị lớn nhất (nhỏ nhất) của $F=ax+by$, với $(x;y)$ là tọa độ các điểm thuộc miền đa giác, đạt được tại một trong các đỉnh của đa giác đó. Vì vậy chỉ cần tìm tọa độ các đỉnh, tính $F$ tại từng đỉnh rồi so sánh. Gốc $O$ chỉ là một đỉnh trong một số bài, không phải luôn luôn. Chọn B.",
+          "skills": [
+            "GTLN, GTNN của F = ax + by trên miền đa giác"
+          ],
+          "level": 2,
+          "maxMillipoints": 250,
+          "id": "g10-c2-b01-v1-i10",
+          "part": 1,
+          "number": 10,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "mc",
+          "prompt": "Một xưởng mỗi ngày làm $x$ chiếc ghế và $y$ chiếc bàn. Mỗi chiếc ghế cần $2$ giờ công, mỗi chiếc bàn cần $3$ giờ công; mỗi ngày xưởng có tối đa $60$ giờ công. Bất phương trình mô tả điều kiện về giờ công là",
+          "choices": [
+            "$3x+2y\\le60$",
+            "$2x+3y\\ge60$",
+            "$2x+3y<60$",
+            "$2x+3y\\le60$"
+          ],
+          "answer": "D",
+          "solution": "Làm $x$ ghế cần $2x$ giờ công, làm $y$ bàn cần $3y$ giờ công, tổng là $2x+3y$ giờ công. “Tối đa $60$” nghĩa là không vượt quá $60$, được phép bằng $60$, nên $2x+3y\\le60$. Phương án A đổi chỗ hệ số, phương án B ngược chiều, phương án C loại trường hợp dùng đúng $60$ giờ công. Chọn D.",
+          "skills": [
+            "Bài toán thực tế",
+            "Lập bất phương trình"
+          ],
+          "level": 2,
+          "maxMillipoints": 250,
+          "id": "g10-c2-b01-v1-i11",
+          "part": 1,
+          "number": 11,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "mc",
+          "prompt": "Miền nghiệm của hệ $\\begin{cases}x\\ge0\\\\y\\ge0\\\\x+y\\le5\\\\x+3y\\le9\\end{cases}$ là miền tứ giác $OABC$ với $O(0;0)$, $A(5;0)$, $B(3;2)$, $C(0;3)$. Giá trị lớn nhất của $F=x+2y$ trên miền này là",
+          "choices": [
+            "$7$",
+            "$5$",
+            "$6$",
+            "$9$"
+          ],
+          "answer": "A",
+          "solution": "Kiểm đỉnh $B$: $3+2=5$ và $3+3\\cdot2=9$, nên $B$ là giao điểm của hai bờ $x+y=5$ và $x+3y=9$. Giá trị lớn nhất đạt tại một đỉnh của miền đa giác. Tính $F=x+2y$: $F(O)=0$, $F(A)=5$, $F(B)=3+4=7$, $F(C)=0+6=6$. Số lớn nhất là $7$, đạt tại $B(3;2)$. Chọn A.",
+          "skills": [
+            "GTLN, GTNN của F = ax + by trên miền đa giác"
+          ],
+          "level": 3,
+          "maxMillipoints": 250,
+          "id": "g10-c2-b01-v1-i12",
+          "part": 1,
+          "number": 12,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "tf",
+          "prompt": "Cho bất phương trình $2x+y\\le4$ có bờ là đường thẳng $d:2x+y=4$. Xét các khẳng định sau:",
+          "statements": [
+            "Cặp số $(1;2)$ là một nghiệm của bất phương trình.",
+            "Miền nghiệm của bất phương trình là nửa mặt phẳng bờ $d$ không chứa gốc tọa độ $O$.",
+            "Điểm $M(3;-1)$ thuộc miền nghiệm của bất phương trình.",
+            "Mọi điểm nằm trên đường thẳng $d$ đều thuộc miền nghiệm của bất phương trình."
+          ],
+          "answer": [
+            true,
+            false,
+            false,
+            true
+          ],
+          "statementSolutions": [
+            "Đúng. $2\\cdot1+2=4$ và $4\\le4$ đúng.",
+            "Sai. $O$ không thuộc $d$; thay $O$: $2\\cdot0+0=0\\le4$ đúng, nên miền nghiệm là nửa mặt phẳng bờ $d$ chứa $O$ (kể cả bờ).",
+            "Sai. $2\\cdot3+(-1)=5$ và $5\\le4$ sai.",
+            "Đúng. Điểm trên $d$ cho $2x+y=4$, thỏa $2x+y\\le4$; dấu $\\le$ nên miền nghiệm kể cả bờ $d$."
+          ],
+          "solution": "Đánh giá từng ý độc lập; kết quả: Đúng – Sai – Sai – Đúng.",
+          "skills": [
+            "Nghiệm",
+            "Miền nghiệm",
+            "Kể bờ"
+          ],
+          "level": 1,
+          "maxMillipoints": 1000,
+          "pointsByCorrectCount": [
+            0,
+            100,
+            250,
+            500,
+            1000
+          ],
+          "id": "g10-c2-b01-v1-ii1",
+          "part": 2,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "tf",
+          "prompt": "Cho hệ bất phương trình $\\begin{cases}x\\ge1\\\\y\\ge1\\\\x+y\\le5\\end{cases}$. Xét các khẳng định sau:",
+          "statements": [
+            "Điểm $(2;2)$ thuộc miền nghiệm của hệ.",
+            "Gốc tọa độ $O(0;0)$ thuộc miền nghiệm của hệ.",
+            "Miền nghiệm của hệ là miền tam giác có các đỉnh $(1;1)$, $(4;1)$, $(1;4)$.",
+            "Diện tích miền nghiệm của hệ bằng $\\dfrac92$."
+          ],
+          "answer": [
+            true,
+            false,
+            true,
+            true
+          ],
+          "statementSolutions": [
+            "Đúng. $2\\ge1$, $2\\ge1$, $2+2=4\\le5$: cả ba bất phương trình đều thỏa.",
+            "Sai. Tại $O$ có $0\\ge1$ sai, nên $O$ không là nghiệm của hệ.",
+            "Đúng. Giao của $x=1$ và $y=1$ là $(1;1)$; giao của $y=1$ và $x+y=5$ là $(4;1)$; giao của $x=1$ và $x+y=5$ là $(1;4)$. Cả ba điểm thỏa mọi bất phương trình của hệ; phần chung của ba nửa mặt phẳng (kể cả bờ) là miền tam giác có ba đỉnh này.",
+            "Đúng. Tam giác vuông tại $(1;1)$, hai cạnh góc vuông dài $4-1=3$ và $4-1=3$, nên diện tích bằng $\\dfrac12\\cdot3\\cdot3=\\dfrac92$."
+          ],
+          "solution": "Đánh giá từng ý độc lập; kết quả: Đúng – Sai – Đúng – Đúng.",
+          "skills": [
+            "Miền nghiệm của hệ",
+            "Đỉnh của miền đa giác"
+          ],
+          "level": 2,
+          "maxMillipoints": 1000,
+          "pointsByCorrectCount": [
+            0,
+            100,
+            250,
+            500,
+            1000
+          ],
+          "id": "g10-c2-b01-v1-ii2",
+          "part": 2,
+          "number": 2,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "tf",
+          "prompt": "Cho hệ bất phương trình $\\begin{cases}x\\ge0\\\\y\\ge0\\\\x+y\\le6\\\\2x+y\\le8\\end{cases}$ và các biểu thức $F=3x+2y$, $G=x-y$. Xét các khẳng định sau:",
+          "statements": [
+            "Miền nghiệm của hệ là miền tứ giác $OABC$ với $O(0;0)$, $A(4;0)$, $B(2;4)$, $C(0;6)$.",
+            "Giá trị lớn nhất của $F$ trên miền nghiệm của hệ bằng $14$.",
+            "Giá trị lớn nhất của $F$ trên miền nghiệm của hệ đạt tại điểm $C(0;6)$.",
+            "Giá trị nhỏ nhất của $G$ trên miền nghiệm của hệ bằng $-2$."
+          ],
+          "answer": [
+            true,
+            true,
+            false,
+            false
+          ],
+          "statementSolutions": [
+            "Đúng. Bờ $2x+y=8$ cắt $Ox$ tại $A(4;0)$ (điểm $(6;0)$ của bờ $x+y=6$ vi phạm $2x+y\\le8$). Bờ $x+y=6$ cắt $Oy$ tại $C(0;6)$ (điểm $(0;8)$ vi phạm $x+y\\le6$). Giải $\\begin{cases}x+y=6\\\\2x+y=8\\end{cases}$ được $B(2;4)$. Bốn điểm $O,A,B,C$ đều thỏa cả bốn bất phương trình.",
+            "Đúng. $F(O)=0$, $F(A)=12$, $F(B)=6+8=14$, $F(C)=12$. Giá trị lớn nhất đạt tại một đỉnh nên bằng $14$.",
+            "Sai. $F(C)=12<14=F(B)$; giá trị lớn nhất đạt tại $B(2;4)$.",
+            "Sai. $G(O)=0$, $G(A)=4$, $G(B)=-2$, $G(C)=-6$. Giá trị nhỏ nhất của $G$ là $-6$, đạt tại $C(0;6)$."
+          ],
+          "solution": "Đánh giá từng ý độc lập; kết quả: Đúng – Đúng – Sai – Sai.",
+          "skills": [
+            "Đỉnh của miền đa giác",
+            "GTLN, GTNN của F = ax + by"
+          ],
+          "level": 3,
+          "maxMillipoints": 1000,
+          "pointsByCorrectCount": [
+            0,
+            100,
+            250,
+            500,
+            1000
+          ],
+          "id": "g10-c2-b01-v1-ii3",
+          "part": 2,
+          "number": 3,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "tf",
+          "prompt": "Một cửa hàng làm hai loại bánh. Mỗi mẻ bánh loại I cần $2$ kg bột và $1$ kg đường, lãi $300$ nghìn đồng; mỗi mẻ bánh loại II cần $1$ kg bột và $1$ kg đường, lãi $200$ nghìn đồng. Cửa hàng có $10$ kg bột và $6$ kg đường. Gọi $x$, $y$ ($x\\ge0$, $y\\ge0$) lần lượt là số mẻ bánh loại I và loại II. Xét các khẳng định sau:",
+          "statements": [
+            "Điều kiện về bột là $2x+y\\le10$.",
+            "Phương án làm $3$ mẻ loại I và $4$ mẻ loại II thỏa mãn mọi điều kiện.",
+            "Miền nghiệm của hệ điều kiện có một đỉnh là điểm $(4;2)$.",
+            "Lợi nhuận lớn nhất cửa hàng có thể đạt được là $1{,}5$ triệu đồng."
+          ],
+          "answer": [
+            true,
+            false,
+            true,
+            false
+          ],
+          "statementSolutions": [
+            "Đúng. $x$ mẻ loại I dùng $2x$ kg bột, $y$ mẻ loại II dùng $y$ kg bột; tổng không vượt quá $10$ kg nên $2x+y\\le10$.",
+            "Sai. Điều kiện về đường là $x+y\\le6$; với $x=3$, $y=4$ thì $x+y=7>6$ (dù bột vừa đủ: $2\\cdot3+4=10$).",
+            "Đúng. Hệ điều kiện $\\begin{cases}2x+y\\le10\\\\x+y\\le6\\\\x\\ge0\\\\y\\ge0\\end{cases}$. Giải $\\begin{cases}2x+y=10\\\\x+y=6\\end{cases}$ được $(4;2)$, điểm này thỏa $x\\ge0$, $y\\ge0$ nên là một đỉnh. Các đỉnh còn lại là $O(0;0)$, $(5;0)$, $(0;6)$.",
+            "Sai. Lợi nhuận $F=300x+200y$ (nghìn đồng). $F(0;0)=0$, $F(5;0)=1500$, $F(4;2)=1200+400=1600$, $F(0;6)=1200$. Lợi nhuận lớn nhất là $1600$ nghìn đồng $=1{,}6$ triệu đồng, khi làm $4$ mẻ loại I và $2$ mẻ loại II."
+          ],
+          "solution": "Đánh giá từng ý độc lập; kết quả: Đúng – Sai – Đúng – Sai.",
+          "skills": [
+            "Bài toán thực tế",
+            "Bài toán tối ưu"
+          ],
+          "level": 3,
+          "maxMillipoints": 1000,
+          "pointsByCorrectCount": [
+            0,
+            100,
+            250,
+            500,
+            1000
+          ],
+          "id": "g10-c2-b01-v1-ii4",
+          "part": 2,
+          "number": 4,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "short",
+          "prompt": "Bạn An có $120$ nghìn đồng để mua $x$ quyển vở (giá $9$ nghìn đồng/quyển) và $y$ chiếc bút (giá $5$ nghìn đồng/chiếc). Nếu An mua $5$ quyển vở thì An mua được nhiều nhất bao nhiêu chiếc bút?",
+          "mode": "numeric",
+          "acceptedAnswers": [
+            "15"
+          ],
+          "solution": "Điều kiện về tiền: $9x+5y\\le120$. Với $x=5$: $45+5y\\le120\\Leftrightarrow5y\\le75\\Leftrightarrow y\\le15$. Số bút là số tự nhiên nên nhiều nhất $15$ chiếc (khi đó tiêu đúng $120$ nghìn đồng). Kết quả nhập: $15$.",
+          "skills": [
+            "Bài toán thực tế",
+            "Lập bất phương trình"
+          ],
+          "level": 1,
+          "maxMillipoints": 500,
+          "id": "g10-c2-b01-v1-iii1",
+          "part": 3,
+          "number": 1,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "short",
+          "prompt": "Có bao nhiêu điểm có hoành độ và tung độ đều là số nguyên thuộc miền nghiệm của hệ $\\begin{cases}x\\ge0\\\\y\\ge0\\\\2x+y\\le4\\end{cases}$?",
+          "mode": "numeric",
+          "acceptedAnswers": [
+            "9"
+          ],
+          "solution": "Từ $x\\ge0$, $y\\ge0$ và $2x\\le2x+y\\le4$ suy ra $x\\in\\{0;1;2\\}$. Với $x=0$: $0\\le y\\le4$, có $5$ giá trị. Với $x=1$: $0\\le y\\le2$, có $3$ giá trị. Với $x=2$: $y=0$, có $1$ giá trị. Tổng cộng $5+3+1=9$ điểm. Kết quả nhập: $9$.",
+          "skills": [
+            "Miền nghiệm của hệ",
+            "Điểm nguyên"
+          ],
+          "level": 2,
+          "maxMillipoints": 500,
+          "id": "g10-c2-b01-v1-iii2",
+          "part": 3,
+          "number": 2,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "short",
+          "prompt": "Tính diện tích miền nghiệm của hệ bất phương trình $\\begin{cases}x\\ge0\\\\y\\ge0\\\\2x+3y\\le12\\end{cases}$ (đơn vị độ dài trên hai trục bằng nhau).",
+          "mode": "numeric",
+          "acceptedAnswers": [
+            "12"
+          ],
+          "solution": "Bờ $2x+3y=12$ cắt $Ox$ tại $A(6;0)$ và cắt $Oy$ tại $B(0;4)$. Vì $0\\le12$ nên miền nghiệm của $2x+3y\\le12$ chứa $O$; kết hợp $x\\ge0$, $y\\ge0$, miền nghiệm của hệ là tam giác $OAB$ vuông tại $O$. Diện tích $S=\\dfrac12\\cdot OA\\cdot OB=\\dfrac12\\cdot6\\cdot4=12$. Kết quả nhập: $12$.",
+          "skills": [
+            "Miền nghiệm của hệ",
+            "Miền đa giác"
+          ],
+          "level": 2,
+          "maxMillipoints": 500,
+          "id": "g10-c2-b01-v1-iii3",
+          "part": 3,
+          "number": 3,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "short",
+          "prompt": "Tìm giá trị lớn nhất của $F=2x+5y$ trên miền nghiệm của hệ $\\begin{cases}x\\ge0\\\\y\\ge0\\\\x+y\\le5\\\\y\\le3\\end{cases}$.",
+          "mode": "numeric",
+          "acceptedAnswers": [
+            "19"
+          ],
+          "solution": "Miền nghiệm là tứ giác $OABC$: $O(0;0)$; $A(5;0)$ là giao của $x+y=5$ với $Ox$; $B(2;3)$ là giao của $x+y=5$ và $y=3$; $C(0;3)$ là giao của $y=3$ với $Oy$. Bốn điểm đều thỏa mọi bất phương trình. $F(O)=0$, $F(A)=10$, $F(B)=4+15=19$, $F(C)=15$. Giá trị lớn nhất là $19$, đạt tại $B(2;3)$. Kết quả nhập: $19$.",
+          "skills": [
+            "GTLN, GTNN của F = ax + by trên miền đa giác"
+          ],
+          "level": 3,
+          "maxMillipoints": 500,
+          "id": "g10-c2-b01-v1-iii4",
+          "part": 3,
+          "number": 4,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "short",
+          "prompt": "Tìm giá trị nhỏ nhất của $F=x-2y$ trên miền nghiệm của hệ $\\begin{cases}x\\ge1\\\\y\\ge1\\\\x\\le4\\\\x+y\\le6\\end{cases}$.",
+          "mode": "numeric",
+          "acceptedAnswers": [
+            "-9"
+          ],
+          "solution": "Các đỉnh của miền nghiệm: giao của $x=1$ và $y=1$ là $(1;1)$; giao của $y=1$ và $x=4$ là $(4;1)$; giao của $x=4$ và $x+y=6$ là $(4;2)$; giao của $x=1$ và $x+y=6$ là $(1;5)$. Cả bốn điểm thỏa mọi bất phương trình nên miền nghiệm là tứ giác với bốn đỉnh này. $F(1;1)=-1$, $F(4;1)=2$, $F(4;2)=0$, $F(1;5)=1-10=-9$. Giá trị nhỏ nhất là $-9$, đạt tại $(1;5)$. Kết quả nhập: $-9$.",
+          "skills": [
+            "GTLN, GTNN của F = ax + by trên miền đa giác"
+          ],
+          "level": 3,
+          "maxMillipoints": 500,
+          "id": "g10-c2-b01-v1-iii5",
+          "part": 3,
+          "number": 5,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "short",
+          "prompt": "Một trang trại trộn hai loại thức ăn A và B cho gia súc. Mỗi kg loại A chứa $2$ đơn vị chất đạm và $1$ đơn vị chất béo, giá $30$ nghìn đồng; mỗi kg loại B chứa $1$ đơn vị chất đạm và $2$ đơn vị chất béo, giá $20$ nghìn đồng. Mỗi ngày cần ít nhất $8$ đơn vị chất đạm và ít nhất $7$ đơn vị chất béo; trang trại chỉ mua được tối đa $6$ kg mỗi loại. Tính chi phí nhỏ nhất mỗi ngày (đơn vị: nghìn đồng).",
+          "mode": "numeric",
+          "acceptedAnswers": [
+            "130"
+          ],
+          "solution": "Gọi $x$, $y$ (kg) là khối lượng loại A, loại B mua mỗi ngày. Điều kiện: $\\begin{cases}2x+y\\ge8\\\\x+2y\\ge7\\\\0\\le x\\le6\\\\0\\le y\\le6\\end{cases}$. Chi phí $F=30x+20y$ (nghìn đồng). Các đỉnh của miền nghiệm: giải $\\begin{cases}2x+y=8\\\\x+2y=7\\end{cases}$ được $(3;2)$; giao của $2x+y=8$ và $y=6$ là $(1;6)$; giao của $x+2y=7$ và $x=6$ là $\\left(6;\\dfrac12\\right)$; giao của $x=6$ và $y=6$ là $(6;6)$. Bốn điểm đều thỏa mọi điều kiện. $F(3;2)=90+40=130$, $F(1;6)=30+120=150$, $F\\left(6;\\dfrac12\\right)=180+10=190$, $F(6;6)=300$. Chi phí nhỏ nhất là $130$ nghìn đồng, khi mua $3$ kg loại A và $2$ kg loại B. Kết quả nhập: $130$.",
+          "skills": [
+            "Bài toán thực tế",
+            "Bài toán tối ưu"
+          ],
+          "level": 3,
+          "maxMillipoints": 500,
+          "id": "g10-c2-b01-v1-iii6",
+          "part": 3,
+          "number": 6,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        }
+      ],
+      "theoryRecall": {
+        "title": "Chương II · Hệ thống công thức và lí thuyết toàn chương",
+        "scope": "Ôn toàn Chương II (SGK Kết nối tri thức Toán 10): Bài 3 Bất phương trình bậc nhất hai ẩn, Bài 4 Hệ bất phương trình bậc nhất hai ẩn và ứng dụng. Nội dung tổng quát, không chứa đáp án từng câu.",
+        "sections": [
+          {
+            "id": "bpt",
+            "title": "Bất phương trình bậc nhất hai ẩn",
+            "body": "Bất phương trình bậc nhất hai ẩn $x,y$ có một trong các dạng $ax+by<c$, $ax+by>c$, $ax+by\\le c$, $ax+by\\ge c$, trong đó $a,b,c$ là những số cho trước, $a$ và $b$ không đồng thời bằng $0$. Biểu thức chứa $x^2$, $y^2$, $xy$, ẩn ở mẫu… thì không phải bậc nhất. Mỗi cặp số $(x_0;y_0)$ làm bất đẳng thức đúng (ví dụ $ax_0+by_0<c$) gọi là một nghiệm. Bất phương trình bậc nhất hai ẩn luôn có vô số nghiệm."
+          },
+          {
+            "id": "mien-nghiem",
+            "title": "Miền nghiệm là một nửa mặt phẳng",
+            "body": "Miền nghiệm là tập hợp các điểm $M(x_0;y_0)$ trong mặt phẳng $Oxy$ mà $(x_0;y_0)$ là nghiệm. Đường thẳng $d:ax+by=c$ chia mặt phẳng thành hai nửa mặt phẳng: một nửa (không kể $d$) là miền nghiệm của $ax+by<c$, nửa còn lại (không kể $d$) là miền nghiệm của $ax+by>c$. Với dấu $\\le$ hoặc $\\ge$, miền nghiệm là nửa mặt phẳng tương ứng kể cả bờ $d$.",
+            "tables": [
+              {
+                "caption": "Dấu của bất phương trình quyết định có kể bờ hay không",
+                "headers": [
+                  "Dạng",
+                  "Bờ $d$",
+                  "Cách vẽ bờ"
+                ],
+                "rows": [
+                  [
+                    "$ax+by<c$ hoặc $ax+by>c$",
+                    "Không thuộc miền nghiệm",
+                    "Nét đứt"
+                  ],
+                  [
+                    "$ax+by\\le c$ hoặc $ax+by\\ge c$",
+                    "Thuộc miền nghiệm",
+                    "Nét liền"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "id": "bieu-dien",
+            "title": "Các bước biểu diễn miền nghiệm",
+            "body": "Bước 1: vẽ đường thẳng $d:ax+by=c$ (nét liền hoặc nét đứt như bảng trên). Bước 2: lấy một điểm $M(x_0;y_0)$ không thuộc $d$; thường lấy $O(0;0)$ khi $c\\ne0$, còn khi $d$ đi qua $O$ thì lấy $(1;0)$ hoặc $(0;1)$. Bước 3: tính $ax_0+by_0$ và so sánh với $c$. Bước 4: nếu bất đẳng thức đúng thì nửa mặt phẳng chứa $M$ là miền nghiệm; nếu sai thì miền nghiệm là nửa mặt phẳng không chứa $M$. Trên hình phải ghi rõ phần nào là miền nghiệm (phần được giữ hay phần bị gạch bỏ)."
+          },
+          {
+            "id": "dac-biet",
+            "title": "Trường hợp a = 0 hoặc b = 0",
+            "body": "Khi $a=0$, $b\\ne0$: bất phương trình đưa về $y<k$, $y>k$, $y\\le k$ hoặc $y\\ge k$; bờ là đường thẳng $y=k$ song song với $Ox$, miền nghiệm là nửa mặt phẳng phía dưới hoặc phía trên. Khi $b=0$, $a\\ne0$: đưa về $x<h$, $x>h$… với bờ $x=h$ song song với $Oy$, miền nghiệm ở bên trái hoặc bên phải. Đặc biệt $x\\ge0$ là nửa mặt phẳng bên phải trục $Oy$ kể cả trục, $y\\ge0$ là nửa mặt phẳng phía trên trục $Ox$ kể cả trục. Khi chia hai vế cho số âm phải đổi chiều bất đẳng thức."
+          },
+          {
+            "id": "he",
+            "title": "Hệ bất phương trình bậc nhất hai ẩn",
+            "body": "Hệ bất phương trình bậc nhất hai ẩn gồm một số bất phương trình bậc nhất hai ẩn $x,y$. Mỗi nghiệm chung của tất cả các bất phương trình trong hệ là một nghiệm của hệ; chỉ cần một bất phương trình sai là cặp số đó không là nghiệm. Miền nghiệm của hệ là giao các miền nghiệm của từng bất phương trình. Cách biểu diễn: trên cùng một hệ trục, xác định miền nghiệm của từng bất phương trình rồi lấy phần chung."
+          },
+          {
+            "id": "dinh",
+            "title": "Miền đa giác và tìm đỉnh",
+            "body": "Khi miền nghiệm của hệ là một đa giác (bị chặn, kể cả các cạnh nếu mọi dấu đều là $\\le,\\ge$), mỗi đỉnh là giao điểm của hai đường thẳng bờ: giải hệ hai phương trình bậc nhất tương ứng. Sau khi tìm giao điểm phải kiểm lại điểm đó thỏa mọi bất phương trình của hệ; giao điểm vi phạm một điều kiện thì không phải là đỉnh. Diện tích miền tam giác hoặc tứ giác có thể tính bằng cách chia thành các tam giác vuông, hình thang có cạnh song song với trục."
+          },
+          {
+            "id": "gtln",
+            "title": "Giá trị lớn nhất, nhỏ nhất của F = ax + by",
+            "body": "Giá trị lớn nhất (nhỏ nhất) của biểu thức $F(x;y)=ax+by$, với $(x;y)$ là tọa độ các điểm thuộc miền đa giác $A_1A_2\\ldots A_n$ (các điểm nằm bên trong hay trên các cạnh của đa giác), đạt được tại một trong các đỉnh của đa giác đó. Quy trình: xác định miền nghiệm, tìm tọa độ tất cả các đỉnh, tính $F$ tại từng đỉnh, so sánh và kết luận kèm điểm đạt. Kết quả này dùng cho miền đa giác; với miền không bị chặn, $F$ có thể không có giá trị lớn nhất hoặc nhỏ nhất, phải lập luận riêng. Nếu hai đỉnh kề nhau cho cùng giá trị tốt nhất thì $F$ đạt giá trị đó trên cả cạnh nối chúng."
+          },
+          {
+            "id": "thuc-te",
+            "title": "Bài toán thực tế tối ưu đơn giản",
+            "body": "Bước 1: đặt ẩn có ý nghĩa và đơn vị rõ ràng (số sản phẩm, số kg, số giờ…), kèm điều kiện $x\\ge0$, $y\\ge0$ (và số tự nhiên nếu đề yêu cầu). Bước 2: chuyển từng ràng buộc thành bất phương trình, lập hệ. Bước 3: xác định miền nghiệm và các đỉnh. Bước 4: lập biểu thức mục tiêu (lợi nhuận, chi phí…) dạng $F=ax+by$, tính tại các đỉnh và chọn giá trị lớn nhất hoặc nhỏ nhất theo yêu cầu. Bước 5: trả lời bằng lời, có đơn vị và phương án cụ thể.",
+            "tables": [
+              {
+                "caption": "Đọc lời văn thành dấu bất đẳng thức",
+                "headers": [
+                  "Lời văn",
+                  "Dấu"
+                ],
+                "rows": [
+                  [
+                    "không quá, tối đa, nhiều nhất",
+                    "$\\le$"
+                  ],
+                  [
+                    "ít nhất, tối thiểu, không dưới",
+                    "$\\ge$"
+                  ],
+                  [
+                    "vượt quá, nhiều hơn",
+                    "$>$"
+                  ],
+                  [
+                    "ít hơn, chưa đến",
+                    "$<$"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "id": "loi",
+            "title": "Lỗi thường gặp",
+            "body": "Nhầm nét liền với nét đứt (kể bờ hay không kể bờ). Chọn điểm thử nằm ngay trên bờ $d$ nên không kết luận được. Kết luận một cặp số là nghiệm của hệ khi mới thử một bất phương trình. Quên điều kiện $x\\ge0$, $y\\ge0$ trong bài toán thực tế. Đọc “tối đa” thành dấu $<$. Tính $F$ tại giao điểm không thuộc miền nghiệm, hoặc bỏ sót đỉnh. Áp dụng kết luận “đạt tại đỉnh” cho miền không bị chặn mà không kiểm tra."
+          }
+        ],
+        "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014"
+      },
+      "answerVerificationNote": "Đáp án và lời giải đã được tác giả kiểm bằng Python và kiểm độc lập lần hai ngày 14/10/2026.",
+      "versionHash": "3ed6162540b4d97429c2b4d2aec1062a9e0cce496a23d605dbbeec98abdfad90"
+    },
+    "track": "10",
+    "chapter": "2",
+    "order": 1,
+    "coverage": "Hệ thống công thức và lí thuyết toàn chương",
+    "isChapterEnd": false,
+    "isFoundation": true,
+    "scope": "PUBLIC_RELEASE_CANDIDATE",
+    "published": false,
+    "reviewStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+    "sourceArtifactHash": "15b9407343884a70989f7ad0b3fc8a21fdf36a7bcdf7efee8989b91d4473e324",
+    "note": "Đề đủ ba phần, 22 câu (34 ô trả lời), 90 phút. Điểm từng phần và lời giải mở sau khi nộp.",
+    "admission": {
+      "newQuestions": 22,
+      "retainedQuestions": 0,
+      "mathVerified": true,
+      "independentReviewDone": true,
+      "sourceTheoryReviewed": true,
+      "legacyFlagsAreNotLivePublication": true
+    },
+    "limits": [
+      "Lịch sử lưu trên trình duyệt này; chưa đồng bộ giữa các thiết bị."
+    ]
+  },
+  {
+    "exam": {
+      "id": "mtm-practice-g10-c4-b01-v1",
+      "title": "Toán 10 · Chương IV · Bài 1: Hệ thống lí thuyết vectơ (khái niệm, tổng hiệu, tích với một số)",
+      "grade": 10,
+      "period": "GK1",
+      "chapter": 4,
+      "practiceNumber": 1,
+      "topic": "Hệ thống lí thuyết vectơ: khái niệm, tổng hiệu, tích với một số",
+      "questionCount": 22,
+      "durationMinutes": 90,
+      "sourceHash": "bf22da6a3446686cf1bfdd95108b5228d5a59603a849d5114b034b4a17d457d0",
+      "sourceHashMeaning": "SHA256 của nội dung câu hỏi và khóa chấm (JSON chuẩn hóa) do MTM biên soạn mới; không phải chứng nhận đáp án",
+      "sourceRef": "MTM biên soạn mới 14/10/2026",
+      "sourceUrl": "https://minhthanhmath.vn/",
+      "instructions": "Mỗi câu phần I chọn một phương án; mỗi nhóm phần II chọn đúng/sai độc lập cho bốn ý; phần III nhập số và chỉ làm tròn khi câu hỏi yêu cầu. Đơn vị lực là niutơn (N). Phần I/II/III lần lượt tối đa 3/4/3 điểm.",
+      "sections": [
+        {
+          "label": "I · Trắc nghiệm",
+          "kind": "mc",
+          "count": 12
+        },
+        {
+          "label": "II · Đúng/sai",
+          "kind": "tf",
+          "count": 4
+        },
+        {
+          "label": "III · Trả lời ngắn",
+          "kind": "short",
+          "count": 6
+        }
+      ],
+      "rubricVersion": "MTM-PRACTICE-22-12MC-4TF-6SA-v2",
+      "answerKeyVerified": true,
+      "rubricVerified": true,
+      "questionDisplayVerified": true,
+      "publicationVerified": true,
+      "independentMathVerified": true,
+      "sourceMaterial": {
+        "title": "Toán 10 KNTT · Chương IV · Bài 7–9 (khái niệm vectơ, tổng hiệu, tích với một số)",
+        "publisher": "Minh Thành Math (câu hỏi mới)",
+        "version": "2026–2027 · biên soạn 14/10/2026 · tác giả đã kiểm bằng VERIFY.py, chờ kiểm độc lập",
+        "locator": "Câu hỏi mới MTM theo phạm vi SGK Kết nối tri thức Toán 10, Bài 7, 8, 9; không dùng đề nguồn",
+        "sourceType": "ORIGINAL_MTM_AUTHORING",
+        "sourceQuestionReuse": false,
+        "sourceAnswerKeyReuse": false
+      },
+      "questions": [
+        {
+          "kind": "mc",
+          "prompt": "Cho hai điểm phân biệt $A,B$. Khẳng định nào sau đây đúng?",
+          "choices": [
+            "$\\overrightarrow{AB}=\\overrightarrow{BA}$",
+            "Vectơ $\\overrightarrow{AB}$ có điểm đầu là $B$, điểm cuối là $A$",
+            "$|\\overrightarrow{AB}|=|\\overrightarrow{BA}|=AB$",
+            "Hai vectơ $\\overrightarrow{AB}$ và $\\overrightarrow{BA}$ cùng hướng"
+          ],
+          "answer": "C",
+          "solution": "Vectơ $\\overrightarrow{AB}$ có điểm đầu $A$, điểm cuối $B$; vectơ $\\overrightarrow{BA}$ có điểm đầu $B$, điểm cuối $A$. Vậy B sai (đổi chỗ điểm đầu, điểm cuối). Hai vectơ này có chung giá là đường thẳng $AB$ nhưng ngược hướng, nên chúng không bằng nhau và không cùng hướng (loại A, D). Độ dài của mỗi vectơ là khoảng cách giữa điểm đầu và điểm cuối: $|\\overrightarrow{AB}|=|\\overrightarrow{BA}|=AB$. Chọn C.",
+          "skills": [
+            "Định nghĩa vectơ",
+            "Độ dài vectơ"
+          ],
+          "level": 1,
+          "id": "g10-c4-b01-v1-i1",
+          "part": 1,
+          "number": 1,
+          "maxMillipoints": 250,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "mc",
+          "prompt": "Khẳng định nào sau đây về vectơ-không là đúng?",
+          "choices": [
+            "Vectơ-không cùng phương với mọi vectơ.",
+            "Vectơ-không có độ dài bằng $1$.",
+            "Với hai điểm phân biệt $A,B$, hai vectơ $\\overrightarrow{AA}$ và $\\overrightarrow{BB}$ khác nhau.",
+            "Vectơ-không không cùng hướng với vectơ nào."
+          ],
+          "answer": "A",
+          "solution": "Theo SGK, vectơ có điểm đầu và điểm cuối trùng nhau là vectơ-không, kí hiệu $\\vec 0$; mọi vectơ $\\overrightarrow{AA},\\overrightarrow{BB},\\ldots$ đều bằng $\\vec 0$ (loại C). Độ dài $|\\vec 0|=0$ (loại B). Quy ước: $\\vec 0$ cùng phương, cùng hướng với mọi vectơ (loại D, chọn A). Chọn A.",
+          "skills": [
+            "Vectơ-không",
+            "Quy ước cùng phương"
+          ],
+          "level": 1,
+          "id": "g10-c4-b01-v1-i2",
+          "part": 1,
+          "number": 2,
+          "maxMillipoints": 250,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "mc",
+          "prompt": "Cho ba điểm phân biệt $A,B,C$. Số vectơ khác vectơ-không có điểm đầu và điểm cuối thuộc tập $\\{A;B;C\\}$ là",
+          "choices": [
+            "$3$",
+            "$9$",
+            "$4$",
+            "$6$"
+          ],
+          "answer": "D",
+          "solution": "Mỗi vectơ khác $\\vec 0$ ứng với một cặp có thứ tự (điểm đầu, điểm cuối) gồm hai điểm khác nhau. Điểm đầu có $3$ cách chọn, điểm cuối có $2$ cách chọn, nên có $3\\cdot2=6$ vectơ: $\\overrightarrow{AB},\\overrightarrow{BA},\\overrightarrow{AC},\\overrightarrow{CA},\\overrightarrow{BC},\\overrightarrow{CB}$. Đáp án $3$ chỉ đếm đoạn thẳng; đáp án $9$ đếm thêm cả ba vectơ-không. Chọn D.",
+          "skills": [
+            "Đếm vectơ",
+            "Điểm đầu, điểm cuối"
+          ],
+          "level": 1,
+          "id": "g10-c4-b01-v1-i3",
+          "part": 1,
+          "number": 3,
+          "maxMillipoints": 250,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "mc",
+          "prompt": "Cho hình bình hành $ABCD$. Vectơ nào sau đây bằng vectơ $\\overrightarrow{AB}$?",
+          "choices": [
+            "$\\overrightarrow{CD}$",
+            "$\\overrightarrow{DC}$",
+            "$\\overrightarrow{BA}$",
+            "$\\overrightarrow{AD}$"
+          ],
+          "answer": "B",
+          "solution": "Trong hình bình hành $ABCD$, $AB\\parallel DC$ và $AB=DC$. Vectơ $\\overrightarrow{AB}$ hướng từ $A$ sang $B$, vectơ $\\overrightarrow{DC}$ hướng từ $D$ sang $C$, hai hướng này trùng nhau. Vì cùng hướng và cùng độ dài nên $\\overrightarrow{AB}=\\overrightarrow{DC}$. Vectơ $\\overrightarrow{CD}$ và $\\overrightarrow{BA}$ ngược hướng với $\\overrightarrow{AB}$; $\\overrightarrow{AD}$ không cùng phương với $\\overrightarrow{AB}$. Chọn B.",
+          "skills": [
+            "Hai vectơ bằng nhau",
+            "Hình bình hành"
+          ],
+          "level": 1,
+          "id": "g10-c4-b01-v1-i4",
+          "part": 1,
+          "number": 4,
+          "maxMillipoints": 250,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "mc",
+          "prompt": "Cho ba điểm phân biệt $A,B,C$ thẳng hàng, trong đó $B$ nằm giữa $A$ và $C$. Khẳng định nào sau đây đúng?",
+          "choices": [
+            "Hai vectơ $\\overrightarrow{AB}$ và $\\overrightarrow{AC}$ cùng hướng.",
+            "Hai vectơ $\\overrightarrow{AB}$ và $\\overrightarrow{BC}$ ngược hướng.",
+            "Hai vectơ $\\overrightarrow{BA}$ và $\\overrightarrow{BC}$ cùng hướng.",
+            "Hai vectơ $\\overrightarrow{AB}$ và $\\overrightarrow{CA}$ cùng hướng."
+          ],
+          "answer": "A",
+          "solution": "Bốn cặp vectơ đều có giá là đường thẳng $AC$ nên cùng phương; cần xét hướng. Vì $B$ nằm giữa $A$ và $C$: đi từ $A$ đến $B$ và đi từ $A$ đến $C$ cùng một hướng, nên $\\overrightarrow{AB},\\overrightarrow{AC}$ cùng hướng (A đúng). Đi từ $B$ đến $C$ cũng theo hướng đó nên $\\overrightarrow{AB},\\overrightarrow{BC}$ cùng hướng (B sai). Từ $B$, điểm $A$ và $C$ nằm về hai phía nên $\\overrightarrow{BA},\\overrightarrow{BC}$ ngược hướng (C sai). $\\overrightarrow{CA}$ hướng từ $C$ về $A$, ngược hướng với $\\overrightarrow{AB}$ (D sai). Chọn A.",
+          "skills": [
+            "Cùng phương, cùng hướng"
+          ],
+          "level": 2,
+          "id": "g10-c4-b01-v1-i5",
+          "part": 1,
+          "number": 5,
+          "maxMillipoints": 250,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "mc",
+          "prompt": "Với bốn điểm $A,B,C,D$ bất kì, vectơ $\\overrightarrow{AB}+\\overrightarrow{BC}+\\overrightarrow{CD}$ bằng",
+          "choices": [
+            "$\\overrightarrow{DA}$",
+            "$\\overrightarrow{AC}$",
+            "$\\overrightarrow{AD}$",
+            "$\\vec 0$"
+          ],
+          "answer": "C",
+          "solution": "Áp dụng quy tắc ba điểm hai lần: $\\overrightarrow{AB}+\\overrightarrow{BC}=\\overrightarrow{AC}$, rồi $\\overrightarrow{AC}+\\overrightarrow{CD}=\\overrightarrow{AD}$. Vậy tổng bằng $\\overrightarrow{AD}$ (điểm đầu của vectơ thứ nhất, điểm cuối của vectơ cuối cùng). $\\overrightarrow{DA}$ là vectơ đối của kết quả. Chọn C.",
+          "skills": [
+            "Quy tắc ba điểm"
+          ],
+          "level": 2,
+          "id": "g10-c4-b01-v1-i6",
+          "part": 1,
+          "number": 6,
+          "maxMillipoints": 250,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "mc",
+          "prompt": "Với ba điểm $O,A,B$ bất kì, hiệu $\\overrightarrow{OA}-\\overrightarrow{OB}$ bằng",
+          "choices": [
+            "$\\overrightarrow{AB}$",
+            "$\\overrightarrow{BA}$",
+            "$\\overrightarrow{BO}$",
+            "$\\overrightarrow{OA}+\\overrightarrow{OB}$"
+          ],
+          "answer": "B",
+          "solution": "Theo quy tắc hiệu: $\\overrightarrow{OA}-\\overrightarrow{OB}=\\overrightarrow{OA}+\\overrightarrow{BO}=\\overrightarrow{BO}+\\overrightarrow{OA}=\\overrightarrow{BA}$ (quy tắc ba điểm). Ghi nhớ: hiệu hai vectơ chung điểm đầu là vectơ đi từ điểm cuối của vectơ trừ đến điểm cuối của vectơ bị trừ. Phương án A là $\\overrightarrow{OB}-\\overrightarrow{OA}$, viết ngược chiều. Chọn B.",
+          "skills": [
+            "Hiệu hai vectơ",
+            "Vectơ đối"
+          ],
+          "level": 2,
+          "id": "g10-c4-b01-v1-i7",
+          "part": 1,
+          "number": 7,
+          "maxMillipoints": 250,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "mc",
+          "prompt": "Cho đoạn thẳng $AB$ có trung điểm $I$. Khẳng định nào sau đây đúng?",
+          "choices": [
+            "$\\overrightarrow{IA}=\\overrightarrow{IB}$",
+            "$\\overrightarrow{AI}+\\overrightarrow{IB}=\\vec 0$",
+            "$\\overrightarrow{IA}-\\overrightarrow{IB}=\\vec 0$",
+            "$\\overrightarrow{IA}+\\overrightarrow{IB}=\\vec 0$"
+          ],
+          "answer": "D",
+          "solution": "$I$ là trung điểm của $AB$ nên $IA=IB$ và hai vectơ $\\overrightarrow{IA},\\overrightarrow{IB}$ ngược hướng; do đó $\\overrightarrow{IB}=-\\overrightarrow{IA}$, tức $\\overrightarrow{IA}+\\overrightarrow{IB}=\\vec 0$ (D đúng). Vì $\\overrightarrow{IA}\\ne\\overrightarrow{IB}$ nên A và C sai. Theo quy tắc ba điểm $\\overrightarrow{AI}+\\overrightarrow{IB}=\\overrightarrow{AB}\\ne\\vec 0$ nên B sai. Chọn D.",
+          "skills": [
+            "Trung điểm đoạn thẳng"
+          ],
+          "level": 2,
+          "id": "g10-c4-b01-v1-i8",
+          "part": 1,
+          "number": 8,
+          "maxMillipoints": 250,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "mc",
+          "prompt": "Cho vectơ $\\vec a\\ne\\vec 0$ có $|\\vec a|=2$ và $\\vec b=-3\\vec a$. Khẳng định nào sau đây đúng?",
+          "choices": [
+            "$\\vec b$ cùng hướng với $\\vec a$ và $|\\vec b|=6$.",
+            "$\\vec b$ ngược hướng với $\\vec a$ và $|\\vec b|=-6$.",
+            "$\\vec b$ ngược hướng với $\\vec a$ và $|\\vec b|=6$.",
+            "$\\vec b$ ngược hướng với $\\vec a$ và $|\\vec b|=\\dfrac23$."
+          ],
+          "answer": "C",
+          "solution": "Với $k=-3<0$, vectơ $k\\vec a$ ngược hướng với $\\vec a$ và có độ dài $|k|\\cdot|\\vec a|=|-3|\\cdot2=6$. Độ dài vectơ luôn không âm nên $-6$ là sai. Chọn C.",
+          "skills": [
+            "Tích của vectơ với một số"
+          ],
+          "level": 2,
+          "id": "g10-c4-b01-v1-i9",
+          "part": 1,
+          "number": 9,
+          "maxMillipoints": 250,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "mc",
+          "prompt": "Cho ba điểm phân biệt $A,B,C$. Điều kiện cần và đủ để $A,B,C$ thẳng hàng là",
+          "choices": [
+            "có số $k\\ne0$ sao cho $\\overrightarrow{AB}=k\\overrightarrow{AC}$",
+            "$\\overrightarrow{AB}=\\overrightarrow{AC}$",
+            "$|\\overrightarrow{AB}|=|\\overrightarrow{AC}|$",
+            "$\\overrightarrow{AB}+\\overrightarrow{AC}=\\vec 0$"
+          ],
+          "answer": "A",
+          "solution": "Ba điểm phân biệt $A,B,C$ thẳng hàng khi và chỉ khi $\\overrightarrow{AB}$ và $\\overrightarrow{AC}$ cùng phương, tức là có số $k\\ne0$ để $\\overrightarrow{AB}=k\\overrightarrow{AC}$ (A đúng). Đẳng thức $\\overrightarrow{AB}=\\overrightarrow{AC}$ kéo theo $B\\equiv C$, trái giả thiết (B sai). $|\\overrightarrow{AB}|=|\\overrightarrow{AC}|$ chỉ nói $AB=AC$, không buộc thẳng hàng, chẳng hạn tam giác cân tại $A$ (C sai). $\\overrightarrow{AB}+\\overrightarrow{AC}=\\vec 0$ nghĩa là $A$ là trung điểm $BC$: chỉ là một trường hợp thẳng hàng, không cần thiết, ví dụ $B$ nằm giữa $A$ và $C$ thì đẳng thức không xảy ra (D sai). Chọn A.",
+          "skills": [
+            "Ba điểm thẳng hàng",
+            "Điều kiện cùng phương"
+          ],
+          "level": 2,
+          "id": "g10-c4-b01-v1-i10",
+          "part": 1,
+          "number": 10,
+          "maxMillipoints": 250,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "mc",
+          "prompt": "Cho tam giác $ABC$ và điểm $M$ thuộc cạnh $BC$ sao cho $MB=2MC$. Khẳng định nào sau đây đúng?",
+          "choices": [
+            "$\\overrightarrow{AM}=\\dfrac23\\overrightarrow{AB}+\\dfrac13\\overrightarrow{AC}$",
+            "$\\overrightarrow{AM}=\\dfrac12\\overrightarrow{AB}+\\dfrac12\\overrightarrow{AC}$",
+            "$\\overrightarrow{AM}=\\dfrac13\\overrightarrow{AB}-\\dfrac23\\overrightarrow{AC}$",
+            "$\\overrightarrow{AM}=\\dfrac13\\overrightarrow{AB}+\\dfrac23\\overrightarrow{AC}$"
+          ],
+          "answer": "D",
+          "solution": "$M$ thuộc đoạn $BC$ và $MB=2MC$ nên $BM=\\dfrac23BC$, hai vectơ $\\overrightarrow{BM},\\overrightarrow{BC}$ cùng hướng: $\\overrightarrow{BM}=\\dfrac23\\overrightarrow{BC}$. Khi đó $\\overrightarrow{AM}=\\overrightarrow{AB}+\\overrightarrow{BM}=\\overrightarrow{AB}+\\dfrac23(\\overrightarrow{AC}-\\overrightarrow{AB})=\\dfrac13\\overrightarrow{AB}+\\dfrac23\\overrightarrow{AC}$. Vì $\\overrightarrow{AB},\\overrightarrow{AC}$ không cùng phương nên cách phân tích là duy nhất; phương án A là nhầm vai trò hai hệ số, phương án B ứng với trung điểm. Chọn D.",
+          "skills": [
+            "Phân tích vectơ theo hai vectơ không cùng phương"
+          ],
+          "level": 3,
+          "id": "g10-c4-b01-v1-i11",
+          "part": 1,
+          "number": 11,
+          "maxMillipoints": 250,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "mc",
+          "prompt": "Hai lực $\\overrightarrow{F_1}=\\overrightarrow{OA}$ và $\\overrightarrow{F_2}=\\overrightarrow{OB}$ cùng tác dụng vào một vật tại điểm $O$, với $|\\overrightarrow{F_1}|=3$ N, $|\\overrightarrow{F_2}|=5$ N và $\\widehat{AOB}=120^\\circ$. Độ lớn của hợp lực $\\overrightarrow{F_1}+\\overrightarrow{F_2}$ là",
+          "choices": [
+            "$7$ N",
+            "$\\sqrt{19}$ N",
+            "$8$ N",
+            "$2$ N"
+          ],
+          "answer": "B",
+          "solution": "Dựng hình bình hành $OACB$; theo quy tắc hình bình hành $\\overrightarrow{F_1}+\\overrightarrow{F_2}=\\overrightarrow{OA}+\\overrightarrow{OB}=\\overrightarrow{OC}$. Trong tam giác $OAC$: $OA=3$, $AC=OB=5$ và $\\widehat{OAC}=180^\\circ-\\widehat{AOB}=60^\\circ$ (hai góc kề một cạnh của hình bình hành bù nhau). Định lí cosin: $OC^2=3^2+5^2-2\\cdot3\\cdot5\\cos60^\\circ=34-15=19$, nên $OC=\\sqrt{19}$. Vậy hợp lực có độ lớn $\\sqrt{19}\\approx4{,}36$ N. Phương án $7$ N là nhầm dùng góc $120^\\circ$ trong tam giác $OAC$; $8$ N chỉ đúng khi hai lực cùng hướng. Chọn B.",
+          "skills": [
+            "Hợp lực",
+            "Quy tắc hình bình hành",
+            "Ứng dụng thực tế"
+          ],
+          "level": 3,
+          "id": "g10-c4-b01-v1-i12",
+          "part": 1,
+          "number": 12,
+          "maxMillipoints": 250,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "tf",
+          "prompt": "Cho hình bình hành $ABCD$ có tâm $O$ (giao điểm hai đường chéo). Xét các khẳng định:",
+          "statements": [
+            "$\\overrightarrow{AB}=\\overrightarrow{CD}$.",
+            "$\\overrightarrow{AB}+\\overrightarrow{AD}=\\overrightarrow{AC}$.",
+            "$\\overrightarrow{OA}+\\overrightarrow{OC}=\\vec 0$.",
+            "$\\overrightarrow{AB}-\\overrightarrow{AD}=\\overrightarrow{BD}$."
+          ],
+          "answer": [
+            false,
+            true,
+            true,
+            false
+          ],
+          "statementSolutions": [
+            "Sai. $\\overrightarrow{AB}$ và $\\overrightarrow{CD}$ cùng độ dài nhưng ngược hướng; đúng phải là $\\overrightarrow{AB}=\\overrightarrow{DC}$.",
+            "Đúng. Đây là quy tắc hình bình hành tại đỉnh $A$: tổng hai vectơ cạnh chung điểm đầu $A$ bằng vectơ đường chéo $\\overrightarrow{AC}$.",
+            "Đúng. Hai đường chéo cắt nhau tại trung điểm mỗi đường nên $O$ là trung điểm của $AC$, suy ra $\\overrightarrow{OA}+\\overrightarrow{OC}=\\vec 0$.",
+            "Sai. Theo quy tắc hiệu, $\\overrightarrow{AB}-\\overrightarrow{AD}=\\overrightarrow{DB}$, là vectơ đối của $\\overrightarrow{BD}$; hai vectơ này khác $\\vec 0$ nên không bằng nhau."
+          ],
+          "solution": "Đánh giá từng ý độc lập; kết quả: Sai – Đúng – Đúng – Sai.",
+          "skills": [
+            "Hình bình hành",
+            "Tổng và hiệu hai vectơ"
+          ],
+          "level": 2,
+          "id": "g10-c4-b01-v1-ii1",
+          "part": 2,
+          "number": 1,
+          "maxMillipoints": 1000,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true,
+          "pointsByCorrectCount": [
+            0,
+            100,
+            250,
+            500,
+            1000
+          ]
+        },
+        {
+          "kind": "tf",
+          "prompt": "Cho tam giác đều $ABC$ có cạnh bằng $6$, gọi $M$ là trung điểm của $BC$. Xét các khẳng định:",
+          "statements": [
+            "$\\overrightarrow{MB}=\\overrightarrow{MC}$.",
+            "$|\\overrightarrow{AB}+\\overrightarrow{BC}|=6$.",
+            "$|\\overrightarrow{AB}-\\overrightarrow{AC}|=6$.",
+            "$|\\overrightarrow{AB}+\\overrightarrow{AC}|=12$."
+          ],
+          "answer": [
+            false,
+            true,
+            true,
+            false
+          ],
+          "statementSolutions": [
+            "Sai. $MB=MC$ nhưng $\\overrightarrow{MB},\\overrightarrow{MC}$ ngược hướng; thực ra $\\overrightarrow{MB}+\\overrightarrow{MC}=\\vec 0$.",
+            "Đúng. Quy tắc ba điểm: $\\overrightarrow{AB}+\\overrightarrow{BC}=\\overrightarrow{AC}$, nên độ dài bằng $AC=6$.",
+            "Đúng. Quy tắc hiệu: $\\overrightarrow{AB}-\\overrightarrow{AC}=\\overrightarrow{CB}$, nên độ dài bằng $CB=6$.",
+            "Sai. Vì $M$ là trung điểm $BC$ nên $\\overrightarrow{AB}+\\overrightarrow{AC}=2\\overrightarrow{AM}$. Trung tuyến của tam giác đều cạnh $6$ cũng là đường cao: $AM=\\sqrt{6^2-3^2}=3\\sqrt3$. Do đó $|\\overrightarrow{AB}+\\overrightarrow{AC}|=6\\sqrt3\\approx10{,}39\\ne12$. Lỗi thường gặp là cộng độ dài: $|\\vec a+\\vec b|$ nói chung khác $|\\vec a|+|\\vec b|$."
+          ],
+          "solution": "Đánh giá từng ý độc lập; kết quả: Sai – Đúng – Đúng – Sai.",
+          "skills": [
+            "Độ dài tổng, hiệu",
+            "Trung điểm"
+          ],
+          "level": 2,
+          "id": "g10-c4-b01-v1-ii2",
+          "part": 2,
+          "number": 2,
+          "maxMillipoints": 1000,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true,
+          "pointsByCorrectCount": [
+            0,
+            100,
+            250,
+            500,
+            1000
+          ]
+        },
+        {
+          "kind": "tf",
+          "prompt": "Cho tam giác $ABC$ có trọng tâm $G$, gọi $M$ là trung điểm của $BC$. Xét các khẳng định:",
+          "statements": [
+            "$\\overrightarrow{GA}+\\overrightarrow{GB}=\\overrightarrow{GC}$.",
+            "$\\overrightarrow{AB}+\\overrightarrow{AC}=2\\overrightarrow{AM}$.",
+            "$\\overrightarrow{AG}=\\dfrac23\\overrightarrow{AB}+\\dfrac23\\overrightarrow{AC}$.",
+            "Với mọi điểm $P$, $\\overrightarrow{PA}+\\overrightarrow{PB}+\\overrightarrow{PC}=3\\overrightarrow{PG}$."
+          ],
+          "answer": [
+            false,
+            true,
+            false,
+            true
+          ],
+          "statementSolutions": [
+            "Sai. $G$ là trọng tâm nên $\\overrightarrow{GA}+\\overrightarrow{GB}+\\overrightarrow{GC}=\\vec 0$, suy ra $\\overrightarrow{GA}+\\overrightarrow{GB}=-\\overrightarrow{GC}=\\overrightarrow{CG}$. Vì $G\\ne C$ nên $\\overrightarrow{CG}\\ne\\overrightarrow{GC}$.",
+            "Đúng. $\\overrightarrow{AB}+\\overrightarrow{AC}=(\\overrightarrow{AM}+\\overrightarrow{MB})+(\\overrightarrow{AM}+\\overrightarrow{MC})=2\\overrightarrow{AM}+(\\overrightarrow{MB}+\\overrightarrow{MC})=2\\overrightarrow{AM}$, vì $M$ là trung điểm $BC$.",
+            "Sai. $G$ nằm trên trung tuyến $AM$ với $AG=\\dfrac23AM$, nên $\\overrightarrow{AG}=\\dfrac23\\overrightarrow{AM}=\\dfrac23\\cdot\\dfrac12(\\overrightarrow{AB}+\\overrightarrow{AC})=\\dfrac13\\overrightarrow{AB}+\\dfrac13\\overrightarrow{AC}$. Hệ số $\\dfrac23$ là nhầm khi quên $\\overrightarrow{AM}=\\dfrac12(\\overrightarrow{AB}+\\overrightarrow{AC})$.",
+            "Đúng. Chèn điểm $G$: $\\overrightarrow{PA}+\\overrightarrow{PB}+\\overrightarrow{PC}=3\\overrightarrow{PG}+(\\overrightarrow{GA}+\\overrightarrow{GB}+\\overrightarrow{GC})=3\\overrightarrow{PG}+\\vec 0=3\\overrightarrow{PG}$."
+          ],
+          "solution": "Đánh giá từng ý độc lập; kết quả: Sai – Đúng – Sai – Đúng.",
+          "skills": [
+            "Trọng tâm tam giác",
+            "Tích của vectơ với một số"
+          ],
+          "level": 3,
+          "id": "g10-c4-b01-v1-ii3",
+          "part": 2,
+          "number": 3,
+          "maxMillipoints": 1000,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true,
+          "pointsByCorrectCount": [
+            0,
+            100,
+            250,
+            500,
+            1000
+          ]
+        },
+        {
+          "kind": "tf",
+          "prompt": "Một ca nô sang sông. Vận tốc riêng của ca nô (so với nước) là $\\overrightarrow{v_1}$ có độ lớn $12$ km/h, hướng vuông góc với bờ; dòng nước chảy với vận tốc $\\overrightarrow{v_2}$ có độ lớn $5$ km/h, song song với bờ. Vận tốc thực tế của ca nô là $\\vec v=\\overrightarrow{v_1}+\\overrightarrow{v_2}$. Xét các khẳng định:",
+          "statements": [
+            "$|\\vec v|=17$ km/h.",
+            "$|\\vec v|=13$ km/h.",
+            "Nếu ca nô chạy ngược dòng, với vận tốc riêng có độ lớn $12$ km/h và ngược hướng với $\\overrightarrow{v_2}$, thì vận tốc thực tế của ca nô có độ lớn $7$ km/h.",
+            "Sông rộng $600$ m, hai bờ song song. Giữ vận tốc riêng $\\overrightarrow{v_1}$ như ban đầu, ca nô sang tới bờ bên kia sau $3$ phút."
+          ],
+          "answer": [
+            false,
+            true,
+            true,
+            true
+          ],
+          "statementSolutions": [
+            "Sai. $17=12+5$ chỉ đúng khi hai vận tốc cùng hướng. Ở đây $\\overrightarrow{v_1}\\perp\\overrightarrow{v_2}$ nên độ lớn tổng được tính theo quy tắc hình bình hành (hình chữ nhật), xem ý tiếp theo.",
+            "Đúng. Dựng $\\overrightarrow{OA}=\\overrightarrow{v_1}$, $\\overrightarrow{OB}=\\overrightarrow{v_2}$ và hình chữ nhật $OACB$; khi đó $\\vec v=\\overrightarrow{OC}$ và $|\\vec v|=OC=\\sqrt{12^2+5^2}=\\sqrt{169}=13$ (km/h).",
+            "Đúng. Vận tốc riêng khi đó là $\\vec u=-\\dfrac{12}{5}\\overrightarrow{v_2}$, nên vận tốc thực tế $\\vec u+\\overrightarrow{v_2}=-\\dfrac75\\overrightarrow{v_2}$ có độ lớn $\\dfrac75\\cdot5=7$ (km/h), ngược hướng dòng nước.",
+            "Đúng. Sau $t$ giờ, độ dời của ca nô là $t\\vec v=t\\overrightarrow{v_1}+t\\overrightarrow{v_2}$. Thành phần $t\\overrightarrow{v_2}$ song song với bờ nên không làm ca nô tiến gần bờ bên kia; quãng đường theo phương vuông góc với bờ là $|t\\overrightarrow{v_1}|=12t$ (km). Cần $12t=0{,}6$, suy ra $t=0{,}05$ giờ $=3$ phút."
+          ],
+          "solution": "Đánh giá từng ý độc lập; kết quả: Sai – Đúng – Đúng – Đúng.",
+          "skills": [
+            "Tổng hai vận tốc",
+            "Tích của vectơ với một số",
+            "Ứng dụng thực tế"
+          ],
+          "level": 3,
+          "id": "g10-c4-b01-v1-ii4",
+          "part": 2,
+          "number": 4,
+          "maxMillipoints": 1000,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true,
+          "pointsByCorrectCount": [
+            0,
+            100,
+            250,
+            500,
+            1000
+          ]
+        },
+        {
+          "kind": "short",
+          "prompt": "Cho lục giác đều $ABCDEF$ có tâm $O$. Có bao nhiêu vectơ có điểm đầu và điểm cuối thuộc tập $\\{A;B;C;D;E;F;O\\}$ và bằng vectơ $\\overrightarrow{OA}$ (tính cả chính vectơ $\\overrightarrow{OA}$)?",
+          "mode": "numeric",
+          "acceptedAnswers": [
+            "4"
+          ],
+          "solution": "Lục giác đều được chia thành sáu tam giác đều chung đỉnh $O$, nên các tứ giác $OABC$, $OAFE$ là hình thoi và $O$ là trung điểm $AD$. Vectơ bằng $\\overrightarrow{OA}$ phải cùng hướng với $\\overrightarrow{OA}$ và có độ dài bằng cạnh lục giác. Ta có: $\\overrightarrow{OA}$; $\\overrightarrow{CB}=\\overrightarrow{OA}$ (hình thoi $OABC$); $\\overrightarrow{EF}=\\overrightarrow{OA}$ (hình thoi $OAFE$); $\\overrightarrow{DO}=\\overrightarrow{OA}$ ($O$ là trung điểm $AD$). Các vectơ còn lại cùng phương với $\\overrightarrow{OA}$ (giá là $AD$, $BC$ hoặc $EF$) đều không thỏa: $\\overrightarrow{AO},\\overrightarrow{OD},\\overrightarrow{BC},\\overrightarrow{FE}$ ngược hướng; $\\overrightarrow{AD}$, $\\overrightarrow{DA}$ có độ dài gấp đôi. Kết quả nhập: $4$.",
+          "skills": [
+            "Hai vectơ bằng nhau",
+            "Đếm vectơ"
+          ],
+          "level": 2,
+          "id": "g10-c4-b01-v1-iii1",
+          "part": 3,
+          "number": 1,
+          "maxMillipoints": 500,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "short",
+          "prompt": "Một vật chịu tác dụng của hai lực $\\overrightarrow{F_1},\\overrightarrow{F_2}$ có giá vuông góc với nhau, $|\\overrightarrow{F_1}|=9$ N và $|\\overrightarrow{F_2}|=12$ N. Để vật đứng cân bằng, người ta tác dụng thêm lực $\\overrightarrow{F_3}$ sao cho $\\overrightarrow{F_1}+\\overrightarrow{F_2}+\\overrightarrow{F_3}=\\vec 0$. Tính độ lớn của $\\overrightarrow{F_3}$ (đơn vị N).",
+          "mode": "numeric",
+          "acceptedAnswers": [
+            "15"
+          ],
+          "solution": "Từ điều kiện cân bằng, $\\overrightarrow{F_3}=-(\\overrightarrow{F_1}+\\overrightarrow{F_2})$ là vectơ đối của hợp lực, nên $|\\overrightarrow{F_3}|=|\\overrightarrow{F_1}+\\overrightarrow{F_2}|$. Đặt $\\overrightarrow{F_1}=\\overrightarrow{OA}$, $\\overrightarrow{F_2}=\\overrightarrow{OB}$ và dựng hình chữ nhật $OACB$ (vì $OA\\perp OB$); khi đó $\\overrightarrow{F_1}+\\overrightarrow{F_2}=\\overrightarrow{OC}$ với $OC=\\sqrt{9^2+12^2}=\\sqrt{225}=15$. Kết quả nhập: $15$.",
+          "skills": [
+            "Hợp lực",
+            "Vectơ đối",
+            "Ứng dụng thực tế"
+          ],
+          "level": 2,
+          "id": "g10-c4-b01-v1-iii2",
+          "part": 3,
+          "number": 2,
+          "maxMillipoints": 500,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "short",
+          "prompt": "Cho hình chữ nhật $ABCD$ có $AB=6$, $AD=8$. Tính $|\\overrightarrow{AB}+\\overrightarrow{AD}|+|\\overrightarrow{AB}-\\overrightarrow{AD}|$.",
+          "mode": "numeric",
+          "acceptedAnswers": [
+            "20"
+          ],
+          "solution": "Quy tắc hình bình hành: $\\overrightarrow{AB}+\\overrightarrow{AD}=\\overrightarrow{AC}$. Quy tắc hiệu: $\\overrightarrow{AB}-\\overrightarrow{AD}=\\overrightarrow{DB}$. Hai đường chéo hình chữ nhật bằng nhau: $AC=DB=\\sqrt{6^2+8^2}=10$. Vậy tổng cần tìm bằng $10+10=20$. Kết quả nhập: $20$.",
+          "skills": [
+            "Độ dài tổng, hiệu"
+          ],
+          "level": 2,
+          "id": "g10-c4-b01-v1-iii3",
+          "part": 3,
+          "number": 3,
+          "maxMillipoints": 500,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "short",
+          "prompt": "Cho tam giác $ABC$. Gọi $M$ là trung điểm của $AB$ và $N$ là điểm thuộc cạnh $AC$ sao cho $AN=3NC$. Biết $\\overrightarrow{MN}=x\\overrightarrow{AB}+y\\overrightarrow{AC}$ với $x,y$ là các số thực. Tính $x+y$.",
+          "mode": "numeric",
+          "acceptedAnswers": [
+            "0.25"
+          ],
+          "solution": "$M$ là trung điểm $AB$ nên $\\overrightarrow{AM}=\\dfrac12\\overrightarrow{AB}$. $N$ thuộc đoạn $AC$ và $AN=3NC$ nên $AN=\\dfrac34AC$, cùng hướng: $\\overrightarrow{AN}=\\dfrac34\\overrightarrow{AC}$. Do đó $\\overrightarrow{MN}=\\overrightarrow{AN}-\\overrightarrow{AM}=-\\dfrac12\\overrightarrow{AB}+\\dfrac34\\overrightarrow{AC}$. Vì $\\overrightarrow{AB},\\overrightarrow{AC}$ không cùng phương nên cặp $(x;y)$ là duy nhất: $x=-\\dfrac12$, $y=\\dfrac34$, suy ra $x+y=\\dfrac14$. Kết quả nhập: $0{,}25$.",
+          "skills": [
+            "Phân tích vectơ theo hai vectơ không cùng phương"
+          ],
+          "level": 3,
+          "id": "g10-c4-b01-v1-iii4",
+          "part": 3,
+          "number": 4,
+          "maxMillipoints": 500,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "short",
+          "prompt": "Cho tam giác $ABC$. Các điểm $M,N$ thỏa mãn $\\overrightarrow{AM}=\\dfrac12\\overrightarrow{AB}$ và $\\overrightarrow{AN}=\\dfrac13\\overrightarrow{AC}$. Điểm $P$ thuộc đường thẳng $BC$ thỏa mãn $\\overrightarrow{BP}=k\\overrightarrow{BC}$. Tìm số thực $k$ để ba điểm $M,N,P$ thẳng hàng.",
+          "mode": "numeric",
+          "acceptedAnswers": [
+            "-1"
+          ],
+          "solution": "Biểu diễn theo hai vectơ không cùng phương $\\overrightarrow{AB},\\overrightarrow{AC}$: $\\overrightarrow{AP}=\\overrightarrow{AB}+k\\overrightarrow{BC}=\\overrightarrow{AB}+k(\\overrightarrow{AC}-\\overrightarrow{AB})=(1-k)\\overrightarrow{AB}+k\\overrightarrow{AC}$. Khi đó $\\overrightarrow{MN}=\\overrightarrow{AN}-\\overrightarrow{AM}=-\\dfrac12\\overrightarrow{AB}+\\dfrac13\\overrightarrow{AC}\\ne\\vec 0$ và $\\overrightarrow{MP}=\\overrightarrow{AP}-\\overrightarrow{AM}=\\left(\\dfrac12-k\\right)\\overrightarrow{AB}+k\\overrightarrow{AC}$. $M,N,P$ thẳng hàng $\\Leftrightarrow$ có số $t$ để $\\overrightarrow{MP}=t\\overrightarrow{MN}$; do phân tích duy nhất: $\\dfrac12-k=-\\dfrac t2$ và $k=\\dfrac t3$. Thay $k=\\dfrac t3$: $\\dfrac12-\\dfrac t3=-\\dfrac t2\\Rightarrow\\dfrac12=-\\dfrac t6\\Rightarrow t=-3$, nên $k=-1$. Kiểm lại: $k=-1$ cho $\\overrightarrow{MP}=\\dfrac32\\overrightarrow{AB}-\\overrightarrow{AC}=-3\\overrightarrow{MN}$, đúng. ($P$ nằm trên tia đối của tia $BC$, $BP=BC$.) Kết quả nhập: $-1$.",
+          "skills": [
+            "Ba điểm thẳng hàng",
+            "Phân tích vectơ"
+          ],
+          "level": 3,
+          "id": "g10-c4-b01-v1-iii5",
+          "part": 3,
+          "number": 5,
+          "maxMillipoints": 500,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "short",
+          "prompt": "Hai người cùng kéo một vật bằng hai sợi dây buộc tại điểm $O$. Các lực kéo $\\overrightarrow{OA}$ và $\\overrightarrow{OB}$ đều có độ lớn $100$ N và $\\widehat{AOB}=60^\\circ$. Tính độ lớn hợp lực $\\overrightarrow{OA}+\\overrightarrow{OB}$ (đơn vị N), làm tròn kết quả đến hàng phần mười.",
+          "mode": "numeric",
+          "acceptedAnswers": [
+            "173.2"
+          ],
+          "solution": "Dựng hình bình hành $OACB$; vì $OA=OB=100$ nên đó là hình thoi và $\\overrightarrow{OA}+\\overrightarrow{OB}=\\overrightarrow{OC}$. Trong tam giác $OAC$: $OA=AC=100$, $\\widehat{OAC}=180^\\circ-60^\\circ=120^\\circ$. Định lí cosin: $OC^2=100^2+100^2-2\\cdot100\\cdot100\\cos120^\\circ=30000$, nên $OC=100\\sqrt3\\approx173{,}205$. (Cách khác: đường chéo $OC$ là phân giác góc $AOB$ và vuông góc với $AB$ tại trung điểm nên $OC=2\\cdot100\\cos30^\\circ=100\\sqrt3$.) Làm tròn đến hàng phần mười: $173{,}2$. Kết quả nhập: $173{,}2$.",
+          "skills": [
+            "Hợp lực",
+            "Hình thoi",
+            "Ứng dụng thực tế"
+          ],
+          "level": 3,
+          "id": "g10-c4-b01-v1-iii6",
+          "part": 3,
+          "number": 6,
+          "maxMillipoints": 500,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        }
+      ],
+      "theoryRecall": {
+        "title": "Chương IV (phần 1) · Vectơ, tổng hiệu, tích với một số",
+        "scope": "Ôn Bài 7, 8, 9 SGK Kết nối tri thức Toán 10 trước Bài 1: khái niệm vectơ, tổng và hiệu hai vectơ, tích của vectơ với một số. Tọa độ và tích vô hướng thuộc Bài 2. Công thức tổng quát, không chứa đáp án từng câu.",
+        "sections": [
+          {
+            "id": "define",
+            "title": "Vectơ, độ dài, giá",
+            "body": "Vectơ là một đoạn thẳng có hướng: $\\overrightarrow{AB}$ có điểm đầu $A$, điểm cuối $B$; khi không cần chỉ rõ điểm đầu, điểm cuối có thể viết $\\vec a,\\vec b,\\vec x,\\ldots$. Độ dài của $\\overrightarrow{AB}$ là khoảng cách giữa điểm đầu và điểm cuối: $|\\overrightarrow{AB}|=AB$. Đường thẳng đi qua điểm đầu và điểm cuối gọi là giá của vectơ. Phân biệt: $\\overrightarrow{AB}$ là vectơ, còn $AB$ và $|\\overrightarrow{AB}|$ là số không âm."
+          },
+          {
+            "id": "direction",
+            "title": "Cùng phương, cùng hướng, ngược hướng",
+            "body": "Hai vectơ cùng phương nếu giá của chúng song song hoặc trùng nhau. Hai vectơ cùng phương thì hoặc cùng hướng, hoặc ngược hướng; hai vectơ không cùng phương thì không nói đến cùng hướng hay ngược hướng. Ba điểm phân biệt $A,B,C$ thẳng hàng khi và chỉ khi $\\overrightarrow{AB}$ và $\\overrightarrow{AC}$ cùng phương. Lỗi thường gặp: coi cùng phương là cùng hướng."
+          },
+          {
+            "id": "zero-equal",
+            "title": "Vectơ-không và hai vectơ bằng nhau",
+            "body": "Vectơ có điểm đầu và điểm cuối trùng nhau là vectơ-không, kí hiệu $\\vec 0$: $\\overrightarrow{AA}=\\overrightarrow{BB}=\\vec 0$, $|\\vec 0|=0$; quy ước $\\vec 0$ cùng phương, cùng hướng với mọi vectơ. Hai vectơ bằng nhau khi chúng cùng hướng và cùng độ dài (cùng độ dài thôi chưa đủ). Cho $\\vec a$ và điểm $O$, có duy nhất điểm $A$ sao cho $\\overrightarrow{OA}=\\vec a$. Tứ giác $ABCD$ là hình bình hành khi và chỉ khi $\\overrightarrow{AB}=\\overrightarrow{DC}$ (chú ý thứ tự đỉnh)."
+          },
+          {
+            "id": "sum",
+            "title": "Tổng hai vectơ: quy tắc ba điểm, quy tắc hình bình hành",
+            "body": "Cho $\\vec a,\\vec b$; lấy điểm $A$, vẽ $\\overrightarrow{AB}=\\vec a$, $\\overrightarrow{BC}=\\vec b$, khi đó $\\vec a+\\vec b=\\overrightarrow{AC}$. Quy tắc ba điểm: với ba điểm $A,B,C$ bất kì, $\\overrightarrow{AB}+\\overrightarrow{BC}=\\overrightarrow{AC}$ (điểm cuối vectơ thứ nhất trùng điểm đầu vectơ thứ hai). Quy tắc hình bình hành: nếu $ABCD$ là hình bình hành thì $\\overrightarrow{AB}+\\overrightarrow{AD}=\\overrightarrow{AC}$. Tính chất: $\\vec a+\\vec b=\\vec b+\\vec a$; $(\\vec a+\\vec b)+\\vec c=\\vec a+(\\vec b+\\vec c)$; $\\vec a+\\vec 0=\\vec a$. Nói chung $|\\vec a+\\vec b|\\le|\\vec a|+|\\vec b|$, không được cộng độ dài thay cho cộng vectơ."
+          },
+          {
+            "id": "difference",
+            "title": "Vectơ đối và hiệu hai vectơ",
+            "body": "Vectơ đối của $\\vec a$, kí hiệu $-\\vec a$, là vectơ ngược hướng và cùng độ dài với $\\vec a$; $\\vec a+(-\\vec a)=\\vec 0$, $-\\overrightarrow{AB}=\\overrightarrow{BA}$, vectơ đối của $\\vec 0$ là $\\vec 0$. Hiệu: $\\vec a-\\vec b=\\vec a+(-\\vec b)$. Quy tắc hiệu: với ba điểm $O,A,B$ bất kì, $\\overrightarrow{OB}-\\overrightarrow{OA}=\\overrightarrow{AB}$ (hai vectơ chung điểm đầu; kết quả đi từ điểm cuối vectơ trừ đến điểm cuối vectơ bị trừ). Lỗi thường gặp: viết ngược chiều kết quả của hiệu."
+          },
+          {
+            "id": "midpoint-centroid",
+            "title": "Trung điểm và trọng tâm",
+            "body": "$I$ là trung điểm của đoạn thẳng $AB$ khi và chỉ khi $\\overrightarrow{IA}+\\overrightarrow{IB}=\\vec 0$. $G$ là trọng tâm tam giác $ABC$ khi và chỉ khi $\\overrightarrow{GA}+\\overrightarrow{GB}+\\overrightarrow{GC}=\\vec 0$. Kết hợp với tích vectơ với một số: với mọi điểm $M$, $\\overrightarrow{MA}+\\overrightarrow{MB}=2\\overrightarrow{MI}$ và $\\overrightarrow{MA}+\\overrightarrow{MB}+\\overrightarrow{MC}=3\\overrightarrow{MG}$. Trọng tâm nằm trên mỗi trung tuyến, cách đỉnh $\\dfrac23$ độ dài trung tuyến."
+          },
+          {
+            "id": "scalar",
+            "title": "Tích của vectơ với một số",
+            "body": "Cho số $k\\ne0$ và $\\vec a\\ne\\vec 0$: $k\\vec a$ cùng hướng với $\\vec a$ nếu $k>0$, ngược hướng với $\\vec a$ nếu $k<0$, và $|k\\vec a|=|k|\\cdot|\\vec a|$. Quy ước $0\\vec a=\\vec 0$, $k\\vec 0=\\vec 0$. Tính chất: $k(\\vec a+\\vec b)=k\\vec a+k\\vec b$; $(h+k)\\vec a=h\\vec a+k\\vec a$; $h(k\\vec a)=(hk)\\vec a$; $1\\vec a=\\vec a$; $(-1)\\vec a=-\\vec a$. Độ dài nhân với $|k|$, không nhân với $k$ âm.",
+            "tables": [
+              {
+                "caption": "Hướng và độ dài của $k\\vec a$ khi $\\vec a\\ne\\vec 0$",
+                "headers": [
+                  "Số $k$",
+                  "Hướng so với $\\vec a$",
+                  "Độ dài $|k\\vec a|$"
+                ],
+                "rows": [
+                  [
+                    "$k>0$",
+                    "Cùng hướng",
+                    "$k\\,|\\vec a|$"
+                  ],
+                  [
+                    "$k<0$",
+                    "Ngược hướng",
+                    "$-k\\,|\\vec a|=|k|\\,|\\vec a|$"
+                  ],
+                  [
+                    "$k=0$",
+                    "Là $\\vec 0$ (quy ước cùng hướng với mọi vectơ)",
+                    "$0$"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "id": "collinear",
+            "title": "Điều kiện cùng phương, ba điểm thẳng hàng",
+            "body": "Hai vectơ $\\vec a,\\vec b$ với $\\vec b\\ne\\vec 0$ cùng phương khi và chỉ khi có số $k$ sao cho $\\vec a=k\\vec b$. Ba điểm phân biệt $A,B,C$ thẳng hàng khi và chỉ khi có số $k\\ne0$ để $\\overrightarrow{AB}=k\\overrightarrow{AC}$. Cách làm: biểu diễn hai vectơ cần xét qua cùng hai vectơ không cùng phương rồi so sánh hệ số."
+          },
+          {
+            "id": "decompose",
+            "title": "Phân tích một vectơ theo hai vectơ không cùng phương",
+            "body": "Nếu $\\vec a,\\vec b$ không cùng phương thì mọi vectơ $\\vec x$ đều biểu diễn được duy nhất dưới dạng $\\vec x=h\\vec a+k\\vec b$ ($h,k$ là số thực). Vì duy nhất nên từ $h\\vec a+k\\vec b=h'\\vec a+k'\\vec b$ suy ra $h=h'$, $k=k'$. Mẹo: chèn điểm bằng quy tắc ba điểm, đổi vectơ trên một đường thẳng theo tỉ số độ dài (chú ý cùng hướng hay ngược hướng)."
+          },
+          {
+            "id": "physics",
+            "title": "Ứng dụng: lực và vận tốc",
+            "body": "Lực, vận tốc, độ dời là các đại lượng vectơ. Hai lực cùng đặt tại một điểm có hợp lực là tổng hai vectơ lực, dựng theo quy tắc hình bình hành; độ lớn hợp lực là độ dài đường chéo, tính bằng định lí Pythagore (hai lực vuông góc) hoặc định lí cosin của Chương III. Vật đứng cân bằng khi tổng các lực bằng $\\vec 0$: lực cân bằng là vectơ đối của hợp lực các lực còn lại. Vận tốc thực tế của vật trên dòng nước bằng tổng vận tốc riêng và vận tốc dòng nước. Chuyển động thẳng đều với vận tốc $\\vec v$ trong thời gian $t$ có độ dời $t\\vec v$. Ghi đơn vị (N, km/h) và chỉ làm tròn ở kết quả cuối."
+          }
+        ],
+        "notationConvention": "Kí hiệu theo SGK Kết nối tri thức: vectơ $\\overrightarrow{AB}$, $\\vec a$; độ dài $|\\overrightarrow{AB}|$; vectơ-không $\\vec 0$.",
+        "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014"
+      },
+      "versionHash": "357e1235539fbf2a5f3fd89e030ea00ba1ee1f5fd3a88fadfb6bd02cea4c6286",
+      "answerVerificationNote": "Đáp án và lời giải đã được tác giả kiểm bằng Python và kiểm độc lập lần hai ngày 14/10/2026."
+    },
+    "track": "10",
+    "chapter": "4",
+    "order": 1,
+    "coverage": "Hệ thống lí thuyết vectơ: khái niệm, tổng hiệu, tích với một số (Bài 7–9)",
+    "isChapterEnd": false,
+    "isFoundation": true,
+    "scope": "PUBLIC_RELEASE_CANDIDATE",
+    "published": false,
+    "reviewStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+    "sourceArtifactHash": "bf22da6a3446686cf1bfdd95108b5228d5a59603a849d5114b034b4a17d457d0",
+    "note": "Đề đủ ba phần, 22 câu (34 ô trả lời), 90 phút. Điểm từng phần và lời giải mở sau khi nộp.",
+    "admission": {
+      "newQuestions": 22,
+      "retainedQuestions": 0,
+      "mathVerified": true,
+      "independentReview": true,
+      "legacyFlagsAreNotLivePublication": true
+    },
+    "limits": [
+      "Lịch sử lưu trên trình duyệt này; chưa đồng bộ giữa các thiết bị."
+    ],
+    "displayCoverage": "Hệ thống lý thuyết vectơ: khái niệm, tổng hiệu, tích với một số"
+  },
+  {
+    "exam": {
+      "id": "mtm-practice-g10-c4-b02-v1",
+      "title": "Toán 10 · Chương IV · Bài 2: Hệ thống công thức tọa độ và tích vô hướng",
+      "grade": 10,
+      "period": "GK1",
+      "chapter": 4,
+      "practiceNumber": 2,
+      "topic": "Hệ thống công thức tọa độ và tích vô hướng",
+      "questionCount": 22,
+      "durationMinutes": 90,
+      "sourceHash": "f0c3c180d39f2280f803ab527abbab735684cf1a4160677051cb438794a3f2ad",
+      "sourceHashMeaning": "SHA256 nội dung câu hỏi + lời giải + theoryRecall của bản tự soạn; không có PDF nguồn; không phải chứng nhận đáp án",
+      "sourceRef": "MTM biên soạn mới 14/10/2026 theo SGK Kết nối tri thức Toán 10 (tập 1), Chương IV, Bài 10 và Bài 11. Không chép câu hỏi hoặc đáp án nguồn.",
+      "sourceUrl": "https://minhthanhmath.vn/",
+      "instructions": "Góc ghi bằng độ; lực tính bằng newton (N), độ dài bằng mét (m), công bằng jun (J) khi đề ghi. Mỗi câu phần I chọn một phương án; mỗi nhóm phần II chọn đúng/sai độc lập cho bốn ý; phần III nhập số và chỉ làm tròn khi câu hỏi yêu cầu. Phần I/II/III lần lượt tối đa 3/4/3 điểm.",
+      "sections": [
+        {
+          "label": "I · Trắc nghiệm",
+          "kind": "mc",
+          "count": 12
+        },
+        {
+          "label": "II · Đúng/sai",
+          "kind": "tf",
+          "count": 4
+        },
+        {
+          "label": "III · Trả lời ngắn",
+          "kind": "short",
+          "count": 6
+        }
+      ],
+      "rubricVersion": "MTM-PRACTICE-22-12MC-4TF-6SA-v2",
+      "answerKeyVerified": true,
+      "rubricVerified": true,
+      "questionDisplayVerified": true,
+      "publicationVerified": true,
+      "independentMathVerified": true,
+      "sourceMaterial": {
+        "title": "Vectơ trong mặt phẳng tọa độ và tích vô hướng · câu hỏi mới MTM",
+        "publisher": "Minh Thành Math (câu hỏi mới)",
+        "version": "2026–2027 · biên soạn 14/10/2026 · tác giả tự kiểm bằng VERIFY.py, chờ kiểm độc lập",
+        "locator": "Phạm vi SGK Kết nối tri thức Toán 10 tập 1, Chương IV, Bài 10 và Bài 11; câu hỏi mới MTM, không dùng PDF nguồn",
+        "sourceType": "ORIGINAL_MTM_AUTHORING",
+        "sourceQuestionReuse": false,
+        "sourceAnswerKeyReuse": false
+      },
+      "questions": [
+        {
+          "kind": "mc",
+          "prompt": "Trong mặt phẳng tọa độ $Oxy$, cho $\\vec u=3\\vec i-2\\vec j$. Tọa độ của vectơ $\\vec u$ là",
+          "choices": [
+            "$(3;2)$",
+            "$(-2;3)$",
+            "$(3;-2)$",
+            "$(-3;2)$"
+          ],
+          "answer": "C",
+          "solution": "Theo định nghĩa, $\\vec u=x\\vec i+y\\vec j\\iff\\vec u=(x;y)$. Ở đây hệ số của $\\vec i$ là $x=3$, hệ số của $\\vec j$ là $y=-2$ (giữ cả dấu). Vậy $\\vec u=(3;-2)$. Chọn C.",
+          "skills": [
+            "Tọa độ của vectơ"
+          ],
+          "level": 1,
+          "id": "g10-c4-b02-v1-i1",
+          "part": 1,
+          "number": 1,
+          "maxMillipoints": 250,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "mc",
+          "prompt": "Trong mặt phẳng tọa độ $Oxy$, cho hai điểm $A(1;-2)$ và $B(4;3)$. Tọa độ của vectơ $\\overrightarrow{AB}$ là",
+          "choices": [
+            "$(3;5)$",
+            "$(-3;-5)$",
+            "$(5;1)$",
+            "$(3;1)$"
+          ],
+          "answer": "A",
+          "solution": "$\\overrightarrow{AB}=(x_B-x_A;\\,y_B-y_A)$ (tọa độ điểm cuối trừ tọa độ điểm đầu). Do đó $\\overrightarrow{AB}=(4-1;\\,3-(-2))=(3;5)$. Phương án $(-3;-5)$ là tọa độ của $\\overrightarrow{BA}$. Chọn A.",
+          "skills": [
+            "Tọa độ vectơ nối hai điểm"
+          ],
+          "level": 1,
+          "id": "g10-c4-b02-v1-i2",
+          "part": 1,
+          "number": 2,
+          "maxMillipoints": 250,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "mc",
+          "prompt": "Cho $\\vec a=(2;-1)$ và $\\vec b=(-3;4)$. Tọa độ của vectơ $2\\vec a-\\vec b$ là",
+          "choices": [
+            "$(1;2)$",
+            "$(-7;6)$",
+            "$(5;-5)$",
+            "$(7;-6)$"
+          ],
+          "answer": "D",
+          "solution": "$2\\vec a=(2\\cdot2;\\,2\\cdot(-1))=(4;-2)$. Khi đó $2\\vec a-\\vec b=(4-(-3);\\,-2-4)=(7;-6)$. Phương án $(1;2)$ là $2\\vec a+\\vec b$, phương án $(5;-5)$ là $\\vec a-\\vec b$. Chọn D.",
+          "skills": [
+            "Biểu thức tọa độ của các phép toán vectơ"
+          ],
+          "level": 2,
+          "id": "g10-c4-b02-v1-i3",
+          "part": 1,
+          "number": 3,
+          "maxMillipoints": 250,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "mc",
+          "prompt": "Cho tam giác $ABC$ có $A(1;2)$, $B(-3;4)$, $C(5;-3)$. Tọa độ trọng tâm $G$ của tam giác $ABC$ là",
+          "choices": [
+            "$(3;3)$",
+            "$(1;1)$",
+            "$\\left(\\dfrac32;\\dfrac32\\right)$",
+            "$(1;-1)$"
+          ],
+          "answer": "B",
+          "solution": "Ba điểm không thẳng hàng vì $\\overrightarrow{AB}=(-4;2)$, $\\overrightarrow{AC}=(4;-5)$ và $(-4)\\cdot(-5)-2\\cdot4=12\\ne0$. Trọng tâm: $x_G=\\dfrac{1+(-3)+5}{3}=1$, $y_G=\\dfrac{2+4+(-3)}{3}=1$. Vậy $G(1;1)$. Phương án $(3;3)$ quên chia cho $3$; phương án $\\left(\\dfrac32;\\dfrac32\\right)$ chia nhầm cho $2$. Chọn B.",
+          "skills": [
+            "Tọa độ trọng tâm"
+          ],
+          "level": 2,
+          "id": "g10-c4-b02-v1-i4",
+          "part": 1,
+          "number": 4,
+          "maxMillipoints": 250,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "mc",
+          "prompt": "Cho $\\vec u=(2;-3)$. Vectơ nào sau đây cùng phương với $\\vec u$?",
+          "choices": [
+            "$(4;6)$",
+            "$(3;-2)$",
+            "$(-4;6)$",
+            "$(-2;-3)$"
+          ],
+          "answer": "C",
+          "solution": "Hai vectơ $(x;y)$ và $(x';y')$ cùng phương khi và chỉ khi $xy'-x'y=0$. Với $(-4;6)$: $2\\cdot6-(-4)\\cdot(-3)=12-12=0$, thật vậy $(-4;6)=-2\\vec u$. Kiểm các phương án còn lại: $(4;6)$ cho $2\\cdot6-4\\cdot(-3)=24\\ne0$; $(3;-2)$ cho $2\\cdot(-2)-3\\cdot(-3)=5\\ne0$; $(-2;-3)$ cho $2\\cdot(-3)-(-2)\\cdot(-3)=-12\\ne0$. Chọn C.",
+          "skills": [
+            "Điều kiện cùng phương"
+          ],
+          "level": 2,
+          "id": "g10-c4-b02-v1-i5",
+          "part": 1,
+          "number": 5,
+          "maxMillipoints": 250,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "mc",
+          "prompt": "Cho hai điểm $A(2;-1)$ và $B(5;3)$. Độ dài đoạn thẳng $AB$ bằng",
+          "choices": [
+            "$7$",
+            "$25$",
+            "$\\sqrt{53}$",
+            "$5$"
+          ],
+          "answer": "D",
+          "solution": "$\\overrightarrow{AB}=(5-2;\\,3-(-1))=(3;4)$. Do đó $AB=|\\overrightarrow{AB}|=\\sqrt{3^2+4^2}=\\sqrt{25}=5$. Phương án $25$ quên lấy căn, $7$ cộng hai thành phần, $\\sqrt{53}$ cộng nhầm tọa độ hai điểm. Chọn D.",
+          "skills": [
+            "Độ dài vectơ, khoảng cách hai điểm"
+          ],
+          "level": 2,
+          "id": "g10-c4-b02-v1-i6",
+          "part": 1,
+          "number": 6,
+          "maxMillipoints": 250,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "mc",
+          "prompt": "Cho hai vectơ $\\vec u,\\vec v$ đều khác $\\vec 0$. Tích vô hướng của $\\vec u$ và $\\vec v$ được xác định bởi",
+          "choices": [
+            "$\\vec u\\cdot\\vec v=|\\vec u|\\cdot|\\vec v|\\cos(\\vec u,\\vec v)$",
+            "$\\vec u\\cdot\\vec v=|\\vec u|\\cdot|\\vec v|\\sin(\\vec u,\\vec v)$",
+            "$\\vec u\\cdot\\vec v=|\\vec u|\\cdot|\\vec v|$",
+            "$\\vec u\\cdot\\vec v=-|\\vec u|\\cdot|\\vec v|\\cos(\\vec u,\\vec v)$"
+          ],
+          "answer": "A",
+          "solution": "Theo định nghĩa (SGK Kết nối tri thức Toán 10, Bài 11), với hai vectơ khác $\\vec 0$: $\\vec u\\cdot\\vec v=|\\vec u|\\cdot|\\vec v|\\cos(\\vec u,\\vec v)$; kết quả là một số. Đẳng thức $\\vec u\\cdot\\vec v=|\\vec u|\\cdot|\\vec v|$ chỉ xảy ra khi hai vectơ cùng hướng. Chọn A.",
+          "skills": [
+            "Định nghĩa tích vô hướng"
+          ],
+          "level": 2,
+          "id": "g10-c4-b02-v1-i7",
+          "part": 1,
+          "number": 7,
+          "maxMillipoints": 250,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "mc",
+          "prompt": "Cho $\\vec a=(3;-2)$ và $\\vec b=(4;5)$. Tích vô hướng $\\vec a\\cdot\\vec b$ bằng",
+          "choices": [
+            "$(12;-10)$",
+            "$22$",
+            "$2$",
+            "$-2$"
+          ],
+          "answer": "C",
+          "solution": "Biểu thức tọa độ: $\\vec a\\cdot\\vec b=xx'+yy'=3\\cdot4+(-2)\\cdot5=12-10=2$. Tích vô hướng là một số, không phải vectơ, nên $(12;-10)$ sai bản chất. Chọn C.",
+          "skills": [
+            "Biểu thức tọa độ của tích vô hướng"
+          ],
+          "level": 2,
+          "id": "g10-c4-b02-v1-i8",
+          "part": 1,
+          "number": 8,
+          "maxMillipoints": 250,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "mc",
+          "prompt": "Tìm $m$ để hai vectơ $\\vec u=(m;2)$ và $\\vec v=(3;-6)$ vuông góc với nhau.",
+          "choices": [
+            "$m=-4$",
+            "$m=4$",
+            "$m=-1$",
+            "$m=1$"
+          ],
+          "answer": "B",
+          "solution": "Hai vectơ khác $\\vec 0$ ($\\vec u$ có tung độ $2\\ne0$) vuông góc khi và chỉ khi $\\vec u\\cdot\\vec v=0$, tức $3m+2\\cdot(-6)=0\\iff3m=12\\iff m=4$. Kiểm lại: $(4;2)\\cdot(3;-6)=12-12=0$. Giá trị $m=-1$ là điều kiện cùng phương ($-6m-6=0$), không phải vuông góc. Chọn B.",
+          "skills": [
+            "Điều kiện vuông góc"
+          ],
+          "level": 2,
+          "id": "g10-c4-b02-v1-i9",
+          "part": 1,
+          "number": 9,
+          "maxMillipoints": 250,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "mc",
+          "prompt": "Một người kéo một thùng hàng trượt thẳng trên sàn một quãng đường $20\\ \\text{m}$ bằng một lực không đổi có độ lớn $50\\ \\text{N}$, hướng của lực hợp với hướng dịch chuyển một góc $60^\\circ$. Công sinh bởi lực đó là",
+          "choices": [
+            "$1000\\ \\text{J}$",
+            "$500\\sqrt3\\ \\text{J}$",
+            "$70\\ \\text{J}$",
+            "$500\\ \\text{J}$"
+          ],
+          "answer": "D",
+          "solution": "Gọi $\\vec F$ là lực, $\\vec d$ là vectơ dịch chuyển. Công $A=\\vec F\\cdot\\vec d=|\\vec F|\\cdot|\\vec d|\\cos(\\vec F,\\vec d)=50\\cdot20\\cdot\\cos60^\\circ=1000\\cdot\\dfrac12=500\\ (\\text{J})$. Phương án $1000$ bỏ quên $\\cos60^\\circ$; $500\\sqrt3$ dùng nhầm $\\sin60^\\circ$. Chọn D.",
+          "skills": [
+            "Ứng dụng: công của lực"
+          ],
+          "level": 2,
+          "id": "g10-c4-b02-v1-i10",
+          "part": 1,
+          "number": 10,
+          "maxMillipoints": 250,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "mc",
+          "prompt": "Cho hai vectơ $\\vec u,\\vec v$ đều khác $\\vec 0$ thỏa mãn $\\vec u\\cdot\\vec v<0$. Khẳng định nào sau đây đúng?",
+          "choices": [
+            "$(\\vec u,\\vec v)$ là góc nhọn.",
+            "$90^\\circ<(\\vec u,\\vec v)\\le180^\\circ$.",
+            "$\\vec u\\perp\\vec v$.",
+            "$(\\vec u,\\vec v)=180^\\circ$."
+          ],
+          "answer": "B",
+          "solution": "$\\vec u\\cdot\\vec v=|\\vec u|\\cdot|\\vec v|\\cos(\\vec u,\\vec v)$ với $|\\vec u|\\cdot|\\vec v|>0$, nên $\\vec u\\cdot\\vec v<0\\iff\\cos(\\vec u,\\vec v)<0$. Vì góc giữa hai vectơ thuộc $[0^\\circ;180^\\circ]$, điều này tương đương $90^\\circ<(\\vec u,\\vec v)\\le180^\\circ$. Góc $180^\\circ$ chỉ là một trường hợp riêng (hai vectơ ngược hướng), không bắt buộc. Chọn B.",
+          "skills": [
+            "Dấu của tích vô hướng"
+          ],
+          "level": 3,
+          "id": "g10-c4-b02-v1-i11",
+          "part": 1,
+          "number": 11,
+          "maxMillipoints": 250,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "mc",
+          "prompt": "Cho tam giác đều $ABC$. Góc giữa hai vectơ $\\overrightarrow{AB}$ và $\\overrightarrow{BC}$ bằng",
+          "choices": [
+            "$120^\\circ$",
+            "$60^\\circ$",
+            "$30^\\circ$",
+            "$150^\\circ$"
+          ],
+          "answer": "A",
+          "solution": "Hai vectơ chưa chung điểm đầu nên phải dời về chung gốc. Lấy điểm $D$ sao cho $\\overrightarrow{BD}=\\overrightarrow{AB}$ ($D$ đối xứng với $A$ qua $B$). Khi đó $(\\overrightarrow{AB},\\overrightarrow{BC})=(\\overrightarrow{BD},\\overrightarrow{BC})=\\widehat{DBC}=180^\\circ-\\widehat{ABC}=180^\\circ-60^\\circ=120^\\circ$. Phương án $60^\\circ$ nhầm với góc trong $\\widehat{ABC}$. Chọn A.",
+          "skills": [
+            "Góc giữa hai vectơ"
+          ],
+          "level": 3,
+          "id": "g10-c4-b02-v1-i12",
+          "part": 1,
+          "number": 12,
+          "maxMillipoints": 250,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "tf",
+          "prompt": "Trong mặt phẳng tọa độ $Oxy$, cho ba điểm $A(1;3)$, $B(-2;-1)$, $C(4;-1)$. Xét các khẳng định:",
+          "statements": [
+            "$\\overrightarrow{AB}=(-3;-4)$.",
+            "$AB=5$.",
+            "Trung điểm $M$ của đoạn thẳng $BC$ có tọa độ $(2;-1)$.",
+            "Điểm $D$ để $ABCD$ là hình bình hành có tọa độ $(7;3)$."
+          ],
+          "answer": [
+            true,
+            true,
+            false,
+            true
+          ],
+          "statementSolutions": [
+            "Đúng. $\\overrightarrow{AB}=(-2-1;\\,-1-3)=(-3;-4)$.",
+            "Đúng. $AB=\\sqrt{(-3)^2+(-4)^2}=\\sqrt{25}=5$.",
+            "Sai. $x_M=\\dfrac{-2+4}{2}=1$, $y_M=\\dfrac{-1+(-1)}{2}=-1$, nên $M(1;-1)$. Tọa độ $(2;-1)$ có hoành độ quên chia cho $2$.",
+            "Đúng. $A,B,C$ không thẳng hàng vì $\\overrightarrow{AB}=(-3;-4)$, $\\overrightarrow{BC}=(6;0)$ và $(-3)\\cdot0-6\\cdot(-4)=24\\ne0$. $ABCD$ là hình bình hành $\\iff\\overrightarrow{AD}=\\overrightarrow{BC}=(6;0)$, suy ra $D(1+6;\\,3+0)=(7;3)$."
+          ],
+          "solution": "Đánh giá từng ý độc lập; kết quả: Đúng – Đúng – Sai – Đúng.",
+          "skills": [
+            "Tọa độ vectơ",
+            "Độ dài",
+            "Trung điểm",
+            "Hình bình hành"
+          ],
+          "level": 2,
+          "id": "g10-c4-b02-v1-ii1",
+          "part": 2,
+          "number": 1,
+          "maxMillipoints": 1000,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true,
+          "pointsByCorrectCount": [
+            0,
+            100,
+            250,
+            500,
+            1000
+          ]
+        },
+        {
+          "kind": "tf",
+          "prompt": "Cho hai vectơ $\\vec a=(1;2)$ và $\\vec b=(3;-1)$. Xét các khẳng định:",
+          "statements": [
+            "$\\vec a\\cdot\\vec b=1$.",
+            "$|\\vec a+\\vec b|=|\\vec a|+|\\vec b|$.",
+            "$\\cos(\\vec a,\\vec b)=\\dfrac{\\sqrt2}{10}$.",
+            "Góc giữa hai vectơ $\\vec a$ và $\\vec b$ là góc tù."
+          ],
+          "answer": [
+            true,
+            false,
+            true,
+            false
+          ],
+          "statementSolutions": [
+            "Đúng. $\\vec a\\cdot\\vec b=1\\cdot3+2\\cdot(-1)=1$.",
+            "Sai. $\\vec a+\\vec b=(4;1)$ nên $|\\vec a+\\vec b|=\\sqrt{17}$, còn $|\\vec a|+|\\vec b|=\\sqrt5+\\sqrt{10}$. Vì $(\\sqrt5+\\sqrt{10})^2=15+2\\sqrt{50}>17$, hai số khác nhau. Đẳng thức chỉ đúng khi hai vectơ cùng hướng.",
+            "Đúng. $|\\vec a|=\\sqrt5$, $|\\vec b|=\\sqrt{10}$, nên $\\cos(\\vec a,\\vec b)=\\dfrac{\\vec a\\cdot\\vec b}{|\\vec a|\\cdot|\\vec b|}=\\dfrac{1}{\\sqrt{50}}=\\dfrac{1}{5\\sqrt2}=\\dfrac{\\sqrt2}{10}$.",
+            "Sai. $\\vec a\\cdot\\vec b=1>0$ nên $\\cos(\\vec a,\\vec b)>0$; góc giữa hai vectơ là góc nhọn."
+          ],
+          "solution": "Đánh giá từng ý độc lập; kết quả: Đúng – Sai – Đúng – Sai.",
+          "skills": [
+            "Tích vô hướng",
+            "Độ dài tổng",
+            "Côsin góc giữa hai vectơ"
+          ],
+          "level": 2,
+          "id": "g10-c4-b02-v1-ii2",
+          "part": 2,
+          "number": 2,
+          "maxMillipoints": 1000,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true,
+          "pointsByCorrectCount": [
+            0,
+            100,
+            250,
+            500,
+            1000
+          ]
+        },
+        {
+          "kind": "tf",
+          "prompt": "Trong mặt phẳng tọa độ $Oxy$, cho tam giác $ABC$ có $A(1;1)$, $B(4;2)$, $C(2;4)$. Xét các khẳng định:",
+          "statements": [
+            "$\\overrightarrow{AB}\\cdot\\overrightarrow{AC}=6$.",
+            "Tam giác $ABC$ vuông tại $A$.",
+            "$\\cos(\\overrightarrow{AB},\\overrightarrow{BC})=-\\dfrac{\\sqrt5}{5}$.",
+            "Diện tích tam giác $ABC$ bằng $4$."
+          ],
+          "answer": [
+            true,
+            false,
+            true,
+            true
+          ],
+          "statementSolutions": [
+            "Đúng. $\\overrightarrow{AB}=(3;1)$, $\\overrightarrow{AC}=(1;3)$, nên $\\overrightarrow{AB}\\cdot\\overrightarrow{AC}=3\\cdot1+1\\cdot3=6$.",
+            "Sai. Tam giác vuông tại $A$ khi và chỉ khi $\\overrightarrow{AB}\\cdot\\overrightarrow{AC}=0$, nhưng tích này bằng $6\\ne0$.",
+            "Đúng. $\\overrightarrow{BC}=(-2;2)$, $\\overrightarrow{AB}\\cdot\\overrightarrow{BC}=3\\cdot(-2)+1\\cdot2=-4$, $|\\overrightarrow{AB}|=\\sqrt{10}$, $|\\overrightarrow{BC}|=2\\sqrt2$. Do đó $\\cos(\\overrightarrow{AB},\\overrightarrow{BC})=\\dfrac{-4}{\\sqrt{10}\\cdot2\\sqrt2}=-\\dfrac{2}{\\sqrt{20}}=-\\dfrac{\\sqrt5}{5}$. Lưu ý đây là côsin của góc giữa hai vectơ, bằng $-\\cos\\widehat{ABC}$, không phải $\\cos\\widehat{ABC}$.",
+            "Đúng. $\\cos\\widehat{BAC}=\\dfrac{6}{\\sqrt{10}\\cdot\\sqrt{10}}=\\dfrac35$; vì $0^\\circ<\\widehat{BAC}<180^\\circ$ nên $\\sin\\widehat{BAC}=\\sqrt{1-\\dfrac{9}{25}}=\\dfrac45$. Vậy $S=\\dfrac12\\cdot AB\\cdot AC\\cdot\\sin\\widehat{BAC}=\\dfrac12\\cdot\\sqrt{10}\\cdot\\sqrt{10}\\cdot\\dfrac45=4$."
+          ],
+          "solution": "Đánh giá từng ý độc lập; kết quả: Đúng – Sai – Đúng – Đúng.",
+          "skills": [
+            "Tích vô hướng trong tam giác",
+            "Góc giữa hai vectơ",
+            "Diện tích"
+          ],
+          "level": 3,
+          "id": "g10-c4-b02-v1-ii3",
+          "part": 2,
+          "number": 3,
+          "maxMillipoints": 1000,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true,
+          "pointsByCorrectCount": [
+            0,
+            100,
+            250,
+            500,
+            1000
+          ]
+        },
+        {
+          "kind": "tf",
+          "prompt": "Hai lực $\\vec F_1,\\vec F_2$ cùng tác dụng vào một vật, có độ lớn $|\\vec F_1|=6\\ \\text{N}$, $|\\vec F_2|=10\\ \\text{N}$ và $(\\vec F_1,\\vec F_2)=60^\\circ$. Gọi $\\vec F=\\vec F_1+\\vec F_2$ là hợp lực. Xét các khẳng định:",
+          "statements": [
+            "$\\vec F_1\\cdot\\vec F_2=30$.",
+            "$|\\vec F|=14\\ \\text{N}$.",
+            "Nếu vật dịch chuyển thẳng $5\\ \\text{m}$ theo đúng hướng của $\\vec F_1$ thì công của hợp lực $\\vec F$ bằng $55\\ \\text{J}$.",
+            "Nếu giữ nguyên độ lớn hai lực nhưng cho chúng vuông góc với nhau thì $|\\vec F|=16\\ \\text{N}$."
+          ],
+          "answer": [
+            true,
+            true,
+            true,
+            false
+          ],
+          "statementSolutions": [
+            "Đúng. $\\vec F_1\\cdot\\vec F_2=6\\cdot10\\cdot\\cos60^\\circ=30$.",
+            "Đúng. $|\\vec F|^2=(\\vec F_1+\\vec F_2)^2=|\\vec F_1|^2+2\\vec F_1\\cdot\\vec F_2+|\\vec F_2|^2=36+60+100=196$, nên $|\\vec F|=14\\ \\text{N}$.",
+            "Đúng. Gọi $\\vec d$ là vectơ dịch chuyển, $|\\vec d|=5$, $\\vec d$ cùng hướng $\\vec F_1$ nên $(\\vec F_1,\\vec d)=0^\\circ$, $(\\vec F_2,\\vec d)=60^\\circ$. Công $A=\\vec F\\cdot\\vec d=\\vec F_1\\cdot\\vec d+\\vec F_2\\cdot\\vec d=6\\cdot5\\cdot1+10\\cdot5\\cdot\\dfrac12=55\\ (\\text{J})$.",
+            "Sai. Khi $\\vec F_1\\perp\\vec F_2$ thì $\\vec F_1\\cdot\\vec F_2=0$, $|\\vec F|^2=36+100=136$, $|\\vec F|=2\\sqrt{34}\\approx11{,}66\\ \\text{N}$. Số $16$ là cộng độ lớn, chỉ đúng khi hai lực cùng hướng."
+          ],
+          "solution": "Đánh giá từng ý độc lập; kết quả: Đúng – Đúng – Đúng – Sai.",
+          "skills": [
+            "Ứng dụng: hợp lực",
+            "Ứng dụng: công của lực"
+          ],
+          "level": 3,
+          "id": "g10-c4-b02-v1-ii4",
+          "part": 2,
+          "number": 4,
+          "maxMillipoints": 1000,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true,
+          "pointsByCorrectCount": [
+            0,
+            100,
+            250,
+            500,
+            1000
+          ]
+        },
+        {
+          "kind": "short",
+          "prompt": "Cho hai vectơ $\\vec u=(2;-3)$ và $\\vec v=(-1;4)$. Tính $\\vec u\\cdot\\vec v$.",
+          "mode": "numeric",
+          "acceptedAnswers": [
+            "-14"
+          ],
+          "solution": "$\\vec u\\cdot\\vec v=xx'+yy'=2\\cdot(-1)+(-3)\\cdot4=-2-12=-14$. Kết quả nhập: $-14$.",
+          "skills": [
+            "Biểu thức tọa độ của tích vô hướng"
+          ],
+          "level": 1,
+          "id": "g10-c4-b02-v1-iii1",
+          "part": 3,
+          "number": 1,
+          "maxMillipoints": 500,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "short",
+          "prompt": "Tìm số thực $m$ để hai vectơ $\\vec a=(m;3)$ và $\\vec b=(4;6)$ cùng phương.",
+          "mode": "numeric",
+          "acceptedAnswers": [
+            "2"
+          ],
+          "solution": "$\\vec b\\ne\\vec 0$ nên $\\vec a$ cùng phương $\\vec b\\iff$ có số $k$ với $\\vec a=k\\vec b$, tức $m=4k$ và $3=6k$. Suy ra $k=\\dfrac12$, $m=2$. Kiểm bằng điều kiện $xy'-x'y=m\\cdot6-4\\cdot3=0\\iff m=2$. Kết quả nhập: $2$.",
+          "skills": [
+            "Điều kiện cùng phương"
+          ],
+          "level": 2,
+          "id": "g10-c4-b02-v1-iii2",
+          "part": 3,
+          "number": 2,
+          "maxMillipoints": 500,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "short",
+          "prompt": "Cho tam giác $ABC$ có $A(1;1)$, $B(4;1)$, $C(3;3)$. Tính số đo góc $\\widehat{BAC}$ (đơn vị độ).",
+          "mode": "numeric",
+          "acceptedAnswers": [
+            "45"
+          ],
+          "solution": "$\\overrightarrow{AB}=(3;0)$, $\\overrightarrow{AC}=(2;2)$, đều khác $\\vec 0$. $\\cos\\widehat{BAC}=\\cos(\\overrightarrow{AB},\\overrightarrow{AC})=\\dfrac{3\\cdot2+0\\cdot2}{3\\cdot2\\sqrt2}=\\dfrac{1}{\\sqrt2}=\\dfrac{\\sqrt2}{2}$. Vì $0^\\circ<\\widehat{BAC}<180^\\circ$ nên $\\widehat{BAC}=45^\\circ$. Kết quả nhập: $45$.",
+          "skills": [
+            "Góc giữa hai vectơ theo tọa độ"
+          ],
+          "level": 2,
+          "id": "g10-c4-b02-v1-iii3",
+          "part": 3,
+          "number": 3,
+          "maxMillipoints": 500,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "short",
+          "prompt": "Một ca nô chạy với vận tốc riêng (so với dòng nước) có độ lớn $12\\ \\text{km/h}$, theo hướng vuông góc với bờ sông. Dòng nước chảy song song với bờ với vận tốc $5\\ \\text{km/h}$. Tính độ lớn vận tốc thực của ca nô so với bờ (đơn vị $\\text{km/h}$).",
+          "mode": "numeric",
+          "acceptedAnswers": [
+            "13"
+          ],
+          "solution": "Vận tốc thực $\\vec v=\\vec v_1+\\vec v_2$ với $\\vec v_1$ là vận tốc riêng, $\\vec v_2$ là vận tốc dòng nước, $\\vec v_1\\perp\\vec v_2$ nên $\\vec v_1\\cdot\\vec v_2=0$. Khi đó $|\\vec v|^2=|\\vec v_1|^2+2\\vec v_1\\cdot\\vec v_2+|\\vec v_2|^2=144+0+25=169$, nên $|\\vec v|=13\\ \\text{km/h}$. Kết quả nhập: $13$.",
+          "skills": [
+            "Ứng dụng: tổng hợp vận tốc"
+          ],
+          "level": 2,
+          "id": "g10-c4-b02-v1-iii4",
+          "part": 3,
+          "number": 4,
+          "maxMillipoints": 500,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "short",
+          "prompt": "Cho hai điểm $A(1;2)$, $B(3;5)$ và điểm $C(x;0)$. Tìm $x$ để tam giác $ABC$ vuông tại $A$.",
+          "mode": "numeric",
+          "acceptedAnswers": [
+            "4"
+          ],
+          "solution": "$\\overrightarrow{AB}=(2;3)$, $\\overrightarrow{AC}=(x-1;-2)$. Tam giác vuông tại $A\\iff\\overrightarrow{AB}\\cdot\\overrightarrow{AC}=0\\iff2(x-1)+3\\cdot(-2)=0\\iff2x-8=0\\iff x=4$. Kiểm: $C(4;0)$, $\\overrightarrow{AC}=(3;-2)\\ne\\vec 0$ và $\\overrightarrow{AB}\\cdot\\overrightarrow{AC}=6-6=0$; $A,B,C$ không thẳng hàng nên tam giác tồn tại. Kết quả nhập: $4$.",
+          "skills": [
+            "Điều kiện vuông góc"
+          ],
+          "level": 3,
+          "id": "g10-c4-b02-v1-iii5",
+          "part": 3,
+          "number": 5,
+          "maxMillipoints": 500,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        },
+        {
+          "kind": "short",
+          "prompt": "Trong mặt phẳng tọa độ với đơn vị độ dài là mét, một vật chuyển động thẳng từ điểm $A(1;2)$ đến điểm $B(7;10)$ dưới tác dụng của lực không đổi $\\vec F=(20;15)$ (các thành phần tính bằng newton). Tính công sinh bởi lực $\\vec F$ (đơn vị jun).",
+          "mode": "numeric",
+          "acceptedAnswers": [
+            "240"
+          ],
+          "solution": "Vectơ dịch chuyển $\\overrightarrow{AB}=(7-1;\\,10-2)=(6;8)$. Công $A=\\vec F\\cdot\\overrightarrow{AB}=20\\cdot6+15\\cdot8=120+120=240\\ (\\text{J})$. Kiểm chéo: $|\\vec F|=25$, $|\\overrightarrow{AB}|=10$, $\\cos(\\vec F,\\overrightarrow{AB})=\\dfrac{240}{250}=0{,}96$, hợp lý vì lực gần cùng hướng dịch chuyển. Kết quả nhập: $240$.",
+          "skills": [
+            "Ứng dụng: công của lực theo tọa độ"
+          ],
+          "level": 3,
+          "id": "g10-c4-b02-v1-iii6",
+          "part": 3,
+          "number": 6,
+          "maxMillipoints": 500,
+          "sourceRef": "MTM biên soạn mới 14/10/2026",
+          "originalQuestion": true,
+          "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+          "answerKeyVerified": true,
+          "rubricVerified": true,
+          "questionDisplayVerified": true,
+          "publicationVerified": true,
+          "independentMathVerified": true
+        }
+      ],
+      "theoryRecall": {
+        "title": "Chương IV · Tọa độ vectơ, tích vô hướng và ứng dụng",
+        "scope": "Ôn lí thuyết Bài 10 (Vectơ trong mặt phẳng tọa độ) và Bài 11 (Tích vô hướng của hai vectơ), SGK Kết nối tri thức Toán 10, cùng ứng dụng công, hợp lực, vận tốc. Công thức tổng quát, không chứa đáp án từng câu.",
+        "sections": [
+          {
+            "id": "axes",
+            "title": "Hệ trục tọa độ và tọa độ của vectơ",
+            "body": "Hệ trục $Oxy$ gồm trục hoành $Ox$, trục tung $Oy$ vuông góc tại gốc $O$, với vectơ đơn vị $\\vec i=(1;0)$, $\\vec j=(0;1)$, $|\\vec i|=|\\vec j|=1$. Mỗi vectơ $\\vec u$ biểu diễn duy nhất $\\vec u=x\\vec i+y\\vec j$; khi đó viết $\\vec u=(x;y)$. Điểm $M$ có tọa độ $(x;y)$ khi $\\overrightarrow{OM}=x\\vec i+y\\vec j$; $x$ là hoành độ, $y$ là tung độ. Hai vectơ bằng nhau khi và chỉ khi hoành độ bằng nhau và tung độ bằng nhau."
+          },
+          {
+            "id": "operations",
+            "title": "Biểu thức tọa độ của các phép toán vectơ",
+            "body": "Với $\\vec u=(x;y)$, $\\vec v=(x';y')$ và số thực $k$: $\\vec u+\\vec v=(x+x';\\,y+y')$, $\\vec u-\\vec v=(x-x';\\,y-y')$, $k\\vec u=(kx;\\,ky)$. Vectơ đối $-\\vec u=(-x;-y)$, vectơ không $\\vec 0=(0;0)$.",
+            "tables": [
+              {
+                "caption": "Bảng công thức tọa độ cần nhớ ($A(x_A;y_A)$, $B(x_B;y_B)$, $C(x_C;y_C)$)",
+                "headers": [
+                  "Đối tượng",
+                  "Công thức"
+                ],
+                "rows": [
+                  [
+                    "Vectơ $\\overrightarrow{AB}$",
+                    "$(x_B-x_A;\\,y_B-y_A)$"
+                  ],
+                  [
+                    "Độ dài $\\vec u=(x;y)$",
+                    "$|\\vec u|=\\sqrt{x^2+y^2}$"
+                  ],
+                  [
+                    "Khoảng cách $AB$",
+                    "$\\sqrt{(x_B-x_A)^2+(y_B-y_A)^2}$"
+                  ],
+                  [
+                    "Trung điểm $M$ của $AB$",
+                    "$\\left(\\dfrac{x_A+x_B}{2};\\dfrac{y_A+y_B}{2}\\right)$"
+                  ],
+                  [
+                    "Trọng tâm $G$ của tam giác $ABC$",
+                    "$\\left(\\dfrac{x_A+x_B+x_C}{3};\\dfrac{y_A+y_B+y_C}{3}\\right)$"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "id": "points",
+            "title": "Vectơ nối hai điểm, trung điểm, trọng tâm",
+            "body": "$\\overrightarrow{AB}$ lấy tọa độ điểm cuối trừ tọa độ điểm đầu; đảo thứ tự cho $\\overrightarrow{BA}=-\\overrightarrow{AB}$. Trung điểm chia tổng cho $2$, trọng tâm chia tổng ba tọa độ cho $3$. Tứ giác $ABCD$ là hình bình hành khi và chỉ khi $A,B,C$ không thẳng hàng và $\\overrightarrow{AB}=\\overrightarrow{DC}$ (tương đương $\\overrightarrow{AD}=\\overrightarrow{BC}$); chú ý đúng thứ tự đỉnh."
+          },
+          {
+            "id": "collinear",
+            "title": "Hai vectơ cùng phương, ba điểm thẳng hàng",
+            "body": "Với $\\vec v\\ne\\vec 0$: $\\vec u$ cùng phương $\\vec v$ khi và chỉ khi có số $k$ sao cho $\\vec u=k\\vec v$, tức $x=kx'$, $y=ky'$. Dạng không cần chia: $\\vec u=(x;y)$ và $\\vec v=(x';y')$ cùng phương $\\iff xy'-x'y=0$. Ba điểm phân biệt $A,B,C$ thẳng hàng $\\iff\\overrightarrow{AB}$, $\\overrightarrow{AC}$ cùng phương. Lỗi thường gặp: viết tỉ lệ $\\dfrac{x}{x'}=\\dfrac{y}{y'}$ khi có tọa độ bằng $0$; nhầm điều kiện cùng phương với điều kiện vuông góc."
+          },
+          {
+            "id": "angle",
+            "title": "Góc giữa hai vectơ",
+            "body": "Cho $\\vec u,\\vec v$ khác $\\vec 0$. Từ một điểm $O$ vẽ $\\overrightarrow{OA}=\\vec u$, $\\overrightarrow{OB}=\\vec v$; góc $\\widehat{AOB}$ gọi là góc giữa hai vectơ, kí hiệu $(\\vec u,\\vec v)$, với $0^\\circ\\le(\\vec u,\\vec v)\\le180^\\circ$. Góc bằng $0^\\circ$ khi hai vectơ cùng hướng, bằng $180^\\circ$ khi ngược hướng; $\\vec u\\perp\\vec v$ khi góc bằng $90^\\circ$. Lỗi thường gặp: đọc góc khi hai vectơ chưa chung điểm đầu (ví dụ một vectơ kết thúc tại điểm mà vectơ kia bắt đầu); phải dời về chung điểm đầu trước."
+          },
+          {
+            "id": "dot-definition",
+            "title": "Định nghĩa tích vô hướng",
+            "body": "Với $\\vec u,\\vec v$ khác $\\vec 0$: $\\vec u\\cdot\\vec v=|\\vec u|\\cdot|\\vec v|\\cos(\\vec u,\\vec v)$. Quy ước: nếu $\\vec u=\\vec 0$ hoặc $\\vec v=\\vec 0$ thì $\\vec u\\cdot\\vec v=0$. Tích vô hướng là một SỐ thực, không phải vectơ. Bình phương vô hướng: $\\vec u^2=\\vec u\\cdot\\vec u=|\\vec u|^2$.",
+            "tables": [
+              {
+                "caption": "Dấu của tích vô hướng (hai vectơ khác $\\vec 0$)",
+                "headers": [
+                  "Tích vô hướng",
+                  "Góc $(\\vec u,\\vec v)$"
+                ],
+                "rows": [
+                  [
+                    "$\\vec u\\cdot\\vec v>0$",
+                    "$0^\\circ\\le(\\vec u,\\vec v)<90^\\circ$"
+                  ],
+                  [
+                    "$\\vec u\\cdot\\vec v=0$",
+                    "$(\\vec u,\\vec v)=90^\\circ$"
+                  ],
+                  [
+                    "$\\vec u\\cdot\\vec v<0$",
+                    "$90^\\circ<(\\vec u,\\vec v)\\le180^\\circ$"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "id": "dot-coordinates",
+            "title": "Biểu thức tọa độ của tích vô hướng",
+            "body": "Với $\\vec u=(x;y)$, $\\vec v=(x';y')$: $\\vec u\\cdot\\vec v=xx'+yy'$. Suy ra $|\\vec u|=\\sqrt{x^2+y^2}$; $\\vec u\\perp\\vec v\\iff xx'+yy'=0$; với hai vectơ khác $\\vec 0$: $\\cos(\\vec u,\\vec v)=\\dfrac{xx'+yy'}{\\sqrt{x^2+y^2}\\cdot\\sqrt{x'^2+y'^2}}$. Trong tam giác $ABC$: $\\cos\\widehat{BAC}=\\cos(\\overrightarrow{AB},\\overrightarrow{AC})$ (hai vectơ chung đỉnh $A$)."
+          },
+          {
+            "id": "properties",
+            "title": "Tính chất của tích vô hướng",
+            "body": "Với mọi $\\vec u,\\vec v,\\vec w$ và số thực $k$: $\\vec u\\cdot\\vec v=\\vec v\\cdot\\vec u$ (giao hoán); $\\vec u\\cdot(\\vec v+\\vec w)=\\vec u\\cdot\\vec v+\\vec u\\cdot\\vec w$ (phân phối); $(k\\vec u)\\cdot\\vec v=k(\\vec u\\cdot\\vec v)=\\vec u\\cdot(k\\vec v)$. Hệ quả: $(\\vec u\\pm\\vec v)^2=\\vec u^2\\pm2\\vec u\\cdot\\vec v+\\vec v^2$, $(\\vec u+\\vec v)\\cdot(\\vec u-\\vec v)=\\vec u^2-\\vec v^2$. Lỗi thường gặp: cho rằng $|\\vec u+\\vec v|=|\\vec u|+|\\vec v|$ (chỉ đúng khi cùng hướng hoặc có vectơ không); viết $(\\vec u\\cdot\\vec v)\\vec w=\\vec u(\\vec v\\cdot\\vec w)$ (không có tính kết hợp)."
+          },
+          {
+            "id": "physics",
+            "title": "Ứng dụng: công, hợp lực, vận tốc",
+            "body": "Lực không đổi $\\vec F$ làm vật dịch chuyển theo vectơ $\\vec d=\\overrightarrow{AB}$ sinh công $A=\\vec F\\cdot\\vec d=|\\vec F|\\cdot|\\vec d|\\cos(\\vec F,\\vec d)$; lực tính bằng N, độ dài bằng m thì công tính bằng J; công âm khi góc tù, bằng $0$ khi lực vuông góc với dịch chuyển. Hợp lực $\\vec F=\\vec F_1+\\vec F_2$ có $|\\vec F|^2=|\\vec F_1|^2+|\\vec F_2|^2+2|\\vec F_1|\\cdot|\\vec F_2|\\cos(\\vec F_1,\\vec F_2)$. Vận tốc thực của vật trong dòng chảy (hoặc trong gió) là tổng vectơ vận tốc riêng và vận tốc dòng: $\\vec v=\\vec v_1+\\vec v_2$; độ lớn tính như hợp lực."
+          },
+          {
+            "id": "checklist",
+            "title": "Kiểm tra trước khi kết luận",
+            "body": "Kiểm vectơ khác $\\vec 0$ trước khi dùng công thức côsin; góc giữa hai vectơ luôn trong $[0^\\circ;180^\\circ]$. Kiểm điều kiện tồn tại hình (ba điểm không thẳng hàng) khi đề nói tam giác, hình bình hành. Độ dài luôn không âm, nhớ lấy căn bậc hai. Ghi đúng đơn vị (N, m, J, km/h) và chỉ làm tròn ở kết quả cuối theo yêu cầu."
+          }
+        ],
+        "contentStatus": "INDEPENDENT_REVIEW_PASSED_20261014"
+      },
+      "versionHash": "17546bfd99a8bbd24c64f7a4361cd5c874e48c7ccbb4c30cf356484c925b24e1",
+      "answerVerificationNote": "Đáp án và lời giải đã được tác giả kiểm bằng Python và kiểm độc lập lần hai ngày 14/10/2026."
+    },
+    "track": "10",
+    "chapter": "4",
+    "order": 2,
+    "coverage": "Hệ thống công thức: vectơ trong mặt phẳng tọa độ, tích vô hướng và ứng dụng (công, hợp lực, vận tốc)",
+    "isChapterEnd": false,
+    "isFoundation": true,
+    "scope": "PUBLIC_RELEASE_CANDIDATE",
+    "published": false,
+    "reviewStatus": "INDEPENDENT_REVIEW_PASSED_20261014",
+    "sourceArtifactHash": "f0c3c180d39f2280f803ab527abbab735684cf1a4160677051cb438794a3f2ad",
+    "note": "Đề đủ ba phần, 22 câu (34 ô trả lời), 90 phút. Điểm từng phần và lời giải mở sau khi nộp.",
+    "admission": {
+      "newQuestions": 22,
+      "retainedQuestions": 0,
+      "mathVerified": true,
+      "sourceTheoryReviewed": false,
+      "legacyFlagsAreNotLivePublication": true
+    },
+    "limits": [
+      "Lịch sử lưu trên trình duyệt này; chưa đồng bộ giữa các thiết bị."
+    ],
+    "displayCoverage": "Hệ thống công thức tọa độ và tích vô hướng, ứng dụng thực tế"
   }
 ]

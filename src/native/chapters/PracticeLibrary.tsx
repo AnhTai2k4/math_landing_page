@@ -6,18 +6,25 @@ import curriculum from './curriculum.json';
 import tests from './practice-tests.json';
 import archives from './archived-tests.json';
 import exactTests from './exact-tests.json';
+import chapterSequence from './chapter-sequence.json';
 import './chapters.css';
 
 type Chapter={id:string;title:string;forms:string[];plannedPracticeTests?:number};
 type Track={id:string;label:string;description:string;chapters:Chapter[];sourceUrl:string;sourceLabel:string};
-type PracticeItem=PracticeBankItem&{track:string;chapter:string;order:number;coverage:string;isChapterEnd?:boolean;isFoundation?:boolean;sourceEdition?:boolean;sourceSequence?:{fileId:string;lesson:string;test:string;sequence:number;lessonTitle:string}};
+type PracticeItem=PracticeBankItem&{track:string;chapter:string;order:number;coverage:string;displayCoverage?:string;isChapterEnd?:boolean;isFoundation?:boolean;sourceEdition?:boolean;sourceSequence?:{fileId:string;lesson:string;test:string;sequence:number;lessonTitle:string}};
 const tracks=curriculum as Track[];
 const rawBank=[...tests,...exactTests] as unknown as PracticeItem[];
 const foundationLabel=(p:PracticeItem)=>p.track==='10'?'Hệ thống công thức và lý thuyết cả chương':p.track==='11'?p.order===1?'Góc và công thức lượng giác':'Hàm số và phương trình lượng giác':p.order===1?'Đạo hàm, biến thiên và cực trị':'Khảo sát đồ thị và bài toán ứng dụng';
 // Tên bài từ file nguồn thường in hoa và có tiền tố "BÀI."; hiển thị lại dạng câu thường.
 const lessonName=(raw:string)=>{const s=raw.replace(/\s+/g,' ').trim().replace(/^BÀI\s*[.:]\s*/i,'');return s===s.toLocaleUpperCase('vi')&&/\p{L}/u.test(s)?s.charAt(0)+s.slice(1).toLocaleLowerCase('vi'):s;};
 const chapterRoman=(c:string)=>({"1":"I","2":"II","3":"III","4":"IV","5":"V","6":"VI","7":"VII","8":"VIII","9":"IX"} as Record<string,string>)[c]??c;
-const bank=rawBank.map(p=>{const coverage=p.isFoundation?foundationLabel(p):p.sourceEdition?lessonName(p.coverage):p.coverage;return {...p,coverage,presentationTitle:p.presentationTitle??(["HSA","TSA"].includes(p.track)?p.exam.title:`Toán ${p.track} · Chương ${chapterRoman(p.chapter)} · ${p.isChapterEnd?"Kiểm tra kết thúc chương":"Bài "+p.order+": "+coverage}`)};});
+// Lộ trình chương (quy chuẩn 14/10/2026): Bài 1 lý thuyết, luyện theo dạng khó dần, cuối cùng kiểm tra chương.
+// Số Bài liên tục theo thứ tự trong chapter-sequence.json, chỉ đếm các đề có trong ngân hàng.
+const sequences=chapterSequence as Record<string,string[]>;
+const rawIds=new Set(rawBank.map(p=>p.exam.id));
+const sequenceNumber=new Map<string,number>();
+for(const ids of Object.values(sequences))ids.filter(id=>rawIds.has(id)).forEach((id,i)=>sequenceNumber.set(id,i+1));
+const bank=rawBank.map(p=>{const coverage=p.displayCoverage??(p.isFoundation?foundationLabel(p):p.sourceEdition?lessonName(p.coverage):p.coverage);const n=sequenceNumber.get(p.exam.id);return {...p,coverage,presentationTitle:n?`Toán ${p.track} · Chương ${chapterRoman(p.chapter)} · Bài ${n}: ${coverage}`:p.presentationTitle??(["HSA","TSA"].includes(p.track)?p.exam.title:`Toán ${p.track} · Chương ${chapterRoman(p.chapter)} · ${p.isChapterEnd?"Kiểm tra kết thúc chương":"Bài "+p.order+": "+coverage}`)};});
 const currentIds=new Set(bank.map(p=>p.exam.id));
 const pilotBank=(archives as unknown as PracticeItem[]).filter(p=>!currentIds.has(p.exam.id));
 // "ĐỀ TEST SỐ 01" hoặc "01" → "Đề test số 01"; nhãn khác giữ nguyên.
@@ -39,7 +46,9 @@ export default function PracticeLibrary(){
   if(requested||view)return <ChapterPractice additionalBank={[...bank,...pilotBank]} catalogUrl={returnURL} contextLabel={['HSA','TSA'].includes(actualTrack)?'Luyện tập theo chủ đề':'Luyện tập theo chương'} audienceLabel={tracks.find(t=>t.id===actualTrack)?.label}/>;
   if(!selected||!chapter)return <section className="mig-container mig-panel"><h1>Chưa đọc được danh mục luyện tập</h1><Link href="/thi-thu">Về Thi thử</Link></section>;
   const chapterBank=bank.filter(p=>p.track===selected.id&&p.chapter===chapter.id).sort((a,b)=>a.order-b.order);
-  const available=chapterBank.filter(p=>!p.isChapterEnd&&!p.sourceEdition),final=chapterBank.find(p=>p.isChapterEnd&&!p.sourceEdition),exact=chapterBank.filter(p=>p.sourceEdition);
+  const chapterRoute=(sequences[`${selected.id}:${chapter.id}`]??[]).map(id=>bank.find(p=>p.exam.id===id)).filter((p):p is typeof bank[number]=>!!p);
+  const inRoute=new Set(chapterRoute.map(p=>p.exam.id));
+  const available=chapterBank.filter(p=>!p.isChapterEnd&&!p.sourceEdition&&!inRoute.has(p.exam.id)),final=chapterBank.find(p=>p.isChapterEnd&&!p.sourceEdition&&!inRoute.has(p.exam.id)),exact=chapterBank.filter(p=>p.sourceEdition&&!inRoute.has(p.exam.id));
   const targetCount=Math.max(chapter.plannedPracticeTests??10,available.length);
   const attempts=new Map(chapterBank.map(p=>{const r=readDraft(localStore(),p.exam);return [p.exam.id,r.ok?r.value:null] as const}));
   const actionLabel=(p:PracticeItem)=>attempts.get(p.exam.id)?.submittedAt===null?'Làm tiếp bài '+p.order:attempts.get(p.exam.id)?.submittedAt!=null?'Xem kết quả bài '+p.order:'Làm bài '+p.order;
@@ -62,7 +71,8 @@ export default function PracticeLibrary(){
       </aside>
       <div className="cp-chapter-content">
         <h2>{chapter.title}</h2><p>{chapter.forms.join(' · ')}</p>
-        {thpt&&<section className="cp-exact-list" aria-label="Đề theo bộ tài liệu MTM"><h3>Luyện theo thứ tự tài liệu</h3><p>Mỗi đề giữ trọn câu hỏi, hình và bảng; đi theo từng bài của file nguồn rồi đến ôn tập cuối chương.</p>{sourceGroups.length?sourceGroups.map(group=><section key={`${group[0].sourceSequence?.fileId}:${group[0].sourceSequence?.lesson}`}><h4>{lessonName(group[0].sourceSequence?.lessonTitle??group[0].coverage)}</h4><ol className="cp-test-grid">{group.map(p=><li key={p.exam.id}><article><span className="cp-test-index">Bài {p.sourceSequence?.sequence??p.order}{p.sourceSequence?.test?<> · {testLabel(p.sourceSequence.test)}</>:null}</span><h3>{p.coverage}</h3><p>{p.exam.questions.length} câu · 3 phần · {p.exam.durationMinutes} phút · thang 10</p><p>{entries.filter(e=>e.exam.id===p.exam.id).length} lượt đã nộp</p><Link className="mig-button cp-action-button" href={practiceURL(selected.id,chapter.id,p.exam.id)}>{sourceAction(p)}<span aria-hidden="true">→</span></Link></article></li>)}</ol></section>):<p>Đề theo tài liệu của chương này đang được đối chiếu đủ câu, hình và lời giải trước khi mở.</p>}</section>}
+        {chapterRoute.length>0&&<section className="cp-exact-list cp-route" aria-label="Lộ trình luyện chương"><h3>Lộ trình luyện chương</h3><p>Bài 1 hệ thống công thức và lý thuyết; sau đó luyện theo từng dạng từ dễ đến khó, có bài toán thực tế; cuối cùng là bài tổng hợp, kiểm tra chương.</p><ol className="cp-test-grid">{chapterRoute.map((p,i)=><li key={p.exam.id}><article><span className="cp-test-index">Bài {i+1}{p.isFoundation?<> · Hệ thống lý thuyết</>:null}{p.isChapterEnd?<> · Tổng hợp cuối chương</>:null}{!p.isFoundation&&p.sourceSequence?.test?<> · {testLabel(p.sourceSequence.test)}</>:null}</span><h3>{p.coverage}</h3><p>{p.exam.questions.length} câu · 3 phần · {p.exam.durationMinutes} phút · thang 10</p><p>{entries.filter(e=>e.exam.id===p.exam.id).length} lượt đã nộp</p><Link className="mig-button cp-action-button" href={practiceURL(selected.id,chapter.id,p.exam.id)}>{attempts.get(p.exam.id)?.submittedAt===null?'Làm tiếp':attempts.get(p.exam.id)?.submittedAt!=null?'Xem kết quả':'Làm'} bài {i+1}<span aria-hidden="true">→</span></Link></article></li>)}</ol></section>}
+        {thpt&&(exact.length>0||chapterRoute.length===0)&&<section className="cp-exact-list" aria-label="Đề theo bộ tài liệu MTM"><h3>Luyện theo thứ tự tài liệu</h3><p>Mỗi đề giữ trọn câu hỏi, hình và bảng; đi theo từng bài của file nguồn rồi đến ôn tập cuối chương.</p>{sourceGroups.length?sourceGroups.map(group=><section key={`${group[0].sourceSequence?.fileId}:${group[0].sourceSequence?.lesson}`}><h4>{lessonName(group[0].sourceSequence?.lessonTitle??group[0].coverage)}</h4><ol className="cp-test-grid">{group.map(p=><li key={p.exam.id}><article><span className="cp-test-index">Bài {p.sourceSequence?.sequence??p.order}{p.sourceSequence?.test?<> · {testLabel(p.sourceSequence.test)}</>:null}</span><h3>{p.coverage}</h3><p>{p.exam.questions.length} câu · 3 phần · {p.exam.durationMinutes} phút · thang 10</p><p>{entries.filter(e=>e.exam.id===p.exam.id).length} lượt đã nộp</p><Link className="mig-button cp-action-button" href={practiceURL(selected.id,chapter.id,p.exam.id)}>{sourceAction(p)}<span aria-hidden="true">→</span></Link></article></li>)}</ol></section>):<p>Đề theo tài liệu của chương này đang được đối chiếu đủ câu, hình và lời giải trước khi mở.</p>}</section>}
         <details className="cp-previous-bank" open={thpt?undefined:true}><summary>{thpt?'Các bài luyện đã có · giữ riêng với lịch sử cũ':'Các bài luyện đang có'}</summary>
         <p className="cp-ready-count" role="status">{available.length}/{targetCount} bài luyện đã mở.</p>
         {available.length>0?<ol className="cp-test-grid">{available.map(p=><li key={p.exam.id}><article>
