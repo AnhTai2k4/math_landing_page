@@ -1,3 +1,5 @@
+import {generatePracticeBank} from './generate-practice-bank.mjs';
+generatePracticeBank();
 // Chạy bộ test hồi quy Luyện tập/Thi thử: đóng gói từng file test bằng esbuild
 // ra thư mục tạm của hệ điều hành rồi chạy bằng node. Không cần cài thêm gói,
 // chạy được trên Windows (npm test). Không đọc/ghi dữ liệu học sinh.
