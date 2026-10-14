@@ -30,17 +30,24 @@ function statementBlocks(entry:SourceDisplay) {
   return blocks;
 }
 
-/** A checked transcription controls layout only. Grading and history retain their original identity. */
-export default function MtmSourceQuestion({question}:{question:PracticeQuestion}) {
-  const instance=useId();
-  const [figureFailed,setFigureFailed]=useState(false);
-  if(!question.sourceContent)return null;
+/** Same eligibility for source rendering and the sole room answer control. */
+export function roomSourceDisplay(question:PracticeQuestion) {
+  if(!question.sourceContent)return undefined;
   const entry=(display as SourceDisplay[]).find(item=>item.questionId===question.id);
   const matches=entry&&question.sourceContent.questions.some(segment=>segment.sha256===entry.sourceDisplayCropSha256);
   // Keep the original table layout; incomplete transcriptions use the complete source.
   const missingTableFigure=!!entry?.questionTables?.length&&!entry.figureRef;
   const missingContextAnchor=entry?.interstitialContent?.some(block=>!entry.statements?.some(statement=>statement.label===block.beforeStatement));
-  if(!matches||missingTableFigure||missingContextAnchor)return <MtmSourceContent segments={question.sourceContent.questions} assetBase="/practice-media/source-crops" label={question.sourceRef} kind="question"/>;
+  return matches&&!missingTableFigure&&!missingContextAnchor?entry:undefined;
+}
+
+/** A checked transcription controls layout only. Grading and history retain their original identity. */
+export default function MtmSourceQuestion({question}:{question:PracticeQuestion}) {
+  const instance=useId();
+  const [figureFailed,setFigureFailed]=useState(false);
+  if(!question.sourceContent)return null;
+  const entry=roomSourceDisplay(question);
+  if(!entry)return <MtmSourceContent segments={question.sourceContent.questions} assetBase="/practice-media/source-crops" label={question.sourceRef} kind="question"/>;
   return <section className="mtm-source-content mtm-native-source" aria-label={`Đề ${question.sourceRef}`}>
     <div className="mtm-native-question-text">
       <p><MathText text={entry.prompt}/></p>
