@@ -1,3 +1,4 @@
+import {checkVideoEmbed} from '../server/btvn/video-embed';
 import {createHmac} from 'node:crypto';
 import {isIP} from 'node:net';
 import {createDurableHomeworkHandler} from '../server/btvn/durable-http';
@@ -22,6 +23,7 @@ export function createBtvnApi(getEnv=()=>process.env,loadRepository:()=>Promise<
   const factory=await loadRepository();
   const repo=factory({SUPABASE_URL:env.SUPABASE_URL!,SUPABASE_SERVICE_ROLE_KEY:env.SUPABASE_SERVICE_ROLE_KEY!,MTM_HOMEWORK_PUBLISHABLE_KEY:env.MTM_HOMEWORK_PUBLISHABLE_KEY!,VERCEL:env.VERCEL,VERCEL_ENV:env.VERCEL_ENV,VERCEL_URL:env.VERCEL_URL},origin,key);
   const result=await createDurableHomeworkHandler(repo)({method:req.method??'',body:req.body,cookie:header(req,'cookie'),origin,host,secure:true});
+  if(result.status===200&&Array.isArray((result.body as any).lessons)){await Promise.all((result.body as any).lessons.map(async(card:any)=>{card.videoEmbeddable=card.videoId?await checkVideoEmbed(card.videoId):null;}));}
   for(const [key,value] of Object.entries(result.headers))res.setHeader(key,value);
   return res.status(result.status).json(result.body);
  }catch(error){

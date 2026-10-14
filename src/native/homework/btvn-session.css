@@ -6,3 +6,5 @@
 .btvn-session .btvn-card>.btvn-review-note{margin:0;padding:0 22px 16px}.btvn-video-placeholder{height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;color:white;text-align:center;padding:16px}.btvn-video-placeholder b{font-size:48px;color:#edc34b}.btvn-video-placeholder span{font-size:24px}.btvn-video-placeholder small{color:#d6deeb}@media(max-width:700px){.btvn-session .btvn-card>.btvn-review-note{padding:0 14px 14px}}
 
 @media(max-width:700px){.btvn-gates{grid-template-columns:minmax(0,1fr);gap:16px}}
+
+.btvn-video-fallback{margin:0 22px 18px;max-width:818px;display:grid;gap:12px}.btvn-video-fallback img{width:100%;max-height:460px;object-fit:contain}.btvn-video-fallback a{text-align:center;text-decoration:none}
