@@ -1,5 +1,5 @@
 /// <reference path="./react-dom-portal.d.ts" />
-import {useCallback,useEffect,useRef,useState,type SyntheticEvent} from 'react';
+import {useCallback,useEffect,useId,useRef,useState,type SyntheticEvent} from 'react';
 import {createPortal} from 'react-dom';
 import './zoomable-image.css';
 
@@ -12,9 +12,9 @@ const levelText=(level:number)=>'Phóng ×'+String(LEVELS[level]).replace('.',',
 // Ảnh đề là dải rộng (1562 px) nên "vừa bề ngang" trên điện thoại chỉ còn khoảng 24% cỡ gốc: khi mở chọn sẵn mức
 // đọc được (initialZoomLevel); ảnh hình nhỏ hoặc màn rộng thì giữ vừa màn.
 
-type Props={src:string;alt:string;width?:number;height?:number;label:string;loading?:'lazy'|'eager';onError?:(event:SyntheticEvent<HTMLImageElement>)=>void};
+type Props={src:string;alt:string;width?:number;height?:number;label:string;watermark?:boolean;loading?:'lazy'|'eager';onError?:(event:SyntheticEvent<HTMLImageElement>)=>void};
 
-export default function ZoomableImage({src,alt,width,height,label,loading='lazy',onError}:Props){
+export default function ZoomableImage({src,alt,width,height,label,watermark=false,loading='lazy',onError}:Props){
   const [open,setOpen]=useState(false);
   const trigger=useRef<HTMLButtonElement>(null),image=useRef<HTMLImageElement>(null);
   const wasOpen=useRef(false);
@@ -24,11 +24,12 @@ export default function ZoomableImage({src,alt,width,height,label,loading='lazy'
   return <>
     <img ref={image} className="ep-zoomable" src={src} width={width} height={height} alt={alt} loading={loading} decoding="async" onError={onError} onClick={()=>setOpen(true)}/>
     <div className="ep-zoom-row"><button ref={trigger} type="button" className="ep-zoom-open" aria-haspopup="dialog" aria-label={`Phóng to ${label}`} onClick={()=>setOpen(true)}><span aria-hidden="true">⤢</span> Phóng to</button></div>
-    {open&&<ZoomDialog src={src} alt={alt} width={width??(image.current?.naturalWidth||undefined)} height={height??(image.current?.naturalHeight||undefined)} label={label} onClose={close}/>}
+    {open&&<ZoomDialog src={src} alt={alt} width={width??(image.current?.naturalWidth||undefined)} height={height??(image.current?.naturalHeight||undefined)} label={label} watermark={watermark} onClose={close}/>}
   </>;
 }
 
-function ZoomDialog({src,alt,width,height,label,onClose}:{src:string;alt:string;width?:number;height?:number;label:string;onClose:()=>void}){
+function ZoomDialog({src,alt,width,height,label,watermark,onClose}:{src:string;alt:string;width?:number;height?:number;label:string;watermark:boolean;onClose:()=>void}){
+  const pattern=useId();
   const dialog=useRef<HTMLDialogElement>(null),area=useRef<HTMLDivElement>(null),closeButton=useRef<HTMLButtonElement>(null);
   const [level,setLevel]=useState(0);
   const swipe=useRef<{x:number;y:number;active:boolean;dy:number}|null>(null);
@@ -67,7 +68,11 @@ function ZoomDialog({src,alt,width,height,label,onClose}:{src:string;alt:string;
         s.dy=Math.max(0,dy);const img=area.current?.firstElementChild as HTMLElement|null;if(img){img.style.transform=`translateY(${s.dy}px)`;img.style.opacity=String(Math.max(.4,1-s.dy/400));}}}
       onTouchEnd={()=>{const s=swipe.current;swipe.current=null;reset(area.current?.firstElementChild as HTMLElement|null);if(s?.active&&s.dy>90)onClose();}}
       onTouchCancel={()=>{swipe.current=null;reset(area.current?.firstElementChild as HTMLElement|null);}}>
-      <img src={src} alt={alt} width={width} height={height} decoding="async" style={{width:`calc(min(100%, ${width??2000}px) * ${LEVELS[level]})`}}/>
+      {/* Ảnh và lớp chữ chìm MTM đi cùng nhau (review Codex đợt 4): bản phóng to giữ watermark như trong bài. */}
+      <div className="ep-zoom-canvas" style={{width:`calc(min(100%, ${width??2000}px) * ${LEVELS[level]})`}}>
+        <img src={src} alt={alt} width={width} height={height} decoding="async"/>
+        {watermark&&<svg className="mtm-source-watermark" aria-hidden="true" width="100%" height="100%"><defs><pattern id={pattern} width="390" height="115" patternUnits="userSpaceOnUse" patternTransform={`scale(${LEVELS[level]})`}><text x="24" y="40" transform="rotate(-8 24 40)">MINH THÀNH MATH</text></pattern></defs><rect width="100%" height="100%" fill={`url(#${pattern})`}/></svg>}
+      </div>
     </div>
     <p className="ep-zoom-hint">{level===0?'Bấm + để phóng to. Vuốt xuống, bấm Đóng hoặc phím Esc để quay lại bài.':'Kéo để xem phần khác của ảnh; bấm − để thu nhỏ. Vuốt xuống ở mép trên hoặc bấm Đóng để quay lại bài.'}</p>
   </dialog>,document.body);

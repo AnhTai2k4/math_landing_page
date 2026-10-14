@@ -19,7 +19,7 @@
 .ep-zoom-dialog .ep-zoom-close{font-size:.95rem;white-space:nowrap;background:#d7a93a;border-color:#d7a93a;color:#172033}
 .ep-zoom-area{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:100%;grid-template-rows:100%;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;background:#fff;touch-action:pan-x pan-y pinch-zoom}
 /* margin:auto trong lưới: ảnh nhỏ hơn vùng xem thì nằm giữa; ảnh lớn hơn thì bắt đầu từ mép, không bị cắt mất phần trái/trên. */
-.ep-zoom-area img{display:block;max-width:none;height:auto;margin:auto;transition:opacity .15s}
+.ep-zoom-canvas{position:relative;margin:auto;transition:opacity .15s}.ep-zoom-area img{display:block;width:100%;max-width:none;height:auto}
 .ep-zoom-hint{margin:0;padding:8px 12px;padding-bottom:max(8px,env(safe-area-inset-bottom));font-size:.85rem;line-height:1.5;background:#172033;color:#e2e8f0;flex:0 0 auto}
 @media(max-width:420px){.ep-zoom-title{font-size:.85rem}.ep-zoom-tools span{min-width:60px;font-size:.8rem}.ep-zoom-bar{gap:6px;padding-left:8px;padding-right:8px}}
-@media(prefers-reduced-motion:reduce){.ep-zoom-area img{transition:none}}
+@media(prefers-reduced-motion:reduce){.ep-zoom-canvas{transition:none}}

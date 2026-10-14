@@ -16,7 +16,7 @@ export default function MtmSourceContent({segments, assetBase, label, kind}: {
           {failed.has(segment.path) ? <p role="alert">Không tải được phần {index + 1} của {label}. Hãy tải lại trang; chưa thể xác nhận nội dung đã đầy đủ.</p> : <>
             {/* TH-02 (Đợt 4): bấm ảnh hoặc nút "Phóng to" để xem toàn màn; ảnh trong bài giữ nguyên. */}
             <ZoomableImage src={`${assetBase}/${segment.path}`} width={segment.width} height={segment.height}
-              label={`${kind === 'question' ? 'Đề' : 'Lời giải'} ${label}${segments.length > 1 ? `, phần ${index + 1}/${segments.length}` : ''}`}
+              watermark label={`${kind === 'question' ? 'Đề' : 'Lời giải'} ${label}${segments.length > 1 ? `, phần ${index + 1}/${segments.length}` : ''}`}
               alt={`${label}${kind === 'solution' ? ' · lời giải' : ''}, phần ${index + 1}/${segments.length}. Chữ, công thức và hình được giữ từ bản gốc.`}
               onError={() => setFailed(previous => new Set([...previous, segment.path]))}/>
             <svg className="mtm-source-watermark" aria-hidden="true" width="100%" height="100%">
