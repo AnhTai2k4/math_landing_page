@@ -1,0 +1,21 @@
+﻿// Port tiêm phụ thuộc: import không kết nối hoặc đọc biến môi trường.
+const sha=async bytes=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))).map(x=>x.toString(16).padStart(2,'0')).join('');
+export function createPublishPort(sql,storage){return {
+ async rpc(action,payload){
+  if(!['lookup','publish','error'].includes(action))throw Error('Invalid publisher action');
+  return sql.begin(async tx=>{
+   await tx`SET LOCAL ROLE mtm_btvn_publisher`;
+   const rows=await tx`SELECT public.mtm_btvn_pipeline(${action},${JSON.stringify(payload)}::jsonb) AS result`;
+   return rows[0].result;
+  });
+ },
+ async upload(path,bytes,type,hash){
+  if(!/^btvn\/[a-z0-9-]{1,160}\/[a-f0-9]{64}\/[a-zA-Z0-9][a-zA-Z0-9_/-]*\.(png|pdf)$/.test(path)||path.includes('//')||!['application/pdf','image/png'].includes(type)||!path.endsWith(type==='image/png'?'.png':'.pdf')||bytes.length<8||bytes.length>15*1024*1024||await sha(bytes)!==hash)throw Error('Invalid publisher asset');
+  const bucket=storage.from('mtm-btvn');
+  const result=await bucket.upload(path,bytes,{contentType:type,upsert:false});
+  if(!result.error)return;
+  if(!(String(result.error.statusCode)==='409'||String(result.error.statusCode)==='400'&&/duplicate|already exists/i.test(result.error.error??result.error.message??'')))throw Error('Asset upload unavailable');
+  const existing=await bucket.download(path);
+  if(existing.error||!existing.data||await sha(new Uint8Array(await existing.data.arrayBuffer()))!==hash)throw Error('Asset collision');
+ }
+};}
