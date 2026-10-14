@@ -1,0 +1,36 @@
+.mtm-guide{background:#f4f6fb;color:#213269;padding:32px 0 56px;min-height:65vh}
+.mg-shell{width:min(820px,calc(100% - 32px));margin:auto}
+.mg-head{margin-bottom:20px}
+.mg-eyebrow{font-size:12px;letter-spacing:.12em;font-weight:700;text-transform:uppercase;color:#927100;margin:0 0 8px}
+.mg-head h1{font-size:clamp(26px,4vw,38px);line-height:1.3;font-weight:800;margin:0 0 10px;color:#213269}
+.mg-head p{font-size:17px;line-height:1.75;color:#47536c;margin:0}
+.mg-tabs{display:flex;gap:8px;margin:0 0 18px;position:sticky;top:0;z-index:5;background:#f4f6fb;padding:8px 0}
+.mg-tabs button{flex:1;max-width:220px;border:2px solid #213269;background:#fff;color:#213269;font:inherit;font-size:16px;font-weight:700;padding:11px 16px;border-radius:12px;cursor:pointer;min-height:48px}
+.mg-tabs button[aria-selected=true]{background:#213269;color:#fff;box-shadow:inset 0 -4px 0 #ffcf24}
+.mg-card{background:#fff;border:1px solid #e0e5ef;border-radius:16px;padding:22px;margin-bottom:16px;font-size:16.5px;line-height:1.75;overflow-wrap:anywhere}
+.mg-card h2{font-size:21px;line-height:1.4;font-weight:800;margin:0 0 10px;color:#213269;display:flex;align-items:center;gap:8px}
+.mg-card h3{font-size:18px;font-weight:700;margin:0 0 8px}
+.mg-card p{margin:0 0 10px}
+.mg-card ul,.mg-card ol{margin:0 0 10px;padding-left:22px}
+.mg-card ul{list-style:disc}.mg-card ol{list-style:decimal}
+.mg-card li{margin:0 0 8px}
+.mg-card b{color:#16234d}
+.mg-card a:not(.mg-button){color:#1d4ed8;text-decoration:underline;font-weight:600}
+.mg-kicker{display:flex;align-items:center;gap:6px;font-size:13px!important;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#927100;margin:0 0 6px!important}
+.mg-zalo{display:grid;grid-template-columns:minmax(0,1fr) 180px;gap:18px 24px;border-top:5px solid #ffcf24}
+.mg-zalo-text{min-width:0}
+.mg-step2{grid-column:1/-1;border-top:1px dashed #d6dcea;padding-top:16px}
+.mg-qr{width:180px;height:180px;border:1px solid #e0e5ef;border-radius:12px;background:#fff;padding:6px;justify-self:end}
+.mg-button{display:inline-flex;align-items:center;gap:8px;background:#ffcf24;color:#213269;font-weight:800;padding:12px 18px;border-radius:12px;min-height:48px;margin-top:4px}
+.mg-button:hover{background:#213269;color:#fff}
+.mg-card pre{background:#f4f6fb;border:1px solid #e0e5ef;border-radius:12px;padding:12px 14px;margin:0 0 10px;white-space:pre-wrap;font:inherit;font-weight:600}
+.mg-small{font-size:15px;color:#47536c}
+.mg-note{display:block;background:#fff8dc;border-left:4px solid #ffcf24;border-radius:8px;padding:10px 12px;font-size:15px;color:#4d3d00}
+.mg-note svg{vertical-align:-2px;margin-right:4px}
+.mg-table{width:100%;border-collapse:collapse;margin:6px 0 14px;font-size:15px}
+.mg-table caption{text-align:left;font-weight:700;margin-bottom:6px}
+.mg-table th,.mg-table td{border:1px solid #e0e5ef;padding:8px 10px;text-align:left;vertical-align:top}
+.mg-table th{background:#213269;color:#fff}
+.mg-safe{border-left:5px solid #213269}
+.mg-slogan{text-align:center;font-weight:800;color:#213269;margin:24px 0 0}
+@media(max-width:600px){.mtm-guide{padding-top:20px}.mg-card{padding:18px}.mg-zalo{grid-template-columns:1fr}.mg-qr{justify-self:center;width:200px;height:200px}.mg-tabs button{max-width:none}}
