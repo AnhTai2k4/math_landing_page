@@ -5,7 +5,8 @@ export function createPublishPort(sql,storage){return {
   if(!['lookup','publish','error'].includes(action))throw Error('Invalid publisher action');
   return sql.begin(async tx=>{
    await tx`SET LOCAL ROLE mtm_btvn_publisher`;
-   const rows=await tx`SELECT public.mtm_btvn_pipeline(${action},${JSON.stringify(payload)}::jsonb) AS result`;
+   // sql.json: postgres.js tự JSON hoá tham số jsonb; JSON.stringify trước sẽ thành chuỗi jsonb (lỗi "Payload invalid" trên cloud 15/10).
+   const rows=await tx`SELECT public.mtm_btvn_pipeline(${action},${sql.json(payload)}) AS result`;
    return rows[0].result;
   });
  },

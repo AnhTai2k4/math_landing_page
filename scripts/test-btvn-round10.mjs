@@ -79,7 +79,7 @@ try{
    const query=strings.map((s,i)=>s+(i<args.length?'$'+(i+1):'')).join('');
    return (await tx.query(query,args)).rows;
   };
-  const sql={begin:fn=>db.transaction(tx=>fn(tagged(tx)))};
+  const sql={json:v=>v,begin:fn=>db.transaction(tx=>fn(tagged(tx)))};
   const port=createPublishPort(sql,{from(){throw Error('Không Storage trong DB test');}});
   assert.equal((await port.rpc('lookup',{lesson_key:'fake-round10'})).status,null);
   await assert.rejects(port.rpc('publish',{lesson_key:'fake-round10'}));
@@ -110,7 +110,7 @@ try{
    await assert.rejects(denied.transaction(async tx=>tx.exec('set local role mtm_btvn_publisher')),e=>e.code==='42501');
   }finally{await denied.close();}
   await db.exec('create role btvn_fake_connector login noinherit;grant mtm_btvn_publisher to btvn_fake_connector;set session authorization btvn_fake_connector');
-  const sql={begin:fn=>db.transaction(tx=>fn(async(strings,...args)=>(await tx.query(strings.map((s,i)=>s+(i<args.length?'$'+(i+1):'')).join(''),args)).rows))};
+  const sql={json:v=>v,begin:fn=>db.transaction(tx=>fn(async(strings,...args)=>(await tx.query(strings.map((s,i)=>s+(i<args.length?'$'+(i+1):'')).join(''),args)).rows))};
   const port=createPublishPort(sql,{});assert.equal((await port.rpc('lookup',{lesson_key:'fake-round10'})).status,null);assert.equal(await scalar('select current_user'),'btvn_fake_connector');
   await assert.rejects(port.rpc('publish',{lesson_key:'fake-round10'}));assert.equal(await scalar('select current_user'),'btvn_fake_connector');
  });
