@@ -14,6 +14,7 @@ function Steps({parent}:{parent:boolean}){
    <span className="mg-num" aria-hidden="true">1</span>
    <div className="mg-step-body">
     <h2>Kết bạn Zalo trợ lý lớp</h2>
+    <p>Trợ lý "Toán Thầy Thành" trực cả ngày lẫn đêm. Quét mã QR hoặc bấm nút, chọn <b>Kết bạn</b>.</p>
     <a className="mg-button" href={ZALO_ASSISTANT_URL} target="_blank" rel="noopener noreferrer">Mở Zalo Toán Thầy Thành <ArrowUpRight size={16} aria-hidden="true"/></a>
    </div>
    <img className="mg-qr" src="/zalo-toan-thay-thanh-qr.svg" width={140} height={140} alt="Mã QR kết bạn Zalo Toán Thầy Thành"/>
@@ -22,13 +23,15 @@ function Steps({parent}:{parent:boolean}){
    <span className="mg-num" aria-hidden="true">2</span>
    <div className="mg-step-body">
     <h2>Nhắn riêng một tin</h2>
-    <p className="mg-template">{parent?'Họ tên phụ huynh / Họ tên học sinh / Lớp':'Họ tên / Lớp đang học'}</p>
+    <p className="mg-template">{parent?'Họ tên phụ huynh / Họ tên học sinh / Lớp đang học':'Họ tên / Lớp đang học'}</p>
+    <p className="mg-sub">Trung tâm đối chiếu với danh sách lớp rồi nhắn lại xác nhận. {parent?'Anh/chị':'Em'} đã nhắn rồi thì không cần nhắn lại.</p>
    </div>
   </div>
   <div className="mg-step">
    <span className="mg-num" aria-hidden="true">3</span>
    <div className="mg-step-body">
     <h2>Cần gì nhắn trợ lý, bất cứ lúc nào</h2>
+    <p>Sau khi được xác nhận, {parent?'anh/chị':'em'} nhắn trợ lý những việc như:</p>
     <ul className="mg-chips">{asks.map(a=><li key={a}>{a}</li>)}</ul>
    </div>
   </div>
@@ -37,8 +40,8 @@ function Steps({parent}:{parent:boolean}){
 function Web({parent}:{parent:boolean}){return <section className="mg-card mg-web">
  <h2>{parent?'Con luyện đề trên web':'Luyện đề trên web'}</h2>
  <div className="mg-web-links"><Link className="mg-link" href="/luyen-tap">Luyện tập</Link><Link className="mg-link" href="/thi-thu">Thi thử</Link></div>
- <p>Bấm <b>Bắt đầu</b>, làm bài, <b>Nộp bài</b> rồi xem ngay điểm và lời giải. Không cần tài khoản.</p>
- <p className="mg-btvn">BTVN vẫn làm trên SHub.</p>
+ <p>{parent?'Con luyện đề theo từng chương và làm đề thi thử. Nộp bài xong xem ngay điểm và lời giải chi tiết, không cần tạo tài khoản.':<>Chọn chương đang học hoặc đề thi thử, bấm <b>Bắt đầu làm bài</b>, làm xong bấm <b>Nộp bài</b> là xem ngay điểm và lời giải chi tiết. Không cần tạo tài khoản.</>}</p>
+ <p className="mg-btvn">Bài tập về nhà vẫn làm trên SHub như hiện tại.</p>
 </section>;}
 
 function More({parent}:{parent:boolean}){return <details className="mg-card mg-more">
@@ -64,7 +67,7 @@ export default function Guide(){const [who,setWho]=useState<Audience>(readAudien
  const pick=(next:Audience)=>{setWho(next);const url=new URL(location.href);url.searchParams.set('cho',next);history.replaceState(null,'',url.pathname+url.search);};
  const parent=who==='phu-huynh';
  return <div className="mtm-guide"><div className="mg-shell">
-  <header className="mg-head"><p className="mg-eyebrow">Minh Thành Math</p><h1>Hướng dẫn nhanh</h1></header>
+  <header className="mg-head"><p className="mg-eyebrow">Minh Thành Math</p><h1>Hướng dẫn nhanh</h1><p className="mg-lead">{parent?'Hai kênh giúp anh/chị theo dõi việc học của con thuận tiện hơn: Zalo trợ lý lớp và web luyện đề có lời giải.':'Hai kênh học cùng MTM: Zalo trợ lý lớp để hỏi lịch, xin nghỉ, lấy tài liệu, hỏi bài và web luyện đề có lời giải.'}</p></header>
   <div className="mg-tabs" role="tablist" aria-label="Hướng dẫn dành cho">
    <button type="button" role="tab" id="mg-tab-hs" aria-selected={!parent} aria-controls="mg-panel" onClick={()=>pick('hoc-sinh')}>Học sinh</button>
    <button type="button" role="tab" id="mg-tab-ph" aria-selected={parent} aria-controls="mg-panel" onClick={()=>pick('phu-huynh')}>Phụ huynh</button>
