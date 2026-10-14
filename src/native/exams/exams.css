@@ -74,3 +74,12 @@
 .ep-backup-row{flex-direction:column;align-items:flex-start}.ep-backup{width:100%}.ep-backup p{margin:4px 0 10px;color:#475569}.ep-root .ep-backup summary{font-weight:600;color:#334155}
 /* LT-15 (Đợt 4): nút Bắt đầu ở màn đầu trên màn hẹp; màn rộng giữ nút trong phiếu trả lời như cũ. */
 .ep-mobile-start{display:none}@media(max-width:950px){.ep-mobile-start{display:block;margin:4px 0 16px}.ep-mobile-start .ep-primary{min-height:52px;font-size:1.05rem}.ep-mobile-start p{margin:8px 0 0;font-size:.9rem;line-height:1.6;color:#475569}.ep-attempt>header p{margin:4px 0}.ep-attempt>header h1{font-size:1.3rem;line-height:1.4;margin:6px 0}}
+/* TH-02 (Đợt 4): trang đề PDF vừa bề ngang, phóng tới x3 (cuộn hai chiều) và xem toàn màn hình. */
+.ep-pdf-zoom{align-items:center;flex-wrap:wrap}.ep-pdf-zoom>span{min-width:96px;text-align:center;font-variant-numeric:tabular-nums}.ep-root .ep-pdf-zoom>button:not(.ep-pdf-full-toggle){min-width:44px;font-weight:700;font-size:1.1rem;padding:6px 12px}.ep-pdf-zoom .ep-pdf-full-toggle{margin-left:auto}
+.ep-question-pdf.is-zoomed canvas{max-width:none}.ep-question-pdf.is-zoomed{max-height:80vh;overscroll-behavior:contain;border:1px solid #cbd5e1;border-radius:8px}.ep-question-pdf:focus-visible{outline:3px solid #1d4ed8;outline-offset:2px}
+.ep-pdf-full{position:fixed;inset:0;z-index:2147483000;display:flex;flex-direction:column;width:100%;height:100vh;height:100dvh;margin:0;padding:8px;padding-bottom:max(8px,env(safe-area-inset-bottom));border:0;border-radius:0;background:#f1f5f9;color:#172033;box-sizing:border-box;overflow:hidden;font-family:inherit}
+.ep-pdf-full>h2{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.ep-pdf-full .ep-toolbar{display:flex;gap:6px;font-size:.9rem;align-items:center;flex-wrap:wrap;flex:0 0 auto;margin:0 0 6px}
+.ep-pdf-full button{min-height:44px;min-width:44px;border:1px solid #64748b;border-radius:8px;padding:6px 10px;background:#fff;color:#172033;font:inherit;cursor:pointer}.ep-pdf-full button:disabled{opacity:.5;cursor:default}.ep-pdf-full button:focus-visible{outline:3px solid #1d4ed8;outline-offset:2px}.ep-pdf-full .ep-pdf-full-toggle{background:#d7a93a;border-color:#d7a93a;font-weight:700}
+.ep-pdf-full .ep-question-pdf{flex:1 1 auto;min-height:0;max-height:none;overflow:auto;background:#fff;border:1px solid #cbd5e1;border-radius:8px}
+.ep-pdf-placeholder{display:flex;align-items:center;justify-content:center;color:#475569}
