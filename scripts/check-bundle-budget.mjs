@@ -15,7 +15,7 @@ const BUDGET = {
   chapterBank: 1_500_000,     // cộng mọi chunk đề của một chương, không chỉ một tệp
   practiceShell: 100_000,     // KT-06: khung trang /luyen-tap (gồm mã ChapterPractice, khoảng 78 kB) không được kéo ngân hàng đề vào lại
   otherChunk: 600_000,       // mọi chunk JS khác
-  totalJs: 12_000_000,        // nâng từ 7.500 kB khi gộp V77 cùng lý do dữ liệu đề tăng (8.879 kB)
+  totalJs: 13_000_000,        // tổng mọi chunk JS trên site (không phải lượng tải mỗi lần mở trang: từ V79 mỗi chương chỉ nạp phần của mình). Nâng 12.000 lên 13.000 kB ở V80 (+24 đề lớp 11)
 };
 const dir = resolve(process.argv[2] ?? 'build');
 const assets = join(dir, 'assets');

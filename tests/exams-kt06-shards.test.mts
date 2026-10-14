@@ -8,6 +8,7 @@ import {chapterRoman,foundationLabel,lessonName,routeGroupsOf,tracks,type Practi
 import {metadata,chapterIds,loadItems,readItems,savedExamId,sequences,sequenceNumber} from '../src/native/chapters/practice-loader';
 import {createDraft,submitDraft,saveDraft,archiveSubmitted,readHistory,HISTORY_KEY,draftKey} from '../src/native/exams/store';
 import {FakeStore,suite} from './exams-harness.mts';
+import {bank as sourceBank,pilotBank as sourcePilotBank,sequences as sourceSequences,sequenceNumber as sourceNumbers} from '../src/native/chapters/practice-bank';
 const root=process.env.MTM_ROOT!;
 const show=(path:string)=>execFileSync('git',['show','0ed6dd3:src/native/chapters/'+path],{cwd:root,encoding:'utf8',maxBuffer:32*1024*1024});
 const context={tests:JSON.parse(show('practice-tests.json')),exactTests:JSON.parse(show('exact-tests.json')),archives:JSON.parse(show('archived-tests.json')),chapterSequence:JSON.parse(show('chapter-sequence.json')),chapterRoman,foundationLabel,lessonName,routeGroupsOf};
@@ -18,15 +19,19 @@ const plain=(p:unknown)=>JSON.parse(JSON.stringify(p));
 const {test,finish}=suite('KT06');
 const actual=await loadItems(Object.keys(metadata));
 const current=actual.filter(p=>!metadata[p.exam.id].archived);
-test('toàn bộ nội dung/id/versionHash/tiêu đề hiện hành và lưu trữ giống V78',()=>assert.deepEqual(plain(actual),plain([...oracle.bank,...oracle.pilotBank])));
+const v80Chapter=(p:PracticeItem)=>p.track==='11'&&['1','2','3','4'].includes(p.chapter);
+test('ngoài bốn chương lớp 11 nhập V80: nội dung/id/versionHash/tiêu đề và lưu trữ giống V78',()=>assert.deepEqual(plain(actual.filter(p=>!v80Chapter(p))),plain([...oracle.bank,...oracle.pilotBank].filter(p=>!v80Chapter(p)))));
+test('mọi shard và lộ trình V80 khớp bộ nạp ngân hàng nguồn nguyên khối',()=>assert.deepEqual(plain(actual),plain([...sourceBank,...sourcePilotBank])));
 const route=(bank:PracticeItem[],seq:Record<string,unknown>,nums:Map<string,number>,key:string)=>routeGroupsOf(seq[key]).map(g=>({...g,items:g.items.flatMap(it=>{const p=bank.find(p=>p.exam.id===it.id);return p?[{...it,number:nums.get(it.id),coverage:p.coverage,title:p.presentationTitle}]:[];})})).filter(g=>g.items.length);
 for(const track of tracks)for(const chapter of track.chapters){
   const key=track.id+':'+chapter.id,ids=chapterIds(track.id,chapter.id),loaded=await loadItems(ids);
-  test(key+': chỉ tải chương này; thứ tự, mọi tiêu đề và lộ trình giống V78',()=>{
+  test(key+': chỉ tải chương này; thứ tự, mọi tiêu đề và lộ trình đúng nguồn đối chiếu',()=>{
     assert.ok(loaded.every(p=>p.track===track.id&&p.chapter===chapter.id));
-    const expected=[...oracle.bank,...oracle.pilotBank].filter(p=>p.track===track.id&&p.chapter===chapter.id);
+    const updated=track.id==='11'&&['1','2','3','4'].includes(chapter.id);
+    const reference=updated?[...sourceBank,...sourcePilotBank]:[...oracle.bank,...oracle.pilotBank];
+    const expected=reference.filter(p=>p.track===track.id&&p.chapter===chapter.id);
     assert.deepEqual(plain(loaded),plain(expected));
-    assert.deepEqual(plain(route(loaded,sequences,sequenceNumber,key)),plain(route(oracle.bank,oracle.sequences,oracle.sequenceNumber,key)));
+    assert.deepEqual(plain(route(loaded,sequences,sequenceNumber,key)),plain(route(updated?sourceBank:oracle.bank,updated?sourceSequences:oracle.sequences,updated?sourceNumbers:oracle.sequenceNumber,key)));
   });
 }
 for(const p of [current[0],actual.find(p=>metadata[p.exam.id].archived)!]){
