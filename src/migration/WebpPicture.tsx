@@ -5,6 +5,8 @@ import type {ImgHTMLAttributes} from 'react';
 const VARIANTS:Record<string,number[]>={
   '/mtm-original-logo.png':[420,640],
   '/migration-assets/source-avatar.jpg':[480,800,1200],
+  // Ảnh nền hero dùng lại làm ảnh đầu của bộ ảnh trang chủ (SourceGallery); bản WebP đã tạo ở KT-19.
+  '/migration-assets/source-3a0a47e483030d752b74a16044b2bd5c5183d3ba.png':[1024,2048],
 };
 const COURSE=/^\/migration-assets\/course-[a-z0-9-]+\.png$/;
 
