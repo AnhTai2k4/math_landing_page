@@ -1,5 +1,6 @@
 /* TH-02 (Đợt 4): phóng to ảnh câu hỏi. Ảnh trong bài giữ nguyên cách hiển thị cũ; chỉ thêm nút và con trỏ phóng. */
 .ep-zoomable{cursor:zoom-in}
+.ep-inline-image,.ep-inline-scroll{display:contents}.ep-inline-hint{display:none}
 /* Nút nằm dưới ảnh, không đè lên chữ của đề. */
 .ep-zoom-row{position:relative;z-index:2;display:flex;justify-content:flex-end;margin-top:6px}
 .ep-root .ep-zoom-open,.ep-zoom-open{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:6px 14px;border:1px solid #233463;border-radius:999px;background:rgba(255,255,255,.94);color:#233463;font:600 .85rem/1.2 inherit;cursor:pointer;box-shadow:0 1px 4px rgba(15,23,42,.18)}

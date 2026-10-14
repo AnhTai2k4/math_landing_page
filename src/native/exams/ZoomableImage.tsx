@@ -1,5 +1,5 @@
 /// <reference path="./react-dom-portal.d.ts" />
-import {useCallback,useEffect,useId,useRef,useState,type SyntheticEvent} from 'react';
+import {useCallback,useEffect,useId,useRef,useState,type CSSProperties,type SyntheticEvent} from 'react';
 import {createPortal} from 'react-dom';
 import './zoomable-image.css';
 
@@ -16,14 +16,17 @@ type Props={src:string;alt:string;width?:number;height?:number;label:string;wate
 
 export default function ZoomableImage({src,alt,width,height,label,watermark=false,loading='lazy',onError}:Props){
   const [open,setOpen]=useState(false);
+  const [naturalWidth,setNaturalWidth]=useState(width??0);
   const trigger=useRef<HTMLButtonElement>(null),image=useRef<HTMLImageElement>(null);
   const wasOpen=useRef(false);
   const close=useCallback(()=>setOpen(false),[]);
   // Trả tiêu điểm về nút "Phóng to" sau khi khung xem đã gỡ (dialog.close() trả tiêu điểm về body trước đó).
   useEffect(()=>{if(wasOpen.current&&!open&&trigger.current?.isConnected)trigger.current.focus({preventScroll:true});wasOpen.current=open;},[open]);
   return <>
-    <img ref={image} className="ep-zoomable" src={src} width={width} height={height} alt={alt} loading={loading} decoding="async" onError={onError} onClick={()=>setOpen(true)}/>
-    <div className="ep-zoom-row"><button ref={trigger} type="button" className="ep-zoom-open" aria-haspopup="dialog" aria-label={`Phóng to ${label}`} onClick={()=>setOpen(true)}><span aria-hidden="true">⤢</span> Phóng to</button></div>
+    <div className={`ep-inline-image${naturalWidth>600?' is-wide':''}`} style={{'--ep-readable-width':`${naturalWidth*.55}px`} as CSSProperties}>
+      <div className="ep-inline-scroll"><img ref={image} className="ep-zoomable" src={src} width={width} height={height} alt={alt} loading={loading} decoding="async" onLoad={event=>setNaturalWidth(width??event.currentTarget.naturalWidth)} onError={onError} onClick={()=>setOpen(true)}/></div>
+    </div>
+    <div className={`ep-zoom-row${naturalWidth>600?' has-wide-image':''}`}><span className="ep-inline-hint">{naturalWidth>600?'Vuốt ngang để xem hết đề':'Chạm ảnh để xem to'}</span><button ref={trigger} type="button" className="ep-zoom-open" aria-haspopup="dialog" aria-label={`Phóng to ${label}`} onClick={()=>setOpen(true)}><span aria-hidden="true">⤢</span> Phóng to</button></div>
     {open&&<ZoomDialog src={src} alt={alt} width={width??(image.current?.naturalWidth||undefined)} height={height??(image.current?.naturalHeight||undefined)} label={label} watermark={watermark} onClose={close}/>}
   </>;
 }

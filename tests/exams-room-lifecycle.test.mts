@@ -1,6 +1,7 @@
 ﻿import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
 import {join} from 'node:path';
+import {readFileSync} from 'node:fs';
 import {PRACTICE_EXAMS} from '../src/native/exams/data';
 import {createDraft,saveDraft,draftKey} from '../src/native/exams/store';
 import {emptyAux,readAux,writeAux} from '../src/native/exams/room-aux';
@@ -23,11 +24,12 @@ class Runtime{
   dispose(){this.slots.forEach(s=>s?.cleanup?.());}
 }
 const exam=PRACTICE_EXAMS[0];
-function mount(store:FakeStore){
+function mount(store:FakeStore,examOverride=exam,questionReader?:unknown){
+  const exam=examOverride;
   const made=createDraft(exam,'room-test',Date.now());assert.ok(made.ok);saveDraft(store,exam,made.value,null);
   const answers:any[]=[];let exits=0;
   const state:any={draft:made.value,activeQuestion:0,setActiveQuestion(i:number){state.activeQuestion=i;r.changed=true;},setQuestionFocus(){},seconds:5400,answered:0,states:exam.questions.map(()=> 'blank'),unsaved:false,notice:'',changeAnswer(...args:any[]){answers.push(args);},pdfReady:true,setPdfReady(){},finish(){},confirmation:null,sections:[{name:'I',from:0,to:12},{name:'II',from:12,to:16},{name:'III',from:16,to:22}]};
-  const r=new Runtime(()=>FocusRoom({props:{exam,catalogUrl:'/thi-thu',storeOverride:store},state,onExit(){exits++;}}));r.flush();return {r,state,answers,get exits(){return exits;}};
+  const r=new Runtime(()=>FocusRoom({props:{exam,catalogUrl:'/thi-thu',storeOverride:store,questionReader},state,onExit(){exits++;}}));r.flush();return {r,state,answers,get exits(){return exits;}};
 }
 function buttons(tree:any):any[]{if(!tree||typeof tree!=='object')return[];if(Array.isArray(tree))return tree.flatMap(buttons);return [...(tree.type==='button'?[tree]:[]),...buttons(tree.props?.children)];}
 function textOf(tree:any):string{if(tree==null||typeof tree==='boolean')return'';if(Array.isArray(tree))return tree.map(textOf).join('');if(typeof tree==='object')return textOf(tree.props?.children);return String(tree);}
@@ -66,16 +68,16 @@ test('Hợp đồng Fullscreen API vào/ra và thoát tập trung không ghi l�
   r.value.props.ref.current=host;buttons(r.value).find(b=>textOf(b)==='Toàn màn hình').props.onClick();r.flush();assert.equal(enter,1);
   buttons(r.value).find(b=>textOf(b)==='Thoát toàn màn hình').props.onClick();r.flush();assert.equal(exit,1);buttons(r.value).find(b=>textOf(b)==='Thoát tập trung').props.onClick();assert.equal(mounted.exits,1);assert.equal(store.getItem(draftKey(exam.id)),before);r.value.props.ref.current=null;r.dispose();
 });
-test('Trả lời nhanh A-D dùng bộ ghi hiện có, phản ánh đáp án và bỏ chọn',()=>{
+test('Trả lời tại câu A-D dùng bộ ghi hiện có, phản ánh đáp án và bỏ chọn',()=>{
   const {r,state,answers}=mount(new FakeStore());const q=exam.questions[0];assert.equal(q.kind,'mc');
   let quick=find(r.value,(n:any)=>n.props?.className==='fr-quick');
-  buttons(quick).find(b=>textOf(b)==='B').props.onClick();assert.deepEqual(answers.pop(),[q.id,'B']);
+  buttons(quick).find(b=>b.props['aria-label']==='Chọn B').props.onClick();assert.deepEqual(answers.pop(),[q.id,'B']);
   state.draft.answers[q.id]='B';r.flush();quick=find(r.value,(n:any)=>n.props?.className==='fr-quick');
-  const selected=buttons(quick).find(b=>textOf(b)==='B');assert.equal(selected.props['aria-pressed'],true);
+  const selected=buttons(quick).find(b=>b.props['aria-label']==='Chọn B');assert.equal(selected.props['aria-pressed'],true);
   selected.props.onClick();assert.deepEqual(answers.pop(),[q.id,null]);
   state.pdfReady=false;r.flush();assert.equal(find(r.value,(n:any)=>n.type==='fieldset'&&n.props.disabled)?.props.disabled,true);r.dispose();
 });
-test('Trả lời nhanh Đ/S giữ đủ bốn ý, sửa/xóa một ý không mất ý khác',()=>{
+test('Trả lời tại câu Đ/S giữ đủ bốn ý, sửa/xóa một ý không mất ý khác',()=>{
   const {r,state,answers}=mount(new FakeStore());state.activeQuestion=exam.questions.findIndex(q=>q.kind==='tf');
   const q=exam.questions[state.activeQuestion];state.draft.answers[q.id]=[true,null,false,null];r.flush();
   let quick=find(r.value,(n:any)=>n.props?.className==='fr-quick');
@@ -104,14 +106,14 @@ test('Tên đề đầy đủ mở bằng chạm, Esc đóng; nhãn phiếu th�
   press('Escape');r.flush();assert.ok(!find(r.value,(n:any)=>n.props?.['aria-label']==='Tên đầy đủ của đề'));
   const sheet=buttons(r.value).find(b=>b.props['aria-label']==='Mở phiếu trả lời');assert.ok(sheet);assert.ok(!textOf(sheet).startsWith('Phiếu ·'));r.dispose();
 });
-test('Phương án DOM trong đề dùng cùng bộ ghi/bỏ chọn với dock',()=>{
+test('Phương án DOM trong đề dùng bộ ghi/bỏ chọn hiện có',()=>{
   const {r,state,answers}=mount(new FakeStore()),q=exam.questions[0];
   const provider=()=>find(r.value,(n:any)=>n.props?.value?.questionId===q.id).props.value;
   provider().choose('B');assert.deepEqual(answers.pop(),[q.id,'B']);
   state.draft.answers[q.id]='B';r.flush();assert.equal(provider().answer,'B');provider().choose('B');assert.deepEqual(answers.pop(),[q.id,null]);
   state.pdfReady=false;r.flush();assert.equal(provider().disabled,true);r.dispose();
 });
-test('Nộp bài chỉ nổi vàng khi làm hết hoặc còn tối đa 5 phút; dấu sao theo câu',()=>{
+test('Nộp bài luôn vàng theo mẫu B, vẫn giữ trạng thái sẵn sàng và dấu sao theo câu',()=>{
   const {r,state}=mount(new FakeStore());
   const submit=()=>buttons(r.value).find(b=>textOf(b)==='Nộp bài');
   assert.equal(submit().props.className,'fr-submit');
@@ -135,6 +137,78 @@ test('PDF: chỉ compact mobile khởi tạo 150%, nút vừa ngang về 100%; g
     assert.ok(textOf(r.value).includes(want));
     if(compact){buttons(r.value).find(b=>b.props['aria-label']==='Vừa ngang').props.onClick();r.index=0;r.value=r.fn();assert.equal(textOf(buttons(r.value).find(b=>b.props['aria-label']==='Vừa ngang')),'Vừa ngang');}
   }}finally{(globalThis as any).window=original;}
+});
+test('B: chỉ một bộ trả lời, đáy chỉ điều hướng và không chứa A-D/ô nhập',()=>{
+  const {r,state}=mount(new FakeStore());
+  for(let i=0;i<exam.questions.length;i++){
+    state.activeQuestion=i;r.flush();
+    const dock=find(r.value,(n:any)=>n.props?.className==='fr-answer-dock');
+    assert.equal(buttons(dock).length,3);
+    assert.ok(!find(dock,(n:any)=>n.type==='input'||n.type==='fieldset'));
+    assert.ok(!buttons(dock).some(b=>/^Chọn [A-D]$/.test(b.props['aria-label']??'')));
+    const paper=find(r.value,(n:any)=>n.props?.className==='fr-paper');
+    assert.ok(find(paper,(n:any)=>n.props?.className==='fr-quick'));
+    if(exam.questions[i].kind==='mc')assert.equal(buttons(paper).filter(b=>/^Chọn [A-D]$/.test(b.props['aria-label']??'')).length,4);
+    if(exam.questions[i].kind==='tf')assert.equal(buttons(paper).filter(b=>/^Ý [a-d]:/.test(b.props['aria-label']??'')).length,8);
+    if(exam.questions[i].kind==='short')assert.ok(find(paper,(n:any)=>n.props?.id==='fr-quick-short'));
+  }
+  r.dispose();
+});
+test('B: nguồn chỉ hiện một lần, không render tên tệp ảnh trong phòng',()=>{
+  const {r}=mount(new FakeStore());
+  assert.equal(textOf(r.value).split('MTM sưu tầm và biên soạn').length-1,1);
+  assert.ok(!find(r.value,(n:any)=>n.type==='figcaption'));
+  assert.doesNotMatch(textOf(r.value),/\.(png|webp|jpg)\b/);
+  assert.ok(find(r.value,(n:any)=>n.props?.className==='fr-progress'));
+  r.dispose();
+});
+test('B: câu chữ có phương án tương tác trong nguồn không sinh bộ A-D thứ hai',()=>{
+  const exams=JSON.parse(readFileSync(join(root,'src/native/chapters/exact-tests.json'),'utf8')).map((p:any)=>p.exam);
+  const displays=JSON.parse(readFileSync(join(root,'src/native/chapters/exact-source-display.json'),'utf8'));
+  const example=exams.find((e:any)=>e.questions.some((q:any)=>q.kind==='mc'&&displays.some((d:any)=>d.questionId===q.id&&d.choices?.length===4&&q.sourceContent?.questions.some((seg:any)=>seg.sha256===d.sourceDisplayCropSha256))));
+  assert.ok(example);
+  const index=example.questions.findIndex((q:any)=>q.kind==='mc'&&displays.some((d:any)=>d.questionId===q.id&&d.choices?.length===4));
+  const {r,state}=mount(new FakeStore(),example);state.activeQuestion=index;r.flush();
+  assert.ok(!find(r.value,(n:any)=>n.props?.className==='fr-quick'));
+  assert.ok(find(r.value,(n:any)=>n.props?.question?.id===example.questions[index].id));
+  r.dispose();
+  const reader=mount(new FakeStore(),exam,{type:'reader'});
+  assert.ok(!find(reader.r.value,(n:any)=>n.props?.className==='fr-quick'));
+  reader.r.dispose();
+});
+test('B: ảnh chưa có bản chép đủ điều kiện vẫn giữ bốn nút chọn dưới ảnh',()=>{
+  const exams=JSON.parse(readFileSync(join(root,'src/native/chapters/exact-tests.json'),'utf8')).map((p:any)=>p.exam);
+  const original=exams.find((e:any)=>e.questions.some((q:any)=>q.kind==='mc'&&q.sourceContent));
+  const example=structuredClone(original),index=example.questions.findIndex((q:any)=>q.kind==='mc'&&q.sourceContent);
+  example.questions[index].id='image-fallback';
+  const {r,state}=mount(new FakeStore(),example);state.activeQuestion=index;r.flush();
+  const paper=find(r.value,(n:any)=>n.props?.className==='fr-paper');
+  assert.equal(buttons(paper).filter(b=>/^Chọn [A-D]$/.test(b.props['aria-label']??'')).length,4);
+  assert.ok(find(paper,(n:any)=>n.props?.question?.id==='image-fallback'));
+  r.dispose();
+});
+test('Vòng 1: PDF cuộn riêng, giữ đúng một bộ trả lời ở ngoài vùng tài liệu',()=>{
+  const {r,state,answers}=mount(new FakeStore());
+  assert.ok(exam.sourcePdf);
+  const workspace=find(r.value,(n:any)=>n.props?.className==='fr-workspace fr-pdf-workspace');
+  const document=find(workspace,(n:any)=>n.props?.className==='fr-pdf-document');
+  assert.ok(document);
+  assert.ok(!find(document,(n:any)=>n.props?.className==='fr-quick'));
+  for(const kind of ['mc','tf','short']){
+    state.activeQuestion=exam.questions.findIndex(q=>q.kind===kind);r.flush();
+    const paper=find(r.value,(n:any)=>n.props?.className==='fr-paper');
+    const quick=find(paper,(n:any)=>n.props?.className==='fr-quick');assert.ok(quick);
+    if(kind==='mc'){
+      assert.equal(buttons(paper).filter(b=>/^Chọn [A-D]$/.test(b.props['aria-label']??'')).length,4);
+      buttons(quick).find(b=>b.props['aria-label']==='Chọn C').props.onClick();
+      assert.deepEqual(answers.pop(),[exam.questions[state.activeQuestion].id,'C']);
+    }
+    if(kind==='tf')assert.equal(buttons(paper).filter(b=>/^Ý [a-d]:/.test(b.props['aria-label']??'')).length,8);
+    if(kind==='short')assert.ok(find(quick,(n:any)=>n.props?.id==='fr-quick-short'));
+  }
+  const mark=buttons(r.value).find(b=>b.props['aria-label']==='Đánh dấu để xem lại');assert.ok(mark);
+  mark.props.onClick();r.flush();assert.ok(buttons(r.value).find(b=>b.props['aria-label']==='Bỏ đánh dấu xem lại'&&b.props['aria-pressed']));
+  r.dispose();
 });
 finish();
 

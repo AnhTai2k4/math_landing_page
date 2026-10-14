@@ -1,3 +1,5 @@
+import {generatePracticeBank} from './scripts/generate-practice-bank.mjs';
+generatePracticeBank();
 
   import { defineConfig } from 'vite';
   import react from '@vitejs/plugin-react-swc';
