@@ -1,5 +1,5 @@
 /// <reference path="./react-dom-portal.d.ts" />
-import {useEffect,useRef,useState} from 'react';
+import {useEffect,useLayoutEffect,useRef,useState} from 'react';
 import {createPortal} from 'react-dom';
 import {getDocument,GlobalWorkerOptions,AnnotationMode,type PDFDocumentProxy,type RenderTask} from 'pdfjs-dist';
 import workerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
@@ -15,8 +15,19 @@ export default function QuestionPdf({file,title,onReady}:{file:QuestionPdfFile;t
   const host=useRef<HTMLElement>(null),sheet=useRef<HTMLDivElement>(null),fullButton=useRef<HTMLButtonElement>(null),ready=useRef(onReady);ready.current=onReady;
   const [placeholder,setPlaceholder]=useState(0);
   // Trang đang hiển thị thật (để biết lúc nào "bản đề đã hiện"), và vị trí cuộn cần giữ khi đổi chế độ toàn màn hình.
-  const shown=useRef<{index:number;canvas:HTMLCanvasElement}|null>(null),scrollMemo=useRef<{x:number;y:number}|null>(null);
-  const restoreScroll=(target:HTMLElement)=>{const m=scrollMemo.current;if(!m)return;target.scrollLeft=m.x*target.scrollWidth-target.clientWidth/2;target.scrollTop=m.y*target.scrollHeight-target.clientHeight/2;};
+  const shown=useRef<{index:number;canvas:HTMLCanvasElement}|null>(null),scrollMemo=useRef<{x:number;y:number;cx:number;cy:number}|null>(null),restorePending=useRef(false);
+  // Review Codex đợt 4 vòng 2: vị trí đang đọc tính theo PHẦN TRANG ĐỀ ĐANG NHÌN THẤY (điểm giữa, tỉ lệ theo canvas),
+  // đi qua mọi khung cuộn chứa trang (khung đề, .ep-pdf-pane/.cp-reader, cả trang), nên đúng cả khi khung cha cuộn chứ không phải khung đề.
+  const scrollers=(el:HTMLElement)=>{const list:HTMLElement[]=[];for(let e:HTMLElement|null=el;e&&e!==document.body&&e!==document.documentElement;e=e.parentElement){const st=getComputedStyle(e);if(/(auto|scroll)/.test(st.overflowX+st.overflowY))list.push(e);}if(el.closest('.ep-pdf-full'))return list;/* toàn màn hình: không cuộn trang nền đang khoá */const root=document.scrollingElement;if(root instanceof HTMLElement)list.push(root);return list;};
+  const visibleBox=(el:HTMLElement)=>{let l=0,t=0,r=innerWidth,b=innerHeight;for(const s of scrollers(el)){if(s===document.scrollingElement)continue;const c=s.getBoundingClientRect();l=Math.max(l,c.left+s.clientLeft);t=Math.max(t,c.top+s.clientTop);r=Math.min(r,c.left+s.clientLeft+s.clientWidth);b=Math.min(b,c.top+s.clientTop+s.clientHeight);}return {l,t,r,b};};
+  const captureScroll=()=>{const target=sheet.current,canvas=target?.querySelector('canvas');if(!target||!canvas){scrollMemo.current=null;return;}const c=canvas.getBoundingClientRect();if(!c.width||!c.height){scrollMemo.current=null;return;}const v=visibleBox(target),l=Math.max(v.l,c.left),t=Math.max(v.t,c.top),r=Math.min(v.r,c.right),b=Math.min(v.b,c.bottom);
+    scrollMemo.current=r>l&&b>t?{x:((l+r)/2-c.left)/c.width,y:((t+b)/2-c.top)/c.height,cx:(l+r)/2,cy:(t+b)/2}:null;};
+  const restoreScroll=(target:HTMLElement)=>{const m=scrollMemo.current,canvas=target.querySelector('canvas');if(!m||!canvas)return;const c=canvas.getBoundingClientRect();let x=c.left+m.x*c.width,y=c.top+m.y*c.height;
+    // Từ khung trong ra ngoài: mỗi khung cuộn phần còn thiếu để điểm đang đọc về đúng chỗ cũ trên màn hình
+    // (đổi mức phóng thì trang nền không nhảy); chỗ cũ nằm ngoài khung (vừa vào/ra toàn màn hình) thì về giữa khung.
+    for(const s of scrollers(target)){const page=s===document.scrollingElement,box=page?{left:0,top:0,width:innerWidth,height:innerHeight}:(()=>{const r=s.getBoundingClientRect(),left=Math.max(0,r.left+s.clientLeft),top=Math.max(0,r.top+s.clientTop);/* chỉ phần khung đang nằm trong màn hình */return {left,top,width:Math.max(0,Math.min(innerWidth,r.left+s.clientLeft+s.clientWidth)-left),height:Math.max(0,Math.min(innerHeight,r.top+s.clientTop+s.clientHeight)-top)};})();
+      const left=s.scrollLeft,top=s.scrollTop;const inside=(v:number,from:number,size:number)=>v>=from&&v<=from+size,wantX=inside(m.cx,box.left,box.width)?m.cx:box.left+box.width/2,wantY=inside(m.cy,box.top,box.height)?m.cy:box.top+box.height/2;
+      s.scrollLeft=left+x-wantX;s.scrollTop=top+y-wantY;x-=s.scrollLeft-left;y-=s.scrollTop-top;}};
   // Khung đọc được gắn lại (vào body khi toàn màn hình) nên theo dõi lại bề ngang mỗi lần đổi chế độ.
   useEffect(()=>{const target=sheet.current;if(!target)return;const observer=new ResizeObserver(entries=>setWidth(Math.max(240,Math.floor(entries[0].contentRect.width))));observer.observe(target);return()=>observer.disconnect();},[full]);
   useEffect(()=>{let active=true;const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),20000);let task:ReturnType<typeof getDocument>|undefined;
@@ -28,24 +39,28 @@ export default function QuestionPdf({file,title,onReady}:{file:QuestionPdfFile;t
     // Review Codex đợt 4: đổi trang thì gỡ trang cũ và báo "chưa hiện" cho tới khi trang mới vẽ xong (như trước đợt);
     // đổi mức phóng giữ trang đang hiện; vào/ra toàn màn hình chuyển chính canvas đang hiện sang khung mới nên trang không biến mất.
     const target=sheet.current,previous=shown.current;
-    if(!previous||previous.index!==index){shown.current=null;ready.current(false);target.replaceChildren();}
+    if(!previous||previous.index!==index){shown.current=null;scrollMemo.current=null;ready.current(false);target.replaceChildren();}
     else if(!target.contains(previous.canvas)){target.replaceChildren(previous.canvas);restoreScroll(target);}
+    // Vẽ lại vì đổi bề ngang (vừa vào toàn màn hình, xoay máy): giữ điểm đang đọc như khi đổi mức phóng.
+    else if(!scrollMemo.current)captureScroll();
     void(async()=>{try{const pageNumber=file.questionPages[index];if(!pageNumber)throw Error('Trang câu hỏi chưa hợp lệ.');const page=await doc.getPage(pageNumber);if(!active)return;
       // Vừa bề ngang vùng đọc (ở cỡ vừa, chữ không vượt 1050 px như trước); mức phóng nhân thêm và cho cuộn ngang.
       const fit=Math.min(full?1400:1050,Math.max(240,width-2)),natural=page.getViewport({scale:1}),viewport=page.getViewport({scale:Math.min(MAX_RENDER_WIDTH,fit*ZOOMS[zoom])/natural.width}),density=Math.min(2,devicePixelRatio||1,Math.sqrt(6000000/(viewport.width*viewport.height)));
       const canvas=document.createElement('canvas'),context=canvas.getContext('2d',{alpha:false});if(!context)throw Error('Trình duyệt chưa hiển thị được bản đề.');canvas.width=Math.ceil(viewport.width*density);canvas.height=Math.ceil(viewport.height*density);canvas.style.width=Math.ceil(viewport.width)+'px';canvas.style.height=Math.ceil(viewport.height)+'px';canvas.setAttribute('role','img');canvas.setAttribute('aria-label',`${title}, trang câu hỏi ${pageNumber}`);
       render=page.render({canvas,viewport,transform:density!==1?[density,0,0,density,0,0]:undefined,annotationMode:AnnotationMode.DISABLE});await render.promise;
       // Vẽ xong mới thay canvas cũ: đổi mức phóng không làm trang nháy trắng hay nhảy chiều cao.
-      if(active&&sheet.current){sheet.current.replaceChildren(canvas);canvas.dataset.questionPage=String(pageNumber);shown.current={index,canvas};restoreScroll(sheet.current);scrollMemo.current=null;setBusy(false);ready.current(true);}
+      if(active&&sheet.current){sheet.current.replaceChildren(canvas);canvas.dataset.questionPage=String(pageNumber);shown.current={index,canvas};restorePending.current=true;setBusy(false);ready.current(true);}
     }catch(e){if(active){setError(e instanceof Error?e.message:'Chưa hiển thị được trang đề.');setBusy(false);ready.current(false);}}})();return()=>{active=false;render?.cancel();};
   },[doc,file,index,width,zoom,full]);
+  // Trả điểm đang đọc SAU khi dòng "Đang hiển thị bản đề…" đã gỡ (dòng đó đẩy khung đề xuống), trước khi trình duyệt vẽ.
+  useLayoutEffect(()=>{if(busy||!restorePending.current||!sheet.current)return;restorePending.current=false;restoreScroll(sheet.current);scrollMemo.current=null;},[busy]);
   // Toàn màn hình: khoá cuộn trang nền, Esc để thoát, Tab chỉ đi trong khung; thoát xong trả tiêu điểm về nút.
   const wasFull=useRef(false);
   useEffect(()=>{
     if(!full){if(wasFull.current)fullButton.current?.focus({preventScroll:true});wasFull.current=false;return;}
     wasFull.current=true;const root=document.documentElement,previous=root.style.overflow;root.style.overflow='hidden';fullButton.current?.focus({preventScroll:true});
     const key=(event:KeyboardEvent)=>{
-      if(event.key==='Escape'){event.preventDefault();setFull(false);return;}
+      if(event.key==='Escape'){event.preventDefault();captureScroll();setFull(false);return;}
       if(event.key!=='Tab'||!host.current)return;
       const items=[...host.current.querySelectorAll<HTMLElement>('button:not([disabled]),a[href],[tabindex="0"]')];if(!items.length)return;
       const first=items[0],last=items[items.length-1];
@@ -56,10 +71,10 @@ export default function QuestionPdf({file,title,onReady}:{file:QuestionPdfFile;t
     document.addEventListener('keydown',key);return()=>{document.removeEventListener('keydown',key);root.style.overflow=previous;};
   },[full]);
   const zoomLabel=zoom===0?'Vừa bề ngang':'Phóng ×'+String(ZOOMS[zoom]).replace('.',',');
-  const toggleFull=()=>{const s=sheet.current;scrollMemo.current=s&&s.scrollWidth&&s.scrollHeight?{x:(s.scrollLeft+s.clientWidth/2)/s.scrollWidth,y:(s.scrollTop+s.clientHeight/2)/s.scrollHeight}:null;if(!full)setPlaceholder(host.current?.offsetHeight??0);setFull(f=>!f);};
+  const toggleFull=()=>{captureScroll();if(!full)setPlaceholder(host.current?.offsetHeight??0);setFull(f=>!f);};
   const viewer=<section className={`ep-card ep-pdf-viewer${full?' ep-pdf-full':''}`} ref={host} aria-label="Bản câu hỏi PDF" role={full?'dialog':undefined} aria-modal={full||undefined}><h2>Bản câu hỏi</h2>
     <div className="ep-toolbar"><button type="button" disabled={!doc||index===0} onClick={()=>setIndex(i=>i-1)} aria-label={full?'Trang trước':undefined}>{full?'‹ Trước':'Trang trước'}</button><span>{full?'Trang':'Trang câu hỏi'} {index+1}/{file.questionPages.length}</span><button type="button" disabled={!doc||index===file.questionPages.length-1} onClick={()=>setIndex(i=>i+1)} aria-label={full?'Trang sau':undefined}>{full?'Sau ›':'Trang sau'}</button></div>
-    <div className="ep-toolbar ep-pdf-zoom" role="group" aria-label="Cỡ trang đề"><button type="button" aria-label="Thu nhỏ trang đề" disabled={!doc||zoom===0} onClick={()=>setZoom(z=>Math.max(0,z-1))}>−</button><span aria-live="polite">{zoomLabel}</span><button type="button" aria-label="Phóng to trang đề" disabled={!doc||zoom===ZOOMS.length-1} onClick={()=>setZoom(z=>Math.min(ZOOMS.length-1,z+1))}>+</button><button ref={fullButton} type="button" className="ep-pdf-full-toggle" aria-pressed={full} disabled={!doc&&!full} onClick={toggleFull} aria-label={full?'Thoát toàn màn hình':undefined}>{full?'Đóng ✕':'Toàn màn hình'}</button></div>
+    <div className="ep-toolbar ep-pdf-zoom" role="group" aria-label="Cỡ trang đề"><button type="button" aria-label="Thu nhỏ trang đề" disabled={!doc||zoom===0} onClick={()=>{captureScroll();setZoom(z=>Math.max(0,z-1));}}>−</button><span aria-live="polite">{zoomLabel}</span><button type="button" aria-label="Phóng to trang đề" disabled={!doc||zoom===ZOOMS.length-1} onClick={()=>{captureScroll();setZoom(z=>Math.min(ZOOMS.length-1,z+1));}}>+</button><button ref={fullButton} type="button" className="ep-pdf-full-toggle" aria-pressed={full} disabled={!doc&&!full} onClick={toggleFull} aria-label={full?'Thoát toàn màn hình':undefined}>{full?'Đóng ✕':'Toàn màn hình'}</button></div>
     {busy&&<p role="status">Đang hiển thị bản đề…</p>}{error&&<p role="alert">{error} Chưa mở làm bài khi bản câu hỏi chưa hiển thị. Liên kết nguồn có thể chứa đáp án hoặc mã đề khác.</p>}
     <div className={`ep-question-pdf${zoom>0?' is-zoomed':''}`} ref={sheet} tabIndex={zoom>0||full?0:undefined} aria-label={zoom>0||full?'Trang đề, cuộn để xem phần khác':undefined}/></section>;
   // Toàn màn hình gắn vào body (lớp trên cùng), không bị đầu trang dính hay vùng cuộn của khung bài làm che/cắt.
