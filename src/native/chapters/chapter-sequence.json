@@ -1087,5 +1087,1283 @@
         ]
       }
     ]
+  },
+  "12:1": {
+    "groups": [
+      {
+        "title": "Hệ thống công thức và lý thuyết",
+        "items": [
+          {
+            "id": "mtm-practice-g12-c1-b01-v2"
+          },
+          {
+            "id": "mtm-practice-g12-c1-b02-v2"
+          }
+        ]
+      },
+      {
+        "title": "Tính đơn điệu và cực trị của hàm số (SGK bài 1)",
+        "items": [
+          {
+            "id": "mtm-luyen-g12-c1-n02-mtm-errata-v1",
+            "dangs": [
+              "Xét tính đơn điệu từ đồ thị, bảng biến thiên, bảng xét dấu đạo hàm",
+              "Đơn điệu, cực trị trong bài toán thực tế",
+              "Tìm khoảng đơn điệu của hàm số cho bởi công thức",
+              "Cực trị từ đồ thị, bảng biến thiên, đạo hàm",
+              "toán thực tế (4 câu)"
+            ]
+          },
+          {
+            "id": "mtm-drive-g12-c1-t01-mtm-errata-v1",
+            "dangs": [
+              "Tìm khoảng đơn điệu của hàm số cho bởi công thức",
+              "Xét tính đơn điệu từ đồ thị, bảng biến thiên, bảng xét dấu đạo hàm",
+              "Tìm cực trị của hàm số cho bởi công thức",
+              "Cực trị từ đồ thị, bảng biến thiên, đạo hàm",
+              "toán thực tế (2 câu)"
+            ]
+          },
+          {
+            "id": "mtm-drive-g12-c1-t02-mtm-errata-v1",
+            "dangs": [
+              "Xét tính đơn điệu từ đồ thị, bảng biến thiên, bảng xét dấu đạo hàm",
+              "Cực trị từ đồ thị, bảng biến thiên, đạo hàm",
+              "Tìm khoảng đơn điệu của hàm số cho bởi công thức",
+              "Tìm cực trị của hàm số cho bởi công thức",
+              "toán thực tế (3 câu)"
+            ]
+          },
+          {
+            "id": "mtm-luyen-g12-c1-n01-mtm-errata-v1",
+            "dangs": [
+              "Tìm khoảng đơn điệu của hàm số cho bởi công thức",
+              "Xét tính đơn điệu từ đồ thị, bảng biến thiên, bảng xét dấu đạo hàm",
+              "Đơn điệu, cực trị trong bài toán thực tế",
+              "toán thực tế (5 câu)"
+            ]
+          },
+          {
+            "id": "mtm-ghep-g12-c1-k02-mtm-errata-v1",
+            "dangs": [
+              "Xét tính đơn điệu từ đồ thị, bảng biến thiên, bảng xét dấu đạo hàm",
+              "Tìm khoảng đơn điệu của hàm số cho bởi công thức",
+              "Cực trị từ đồ thị, bảng biến thiên, đạo hàm",
+              "Đơn điệu, cực trị của hàm số chứa tham số",
+              "toán thực tế (2 câu)"
+            ]
+          },
+          {
+            "id": "mtm-ghep-g12-c1-k01-mtm-errata-v1",
+            "dangs": [
+              "Đơn điệu, cực trị trong bài toán thực tế",
+              "Tìm khoảng đơn điệu của hàm số cho bởi công thức",
+              "Xét tính đơn điệu từ đồ thị, bảng biến thiên, bảng xét dấu đạo hàm",
+              "toán thực tế (20 câu)"
+            ]
+          }
+        ],
+        "note": "Các đề trong nhóm xếp từ dễ đến khó."
+      },
+      {
+        "title": "Giá trị lớn nhất và giá trị nhỏ nhất của hàm số (SGK bài 2)",
+        "items": [
+          {
+            "id": "mtm-drive-g12-c1-t03-mtm-errata-v1",
+            "dangs": [
+              "GTLN, GTNN trên khoảng, nửa khoảng; hàm chứa căn, lượng giác, mũ, lôgarit",
+              "GTLN, GTNN từ đồ thị, bảng biến thiên",
+              "Tối ưu thực tế (GTLN, GTNN)",
+              "GTLN, GTNN trên đoạn của hàm số cho bởi công thức",
+              "toán thực tế (4 câu)"
+            ]
+          },
+          {
+            "id": "mtm-ghep-g12-c1-k05-mtm-errata-v1",
+            "dangs": [
+              "Tối ưu thực tế (GTLN, GTNN)",
+              "GTLN, GTNN từ đồ thị, bảng biến thiên",
+              "GTLN, GTNN trên đoạn của hàm số cho bởi công thức",
+              "GTLN, GTNN chứa tham số",
+              "toán thực tế (8 câu)"
+            ]
+          },
+          {
+            "id": "mtm-luyen-g12-c1-n04-mtm-errata-v1",
+            "dangs": [
+              "GTLN, GTNN trên đoạn của hàm số cho bởi công thức",
+              "GTLN, GTNN trên khoảng, nửa khoảng; hàm chứa căn, lượng giác, mũ, lôgarit",
+              "GTLN, GTNN từ đồ thị, bảng biến thiên",
+              "Tối ưu thực tế (GTLN, GTNN)",
+              "toán thực tế (2 câu)"
+            ]
+          },
+          {
+            "id": "mtm-drive-g12-c1-t04-mtm-errata-v1",
+            "dangs": [
+              "GTLN, GTNN từ đồ thị, bảng biến thiên",
+              "Tối ưu thực tế (GTLN, GTNN)",
+              "GTLN, GTNN trên khoảng, nửa khoảng; hàm chứa căn, lượng giác, mũ, lôgarit",
+              "GTLN, GTNN trên đoạn của hàm số cho bởi công thức",
+              "toán thực tế (6 câu)"
+            ]
+          },
+          {
+            "id": "mtm-ghep-g12-c1-k04-mtm-errata-v1",
+            "dangs": [
+              "Tối ưu thực tế (GTLN, GTNN)",
+              "GTLN, GTNN từ đồ thị, bảng biến thiên",
+              "toán thực tế (21 câu)"
+            ]
+          },
+          {
+            "id": "mtm-ghep-g12-c1-k06-mtm-errata-v1",
+            "dangs": [
+              "Tối ưu thực tế (GTLN, GTNN)",
+              "GTLN, GTNN chứa tham số",
+              "GTLN, GTNN từ đồ thị, bảng biến thiên",
+              "GTLN, GTNN trên đoạn của hàm số cho bởi công thức",
+              "toán thực tế (8 câu)"
+            ]
+          }
+        ],
+        "note": "Các đề trong nhóm xếp từ dễ đến khó."
+      },
+      {
+        "title": "Đường tiệm cận của đồ thị hàm số (SGK bài 3)",
+        "items": [
+          {
+            "id": "mtm-luyen-g12-c1-n07-mtm-errata-v1",
+            "dangs": [
+              "Tiệm cận chứa tham số; bài toán tổng hợp, thực tế",
+              "Tiệm cận từ đồ thị, bảng biến thiên, giới hạn",
+              "Tiệm cận đứng, ngang của hàm phân thức",
+              "Tiệm cận xiên",
+              "toán thực tế (5 câu)"
+            ]
+          },
+          {
+            "id": "mtm-drive-g12-c1-t06-mtm-errata-v1",
+            "dangs": [
+              "Tiệm cận từ đồ thị, bảng biến thiên, giới hạn",
+              "Tiệm cận chứa tham số; bài toán tổng hợp, thực tế",
+              "Tiệm cận đứng, ngang của hàm phân thức",
+              "Tiệm cận xiên",
+              "toán thực tế (6 câu)"
+            ]
+          },
+          {
+            "id": "mtm-ghep-g12-c1-k07-mtm-errata-v1",
+            "dangs": [
+              "Tiệm cận đứng, ngang của hàm phân thức",
+              "Tiệm cận từ đồ thị, bảng biến thiên, giới hạn",
+              "Tiệm cận xiên",
+              "Tiệm cận chứa tham số; bài toán tổng hợp, thực tế"
+            ]
+          },
+          {
+            "id": "mtm-drive-g12-c1-t05-mtm-errata-v1",
+            "dangs": [
+              "Tiệm cận xiên",
+              "Tiệm cận từ đồ thị, bảng biến thiên, giới hạn",
+              "Tiệm cận chứa tham số; bài toán tổng hợp, thực tế",
+              "Tiệm cận đứng, ngang của hàm phân thức",
+              "toán thực tế (3 câu)"
+            ]
+          },
+          {
+            "id": "mtm-ghep-g12-c1-k08-mtm-errata-v1",
+            "dangs": [
+              "Tiệm cận chứa tham số; bài toán tổng hợp, thực tế",
+              "Tiệm cận xiên",
+              "Tiệm cận đứng, ngang của hàm phân thức",
+              "Tiệm cận từ đồ thị, bảng biến thiên, giới hạn",
+              "toán thực tế (5 câu)"
+            ]
+          }
+        ],
+        "note": "Các đề trong nhóm xếp từ dễ đến khó."
+      },
+      {
+        "title": "Khảo sát sự biến thiên và vẽ đồ thị của hàm số (SGK bài 4)",
+        "items": [
+          {
+            "id": "mtm-drive-g12-c1-t08-mtm-errata-v1",
+            "dangs": [
+              "Tâm đối xứng, tiếp tuyến, tổng hợp tính chất đồ thị",
+              "Tương giao, số nghiệm phương trình bằng đồ thị",
+              "Nhận dạng đồ thị, bảng biến thiên",
+              "Tiệm cận chứa tham số; bài toán tổng hợp, thực tế",
+              "toán thực tế (3 câu)"
+            ]
+          },
+          {
+            "id": "mtm-ghep-g12-c1-k09-mtm-errata-v1",
+            "dangs": [
+              "Tâm đối xứng, tiếp tuyến, tổng hợp tính chất đồ thị",
+              "Tương giao, số nghiệm phương trình bằng đồ thị",
+              "Tiệm cận đứng, ngang của hàm phân thức",
+              "Xác định dấu hệ số từ đồ thị"
+            ]
+          },
+          {
+            "id": "mtm-luyen-g12-c1-n08-mtm-errata-v1",
+            "dangs": [
+              "Nhận dạng đồ thị, bảng biến thiên",
+              "Xác định dấu hệ số từ đồ thị",
+              "Mô hình tăng trưởng, khoa học, đọc đồ thị thực tế",
+              "Tiệm cận chứa tham số; bài toán tổng hợp, thực tế",
+              "toán thực tế (11 câu)"
+            ]
+          },
+          {
+            "id": "mtm-ghep-g12-c1-k10-mtm-errata-v1",
+            "dangs": [
+              "Nhận dạng đồ thị, bảng biến thiên",
+              "Tương giao, số nghiệm phương trình bằng đồ thị",
+              "Xác định dấu hệ số từ đồ thị",
+              "Xét tính đơn điệu từ đồ thị, bảng biến thiên, bảng xét dấu đạo hàm",
+              "toán thực tế (4 câu)"
+            ]
+          },
+          {
+            "id": "mtm-drive-g12-c1-t07-mtm-errata-v1",
+            "dangs": [
+              "Nhận dạng đồ thị, bảng biến thiên",
+              "Tâm đối xứng, tiếp tuyến, tổng hợp tính chất đồ thị",
+              "Tối ưu hình học (diện tích, thể tích, quãng đường)",
+              "Tối ưu kinh tế (chi phí, doanh thu, lợi nhuận)",
+              "toán thực tế (7 câu)"
+            ]
+          }
+        ],
+        "note": "Các đề trong nhóm xếp từ dễ đến khó."
+      },
+      {
+        "title": "Ứng dụng đạo hàm để giải quyết một số vấn đề liên quan đến thực tiễn (SGK bài 5)",
+        "items": [
+          {
+            "id": "mtm-luyen-g12-c1-n09-mtm-errata-v1",
+            "dangs": [
+              "Tốc độ thay đổi, chuyển động (vận tốc, gia tốc)",
+              "Mô hình tăng trưởng, khoa học, đọc đồ thị thực tế",
+              "Tối ưu kinh tế (chi phí, doanh thu, lợi nhuận)",
+              "toán thực tế (22 câu)"
+            ]
+          },
+          {
+            "id": "mtm-drive-g12-c1-t10-mtm-errata-v1",
+            "dangs": [
+              "Tối ưu hình học (diện tích, thể tích, quãng đường)",
+              "Tối ưu kinh tế (chi phí, doanh thu, lợi nhuận)",
+              "Mô hình tăng trưởng, khoa học, đọc đồ thị thực tế",
+              "toán thực tế (22 câu)"
+            ]
+          },
+          {
+            "id": "mtm-drive-g12-c1-t09-mtm-errata-v1",
+            "dangs": [
+              "Mô hình tăng trưởng, khoa học, đọc đồ thị thực tế",
+              "Tối ưu kinh tế (chi phí, doanh thu, lợi nhuận)",
+              "Tốc độ thay đổi, chuyển động (vận tốc, gia tốc)",
+              "Tối ưu hình học (diện tích, thể tích, quãng đường)",
+              "toán thực tế (22 câu)"
+            ]
+          },
+          {
+            "id": "mtm-ghep-g12-c1-k12-mtm-errata-v1",
+            "dangs": [
+              "Tối ưu kinh tế (chi phí, doanh thu, lợi nhuận)",
+              "Tốc độ thay đổi, chuyển động (vận tốc, gia tốc)",
+              "Mô hình tăng trưởng, khoa học, đọc đồ thị thực tế",
+              "Tối ưu hình học (diện tích, thể tích, quãng đường)",
+              "toán thực tế (22 câu)"
+            ]
+          }
+        ],
+        "note": "Các đề trong nhóm xếp từ dễ đến khó."
+      },
+      {
+        "title": "Tổng hợp, kiểm tra chương",
+        "items": [
+          {
+            "id": "mtm-drive-g12-c1-t12-mtm-errata-v1",
+            "dangs": [
+              "Tiệm cận đứng, ngang của hàm phân thức",
+              "Tìm cực trị của hàm số cho bởi công thức",
+              "Xét tính đơn điệu từ đồ thị, bảng biến thiên, bảng xét dấu đạo hàm",
+              "Cực trị từ đồ thị, bảng biến thiên, đạo hàm",
+              "toán thực tế (2 câu)"
+            ]
+          },
+          {
+            "id": "mtm-drive-g12-c1-t11-mtm-errata-v1",
+            "dangs": [
+              "Tối ưu kinh tế (chi phí, doanh thu, lợi nhuận)",
+              "Nhận dạng đồ thị, bảng biến thiên",
+              "Tìm cực trị của hàm số cho bởi công thức",
+              "GTLN, GTNN từ đồ thị, bảng biến thiên",
+              "toán thực tế (6 câu)"
+            ]
+          },
+          {
+            "id": "mtm-luyen-g12-c1-n14-mtm-errata-v1",
+            "dangs": [
+              "Cực trị từ đồ thị, bảng biến thiên, đạo hàm",
+              "Tiệm cận xiên",
+              "Xác định dấu hệ số từ đồ thị",
+              "Nhận dạng đồ thị, bảng biến thiên",
+              "toán thực tế (4 câu)"
+            ]
+          },
+          {
+            "id": "mtm-drive-g12-c1-tutam-otcc01-mtm-errata-v1",
+            "dangs": [
+              "Cực trị từ đồ thị, bảng biến thiên, đạo hàm",
+              "Tiệm cận đứng, ngang của hàm phân thức",
+              "GTLN, GTNN từ đồ thị, bảng biến thiên",
+              "Tiệm cận xiên",
+              "toán thực tế (3 câu)"
+            ]
+          }
+        ],
+        "note": "Các đề trong nhóm xếp từ dễ đến khó."
+      }
+    ]
+  },
+  "12:2": {
+    "groups": [
+      {
+        "title": "Hệ thống công thức và lý thuyết",
+        "items": [
+          {
+            "id": "mtm-practice-g12-c2-b01-v1"
+          }
+        ]
+      },
+      {
+        "title": "Vectơ trong không gian (SGK bài 6)",
+        "items": [
+          {
+            "id": "mtm-ghep-g12-c2-k01-mtm-errata-v1",
+            "dangs": [
+              "Tổng, hiệu, quy tắc hình hộp, tích vectơ với một số",
+              "Khái niệm vectơ, vectơ bằng nhau, cùng phương trong hình không gian",
+              "Góc giữa hai vectơ, tích vô hướng",
+              "Vectơ trong bài toán thực tế (lực, hợp lực, công)",
+              "toán thực tế (1 câu)"
+            ]
+          },
+          {
+            "id": "mtm-practice-g12-c2-p01-v1",
+            "dangs": [
+              "Vectơ trong không gian: quy tắc hình hộp, tích vectơ với một số",
+              "toán thực tế (6 câu)"
+            ]
+          },
+          {
+            "id": "mtm-drive-g12-c2-t01-mtm-errata-v1",
+            "dangs": [
+              "Tổng, hiệu, quy tắc hình hộp, tích vectơ với một số",
+              "Góc giữa hai vectơ, tích vô hướng",
+              "Vectơ trong bài toán thực tế (lực, hợp lực, công)",
+              "Khái niệm vectơ, vectơ bằng nhau, cùng phương trong hình không gian",
+              "toán thực tế (6 câu)"
+            ]
+          },
+          {
+            "id": "mtm-luyen-g12-c2-n03-mtm-errata-v1",
+            "dangs": [
+              "Tổng, hiệu, quy tắc hình hộp, tích vectơ với một số",
+              "Góc giữa hai vectơ, tích vô hướng",
+              "Vectơ trong bài toán thực tế (lực, hợp lực, công)",
+              "toán thực tế (2 câu)"
+            ]
+          },
+          {
+            "id": "mtm-luyen-g12-c2-n01-mtm-errata-v1",
+            "dangs": [
+              "Tổng, hiệu, quy tắc hình hộp, tích vectơ với một số",
+              "Vectơ trong bài toán thực tế (lực, hợp lực, công)",
+              "Góc giữa hai vectơ, tích vô hướng",
+              "toán thực tế (2 câu)"
+            ]
+          },
+          {
+            "id": "mtm-luyen-g12-c2-n02-mtm-errata-v1",
+            "dangs": [
+              "Góc giữa hai vectơ, tích vô hướng",
+              "Vectơ trong bài toán thực tế (lực, hợp lực, công)",
+              "toán thực tế (7 câu)"
+            ]
+          },
+          {
+            "id": "mtm-drive-g12-c2-t02-mtm-errata-v56",
+            "dangs": [
+              "Tổng, hiệu, quy tắc hình hộp, tích vectơ với một số",
+              "Góc giữa hai vectơ, tích vô hướng",
+              "Vectơ trong bài toán thực tế (lực, hợp lực, công)",
+              "toán thực tế (1 câu)"
+            ]
+          },
+          {
+            "id": "mtm-practice-g12-c2-p03-v1",
+            "dangs": [
+              "Vectơ trong thực tế: lực, hợp lực, công",
+              "toán thực tế (22 câu)"
+            ]
+          },
+          {
+            "id": "mtm-practice-g12-c2-p02-v1",
+            "dangs": [
+              "Góc giữa hai vectơ và tích vô hướng trong không gian",
+              "toán thực tế (5 câu)"
+            ]
+          }
+        ],
+        "note": "Các đề trong nhóm xếp từ dễ đến khó."
+      },
+      {
+        "title": "Hệ trục tọa độ trong không gian (SGK bài 7)",
+        "items": [
+          {
+            "id": "mtm-ghep-g12-c2-k02-mtm-errata-v1",
+            "dangs": [
+              "Tọa độ vectơ, biểu diễn vectơ theo i, j, k",
+              "Tọa độ điểm, hình chiếu, điểm đối xứng",
+              "Tọa độ trong hình hộp, lập phương, mô hình thực tế",
+              "Cùng phương, thẳng hàng, hình bình hành, tìm điểm thỏa điều kiện"
+            ]
+          },
+          {
+            "id": "mtm-drive-g12-c2-t03-mtm-errata-v1",
+            "dangs": [
+              "Tọa độ trong hình hộp, lập phương, mô hình thực tế",
+              "Tọa độ vectơ, biểu diễn vectơ theo i, j, k",
+              "Phép cộng, trừ, nhân số; trung điểm, trọng tâm",
+              "Tọa độ điểm, hình chiếu, điểm đối xứng",
+              "toán thực tế (5 câu)"
+            ]
+          },
+          {
+            "id": "mtm-practice-g12-c2-p04-v1",
+            "dangs": [
+              "Tọa độ điểm, hình chiếu, điểm đối xứng, tọa độ vectơ",
+              "toán thực tế (5 câu)"
+            ]
+          },
+          {
+            "id": "mtm-drive-g12-c2-t04-mtm-errata-v1",
+            "dangs": [
+              "Tọa độ trong hình hộp, lập phương, mô hình thực tế",
+              "Tọa độ điểm, hình chiếu, điểm đối xứng",
+              "Tọa độ vectơ, biểu diễn vectơ theo i, j, k",
+              "Phép cộng, trừ, nhân số; trung điểm, trọng tâm",
+              "toán thực tế (4 câu)"
+            ]
+          },
+          {
+            "id": "mtm-luyen-g12-c2-n04-mtm-errata-v1",
+            "dangs": [
+              "Tọa độ trong hình hộp, lập phương, mô hình thực tế",
+              "Tọa độ vectơ, biểu diễn vectơ theo i, j, k",
+              "Cùng phương, thẳng hàng, hình bình hành, tìm điểm thỏa điều kiện",
+              "Phép cộng, trừ, nhân số; trung điểm, trọng tâm",
+              "toán thực tế (5 câu)"
+            ]
+          },
+          {
+            "id": "mtm-practice-g12-c2-p05-v1",
+            "dangs": [
+              "Tọa độ trong hình hộp và mô hình thực tế",
+              "toán thực tế (16 câu)"
+            ]
+          }
+        ],
+        "note": "Các đề trong nhóm xếp từ dễ đến khó."
+      },
+      {
+        "title": "Biểu thức tọa độ của các phép toán vectơ (SGK bài 8)",
+        "items": [
+          {
+            "id": "mtm-ghep-g12-c2-k03-mtm-errata-v1",
+            "dangs": [
+              "Phép cộng, trừ, nhân số; trung điểm, trọng tâm",
+              "Bài toán thực tế, cực trị trong tọa độ",
+              "Cùng phương, thẳng hàng, hình bình hành, tìm điểm thỏa điều kiện",
+              "Tích vô hướng, độ dài, góc, vuông góc"
+            ]
+          },
+          {
+            "id": "mtm-luyen-g12-c2-n05-mtm-errata-v1",
+            "dangs": [
+              "Phép cộng, trừ, nhân số; trung điểm, trọng tâm",
+              "Tích vô hướng, độ dài, góc, vuông góc",
+              "Cùng phương, thẳng hàng, hình bình hành, tìm điểm thỏa điều kiện",
+              "Bài toán thực tế, cực trị trong tọa độ",
+              "toán thực tế (2 câu)"
+            ]
+          },
+          {
+            "id": "mtm-practice-g12-c2-p06-v1",
+            "dangs": [
+              "Phép toán tọa độ, trung điểm, trọng tâm, hình bình hành, thẳng hàng",
+              "toán thực tế (7 câu)"
+            ]
+          },
+          {
+            "id": "mtm-drive-g12-c2-t06-mtm-errata-v1",
+            "dangs": [
+              "Phép cộng, trừ, nhân số; trung điểm, trọng tâm",
+              "Tích vô hướng, độ dài, góc, vuông góc",
+              "Bài toán thực tế, cực trị trong tọa độ",
+              "Tọa độ điểm, hình chiếu, điểm đối xứng",
+              "toán thực tế (4 câu)"
+            ]
+          },
+          {
+            "id": "mtm-drive-g12-c2-t05-mtm-errata-v1",
+            "dangs": [
+              "Tích vô hướng, độ dài, góc, vuông góc",
+              "Phép cộng, trừ, nhân số; trung điểm, trọng tâm",
+              "Bài toán thực tế, cực trị trong tọa độ",
+              "Cùng phương, thẳng hàng, hình bình hành, tìm điểm thỏa điều kiện",
+              "toán thực tế (6 câu)"
+            ]
+          },
+          {
+            "id": "mtm-practice-g12-c2-p07-v1",
+            "dangs": [
+              "Tích vô hướng, độ dài, góc, vuông góc theo tọa độ",
+              "toán thực tế (5 câu)"
+            ]
+          },
+          {
+            "id": "mtm-practice-g12-c2-p08-v1",
+            "dangs": [
+              "Bài toán thực tế và cực trị trong tọa độ không gian",
+              "toán thực tế (14 câu)"
+            ]
+          }
+        ],
+        "note": "Các đề trong nhóm xếp từ dễ đến khó."
+      },
+      {
+        "title": "Tổng hợp, kiểm tra chương",
+        "items": [
+          {
+            "id": "mtm-ghep-g12-c2-k04-mtm-errata-v1",
+            "dangs": [
+              "Góc giữa hai vectơ, tích vô hướng",
+              "Tổng, hiệu, quy tắc hình hộp, tích vectơ với một số",
+              "Vectơ trong bài toán thực tế (lực, hợp lực, công)",
+              "Khái niệm vectơ, vectơ bằng nhau, cùng phương trong hình không gian",
+              "toán thực tế (3 câu)"
+            ]
+          },
+          {
+            "id": "mtm-drive-g12-c2-t08-mtm-errata-v1",
+            "dangs": [
+              "Phép cộng, trừ, nhân số; trung điểm, trọng tâm",
+              "Góc giữa hai vectơ, tích vô hướng",
+              "Tích vô hướng, độ dài, góc, vuông góc",
+              "Cùng phương, thẳng hàng, hình bình hành, tìm điểm thỏa điều kiện",
+              "toán thực tế (4 câu)"
+            ]
+          },
+          {
+            "id": "mtm-ghep-g12-c2-k05-mtm-errata-v1",
+            "dangs": [
+              "Tọa độ trong hình hộp, lập phương, mô hình thực tế",
+              "Cùng phương, thẳng hàng, hình bình hành, tìm điểm thỏa điều kiện",
+              "Tọa độ điểm, hình chiếu, điểm đối xứng",
+              "Tọa độ vectơ, biểu diễn vectơ theo i, j, k",
+              "toán thực tế (5 câu)"
+            ]
+          },
+          {
+            "id": "mtm-luyen-g12-c2-n07-mtm-errata-v1",
+            "dangs": [
+              "Tổng, hiệu, quy tắc hình hộp, tích vectơ với một số",
+              "Cùng phương, thẳng hàng, hình bình hành, tìm điểm thỏa điều kiện",
+              "Tích vô hướng, độ dài, góc, vuông góc",
+              "Phép cộng, trừ, nhân số; trung điểm, trọng tâm",
+              "toán thực tế (3 câu)"
+            ]
+          },
+          {
+            "id": "mtm-luyen-g12-c2-n08-mtm-errata-v1",
+            "dangs": [
+              "Phép cộng, trừ, nhân số; trung điểm, trọng tâm",
+              "Góc giữa hai vectơ, tích vô hướng",
+              "Tổng, hiệu, quy tắc hình hộp, tích vectơ với một số",
+              "Cùng phương, thẳng hàng, hình bình hành, tìm điểm thỏa điều kiện"
+            ]
+          },
+          {
+            "id": "mtm-drive-g12-c2-t07-mtm-errata-v1",
+            "dangs": [
+              "Phép cộng, trừ, nhân số; trung điểm, trọng tâm",
+              "Khái niệm vectơ, vectơ bằng nhau, cùng phương trong hình không gian",
+              "Góc giữa hai vectơ, tích vô hướng",
+              "Tổng, hiệu, quy tắc hình hộp, tích vectơ với một số",
+              "toán thực tế (4 câu)"
+            ]
+          },
+          {
+            "id": "mtm-practice-g12-c2-p09-v1",
+            "dangs": [
+              "Tổng hợp chương II nâng cao",
+              "toán thực tế (5 câu)"
+            ]
+          }
+        ],
+        "note": "Các đề trong nhóm xếp từ dễ đến khó."
+      }
+    ]
+  },
+  "12:3": {
+    "groups": [
+      {
+        "title": "Hệ thống công thức và lý thuyết",
+        "items": [
+          {
+            "id": "mtm-practice-g12-c3-b01-v1"
+          }
+        ]
+      },
+      {
+        "title": "Khoảng biến thiên và khoảng tứ phân vị (SGK bài 9)",
+        "items": [
+          {
+            "id": "mtm-drive-g12-c3-t01-mtm-errata-v57",
+            "dangs": [
+              "Tứ phân vị, khoảng tứ phân vị",
+              "Khoảng biến thiên của mẫu ghép nhóm",
+              "Giá trị ngoại lệ, so sánh độ phân tán",
+              "toán thực tế (1 câu)"
+            ]
+          },
+          {
+            "id": "mtm-ghep-g12-c3-k01-mtm-errata-v1",
+            "dangs": [
+              "Khoảng biến thiên của mẫu ghép nhóm",
+              "Tứ phân vị, khoảng tứ phân vị",
+              "Giá trị ngoại lệ, so sánh độ phân tán",
+              "toán thực tế (18 câu)"
+            ]
+          },
+          {
+            "id": "mtm-practice-g12-c3-p01-v1",
+            "dangs": [
+              "Khoảng biến thiên của mẫu số liệu ghép nhóm",
+              "toán thực tế (19 câu)"
+            ]
+          },
+          {
+            "id": "mtm-drive-g12-c3-t02-mtm-errata-v60",
+            "dangs": [
+              "Tứ phân vị, khoảng tứ phân vị",
+              "Khoảng biến thiên của mẫu ghép nhóm",
+              "Giá trị ngoại lệ, so sánh độ phân tán"
+            ]
+          },
+          {
+            "id": "mtm-luyen-g12-c3-n01-mtm-errata-v1",
+            "dangs": [
+              "Tứ phân vị, khoảng tứ phân vị",
+              "Khoảng biến thiên của mẫu ghép nhóm",
+              "Giá trị ngoại lệ, so sánh độ phân tán"
+            ]
+          },
+          {
+            "id": "mtm-practice-g12-c3-p02-v1",
+            "dangs": [
+              "Tứ phân vị của mẫu số liệu ghép nhóm",
+              "toán thực tế (20 câu)"
+            ]
+          },
+          {
+            "id": "mtm-practice-g12-c3-p04-v1",
+            "dangs": [
+              "So sánh độ phân tán bằng khoảng biến thiên, khoảng tứ phân vị",
+              "toán thực tế (21 câu)"
+            ]
+          },
+          {
+            "id": "mtm-practice-g12-c3-p03-v1",
+            "dangs": [
+              "Khoảng tứ phân vị và giá trị ngoại lệ",
+              "toán thực tế (18 câu)"
+            ]
+          },
+          {
+            "id": "mtm-practice-g12-c3-p05-v1",
+            "dangs": [
+              "Bài 9 nâng cao: bài toán ngược, tần số chưa biết",
+              "toán thực tế (14 câu)"
+            ]
+          }
+        ],
+        "note": "Các đề trong nhóm xếp từ dễ đến khó."
+      },
+      {
+        "title": "Phương sai và độ lệch chuẩn (SGK bài 10)",
+        "items": [
+          {
+            "id": "mtm-ghep-g12-c3-k02-mtm-errata-v1",
+            "dangs": [
+              "Số trung bình, phương sai, độ lệch chuẩn của mẫu ghép nhóm",
+              "Tứ phân vị, khoảng tứ phân vị",
+              "So sánh, đánh giá độ phân tán, rủi ro bằng độ lệch chuẩn",
+              "Khoảng biến thiên của mẫu ghép nhóm",
+              "toán thực tế (19 câu)"
+            ]
+          },
+          {
+            "id": "mtm-luyen-g12-c3-n02-mtm-errata-v1",
+            "dangs": [
+              "Số trung bình, phương sai, độ lệch chuẩn của mẫu ghép nhóm",
+              "So sánh, đánh giá độ phân tán, rủi ro bằng độ lệch chuẩn",
+              "Tứ phân vị, khoảng tứ phân vị",
+              "toán thực tế (1 câu)"
+            ]
+          },
+          {
+            "id": "mtm-drive-g12-c3-t03-mtm-errata-v61",
+            "dangs": [
+              "Số trung bình, phương sai, độ lệch chuẩn của mẫu ghép nhóm",
+              "So sánh, đánh giá độ phân tán, rủi ro bằng độ lệch chuẩn"
+            ]
+          },
+          {
+            "id": "mtm-practice-g12-c3-p06-v1",
+            "dangs": [
+              "Số trung bình và phương sai của mẫu số liệu ghép nhóm",
+              "toán thực tế (14 câu)"
+            ]
+          },
+          {
+            "id": "mtm-drive-g12-c3-t04-mtm-errata-v64",
+            "dangs": [
+              "Số trung bình, phương sai, độ lệch chuẩn của mẫu ghép nhóm",
+              "So sánh, đánh giá độ phân tán, rủi ro bằng độ lệch chuẩn",
+              "toán thực tế (2 câu)"
+            ]
+          },
+          {
+            "id": "mtm-practice-g12-c3-p07-v1",
+            "dangs": [
+              "Độ lệch chuẩn, công thức rút gọn, đơn vị đo",
+              "toán thực tế (14 câu)"
+            ]
+          },
+          {
+            "id": "mtm-practice-g12-c3-p08-v1",
+            "dangs": [
+              "Đánh giá rủi ro, độ ổn định bằng độ lệch chuẩn",
+              "toán thực tế (22 câu)"
+            ]
+          },
+          {
+            "id": "mtm-practice-g12-c3-p10-v1",
+            "dangs": [
+              "Bài 10 nâng cao: phối hợp số đặc trưng",
+              "toán thực tế (21 câu)"
+            ]
+          },
+          {
+            "id": "mtm-practice-g12-c3-p09-v1",
+            "dangs": [
+              "Bài toán ngược về phương sai, độ lệch chuẩn",
+              "toán thực tế (15 câu)"
+            ]
+          }
+        ],
+        "note": "Các đề trong nhóm xếp từ dễ đến khó."
+      },
+      {
+        "title": "Tổng hợp, kiểm tra chương",
+        "items": [
+          {
+            "id": "mtm-luyen-g12-c3-n04-mtm-errata-v1",
+            "dangs": [
+              "Số trung bình, phương sai, độ lệch chuẩn của mẫu ghép nhóm",
+              "Tứ phân vị, khoảng tứ phân vị",
+              "So sánh, đánh giá độ phân tán, rủi ro bằng độ lệch chuẩn",
+              "Khoảng biến thiên của mẫu ghép nhóm"
+            ]
+          },
+          {
+            "id": "mtm-practice-g12-c3-p11-v1",
+            "dangs": [
+              "Tổng hợp chương III cơ bản",
+              "toán thực tế (19 câu)"
+            ]
+          },
+          {
+            "id": "mtm-drive-g12-c3-t05-mtm-errata-v1",
+            "dangs": [
+              "So sánh, đánh giá độ phân tán, rủi ro bằng độ lệch chuẩn",
+              "Số trung bình, phương sai, độ lệch chuẩn của mẫu ghép nhóm",
+              "Khoảng biến thiên của mẫu ghép nhóm",
+              "Tứ phân vị, khoảng tứ phân vị"
+            ]
+          },
+          {
+            "id": "mtm-drive-g12-c3-t06-mtm-errata-v1",
+            "dangs": [
+              "Số trung bình, phương sai, độ lệch chuẩn của mẫu ghép nhóm",
+              "So sánh, đánh giá độ phân tán, rủi ro bằng độ lệch chuẩn",
+              "Khoảng biến thiên của mẫu ghép nhóm",
+              "Tứ phân vị, khoảng tứ phân vị"
+            ]
+          },
+          {
+            "id": "mtm-luyen-g12-c3-n03-mtm-errata-v1",
+            "dangs": [
+              "Số trung bình, phương sai, độ lệch chuẩn của mẫu ghép nhóm",
+              "So sánh, đánh giá độ phân tán, rủi ro bằng độ lệch chuẩn",
+              "Khoảng biến thiên của mẫu ghép nhóm",
+              "Tứ phân vị, khoảng tứ phân vị"
+            ]
+          },
+          {
+            "id": "mtm-ghep-g12-c3-k03-mtm-errata-v1",
+            "dangs": [
+              "Giá trị ngoại lệ, so sánh độ phân tán",
+              "Khoảng biến thiên của mẫu ghép nhóm",
+              "Tứ phân vị, khoảng tứ phân vị",
+              "So sánh, đánh giá độ phân tán, rủi ro bằng độ lệch chuẩn",
+              "toán thực tế (20 câu)"
+            ]
+          },
+          {
+            "id": "mtm-practice-g12-c3-p13-v1",
+            "dangs": [
+              "Tổng hợp chương III: thống kê trong đời sống",
+              "toán thực tế (22 câu)"
+            ]
+          },
+          {
+            "id": "mtm-practice-g12-c3-p12-v1",
+            "dangs": [
+              "Tổng hợp chương III vận dụng",
+              "toán thực tế (22 câu)"
+            ]
+          },
+          {
+            "id": "mtm-practice-g12-c3-p14-v1",
+            "dangs": [
+              "Tổng hợp chương III nâng cao 1",
+              "toán thực tế (13 câu)"
+            ]
+          },
+          {
+            "id": "mtm-practice-g12-c3-p15-v1",
+            "dangs": [
+              "Tổng hợp chương III nâng cao 2: ra quyết định từ số liệu",
+              "toán thực tế (22 câu)"
+            ]
+          },
+          {
+            "id": "mtm-practice-g12-c3-p16-v1",
+            "dangs": [
+              "Tổng hợp chương III vận dụng cao",
+              "toán thực tế (12 câu)"
+            ]
+          }
+        ],
+        "note": "Các đề trong nhóm xếp từ dễ đến khó."
+      }
+    ]
+  },
+  "12:4": {
+    "groups": [
+      {
+        "title": "Hệ thống công thức và lý thuyết",
+        "items": [
+          {
+            "id": "mtm-practice-g12-c4-b01-v1"
+          },
+          {
+            "id": "mtm-practice-g12-c4-b02-v1"
+          }
+        ]
+      },
+      {
+        "title": "Nguyên hàm (SGK bài 11)",
+        "items": [
+          {
+            "id": "mtm-practice-g12-c4-p01-v1",
+            "dangs": [
+              "Nguyên hàm cơ bản: lũy thừa, mũ, lượng giác",
+              "toán thực tế (5 câu)"
+            ]
+          },
+          {
+            "id": "mtm-luyen-g12-c4-n01-mtm-errata-v1",
+            "dangs": [
+              "Nguyên hàm thỏa điều kiện; bài toán thực tế",
+              "Nguyên hàm cơ bản, tính chất",
+              "Nguyên hàm hàm lượng giác, mũ, phân thức đơn giản",
+              "toán thực tế (9 câu)"
+            ]
+          },
+          {
+            "id": "mtm-drive-g12-c4-t02-mtm-errata-v62",
+            "dangs": [
+              "Nguyên hàm thỏa điều kiện; bài toán thực tế",
+              "Nguyên hàm hàm lượng giác, mũ, phân thức đơn giản",
+              "Nguyên hàm cơ bản, tính chất",
+              "toán thực tế (3 câu)"
+            ]
+          },
+          {
+            "id": "mtm-ghep-g12-c4-k01-mtm-errata-v1",
+            "dangs": [
+              "Nguyên hàm thỏa điều kiện; bài toán thực tế",
+              "Nguyên hàm cơ bản, tính chất",
+              "Nguyên hàm hàm lượng giác, mũ, phân thức đơn giản",
+              "toán thực tế (7 câu)"
+            ]
+          },
+          {
+            "id": "mtm-drive-g12-c4-t01-mtm-errata-v1",
+            "dangs": [
+              "Nguyên hàm thỏa điều kiện; bài toán thực tế",
+              "Nguyên hàm cơ bản, tính chất",
+              "Nguyên hàm hàm lượng giác, mũ, phân thức đơn giản",
+              "toán thực tế (5 câu)"
+            ]
+          },
+          {
+            "id": "mtm-practice-g12-c4-p02-v1",
+            "dangs": [
+              "Nguyên hàm thỏa điều kiện và bài toán thực tế",
+              "toán thực tế (10 câu)"
+            ]
+          }
+        ],
+        "note": "Các đề trong nhóm xếp từ dễ đến khó."
+      },
+      {
+        "title": "Tích phân (SGK bài 12)",
+        "items": [
+          {
+            "id": "mtm-ghep-g12-c4-k03-mtm-errata-v1",
+            "dangs": [
+              "Tính tích phân hàm cơ bản, chứa dấu giá trị tuyệt đối, hàm từng khúc",
+              "Định nghĩa, tính chất tích phân",
+              "Tích phân trong bài toán thực tế (quãng đường, lượng thay đổi)",
+              "toán thực tế (6 câu)"
+            ]
+          },
+          {
+            "id": "mtm-drive-g12-c4-t03-mtm-errata-v1",
+            "dangs": [
+              "Tính tích phân hàm cơ bản, chứa dấu giá trị tuyệt đối, hàm từng khúc",
+              "Định nghĩa, tính chất tích phân",
+              "Tích phân trong bài toán thực tế (quãng đường, lượng thay đổi)",
+              "Diện tích, thể tích trong bài toán thực tế",
+              "toán thực tế (5 câu)"
+            ]
+          },
+          {
+            "id": "mtm-ghep-g12-c4-k02-mtm-errata-v1",
+            "dangs": [
+              "Tính tích phân hàm cơ bản, chứa dấu giá trị tuyệt đối, hàm từng khúc",
+              "Tích phân trong bài toán thực tế (quãng đường, lượng thay đổi)",
+              "Định nghĩa, tính chất tích phân",
+              "toán thực tế (8 câu)"
+            ]
+          },
+          {
+            "id": "mtm-drive-g12-c4-t04-mtm-errata-v1",
+            "dangs": [
+              "Tính tích phân hàm cơ bản, chứa dấu giá trị tuyệt đối, hàm từng khúc",
+              "Định nghĩa, tính chất tích phân",
+              "Tích phân trong bài toán thực tế (quãng đường, lượng thay đổi)",
+              "Nguyên hàm thỏa điều kiện; bài toán thực tế",
+              "toán thực tế (4 câu)"
+            ]
+          },
+          {
+            "id": "mtm-luyen-g12-c4-n03-mtm-errata-v1",
+            "dangs": [
+              "Tích phân trong bài toán thực tế (quãng đường, lượng thay đổi)",
+              "Định nghĩa, tính chất tích phân",
+              "Tính tích phân hàm cơ bản, chứa dấu giá trị tuyệt đối, hàm từng khúc",
+              "Diện tích, thể tích trong bài toán thực tế",
+              "toán thực tế (10 câu)"
+            ]
+          },
+          {
+            "id": "mtm-practice-g12-c4-p03-v1",
+            "dangs": [
+              "Tích phân: tính chất, hàm từng khúc, chứa giá trị tuyệt đối",
+              "toán thực tế (5 câu)"
+            ]
+          },
+          {
+            "id": "mtm-practice-g12-c4-p04-v1",
+            "dangs": [
+              "Tích phân trong bài toán thực tế",
+              "toán thực tế (21 câu)"
+            ]
+          }
+        ],
+        "note": "Các đề trong nhóm xếp từ dễ đến khó."
+      },
+      {
+        "title": "Ứng dụng hình học của tích phân (SGK bài 13)",
+        "items": [
+          {
+            "id": "mtm-ghep-g12-c4-k04-mtm-errata-v1",
+            "dangs": [
+              "Diện tích hình phẳng",
+              "Thể tích vật thể, khối tròn xoay"
+            ]
+          },
+          {
+            "id": "mtm-drive-g12-c4-t05-mtm-errata-v1",
+            "dangs": [
+              "Diện tích hình phẳng",
+              "Thể tích vật thể, khối tròn xoay",
+              "Diện tích, thể tích trong bài toán thực tế",
+              "toán thực tế (4 câu)"
+            ]
+          },
+          {
+            "id": "mtm-ghep-g12-c4-k05-mtm-errata-v1",
+            "dangs": [
+              "Diện tích hình phẳng",
+              "Thể tích vật thể, khối tròn xoay",
+              "Diện tích, thể tích trong bài toán thực tế",
+              "toán thực tế (5 câu)"
+            ]
+          },
+          {
+            "id": "mtm-luyen-g12-c4-n06-mtm-errata-v1",
+            "dangs": [
+              "Thể tích vật thể, khối tròn xoay",
+              "Diện tích, thể tích trong bài toán thực tế",
+              "Diện tích hình phẳng",
+              "toán thực tế (8 câu)"
+            ]
+          },
+          {
+            "id": "mtm-drive-g12-c4-t06-mtm-errata-v1",
+            "dangs": [
+              "Thể tích vật thể, khối tròn xoay",
+              "Diện tích hình phẳng",
+              "Diện tích, thể tích trong bài toán thực tế",
+              "Tích phân trong bài toán thực tế (quãng đường, lượng thay đổi)",
+              "toán thực tế (5 câu)"
+            ]
+          },
+          {
+            "id": "mtm-practice-g12-c4-p06-v1",
+            "dangs": [
+              "Thể tích vật thể và khối tròn xoay",
+              "toán thực tế (5 câu)"
+            ]
+          },
+          {
+            "id": "mtm-luyen-g12-c4-n05-mtm-errata-v1",
+            "dangs": [
+              "Diện tích hình phẳng",
+              "Diện tích, thể tích trong bài toán thực tế",
+              "toán thực tế (6 câu)"
+            ]
+          },
+          {
+            "id": "mtm-practice-g12-c4-p05-v1",
+            "dangs": [
+              "Diện tích hình phẳng",
+              "toán thực tế (5 câu)"
+            ]
+          },
+          {
+            "id": "mtm-practice-g12-c4-p07-v1",
+            "dangs": [
+              "Ứng dụng tích phân trong thực tế: diện tích, thể tích",
+              "toán thực tế (22 câu)"
+            ]
+          }
+        ],
+        "note": "Các đề trong nhóm xếp từ dễ đến khó."
+      },
+      {
+        "title": "Tổng hợp, kiểm tra chương",
+        "items": [
+          {
+            "id": "mtm-drive-g12-c4-t07-mtm-errata-v1",
+            "dangs": [
+              "Định nghĩa, tính chất tích phân",
+              "Diện tích, thể tích trong bài toán thực tế",
+              "Nguyên hàm cơ bản, tính chất",
+              "Nguyên hàm hàm lượng giác, mũ, phân thức đơn giản",
+              "toán thực tế (6 câu)"
+            ]
+          },
+          {
+            "id": "mtm-luyen-g12-c4-n07-mtm-errata-v1",
+            "dangs": [
+              "Nguyên hàm thỏa điều kiện; bài toán thực tế",
+              "Tính tích phân hàm cơ bản, chứa dấu giá trị tuyệt đối, hàm từng khúc",
+              "Diện tích, thể tích trong bài toán thực tế",
+              "Tích phân trong bài toán thực tế (quãng đường, lượng thay đổi)",
+              "toán thực tế (8 câu)"
+            ]
+          },
+          {
+            "id": "mtm-drive-g12-c4-t08-mtm-errata-v1",
+            "dangs": [
+              "Định nghĩa, tính chất tích phân",
+              "Tính tích phân hàm cơ bản, chứa dấu giá trị tuyệt đối, hàm từng khúc",
+              "Diện tích hình phẳng",
+              "Diện tích, thể tích trong bài toán thực tế",
+              "toán thực tế (5 câu)"
+            ]
+          },
+          {
+            "id": "mtm-ghep-g12-c4-k06-mtm-errata-v1",
+            "dangs": [
+              "Nguyên hàm thỏa điều kiện; bài toán thực tế",
+              "Nguyên hàm cơ bản, tính chất",
+              "Tích phân trong bài toán thực tế (quãng đường, lượng thay đổi)",
+              "Nguyên hàm hàm lượng giác, mũ, phân thức đơn giản",
+              "toán thực tế (11 câu)"
+            ]
+          },
+          {
+            "id": "mtm-practice-g12-c4-p08-v1",
+            "dangs": [
+              "Tổng hợp chương IV nâng cao",
+              "toán thực tế (5 câu)"
+            ]
+          }
+        ],
+        "note": "Các đề trong nhóm xếp từ dễ đến khó."
+      }
+    ]
+  },
+  "10:5": {
+    "groups": [
+      {
+        "title": "Hệ thống công thức và lý thuyết",
+        "items": [
+          {
+            "id": "mtm-practice-g10-c5-b01-v1"
+          }
+        ]
+      },
+      {
+        "title": "Số gần đúng và sai số (SGK bài 12)",
+        "note": "Các đề trong nhóm xếp từ dễ đến khó.",
+        "items": [
+          {
+            "id": "mtm-practice-g10-c5-d01-v1",
+            "dangs": [
+              "Quy tròn theo độ chính xác",
+              "Cận sai số tuyệt đối",
+              "Sai số tương đối",
+              "Sai số khi đo đạc"
+            ]
+          },
+          {
+            "id": "mtm-src-g10-c5-s01-v1",
+            "dangs": [
+              "Quy tròn theo độ chính xác",
+              "Cận sai số tuyệt đối",
+              "Sai số tương đối",
+              "Sai số khi đo đạc"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Các số đặc trưng đo xu thế trung tâm (SGK bài 13)",
+        "note": "Các đề trong nhóm xếp từ dễ đến khó.",
+        "items": [
+          {
+            "id": "mtm-src-g10-c5-s02-v1",
+            "dangs": [
+              "Số trung bình",
+              "Trung vị",
+              "Tứ phân vị",
+              "Mốt"
+            ]
+          },
+          {
+            "id": "mtm-practice-g10-c5-d03-v1",
+            "dangs": [
+              "Tứ phân vị",
+              "Mốt",
+              "Tần số",
+              "Bài toán thực tế"
+            ]
+          },
+          {
+            "id": "mtm-practice-g10-c5-d02-v1",
+            "dangs": [
+              "Số trung bình từ mẫu và bảng tần số",
+              "Trung vị",
+              "Bài toán ngược về số trung bình",
+              "Biến đổi dữ liệu"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Các số đặc trưng đo độ phân tán (SGK bài 14)",
+        "note": "Các đề trong nhóm xếp từ dễ đến khó.",
+        "items": [
+          {
+            "id": "mtm-src-g10-c5-s03-v1",
+            "dangs": [
+              "Khoảng biến thiên",
+              "Khoảng tứ phân vị",
+              "Phương sai và độ lệch chuẩn",
+              "Giá trị bất thường"
+            ]
+          },
+          {
+            "id": "mtm-practice-g10-c5-d05-v1",
+            "dangs": [
+              "Phương sai",
+              "Độ lệch chuẩn",
+              "Biến đổi phương sai",
+              "Đơn vị và làm tròn"
+            ]
+          },
+          {
+            "id": "mtm-practice-g10-c5-d04-v1",
+            "dangs": [
+              "Khoảng biến thiên",
+              "Khoảng tứ phân vị",
+              "Ngưỡng giá trị bất thường",
+              "So sánh độ đồng đều"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Kiểm tra cuối chương",
+        "note": "Các đề trong nhóm xếp từ dễ đến khó.",
+        "items": [
+          {
+            "id": "mtm-practice-g10-c5-s04-v1",
+            "dangs": [
+              "Quy tròn và sai số",
+              "Các số đo xu thế trung tâm",
+              "Các số đo độ phân tán",
+              "Vận dụng tổng hợp"
+            ]
+          }
+        ]
+      }
+    ]
   }
 }
