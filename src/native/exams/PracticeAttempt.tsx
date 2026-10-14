@@ -1,6 +1,7 @@
 import {lazy,Suspense,useState} from 'react';
 import {phongThiV2} from '../flags';
 import FocusRoom from './FocusRoom';
+import RoomNotice,{homeworkStorageNotice} from './RoomNotice';
 import {Link} from '../../migration/navigation';
 import type {Draft} from './store';
 import {draftExportFile,pendingQuestions,questionLabel,scoredQuestionCount} from './attempt-ui';
@@ -29,8 +30,8 @@ function exportDraft(draft: Draft): boolean {
 }
 
 /** kind: 'exam' cho Thi thử (/thi-thu), 'practice' (mặc định) cho Luyện tập; chỉ đổi chữ hiển thị. */
-export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverride,questionReader,renderText,renderSolutionExtra,contextLabel,audienceLabel,displayTitle,kind='practice',newAttemptsClosed,storageNotice,onRetake}: PracticeAttemptProps) {
-  const props = {exam,previousExam,catalogUrl,storeOverride,questionReader,renderText,renderSolutionExtra,contextLabel,audienceLabel,displayTitle,kind,newAttemptsClosed,storageNotice,onRetake};
+export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverride,questionReader,renderText,renderSolutionExtra,contextLabel,audienceLabel,displayTitle,kind='practice',isHomework=false,newAttemptsClosed,storageNotice,onRetake}: PracticeAttemptProps) {
+  const props = {exam,previousExam,catalogUrl,storeOverride,questionReader,renderText,renderSolutionExtra,contextLabel,audienceLabel,displayTitle,kind,isHomework,newAttemptsClosed,storageNotice,onRetake};
   const state = usePracticeAttempt(props);
   const {sourceIssue,erratum,acceptedErratum,setAcceptedErratum,legacy,persisted,conflict,draft,notice,setNotice,unsaved,exportNotice,setExportNotice,pdfReady,setPdfReady,confirmation,setConfirmation,desktopLayout,setDesktopLayout,setActiveQuestion,setQuestionFocus,mobilePane,setMobilePane,leaveConfirmation,persist,finish,begin,submitted,sections,answered,invalidCount,seconds,startDisabled,startLabel,retake} = state;
   const [exitedAttempt,setExitedAttempt]=useState<string|null>(null);
@@ -38,7 +39,7 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverr
   return <section className="ep-attempt">{leaveConfirmation}
     {focused?<FocusRoom key={draft.attemptId} props={props} state={state} onExit={()=>setExitedAttempt(draft.attemptId)}/>:<>
     {phongThiV2&&draft&&!submitted&&<button type="button" className="ep-primary" onClick={()=>setExitedAttempt(null)}>Vào lại phòng tập trung</button>}
-    {phongThiV2&&!draft&&<section className="ep-card ep-room-intake"><strong>Phòng tự luyện MTM</strong><p>Đồng hồ chỉ bắt đầu khi vào làm bài. Bài và kết quả lưu trên trình duyệt này; đây là điểm tự luyện, không phải kết quả xác thực.</p><details><summary>Nguồn và cách chấm</summary><p>MTM sưu tầm và biên soạn</p><p>Thang 10 điểm. Điểm mỗi câu hiện ở phiếu; câu trống hoặc sai định dạng được 0 điểm.</p>{exam.questions.find(q=>q.kind==='tf')?.kind==='tf'&&<p>Đúng/sai: {exam.questions.filter(q=>q.kind==='tf').slice(0,1).map(q=>q.kind==='tf'?q.pointsByCorrectCount.map((v,i)=>i+' ý đúng: '+(v/1000).toLocaleString('vi-VN')+' điểm').join(' · '):'')}</p>}<p>Hết giờ tự nộp. Toàn màn hình giúp tập trung, không xác thực kỳ thi hay chống gian lận.</p></details></section>}
+    {phongThiV2&&!draft&&<section className="ep-card ep-room-intake"><strong>{isHomework?'Phòng làm BTVN MTM':'Phòng tự luyện MTM'}</strong><RoomNotice isHomework={isHomework}/><details><summary>Nguồn và cách chấm</summary><p>MTM sưu tầm và biên soạn</p><p>Thang 10 điểm. Điểm mỗi câu hiện ở phiếu; câu trống hoặc sai định dạng được 0 điểm.</p>{exam.questions.find(q=>q.kind==='tf')?.kind==='tf'&&<p>Đúng/sai: {exam.questions.filter(q=>q.kind==='tf').slice(0,1).map(q=>q.kind==='tf'?q.pointsByCorrectCount.map((v,i)=>i+' ý đúng: '+(v/1000).toLocaleString('vi-VN')+' điểm').join(' · '):'')}</p>}<p>Hết giờ tự nộp. Toàn màn hình giúp tập trung, không xác thực kỳ thi hay chống gian lận.</p></details></section>}
     <AttemptHeader {...props}/>
     {/* LT-15 (Đợt 4): trên điện thoại phiếu trả lời (có nút Bắt đầu) bị ẩn sau thẻ "Đọc câu hỏi"; nút này đưa việc bắt đầu lên màn đầu.
         Cùng điều kiện và cùng hàm begin() với nút trong phiếu; chỉ hiện ở màn hẹp (exams.css). */}
@@ -64,7 +65,7 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverr
       </div>
       <div className="ep-answer-pane" aria-label={submitted?'Kết quả bài làm':'Phiếu trả lời'}>
         {!draft?<section className="ep-card">
-          <h2>Phiếu trả lời</h2><p>{storeOverride?'Bản xem thử chỉ giữ trong bộ nhớ của trang quản trị, không ghi lịch sử học sinh.':'Bài làm và kết quả lưu trên trình duyệt này. Thời gian tiếp tục tính khi bạn rời trang.'}</p>
+          <h2>Phiếu trả lời</h2><p>{isHomework?homeworkStorageNotice:storeOverride?'Bản xem thử chỉ giữ trong bộ nhớ của trang quản trị, không ghi lịch sử học sinh.':'Bài làm và kết quả lưu trên trình duyệt này. Thời gian tiếp tục tính khi bạn rời trang.'}</p>
           <p>{sections.map(s=>`${s.name}: ${s.count} câu`).join(' · ')}</p>
           {persisted.current&&<p>Đã có bài đang làm. Hạn nộp: {new Date(persisted.current.deadline).toLocaleString('vi-VN')}.</p>}
           <button type="button" className="ep-primary ep-wide" disabled={startDisabled} onClick={begin}>{startLabel}</button>

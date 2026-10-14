@@ -1,5 +1,5 @@
 import {useContext,useEffect,useMemo,useRef,useState} from 'react';
-import {homeworkTitle,displayClassName} from './presentation';
+import {homeworkLessonCaption,homeworkTitle,displayClassName} from './presentation';
 import LessonCards from './LessonCards';
 import HomeworkGate from './HomeworkGate';
 import PracticeAttempt from '../exams/PracticeAttempt';
@@ -46,8 +46,8 @@ function ManagedAttempt({state,gateway,onState}:{state:HomeworkState;gateway:Hom
     }};
   },[state.draft?.attemptId]);
   return <><p role="status">{notice}</p>{failed&&<button disabled={saving} onClick={()=>last.current&&send(last.current)}>Gửi lại bài đang giữ</button>}
-    <PracticeAttempt exam={state.exam} catalogUrl={location.pathname} contextLabel="BTVN" audienceLabel={displayClassName(state)} storeOverride={store}
-      storageNotice="Bài thử giữ trong bộ nhớ trang và gửi đến máy chủ thử. Chỉ thông báo nhận bài từ máy chủ mới xác nhận đã nộp BTVN."
+    <PracticeAttempt isHomework exam={state.exam} catalogUrl={location.pathname} contextLabel="BTVN" audienceLabel={displayClassName(state)} storeOverride={store}
+      storageNotice="Bài làm gửi đến máy chủ MTM theo tài khoản em. Chỉ thông báo nhận bài từ máy chủ mới xác nhận đã nộp BTVN."
       onRetake={()=>{setNotice('Dùng nút Mở lượt tiếp theo ở bảng BTVN bên dưới.');document.getElementById('btvn-summary')?.scrollIntoView({behavior:'smooth'});}}
       questionReader={<HomeworkReader exam={state.exam}/>}/>
   </>;
@@ -97,6 +97,7 @@ export default function HomeworkSession({pathname}:{pathname:string}){
       <header className="btvn-top"><img src="/mtm-original-logo-420w.webp" alt="Minh Thành Math"/><div><b>Bài tập về nhà</b><p>Video buổi học và BTVN của lớp em</p></div><div className="btvn-me"><b>{state.fullName}</b><span>{displayClassName(state)}</span><button disabled={busy} onClick={async()=>{setBusy(true);try{await gateway.call('logout');setState(null);setRoom(false);}catch{setNotice('Chưa thoát phiên được.');}finally{setBusy(false);}}}>Thoát</button></div></header>
       {!room&&<LessonCards demo={state.demo} lessons={state.lessons??[]} busy={busy} onHomework={async code=>{setBusy(true);setNotice('');try{setState(await gateway.call('select',{lessonCode:code}));setRoom(true);requestAnimationFrame(()=>document.getElementById('btvn-summary')?.scrollIntoView({behavior:'smooth'}));}catch(error){setNotice(error instanceof Error?error.message:'Chưa mở được bài.');}finally{setBusy(false);}}}/>}
       {room&&<><button className="btvn-btn" onClick={()=>setRoom(false)}>Quay lại các buổi học</button><section id="btvn-summary" className="mig-panel"><h2>{homeworkTitle(state)}</h2>
+        {homeworkLessonCaption(state)&&<p>{homeworkLessonCaption(state)}</p>}
         <p>{state.attemptsUsed}/{state.maxAttempts} lượt · 120 phút/lượt · Điểm cao nhất: {state.bestScore===null?'Chưa có':state.bestScore+'/10'} · Hạn: {state.dueAt===null?'chờ xác minh buổi học kế tiếp':new Date(state.dueAt).toLocaleString('vi-VN',{timeZone:'Asia/Ho_Chi_Minh'})} (giờ Việt Nam).</p>
         <p>Mở lượt tính ngay là một lần làm. Điểm cao nhất tính cả lần nộp muộn. Hạn nộp là giờ vào buổi học kế tiếp mà em thực học.</p>
         {(!state.draft||state.draft.submittedAt!==null)&&state.attemptsUsed<state.maxAttempts&&<button className="ep-primary" disabled={busy} onClick={()=>void run('start')}>{state.draft?'Mở lượt tiếp theo':'Bắt đầu làm bài'}</button>}

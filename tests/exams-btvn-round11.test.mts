@@ -1,0 +1,43 @@
+import assert from 'node:assert/strict';
+import {createRequire} from 'node:module';
+import {join} from 'node:path';
+import {readFileSync} from 'node:fs';
+const root=process.env.MTM_ROOT!,require=createRequire(join(root,'package.json'));
+const {buildSync}=require('esbuild'),React=require('react'),{renderToStaticMarkup}=require('react-dom/server');
+function load(file:string){const code=buildSync({entryPoints:[join(root,file)],bundle:true,write:false,platform:'node',format:'cjs',jsx:'automatic',packages:'external',loader:{'.css':'empty'},logLevel:'silent'}).outputFiles[0].text;const mod={exports:{} as any};new Function('require','module','exports',code)((id:string)=>id.endsWith('.css')?{}:require(id),mod,mod.exports);return mod.exports;}
+const {default:Attempt}=load('src/native/exams/PracticeAttempt.tsx');
+const {default:Notice,homeworkStorageNotice}=load('src/native/exams/RoomNotice.tsx');
+const {default:Cards}=load('src/native/homework/LessonCards.tsx');
+const {PRACTICE_EXAMS}=load('src/native/exams/data.ts');
+const {homeworkTitle,homeworkLessonCaption,lessonHomeworkTitle}=load('src/native/homework/presentation.ts');
+const exam={...PRACTICE_EXAMS[0],title:'Đề giả kiểm thử',sourcePdf:undefined};
+const render=(component:any,props:any)=>renderToStaticMarkup(React.createElement(component,props));
+for(const isHomework of [false,true]){
+ const html=render(Attempt,{exam,catalogUrl:'/btvn',isHomework,questionReader:React.createElement('p',null,'Đề giả')});
+ assert.equal(html.includes('← Danh sách đề'),!isHomework);
+ assert.equal(html.includes(homeworkStorageNotice),isHomework);
+ assert.equal(html.includes('đây là điểm tự luyện, không phải kết quả xác thực.'),!isHomework);
+ assert.ok(html.includes('Nguồn và cách chấm'));
+ assert.equal(html.includes('Phòng làm BTVN MTM'),isHomework);
+ const focused=render(Notice,{isHomework,focused:true});
+ assert.ok(focused.includes('fr-local'));
+ assert.equal(focused.includes(homeworkStorageNotice),isHomework);
+ assert.equal(focused.includes('Tự luyện trên thiết bị này.'),!isHomework);
+ assert.equal(focused.includes('Điểm không phải kết quả xác thực.'),!isHomework);
+}
+const lesson={lessonCode:'gia',date:'2026-10-14',title:'Tên buổi giả',homeworkTitle:exam.title,homeworkNote:'Ghi chú giả',classNames:['Lớp giả'],videoId:null,materialUrl:null,handoutUrl:null,homeworkUrl:null,dueAt:null,bestScore:null,late:null,submittedAt:null,available:true};
+const state={exam,lessonCode:'gia',lessons:[lesson],demo:false};
+assert.equal(homeworkTitle(state),exam.title);
+assert.equal(homeworkLessonCaption(state),'Buổi học 14/10: Tên buổi giả');
+const card=render(Cards,{lessons:[lesson],busy:false,onHomework(){}});
+assert.ok(card.includes('<h2>Đề giả kiểm thử</h2>'));
+assert.ok(card.includes('<p>Buổi học 14/10: Tên buổi giả</p>'));
+assert.equal(lessonHomeworkTitle({...lesson,homeworkTitle:undefined}),'Ghi chú giả');
+assert.equal(lessonHomeworkTitle({...lesson,homeworkTitle:' ',homeworkNote:undefined}),'Bài tập về nhà');
+assert.equal(homeworkLessonCaption({...state,lessons:[]}),null);
+assert.ok(readFileSync(join(root,'src/native/homework/HomeworkSession.tsx'),'utf8').includes('<PracticeAttempt isHomework'));
+assert.ok(readFileSync(join(root,'src/native/exams/FocusRoom.tsx'),'utf8').includes('<RoomNotice isHomework={props.isHomework} focused/>'));
+const sql=readFileSync(join(root,'supabase/migrations-pending/202610150008_btvn_homework_title.sql'),'utf8');
+assert.ok(sql.includes("'homeworkTitle',q.exam->>'title'"));
+assert.ok(sql.includes('where q.active and s.class_id=any(q.class_ids)'));
+console.log('Đạt kiểm tra SSR đợt 11: chữ BTVN và luyện tập, liên kết, phòng tập trung, tên đề và tên buổi; dữ liệu giả.');
