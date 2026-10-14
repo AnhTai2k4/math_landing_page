@@ -1,0 +1,147 @@
+import {useCallback,useEffect,useRef,useState} from 'react';
+import {createDraft,matchingStorageEvent,retakeDraft,readDraft,remainingMs,saveDraft,submitDraft,validateDraft,type Draft,type Response} from './store';
+import {localStore} from './local-store';
+import {resultFor} from './result';
+import {examSections} from './flexible-profile';
+import {answerState} from './attempt-ui';
+import {useUnsavedGuard} from './navigation-guard';
+import {SOURCE_HOLDS} from './source-holds';
+import {erratumFor} from './practice-errata';
+import type {PracticeAttemptProps} from './attempt-types';
+
+/** Một instance cho mỗi lượt đang mở; RAM, đồng hồ và kiểm xung đột giữ cùng vòng đời. */
+export function usePracticeAttempt({exam,previousExam,storeOverride,newAttemptsClosed}: PracticeAttemptProps) {
+  const getStore=useCallback(()=>storeOverride??localStore(),[storeOverride]);
+  const sourceIssue=SOURCE_HOLDS[exam.id];
+  const erratum=erratumFor(exam.id);
+  const [acceptedErratum,setAcceptedErratum]=useState(false);
+  const [legacy]=useState(()=>previousExam?readDraft(getStore(),previousExam):null);
+  const [initial] = useState(() => readDraft(getStore(), exam));
+  const persisted = useRef<Draft | null>(initial.ok ? initial.value : null);
+  const ram = useRef<Draft | null>(initial.ok && initial.value && initial.value.submittedAt !== null ? initial.value : null);
+  const dirty = useRef(false), conflict = useRef(false);
+  const [draft, setDraft] = useState<Draft | null>(ram.current);
+  const [notice, setNotice] = useState(initial.ok ? '' : initial.message);
+  const [unsaved, setUnsaved] = useState(false);
+  const [now, setNow] = useState(Date.now);
+  const [exportNotice, setExportNotice] = useState('');
+  const [pdfReady,setPdfReady]=useState(!exam.sourcePdf);
+  const [confirmation,setConfirmation]=useState<'submit'|'retake'|null>(null);
+  const [desktopLayout,setDesktopLayout]=useState<'balanced'|'reading'|'answers'>('balanced');
+  const [activeQuestion,setActiveQuestion]=useState(0),[questionFocus,setQuestionFocus]=useState(false),[mobilePane,setMobilePane]=useState<'pdf'|'answers'>(ram.current?.submittedAt!=null?'answers':'pdf');
+  useEffect(()=>{if(questionFocus){const target=document.getElementById(`ep-question-${activeQuestion}`);target?.focus();setQuestionFocus(false);}},[activeQuestion,questionFocus]);
+  const resultHeading = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    if (draft?.submittedAt != null) resultHeading.current?.focus();
+  }, [draft?.attemptId, draft?.submittedAt]);
+  const leaveConfirmation=useUnsavedGuard(() => dirty.current);
+
+  const persist = useCallback((next: Draft) => {
+    // RAM is authoritative for this mounted attempt, even when storage refuses.
+    ram.current = next;
+    if (conflict.current) {
+      dirty.current = true;
+      setUnsaved(true);
+      setNotice('Bản lưu đã thay đổi ở nơi khác. Câu trả lời trên trang này được giữ nguyên và chưa được lưu. Hãy tải bản lưu bài làm (mục "Bản lưu bài làm" bên dưới) trước khi rời trang.');
+    } else {
+      const saved = saveDraft(getStore(), exam, next, persisted.current);
+      dirty.current = !saved.ok;
+      setUnsaved(!saved.ok);
+      if (saved.ok) { persisted.current = saved.value; setNotice(''); }
+      else {
+        if (saved.code === 'conflict' || saved.code === 'version') conflict.current = true;
+        setNotice(saved.message);
+      }
+    }
+    setDraft(next);
+  }, [exam,getStore]);
+
+  useEffect(() => {
+    const captured=getStore();
+    const changed = (event: StorageEvent) => {
+      if (!matchingStorageEvent(event,captured,exam.id)) return;
+      conflict.current = true;
+      if (ram.current) { dirty.current = true; setUnsaved(true); }
+      setNotice('Bản lưu đã thay đổi hoặc bị xóa ở cửa sổ khác. Bài đang mở được giữ nguyên. Hãy tải bản lưu bài làm (mục "Bản lưu bài làm" bên dưới) trước khi tải lại trang.');
+    };
+    window.addEventListener('storage', changed);
+    return () => window.removeEventListener('storage', changed);
+  }, [exam.id,getStore]);
+
+  const finish = useCallback((automatic: boolean, confirmed=false) => {
+    const current = ram.current;
+    if (!current || current.submittedAt !== null) return;
+    if(!automatic&&!pdfReady){setNotice('Chưa thể nộp thủ công khi có phần câu hỏi chưa hiển thị. Bài làm vẫn được giữ; hãy tải lại trang để đọc đủ đề.');return;}
+    const clock = Date.now();
+    const unanswered = exam.questions.filter(q => answerState(exam, q, current.answers) !== 'answered').length;
+    if (!automatic && remainingMs(current, clock) > 0 && unanswered > 0 && !confirmed) {setConfirmation('submit');return;}
+    const result = submitDraft(exam, current, Date.now());
+    if (!result.ok) { setNotice(result.message); return; }
+    setConfirmation(null);setMobilePane('answers');
+    persist(result.value); // Sets the ref synchronously before another click/tick.
+  }, [exam, persist, pdfReady]);
+
+  useEffect(() => {
+    if (!draft || draft.submittedAt !== null) return;
+    const tick = () => setNow(Date.now());
+    tick();
+    const interval = window.setInterval(tick, 500);
+    window.addEventListener('focus', tick);
+    document.addEventListener('visibilitychange', tick);
+    return () => { clearInterval(interval); window.removeEventListener('focus', tick); document.removeEventListener('visibilitychange', tick); };
+  }, [draft?.attemptId, draft?.submittedAt]);
+  useEffect(() => {
+    if (draft && draft.submittedAt === null && remainingMs(draft, now) === 0) finish(true);
+  }, [draft, now, finish]);
+
+  const begin = () => {
+    if(sourceIssue||(erratum&&!acceptedErratum))return;
+    if(!pdfReady){setNotice('Chưa mở làm bài khi bản câu hỏi chưa hiển thị.');return;}
+    if (ram.current) return;
+    const old = persisted.current;
+    if (!old && newAttemptsClosed) return; // DL-01: không mở lượt mới; bài dở và lượt đã nộp vẫn mở.
+    if (old) {
+      if (old.submittedAt !== null) { persist(old); return; }
+      const resumed = validateDraft({...old, updatedAt: Math.max(old.updatedAt, Date.now()), revision: old.revision + 1}, exam);
+      if (resumed.ok) persist(resumed.value); else setNotice(resumed.message);
+    } else {
+      const attemptId = typeof globalThis.crypto?.randomUUID === 'function' ? globalThis.crypto.randomUUID() : `local-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+      const made = createDraft(exam, attemptId, Date.now());
+      if (made.ok) persist(made.value); else setNotice(made.message);
+    }
+    setNow(Date.now());setMobilePane('answers');
+  };
+  const changeAnswer = (id: string, answer: Response) => {
+    if(!pdfReady)return;
+    const current = ram.current;
+    if (!current || current.submittedAt !== null) return;
+    const clock = Date.now();
+    if (remainingMs(current, clock) === 0) { finish(true); return; }
+    const next = validateDraft({...current, answers: {...current.answers, [id]: answer}, updatedAt: Math.max(clock, current.updatedAt), revision: current.revision + 1}, exam);
+    if (!next.ok) { setNotice(next.message); return; }
+    persist(next.value);
+  };
+  const submitted = !!draft && draft.submittedAt !== null;
+  const result = draft && submitted ? resultFor(exam, draft) : null;
+  const score = result?.score;
+  const sections=examSections(exam);
+  const states = draft ? exam.questions.map(q => answerState(exam, q, draft.answers)) : [];
+  const answered = states.filter(state => state === 'answered').length, invalidCount = states.filter(state => state === 'invalid').length;
+  const seconds = draft ? Math.ceil(remainingMs(draft, now) / 1000) : 0;
+  const startDisabled=!pdfReady||!!sourceIssue||!!erratum&&!acceptedErratum||!!newAttemptsClosed&&!persisted.current;
+  const startLabel=sourceIssue?'Chờ đính chính điều kiện':persisted.current?'Tiếp tục làm bài':newAttemptsClosed?'Chờ phản biện · chưa mở lượt mới':'Bắt đầu làm bài';
+  const retake=(confirmed=false)=>{
+    if(sourceIssue||newAttemptsClosed)return;
+    const old=ram.current;if(!old||old.submittedAt===null||dirty.current||conflict.current)return;
+    if(!pdfReady)return;
+    if(!confirmed){setConfirmation('retake');return;}
+    setConfirmation(null);setActiveQuestion(0);setMobilePane('answers');
+    const id=typeof crypto.randomUUID==='function'?crypto.randomUUID():`local-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    const next=retakeDraft(getStore(),exam,old,id,Date.now());
+    if(!next.ok){setNotice(next.message);return;}
+    persisted.current=next.value;ram.current=next.value;setDraft(next.value);setNow(Date.now());setNotice('');setExportNotice('');setUnsaved(false);
+  };
+
+  return {sourceIssue,erratum,acceptedErratum,setAcceptedErratum,legacy,persisted,conflict,draft,notice,setNotice,unsaved,exportNotice,setExportNotice,pdfReady,setPdfReady,confirmation,setConfirmation,desktopLayout,setDesktopLayout,activeQuestion,setActiveQuestion,setQuestionFocus,mobilePane,setMobilePane,resultHeading,leaveConfirmation,persist,finish,begin,changeAnswer,submitted,score,sections,states,answered,invalidCount,seconds,startDisabled,startLabel,retake};
+}
+export type PracticeAttemptState = ReturnType<typeof usePracticeAttempt>;

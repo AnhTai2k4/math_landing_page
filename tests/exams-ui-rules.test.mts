@@ -235,20 +235,20 @@ test('DL-01: bài chờ phản biện chỉ còn lượt trong lịch sử thì 
 // ---------- TT-05, GD-01, GD-02, TT-14: chỉ đổi chữ/giao diện, kiểm bằng mã nguồn ----------
 const src = (rel: string) => readFileSync(join(process.env.MTM_ROOT ?? process.cwd(), rel), 'utf8');
 test('TT-05: Thi thử ghi "Kết quả thi thử", Luyện tập giữ "Kết quả luyện tập"', () => {
-  const attempt = src('src/native/exams/PracticeAttempt.tsx');
+  const attempt = ['PracticeAttempt.tsx','AttemptResult.tsx','AttemptAnswerSheet.tsx'].map(f=>src('src/native/exams/'+f)).join('\n');
   assert.ok(attempt.includes("kind='practice'"), 'mặc định là luyện tập');
   assert.ok(attempt.includes("kind==='exam'?'Kết quả thi thử':'Kết quả luyện tập'"));
   assert.ok(/<PracticeAttempt key={[^}]*} kind="exam"/.test(src('src/native/NativeExams.tsx')), '/thi-thu truyền kind="exam"');
   assert.ok(!src('src/native/chapters/ChapterPractice.tsx').includes('kind="exam"'), 'Luyện tập không truyền kind="exam"');
 });
 test('GD-01: ý Đ/S chỉ có hai nút Đúng/Sai, bỏ chọn bằng nút "Xóa lựa chọn" riêng', () => {
-  const attempt = src('src/native/exams/PracticeAttempt.tsx');
+  const attempt = ['PracticeAttempt.tsx','AttemptResult.tsx','AttemptAnswerSheet.tsx'].map(f=>src('src/native/exams/'+f)).join('\n');
   assert.ok(attempt.includes('{[true,false].map'), 'không còn nút thứ ba "chưa chọn"');
   assert.ok(!attempt.includes('{[true,false,null].map'));
   assert.ok(attempt.includes('Xóa lựa chọn'));
 });
 test('GD-02: nút rời trang ghi "Rời bài luyện" / "Rời bài thi"', () => {
-  const attempt = src('src/native/exams/PracticeAttempt.tsx');
+  const attempt = ['PracticeAttempt.tsx','AttemptResult.tsx','AttemptAnswerSheet.tsx'].map(f=>src('src/native/exams/'+f)).join('\n');
   assert.ok(attempt.includes('Rời bài luyện') && attempt.includes('Rời bài thi'));
 });
 test('TT-14: sau khi nộp, cột kết quả nằm trên đề và giãn đủ bề ngang', () => {
