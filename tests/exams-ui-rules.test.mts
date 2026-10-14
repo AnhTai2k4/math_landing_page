@@ -275,7 +275,11 @@ test('KT-06: PracticeLibrary.tsx không nhập tĩnh JSON đề; ngân hàng đ�
   // Chỉ xét các dòng import (chú thích được phép nhắc tên tệp).
   const imports = (rel: string) => src(rel).split(/\r?\n/).filter(l => /^\s*import\s/.test(l)).join('\n');
   const shell = imports('src/native/chapters/PracticeLibrary.tsx'), shared = imports('src/native/chapters/practice-shared.ts');
-  for (const f of ['practice-tests.json', 'exact-tests.json', 'archived-tests.json', 'practice-bank', "from './PracticeShelf'", "from './ChapterPractice'"]) assert.ok(!shell.includes(f), 'khung trang không được nhập ' + f);
+  for (const f of ['practice-tests.json', 'exact-tests.json', 'archived-tests.json', 'practice-bank', "from './PracticeShelf'"]) assert.ok(!shell.includes(f), 'khung trang không được nhập ' + f);
+  // Khung trang nhập tĩnh ChapterPractice để giữ thứ tự CSS như trước; ChapterPractice không được kéo ngân hàng đề vào.
+  assert.ok(shell.includes("import './ChapterPractice';"), 'giữ thứ tự CSS: nhập tĩnh ChapterPractice');
+  const cp = imports('src/native/chapters/ChapterPractice.tsx');
+  for (const f of ['practice-tests.json', 'exact-tests.json', 'archived-tests.json', 'practice-bank', 'PracticeShelf', 'PracticeLibrary']) assert.ok(!cp.includes(f), 'ChapterPractice không được nhập ' + f);
   for (const f of ['practice-tests.json', 'exact-tests.json', 'archived-tests.json', 'practice-bank', 'PracticeShelf']) assert.ok(!shared.includes(f), 'practice-shared không được nhập ' + f);
   assert.equal(shared.match(/from '\.\/ChapterPractice'/g)?.length, 1);
   assert.ok(shared.includes("import type {PracticeBankItem} from './ChapterPractice'"), 'practice-shared chỉ nhập KIỂU từ ChapterPractice');

@@ -1,6 +1,10 @@
 import {lazy,Suspense,useEffect,useState} from 'react';
 import {Link,useRoute} from '../../migration/navigation';
 import {practiceURL,tracks} from './practice-shared';
+// Nhập tĩnh ChapterPractice (chỉ phần mã giao diện, KHÔNG có ngân hàng đề) như trước KT-06 để giữ nguyên thứ tự CSS:
+// katex, math-text, result-summary, mtm-source-content, theory-tables, chapters, exams. Đã thử nhập riêng từng CSS nhưng
+// Vite đặt CSS riêng của chunk lên trước CSS dùng chung nên đổi giao diện nút/summary (review Codex đợt 3; so computed style).
+import './ChapterPractice';
 import './chapters.css';
 
 // KT-06 (Đợt 3) bước 1: ngân hàng đề (khoảng 3 MB) không còn nhập tĩnh vào trang này. Khung trang (giới thiệu,
