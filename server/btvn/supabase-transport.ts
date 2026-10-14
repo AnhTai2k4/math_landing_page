@@ -14,5 +14,24 @@ export function createSupabaseRepository(env:{SUPABASE_URL:string;SUPABASE_SERVI
   return new SupabaseHomeworkRepository({rpc:async(name,args)=>await db.rpc(name,args)},async body=>{
     const response=await handler(new Request(env.SUPABASE_URL+'/functions/v1/mtm-homework-access',{method:'POST',headers:{Origin:origin,apikey:env.MTM_HOMEWORK_PUBLISHABLE_KEY,'Content-Type':'application/json'},body:JSON.stringify(body)}));
     if(!response.ok)throw Error('Không thể vào bài. Hãy kiểm tra thông tin hoặc thử lại sau.');return response.json();
-  },Date.now,async(path,seconds)=>{const result=await db.storage.from('mtm-btvn').createSignedUrl(path,seconds);if(result.error||!result.data)throw Error('Private asset unavailable');return result.data.signedUrl;});
+  },Date.now,batchSigner(path=>db.storage.from('mtm-btvn').createSignedUrls(path,300)));
+}
+type SignResult={data:{path:string|null;signedUrl:string;error:string|null}[]|null;error:unknown};
+/** Gom các lần ký cùng một nhịp thành một request createSignedUrls (hạn 300 giây như hydratePrivateAssets yêu cầu). */
+export function batchSigner(signMany:(paths:string[])=>Promise<SignResult>){
+  let queue:{path:string;resolve:(url:string)=>void;reject:(error:Error)=>void}[]=[];
+  const flush=async()=>{
+    const items=queue;queue=[];
+    try{
+      const result=await signMany([...new Set(items.map(x=>x.path))]);
+      if(result.error||!result.data)throw Error('Private asset unavailable');
+      const byPath=new Map(result.data.map(row=>[row.path,row]));
+      for(const item of items){const row=byPath.get(item.path);if(!row||row.error||!row.signedUrl)item.reject(Error('Private asset unavailable'));else item.resolve(row.signedUrl);}
+    }catch{for(const item of items)item.reject(Error('Private asset unavailable'));}
+  };
+  return (path:string,seconds:number)=>new Promise<string>((resolve,reject)=>{
+    if(seconds!==300)return reject(Error('Private asset unavailable'));
+    if(!queue.length)setTimeout(()=>void flush(),0);
+    queue.push({path,resolve,reject});
+  });
 }
