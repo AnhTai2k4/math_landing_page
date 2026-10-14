@@ -2,7 +2,7 @@
 // trỏ tới phải có trong public/ và đúng SHA-256 ghi trong dữ liệu. PDF ở máy chủ ngoài chỉ được liệt kê.
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
-import {existsSync, readFileSync} from 'node:fs';
+import {existsSync, readdirSync, readFileSync} from 'node:fs';
 import {join} from 'node:path';
 import {PRACTICE_EXAMS, type PracticeExam} from '../src/native/exams/data';
 import type {SourceSegment} from '../src/native/exams/MtmSourceContent';
@@ -49,6 +49,18 @@ test('DL-12: không còn đề nào tải PDF từ kho GitHub cũ; 2 đề Thi t
     assert.equal(pdf.url, `/exam-assets/${pdf.sha256}.pdf`);
     assert.equal(sha(join(root, 'public', pdf.url)), pdf.sha256);
   }
+});
+test('KT-20: Cache-Control lâu dài chỉ cho /exam-assets tên SHA-256, và mọi tệp ở đó đúng là SHA-256 nội dung', () => {
+  const vercel = JSON.parse(readFileSync(join(root, 'vercel.json'), 'utf8')) as {headers?: {source: string; headers: {key: string; value: string}[]}[]};
+  assert.equal(vercel.headers?.length, 1, 'chỉ một luật header (không áp cho /practice-media hay trang)');
+  const rule = vercel.headers![0];
+  assert.equal(rule.source, '/exam-assets/:file([0-9a-f]{64}\\.pdf)');
+  assert.deepEqual(rule.headers, [{key: 'Cache-Control', value: 'public, max-age=31536000, immutable'}]);
+  const pattern = /^[0-9a-f]{64}\.pdf$/;
+  const files = readdirSync(join(root, 'public/exam-assets'));
+  assert.ok(files.length > 0);
+  // Tên tệp khớp luật thì nội dung phải đúng SHA-256 của tên: đổi nội dung bắt buộc đổi tên, nên giữ lâu không phục vụ nhầm bản cũ.
+  for (const f of files.filter(f => pattern.test(f))) assert.equal(sha(join(root, 'public/exam-assets', f)), f.slice(0, 64), f);
 });
 
 finish({segments: segments.length, uniqueFiles: cache.size, localPdfs: pdfs.filter(p => p.url.startsWith('/')).length, externalPdfs: external});

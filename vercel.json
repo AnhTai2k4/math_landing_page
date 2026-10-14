@@ -51,5 +51,16 @@
       "source": "/luyen-tap",
       "destination": "/index.html"
     }
+  ],
+  "headers": [
+    {
+      "source": "/exam-assets/:file([0-9a-f]{64}\\.pdf)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
   ]
 }
