@@ -1,4 +1,6 @@
-import {lazy,Suspense} from 'react';
+import {lazy,Suspense,useState} from 'react';
+import {phongThiV2} from '../flags';
+import FocusRoom from './FocusRoom';
 import {Link} from '../../migration/navigation';
 import type {Draft} from './store';
 import {draftExportFile,pendingQuestions,questionLabel} from './attempt-ui';
@@ -31,7 +33,12 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverr
   const props = {exam,previousExam,catalogUrl,storeOverride,questionReader,renderText,renderSolutionExtra,contextLabel,audienceLabel,displayTitle,kind,newAttemptsClosed};
   const state = usePracticeAttempt(props);
   const {sourceIssue,erratum,acceptedErratum,setAcceptedErratum,legacy,persisted,conflict,draft,notice,setNotice,unsaved,exportNotice,setExportNotice,pdfReady,setPdfReady,confirmation,setConfirmation,desktopLayout,setDesktopLayout,setActiveQuestion,setQuestionFocus,mobilePane,setMobilePane,leaveConfirmation,persist,finish,begin,submitted,sections,answered,invalidCount,seconds,startDisabled,startLabel,retake} = state;
+  const [exitedAttempt,setExitedAttempt]=useState<string|null>(null);
+  const focused=phongThiV2&&!!draft&&!submitted&&exitedAttempt!==draft.attemptId;
   return <section className="ep-attempt">{leaveConfirmation}
+    {focused?<FocusRoom key={draft.attemptId} props={props} state={state} onExit={()=>setExitedAttempt(draft.attemptId)}/>:<>
+    {phongThiV2&&draft&&!submitted&&<button type="button" className="ep-primary" onClick={()=>setExitedAttempt(null)}>Vào lại phòng tập trung</button>}
+    {phongThiV2&&!draft&&<section className="ep-card ep-room-intake"><strong>Phòng tự luyện MTM</strong><p>Đồng hồ chỉ bắt đầu khi vào làm bài. Bài và kết quả lưu trên trình duyệt này; đây là điểm tự luyện, không phải kết quả xác thực.</p><details><summary>Nguồn và cách chấm</summary><p>{exam.sourceMaterial.title} · {exam.sourceMaterial.publisher} · {exam.sourceMaterial.version} · {exam.sourceMaterial.locator}</p><p>Thang 10 điểm. Điểm mỗi câu hiện ở phiếu; câu trống hoặc sai định dạng được 0 điểm.</p>{exam.questions.find(q=>q.kind==='tf')?.kind==='tf'&&<p>Đúng/sai: {exam.questions.filter(q=>q.kind==='tf').slice(0,1).map(q=>q.kind==='tf'?q.pointsByCorrectCount.map((v,i)=>i+' ý đúng: '+(v/1000).toLocaleString('vi-VN')+' điểm').join(' · '):'')}</p>}<p>Hết giờ tự nộp. Toàn màn hình giúp tập trung, không xác thực kỳ thi hay chống gian lận.</p></details></section>}
     <AttemptHeader {...props}/>
     {/* LT-15 (Đợt 4): trên điện thoại phiếu trả lời (có nút Bắt đầu) bị ẩn sau thẻ "Đọc câu hỏi"; nút này đưa việc bắt đầu lên màn đầu.
         Cùng điều kiện và cùng hàm begin() với nút trong phiếu; chỉ hiện ở màn hẹp (exams.css). */}
@@ -75,6 +82,7 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverr
       </div>
     </div>
     {exportNotice&&<p role="status">{exportNotice}</p>}
+    </>}
     {confirmation==='submit'&&draft&&(()=>{const pending=pendingQuestions(exam,draft.answers),count=(s:string)=>pending.filter(p=>p.state===s).length,parts=[[count('blank'),'câu trống'],[count('partial'),'câu Đúng/Sai chưa chọn đủ 4 ý'],[count('invalid'),'câu sai định dạng']].filter(([n])=>n).map(([n,t])=>`${n} ${t}`);const stateText={blank:'chưa trả lời',partial:'chưa chọn đủ 4 ý',invalid:'sai định dạng'} as const;return <ExamConfirm title="Nộp bài khi còn câu chưa xong?" message={`Còn ${pending.length} câu chưa trả lời đầy đủ (${parts.join(', ')}). Bấm vào một câu để quay lại làm; nộp bài sẽ kết thúc lượt này.`} itemsLabel="Câu chưa trả lời đầy đủ" items={pending.map(p=>{const label=questionLabel(exam,p.index);return {key:p.id,group:label.part,label:`Câu ${label.number}`,detail:p.state==='blank'?undefined:stateText[p.state],warn:p.state==='invalid',ariaLabel:`${label.full}: ${stateText[p.state]}`,onSelect:()=>{setConfirmation(null);setActiveQuestion(p.index);setMobilePane('answers');setQuestionFocus(true);}};})} cancelLabel="Ở lại làm tiếp" confirmLabel="Vẫn nộp bài" onCancel={()=>setConfirmation(null)} onConfirm={()=>finish(false,true)}/>;})()}
     {confirmation==='retake'&&<ExamConfirm title="Làm một lượt mới?" message="Bài đã nộp giữ trong lịch sử trước khi bắt đầu lượt mới." confirmLabel="Bắt đầu lượt mới" onCancel={()=>setConfirmation(null)} onConfirm={()=>retake(true)}/>}
   </section>;

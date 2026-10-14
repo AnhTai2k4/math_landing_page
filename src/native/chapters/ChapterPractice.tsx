@@ -1,16 +1,18 @@
-import {lazy,Suspense,useMemo,useState,type ReactNode} from 'react';
+import {lazy,Suspense,useContext,useMemo,useState,type ReactNode} from 'react';
 import {Link,useRoute} from '../../migration/navigation';
 import PracticeAttempt,{localStore} from '../exams/PracticeAttempt';
 import ExamReview from '../exams/ExamReview';
 import {readHistory} from '../exams/store';
 import {resultFor} from '../exams/result';
 import {validatePracticeExam,type PracticeExam,type PracticeQuestion} from '../exams/data';
+import RoomChoice from '../exams/RoomChoice';
 import MathText from '../math/MathText';
 import MtmSourceContent from '../exams/MtmSourceContent';
 import MtmSourceQuestion from '../exams/MtmSourceQuestion';
 import TheorySummary from './TheorySummary';
 import ZoomableImage from '../exams/ZoomableImage';
 import FitTable from '../exams/FitTable';
+import {RoomQuestionContext} from '../exams/RoomQuestionContext';
 import {questionLabel} from '../exams/attempt-ui';
 import questionPdfs from './mtm-question-pdfs.json';
 import {isWarmup,WARMUP_LABEL} from './library-rules';
@@ -34,15 +36,16 @@ const noop=()=>{};
 const points=(value:number)=>(value/1000).toLocaleString('vi-VN',{maximumFractionDigits:3});
 
 function QuestionReader({exam}:{exam:PracticeExam}) {
+  const roomQuestion=useContext(RoomQuestionContext);
   const pdf=useMemo(()=>mtmQuestionPdf(exam),[exam]);
   const [mode,setMode]=useState<'pages'|'questions'>(()=>pdf&&wideScreen()?'pages':'questions');
   return <section className="cp-reader" aria-label="Đề bài luyện chương">
-    <TheorySummary exam={exam}/><h2>Đề bài</h2>{pdf&&<div className="cp-reader-mode" role="group" aria-label="Cách đọc đề"><button type="button" aria-pressed={mode==='pages'} onClick={()=>setMode('pages')}>Bản đề theo trang</button><button type="button" aria-pressed={mode==='questions'} onClick={()=>setMode('questions')}>Từng câu</button></div>}
-    {mode==='pages'&&pdf?<Suspense fallback={<p role="status">Đang mở bản đề…</p>}><QuestionPdf file={pdf} title={exam.title} onReady={noop}/></Suspense>:<><p>Cuộn vùng này để đọc các câu. Điền bài làm ở phiếu trả lời.</p>{exam.mtmDocuments&&<p><a href={exam.mtmDocuments.questions.url} target="_blank" rel="noopener noreferrer">Tải đề PDF theo mẫu MTM</a></p>}{exam.sourceInstructions&&<details><summary>Hướng dẫn làm ba phần</summary><MtmSourceContent segments={exam.sourceInstructions} assetBase="/practice-media/source-crops" label="Hướng dẫn đề" kind="question"/></details>}
-    {(exam.questions as DisplayQuestion[]).map((q,index)=><article key={q.id} className="cp-source-question">
+    {roomQuestion===null&&<TheorySummary exam={exam}/>}<h2>Đề bài</h2>{roomQuestion===null&&pdf&&<div className="cp-reader-mode" role="group" aria-label="Cách đọc đề"><button type="button" aria-pressed={mode==='pages'} onClick={()=>setMode('pages')}>Bản đề theo trang</button><button type="button" aria-pressed={mode==='questions'} onClick={()=>setMode('questions')}>Từng câu</button></div>}
+    {roomQuestion===null&&mode==='pages'&&pdf?<Suspense fallback={<p role="status">Đang mở bản đề…</p>}><QuestionPdf file={pdf} title={exam.title} onReady={noop}/></Suspense>:<>{roomQuestion===null&&<p>Cuộn vùng này để đọc các câu. Điền bài làm ở phiếu trả lời.</p>}{roomQuestion===null&&exam.mtmDocuments&&<p><a href={exam.mtmDocuments.questions.url} target="_blank" rel="noopener noreferrer">Tải đề PDF theo mẫu MTM</a></p>}{roomQuestion===null&&exam.sourceInstructions&&<details><summary>Hướng dẫn làm ba phần</summary><MtmSourceContent segments={exam.sourceInstructions} assetBase="/practice-media/source-crops" label="Hướng dẫn đề" kind="question"/></details>}
+    {(exam.questions as DisplayQuestion[]).map((q,index)=>roomQuestion!==null&&roomQuestion!==index?null:<article key={q.id} className="cp-source-question">
       <h3>{questionLabel(exam,index).full} · {points(q.maxMillipoints)} điểm</h3>
       <p><MathText text={q.prompt??q.text??''}/></p>{q.sourceContent&&<MtmSourceQuestion question={q}/>}<Tables tables={q.questionTables}/>
-      {q.kind==='mc'&&!q.sourceContent&&<ol className="cp-choices" type="A">{q.choices.map((choice,i)=><li key={i}><MathText text={choice}/></li>)}</ol>}
+      {q.kind==='mc'&&!q.sourceContent&&<ol className="cp-choices" type="A">{q.choices.map((choice,i)=><li key={i}><RoomChoice questionId={q.id} choice={['A','B','C','D'][i]}><MathText text={choice}/></RoomChoice></li>)}</ol>}
       {q.kind==='tf'&&!q.sourceContent&&<ol className="cp-statements" type="a">{q.statements?.map((statement,i)=><li key={i}><MathText text={statement}/></li>)}</ol>}
       {q.image&&(q.imageAlt?<figure><ZoomableImage src={q.image} alt={q.imageAlt} label={`Hình ${questionLabel(exam,index).full}`}/><figcaption>{q.imageAlt}</figcaption></figure>:<details><summary>Xem ảnh câu trong nguồn</summary><ZoomableImage src={q.image} alt={`Câu ${index+1} trong PDF gốc; nội dung đã chép ở trên`} label={`Ảnh ${questionLabel(exam,index).full}`}/></details>)}
       <p className="cp-question-source"><small>MTM sưu tầm và biên soạn</small></p>
