@@ -1,0 +1,40 @@
+import assert from 'node:assert/strict';
+import {createBtvnApi} from '../api/btvn';
+import {allowedBtvnOrigin} from '../server/btvn/origin-policy';
+import {SupabaseHomeworkRepository} from '../server/btvn/supabase-repository';
+import {pipelineFixture} from './btvn-pipeline-fixture';
+import {mkdirSync,writeFileSync} from 'node:fs';
+import {join} from 'node:path';
+import {pathToFileURL} from 'node:url';
+const {publishLesson,main}=await import(pathToFileURL(join(process.env.MTM_ROOT!,'scripts/publish-btvn-lesson.mjs')).href);
+const env:Record<string,string|undefined>={VERCEL:'1',VERCEL_ENV:'preview',VERCEL_URL:'minhthanhmath-fake.vercel.app',MTM_BTVN_ENABLED:'1',SUPABASE_URL:'https://fake.supabase.co',SUPABASE_SERVICE_ROLE_KEY:'FAKE_SERVER_SECRET_ROUND9',MTM_HOMEWORK_PUBLISHABLE_KEY:'fake-public',MTM_BTVN_NETWORK_SECRET:'fake-network-only-'.repeat(3)};
+let created=0,rpcCalls=0;
+const repo=new SupabaseHomeworkRepository({async rpc(name,args){rpcCalls++;assert.equal(name,'mtm_btvn_classes');assert.deepEqual(args,{});return {data:['Lớp giả B','Lớp giả A','Lớp giả B'],error:null};}},async()=>{throw Error('No student access in fixture');});
+const factory=async()=>((config:any,origin:string,key:string)=>{created++;assert.equal(config.SUPABASE_SERVICE_ROLE_KEY,env.SUPABASE_SERVICE_ROLE_KEY);assert.equal(config.VERCEL_ENV,env.VERCEL_ENV);assert.ok(allowedBtvnOrigin(origin,config));assert.match(key,/^[a-f0-9]{64}$/);assert.ok(!key.includes('203.0.113.1'));return repo;});
+const api=createBtvnApi(()=>env,factory);
+async function call(headers:Record<string,string>={},method='POST',body:unknown={action:'classes'}){let status=0;let output:any;const responseHeaders:Record<string,string>={};await api({method,body,headers:{host:env.VERCEL_URL!,origin:`https://${env.VERCEL_URL}`,'x-vercel-forwarded-for':'203.0.113.1',...headers}},{setHeader(k,v){responseHeaders[k]=v;},status(n){status=n;return {json(v){output=v;}};}});return {status,output,responseHeaders};}
+for(const flag of [undefined,'0','true','01']){env.MTM_BTVN_ENABLED=flag;assert.equal((await call()).status,503);}
+env.MTM_BTVN_ENABLED='1';
+for(const key of ['SUPABASE_URL','SUPABASE_SERVICE_ROLE_KEY','MTM_HOMEWORK_PUBLISHABLE_KEY','MTM_BTVN_NETWORK_SECRET']){const saved=env[key];delete env[key];assert.equal((await call()).status,503);env[key]=saved;}
+assert.equal(created,0);
+assert.equal((await call({origin:'https://attacker.vercel.app'})).status,403);
+assert.equal((await call({host:'attacker.vercel.app'})).status,403);
+assert.equal((await call({},'GET')).status,405);
+assert.equal((await call({'x-vercel-forwarded-for':''})).status,503);
+assert.equal(created,0);
+const classes=await call();assert.equal(classes.status,200);assert.deepEqual(classes.output,{classNames:['Lớp giả A','Lớp giả B']});assert.equal(rpcCalls,1);assert.match(classes.responseHeaders['Cache-Control'],/no-store/);assert.ok(!JSON.stringify(classes).includes('FAKE_SERVER_SECRET'));
+env.VERCEL_ENV='production';assert.equal((await call()).status,403);assert.equal((await call({host:'minhthanhmath.vn',origin:'https://minhthanhmath.vn'})).status,200);
+assert.equal(allowedBtvnOrigin('https://anything.vercel.app',{VERCEL:'1',VERCEL_ENV:'preview',VERCEL_URL:'anything.vercel.app.evil.invalid'}),false);
+const payload=pipelineFixture();let requests=0;
+const transport=async(_url:string,options:any)=>{requests++;assert.equal(options.redirect,'error');assert.equal(options.headers['X-MTM-Publish-Secret'],'fake-publish-'.repeat(4));assert.equal(JSON.parse(options.body).action,'publish');return new Response(JSON.stringify({status:'da_dang'}));};
+const dry=await publishLesson(payload,{transport});assert.equal(dry.mode,'dry-run');assert.equal(dry.written,false);assert.equal(requests,0);
+const invalid=structuredClone(payload);invalid.assets[0].sha256='0'.repeat(64);await assert.rejects(publishLesson(invalid,{live:true,transport}));assert.equal(requests,0);
+await assert.rejects(publishLesson(payload,{live:true,transport}));assert.equal(requests,0);
+const publishEnv={BTVN_PUBLISH_URL:'https://fake.supabase.co/functions/v1/mtm-btvn-publish',BTVN_PUBLISH_SECRET:'fake-publish-'.repeat(4)};
+assert.equal((await publishLesson(payload,{live:true,env:publishEnv,transport})).status,'da_dang');assert.equal(requests,1);
+assert.equal((await publishLesson(payload,{live:true,env:publishEnv,transport:async()=>new Response('{"status":"already_published"}')})).written,false);
+await assert.rejects(publishLesson(payload,{live:true,env:{...publishEnv,BTVN_PUBLISH_URL:'https://attacker.invalid'},transport}));
+await assert.rejects(publishLesson(payload,{live:true,env:publishEnv,transport:async()=>new Response('{"status":"loi"}')}));
+await assert.rejects(main(['fixture','--unknown']));
+const path=join(process.env.MTM_ROOT!,'.qa-temp','round9');mkdirSync(path,{recursive:true});writeFileSync(join(path,'LESSON_BTVN.fake.json'),JSON.stringify(payload));
+console.log('Đạt đợt 9: cờ/env đóng; Preview đúng hostname; proxy/method/origin; lớp qua RPC; dry-run validator/hash không mạng; live giả và xác nhận immutable.');

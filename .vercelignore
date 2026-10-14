@@ -1,0 +1,13 @@
+# Chỉ gửi mã nguồn cần build; giữ fixture/receipt và bí mật local trên PC.
+.git/**
+.qa-temp/**
+build/**
+dist/**
+node_modules/**
+.env
+.env.*
+**/__pycache__/**
+**/*.sqlite
+**/*.sqlite-*
+**/*.log
+supabase/.temp/**

@@ -1,4 +1,18 @@
-# Bộ dựng BTVN đợt 8 (bản local, chưa triển khai)
+# Bộ dựng BTVN đợt 9 (bản local, chưa triển khai)
+
+## Đường XLSX qua Drive (đợt 9)
+
+`config.xlsx.example.json` là mẫu **giả**. Cài `openpyxl` theo requirements vào venv VPS; không cài thêm trong runtime hệ thống. `format:"xlsx"` gọi `GET https://www.googleapis.com/drive/v3/files/{id}/export?mimeType=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet` bằng token chỉ đọc học liệu. Giới hạn export 10 MB; không ghi XLSX xuống đĩa. Mỗi workbook tải một lần/lượt, giữ hyperlink (kể cả tên chip có hyperlink trong bản export), text và ngày; chỉ chiếu tab/range hữu hạn đã cấu hình trong A:K, tối đa 100000 ô. Công thức bị chặn; chip không có hyperlink giữ lỗi, không đoán URL.
+
+**Export là toàn workbook, không lọc tab/range ở API.** Operator chỉ đặt `material_only_workbook:true` sau khi xác nhận toàn workbook không có dữ liệu học sinh. Nếu workbook lẫn roster/bảng điểm/link nộp thì không dùng XLSX; giữ `grid` theo vùng học liệu được phép hoặc nguồn học liệu riêng. Không tự sao chép/chia sẻ nguồn thật. Mẫu chưa xác minh Sheet/Drive thật; test tạo XLSX giả bằng openpyxl.
+
+## Nạp một buổi thủ công (đợt 9)
+
+Từ root repo: `node scripts/publish-btvn-lesson.mjs <LESSON_BTVN.json>` mặc định dry-run: chạy handler/validator production và kiểm proof/từng slot/hash/chữ ký tệp, không env bí mật, không request mạng/upload/RPC thật. JSON cùng contract `publish` bên dưới, bắt buộc `action:"publish"`; `assets[].data_base64` chứa ảnh/PDF, không chỉ đường dẫn PC. Không giả bằng chứng phản biện để vượt bộ kiểm.
+
+Chỉ operator chạy `--live` sau khi áp 006, cấu hình scope/role riêng và deploy Edge đã nghiệm thu. Env: `BTVN_PUBLISH_URL=https://<project-ref>.supabase.co/functions/v1/mtm-btvn-publish` và `BTVN_PUBLISH_SECRET` (32–1024 ký tự). Script không lấy service_role, không đọc roster, không ghi bảng trực tiếp; chỉ gọi Edge, không theo redirect. Chỉ nhận `da_dang`/`already_published` là xác nhận thành công; lỗi giữ chưa xác nhận, không tự thử lại. Buổi đã đăng không sửa. Chưa có 006 thì dừng ở dry-run, không dùng credential toàn quyền làm đường dự phòng.
+
+API web cần `MTM_BTVN_ENABLED=1`, `VERCEL=1`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `MTM_HOMEWORK_PUBLISHABLE_KEY`, `MTM_BTVN_NETWORK_SECRET` tối thiểu 32 ký tự; thiếu cấu hình trả 503. Danh sách lớp qua `mtm_btvn_classes`. Preview chỉ nhận Origin/Host khớp chính `VERCEL_URL` khi `VERCEL_ENV=preview`; không cho mọi `*.vercel.app`. Khóa server không đặt tên `VITE_*`. Lệnh deploy/nghiệm thu chỉ nằm trong biên bản để Claude/operator thực hiện, chưa chạy ở đợt local này.
 
 Python 3.12+, Pillow, pypdf, Poppler (`pdftotext`, `pdftoppm`), Node 20+ và dependencies repo (`esbuild`). Chạy Linux; mặc định **offline**, cần cả `--live` và `BTVN_ALLOW_NETWORK=1` mới cho mạng. Đợt này chỉ chạy dữ liệu giả; không gọi Sheet/Supabase/AI/Telegram thật, không bật timer.
 

@@ -29,12 +29,12 @@ def sheet_sources(config):
     for sheet in config['sheets']:
         require(sheet.get('id') and isinstance(sheet.get('columns'),dict),'Thiếu định danh/ánh xạ Sheet')
         if 'tabs' not in sheet:
-            require(sheet.get('url'),'Thiếu URL Sheet');result.append(sheet);continue
+            require(sheet.get('url') or sheet.get('format')=='xlsx','Thiếu URL Sheet');result.append(sheet);continue
         tabs=sheet['tabs']
         require(isinstance(tabs,list) and bool(tabs),'Sheet cần ít nhất một tab được cấu hình')
         names=set()
         for tab in tabs:
-            require(isinstance(tab,dict) and set(tab).issubset({'name','url','columns','format','school_year','class_aliases','range'}) and tab.get('name') and tab.get('url'),'Tab cần name/url và chỉ override columns')
+            require(isinstance(tab,dict) and set(tab).issubset({'name','url','columns','format','school_year','class_aliases','range'}) and tab.get('name') and (tab.get('url') or sheet.get('format')=='xlsx'),'Tab cần name/url và chỉ override columns')
             require(tab['name'] not in names,'Trùng tên tab trong cấu hình');names.add(tab['name'])
             require(isinstance(tab.get('columns',{}),dict),'Override cột tab phải là object')
             effective={k:v for k,v in sheet.items() if k!='tabs'}
@@ -55,11 +55,22 @@ def load_config(path):
 
 def read_material_rows(config,transport):
     rows=[]
+    exports={}
     for sheet in sheet_sources(config):
         headers={}
         if sheet.get('bearer_env'):
             token=os.environ.get(sheet['bearer_env']);require(token,'Thiếu quyền chỉ đọc Sheet học liệu');headers['Authorization']='Bearer '+token
-        url=sheet['url']
+        url=sheet.get('url','')
+        if sheet.get('format')=='xlsx':
+            # files.export tải cả workbook: chỉ nguồn đã xác nhận KHÔNG có HS.
+            require(sheet.get('material_only_workbook') is True,'XLSX cần xác nhận workbook chỉ có học liệu, không dữ liệu học sinh')
+            require(re.fullmatch(r'[A-Za-z0-9_-]{10,200}',sheet.get('id','')),'Thiếu file ID Drive XLSX')
+            require(sheet.get('name') and sheet.get('range'),'XLSX cần tab và vùng học liệu rõ ràng')
+            query=urllib.parse.urlencode({'mimeType':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'})
+            url='https://www.googleapis.com/drive/v3/files/'+sheet['id']+'/export?'+query
+            key=(url,sheet.get('bearer_env'))
+            if key not in exports:exports[key]=transport.request(url,headers=headers,limit=10*1024*1024)
+            rows.extend(sheet_rows(exports[key],sheet));continue
         if sheet.get('format')=='grid':
             query=urllib.parse.parse_qs(urllib.parse.urlsplit(url).query)
             require(query.get('includeGridData')==['true'] and len(query.get('ranges',[]))==1,'Grid API cần includeGridData và đúng một vùng tab học liệu')
@@ -163,9 +174,43 @@ def grid_rows(raw):
                 target[index_col]={'text':str(cell.get('formattedValue',cell.get('effectiveValue',{}).get('stringValue',''))),'links':list(dict.fromkeys(x for x in links if isinstance(x,str)))}
     return rows
 
+def xlsx_rows(raw,sheet):
+    """Giữ hyperlink smart chip; không đoán URL từ tên file, không chạy công thức."""
+    import zipfile
+    from openpyxl import load_workbook
+    from openpyxl.utils.cell import range_boundaries
+    require(isinstance(raw,bytes) and len(raw)<=10*1024*1024 and raw.startswith(b'PK'),'XLSX sai định dạng/kích thước')
+    require(sheet.get('material_only_workbook') is True,'Workbook chưa xác nhận chỉ học liệu')
+    region=sheet.get('range','')
+    require(re.fullmatch(r'[A-Z]{1,3}[1-9][0-9]*:[A-Z]{1,3}[1-9][0-9]*',region),'XLSX cần vùng hữu hạn, bắt đầu bằng hàng tiêu đề')
+    try:
+        bounds=range_boundaries(region);c1,r1,c2,r2=bounds
+        require(1<=c1<=c2<=11 and 1<=r1<=r2 and (r2-r1+1)*(c2-c1+1)<=100000,'Vùng XLSX vượt phạm vi học liệu A:K/100000 ô')
+        with zipfile.ZipFile(io.BytesIO(raw)) as archive:
+            require(len(archive.infolist())<=2000 and sum(x.file_size for x in archive.infolist())<=100*1024*1024,'XLSX giải nén vượt giới hạn')
+        # read_only bỏ hyperlink; chế độ thường giữ hyperlink, chỉ chiếu tab/range đã giao.
+        book=load_workbook(io.BytesIO(raw),data_only=False,keep_links=False)
+        try:
+            require(sheet['name'] in book.sheetnames,'Không tìm thấy tab học liệu đã cấu hình')
+            table=[]
+            for row in book[sheet['name']].iter_rows(min_row=r1,max_row=r2,min_col=c1,max_col=c2):
+                cells=[]
+                for cell in row:
+                    require(cell.data_type!='f','Công thức XLSX chưa được kiểm; cần giá trị/hyperlink thật')
+                    value=cell.value
+                    text=value.date().isoformat() if isinstance(value,datetime.datetime) else value.isoformat() if isinstance(value,datetime.date) else '' if value is None else str(value)
+                    target=cell.hyperlink.target if cell.hyperlink else None
+                    cells.append({'text':text,'links':[target] if target else [text]})
+                table.append(cells)
+            return table
+        finally:book.close()
+    except GateError:raise
+    except Exception:raise GateError('XLSX học liệu không đọc được') from None
+
 def sheet_rows(raw, sheet):
     try:
         if sheet.get('format')=='grid':table=grid_rows(raw)
+        elif sheet.get('format')=='xlsx':table=xlsx_rows(raw,sheet)
         else:table=[[{'text':x,'links':[x]} for x in row] for row in csv.reader(io.StringIO(raw.decode('utf-8-sig')))]
         require(bool(table),'Thiếu tiêu đề học liệu')
         headers=[header_key(x['text']) for x in table[0]]

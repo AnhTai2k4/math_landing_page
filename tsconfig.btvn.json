@@ -15,6 +15,7 @@
     "tests/exams-btvn-round6.test.mts",
     "tests/exams-btvn-round7.test.mts",
     "tests/exams-btvn-round8.test.mts",
+    "tests/exams-btvn-round9.test.mts",
     "tests/btvn-pipeline-fixture.ts"
   ]
 }
