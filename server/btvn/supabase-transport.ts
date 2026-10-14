@@ -1,5 +1,6 @@
 import {createClient} from '@supabase/supabase-js';
 import {createHomeworkHandler} from '../../supabase/functions/mtm-homework-access/handler';
+import {HomeworkError,GATE_ERROR} from './service';
 import {SupabaseHomeworkRepository} from './supabase-repository';
 import {allowedBtvnOrigin} from './origin-policy';
 import {SIGNED_ASSET_SECONDS} from './private-assets';
@@ -14,7 +15,7 @@ export function createSupabaseRepository(env:{SUPABASE_URL:string;SUPABASE_SERVI
   const handler=createHomeworkHandler({publishableKey:env.MTM_HOMEWORK_PUBLISHABLE_KEY,origins:[origin],networkKey:async()=>trustedNetworkKey,rpc:async(name,args)=>await db.rpc(name,args),download:async()=>{throw Error('Adapter BTVN không mở tải PDF');}});
   return new SupabaseHomeworkRepository({rpc:async(name,args)=>await db.rpc(name,args)},async body=>{
     const response=await handler(new Request(env.SUPABASE_URL+'/functions/v1/mtm-homework-access',{method:'POST',headers:{Origin:origin,apikey:env.MTM_HOMEWORK_PUBLISHABLE_KEY,'Content-Type':'application/json'},body:JSON.stringify(body)}));
-    if(!response.ok)throw Error('Không thể vào bài. Hãy kiểm tra thông tin hoặc thử lại sau.');return response.json();
+    if(!response.ok)throw new HomeworkError(response.status,response.status===429?'Em đã thử nhiều lần. Chờ 15 phút rồi thử lại.':response.status===401?GATE_ERROR:'Chưa kết nối được máy chủ. Em thử lại sau.');return response.json();
   },Date.now,batchSigner(path=>db.storage.from('mtm-btvn').createSignedUrls(path,SIGNED_ASSET_SECONDS)));
 }
 type SignResult={data:{path:string|null;signedUrl:string;error:string|null}[]|null;error:unknown};

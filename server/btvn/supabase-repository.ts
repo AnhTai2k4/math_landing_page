@@ -8,13 +8,13 @@ import {publicClassNames} from './class-config';
 import {hydratePrivateAssets,type PrivateAsset} from './private-assets';
 
 export interface RpcTransport {rpc(name:string,args:Record<string,unknown>):Promise<{data:unknown;error:null|{code?:string}}>}
-export type DurableSnapshot={revision:number;work:StudentWork;exam:PracticeExam;material:LessonMaterial;lessons:LessonMaterial[]};
+export type DurableSnapshot={revision:number;work:StudentWork;exam?:PracticeExam;material?:LessonMaterial;lessons:LessonMaterial[]};
 /** Server-only. Không liệt kê học sinh, không giữ mã thô trong repository.
  * Mỗi request đọc snapshot có quyền; CAS DB là điểm commit duy nhất.
  * Edge Function giữ resolver cũ + limiter chung; transport phải trỏ đúng Edge đã có. */
 export class SupabaseHomeworkRepository {
   constructor(private db:RpcTransport,private edge:(body:Record<string,unknown>)=>Promise<any>,private clock=Date.now,private signAsset?:(path:string,seconds:number)=>Promise<string>){}
-  async login(gate:GateInput){
+  async login(gate:GateInput,details?:{classMismatch?:boolean}){
     const keys=gate&&typeof gate==='object'?Object.keys(gate):[];
     if(keys.length===1&&keys[0]==='studentCode'&&typeof (gate as any).studentCode==='string'){
       const code=(gate as {studentCode:string}).studentCode.replace(/^HS-/i,'');
@@ -27,10 +27,11 @@ export class SupabaseHomeworkRepository {
     if(keys.length!==3||!['fullName','phone','className'].every(k=>keys.includes(k)))throw new HomeworkError(401,GATE_ERROR);
     const result=await this.edge({operation:'forgot',...gate});
     if(!result?.ok||!result.session)throw new HomeworkError(401,GATE_ERROR);
+    if(details)details.classMismatch=result.classMismatch===true;
     return result.session as string;
   }
   private async rpc<T>(name:string,args:Record<string,unknown>):Promise<T>{
-    const out=await this.db.rpc(name,args);if(out.error)throw new HomeworkError(out.error.code==='42501'?401:out.error.code==='40001'?409:503,GATE_ERROR);return out.data as T;
+    const out=await this.db.rpc(name,args);if(out.error)throw new HomeworkError(out.error.code==='42501'?401:out.error.code==='40001'?409:503,out.error.code==='42501'?GATE_ERROR:out.error.code==='40001'?'Bài đã thay đổi ở tab khác. Tải lại để tiếp tục.':'Chưa kết nối được máy chủ. Em thử lại sau.');return out.data as T;
   }
   async logout(session:string){await this.rpc('mtm_btvn_logout',{p_session:session});}
   async classNames(){return publicClassNames(await this.rpc<unknown>('mtm_btvn_classes',{}));}
@@ -44,6 +45,11 @@ export class SupabaseHomeworkRepository {
     // Hai lần thử lại chỉ khi CAS báo xung đột; mọi lỗi quyền/lưu khác dừng ngay.
     for(let retry=0;retry<3;retry++){
       const snapshot=await this.rpc<DurableSnapshot>('mtm_btvn_read',{p_session:session,p_lesson:lessonCode??null});
+      if(!snapshot.exam||!snapshot.material){
+        if(snapshot.lessons.length||snapshot.exam||snapshot.material)throw new HomeworkError(503,'Dữ liệu buổi học chưa sẵn sàng.');
+        if(action!=='state')throw new HomeworkError(404,'Lớp em chưa có BTVN trên web.');
+        return {exam:null,fullName:snapshot.work.student.fullName,className:snapshot.work.student.className,lessonCode:'',dueAt:null,maxAttempts:5,attemptsUsed:0,draft:null,receipts:[],bestScore:null,demo:false,lessons:[]};
+      }
       const code=randomBytes(16).toString('hex'),work={...snapshot.work,student:{...snapshot.work.student,studentCode:code}};
       const memory=new MemoryHomeworkRepository([]);memory.put(work);
       const service=new HomeworkService(memory,snapshot.exam,0,'private',snapshot.material.lessonCode,this.clock,[snapshot.material]);
@@ -53,7 +59,7 @@ export class SupabaseHomeworkRepository {
       // Hạn/điểm mỗi thẻ lấy từ snapshot có quyền, không suy từ lịch lớp.
       next.lessons=(snapshot.lessons as HomeworkState['lessons']);
       if(action==='state'||action==='select'){
-        if(this.signAsset){const assets=await this.rpc<PrivateAsset[]>('mtm_btvn_assets',{p_session:session,p_lesson:snapshot.material.lessonCode});next.exam=await hydratePrivateAssets(next.exam,assets,this.signAsset);}
+        if(this.signAsset){const assets=await this.rpc<PrivateAsset[]>('mtm_btvn_assets',{p_session:session,p_lesson:snapshot.material.lessonCode});next.exam=await hydratePrivateAssets(snapshot.exam,assets,this.signAsset);}
         return next;
       }
       const updated=memory.get(code)!;

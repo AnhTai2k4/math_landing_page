@@ -21,10 +21,11 @@ export function createDurableHomeworkHandler(repo:SupabaseHomeworkRepository){re
     const allowed=['action','classKey','lessonCode',...(action==='login'?['gate']:action==='save'||action==='submit'?['attemptId','answers']:[])];
     if(Object.keys(body).some(k=>!allowed.includes(k)))throw new HomeworkError(400,GATE_ERROR);
     let session=(input.cookie??'').split(';').map(x=>x.trim()).find(x=>x.startsWith('mtm_btvn_demo='))?.slice(14)??'';
-    if(action==='login'){session=await repo.login(body.gate as GateInput);headers['Set-Cookie']=homeworkCookie(session,input.secure);}
+    const details:{classMismatch?:boolean}={};
+    if(action==='login'){session=await repo.login(body.gate as GateInput,details);headers['Set-Cookie']=homeworkCookie(session,input.secure);}
     if(!/^[0-9a-f]{64}$/.test(session))throw new HomeworkError(401,GATE_ERROR);
     if(action==='logout'){await repo.logout(session);headers['Set-Cookie']=homeworkCookie('',input.secure);return {status:200,headers,body:{loggedOut:true}};}
     const state=await repo.call(session,action==='login'?'state':action as 'state'|'select'|'start'|'save'|'submit',body.lessonCode as string|undefined,body.attemptId as string|undefined,body.answers as any);
-    return {status:200,headers,body:state};
+    return {status:200,headers,body:action==='login'?{...state,...details}:state};
   }catch(error){return {status:error instanceof HomeworkError?error.status:503,headers,body:{message:error instanceof HomeworkError?error.message:'Chưa lưu được. Giữ trang mở và thử lại.'}};}
 };}

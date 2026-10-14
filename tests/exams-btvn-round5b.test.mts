@@ -33,7 +33,7 @@ const rendered=(await import(pathToFileURL(out+'/gate.cjs').href)).default;
 const session=readFileSync(root+'/src/native/homework/HomeworkSession.tsx','utf8');
 assert.ok(session.includes("onLogin={input=>void run('login',input)}"));
 assert.ok(!session.includes('setMode'));assert.ok(!session.includes('Quên mã'));
-assert.ok(session.includes("action==='login'?'Chưa vào được bài. Em kiểm tra thông tin và thử lại sau.'"));
+assert.ok(session.includes("entryFailure(response.status,data.message)"));
 const css=readFileSync(root+'/src/native/homework/btvn-session.css','utf8');
 assert.ok(css.includes('grid-template-columns:repeat(2,minmax(0,1fr))'));
 assert.ok(css.includes('align-items:stretch'));

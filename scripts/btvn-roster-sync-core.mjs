@@ -9,7 +9,7 @@ export function makeSyncPayload(bundle,config){
   seen.add(s.studentCode.toUpperCase());
   if(!Object.values(bundle.registry).includes(s.studentCode))throw Error('Registry thiếu định danh');
   const sourceIdentity=`btvn:${sheetHash}:${digest(s.studentCode.toUpperCase())}`;
-  return {sourceIdentity,proposedCode:s.studentCode.toUpperCase(),fullName:s.fullName,phone:s.phone??'',parentPhone:s.parentPhone??'',cohort:s.cohort,className:s.className,...(config.legacyMappings?.[s.studentCode]?{studentId:config.legacyMappings[s.studentCode]}:{})};
+  return {sourceIdentity,proposedCode:s.studentCode.toUpperCase(),fullName:s.fullName,phone:s.phone??'',parentPhone:s.parentPhone??'',parentName:s.parentName??'',cohort:s.cohort,className:s.className,...(config.legacyMappings?.[s.studentCode]?{studentId:config.legacyMappings[s.studentCode]}:{})};
  });
  const labels=[...new Set(students.map(s=>s.className))];
  const classes=labels.map(label=>{const grade=config.classGrades?.[label];if(!Number.isInteger(grade)||grade<6||grade>12)throw Error('Cần grade đã xác minh cho mọi lớp');return {label,grade};});

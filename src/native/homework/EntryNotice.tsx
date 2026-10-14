@@ -1,0 +1,3 @@
+export const ENTRY_ERROR='Chưa khớp danh sách lớp. Em kiểm tra: họ tên học sinh hoặc phụ huynh đúng như đã đăng ký với MTM, số điện thoại đã đăng ký, lớp đang học. Phụ huynh có từ 2 con học cùng lớp thì nhập tên con. Vẫn chưa vào được thì nhắn trợ lý lớp qua Zalo 0967365413.';
+export function entryFailure(status:number,message?:string){return status===401?ENTRY_ERROR:status===429?'Em đã thử nhiều lần. Chờ 15 phút rồi thử lại hoặc nhắn trợ lý lớp qua Zalo 0967365413.':message||'Chưa kết nối được máy chủ. Em thử lại sau.';}
+export default function EntryNotice({className}:{className:string}){return <p role="status">MTM ghi em học lớp {className}, em đã được đưa vào đúng lớp.</p>;}

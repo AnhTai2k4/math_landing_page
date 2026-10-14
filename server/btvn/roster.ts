@@ -6,7 +6,7 @@ export function normalizePhone(s:string){
   const n=s.replace(/[\s().-]/g,'').replace(/^\+84/,'0');
   return /^0\d{9}$/.test(n)?n:'';
 }
-export type RosterColumns={fullName:string;phone:string;parentPhone:string;className:string;leave:string;birthDate:string};
+export type RosterColumns={fullName:string;phone:string;parentPhone:string;parentName?:string;className:string;leave:string;birthDate:string};
 export type RosterConfig={sheetId:string;enabled?:boolean;tabs:{tab:string;className:string;cohort?:string}[];columns:RosterColumns;outputDir?:string};
 /** Kho ghép riêng tư phải được lưu atomically phía server, không đưa vào public/Git. */
 export type IdentityRegistry=Record<string,string>;
@@ -38,7 +38,7 @@ export function importRoster(headers:string[],rows:string[][],config:RosterConfi
     if(transfer&&nextRegistry[identity]&&nextRegistry[oldIdentity]&&nextRegistry[identity]!==nextRegistry[oldIdentity])throw new Error('Hai mã chuyển lớp cần đối soát');
     const studentCode=nextRegistry[identity]??(transfer?nextRegistry[oldIdentity]:undefined)??('HS-'+randomBytes(16).toString('hex'));
     nextRegistry[identity]=studentCode;if(transfer)nextRegistry[oldIdentity]=studentCode;
-    students.push({studentCode,fullName,phone,parentPhone,className,cohort:target.cohort??/^2K\d+/i.exec(className)?.[0]??''});
+    students.push({studentCode,fullName,phone,parentPhone,...(config.columns.parentName?{parentName:cell('parentName')}:{}),className,cohort:target.cohort??/^2K\d+/i.exec(className)?.[0]??''});
   }
   // Registry có thể có alias lịch sử cùng mã; hai người đang nhập không được dùng chung mã.
   if(new Set(students.map(s=>s.studentCode)).size!==students.length)throw new Error('Trùng mã nội bộ');

@@ -20,6 +20,6 @@ export default function LessonCards({lessons,busy,onHomework,demo=false}:{lesson
       <div className="btvn-files">{lesson.materialUrl&&<a href={lesson.materialUrl} target="_blank" rel="noopener noreferrer">📄 Tài liệu buổi học</a>}{lesson.handoutUrl&&<a href={lesson.handoutUrl} target="_blank" rel="noopener noreferrer">📄 Handout</a>}{lesson.homeworkNote&&<span>{lesson.homeworkNote}</span>}</div>
       {(isOpen||invited===lesson.lessonCode)&&<div className="btvn-after"><p><b>Xem xong rồi?</b> Em có thể làm BTVN của buổi này ngay.</p><button className="btvn-btn primary" disabled={busy||!lesson.available} onClick={doHomework}>Làm BTVN buổi này</button></div>}
     </section>;})}
-    {!lessons.length&&<p>Chưa có buổi học được xác minh cho lớp em.</p>}<p className="btvn-footnote">Buổi mới nhất ở trên cùng. Điểm lấy lần cao nhất; nộp sau giờ vào buổi kế tiếp mà em thực học vẫn được nhưng ghi nộp muộn.</p>
+    {!lessons.length&&<p>Lớp em chưa có BTVN trên web. Khi thầy giao bài, buổi học và BTVN sẽ hiện ở đây.</p>}<p className="btvn-footnote">Buổi mới nhất ở trên cùng. Điểm lấy lần cao nhất; nộp sau giờ vào buổi kế tiếp mà em thực học vẫn được nhưng ghi nộp muộn.</p>
   </div>;
 }

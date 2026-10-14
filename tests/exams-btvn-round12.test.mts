@@ -1,0 +1,54 @@
+﻿import assert from 'node:assert/strict';
+import {createRequire} from 'node:module';
+import {readFileSync,writeFileSync,mkdtempSync,readdirSync,mkdirSync,rmSync} from 'node:fs';
+import {join} from 'node:path';
+import {tmpdir} from 'node:os';
+import {spawnSync} from 'node:child_process';
+import {SupabaseHomeworkRepository} from '../server/btvn/supabase-repository';
+import {createDurableHomeworkHandler} from '../server/btvn/durable-http';
+import {publicClassNames} from '../server/btvn/class-config';
+const root=process.env.MTM_ROOT!,require=createRequire(join(root,'package.json'));
+const {buildSync}=require('esbuild'),React=require('react'),{renderToStaticMarkup}=require('react-dom/server');
+function load(file:string,hooks?:any){const code=buildSync({entryPoints:[join(root,file)],bundle:true,write:false,platform:'node',format:'cjs',jsx:'automatic',packages:'external',loader:{'.css':'empty'},logLevel:'silent'}).outputFiles[0].text;const mod={exports:{} as any};new Function('require','module','exports',code)((id:string)=>id==='react'&&hooks?{...React,...hooks}:id.endsWith('.css')?{}:require(id),mod,mod.exports);return mod.exports;}
+const {default:Gate}=load('src/native/homework/HomeworkGate.tsx');
+const {default:Notice,ENTRY_ERROR,entryFailure}=load('src/native/homework/EntryNotice.tsx');
+const render=(c:any,p:any)=>renderToStaticMarkup(React.createElement(c,p));
+assert.ok(render(Gate,{studentCode:'',identity:{fullName:'',phone:'',className:''},busy:false,classNames:['2K9','2K10'],onCode(){},onIdentity(){},onLogin(){}}).includes('Họ tên học sinh hoặc phụ huynh'));
+assert.ok(render('p',{children:entryFailure(401)}).includes(ENTRY_ERROR));assert.ok(ENTRY_ERROR.includes('Zalo 0967365413'));assert.notEqual(entryFailure(503),ENTRY_ERROR);assert.notEqual(entryFailure(429),ENTRY_ERROR);
+assert.deepEqual(publicClassNames(['2K10 8+','2K9 9+','2K9 8+']),['2K9 8+','2K9 9+','2K10 8+']);
+const empty={exam:null,fullName:'Học sinh GIẢ',className:'2K9 9+',lessonCode:'',dueAt:null,maxAttempts:5,attemptsUsed:0,draft:null,receipts:[],bestScore:null,demo:false,lessons:[],classMismatch:true};
+const hooks={useState:(v:any)=>[v===null?empty:v===true?false:v,()=>{}],useEffect(){},useMemo:(fn:any)=>fn(),useRef:(v:any)=>({current:v})};
+const {default:Session}=load('src/native/homework/HomeworkSession.tsx',hooks);
+const html=render(Session,{pathname:'/btvn'});
+assert.ok(html.includes('Lớp em chưa có BTVN trên web. Khi thầy giao bài, buổi học và BTVN sẽ hiện ở đây.'));
+assert.ok(html.includes('>Thoát</button>'));assert.ok(!html.includes('Bắt đầu làm bài'));
+assert.ok(html.includes('MTM ghi em học lớp 2K9 9+, em đã được đưa vào đúng lớp.'));
+writeFileSync(join(root,'.qa-temp/dot-12/empty-ssr.html'),'<!doctype html><html lang="vi"><meta charset="utf-8">'+html+'</html>');
+const session='a'.repeat(64),calls:string[]=[];
+const snapshot={revision:0,lessons:[],work:{student:{studentCode:'',fullName:empty.fullName,phone:'',className:empty.className},drafts:[],receipts:[]}};
+const repo=new SupabaseHomeworkRepository({async rpc(name){calls.push(name);return {data:snapshot,error:null};}},async()=>({ok:true,session,classMismatch:true}));
+const handler=createDurableHomeworkHandler(repo),input={method:'POST',host:'fake.local',origin:'https://fake.local',secure:true};
+const res=await handler({...input,body:{action:'login',gate:{fullName:'Phụ huynh GIẢ',phone:'0900000000',className:'2K10'}}});
+assert.equal(res.status,200);assert.equal((res.body as any).classMismatch,true);assert.equal((res.body as any).exam,null);assert.equal((res.body as any).fullName,empty.fullName);assert.ok(res.headers['Set-Cookie'].includes('HttpOnly'));assert.deepEqual(calls,['mtm_btvn_read']);
+const next=await handler({...input,cookie:res.headers['Set-Cookie'],body:{action:'state'}});assert.equal(next.status,200);
+for(const action of ['start','save','submit','select'] as const)await assert.rejects(repo.call(session,action),e=>e.status===404);
+const logoutRepo=new SupabaseHomeworkRepository({async rpc(name){assert.equal(name,'mtm_btvn_logout');return {data:{ok:true},error:null};}},async()=>({}));
+assert.equal((await createDurableHomeworkHandler(logoutRepo)({...input,cookie:res.headers['Set-Cookie'],body:{action:'logout'}})).status,200);
+const denied=new SupabaseHomeworkRepository({async rpc(){throw Error('Không được đọc sau thất bại');}},async()=>({ok:false}));assert.equal((await createDurableHomeworkHandler(denied)({...input,body:{action:'login',gate:{fullName:'GIẢ',phone:'0900000000',className:'GIẢ'}}})).status,401);
+const broken=new SupabaseHomeworkRepository({async rpc(){return {data:null,error:{code:'XX000'}};}},async()=>({}));
+const failure=await createDurableHomeworkHandler(broken)({...input,cookie:res.headers['Set-Cookie'],body:{action:'state'}});assert.equal(failure.status,503);assert.ok((failure.body as any).message.includes('Chưa kết nối'));assert.notEqual(entryFailure(failure.status,(failure.body as any).message),ENTRY_ERROR);
+// CLI --previous thật, chỉ snapshot giả, thư mục tạm được xoá cuối test.
+const temp=mkdtempSync(join(tmpdir(),'mtm-roster-round12-'));
+try{
+ const output=join(temp,'out');mkdirSync(output);
+ const config={sheetId:'FAKE-ROUND12',outputDir:output,tabs:[{tab:'FAKE',className:'2K9 9+'}],columns:{fullName:'HS',phone:'SĐT',parentPhone:'SĐT PH',parentName:'Họ và tên PH',className:'Lớp',leave:'Nghỉ',birthDate:'Sinh'}};
+ const source=join(temp,'source.json');const data={config,tabs:{FAKE:[['HS','SĐT','SĐT PH','Họ và tên PH','Lớp','Nghỉ','Sinh'],['Học sinh GIẢ','0900000000','0980000000','Phụ huynh GIẢ','2K9 9+','','2009']]}};
+ writeFileSync(source,JSON.stringify(data));
+ const run=(previous?:string)=>{const r=spawnSync(process.execPath,[join(root,'scripts/import-btvn-roster.mjs'),source,...(previous?['--previous',previous]:[])],{cwd:root,encoding:'utf8'});assert.equal(r.status,0,r.stderr);};
+ run();const first=join(output,readdirSync(output)[0],'bundle.json'),before=JSON.parse(readFileSync(first,'utf8'));assert.equal(before.students[0].parentName,'Phụ huynh GIẢ');
+ data.tabs.FAKE[1][3]='Phụ huynh GIẢ đổi';writeFileSync(source,JSON.stringify(data));run(first);
+ const second=join(output,readdirSync(output).find(n=>join(output,n,'bundle.json')!==first)!,'bundle.json'),after=JSON.parse(readFileSync(second,'utf8'));
+ assert.equal(after.students[0].parentName,'Phụ huynh GIẢ đổi');assert.equal(after.students[0].studentCode,before.students[0].studentCode);assert.deepEqual(after.registry,before.registry);
+ assert.ok(!readFileSync(join(second,'..','ma-hoc-sinh-noi-bo.csv'),'utf8').includes('Phụ huynh'));
+}finally{rmSync(temp,{recursive:true,force:true});}
+console.log('Đạt đợt 12: SSR nhãn/lỗi/lớp rỗng/nút Thoát/cờ sai lớp; API dữ liệu giả, thao tác bài bị chặn, CLI --previous giữ mã và registry. Không kiểm trình duyệt thật.');

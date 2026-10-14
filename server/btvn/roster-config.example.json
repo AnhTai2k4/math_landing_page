@@ -14,5 +14,5 @@
     {"tab":"2K12","className":"2K12"},{"tab":"2K13","className":"2K13"},
     {"tab":"2K14","className":"2K14"},{"tab":"2K15","className":"2K15"}
   ],
-  "columns":{"fullName":"Họ tên","phone":"SĐT HS","parentPhone":"SĐT PH","className":"Lớp","leave":"Ngày nghỉ","birthDate":"Ngày sinh"}
+  "columns":{"fullName":"Họ tên","phone":"SĐT HS","parentPhone":"SĐT PH","parentName":"Họ và tên PH","className":"Lớp","leave":"Ngày nghỉ","birthDate":"Ngày sinh"}
 }

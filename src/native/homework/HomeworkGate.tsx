@@ -18,7 +18,7 @@ export default function HomeworkGate({studentCode,identity,busy,classNames=[],cl
     </form>
     <form className="btvn-gate mig-panel" aria-labelledby="btvn-identity-title" onSubmit={event=>{event.preventDefault();if(!busy&&!classesLoading&&classNames.includes(identity.className))onLogin({...identity});}}>
       <h2 id="btvn-identity-title">Không có mã</h2>
-      {([['fullName','Họ tên'],['phone','Số điện thoại (học sinh hoặc phụ huynh)']] as const).map(([key,label])=><label key={key}>{label}<input type={key==='phone'?'tel':'text'} autoComplete="off" maxLength={160} required value={identity[key]} onChange={event=>onIdentity({...identity,[key]:event.target.value})}/></label>)}
+      {([['fullName','Họ tên học sinh hoặc phụ huynh'],['phone','Số điện thoại (học sinh hoặc phụ huynh)']] as const).map(([key,label])=><label key={key}>{label}<input type={key==='phone'?'tel':'text'} autoComplete="off" maxLength={160} required value={identity[key]} onChange={event=>onIdentity({...identity,[key]:event.target.value})}/></label>)}
       <label>Lớp đang học<select required disabled={busy||classesLoading||!classNames.length} value={identity.className} onChange={event=>onIdentity({...identity,className:event.target.value})}><option value="">{classesLoading?'Đang tải lớp…':'Chọn lớp đang học'}</option>{[...classNames].sort((a,b)=>a.localeCompare(b,"vi",{numeric:true})).map(name=><option key={name} value={name}>{name}</option>)}</select></label>
       {classesError&&<p role="status">Chưa tải được danh sách lớp. <button type="button" disabled={busy||classesLoading} onClick={onReloadClasses}>Thử tải lại</button></p>}
       {!classesLoading&&!classesError&&!classNames.length&&<p role="status">Chưa có lớp để chọn. Em liên hệ MTM.</p>}
