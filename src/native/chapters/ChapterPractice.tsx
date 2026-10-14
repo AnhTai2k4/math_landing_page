@@ -10,6 +10,7 @@ import MtmSourceContent from '../exams/MtmSourceContent';
 import MtmSourceQuestion from '../exams/MtmSourceQuestion';
 import TheorySummary from './TheorySummary';
 import ZoomableImage from '../exams/ZoomableImage';
+import FitTable from '../exams/FitTable';
 import {questionLabel} from '../exams/attempt-ui';
 import questionPdfs from './mtm-question-pdfs.json';
 import {isWarmup,WARMUP_LABEL} from './library-rules';
@@ -49,7 +50,8 @@ function QuestionReader({exam}:{exam:PracticeExam}) {
   </section>;
 }
 
-function Tables({tables}:{tables?:VariationTable[]}){return <>{tables?.map((table,index)=><div className="ep-table-wrap" key={index}><table className="ep-solution-table"><caption><MathText text={table.caption}/></caption><thead><tr>{table.headers.map((cell,i)=><th scope="col" key={i}><MathText text={cell}/></th>)}</tr></thead><tbody>{table.rows.map((row,i)=><tr key={i}>{row.map((cell,j)=>j===0?<th scope="row" key={j}><MathText text={cell}/></th>:<td key={j}><MathText text={cell}/></td>)}</tr>)}</tbody></table></div>)}</>;}
+// TH-05 (Đợt 4): bảng biến thiên không tràn khung ở màn hẹp (FitTable chuyển dạng dọc khi dạng ngang không vừa).
+function Tables({tables}:{tables?:VariationTable[]}){return <>{tables?.map((table,index)=><FitTable key={index} table={table} renderCell={rich}/>)}</>;}
 function ExtraSolution({question}:{question:PracticeQuestion}) {const q=question as DisplayQuestion;return <>{q.statementSolutions&&<ol className="cp-statements">{q.statementSolutions.map((text,index)=><li key={index}><MathText text={text}/></li>)}</ol>}<Tables tables={q.solutionTables}/></>;}
 
 export default function ChapterPractice({additionalBank=[],catalogUrl='/luyen-tap',contextLabel='Luyện Chương I',audienceLabel,closedNotice}:{additionalBank?:PracticeBankItem[];catalogUrl?:string;contextLabel?:string;audienceLabel?:string;closedNotice?:(examId:string)=>string|undefined}) {
