@@ -28,6 +28,10 @@
       "destination": "/index.html"
     },
     {
+      "source": "/huong-dan",
+      "destination": "/index.html"
+    },
+    {
       "source": "/tai-lieu",
       "destination": "/index.html"
     },
