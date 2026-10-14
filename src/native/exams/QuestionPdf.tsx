@@ -16,7 +16,7 @@ export default function QuestionPdf({file,title,onReady}:{file:QuestionPdfFile;t
   const [placeholder,setPlaceholder]=useState(0);
   // Trang đang hiển thị thật (để biết lúc nào "bản đề đã hiện"), và vị trí cuộn cần giữ khi đổi chế độ toàn màn hình.
   const shown=useRef<{index:number;canvas:HTMLCanvasElement}|null>(null),scrollMemo=useRef<{x:number;y:number}|null>(null);
-  const restoreScroll=(target:HTMLElement)=>{const m=scrollMemo.current;if(!m)return;target.scrollLeft=m.x*target.scrollWidth;target.scrollTop=m.y*target.scrollHeight;};
+  const restoreScroll=(target:HTMLElement)=>{const m=scrollMemo.current;if(!m)return;target.scrollLeft=m.x*target.scrollWidth-target.clientWidth/2;target.scrollTop=m.y*target.scrollHeight-target.clientHeight/2;};
   // Khung đọc được gắn lại (vào body khi toàn màn hình) nên theo dõi lại bề ngang mỗi lần đổi chế độ.
   useEffect(()=>{const target=sheet.current;if(!target)return;const observer=new ResizeObserver(entries=>setWidth(Math.max(240,Math.floor(entries[0].contentRect.width))));observer.observe(target);return()=>observer.disconnect();},[full]);
   useEffect(()=>{let active=true;const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),20000);let task:ReturnType<typeof getDocument>|undefined;
@@ -56,7 +56,7 @@ export default function QuestionPdf({file,title,onReady}:{file:QuestionPdfFile;t
     document.addEventListener('keydown',key);return()=>{document.removeEventListener('keydown',key);root.style.overflow=previous;};
   },[full]);
   const zoomLabel=zoom===0?'Vừa bề ngang':'Phóng ×'+String(ZOOMS[zoom]).replace('.',',');
-  const toggleFull=()=>{const s=sheet.current;scrollMemo.current=s&&s.scrollWidth&&s.scrollHeight?{x:s.scrollLeft/s.scrollWidth,y:s.scrollTop/s.scrollHeight}:null;if(!full)setPlaceholder(host.current?.offsetHeight??0);setFull(f=>!f);};
+  const toggleFull=()=>{const s=sheet.current;scrollMemo.current=s&&s.scrollWidth&&s.scrollHeight?{x:(s.scrollLeft+s.clientWidth/2)/s.scrollWidth,y:(s.scrollTop+s.clientHeight/2)/s.scrollHeight}:null;if(!full)setPlaceholder(host.current?.offsetHeight??0);setFull(f=>!f);};
   const viewer=<section className={`ep-card ep-pdf-viewer${full?' ep-pdf-full':''}`} ref={host} aria-label="Bản câu hỏi PDF" role={full?'dialog':undefined} aria-modal={full||undefined}><h2>Bản câu hỏi</h2>
     <div className="ep-toolbar"><button type="button" disabled={!doc||index===0} onClick={()=>setIndex(i=>i-1)} aria-label={full?'Trang trước':undefined}>{full?'‹ Trước':'Trang trước'}</button><span>{full?'Trang':'Trang câu hỏi'} {index+1}/{file.questionPages.length}</span><button type="button" disabled={!doc||index===file.questionPages.length-1} onClick={()=>setIndex(i=>i+1)} aria-label={full?'Trang sau':undefined}>{full?'Sau ›':'Trang sau'}</button></div>
     <div className="ep-toolbar ep-pdf-zoom" role="group" aria-label="Cỡ trang đề"><button type="button" aria-label="Thu nhỏ trang đề" disabled={!doc||zoom===0} onClick={()=>setZoom(z=>Math.max(0,z-1))}>−</button><span aria-live="polite">{zoomLabel}</span><button type="button" aria-label="Phóng to trang đề" disabled={!doc||zoom===ZOOMS.length-1} onClick={()=>setZoom(z=>Math.min(ZOOMS.length-1,z+1))}>+</button><button ref={fullButton} type="button" className="ep-pdf-full-toggle" aria-pressed={full} disabled={!doc&&!full} onClick={toggleFull} aria-label={full?'Thoát toàn màn hình':undefined}>{full?'Đóng ✕':'Toàn màn hình'}</button></div>
