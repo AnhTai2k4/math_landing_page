@@ -111,5 +111,30 @@ test('Phương án DOM trong đề dùng cùng bộ ghi/bỏ chọn với dock',
   state.draft.answers[q.id]='B';r.flush();assert.equal(provider().answer,'B');provider().choose('B');assert.deepEqual(answers.pop(),[q.id,null]);
   state.pdfReady=false;r.flush();assert.equal(provider().disabled,true);r.dispose();
 });
+test('Nộp bài chỉ nổi vàng khi làm hết hoặc còn tối đa 5 phút; dấu sao theo câu',()=>{
+  const {r,state}=mount(new FakeStore());
+  const submit=()=>buttons(r.value).find(b=>textOf(b)==='Nộp bài');
+  assert.equal(submit().props.className,'fr-submit');
+  state.seconds=301;r.flush();assert.equal(submit().props.className,'fr-submit');
+  state.seconds=300;r.flush();assert.equal(submit().props.className,'fr-submit is-ready');
+  state.seconds=5400;state.answered=exam.questions.length;r.flush();assert.equal(submit().props.className,'fr-submit is-ready');
+  press('M');r.flush();assert.match(textOf(buttons(r.value).find(b=>b.props.className==='fr-sheet-toggle')),/★/);
+  press('ArrowRight');r.flush();assert.doesNotMatch(textOf(buttons(r.value).find(b=>b.props.className==='fr-sheet-toggle')),/★/);
+  buttons(r.value).find(b=>b.props.className==='fr-menu-title').props.onClick();r.flush();
+  assert.ok(find(r.value,(n:any)=>n.props?.['aria-label']==='Tên đầy đủ của đề'));r.dispose();
+});
+test('PDF: chỉ compact mobile khởi tạo 150%, nút vừa ngang về 100%; giao diện cũ giữ nguyên',()=>{
+  const pdfCode=buildSync({entryPoints:[join(root,'src/native/exams/QuestionPdf.tsx')],bundle:true,write:false,platform:'node',format:'cjs',jsx:'automatic',packages:'external',alias:{react:fixture,'react/jsx-runtime':fixture,'react-dom':fixture},logLevel:'silent'}).outputFiles[0].text;
+  const m={exports:{} as any};new Function('require','module','exports',pdfCode)((id:string)=>id.startsWith('pdfjs-dist')?(id.includes('worker')?{default:'worker'}:{GlobalWorkerOptions:{},AnnotationMode:{DISABLE:0},getDocument(){}}):require(id),m,m.exports);
+  const original=(globalThis as any).window;
+  try{for(const [mobile,compact,want] of [[true,true,'×1,5'],[false,true,'Vừa ngang'],[true,false,'Vừa bề ngang']] as const){
+    (globalThis as any).window={matchMedia:()=>({matches:mobile})};
+    const r=new Runtime(()=>m.exports.default({file:{questionPages:[1]},title:'Đề kiểm',onReady(){},compact}));
+    // Kiểm khởi tạo và handler; không mô phỏng vẽ canvas bằng fixture React.
+    (globalThis as any).__mtmRoomRuntime=r;r.value=r.fn();
+    assert.ok(textOf(r.value).includes(want));
+    if(compact){buttons(r.value).find(b=>b.props['aria-label']==='Vừa ngang').props.onClick();r.index=0;r.value=r.fn();assert.equal(textOf(buttons(r.value).find(b=>b.props['aria-label']==='Vừa ngang')),'Vừa ngang');}
+  }}finally{(globalThis as any).window=original;}
+});
 finish();
 
