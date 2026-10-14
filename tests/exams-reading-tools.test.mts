@@ -1,7 +1,9 @@
 // Đợt 4 (claude/doc-de-mobile): test quy tắc thuần của công cụ đọc đề trên điện thoại.
-// TH-02 mức phóng khi mở ảnh câu; TH-05 xoay bảng biến thiên giữ nguyên dữ liệu; LT-14 nhãn thẻ đề.
+// TH-02 mức phóng khi mở ảnh câu; TH-05 xoay bảng biến thiên giữ nguyên dữ liệu; nhãn thẻ đề giữ như V67 (anh chốt).
 // Chỉ dùng dữ liệu đề có sẵn trong kho mã nguồn; không dữ liệu học sinh, không ghi bộ nhớ.
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {join} from 'node:path';
 import {IMAGE_ZOOM_LEVELS, READABLE_SCALE, canTranspose, initialZoomLevel, transposeTable} from '../src/native/exams/reading-tools';
 import {testLabel} from '../src/native/chapters/practice-shared';
 import practiceTests from '../src/native/chapters/practice-tests.json';
@@ -60,10 +62,16 @@ test('Bảng 2 cột hoặc hàng thiếu ô không xoay (giữ cách hiện cũ
   assert.equal(canTranspose({headers: ['x', '1', '2'], rows: [['y', '3']]}), false);
   assert.equal(canTranspose({headers: ['x', '1', '2'], rows: []}), false);
 });
-test('LT-14: nhãn đề theo tài liệu là "Đề số 0n", không còn chữ "test"', () => {
-  assert.equal(testLabel('ĐỀ TEST SỐ 02'), 'Đề số 02');
-  assert.equal(testLabel('1'), 'Đề số 01');
+test('Nhãn đề theo tài liệu giữ như V67: "Đề test số 0n" (anh chốt đánh số liên tục Bài 1, Bài 2...)', () => {
+  assert.equal(testLabel('ĐỀ TEST SỐ 02'), 'Đề test số 02');
+  assert.equal(testLabel('1'), 'Đề test số 01');
   assert.equal(testLabel('Đề ôn tập'), 'Đề ôn tập');
+});
+test('Thẻ đề theo tài liệu vẫn ghi "Bài n · Đề test số 0x" và nút "Làm bài n" (không đổi sang "Đề thứ n trong chương")', () => {
+  const shelf = readFileSync(join(process.env.MTM_ROOT ?? process.cwd(), 'src/native/chapters/PracticeShelf.tsx'), 'utf8');
+  assert.ok(shelf.includes('<span className="cp-test-index">Bài {p.sourceSequence?.sequence??p.order}{p.sourceSequence?.test?<> · {testLabel(p.sourceSequence.test)}</>:null}</span>'));
+  assert.ok(shelf.includes("'Làm'} bài ${p.sourceSequence?.sequence??p.order}"));
+  assert.ok(!shelf.includes('trong chương</span>'));
 });
 
 finish();

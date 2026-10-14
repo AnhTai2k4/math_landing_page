@@ -9,6 +9,6 @@ export type PracticeItem=PracticeBankItem&{track:string;reviewStatus?:string;cha
 export const tracks=curriculum as Track[];
 // Tên bài từ file nguồn thường in hoa và có tiền tố "BÀI."; hiển thị lại dạng câu thường.
 export const lessonName=(raw:string)=>{const s=raw.replace(/\s+/g,' ').trim().replace(/^BÀI\s*[.:]\s*/i,'');return s===s.toLocaleUpperCase('vi')&&/\p{L}/u.test(s)?s.charAt(0)+s.slice(1).toLocaleLowerCase('vi'):s;};
-// "ĐỀ TEST SỐ 01" hoặc "01" → "Đề số 01" (LT-14: bỏ chữ "test" khó hiểu với học sinh); nhãn khác giữ nguyên.
-export const testLabel=(label:string)=>{const s=label.trim(),n=s.match(/^(?:ĐỀ TEST SỐ\s*)?(\d+)$/i)?.[1];return n?'Đề số '+n.padStart(2,'0'):s;};
+// "ĐỀ TEST SỐ 01" hoặc "01" → "Đề test số 01"; nhãn khác giữ nguyên.
+export const testLabel=(label:string)=>{const s=label.trim(),n=s.match(/^(?:ĐỀ TEST SỐ\s*)?(\d+)$/i)?.[1];return n?'Đề test số '+n.padStart(2,'0'):s;};
 export const practiceURL=(track:string,chapter:string,id?:string)=>'/luyen-tap?'+new URLSearchParams({nhom:track,chuong:chapter,...(id?{id}:{})}).toString();
