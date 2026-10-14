@@ -10,10 +10,10 @@ const BUDGET = {
   entryJs: 430_000,          // JS tải ngay khi mở trang (index.html + import tĩnh)
   entryJsGzip: 135_000,
   entryCss: 125_000,
-  practiceLibrary: 6_500_000, // ngân hàng đề (PracticeShelf-*, nạp bằng import()); nâng từ 4.500 kB khi gộp V77 vì V69-V76 thêm khoảng 140 đề (5.819 kB). Giảm lại bằng KT-06 bước 2: chia ngân hàng theo chương
+  practiceLibrary: 9_000_000, // ngân hàng đề (PracticeShelf-*, nạp bằng import()); nâng từ 4.500 kB khi gộp V77 vì V69-V76 thêm khoảng 140 đề (5.819 kB). V78 nâng tiếp lên 9.000 kB (8.708 kB, +96 đề lớp 12 và lớp 10 chương V). Giảm lại bằng KT-06 bước 2: chia ngân hàng theo chương (việc kế tiếp)
   practiceShell: 100_000,     // KT-06: khung trang /luyen-tap (gồm mã ChapterPractice, khoảng 78 kB) không được kéo ngân hàng đề vào lại
   otherChunk: 600_000,       // mọi chunk JS khác
-  totalJs: 9_500_000,         // nâng từ 7.500 kB khi gộp V77 cùng lý do dữ liệu đề tăng (8.879 kB)
+  totalJs: 12_000_000,        // nâng từ 7.500 kB khi gộp V77 cùng lý do dữ liệu đề tăng (8.879 kB)
 };
 const dir = resolve(process.argv[2] ?? 'build');
 const assets = join(dir, 'assets');
