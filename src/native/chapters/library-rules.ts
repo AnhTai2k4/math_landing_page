@@ -19,3 +19,11 @@ export const AWAITING_REVIEW_NOTICE = 'Bài này đang chờ phản biện độ
 export function shelfVisible(item: {reviewStatus?: unknown}, hasAttempt: boolean): boolean {
   return !awaitingReview(item) || hasAttempt;
 }
+
+/** Bài chờ phản biện mà chỉ còn lượt đã nộp trong kho lịch sử (không còn bản nháp hiện hành):
+ * thẻ phải dẫn tới lượt đã nộp gần nhất (?luot=), không dẫn vào trang có nút bắt đầu bị khoá
+ * (review Codex đợt 2, vòng 2). Trả về attemptId cần mở, hoặc undefined khi đi đường cũ (?id=). */
+export function historyOnlyAttempt(item: {reviewStatus?: unknown}, hasCurrentDraft: boolean, submitted: readonly {attemptId: string; submittedAt: number | null}[]): string | undefined {
+  if (!awaitingReview(item) || hasCurrentDraft || !submitted.length) return undefined;
+  return [...submitted].sort((a, b) => (b.submittedAt ?? 0) - (a.submittedAt ?? 0))[0].attemptId;
+}

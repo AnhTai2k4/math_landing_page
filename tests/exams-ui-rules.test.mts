@@ -9,7 +9,7 @@ import {createDraft, submitDraft, validateDraft, isAnswered, type Answers, type 
 import {answerState, displayKeyAnswer, draftExportFile, pendingQuestions, questionLabel, shortAnswerStatus, shortFormatMessage, visibleBuckets} from '../src/native/exams/attempt-ui';
 import {canonicalNumeric, canonicalRational} from '../src/native/exams/assessment';
 import {GRADES, PERIODS, PRACTICE_EXAMS, readFilters, filterSearch, readyExams, type PracticeExam, type PracticeQuestion} from '../src/native/exams/data';
-import {awaitingReview, isWarmup, shelfVisible, WARMUP_LABEL} from '../src/native/chapters/library-rules';
+import {awaitingReview, historyOnlyAttempt, isWarmup, shelfVisible, WARMUP_LABEL} from '../src/native/chapters/library-rules';
 import {FakeStore} from './exams-harness.mts';
 import {readHistory, saveDraft, draftKey} from '../src/native/exams/store';
 import practiceTests from '../src/native/chapters/practice-tests.json';
@@ -217,6 +217,44 @@ test('DL-01: lượt đã nộp của bài chờ phản biện vẫn đọc lạ
   const result = resultFor(item!.exam, item!.draft)!;
   assert.ok(result.score.ok);
   assert.equal(result.score.ok && result.score.earnedMillipoints, pending.questions[0].maxMillipoints);
+});
+
+test('DL-01: bài chờ phản biện chỉ còn lượt trong lịch sử thì thẻ dẫn tới lượt đã nộp gần nhất (review Codex vòng 2)', () => {
+  const pending = (practiceTests as unknown as BankRow[]).find(awaitingReview)!, open = (practiceTests as unknown as BankRow[]).find(p => !awaitingReview(p))!;
+  const subs = [{attemptId: 'cu', submittedAt: T0}, {attemptId: 'moi', submittedAt: T0 + 5000}, {attemptId: 'giua', submittedAt: T0 + 1000}];
+  assert.equal(historyOnlyAttempt(pending, false, subs), 'moi', 'lượt mới nhất');
+  assert.deepEqual(subs.map(x => x.attemptId), ['cu', 'moi', 'giua'], 'không sắp xếp lại mảng gốc');
+  assert.equal(historyOnlyAttempt(pending, true, subs), undefined, 'còn bản nháp hiện hành thì đi đường cũ ?id=');
+  assert.equal(historyOnlyAttempt(pending, false, []), undefined);
+  assert.equal(historyOnlyAttempt(open, false, subs), undefined, 'bài mở bình thường không đổi');
+  const lib = readFileSync(join(process.env.MTM_ROOT ?? process.cwd(), 'src/native/chapters/PracticeLibrary.tsx'), 'utf8');
+  assert.ok(lib.includes('href={cardHref(p)}') && lib.includes('href={cardHref(final)}'), 'thẻ thường và bài kết thúc chương đều dùng cardHref');
+  assert.ok(lib.includes("'&luot='+encodeURIComponent(luot)"), 'dẫn tới ?luot= như danh sách lịch sử');
+});
+
+// ---------- TT-05, GD-01, GD-02, TT-14: chỉ đổi chữ/giao diện, kiểm bằng mã nguồn ----------
+const src = (rel: string) => readFileSync(join(process.env.MTM_ROOT ?? process.cwd(), rel), 'utf8');
+test('TT-05: Thi thử ghi "Kết quả thi thử", Luyện tập giữ "Kết quả luyện tập"', () => {
+  const attempt = src('src/native/exams/PracticeAttempt.tsx');
+  assert.ok(attempt.includes("kind='practice'"), 'mặc định là luyện tập');
+  assert.ok(attempt.includes("kind==='exam'?'Kết quả thi thử':'Kết quả luyện tập'"));
+  assert.ok(/<PracticeAttempt key={[^}]*} kind="exam"/.test(src('src/native/NativeExams.tsx')), '/thi-thu truyền kind="exam"');
+  assert.ok(!src('src/native/chapters/ChapterPractice.tsx').includes('kind="exam"'), 'Luyện tập không truyền kind="exam"');
+});
+test('GD-01: ý Đ/S chỉ có hai nút Đúng/Sai, bỏ chọn bằng nút "Xóa lựa chọn" riêng', () => {
+  const attempt = src('src/native/exams/PracticeAttempt.tsx');
+  assert.ok(attempt.includes('{[true,false].map'), 'không còn nút thứ ba "chưa chọn"');
+  assert.ok(!attempt.includes('{[true,false,null].map'));
+  assert.ok(attempt.includes('Xóa lựa chọn'));
+});
+test('GD-02: nút rời trang ghi "Rời bài luyện" / "Rời bài thi"', () => {
+  const attempt = src('src/native/exams/PracticeAttempt.tsx');
+  assert.ok(attempt.includes('Rời bài luyện') && attempt.includes('Rời bài thi'));
+});
+test('TT-14: sau khi nộp, cột kết quả nằm trên đề và giãn đủ bề ngang', () => {
+  const css = src('src/native/exams/exams.css');
+  assert.ok(css.includes('.ep-exam-layout.ep-submitted{display:flex;flex-direction:column;align-items:stretch'));
+  assert.ok(css.includes('.ep-submitted .ep-answer-pane{order:-1'));
 });
 
 // ---------- Đề metadata rác "uyuyuyuyuyu": ẩn khỏi giao diện, giữ URL ----------

@@ -6,7 +6,7 @@ import curriculum from './curriculum.json';
 import tests from './practice-tests.json';
 import archives from './archived-tests.json';
 import exactTests from './exact-tests.json';
-import {awaitingReview,AWAITING_REVIEW_NOTICE,isWarmup,shelfVisible,WARMUP_LABEL} from './library-rules';
+import {awaitingReview,AWAITING_REVIEW_NOTICE,historyOnlyAttempt,isWarmup,shelfVisible,WARMUP_LABEL} from './library-rules';
 import './chapters.css';
 
 type Chapter={id:string;title:string;forms:string[];plannedPracticeTests?:number};
@@ -42,11 +42,14 @@ export default function PracticeLibrary(){
   if(!selected||!chapter)return <section className="mig-container mig-panel"><h1>Chưa đọc được danh mục luyện tập</h1><Link href="/thi-thu">Về Thi thử</Link></section>;
   const chapterBank=bank.filter(p=>p.track===selected.id&&p.chapter===chapter.id).sort((a,b)=>a.order-b.order);
   const attempts=new Map(chapterBank.map(p=>{const r=readDraft(localStore(),p.exam);return [p.exam.id,r.ok?r.value:null] as const}));
-  const actionLabel=(p:PracticeItem)=>attempts.get(p.exam.id)?.submittedAt===null?'Làm tiếp bài '+p.order:attempts.get(p.exam.id)?.submittedAt!=null?'Xem kết quả bài '+p.order:'Làm bài '+p.order;
+  const actionLabel=(p:PracticeItem)=>reviewOnly(p)?'Xem kết quả bài '+p.order:attempts.get(p.exam.id)?.submittedAt===null?'Làm tiếp bài '+p.order:attempts.get(p.exam.id)?.submittedAt!=null?'Xem kết quả bài '+p.order:'Làm bài '+p.order;
   const samples=pilotBank.filter(p=>p.track===selected.id&&p.chapter===chapter.id);
   const visibleIds=new Set([...chapterBank,...samples].map(p=>p.exam.id));
   const entries=history.items.filter(p=>visibleIds.has(p.exam.id));
   const hasAttempt=(p:PracticeItem)=>!!attempts.get(p.exam.id)||entries.some(e=>e.exam.id===p.exam.id);
+  // DL-01 (review Codex vòng 2): bài chờ phản biện chỉ còn lượt trong lịch sử thì thẻ dẫn thẳng tới lượt đã nộp gần nhất.
+  const reviewOnly=(p:PracticeItem)=>historyOnlyAttempt(p,!!attempts.get(p.exam.id),entries.filter(e=>e.exam.id===p.exam.id).map(e=>e.draft));
+  const cardHref=(p:PracticeItem)=>{const luot=reviewOnly(p);return luot?practiceURL(selected.id,chapter.id)+'&luot='+encodeURIComponent(luot):practiceURL(selected.id,chapter.id,p.exam.id);};
   const available=chapterBank.filter(p=>!p.isChapterEnd&&!p.sourceEdition&&shelfVisible(p,hasAttempt(p))),final=chapterBank.find(p=>p.isChapterEnd&&!p.sourceEdition&&shelfVisible(p,hasAttempt(p))),exact=chapterBank.filter(p=>p.sourceEdition);
   const openCount=available.filter(p=>!awaitingReview(p)).length;
   const targetCount=Math.max(chapter.plannedPracticeTests??10,available.length);
@@ -72,9 +75,9 @@ export default function PracticeLibrary(){
         {available.length>0?<ol className="cp-test-grid">{available.map(p=><li key={p.exam.id}><article>
           <span className="cp-test-index">Bài {p.order}/{targetCount}</span>{isWarmup(p)&&<span className="cp-warmup-badge">{WARMUP_LABEL}</span>}{awaitingReview(p)&&<span className="cp-review-badge">Chờ phản biện · chỉ làm tiếp hoặc xem lại</span>}<h3>{p.coverage}</h3><p>{p.exam.questions.length} câu · {p.exam.durationMinutes} phút · thang 10</p>
           <p>{entries.filter(e=>e.exam.id===p.exam.id).length} lượt đã nộp</p>
-          <Link className="mig-button cp-action-button" href={practiceURL(selected.id,chapter.id,p.exam.id)}>{actionLabel(p)}<span aria-hidden="true">→</span></Link>
+          <Link className="mig-button cp-action-button" href={cardHref(p)}>{actionLabel(p)}<span aria-hidden="true">→</span></Link>
         </article></li>)}</ol>:<div className="cp-empty"><h3>{['HSA','TSA'].includes(selected.id)?'Chủ đề':'Chương'} này chưa có bộ bài đã kiểm</h3><p>Bài sẽ được mở khi đề, đáp án và lời giải đã được đối chiếu. Có thể chọn Chương I lớp 10 để luyện ngay.</p><Link href={practiceURL('10','1')} className="mig-button outline">Luyện Mệnh đề và tập hợp</Link></div>}
-        {final?<article className="cp-final"><p className="mig-eyebrow">TỰ KIỂM TRA SAU KHI LUYỆN</p>{awaitingReview(final)&&<span className="cp-review-badge">Chờ phản biện · chỉ làm tiếp hoặc xem lại</span>}<h3>Kiểm tra kết thúc chương</h3><p>{final.exam.questions.length} câu · {final.exam.durationMinutes} phút · thang 10 · bao phủ các dạng của chương.</p><p>{entries.filter(e=>e.exam.id===final.exam.id).length} lượt đã nộp</p><Link className="mig-button cp-action-button" href={practiceURL(selected.id,chapter.id,final.exam.id)}>{attempts.get(final.exam.id)?.submittedAt===null?'Làm tiếp bài kết thúc chương':attempts.get(final.exam.id)?.submittedAt!=null?'Xem kết quả bài kết thúc chương':'Làm bài kết thúc chương'}<span aria-hidden="true">→</span></Link></article>:<p className="cp-end-note">Bài kiểm tra kết thúc {['HSA','TSA'].includes(selected.id)?'chủ đề':'chương'}: chưa có bản đã kiểm.</p>}
+        {final?<article className="cp-final"><p className="mig-eyebrow">TỰ KIỂM TRA SAU KHI LUYỆN</p>{awaitingReview(final)&&<span className="cp-review-badge">Chờ phản biện · chỉ làm tiếp hoặc xem lại</span>}<h3>Kiểm tra kết thúc chương</h3><p>{final.exam.questions.length} câu · {final.exam.durationMinutes} phút · thang 10 · bao phủ các dạng của chương.</p><p>{entries.filter(e=>e.exam.id===final.exam.id).length} lượt đã nộp</p><Link className="mig-button cp-action-button" href={cardHref(final)}>{reviewOnly(final)?'Xem kết quả bài kết thúc chương':attempts.get(final.exam.id)?.submittedAt===null?'Làm tiếp bài kết thúc chương':attempts.get(final.exam.id)?.submittedAt!=null?'Xem kết quả bài kết thúc chương':'Làm bài kết thúc chương'}<span aria-hidden="true">→</span></Link></article>:<p className="cp-end-note">Bài kiểm tra kết thúc {['HSA','TSA'].includes(selected.id)?'chủ đề':'chương'}: chưa có bản đã kiểm.</p>}
         </details>
         {samples.some(p=>entries.some(e=>e.exam.id===p.exam.id))&&<details className="cp-source-samples"><summary>Phiên bản ngắn trước đây · giữ để đọc lịch sử</summary>{samples.map(p=><article key={p.exam.id}><h3>{p.exam.title}</h3><p>{p.limits[0]}</p><Link className="mig-button outline" href={practiceURL(selected.id,chapter.id,p.exam.id)}>Mở phiên bản cũ lớp {p.exam.grade}</Link></article>)}</details>}
         <section className="cp-history"><h2>Lịch sử {['HSA','TSA'].includes(selected.id)?'chủ đề':'chương'} đang chọn</h2>{history.messages.length>0&&<p role="alert">{history.messages.join(' ')}</p>}{!entries.length?<p>Chưa có bài đã nộp ở đây.</p>:<ul>{entries.map(e=><li key={e.draft.attemptId}><Link href={returnURL+'&luot='+encodeURIComponent(e.draft.attemptId)}>{bank.find(p=>p.exam.id===e.exam.id&&p.exam.versionHash===e.exam.versionHash)?.presentationTitle??e.exam.title} · {new Date(e.draft.submittedAt!).toLocaleString('vi-VN')}</Link></li>)}</ul>}</section>
