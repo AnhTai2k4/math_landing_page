@@ -568,5 +568,524 @@
         ]
       }
     ]
+  },
+  "11:1": {
+    "groups": [
+      {
+        "title": "Hệ thống công thức và lý thuyết",
+        "items": [
+          {
+            "id": "mtm-practice-g11-c1-b01-v1"
+          },
+          {
+            "id": "mtm-practice-g11-c1-b02-v1"
+          }
+        ]
+      },
+      {
+        "title": "Giá trị lượng giác của góc lượng giác (SGK bài 1)",
+        "note": "Các đề trong nhóm xếp từ dễ đến khó.",
+        "items": [
+          {
+            "id": "mtm-drive-g11-c1-t01-mtm-errata-v1",
+            "dangs": [
+              "cả bài",
+              "hệ thức cơ bản và giá trị lượng giác của các góc có liên quan đặc biệt"
+            ]
+          },
+          {
+            "id": "mtm-luyen-g11-c1-n01-mtm-errata-v1",
+            "dangs": [
+              "cả bài",
+              "hệ thức cơ bản và giá trị lượng giác của các góc có liên quan đặc biệt"
+            ]
+          },
+          {
+            "id": "mtm-drive-g11-c1-t02-mtm-errata-v1",
+            "dangs": [
+              "cả bài",
+              "góc lượng giác, biểu diễn trên đường tròn lượng giác, hệ thức Chasles"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Công thức lượng giác (SGK bài 2)",
+        "note": "Các đề trong nhóm xếp từ dễ đến khó.",
+        "items": [
+          {
+            "id": "mtm-luyen-g11-c1-n02-mtm-errata-v1",
+            "dangs": [
+              "cả bài",
+              "công thức cộng"
+            ]
+          },
+          {
+            "id": "mtm-drive-g11-c1-t04-mtm-errata-v1",
+            "dangs": [
+              "cả bài",
+              "biến đổi tích thành tổng, tổng thành tích",
+              "rút gọn và tính giá trị biểu thức"
+            ]
+          },
+          {
+            "id": "mtm-drive-g11-c1-t03-mtm-errata-v1",
+            "dangs": [
+              "cả bài",
+              "công thức nhân đôi, hạ bậc"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Hàm số lượng giác (SGK bài 3)",
+        "note": "Các đề trong nhóm xếp từ dễ đến khó.",
+        "items": [
+          {
+            "id": "mtm-drive-g11-c1-t06-mtm-errata-v1",
+            "dangs": [
+              "cả bài",
+              "tính chẵn lẻ, tuần hoàn, chu kì"
+            ]
+          },
+          {
+            "id": "mtm-drive-g11-c1-t05-mtm-errata-v1",
+            "dangs": [
+              "cả bài",
+              "đồ thị, đơn điệu, giá trị lớn nhất và nhỏ nhất"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Phương trình lượng giác cơ bản (SGK bài 4)",
+        "note": "Các đề trong nhóm xếp từ dễ đến khó.",
+        "items": [
+          {
+            "id": "mtm-drive-g11-c1-t07-mtm-errata-v1",
+            "dangs": [
+              "cả bài",
+              "phương trình đưa về cơ bản, nghiệm thuộc khoảng, đếm nghiệm"
+            ]
+          },
+          {
+            "id": "mtm-drive-g11-c1-t08-mtm-errata-v1",
+            "dangs": [
+              "cả bài",
+              "phương trình đưa về cơ bản, nghiệm thuộc khoảng, đếm nghiệm"
+            ]
+          },
+          {
+            "id": "mtm-luyen-g11-c1-n04-mtm-errata-v1",
+            "dangs": [
+              "cả bài",
+              "phương trình lượng giác cơ bản"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Tổng hợp chương",
+        "note": "Các đề trong nhóm xếp từ dễ đến khó.",
+        "items": [
+          {
+            "id": "mtm-luyen-g11-c1-n05-mtm-errata-v1",
+            "dangs": [
+              "ôn tập, kiểm tra chương"
+            ]
+          },
+          {
+            "id": "mtm-luyen-g11-c1-n03-mtm-errata-v1",
+            "dangs": [
+              "ôn tập, kiểm tra chương"
+            ]
+          },
+          {
+            "id": "mtm-drive-g11-c1-t10-mtm-errata-v1",
+            "dangs": [
+              "ôn tập, kiểm tra chương"
+            ]
+          },
+          {
+            "id": "mtm-drive-g11-c1-t09-mtm-errata-v1",
+            "dangs": [
+              "ôn tập, kiểm tra chương"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "11:2": {
+    "groups": [
+      {
+        "title": "Hệ thống công thức và lý thuyết",
+        "items": [
+          {
+            "id": "mtm-practice-g11-c2-b01-v1"
+          }
+        ]
+      },
+      {
+        "title": "Dãy số (SGK bài 5)",
+        "note": "Các đề trong nhóm xếp từ dễ đến khó.",
+        "items": [
+          {
+            "id": "mtm-drive-g11-c2-t01-mtm-errata-v1",
+            "dangs": [
+              "cả bài",
+              "cách cho dãy số, số hạng của dãy số"
+            ]
+          },
+          {
+            "id": "mtm-drive-g11-c2-t02-mtm-errata-v1",
+            "dangs": [
+              "cả bài",
+              "cách cho dãy số, số hạng của dãy số"
+            ]
+          },
+          {
+            "id": "mtm-luyen-g11-c2-n01-mtm-errata-v1",
+            "dangs": [
+              "cách cho dãy số, số hạng của dãy số"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Cấp số cộng (SGK bài 6)",
+        "note": "Các đề trong nhóm xếp từ dễ đến khó.",
+        "items": [
+          {
+            "id": "mtm-drive-g11-c2-t04-mtm-errata-v1",
+            "dangs": [
+              "cả bài",
+              "xác định số hạng đầu, công sai, số hạng"
+            ]
+          },
+          {
+            "id": "mtm-drive-g11-c2-t03-mtm-approved-v56",
+            "dangs": [
+              "cả bài",
+              "tổng n số hạng đầu của cấp số cộng"
+            ]
+          },
+          {
+            "id": "mtm-luyen-g11-c2-n02-mtm-errata-v1",
+            "dangs": [
+              "cả bài",
+              "xác định số hạng đầu, công sai, số hạng"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Cấp số nhân (SGK bài 7)",
+        "note": "Các đề trong nhóm xếp từ dễ đến khó.",
+        "items": [
+          {
+            "id": "mtm-drive-g11-c2-t05-mtm-errata-v1",
+            "dangs": [
+              "cả bài",
+              "xác định số hạng đầu, công bội, số hạng"
+            ]
+          },
+          {
+            "id": "mtm-luyen-g11-c2-n03-mtm-errata-v1",
+            "dangs": [
+              "cả bài",
+              "xác định số hạng đầu, công bội, số hạng"
+            ]
+          },
+          {
+            "id": "mtm-drive-g11-c2-t06-mtm-errata-v1",
+            "dangs": [
+              "cả bài",
+              "tổng n số hạng đầu của cấp số nhân"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Tổng hợp chương",
+        "note": "Các đề trong nhóm xếp từ dễ đến khó.",
+        "items": [
+          {
+            "id": "mtm-drive-g11-c2-t07-mtm-errata-v1",
+            "dangs": [
+              "ôn tập, kiểm tra chương"
+            ]
+          },
+          {
+            "id": "mtm-luyen-g11-c2-n04-mtm-errata-v1",
+            "dangs": [
+              "ôn tập, kiểm tra chương"
+            ]
+          },
+          {
+            "id": "mtm-drive-g11-c2-t08-mtm-errata-v1",
+            "dangs": [
+              "ôn tập, kiểm tra chương"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "11:3": {
+    "groups": [
+      {
+        "title": "Hệ thống công thức và lý thuyết",
+        "items": [
+          {
+            "id": "mtm-practice-g11-c3-b01-v1"
+          }
+        ]
+      },
+      {
+        "title": "Mẫu số liệu ghép nhóm (SGK bài 8)",
+        "note": "Các đề trong nhóm xếp từ dễ đến khó.",
+        "items": [
+          {
+            "id": "mtm-luyen-g11-c3-n01-mtm-errata-v1",
+            "dangs": [
+              "mẫu số liệu ghép nhóm: nhóm, tần số, giá trị đại diện, hiệu chỉnh"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Các số đặc trưng đo xu thế trung tâm (SGK bài 9)",
+        "note": "Các đề trong nhóm xếp từ dễ đến khó.",
+        "items": [
+          {
+            "id": "mtm-drive-g11-c3-t04-draft-v61",
+            "dangs": [
+              "cả bài",
+              "trung vị và tứ phân vị"
+            ]
+          },
+          {
+            "id": "mtm-drive-g11-c3-t02-mtm-approved-v58",
+            "dangs": [
+              "cả bài",
+              "trung vị và tứ phân vị"
+            ]
+          },
+          {
+            "id": "mtm-drive-g11-c3-t03-approved-v60",
+            "dangs": [
+              "cả bài",
+              "trung vị và tứ phân vị"
+            ]
+          },
+          {
+            "id": "mtm-drive-g11-c3-t05-mtm-errata-v1",
+            "dangs": [
+              "cả bài",
+              "trung vị và tứ phân vị"
+            ]
+          },
+          {
+            "id": "mtm-drive-g11-c3-t01-mtm-errata-v1",
+            "dangs": [
+              "cả bài",
+              "trung vị và tứ phân vị"
+            ]
+          },
+          {
+            "id": "mtm-luyen-g11-c3-n03-mtm-errata-v1",
+            "dangs": [
+              "cả bài",
+              "trung vị và tứ phân vị"
+            ]
+          },
+          {
+            "id": "mtm-luyen-g11-c3-n04-mtm-errata-v1",
+            "dangs": [
+              "cả bài",
+              "trung vị và tứ phân vị"
+            ]
+          },
+          {
+            "id": "mtm-luyen-g11-c3-n02-mtm-errata-v1",
+            "dangs": [
+              "cả bài",
+              "trung vị và tứ phân vị"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Tổng hợp chương",
+        "note": "Các đề trong nhóm xếp từ dễ đến khó.",
+        "items": [
+          {
+            "id": "mtm-luyen-g11-c3-n05-mtm-errata-v1",
+            "dangs": [
+              "ôn tập, kiểm tra chương"
+            ]
+          },
+          {
+            "id": "mtm-drive-g11-c3-t06-mtm-errata-v1",
+            "dangs": [
+              "ôn tập, kiểm tra chương"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "11:4": {
+    "groups": [
+      {
+        "title": "Hệ thống công thức và lý thuyết",
+        "items": [
+          {
+            "id": "mtm-practice-g11-c4-b01-v1"
+          },
+          {
+            "id": "mtm-practice-g11-c4-b02-v1"
+          }
+        ]
+      },
+      {
+        "title": "Đường thẳng và mặt phẳng trong không gian (SGK bài 10)",
+        "note": "Các đề trong nhóm xếp từ dễ đến khó.",
+        "items": [
+          {
+            "id": "mtm-drive-g11-c4-t01-mtm-errata-v1",
+            "dangs": [
+              "cả bài",
+              "tính chất thừa nhận, giao tuyến của hai mặt phẳng"
+            ]
+          },
+          {
+            "id": "mtm-luyen-g11-c4-n01-mtm-errata-v1",
+            "dangs": [
+              "cả bài",
+              "tính chất thừa nhận, giao tuyến của hai mặt phẳng"
+            ]
+          },
+          {
+            "id": "mtm-drive-g11-c4-t02-mtm-v1",
+            "dangs": [
+              "cả bài",
+              "giao điểm của đường thẳng và mặt phẳng"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Hai đường thẳng song song (SGK bài 11)",
+        "note": "Các đề trong nhóm xếp từ dễ đến khó.",
+        "items": [
+          {
+            "id": "mtm-luyen-g11-c4-n02-mtm-errata-v1",
+            "dangs": [
+              "cả bài",
+              "giao tuyến và thiết diện dùng song song"
+            ]
+          },
+          {
+            "id": "mtm-drive-g11-c4-t03-mtm-errata-v1",
+            "dangs": [
+              "cả bài",
+              "vị trí tương đối, chứng minh hai đường thẳng song song"
+            ]
+          },
+          {
+            "id": "mtm-drive-g11-c4-t04-mtm-errata-v1",
+            "dangs": [
+              "cả bài",
+              "vị trí tương đối, chứng minh hai đường thẳng song song"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Đường thẳng và mặt phẳng song song (SGK bài 12)",
+        "note": "Các đề trong nhóm xếp từ dễ đến khó.",
+        "items": [
+          {
+            "id": "mtm-luyen-g11-c4-n03-mtm-errata-v1",
+            "dangs": [
+              "chứng minh đường thẳng song song với mặt phẳng"
+            ]
+          },
+          {
+            "id": "mtm-drive-g11-c4-t05-mtm-errata-v1",
+            "dangs": [
+              "cả bài",
+              "giao tuyến, giao điểm dùng quan hệ song song"
+            ]
+          },
+          {
+            "id": "mtm-drive-g11-c4-t06-mtm-errata-v1",
+            "dangs": [
+              "cả bài",
+              "chứng minh đường thẳng song song với mặt phẳng"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Hai mặt phẳng song song (SGK bài 13)",
+        "note": "Các đề trong nhóm xếp từ dễ đến khó.",
+        "items": [
+          {
+            "id": "mtm-drive-g11-c4-t07-mtm-errata-v1",
+            "dangs": [
+              "cả bài",
+              "chứng minh hai mặt phẳng song song"
+            ]
+          },
+          {
+            "id": "mtm-luyen-g11-c4-n04-mtm-errata-v1",
+            "dangs": [
+              "cả bài",
+              "chứng minh hai mặt phẳng song song"
+            ]
+          },
+          {
+            "id": "mtm-drive-g11-c4-t08-mtm-errata-v1",
+            "dangs": [
+              "cả bài",
+              "chứng minh hai mặt phẳng song song"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Phép chiếu song song (SGK bài 14)",
+        "note": "Các đề trong nhóm xếp từ dễ đến khó.",
+        "items": [
+          {
+            "id": "mtm-luyen-g11-c4-n05-mtm-errata-v1",
+            "dangs": [
+              "phép chiếu song song, hình biểu diễn"
+            ]
+          }
+        ]
+      },
+      {
+        "title": "Tổng hợp chương",
+        "note": "Các đề trong nhóm xếp từ dễ đến khó.",
+        "items": [
+          {
+            "id": "mtm-drive-g11-c4-t09-mtm-errata-v1",
+            "dangs": [
+              "ôn tập, kiểm tra chương"
+            ]
+          },
+          {
+            "id": "mtm-drive-g11-c4-t10-mtm-errata-v1",
+            "dangs": [
+              "ôn tập, kiểm tra chương"
+            ]
+          }
+        ]
+      }
+    ]
   }
 }

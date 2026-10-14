@@ -35,7 +35,7 @@
 .ep-root .ep-question-nav .is-answered{background:#172033;color:#fff}
 .ep-question{scroll-margin-top:110px}
 .ep-question:focus{outline:3px solid #1d4ed8;outline-offset:3px}
-.ep-source-text{white-space:pre-wrap;overflow-wrap:anywhere}
+.ep-source-text{white-space:pre-wrap;overflow-wrap:anywhere;max-width:100%;overflow-x:auto}
 .ep-source-ref{font-size:.85rem;color:#475569}
 .ep-root fieldset{display:block;min-inline-size:0;border:1px solid #cbd5e1;border-radius:8px;margin:14px 0;padding:14px}
 .ep-root legend{max-width:100%;padding:0 6px;font-weight:600;white-space:pre-wrap}
