@@ -1,4 +1,6 @@
 import type {PracticeExam} from '../../src/native/exams/data';
+/** Link ảnh đề sống 150 phút: đủ một lượt 120 phút kể cả khi em đọc lâu không lưu (300s cũ làm vỡ ảnh câu chưa mở). */
+export const SIGNED_ASSET_SECONDS=9000;
 export type PrivateAsset={path:string;sha256:string;storage_path:string;content_type:string;bytes:number};
 /** Chỉ server gọi sau RPC kiểm session/lớp; chữ ký mới mỗi lần state. */
 export async function hydratePrivateAssets(exam:PracticeExam,assets:PrivateAsset[],sign:(path:string,seconds:number)=>Promise<string>){
@@ -10,7 +12,7 @@ export async function hydratePrivateAssets(exam:PracticeExam,assets:PrivateAsset
   seen.add(asset.path);
  }
  // Ký song song để transport gom một lần createSignedUrls (58 lần tuần tự từng tốn 6-8 giây mỗi lượt tải).
- const signed=await Promise.all(assets.map(asset=>sign(asset.storage_path,300)));
+ const signed=await Promise.all(assets.map(asset=>sign(asset.storage_path,SIGNED_ASSET_SECONDS)));
  assets.forEach((asset,i)=>{const parsed=new URL(signed[i]);if(parsed.protocol!=='https:'||parsed.username||parsed.password)throw Error('Invalid signed asset');urls.set(asset.path,signed[i]);});
  const segment=(s:any)=>{const a=assets.find(a=>a.path===s.path&&a.sha256===s.sha256);if(!a)throw Error('Missing private fragment');s.privateUrl=urls.get(s.path);};
  for(const q of copy.questions)for(const s of [...q.sourceContent?.questions??[],...q.sourceContent?.solutions??[]])segment(s);

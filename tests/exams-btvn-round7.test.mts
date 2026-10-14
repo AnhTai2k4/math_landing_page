@@ -24,11 +24,11 @@ assert.equal((await (await send({...f,action:'error',error_code:'MATH_MISMATCH'}
 const error={...pipelineFixture(),lesson_key:'fake-error',material:{...f.material,lessonCode:'fake-error'},action:'error',error_code:'MATH_MISMATCH'};assert.equal((await (await send(error)).json()).status,'loi');
 assert.equal((await (await send({...error,error_code:'SECRET=bad'})).json()).error_code,'PUBLISH_REJECTED');
 const paths=state.get(f.lesson_key).payload.assets;let signed=0;
-const hydrated=await hydratePrivateAssets(f.exam,paths,async(path,seconds)=>{assert.equal(seconds,300);signed++;return 'https://storage.invalid/signed/'+path+'?token=fake';});
+const hydrated=await hydratePrivateAssets(f.exam,paths,async(path,seconds)=>{assert.equal(seconds,9000);signed++;return 'https://storage.invalid/signed/'+path+'?token=fake';});
 assert.equal(signed,1);assert.match(hydrated.sourcePdf!.url,/signed/);assert.ok(f.exam.sourcePdf!.url.startsWith('/exam-assets/'));
 await assert.rejects(hydratePrivateAssets(f.exam,[{...paths[0],sha256:'0'.repeat(64)}],async()=>'https://storage.invalid/signed'));
 await assert.rejects(hydratePrivateAssets(f.exam,paths,async()=>'http://storage.invalid/signed'));
 // Điểm nối production chưa bật; không đọc secret hay gửi request ra ngoài.
 const before=process.env.MTM_BTVN_ENABLED;delete process.env.MTM_BTVN_ENABLED;
 try{let status=0;await api({headers:{}},{setHeader(){},status(n){status=n;return {json(){}};}});assert.equal(status,503);}finally{if(before!==undefined)process.env.MTM_BTVN_ENABLED=before;}
-console.log('Đạt đợt 7: secret, validator, 6 ô đáp án/SHORT chuẩn hóa, tài sản/hash, immutable publish, lỗi, chữ ký 300s, API mặc định đóng.');
+console.log('Đạt đợt 7: secret, validator, 6 ô đáp án/SHORT chuẩn hóa, tài sản/hash, immutable publish, lỗi, chữ ký 9000s, API mặc định đóng.');

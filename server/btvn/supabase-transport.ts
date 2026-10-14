@@ -2,6 +2,7 @@ import {createClient} from '@supabase/supabase-js';
 import {createHomeworkHandler} from '../../supabase/functions/mtm-homework-access/handler';
 import {SupabaseHomeworkRepository} from './supabase-repository';
 import {allowedBtvnOrigin} from './origin-policy';
+import {SIGNED_ASSET_SECONDS} from './private-assets';
 /** Tên env đã có trong Edge Function. Không đọc env/secret khi import.
  * Claude chỉ gọi factory sau khi kiểm proxy và cấu hình server thực tế.
  * Chạy cùng handler Edge để network HMAC là của HS, không phải IP Vercel.
@@ -14,10 +15,10 @@ export function createSupabaseRepository(env:{SUPABASE_URL:string;SUPABASE_SERVI
   return new SupabaseHomeworkRepository({rpc:async(name,args)=>await db.rpc(name,args)},async body=>{
     const response=await handler(new Request(env.SUPABASE_URL+'/functions/v1/mtm-homework-access',{method:'POST',headers:{Origin:origin,apikey:env.MTM_HOMEWORK_PUBLISHABLE_KEY,'Content-Type':'application/json'},body:JSON.stringify(body)}));
     if(!response.ok)throw Error('Không thể vào bài. Hãy kiểm tra thông tin hoặc thử lại sau.');return response.json();
-  },Date.now,batchSigner(path=>db.storage.from('mtm-btvn').createSignedUrls(path,300)));
+  },Date.now,batchSigner(path=>db.storage.from('mtm-btvn').createSignedUrls(path,SIGNED_ASSET_SECONDS)));
 }
 type SignResult={data:{path:string|null;signedUrl:string;error:string|null}[]|null;error:unknown};
-/** Gom các lần ký cùng một nhịp thành một request createSignedUrls (hạn 300 giây như hydratePrivateAssets yêu cầu). */
+/** Gom các lần ký cùng một nhịp thành một request createSignedUrls (hạn SIGNED_ASSET_SECONDS như hydratePrivateAssets yêu cầu). */
 export function batchSigner(signMany:(paths:string[])=>Promise<SignResult>){
   let queue:{path:string;resolve:(url:string)=>void;reject:(error:Error)=>void}[]=[];
   const flush=async()=>{
@@ -30,7 +31,7 @@ export function batchSigner(signMany:(paths:string[])=>Promise<SignResult>){
     }catch{for(const item of items)item.reject(Error('Private asset unavailable'));}
   };
   return (path:string,seconds:number)=>new Promise<string>((resolve,reject)=>{
-    if(seconds!==300)return reject(Error('Private asset unavailable'));
+    if(seconds!==SIGNED_ASSET_SECONDS)return reject(Error('Private asset unavailable'));
     if(!queue.length)setTimeout(()=>void flush(),0);
     queue.push({path,resolve,reject});
   });
