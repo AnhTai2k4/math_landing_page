@@ -1,0 +1,71 @@
+import assert from 'node:assert/strict';
+import {readFileSync,mkdirSync,writeFileSync} from 'node:fs';
+import {createRequire} from 'node:module';
+import {pathToFileURL} from 'node:url';
+import {publicClassNames} from '../server/btvn/class-config';
+import {handleHomework} from '../server/btvn/http';
+import {createDurableHomeworkHandler} from '../server/btvn/durable-http';
+import {SupabaseHomeworkRepository} from '../server/btvn/supabase-repository';
+import {HomeworkService} from '../server/btvn/service';
+import {MemoryHomeworkRepository} from '../server/btvn/repository';
+import {demoLessons} from '../server/btvn/demo-lessons';
+import examJson from '../server/btvn/demo-exam.json';
+import type {PracticeExam} from '../src/native/exams/data';
+
+assert.deepEqual(publicClassNames(['Lớp giả B','Lớp giả A','Lớp giả A']),['Lớp giả A','Lớp giả B']);
+for(const input of [null,[{fullName:'Giả'}],[''],['X'.repeat(101)],Array(201).fill('Lớp giả')])assert.throws(()=>publicClassNames(input));
+// Endpoint trước login chỉ đọc cấu hình buổi học, không gọi kho học sinh.
+const memory=new MemoryHomeworkRepository([]);
+memory.all=()=>{throw Error('Không được đọc roster để liệt kê lớp');};
+const service=new HomeworkService(memory,examJson as PracticeExam,0,undefined,undefined,Date.now,demoLessons);
+const base={method:'POST',ip:'fake',host:'local.invalid',origin:'http://local.invalid'};
+const listed=handleHomework(service,{...base,body:{action:'classes'}});
+assert.equal(listed.status,200);assert.deepEqual(listed.body,{classNames:['LOP-TEST-12']});
+assert.ok(!listed.headers['Set-Cookie']);assert.match(listed.headers['Cache-Control'],/no-store/);
+assert.equal(handleHomework(service,{...base,body:{action:'classes',studentId:'fake'}}).status,400);
+assert.equal(handleHomework(service,{...base,body:{action:'classes'},method:'GET'}).status,405);
+assert.equal(handleHomework(service,{...base,body:{action:'classes'},origin:'https://evil.invalid'}).status,403);
+
+const rpcCalls:string[]=[];
+const repo=new SupabaseHomeworkRepository({async rpc(name,args){
+  rpcCalls.push(name);assert.equal(name,'mtm_btvn_classes');assert.deepEqual(args,{});
+  return {data:['Lớp giả B','Lớp giả A'],error:null};
+}},async()=>{throw Error('Không được gọi resolve/forgot khi liệt kê lớp');});
+const durable=createDurableHomeworkHandler(repo);
+const result=await durable({...base,body:{action:'classes'}});
+assert.equal(result.status,200);assert.deepEqual(result.body,{classNames:['Lớp giả A','Lớp giả B']});assert.deepEqual(rpcCalls,['mtm_btvn_classes']);
+assert.equal((await durable({...base,body:{action:'classes',gate:{}}})).status,400);
+const broken=new SupabaseHomeworkRepository({async rpc(){return {data:[{fullName:'KHÔNG ĐƯỢC TRẢ'}],error:null};}},async()=>({}));
+const denied=await createDurableHomeworkHandler(broken)({...base,body:{action:'classes'}});
+assert.equal(denied.status,503);assert.ok(!JSON.stringify(denied.body).includes('KHÔNG ĐƯỢC TRẢ'));
+
+// Component thật: select required, không nhập lớp tự do; form mã vẫn dùng được khi tải lớp lỗi.
+const root=process.env.MTM_ROOT??process.cwd(),require=createRequire(root+'/package.json');
+const {build}=require('esbuild');const out=root+'/.qa-temp/round6';mkdirSync(out,{recursive:true});
+const entry=`import React from 'react';import {renderToStaticMarkup} from 'react-dom/server';import assert from 'node:assert/strict';import Gate from './src/native/homework/HomeworkGate';
+const walk=n=>Array.isArray(n)?n.flatMap(walk):React.isValidElement(n)?[n,...walk(n.props.children)]:[];
+const calls=[],identity={fullName:'Giả A',phone:'0900000000',className:'Lớp giả A'};
+const props={studentCode:'FAKE',identity,classNames:['Lớp giả A','Lớp giả B'],busy:false,onCode:()=>{},onIdentity:()=>{},onLogin:x=>calls.push(x)};
+const tree=Gate(props),forms=tree.props.children,select=walk(forms[1]).find(n=>n.type==='select');
+assert.ok(select.props.required);assert.ok(!select.props.disabled);assert.equal(select.props.value,identity.className);
+assert.equal(walk(forms[1]).filter(n=>n.type==='input').length,2);
+let edited;walk(Gate({...props,onIdentity:x=>edited=x})).find(n=>n.type==='select').props.onChange({target:{value:'Lớp giả B'}});assert.deepEqual(edited,{...identity,className:'Lớp giả B'});
+const submit=f=>f.props.onSubmit({preventDefault(){}});
+submit(forms[1]);assert.deepEqual(calls,[identity]);
+for(const extra of [{classesLoading:true},{classNames:[],classesError:true},{identity:{...identity,className:'Lớp tự gõ'}}])submit(Gate({...props,...extra}).props.children[1]);
+assert.equal(calls.length,1);
+const failed=Gate({...props,classNames:[],classesError:true});submit(failed.props.children[0]);assert.deepEqual(calls.at(-1),{studentCode:'FAKE'});
+assert.ok(!walk(failed.props.children[0]).find(n=>n.type==='button').props.disabled);
+assert.ok(walk(failed.props.children[1]).find(n=>n.type==='select').props.disabled);
+let reloads=0;walk(Gate({...props,classNames:[],classesError:true,onReloadClasses:()=>reloads++})).find(n=>n.type==='button'&&n.props.type==='button').props.onClick();assert.equal(reloads,1);
+export const html=renderToStaticMarkup(<Gate {...props}/>);`;
+const bundle=await build({stdin:{contents:entry,resolveDir:root,loader:'tsx'},bundle:true,write:false,platform:'node',format:'cjs',jsx:'automatic',define:{'process.env.NODE_ENV':'"production"'}});
+writeFileSync(out+'/gate.cjs',bundle.outputFiles[0].text);
+const rendered=(await import(pathToFileURL(out+'/gate.cjs').href)).default;
+const css=readFileSync(root+'/src/native/homework/btvn-session.css','utf8');
+writeFileSync(out+'/render.html','<!doctype html><html lang="vi"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>*{box-sizing:border-box}'+css+'</style><section class="btvn-session">'+rendered.html+'</section></html>');
+const sql=readFileSync(root+'/supabase/migrations-pending/202610150005_btvn.sql','utf8');
+const functionBody=/create function public\.mtm_btvn_classes\(\)[\s\S]*?\$\$;/.exec(sql)?.[0]??'';
+assert.match(functionBody,/from mtm_hw_private\.classes where active/);assert.ok(!functionBody.includes('students'));
+assert.match(sql,/grant execute on function public\.mtm_btvn_classes\(\) to service_role/);
+console.log('Đạt đợt 6: API chỉ tên lớp trước login, không đọc roster, input/origin/lỗi; select thật và payload/khóa/tải lại. Transport giả, SQL chỉ kiểm tĩnh.');

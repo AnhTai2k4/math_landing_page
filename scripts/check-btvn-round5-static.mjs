@@ -1,0 +1,15 @@
+import {build} from 'esbuild';
+import {writeFileSync,mkdirSync,readFileSync} from 'node:fs';
+import {pathToFileURL} from 'node:url';
+import assert from 'node:assert/strict';
+const out='T:/Claude/SanPham/btvn-web-diem-danh/phieu-a/qa-dot-5';mkdirSync(out,{recursive:true});
+const lesson={lessonCode:'fake',date:'2026-10-14',title:'Hàm số và đồ thị',videoId:'abcdefghijk',classNames:['Lớp giả'],materialUrl:null,handoutUrl:null,homeworkUrl:null,dueAt:null,bestScore:null,late:null,submittedAt:null,available:true};
+const bundle=await build({stdin:{contents:`import React from 'react';import {renderToStaticMarkup as render} from 'react-dom/server';import LessonCards,{LessonVideo} from './src/native/homework/LessonCards';const lesson=${JSON.stringify(lesson)};export const placeholder=render(<LessonVideo lesson={lesson} demo={true}/>);export const iframe=render(<LessonVideo lesson={lesson} demo={false}/>);export const cards=render(<LessonCards lessons={[lesson,{...lesson,lessonCode:'review',videoId:null}]} demo={true} busy={false} onHomework={()=>{}}/>);`,resolveDir:process.cwd(),loader:'tsx'},bundle:true,write:false,platform:'node',format:'cjs',jsx:'automatic',define:{'process.env.NODE_ENV':'"production"'}});
+writeFileSync(out+'/static.cjs',bundle.outputFiles[0].text);
+const {default:rendered}=await import(pathToFileURL(out+'/static.cjs').href);
+assert.ok(rendered.placeholder.includes('Video buổi 14/10'));assert.ok(rendered.placeholder.includes('▶'));assert.ok(!rendered.placeholder.includes('<iframe'));assert.ok(rendered.iframe.includes('youtube-nocookie.com/embed/abcdefghijk'));assert.ok(!rendered.cards.includes('<iframe'));assert.ok(rendered.cards.includes('không có kiến thức mới'));
+const session=readFileSync('src/native/homework/HomeworkSession.tsx','utf8');assert.ok(session.includes('<h2>{homeworkTitle(state)}</h2>'));assert.ok(!session.includes('<h2>{state.fullName}'));assert.ok(session.includes('Bắt đầu làm bài'));
+const css=readFileSync('src/native/homework/btvn-session.css','utf8');assert.ok(css.includes('.btvn-card>.btvn-review-note{margin:0;padding:0 22px 16px}'));
+writeFileSync(out+'/STATIC-RECEIPT.json',JSON.stringify({demoPlaceholder:true,productionIframe:true,initialIframeAbsent:true,reviewNote:true,friendlyHeading:true,singleStartButton:true,browserVerified:false,reason:'CUA listBrowsers trả [] và iab không khả dụng; chưa có QA kích thước/ảnh.'},null,2));
+writeFileSync(out+'/render.html','<!doctype html><meta charset="utf-8"><style>'+css+'</style>'+rendered.cards+rendered.placeholder);
+console.log('Đạt React render: khung video giả không iframe, iframe production giữ nocookie, tiêu đề thân thiện/nút bắt đầu và lề ôn tập có code. Chưa xác minh pixel bằng trình duyệt.');

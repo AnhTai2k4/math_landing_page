@@ -1,0 +1,19 @@
+{
+  "extends": "./tsconfig.migration.json",
+  "include": [
+    "src/App.tsx",
+    "src/native/homework/HomeworkSession.tsx",
+    "server/btvn/**/*.ts",
+    "api/btvn.ts",
+    "vite.config.ts",
+    "tests/exams-btvn.test.mts",
+    "tests/exams-btvn-round2.test.mts",
+    "tests/exams-btvn-round3.test.mts",
+    "tests/exams-btvn-round4.test.mts",
+    "tests/exams-btvn-round5.test.mts",
+    "tests/exams-btvn-round5b.test.mts",
+    "tests/exams-btvn-round6.test.mts",
+    "tests/exams-btvn-round7.test.mts",
+    "tests/btvn-pipeline-fixture.ts"
+  ]
+}

@@ -1,0 +1,62 @@
+import assert from 'node:assert/strict';
+import {mkdtempSync,writeFileSync,readFileSync,rmSync} from 'node:fs';
+import {tmpdir} from 'node:os';
+import {join} from 'node:path';
+import examJson from '../server/btvn/demo-exam.json';
+import {HomeworkService,GATE_ERROR,HomeworkError} from '../server/btvn/service';
+import {MemoryHomeworkRepository,scoresCsv} from '../server/btvn/repository';
+import {demoStudents} from '../server/btvn/demo-students';
+import {handleHomework} from '../server/btvn/http';
+import type {PracticeExam} from '../src/native/exams/data';
+import type {Answers} from '../src/native/exams/store';
+import {routeMetadata,PUBLIC_PATHS} from '../src/migration/route-policy';
+const exam=examJson as unknown as PracticeExam;
+let now=Date.parse('2026-10-15T08:00:00+07:00');
+const due=now+24*3600000;
+const repo=new MemoryHomeworkRepository(demoStudents);
+const service=new HomeworkService(repo,exam,due,undefined,undefined,()=>now);
+const gateOf=(s:typeof demoStudents[number])=>({fullName:s.fullName,className:s.className,phone:s.phone||s.parentPhone||''});
+const gate=gateOf(demoStudents[0]);
+const fails=(fn:()=>unknown,status:number,message?:string)=>assert.throws(fn,(error:unknown)=>error instanceof HomeworkError&&error.status===status&&(!message||error.message===message));
+for(const [index,key] of ['fullName','phone','className'].entries())fails(()=>service.login({...gate,[key]:'sai'},'test-'+index),401,GATE_ERROR);
+now+=15*60000;
+for(let i=0;i<5;i++)fails(()=>service.login({...gate,phone:'sai'},'locked-ip'),401,GATE_ERROR);
+fails(()=>service.login(gate,'locked-ip'),429,GATE_ERROR);
+now+=15*60000;assert.ok(service.login(gate,'locked-ip'));
+const token=service.login(gate,'ok-ip');
+fails(()=>service.state('bad-token'),401);
+let state=service.start(token);assert.equal(state.attemptsUsed,1);assert.equal(state.draft!.deadline-state.draft!.startedAt,120*60000);
+assert.equal(service.start(token).draft!.attemptId,state.draft!.attemptId);
+const answers:Answers=Object.fromEntries(exam.questions.map(q=>[q.id,q.kind==='mc'?q.answer:q.kind==='tf'?q.answer:q.acceptedAnswers[0]]));
+const id=state.draft!.attemptId;
+fails(()=>service.save(token,'other-attempt',answers),409);
+fails(()=>service.save(token,id,{unknown:'A'}),400);
+state=service.submit(token,id,answers);assert.equal(state.receipts[0].score,10);assert.equal(state.bestScore,10);
+assert.equal(service.submit(token,id,{}).receipts.length,1);assert.equal(service.submit(token,id,{}).receipts[0].score,10);
+for(let i=2;i<=5;i++){state=service.start(token);assert.equal(state.attemptsUsed,i);state=service.submit(token,state.draft!.attemptId,{});}
+fails(()=>service.start(token),409);
+const token2=service.login(gateOf(demoStudents[1]),'second-ip');state=service.start(token2);service.save(token2,state.draft!.attemptId,answers);
+now=state.draft!.deadline+1;
+state=service.submit(token2,state.draft!.attemptId,{});assert.equal(state.receipts[0].score,10);assert.equal(state.receipts[0].timedOut,true);assert.equal(state.receipts[0].elapsedSeconds,7200);
+const token3=service.login(gateOf(demoStudents[2]),'third-ip');state=service.start(token3);now=due+1;
+// Đăng nhập lại vì phiên 4 giờ đã hết; bài giữ nguyên ở máy chủ.
+service.reconcileActualClass(demoStudents[2].studentCode,due);
+const refreshed=service.login(gateOf(demoStudents[2]),'third-ip');
+state=service.submit(refreshed,state.draft!.attemptId,answers);assert.equal(state.receipts[0].late,true);assert.equal(state.bestScore,0);
+assert.equal(state.receipts[0].score,0); // quá 120 phút: không nhận đáp án gửi muộn
+assert.equal(service.state(refreshed).receipts.length,1);assert.equal(service.state(service.login(gate,'renew')).receipts.length,5);
+const http=(body:unknown,cookie='',origin='http://localhost:3000')=>handleHomework(service,{method:'POST',body,cookie,ip:'http-ip',origin,host:'localhost:3000'});
+const base={classKey:'lop-test-12',lessonCode:'buoi-mau-01'};
+assert.equal(http({...base,action:'state'}).status,401);
+const login=http({...base,action:'login',gate});assert.equal(login.status,200);assert.match(login.headers['Set-Cookie'],/HttpOnly; SameSite=Strict/);assert.equal(login.headers['Cache-Control'],'no-store, private');
+const cookie=login.headers['Set-Cookie'].split(';')[0];assert.equal(http({...base,action:'state'},cookie,'http://evil.test').status,403);
+const encoded=JSON.stringify(http({...base,action:'state'},cookie).body);assert.ok(!encoded.includes(gate.phone));assert.ok(!encoded.includes(demoStudents[1].studentCode));assert.ok(!encoded.includes('studentCode'));
+assert.equal(http({...base,action:'logout'},cookie).status,200);assert.equal(http({...base,action:'state'},cookie).status,401);
+const path='/btvn/lop-test-12/buoi-mau-01';assert.ok(!PUBLIC_PATHS.includes(path));assert.equal(routeMetadata(path,'www.minhthanhmath.vn').robots,'noindex, nofollow');
+const dir=mkdtempSync(join(tmpdir(),'mtm-btvn-csv-'));
+try{const file=join(dir,'scores.csv');writeFileSync(file,scoresCsv(repo.all(),'buoi-mau-01'));const csv=readFileSync(file,'utf8');assert.match(csv,/ma_hs/);assert.match(csv,/HS-TEST-01/);assert.ok(!csv.includes(gate.phone));assert.equal(csv.split('\r\n').filter(Boolean).length,8);}finally{rmSync(dir,{recursive:true,force:true});}
+// Sink lỗi: không nhận biên nhận và không tăng lượt một phần.
+let failSink=false;const badRepo=new MemoryHomeworkRepository(demoStudents,()=>{if(failSink)throw new Error('disk full');});
+const badService=new HomeworkService(badRepo,exam,due,undefined,undefined,()=>now);const badToken=badService.login(gate,'disk');failSink=true;
+assert.throws(()=>badService.start(badToken),/disk full/);assert.equal(badService.state(badToken).attemptsUsed,0);
+console.log('BTVN: cổng 3 trường, khóa tạm, phiên, quyền, 5 lượt, giờ máy chủ, chấm 10/10, CSV, muộn, timeout, retry, riêng tư, sink lỗi đạt.');

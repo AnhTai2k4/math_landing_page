@@ -1,0 +1,11 @@
+{
+  "enabled": false,
+  "sheetId": "FAKE-ATTENDANCE-SHEET",
+  "tab": "Thứ 2 giả",
+  "identityMap": {"[\"gia mot\",\"0900000001\"]": "source-gia-1"},
+  "blocks": [{
+    "key": "ca-gia-1730", "firstRow": 2, "lastRow": 4, "startsAt": "17:30",
+    "nameColumn": 0, "phoneColumn": 1,
+    "dateColumns": [{"column": 2, "date": "2026-10-12"}, {"column": 3, "date": "2026-10-19"}]
+  }]
+}

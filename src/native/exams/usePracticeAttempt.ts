@@ -10,7 +10,7 @@ import {erratumFor} from './practice-errata';
 import type {PracticeAttemptProps} from './attempt-types';
 
 /** Một instance cho mỗi lượt đang mở; RAM, đồng hồ và kiểm xung đột giữ cùng vòng đời. */
-export function usePracticeAttempt({exam,previousExam,storeOverride,newAttemptsClosed}: PracticeAttemptProps) {
+export function usePracticeAttempt({exam,previousExam,storeOverride,newAttemptsClosed,onRetake}: PracticeAttemptProps) {
   const getStore=useCallback(()=>storeOverride??localStore(),[storeOverride]);
   const sourceIssue=SOURCE_HOLDS[exam.id];
   const erratum=erratumFor(exam.id);
@@ -131,6 +131,7 @@ export function usePracticeAttempt({exam,previousExam,storeOverride,newAttemptsC
   const startDisabled=!pdfReady||!!sourceIssue||!!erratum&&!acceptedErratum||!!newAttemptsClosed&&!persisted.current;
   const startLabel=sourceIssue?'Chờ đính chính điều kiện':persisted.current?'Tiếp tục làm bài':newAttemptsClosed?'Chờ phản biện · chưa mở lượt mới':'Bắt đầu làm bài';
   const retake=(confirmed=false)=>{
+    if(onRetake){onRetake();return;}
     if(sourceIssue||newAttemptsClosed)return;
     const old=ram.current;if(!old||old.submittedAt===null||dirty.current||conflict.current)return;
     if(!pdfReady)return;

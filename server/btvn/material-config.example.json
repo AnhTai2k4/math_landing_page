@@ -1,0 +1,10 @@
+{
+  "config":{
+    "sheetId":"1rq76we9zUxMWN4ni77_agf23XZ1QQsfJ3DM5qX5gGUg",
+    "tab":"2K10",
+    "programKey":"g11-chinh-khoa",
+    "columns":{"date":"Ngày","homework":"BTVN","answer":"Đáp án BTVN"},
+    "confirmedSessions":{}
+  },
+  "note":"Tên cột chỉ là ví dụ chờ Claude đối chiếu. confirmedSessions ánh xạ nhãn ngày nguồn sang giờ kết thúc ca ISO có +07:00 đã xác minh. 8+/9+ cùng khối/chương trình dùng cùng programKey; XPT/HSA tách riêng. Chưa có lịch chạy."
+}

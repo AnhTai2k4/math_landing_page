@@ -50,6 +50,10 @@
     {
       "source": "/luyen-tap",
       "destination": "/index.html"
+    },
+    {
+      "source": "/btvn/:class/:lesson",
+      "destination": "/index.html"
     }
   ],
   "headers": [
@@ -59,6 +63,19 @@
         {
           "key": "Cache-Control",
           "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/btvn/:path*",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
         }
       ]
     }

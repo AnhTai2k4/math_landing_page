@@ -1,0 +1,24 @@
+{
+  "enabled": false,
+  "sources": [
+    {
+      "sheetId": "FAKE-MATERIALS-1",
+      "tab": "TAB-GIA-1",
+      "programKey": "2k9-chinh-khoa",
+      "paired": true,
+      "classNames": ["Lớp giả 8+", "Lớp giả 9+"],
+      "columns": {"className":"Lớp","date":"Ngày","title":"Bài","material":"Tài liệu","handout":"Handout","video":"Video xem lại","homework":"BTVN"},
+      "confirmedDates": {}
+    },
+    {
+      "sheetId": "FAKE-MATERIALS-2",
+      "tab": "TAB-GIA-2",
+      "programKey": "2k10-chinh-khoa",
+      "paired": true,
+      "classNames": ["Lớp giả 8+ khối khác", "Lớp giả 9+ khối khác"],
+      "columns": {"className":"Lớp","date":"Ngày","title":"Bài","material":"Tài liệu","handout":"Handout","video":"Video xem lại","homework":"BTVN"},
+      "confirmedDates": {}
+    }
+  ],
+  "note": "Chỉ cấu hình giả. Claude đối chiếu ID/tab và tiêu đề cột 2 Sheet học liệu cùng bot Zalo trước nối thật. Chỉ nhóm 8+/9+ cùng khối, cùng chương trình; XPT/HSA tách riêng. Không tự đoán năm, giờ học hoặc tự bật lịch. readLessonSources nhận cấu hình nguồn từ bên vận hành; enabled chưa dùng để kích hoạt tự động."
+}

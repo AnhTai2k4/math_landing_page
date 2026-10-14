@@ -3,8 +3,7 @@
 // chạy được trên Windows (npm test). Không đọc/ghi dữ liệu học sinh.
 // Dùng: node scripts/run-tests.mjs [đường-dẫn-test ...]
 import {build} from 'esbuild';
-import {mkdtempSync, readdirSync, rmSync} from 'node:fs';
-import {tmpdir} from 'node:os';
+import {mkdirSync,mkdtempSync, readdirSync, rmSync} from 'node:fs';
 import {join, basename, relative} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {spawnSync} from 'node:child_process';
@@ -16,7 +15,9 @@ const files = args.length
   : readdirSync(join(root, 'tests')).filter(f => /^exams-.*\.test\.mts$/.test(f)).sort().map(f => join(root, 'tests', f));
 if (!files.length) { console.error('Không tìm thấy file test nào.'); process.exit(1); }
 
-const out = mkdtempSync(join(tmpdir(), 'mtm-tests-'));
+// Giữ artifact trên T và cho module external tìm node_modules đúng repo.
+mkdirSync(join(root,'.qa-temp'),{recursive:true});
+const out = mkdtempSync(join(root,'.qa-temp','mtm-tests-'));
 let failed = 0;
 try {
   await build({

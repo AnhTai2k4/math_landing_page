@@ -1,0 +1,904 @@
+{
+  "id": "mtm-btvn-demo-g12-c2-k01-v1",
+  "title": "BTVN mẫu · Vectơ trong không gian",
+  "sourceHash": "8a9f16606cfade5ea33a3f85eb1e61caa31c0cf4a825c878e3c5c0512468eb0b",
+  "sourceRef": "MTM sưu tầm và biên soạn",
+  "sourceUrl": "https://drive.google.com/drive/folders/1DG0Y1cJFAAAlfgpSQlN7tLxcK60gQ4jf",
+  "questionCount": 22,
+  "grade": 12,
+  "period": "GK1",
+  "durationMinutes": 120,
+  "rubricVersion": "MTM-22-12MC-4TF-6SA-3-4-3-v1",
+  "answerKeyVerified": true,
+  "rubricVerified": true,
+  "questionDisplayVerified": true,
+  "publicationVerified": true,
+  "sourceMaterial": {
+    "title": "Toán 12 · Chương II · Vectơ và các phép toán trong không gian · luyện theo dạng · Đề ghép 01",
+    "publisher": "Minh Thành Math",
+    "version": "Bản MTM đính chính · Claude dựng 14/10/2026 · chờ kiểm độc lập · bản thử BTVN, không phải buổi học thật",
+    "locator": "Đề ghép theo dạng: 22 câu từ tệp 1x6XT9YsdB… (lời giải tệp 1n1sybgyEI…)"
+  },
+  "preAttemptNotice": "Bản MTM đã hiệu chỉnh một số chỗ của đề nguồn ở câu II.4; hãy làm theo nội dung trong đề này.",
+  "sourceInstructions": [
+    {
+      "path": "btvn-demo-g12-c2-k01/question-I-instructions-reference.png",
+      "width": 1498,
+      "height": 87,
+      "sha256": "103f7960ec2c13b569512a03fef1059d3e4ca36dd45cf7aac5bf47108a211c50",
+      "sourcePage": 1
+    },
+    {
+      "path": "btvn-demo-g12-c2-k01/question-II-instructions-reference.png",
+      "width": 1498,
+      "height": 89,
+      "sha256": "c3e0a81b5c0df2d64f619d8125700790c6b3e117b6cf1f846f8ac3c10cf0af3c",
+      "sourcePage": 2
+    },
+    {
+      "path": "btvn-demo-g12-c2-k01/question-III-instructions-reference.png",
+      "width": 1498,
+      "height": 45,
+      "sha256": "ea46773066f8c9f67d81ba1fb82fde2e51546b2286e4c9636f9e474b6c652d5d",
+      "sourcePage": 3
+    }
+  ],
+  "solutionInstructions": [
+    {
+      "path": "btvn-demo-g12-c2-k01/solution-I-instructions-reference.png",
+      "width": 1498,
+      "height": 87,
+      "sha256": "103f7960ec2c13b569512a03fef1059d3e4ca36dd45cf7aac5bf47108a211c50",
+      "sourcePage": 1
+    },
+    {
+      "path": "btvn-demo-g12-c2-k01/solution-II-instructions-reference.png",
+      "width": 1498,
+      "height": 89,
+      "sha256": "5f2eb5422366b4a94df6f764f37b1ddd00d502d4feed629844a37d10923a3210",
+      "sourcePage": 5
+    },
+    {
+      "path": "btvn-demo-g12-c2-k01/solution-III-instructions-reference.png",
+      "width": 1498,
+      "height": 45,
+      "sha256": "f1c4a8289697b2910521c5673d01bb9522a295f2162fd5cdf6b156d320c022f6",
+      "sourcePage": 7
+    }
+  ],
+  "sections": [
+    {
+      "label": "I · Trắc nghiệm nhiều phương án",
+      "kind": "mc",
+      "count": 12
+    },
+    {
+      "label": "II · Đúng/sai",
+      "kind": "tf",
+      "count": 4
+    },
+    {
+      "label": "III · Trả lời ngắn",
+      "kind": "short",
+      "count": 6
+    }
+  ],
+  "questions": [
+    {
+      "id": "mtm-btvn-demo-g12-c2-k01-v1-I1",
+      "sourceRef": "Phần I · Câu 1",
+      "sourceContent": {
+        "questions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/I-01-question-01.png",
+            "width": 1568,
+            "height": 399,
+            "sha256": "f12f53b8cdaaf38ee2babf55e90adcfaf7be15a32866135e6af641ae59bd2f1c",
+            "sourcePage": 12
+          }
+        ],
+        "solutions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/I-01-solution-01.png",
+            "width": 1568,
+            "height": 560,
+            "sha256": "a6f6bc8297c3eb3c4d116d53d3b43f4d7494f480c4d8ebb847f787d2573632bb",
+            "sourcePage": 12
+          }
+        ]
+      },
+      "kind": "mc",
+      "choices": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "answer": "B",
+      "maxMillipoints": 250
+    },
+    {
+      "id": "mtm-btvn-demo-g12-c2-k01-v1-I2",
+      "sourceRef": "Phần I · Câu 2",
+      "sourceContent": {
+        "questions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/I-02-question-01.png",
+            "width": 1568,
+            "height": 91,
+            "sha256": "df1d2915b35e733661579d9397c4e7be8fbfdb49a5398db3072dc34831f923b5",
+            "sourcePage": 12
+          }
+        ],
+        "solutions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/I-02-solution-01.png",
+            "width": 1568,
+            "height": 245,
+            "sha256": "3315a336099adfec4fb5ed842ede79b1ce1df6eaba1e1924f2cf69c52b0d5fba",
+            "sourcePage": 12
+          }
+        ]
+      },
+      "kind": "mc",
+      "choices": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "answer": "C",
+      "maxMillipoints": 250
+    },
+    {
+      "id": "mtm-btvn-demo-g12-c2-k01-v1-I3",
+      "sourceRef": "Phần I · Câu 3",
+      "sourceContent": {
+        "questions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/I-03-question-01.png",
+            "width": 1568,
+            "height": 137,
+            "sha256": "6ed5505dc4ab60a99dd36c51fcb3b45fdd8fbc7e6faf8fbba0b82619b8eb727f",
+            "sourcePage": 12
+          }
+        ],
+        "solutions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/I-03-solution-01.png",
+            "width": 1568,
+            "height": 289,
+            "sha256": "20e7f009f3a41b7e41c2ac9d13fed4e2396ddf820c70c9b83549822100682952",
+            "sourcePage": 12
+          }
+        ]
+      },
+      "kind": "mc",
+      "choices": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "answer": "A",
+      "maxMillipoints": 250
+    },
+    {
+      "id": "mtm-btvn-demo-g12-c2-k01-v1-I4",
+      "sourceRef": "Phần I · Câu 4",
+      "sourceContent": {
+        "questions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/I-04-question-01.png",
+            "width": 1568,
+            "height": 406,
+            "sha256": "eb483ce6e5a76bbc2977a1e39550c92ed357a2e12988554fcb862e1c15fd2bcb",
+            "sourcePage": 12
+          }
+        ],
+        "solutions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/I-04-solution-01.png",
+            "width": 1568,
+            "height": 643,
+            "sha256": "0376f714ad856f46fabfdb84e3d501b210a7bbabf80591b7b512dee910db9ea0",
+            "sourcePage": 12
+          }
+        ]
+      },
+      "kind": "mc",
+      "choices": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "answer": "B",
+      "maxMillipoints": 250
+    },
+    {
+      "id": "mtm-btvn-demo-g12-c2-k01-v1-I5",
+      "sourceRef": "Phần I · Câu 5",
+      "sourceContent": {
+        "questions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/I-05-question-01.png",
+            "width": 1568,
+            "height": 451,
+            "sha256": "e51180bc8d5aa229fb7833a2bbbdf08032ed85fdb240dc0087a088d634852863",
+            "sourcePage": 12
+          }
+        ],
+        "solutions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/I-05-solution-01.png",
+            "width": 1568,
+            "height": 63,
+            "sha256": "5eb684dd48d81f71b63f1ff0c7af54d6a0e2552c4d0593fa935056fe21db38df",
+            "sourcePage": 12
+          },
+          {
+            "path": "btvn-demo-g12-c2-k01/I-05-solution-02.png",
+            "width": 1568,
+            "height": 663,
+            "sha256": "9dab0bd5410015a3981cc828971005346bf4b752d3982263898920c2c8d731d9",
+            "sourcePage": 13
+          }
+        ]
+      },
+      "kind": "mc",
+      "choices": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "answer": "C",
+      "maxMillipoints": 250
+    },
+    {
+      "id": "mtm-btvn-demo-g12-c2-k01-v1-I6",
+      "sourceRef": "Phần I · Câu 6",
+      "sourceContent": {
+        "questions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/I-06-question-01.png",
+            "width": 1568,
+            "height": 101,
+            "sha256": "4a04f1e4c1cb34ec8b32b5460c1ef77d2d87a0a4a71067c6a5bf498c354ee050",
+            "sourcePage": 12
+          }
+        ],
+        "solutions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/I-06-solution-01.png",
+            "width": 1568,
+            "height": 892,
+            "sha256": "2944712e90a0da8aa7d276e76dd3d87199656148b35bacbd9431b9b157419827",
+            "sourcePage": 13
+          }
+        ]
+      },
+      "kind": "mc",
+      "choices": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "answer": "C",
+      "maxMillipoints": 250
+    },
+    {
+      "id": "mtm-btvn-demo-g12-c2-k01-v1-I7",
+      "sourceRef": "Phần I · Câu 7",
+      "sourceContent": {
+        "questions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/I-07-question-01.png",
+            "width": 1568,
+            "height": 172,
+            "sha256": "ceb466c855d8a094286da9f1c1ace467b515189db5abcdaf7fe5b56de03d9e46",
+            "sourcePage": 12
+          },
+          {
+            "path": "btvn-demo-g12-c2-k01/I-07-question-02.png",
+            "width": 1568,
+            "height": 401,
+            "sha256": "087f73febc3d530b5547c3f24f055867d61453396be68a055c0acfc7ca32739a",
+            "sourcePage": 13
+          }
+        ],
+        "solutions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/I-07-solution-01.png",
+            "width": 1568,
+            "height": 498,
+            "sha256": "cdb5331b0344d410e2b0db7466b8c67870bdbb49fa17b1a695acc8c57670b3a5",
+            "sourcePage": 13
+          },
+          {
+            "path": "btvn-demo-g12-c2-k01/I-07-solution-02.png",
+            "width": 1568,
+            "height": 167,
+            "sha256": "94041481f6e19a89953b687724904713b3bdc69bbe0c48c4c3182df1b0ff9855",
+            "sourcePage": 14
+          }
+        ]
+      },
+      "kind": "mc",
+      "choices": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "answer": "A",
+      "maxMillipoints": 250
+    },
+    {
+      "id": "mtm-btvn-demo-g12-c2-k01-v1-I8",
+      "sourceRef": "Phần I · Câu 8",
+      "sourceContent": {
+        "questions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/I-08-question-01.png",
+            "width": 1568,
+            "height": 91,
+            "sha256": "7d8fe961e65729b955a6bc6b2c27242f830804805703d50832b960572948f809",
+            "sourcePage": 13
+          }
+        ],
+        "solutions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/I-08-solution-01.png",
+            "width": 1568,
+            "height": 243,
+            "sha256": "cc5d5938470525924e92dc1c1e62c18ae1c7b35bcfa4968f381e690754a57c75",
+            "sourcePage": 14
+          }
+        ]
+      },
+      "kind": "mc",
+      "choices": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "answer": "C",
+      "maxMillipoints": 250
+    },
+    {
+      "id": "mtm-btvn-demo-g12-c2-k01-v1-I9",
+      "sourceRef": "Phần I · Câu 9",
+      "sourceContent": {
+        "questions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/I-09-question-01.png",
+            "width": 1568,
+            "height": 373,
+            "sha256": "476fe9af2c64cd313a63e13173520ba8f2c3235a3e494d0c7c91fc901058ac08",
+            "sourcePage": 13
+          }
+        ],
+        "solutions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/I-09-solution-01.png",
+            "width": 1568,
+            "height": 586,
+            "sha256": "1c2cf96fe9b681f63bf6cc850a95d3e5bcd4fb7ed6d5bcdf1e21316140490bd1",
+            "sourcePage": 14
+          }
+        ]
+      },
+      "kind": "mc",
+      "choices": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "answer": "A",
+      "maxMillipoints": 250
+    },
+    {
+      "id": "mtm-btvn-demo-g12-c2-k01-v1-I10",
+      "sourceRef": "Phần I · Câu 10",
+      "sourceContent": {
+        "questions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/I-10-question-01.png",
+            "width": 1568,
+            "height": 109,
+            "sha256": "32e1e2fb15b32333b5be8d35753ece21ed87aa45b2a16bc781d121a1c2981a0c",
+            "sourcePage": 13
+          }
+        ],
+        "solutions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/I-10-solution-01.png",
+            "width": 1568,
+            "height": 305,
+            "sha256": "e3286f69db65aaa108e05ba068ab815c54d709a0734dcd333aaa8d97a4d7f8b3",
+            "sourcePage": 14
+          }
+        ]
+      },
+      "kind": "mc",
+      "choices": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "answer": "B",
+      "maxMillipoints": 250
+    },
+    {
+      "id": "mtm-btvn-demo-g12-c2-k01-v1-I11",
+      "sourceRef": "Phần I · Câu 11",
+      "sourceContent": {
+        "questions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/I-11-question-01.png",
+            "width": 1568,
+            "height": 157,
+            "sha256": "d6751e6d44c8a6bb116803467222adc8cad15c1e704cbcb274b4c3ae911f5b68",
+            "sourcePage": 13
+          }
+        ],
+        "solutions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/I-11-solution-01.png",
+            "width": 1568,
+            "height": 427,
+            "sha256": "62ce3dc21622df7a081f48230af051c9afe25f0b42372fac059f56b2a0781ef9",
+            "sourcePage": 14
+          }
+        ]
+      },
+      "kind": "mc",
+      "choices": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "answer": "D",
+      "maxMillipoints": 250,
+      "correctionNote": "Lời giải gốc in dòng Chọn C nhưng gạch chân phương án D và tính được AB + DC = 2MN; đáp án đúng là D."
+    },
+    {
+      "id": "mtm-btvn-demo-g12-c2-k01-v1-I12",
+      "sourceRef": "Phần I · Câu 12",
+      "sourceContent": {
+        "questions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/I-12-question-01.png",
+            "width": 1568,
+            "height": 352,
+            "sha256": "cd969dadfdb0d0e1adfc5336f81bc45bd7d82e643846d61ac91402d1530acea4",
+            "sourcePage": 13
+          }
+        ],
+        "solutions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/I-12-solution-01.png",
+            "width": 1568,
+            "height": 314,
+            "sha256": "1338df835420cc666ff3c2f80acfdc041fb7ef1f142cbfe0aea92ba94ba05c2c",
+            "sourcePage": 14
+          },
+          {
+            "path": "btvn-demo-g12-c2-k01/I-12-solution-02.png",
+            "width": 1568,
+            "height": 628,
+            "sha256": "d04cd4b740ae4094fada7c953f20ca5feab4041ab7f060fb9f43a542263c7cb8",
+            "sourcePage": 15
+          }
+        ]
+      },
+      "kind": "mc",
+      "choices": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "answer": "C",
+      "maxMillipoints": 250
+    },
+    {
+      "id": "mtm-btvn-demo-g12-c2-k01-v1-II1",
+      "sourceRef": "Phần II · Câu 1",
+      "sourceContent": {
+        "questions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/II-01-question-01.png",
+            "width": 1568,
+            "height": 388,
+            "sha256": "251a4cc45b44af8d6401e41fc17bc1e0c07b3bd39a58544d0d74eaf93f8b96bb",
+            "sourcePage": 15
+          }
+        ],
+        "solutions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/II-01-solution-01.png",
+            "width": 1568,
+            "height": 422,
+            "sha256": "69d75d051a6e46d50a838de20abf466d5b3e1587655bd768162c2c4738fac992",
+            "sourcePage": 20
+          },
+          {
+            "path": "btvn-demo-g12-c2-k01/II-01-solution-02.png",
+            "width": 1568,
+            "height": 1231,
+            "sha256": "a50e7284b4092963457373959c883fca820dc1f0edcc05ee08fc494d430425cd",
+            "sourcePage": 21
+          }
+        ]
+      },
+      "kind": "tf",
+      "answer": [
+        true,
+        false,
+        true,
+        false
+      ],
+      "pointsByCorrectCount": [
+        0,
+        100,
+        250,
+        500,
+        1000
+      ],
+      "maxMillipoints": 1000
+    },
+    {
+      "id": "mtm-btvn-demo-g12-c2-k01-v1-II2",
+      "sourceRef": "Phần II · Câu 2",
+      "sourceContent": {
+        "questions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/II-02-question-01.png",
+            "width": 1568,
+            "height": 62,
+            "sha256": "d1e9308ba587612dba35b5512dfe5660e8d4abda505800026c74bb7ad5d4dbe5",
+            "sourcePage": 15
+          },
+          {
+            "path": "btvn-demo-g12-c2-k01/II-02-question-02.png",
+            "width": 1568,
+            "height": 624,
+            "sha256": "9e78e6d227a222633ed04e5f2f4924355b6b3f5f6bfda5234d550a76512397b2",
+            "sourcePage": 16
+          }
+        ],
+        "solutions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/II-02-solution-01.png",
+            "width": 1568,
+            "height": 810,
+            "sha256": "b41411d73a52f6f0bede6b028f54f70719a969e3ff6aea058e3401f1ec59d32c",
+            "sourcePage": 21
+          },
+          {
+            "path": "btvn-demo-g12-c2-k01/II-02-solution-02.png",
+            "width": 1568,
+            "height": 502,
+            "sha256": "8c768d51c58566b99f532d43dac5a504040b5bfa9ba26143916c32ec8a160f94",
+            "sourcePage": 22
+          }
+        ]
+      },
+      "kind": "tf",
+      "answer": [
+        true,
+        false,
+        true,
+        false
+      ],
+      "pointsByCorrectCount": [
+        0,
+        100,
+        250,
+        500,
+        1000
+      ],
+      "maxMillipoints": 1000
+    },
+    {
+      "id": "mtm-btvn-demo-g12-c2-k01-v1-II3",
+      "sourceRef": "Phần II · Câu 3",
+      "sourceContent": {
+        "questions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/II-03-question-01.png",
+            "width": 1568,
+            "height": 804,
+            "sha256": "5ae30b1e5dc218a14303b87a7ed43e0f464dffe678137de4d58ff8b142a6064e",
+            "sourcePage": 16
+          }
+        ],
+        "solutions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/II-03-solution-01.png",
+            "width": 1568,
+            "height": 1541,
+            "sha256": "4af1bfc4647b3ddaa29fb7f156eb9f8f1b0ec0f34528090d761090614025a1a1",
+            "sourcePage": 22
+          },
+          {
+            "path": "btvn-demo-g12-c2-k01/II-03-solution-02.png",
+            "width": 1568,
+            "height": 121,
+            "sha256": "6b74e09199eb3e458e62afa2a9d3d301f2c35de4c4182260ef679c8d0679fc54",
+            "sourcePage": 23
+          }
+        ]
+      },
+      "kind": "tf",
+      "answer": [
+        true,
+        false,
+        true,
+        true
+      ],
+      "pointsByCorrectCount": [
+        0,
+        100,
+        250,
+        500,
+        1000
+      ],
+      "maxMillipoints": 1000
+    },
+    {
+      "id": "mtm-btvn-demo-g12-c2-k01-v1-II4",
+      "sourceRef": "Phần II · Câu 4",
+      "sourceContent": {
+        "questions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/II-04-question-01.png",
+            "width": 1568,
+            "height": 624,
+            "sha256": "199aafb875be13915b9b4f3fc5cb73641ee8b0c7155649ca2d35bd05e610ed56",
+            "sourcePage": 16
+          },
+          {
+            "path": "btvn-demo-g12-c2-k01/II-04-question-02.png",
+            "width": 1568,
+            "height": 126,
+            "sha256": "1d0a92fb4c79be21b0db7d338f2d02ad56b7d3353af818565d0eccab3d4d1334",
+            "sourcePage": 17
+          }
+        ],
+        "solutions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/II-04-solution-01.png",
+            "width": 1568,
+            "height": 1507,
+            "sha256": "5ab82edd773401b13e2101d6e7f8ed8961e35f2338b9ec8e99faa048bdbdb162",
+            "sourcePage": 23
+          }
+        ]
+      },
+      "kind": "tf",
+      "answer": [
+        false,
+        true,
+        false,
+        true
+      ],
+      "pointsByCorrectCount": [
+        0,
+        100,
+        250,
+        500,
+        1000
+      ],
+      "maxMillipoints": 1000,
+      "correctionNote": "Ý d) gốc không nói rõ phạm vi các vectơ (bằng vectơ BC có vô số vectơ). Bản MTM ghi rõ: chỉ xét các vectơ khác vectơ BC có điểm đầu và điểm cuối là các đỉnh của hình hộp; đó là AD, A'D', B'C' nên ý d) Đúng."
+    },
+    {
+      "id": "mtm-btvn-demo-g12-c2-k01-v1-III1",
+      "sourceRef": "Phần III · Câu 1",
+      "sourceContent": {
+        "questions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/III-01-question-01.png",
+            "width": 1568,
+            "height": 166,
+            "sha256": "a457bfece7da61e35d960dcf938b5d5b9055a35ea9c556dbcd2488f65a05e34e",
+            "sourcePage": 18
+          }
+        ],
+        "solutions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/III-01-solution-01.png",
+            "width": 1568,
+            "height": 625,
+            "sha256": "60f8d688967e7f5dc61f33509ac4a4ef857d81c24eb35470337d36e80cbafbaf",
+            "sourcePage": 28
+          }
+        ]
+      },
+      "kind": "short",
+      "mode": "numeric",
+      "acceptedAnswers": [
+        "4"
+      ],
+      "maxMillipoints": 500
+    },
+    {
+      "id": "mtm-btvn-demo-g12-c2-k01-v1-III2",
+      "sourceRef": "Phần III · Câu 2",
+      "sourceContent": {
+        "questions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/III-02-question-01.png",
+            "width": 1568,
+            "height": 176,
+            "sha256": "8f734a55a9c48f56c87df39ff05468154077e436e52e845860ed09ebb0660331",
+            "sourcePage": 18
+          }
+        ],
+        "solutions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/III-02-solution-01.png",
+            "width": 1568,
+            "height": 805,
+            "sha256": "5073ede7dbef361d66ada5d1171a6ee9a2b4f621c82a5b55985178fa6b962b9a",
+            "sourcePage": 28
+          },
+          {
+            "path": "btvn-demo-g12-c2-k01/III-02-solution-02.png",
+            "width": 1568,
+            "height": 105,
+            "sha256": "38e6ef6e9ca6b427ccaa08c243d14ef180ae950c2388fa5c9228a7da62a093f9",
+            "sourcePage": 29
+          }
+        ]
+      },
+      "kind": "short",
+      "mode": "numeric",
+      "acceptedAnswers": [
+        "0.5"
+      ],
+      "maxMillipoints": 500,
+      "correctionNote": "Đáp án đúng là 0,5. Lời giải tính được MN = −(1/2)AB + (1/2)AC + (1/2)AD nên a = −1/2, b = 1/2, c = 1/2 và a + b + c = 1/2; bản gốc kết luận nhầm 3/2 = 1,5. Ảnh lời giải đã sửa ô trả lời thành 0,5."
+    },
+    {
+      "id": "mtm-btvn-demo-g12-c2-k01-v1-III3",
+      "sourceRef": "Phần III · Câu 3",
+      "sourceContent": {
+        "questions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/III-03-question-01.png",
+            "width": 1568,
+            "height": 179,
+            "sha256": "d1b6f5c1a344d0ccedfefd69e605ed7e70f443748be147942a18f502b21d46d5",
+            "sourcePage": 18
+          }
+        ],
+        "solutions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/III-03-solution-01.png",
+            "width": 1568,
+            "height": 654,
+            "sha256": "5810fe4fea8b1a798fad567fd80234c13a73044835ce3a37dafb980c771e22be",
+            "sourcePage": 29
+          }
+        ]
+      },
+      "kind": "short",
+      "mode": "numeric",
+      "acceptedAnswers": [
+        "1.73"
+      ],
+      "maxMillipoints": 500
+    },
+    {
+      "id": "mtm-btvn-demo-g12-c2-k01-v1-III4",
+      "sourceRef": "Phần III · Câu 4",
+      "sourceContent": {
+        "questions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/III-04-question-01.png",
+            "width": 1568,
+            "height": 296,
+            "sha256": "2164aa5aaca5e3c595c518c94c5dc24c42eb5c976cca527cae9c6cc35cf15b6d",
+            "sourcePage": 18
+          }
+        ],
+        "solutions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/III-04-solution-01.png",
+            "width": 1568,
+            "height": 480,
+            "sha256": "5e52ea9190f247d951f404668129d6862a85f5428435e9d408c8f253a4da8255",
+            "sourcePage": 29
+          }
+        ]
+      },
+      "kind": "short",
+      "mode": "numeric",
+      "acceptedAnswers": [
+        "-7.5"
+      ],
+      "maxMillipoints": 500,
+      "correctionNote": "Đáp án đúng là −7,5. Từ −6k − 45 = 0 suy ra k = −45/6 = −7,5; bản gốc chia nhầm thành −9/2 = −4,5. Ảnh lời giải đã sửa ô trả lời thành −7,5."
+    },
+    {
+      "id": "mtm-btvn-demo-g12-c2-k01-v1-III5",
+      "sourceRef": "Phần III · Câu 5",
+      "sourceContent": {
+        "questions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/III-05-question-01.png",
+            "width": 1568,
+            "height": 184,
+            "sha256": "96ad7e88d78dfd5d322488a84fecde0d73da8cc1be4f11049eafd2ecd9687365",
+            "sourcePage": 19
+          }
+        ],
+        "solutions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/III-05-solution-01.png",
+            "width": 1568,
+            "height": 647,
+            "sha256": "ff71bfed31398cdd5b249784722e5dfc373b3bf70d44b6a2473df81ca6c47fe1",
+            "sourcePage": 29
+          }
+        ]
+      },
+      "kind": "short",
+      "mode": "numeric",
+      "acceptedAnswers": [
+        "1"
+      ],
+      "maxMillipoints": 500
+    },
+    {
+      "id": "mtm-btvn-demo-g12-c2-k01-v1-III6",
+      "sourceRef": "Phần III · Câu 6",
+      "sourceContent": {
+        "questions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/III-06-question-01.png",
+            "width": 1568,
+            "height": 299,
+            "sha256": "0c56c626a8044682535656166579e45e1bcc8eb3e91d2a343bbcc28e9eb0d63d",
+            "sourcePage": 19
+          }
+        ],
+        "solutions": [
+          {
+            "path": "btvn-demo-g12-c2-k01/III-06-solution-01.png",
+            "width": 1568,
+            "height": 149,
+            "sha256": "da1e8e37e84474608430cdf7f88e70c0081edf4d5229e181bd3455a1456a1ca6",
+            "sourcePage": 29
+          },
+          {
+            "path": "btvn-demo-g12-c2-k01/III-06-solution-02.png",
+            "width": 1568,
+            "height": 790,
+            "sha256": "c2555870c92b8d41e949b9355c4274d1ae614f36acb76b47994ab74c95876977",
+            "sourcePage": 30
+          }
+        ]
+      },
+      "kind": "short",
+      "mode": "numeric",
+      "acceptedAnswers": [
+        "5.4"
+      ],
+      "maxMillipoints": 500
+    }
+  ],
+  "versionHash": "c8122943d1e201fe524a8df2e796a4d8a3329dce435f7b6e1f29bcd9cb719899",
+  "attribution": "MTM sưu tầm và biên soạn",
+  "answerVerificationNote": "Gói thử nội bộ: Codex đối chiếu 34 ô, kiểm số độc lập. Cờ publicationVerified chỉ tương thích bộ chấm, chưa phát hành; Claude chưa nghiệm thu."
+}

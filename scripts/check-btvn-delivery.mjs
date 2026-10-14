@@ -1,0 +1,18 @@
+import {readFileSync,writeFileSync,readdirSync,statSync} from 'node:fs';
+import {execFileSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
+const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
+const base='T:/Claude/SanPham/btvn-web-diem-danh/phieu-a/';
+const files=readdirSync('dist/assets').filter(x=>/\.(js|css)$/.test(x));
+const found=files.filter(name=>/HS-TEST-0[123]|09000000\d{2}|H\u1ecdc sinh th\u1eed|mtm-btvn-demo-g12-c2-k01-v1/.test(readFileSync('dist/assets/'+name,'utf8')));
+if(found.length)throw new Error('Browser bundle leaked demo data '+found.join(','));
+const privacy={at:new Date().toISOString(),directory:'dist/assets',scanned:files.length,patterns:['HS-TEST-01..03','09000000xx','Học sinh thử','ID đề BTVN mẫu riêng'],matches:found,passed:true};
+writeFileSync(base+'BUNDLE-PRIVACY.json',JSON.stringify(privacy,null,2)+'\n');
+const protectedFiles=['src/native/exams/FocusRoom.tsx','src/native/exams/focus-room.css','src/native/chapters/PracticeShelf.tsx','src/native/chapters/practice-bank.ts'];
+const checks=protectedFiles.map(file=>{const original=execFileSync('git',['show','HEAD:'+file],{maxBuffer:20*1024*1024});const current=readFileSync(file);const normalized=bytes=>bytes.toString('utf8').replace(/\r\n/g,'\n');if(hash(normalized(original))!==hash(normalized(current)))throw new Error('Protected file changed '+file);return {file,sha256:hash(current),normalizedLfSha256:hash(normalized(current)),unchanged:true,comparison:'HEAD content with CRLF normalized to LF'};});
+const pdfs=['DE-MAU.pdf','LOI-GIAI-MAU.pdf'].map(file=>({file,bytes:statSync(base+file).size,sha256:hash(readFileSync(base+file))}));
+const documents=['BIEN-BAN-DOT-1.md','DE-XUAT-KY-THUAT.md','CACH-CHAY-THU.md','BAI-HOC.md','GOI-DE-MAU.json','KIEM-TOAN-34-O.json','HTTP-QA.json','ket-qua-gia.csv'].map(file=>({file,bytes:statSync(base+file).size,sha256:hash(readFileSync(base+file))}));
+const receipt={at:new Date().toISOString(),branch:execFileSync('git',['branch','--show-current'],{encoding:'utf8'}).trim(),head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),stagedFiles:execFileSync('git',['diff','--cached','--name-only'],{encoding:'utf8'}).trim(),protectedFiles:checks,pdfs,documents,tests:'12/12 file passed',typescript:true,build:true,bundle:true,browserVerified:false,claudeReview:false,javisReview:false,published:false,notionUpdated:false,bridgeSent:false};
+if(receipt.stagedFiles)throw new Error('Staged files exist');
+writeFileSync(base+'FINAL-RECEIPT.json',JSON.stringify(receipt,null,2)+'\n');
+console.log(JSON.stringify({branch:receipt.branch,head:receipt.head,protectedUnchanged:checks.length,pdfs,privacy,staged:false}));

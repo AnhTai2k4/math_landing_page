@@ -1,0 +1,20 @@
+import assert from 'node:assert/strict';
+import {readFileSync,readdirSync,writeFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+const base='T:/Claude/SanPham/btvn-web-diem-danh/phieu-a/';
+const log=f=>{const b=readFileSync(base+f);return b[0]===255&&b[1]===254?b.toString('utf16le').replace(/^\uFEFF/,''):b.toString('utf8');};
+assert.match(log('npm-test-dot-5.log'),/16\/16 file test đạt/);assert.equal(log('tsc-dot-5.log').trim(),'');assert.match(log('build-dot-5.log'),/built in/);assert.match(log('bundle-dot-5.log'),/Ngân sách gói: đạt/);assert.match(log('static-dot-5.log'),/Đạt React render/);
+const forbidden=['FAKE-ATTENDANCE-SHEET','0900000001','0900000011','Học sinh thử Một','HS-TEST-01','SUPABASE_SERVICE_ROLE_KEY','FAKE-MATERIALS-1'];
+for(const file of readdirSync('build/assets').filter(f=>/\.(js|css)$/.test(f))){const content=readFileSync('build/assets/'+file,'utf8');for(const value of forbidden)assert.ok(!content.includes(value),'Có dấu fixture/server-only trong bundle: '+file+' / '+value);}
+const sha=b=>createHash('sha256').update(b).digest('hex');
+for(const file of ['src/native/exams/FocusRoom.tsx','src/native/exams/focus-room.css','src/native/chapters/PracticeShelf.tsx','src/native/chapters/practice-bank.ts'])assert.equal(sha(readFileSync(file,'utf8').replaceAll('\r\n','\n')),sha(execFileSync('git',['show','HEAD:'+file],{encoding:'utf8',maxBuffer:20*1024*1024}).replaceAll('\r\n','\n')));
+execFileSync('git',['diff','--check','--','src/App.tsx','supabase/functions/mtm-homework-access/handler.ts']);
+assert.equal(execFileSync('git',['diff','--name-only','--','supabase/migrations'],{encoding:'utf8'}).trim(),'');
+const files=['src/App.tsx','src/native/homework/HomeworkSession.tsx','src/native/homework/LessonCards.tsx','src/native/homework/presentation.ts','src/native/homework/btvn-contract.ts','src/native/homework/btvn-session.css','supabase/functions/mtm-homework-access/handler.ts','server/btvn/supabase-repository.ts','server/btvn/supabase-transport.ts','server/btvn/durable-http.ts','server/btvn/attendance-reader.ts','server/btvn/attendance-config.example.json','supabase/migrations-pending/202610150005_btvn.sql','tests/exams-btvn-round5.test.mts','scripts/check-btvn-round5-static.mjs','scripts/check-btvn-round5-delivery.mjs','tsconfig.btvn.json'];
+const sourceHashes=Object.fromEntries(files.map(file=>[file,sha(readFileSync(file))]));
+const artifactFiles=['BIEN-BAN-DOT-5.md','HUONG-DAN-TRIEN-KHAI.md','BAI-HOC-DOT-5.md','npm-test-dot-5.log','test-dot-5-final.log','tsc-dot-5.log','build-dot-5.log','bundle-dot-5.log','static-dot-5.log','qa-dot-5/STATIC-RECEIPT.json'];
+const artifactHashes=Object.fromEntries(artifactFiles.map(file=>[file,sha(readFileSync(base+file))]));
+const receipt={version:'PHIEU-A-DOT-5',createdAt:new Date().toISOString(),producer:'Codex (ChatGPT)',reviewer:'Claude chưa phản hồi bản đợt 5',worktree:process.cwd(),sourceHashes,sourceDigest:sha(JSON.stringify(sourceHashes)),artifactHashes,checks:{testFiles:16,tsc:true,build:'build',bundleBudget:true,reactStatic:true,bundleFixtureLeak:false,protectedFramesUnchanged:true,legacyMigrationsUnchanged:true},limits:{browserVerified:false,postgresExecuted:false,supabaseRuntimeVerified:false,realStudentDataRead:false,migrationApplied:false,deployed:false,gitWrite:false,apiProductionEnabled:false,claudeReview:false}};
+writeFileSync(base+'FINAL-RECEIPT-DOT-5.json',JSON.stringify(receipt,null,2)+'\n');assert.deepEqual(JSON.parse(readFileSync(base+'FINAL-RECEIPT-DOT-5.json','utf8')),receipt);
+console.log('Đạt receipt đợt 5: nguồn/log hash + readback, 16/16 test/tsc/build/bundle/static, không fixture vào bundle, giữ khung và migration cũ. Browser/DB/deploy chưa kiểm/chưa chạy.');

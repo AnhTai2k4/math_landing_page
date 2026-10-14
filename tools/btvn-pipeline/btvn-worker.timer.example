@@ -1,0 +1,9 @@
+[Unit]
+Description=MTM BTVN mẫu hẹn giờ CHƯA bật, không có Install target
+
+[Timer]
+OnCalendar=*-*-* 21:00:00 Asia/Ho_Chi_Minh
+Persistent=false
+Unit=btvn-worker.service
+
+# Thành/operator chốt giờ sau nghiệm thu VPS; chưa enable/start trong đợt 7.

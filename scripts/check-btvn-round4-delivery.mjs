@@ -1,0 +1,21 @@
+import assert from 'node:assert/strict';
+import {readFileSync,readdirSync,writeFileSync,existsSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+const base='T:/Claude/SanPham/btvn-web-diem-danh/phieu-a/';
+const log=file=>{const b=readFileSync(base+file);return b[0]===255&&b[1]===254?b.toString('utf16le').replace(/^\uFEFF/,''):b.toString('utf8');};
+assert.match(log('npm-test-dot-4.log'),/15\/15 file test đạt/);assert.equal(log('tsc-dot-4.log').trim(),'');assert.match(log('build-dot-4.log'),/built in/);assert.match(log('bundle-dot-4.log'),/Ngân sách gói: đạt/);assert.match(log('static-dot-4.log'),/Đạt render React tĩnh/);
+const assets=readdirSync('dist/assets').filter(f=>/\.(js|css)$/.test(f));
+const forbidden=['FAKE-MATERIALS-1','FAKE-MATERIALS-2','FAKE-CODE','0900000001','Học sinh giả','Nguyễn Thử Một','1VeSHq3Gx2WJn8F7HHC11oj9cx9132MxFcUzBrJYfRF4'];
+for(const f of assets){const content=readFileSync('dist/assets/'+f,'utf8');for(const value of forbidden)assert.ok(!content.includes(value),'Rò fixture/source private vào '+f);}
+const sha=b=>createHash('sha256').update(b).digest('hex');
+const protectedFiles=['src/native/exams/FocusRoom.tsx','src/native/exams/focus-room.css','src/native/chapters/PracticeShelf.tsx','src/native/chapters/practice-bank.ts'];
+for(const f of protectedFiles)assert.equal(sha(readFileSync(f,'utf8').replaceAll('\r\n','\n')),sha(execFileSync('git',['show','HEAD:'+f],{encoding:'utf8',maxBuffer:20*1024*1024}).replaceAll('\r\n','\n')));
+const sources=['src/native/homework/HomeworkSession.tsx','src/native/homework/LessonCards.tsx','src/native/homework/btvn-contract.ts','src/native/homework/btvn-session.css','server/btvn/service.ts','server/btvn/repository.ts','server/btvn/http.ts','server/btvn/dev-plugin.ts','server/btvn/lesson-materials.ts','server/btvn/demo-lessons.ts','server/btvn/lesson-config.example.json','tests/exams-btvn-round4.test.mts','scripts/check-btvn-round4-ui.mjs','scripts/check-btvn-round4-delivery.mjs','tsconfig.btvn.json'];
+const blocked={browserVerified:false,attemptedWidth:1920,remainingWidths:[1366,390],screenshotsCreated:false,reason:'Edge sandbox Access denied / GPU exit -1073741790; stopped before DOM',videoPlaybackVerified:false};
+assert.match(log('qa-dot-4/edge-1920.log'),/GPU process isn't usable|Access is denied/);
+writeFileSync(base+'qa-dot-4/UI-BLOCKED.json',JSON.stringify(blocked,null,2)+'\n');
+const artifacts=['BIEN-BAN-DOT-4-VIDEO.md','BAI-HOC-DOT-4.md','npm-test-dot-4.log','test-dot-4-final.log','tsc-dot-4.log','build-dot-4.log','bundle-dot-4.log','static-dot-4.log','diff-check-dot-4.log','qa-dot-4/mau-a-code.html','qa-dot-4/STATIC-RECEIPT.json','qa-dot-4/UI-BLOCKED.json'];
+for(const file of artifacts)assert.ok(existsSync(base+file));
+const receipt={at:new Date().toISOString(),scope:'BTVN round 4 - sample A - demo only',tests:'15/15',typescript:true,build:true,bundle:true,staticReact:true,privacy:{assetsScanned:assets.length,passed:true},protectedFiles,...blocked,liveMaterialHeadersVerified:false,realStudentDataRead:false,liveSheetsRead:false,claudeReview:false,javisReview:false,notionUpdated:false,bridgeSent:false,serviceCreated:false,gitWrite:false,published:false,sourceHashes:sources.map(file=>({file,sha256:sha(readFileSync(file))})),artifacts:artifacts.map(file=>({file,sha256:sha(readFileSync(base+file))}))};
+writeFileSync(base+'FINAL-RECEIPT-DOT-4.json',JSON.stringify(receipt,null,2)+'\n');console.log('Đạt hồ sơ đợt 4, quét bundle không rò fixture/nguồn HS, 4 hash khung dùng chung giữ nguyên. Browser/video playback ghi chưa kiểm.');

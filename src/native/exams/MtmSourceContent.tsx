@@ -2,7 +2,7 @@ import React, {useId, useState} from 'react';
 import './mtm-source-content.css';
 import ZoomableImage from './ZoomableImage';
 
-export type SourceSegment = {path: string; width: number; height: number; sha256: string; sourcePage: number; mtmAuthored?: true};
+export type SourceSegment = {path: string; width: number; height: number; sha256: string; sourcePage: number; mtmAuthored?: true;privateUrl?:string};
 
 /** The raster preserves source glyphs and figures; branding is a separate, reversible layer. */
 export default function MtmSourceContent({segments, assetBase, label, kind}: {
@@ -15,7 +15,7 @@ export default function MtmSourceContent({segments, assetBase, label, kind}: {
         {segments.map((segment, index) => <figure className="mtm-source-segment" key={segment.path}>
           {failed.has(segment.path) ? <p role="alert">Không tải được phần {index + 1} của {label}. Hãy tải lại trang; chưa thể xác nhận nội dung đã đầy đủ.</p> : <>
             {/* TH-02 (Đợt 4): bấm ảnh hoặc nút "Phóng to" để xem toàn màn; ảnh trong bài giữ nguyên. */}
-            <ZoomableImage src={`${assetBase}/${segment.path}`} width={segment.width} height={segment.height}
+            <ZoomableImage src={segment.privateUrl??`${assetBase}/${segment.path}`} width={segment.width} height={segment.height}
               watermark label={`${kind === 'question' ? 'Đề' : 'Lời giải'} ${label}${segments.length > 1 ? `, phần ${index + 1}/${segments.length}` : ''}`}
               alt={`${label}${kind === 'solution' ? ' · lời giải' : ''}, phần ${index + 1}/${segments.length}. Chữ, công thức và hình được giữ từ bản gốc.`}
               onError={() => setFailed(previous => new Set([...previous, segment.path]))}/>

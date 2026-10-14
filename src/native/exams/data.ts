@@ -109,7 +109,7 @@ export function validatePracticeExam(input: unknown): Validation {
 /** Real source packs admitted after independent source, key, rubric and PDF review.
  * QA may pass an external module's fixtures as NativeExams.catalog; no globals,
  * query switches, fetches or fixture imports in the production entry point. */
-export const PRACTICE_EXAMS: readonly PracticeExam[] = Object.freeze(verifiedCatalog as unknown as PracticeExam[]);
+export const PRACTICE_EXAMS: readonly PracticeExam[] = /* @__PURE__ */ Object.freeze(verifiedCatalog as unknown as PracticeExam[]);
 export function readyExams(catalog: readonly unknown[]): PracticeExam[] {
   const valid = catalog.filter((exam): exam is PracticeExam => validatePracticeExam(exam).valid);
   return valid.filter(exam => valid.filter(other => other.id === exam.id).length === 1);

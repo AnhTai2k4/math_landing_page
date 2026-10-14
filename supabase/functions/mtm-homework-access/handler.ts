@@ -5,6 +5,10 @@ const revision=(v:unknown)=>Number.isInteger(v)&&Number(v)>0;
 const answers=(v:unknown)=>!!v&&typeof v==='object'&&!Array.isArray(v)&&JSON.stringify(v).length<=524288;
 function operation(body:Record<string,unknown>):{name:string;args:Record<string,unknown>}|null{
  const op=body.operation,base={p_session:body.session};
+ if(op==='forgot'){
+  if(Object.keys(body).sort().join(',')!=='className,fullName,operation,phone'||!['fullName','phone','className'].every(k=>typeof body[k]==='string'&&String(body[k]).trim().length>0&&String(body[k]).length<=160))return null;
+  return {name:'mtm_btvn_forgot',args:{p_full_name:body.fullName,p_phone:body.phone,p_class_name:body.className}};
+ }
  if(op==='resolve'){if(typeof body.code!=='string'||body.code.length>80||!/^[a-f0-9]{32}$/i.test(body.code.replace(/[\s-]/g,'')))return null;return{name:'mtm_hw_resolve_code',args:{p_code:body.code}};}
  if(op==='confirm')return token(body.challenge)?{name:'mtm_hw_confirm',args:{p_challenge:body.challenge,p_confirm:true}}:null;
  if(!token(body.session))return null;
@@ -28,8 +32,9 @@ export function createHomeworkHandler(deps:GatewayDeps){return async(request:Req
   const reader=request.body?.getReader();if(!reader)return json(400,'BODY');let bytes=0;const chunks:Uint8Array[]=[];
   for(;;){const {done,value}=await reader.read();if(done)break;bytes+=value.byteLength;if(bytes>524288){await reader.cancel();return json(413,'SIZE');}chunks.push(value);}
   const raw=new Uint8Array(bytes);let offset=0;for(const b of chunks){raw.set(b,offset);offset+=b.length;}
-  const body=JSON.parse(new TextDecoder().decode(raw));if(!body||typeof body!=='object'||Array.isArray(body))return json(400,'BODY');const route=operation(body);if(!route)return json(400,'INPUT');
-  if(body.operation==='resolve'){const key=await deps.networkKey(request),limit=await deps.rpc('mtm_hw_gateway_rate',{p_network_key:key});if(limit.error||(limit.data as {ok?:boolean})?.ok!==true)return json(429,'RATE');}
+  const body=JSON.parse(new TextDecoder().decode(raw));if(!body||typeof body!=='object'||Array.isArray(body))return json(400,'BODY');
+  if(body.operation==='resolve'||body.operation==='forgot'){const key=await deps.networkKey(request),limit=await deps.rpc('mtm_btvn_gateway_rate',{p_network_key:key});if(limit.error||(limit.data as {ok?:boolean})?.ok!==true)return json(429,'RATE');}
+  const route=operation(body);if(!route)return json(400,'INPUT');
   const out=await deps.rpc(route.name,route.args);if(out.error)return json(out.error.code==='42501'?401:out.error.code==='40001'?409:400,out.error.code??'RPC');
   if(body.operation!=='pdf')return json(200,'OK',out.data);
   const asset=(out.data as {asset:{path:string;sha256:string;bytes:number}})?.asset;if(!asset||typeof asset.path!=='string'||!uuid(asset.path.split('/')[0])||!uuid(asset.path.split('/')[1])||!/^[0-9a-f]{64}$/.test(asset.sha256)||asset.path!==asset.path.split('/').slice(0,2).join('/')+'/'+asset.sha256+'-'+body.kind+'.pdf'||!Number.isInteger(asset.bytes)||asset.bytes<8||asset.bytes>15728640)return json(500,'ASSET');

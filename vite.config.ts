@@ -2,9 +2,12 @@
   import { defineConfig } from 'vite';
   import react from '@vitejs/plugin-react-swc';
   import path from 'path';
+  import {btvnDevPlugin} from './server/btvn/dev-plugin';
 
   export default defineConfig({
-    plugins: [react()],
+    // Cache riêng trong worktree: build/ bị middleware chặn, node_modules dùng chung.
+    cacheDir: process.env.MTM_BTVN_DEMO==='1'?'.qa-temp/btvn-vite-cache':undefined,
+    plugins: [react(),btvnDevPlugin()],
     resolve: {
       extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
       alias: {
@@ -65,7 +68,8 @@
       manifest: true,
     },
     server: {
+      watch: process.env.MTM_BTVN_DEMO==='1'?{ignored:['**/build/**','**/dist/**']}:undefined,
       port: 3000,
-      open: true,
+      open: process.env.MTM_BTVN_DEMO==='1'?false:true,
     },
   });

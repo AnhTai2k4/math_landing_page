@@ -1,0 +1,18 @@
+[Unit]
+Description=MTM BTVN worker (mẫu CHƯA bật)
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=btvn-worker
+Group=btvn-worker
+WorkingDirectory=/opt/mtm-web
+EnvironmentFile=/etc/mtm-btvn/worker.env
+ExecStart=/opt/mtm-btvn-venv/bin/python tools/btvn-pipeline/pipeline.py --config /etc/mtm-btvn/config.json --state /var/lib/mtm-btvn/worker.sqlite --live
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/mtm-btvn
+

@@ -1,0 +1,18 @@
+{
+  "sheetId":"1VeSHq3Gx2WJn8F7HHC11oj9cx9132MxFcUzBrJYfRF4",
+  "enabled":false,
+  "legacyReconciled":false,
+  "outputDir":"T:/Claude/SanPham/btvn-web-diem-danh/rieng-tu/",
+  "note":"KHÔNG đọc thật trong phiên Codex. Lệnh gọi 15 tab nhưng liệt kê 16 tên; Claude đối chiếu metadata trước bật.",
+  "tabs":[
+    {"tab":"2K9 9+","className":"2K9 9+"},{"tab":"2K9 8+","className":"2K9 8+"},
+    {"tab":"2K9 XPT","className":"2K9 XPT"},{"tab":"2K9 HSA (CN)","className":"2K9 HSA (CN)"},
+    {"tab":"2K9 HSA (THỨ 5)","className":"2K9 HSA (THỨ 5)"},{"tab":"2K10 9+","className":"2K10 9+"},
+    {"tab":"2K10 8+","className":"2K10 8+"},{"tab":"2K10 Thứ 3,6","className":"2K10 Thứ 3,6"},
+    {"tab":"2K10 XPT","className":"2K10 XPT"},{"tab":"2K11 9+","className":"2K11 9+"},
+    {"tab":"2K11 8+","className":"2K11 8+"},{"tab":"2K11 XPT","className":"2K11 XPT"},
+    {"tab":"2K12","className":"2K12"},{"tab":"2K13","className":"2K13"},
+    {"tab":"2K14","className":"2K14"},{"tab":"2K15","className":"2K15"}
+  ],
+  "columns":{"fullName":"Họ tên","phone":"SĐT HS","parentPhone":"SĐT PH","className":"Lớp","leave":"Ngày nghỉ","birthDate":"Ngày sinh"}
+}

@@ -1,0 +1,30 @@
+{
+  "source": "public/exam-assets/0b7f6ade72f2d7c854e619a3c998cc6b6f30148f6edbadf06fdb52a9e373cbe2.pdf",
+  "page": 1,
+  "dpi": 120,
+  "review_scope": "render and lossless crops only; not math or source-rights acceptance",
+  "crops": [
+    {
+      "name": "question-1",
+      "rect": [
+        65,
+        289,
+        940,
+        374
+      ],
+      "sha256": "f8cfad05ffee332b15cffcd6028688969670c86d89ecd6d6a094c6aab0021950",
+      "pixel_equal": true
+    },
+    {
+      "name": "question-8-graph",
+      "rect": [
+        65,
+        1115,
+        958,
+        1290
+      ],
+      "sha256": "4d64d0cc0bdc3c6a93b7b7f9a7b2999e64ccefd3312c539496f6169a8781e797",
+      "pixel_equal": true
+    }
+  ]
+}

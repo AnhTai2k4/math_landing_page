@@ -52,8 +52,9 @@ test('DL-12: không còn đề nào tải PDF từ kho GitHub cũ; 2 đề Thi t
 });
 test('KT-20: Cache-Control lâu dài chỉ cho /exam-assets tên SHA-256, và mọi tệp ở đó đúng là SHA-256 nội dung', () => {
   const vercel = JSON.parse(readFileSync(join(root, 'vercel.json'), 'utf8')) as {headers?: {source: string; headers: {key: string; value: string}[]}[]};
-  assert.equal(vercel.headers?.length, 1, 'chỉ một luật header (không áp cho /practice-media hay trang)');
-  const rule = vercel.headers![0];
+  const cached = vercel.headers!.filter(rule=>rule.headers.some(h=>h.key.toLowerCase()==='cache-control'&&(/immutable/i.test(h.value)||/max-age\s*=\s*[1-9]/i.test(h.value))));
+  assert.equal(cached.length, 1, 'chỉ một luật cache lâu dài; trang riêng được phép no-store');
+  const rule = cached[0];
   assert.equal(rule.source, '/exam-assets/:file([0-9a-f]{64}\\.pdf)');
   assert.deepEqual(rule.headers, [{key: 'Cache-Control', value: 'public, max-age=31536000, immutable'}]);
   const pattern = /^[0-9a-f]{64}\.pdf$/;
