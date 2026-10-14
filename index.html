@@ -10,6 +10,21 @@
   <!-- KT-18: tải sớm 2 độ đậm dùng nhiều nhất (400, 700); TTF vẫn là dự phòng trong @font-face. -->
   <link rel="preload" href="/fonts/BeVietnamPro-Regular.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="/fonts/BeVietnamPro-Bold.woff2" as="font" type="font/woff2" crossorigin />
+  <script>
+    // KT-19: chỉ trang chủ tải sớm ảnh nền hero, đúng tệp WebP mà CSS .mig-hero-background chọn theo bề ngang (767px).
+    (function () {
+      try {
+        if (location.pathname !== '/') return;
+        var link = document.createElement('link');
+        link.rel = 'preload';
+        link.as = 'image';
+        link.type = 'image/webp';
+        link.href = '/migration-assets/source-3a0a47e483030d752b74a16044b2bd5c5183d3ba-' + (window.matchMedia('(max-width: 767px)').matches ? '1024' : '2048') + 'w.webp';
+        link.setAttribute('fetchpriority', 'high');
+        document.head.appendChild(link);
+      } catch (e) {}
+    })();
+  </script>
   <title data-rh="true">Minh Thành Math | Học Toán có lộ trình</title>
   <meta data-rh="true" name="description" content="Minh Thành Math: Toán THCS, THPT, HSA và TSA. Tìm lớp phù hợp, xem lịch học và truy cập cổng học sinh, phụ huynh, nhân sự." />
 </head>
