@@ -20,7 +20,9 @@ export {practiceURL};
  * không giành băng thông với lần vẽ đầu của chữ giới thiệu. */
 function useAfterFirstPaint(){
   const [ready,setReady]=useState(shelfReady);
-  useEffect(()=>{if(ready)return;let timer=0;const frame=requestAnimationFrame(()=>{timer=window.setTimeout(()=>setReady(true),0);});return()=>{cancelAnimationFrame(frame);window.clearTimeout(timer);};},[ready]);
+  // Dự phòng 400 ms: khi trình duyệt không vẽ khung hình (cửa sổ bị che, webview nhúng) requestAnimationFrame có thể
+  // không chạy, trước đây danh sách bài kẹt ở "Đang tải danh sách bài…" (bắt gặp khi kiểm trình duyệt đợt 3).
+  useEffect(()=>{if(ready)return;let timer=0;const go=()=>{window.clearTimeout(fallback);cancelAnimationFrame(frame);timer=window.setTimeout(()=>setReady(true),0);};const frame=requestAnimationFrame(go);const fallback=window.setTimeout(go,400);return()=>{cancelAnimationFrame(frame);window.clearTimeout(fallback);window.clearTimeout(timer);};},[ready]);
   return ready;
 }
 

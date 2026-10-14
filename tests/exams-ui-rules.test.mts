@@ -288,4 +288,12 @@ test('KT-06: PracticeLibrary.tsx không nhập tĩnh JSON đề; ngân hàng đ�
   for (const f of ['practice-tests.json', 'exact-tests.json', 'archived-tests.json']) assert.ok(bankSrc.includes(f), 'practice-bank vẫn đọc ' + f);
 });
 
+test('KT-06: danh sách bài không kẹt khi requestAnimationFrame không chạy (có hẹn giờ dự phòng)', () => {
+  const lib = src('src/native/chapters/PracticeLibrary.tsx');
+  const hook = lib.slice(lib.indexOf('function useAfterFirstPaint'), lib.indexOf('export default function PracticeLibrary'));
+  assert.ok(hook.includes('requestAnimationFrame(go)'), 'vẫn chờ một khung hình khi trình duyệt vẽ bình thường');
+  assert.ok(/const fallback=window\.setTimeout\(go,\d+\)/.test(hook), 'có hẹn giờ dự phòng gọi cùng hàm go');
+  assert.ok(hook.includes('window.clearTimeout(fallback)') && hook.includes('cancelAnimationFrame(frame)'), 'dọn cả khung hình lẫn hẹn giờ');
+});
+
 finish();
