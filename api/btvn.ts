@@ -23,6 +23,9 @@ export function createBtvnApi(getEnv=()=>process.env,loadRepository:()=>Promise<
   const result=await createDurableHomeworkHandler(repo)({method:req.method??'',body:req.body,cookie:header(req,'cookie'),origin,host,secure:true});
   for(const [key,value] of Object.entries(result.headers))res.setHeader(key,value);
   return res.status(result.status).json(result.body);
- }catch{return res.status(503).json({message:'Chưa lưu được. Giữ trang mở và thử lại.'});}
+ }catch(error){
+  // Chỉ tên lỗi và thông điệp ngắn để vận hành đọc nhật ký Vercel; không ghi body, cookie, khoá.
+  console.error('[btvn-api]',error instanceof Error?error.name+': '+error.message.slice(0,200):'unknown');
+  return res.status(503).json({message:'Chưa lưu được. Giữ trang mở và thử lại.'});}
 };}
 export default createBtvnApi();
