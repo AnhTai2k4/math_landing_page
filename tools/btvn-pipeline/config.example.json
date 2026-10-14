@@ -1,13 +1,62 @@
 {
   "sheets": [
-    {"id":"material-sheet-1", "url":"https://sheets.example.invalid/material-1.csv", "bearer_env":"BTVN_SHEET_READ_TOKEN", "columns":{"class_name":"Lớp","lesson_date":"Ngày","title":"Bài","document":"Tài liệu","handout":"Handout","video":"Video xem lại","homework":"BTVN","answers":"Đáp án BTVN"}},
-    {"id":"material-sheet-2", "url":"https://sheets.example.invalid/material-2.csv", "bearer_env":"BTVN_SHEET_READ_TOKEN", "columns":{"class_name":"Lớp","lesson_date":"Ngày","title":"Bài","document":"Tài liệu","handout":"Handout","video":"Video xem lại","homework":"BTVN","answers":"Đáp án BTVN"}}
+    {
+      "id": "material-sheet-1",
+      "url": "https://sheets.example.invalid/material-1.csv",
+      "bearer_env": "BTVN_SHEET_READ_TOKEN",
+      "columns": {
+        "class_name": "Lớp",
+        "lesson_date": "Ngày",
+        "title": "Bài",
+        "document": "Tài liệu",
+        "handout": "Handout",
+        "video": "Video xem lại",
+        "homework": "BTVN",
+        "answers": "Đáp án BTVN"
+      }
+    },
+    {
+      "id": "material-sheet-2",
+      "url": "https://sheets.example.invalid/material-2.csv",
+      "bearer_env": "BTVN_SHEET_READ_TOKEN",
+      "columns": {
+        "class_name": "Lớp",
+        "lesson_date": "Ngày",
+        "title": "Bài",
+        "document": "Tài liệu",
+        "handout": "Handout",
+        "video": "Video xem lại",
+        "homework": "BTVN",
+        "answers": "Đáp án BTVN"
+      }
+    }
   ],
-  "extractor":{"provider":"provider-a","model":"OPERATOR_CHOOSES_VISION_MODEL","url":"https://ai-a.example.invalid/v1/chat/completions","key_env":"BTVN_EXTRACTOR_API_KEY"},
-  "reviewer":{"provider":"provider-b","model":"OPERATOR_CHOOSES_INDEPENDENT_VISION_MODEL","url":"https://ai-b.example.invalid/v1/chat/completions","key_env":"BTVN_REVIEWER_API_KEY"},
-  "publish_url":"https://publisher.example.invalid/functions/v1/mtm-btvn-publish",
-  "source":{"pdf_download_url_template":null,"pdf_bearer_env":null,"pdf_auth_hosts":[]},
-  "source_publisher":"Minh Thành Math — nguồn học liệu được operator xác nhận",
-  "period":"GK1",
-  "allowed_hosts":["sheets.example.invalid","ai-a.example.invalid","ai-b.example.invalid","publisher.example.invalid","pdf.example.invalid","notify.example.invalid"]
+  "extractor": {
+    "provider": "provider-a",
+    "model": "OPERATOR_CHOOSES_VISION_MODEL",
+    "url": "https://ai-a.example.invalid/v1/chat/completions",
+    "key_env": "BTVN_EXTRACTOR_API_KEY"
+  },
+  "reviewer": {
+    "provider": "provider-b",
+    "model": "OPERATOR_CHOOSES_INDEPENDENT_VISION_MODEL",
+    "url": "https://ai-b.example.invalid/v1/chat/completions",
+    "key_env": "BTVN_REVIEWER_API_KEY"
+  },
+  "publish_url": "https://publisher.example.invalid/functions/v1/mtm-btvn-publish",
+  "source": {
+    "pdf_download_url_template": null,
+    "pdf_bearer_env": null,
+    "pdf_auth_hosts": []
+  },
+  "source_publisher": "Minh Thành Math — nguồn học liệu được operator xác nhận",
+  "period": "GK1",
+  "allowed_hosts": [
+    "sheets.example.invalid",
+    "ai-a.example.invalid",
+    "ai-b.example.invalid",
+    "publisher.example.invalid",
+    "pdf.example.invalid",
+    "notify.example.invalid"
+  ]
 }

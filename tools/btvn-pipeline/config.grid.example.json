@@ -1,0 +1,73 @@
+{
+  "sheets": [
+    {
+      "id": "material-sheet-1",
+      "url": "https://sheets.example.invalid/material-1?includeGridData=true&ranges=%272K10%27!A%3AK",
+      "bearer_env": "BTVN_SHEET_READ_TOKEN",
+      "columns": {
+        "class_name": "Lớp",
+        "lesson_date": "Ngày Dạy",
+        "title": "Tên bài học",
+        "document": "Tài liệu buổi học (HS)",
+        "handout": "Handout",
+        "video": "Record",
+        "homework": "BTVN",
+        "answers": "Đáp án BTVN"
+      },
+      "format": "grid",
+      "school_year": {
+        "start_year": 2026,
+        "start_month": 7
+      }
+    },
+    {
+      "id": "material-sheet-2",
+      "url": "https://sheets.example.invalid/material-2?includeGridData=true&ranges=%272K11%27!A%3AK",
+      "bearer_env": "BTVN_SHEET_READ_TOKEN",
+      "columns": {
+        "class_name": "Lớp",
+        "lesson_date": "Ngày Dạy",
+        "title": "Tên bài học",
+        "document": "Tài liệu buổi học (hs",
+        "handout": "Handout",
+        "video": "Record",
+        "homework": "BTVN",
+        "answers": "Đáp án BTVN"
+      },
+      "format": "grid",
+      "school_year": {
+        "start_year": 2026,
+        "start_month": 7
+      }
+    }
+  ],
+  "extractor": {
+    "provider": "provider-a",
+    "model": "OPERATOR_CHOOSES_VISION_MODEL",
+    "url": "https://ai-a.example.invalid/v1/chat/completions",
+    "key_env": "BTVN_EXTRACTOR_API_KEY"
+  },
+  "reviewer": {
+    "provider": "provider-b",
+    "model": "OPERATOR_CHOOSES_INDEPENDENT_VISION_MODEL",
+    "url": "https://ai-b.example.invalid/v1/chat/completions",
+    "key_env": "BTVN_REVIEWER_API_KEY"
+  },
+  "publish_url": "https://publisher.example.invalid/functions/v1/mtm-btvn-publish",
+  "source": {
+    "pdf_download_url_template": null,
+    "pdf_bearer_env": null,
+    "pdf_auth_hosts": []
+  },
+  "source_publisher": "Minh Thành Math — nguồn học liệu được operator xác nhận",
+  "period": "GK1",
+  "allowed_hosts": [
+    "sheets.example.invalid",
+    "ai-a.example.invalid",
+    "ai-b.example.invalid",
+    "publisher.example.invalid",
+    "pdf.example.invalid",
+    "notify.example.invalid"
+  ],
+  "note": "Mẫu giả, offline. Năm học và tháng bắt đầu phải do operator xác minh; tháng 7 trong mẫu chỉ dùng fixture. Mỗi tab ánh xạ HS/GV theo tiêu đề; tab không Record đặt video:null. Chỉ vùng học liệu, không Link nộp/bảng điểm/roster."
+}

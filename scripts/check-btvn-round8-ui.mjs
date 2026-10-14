@@ -1,0 +1,14 @@
+﻿import {build} from 'esbuild';
+import {mkdirSync,writeFileSync} from 'node:fs';
+import {createRequire} from 'node:module';
+import {resolve} from 'node:path';
+const out=resolve('.qa-temp/ui-8');mkdirSync(out,{recursive:true});
+const source=`import React from 'react';import {renderToStaticMarkup} from 'react-dom/server';import assert from 'node:assert/strict';
+import AttemptAnswerSheet from './src/native/exams/AttemptAnswerSheet';
+import {pipelineFixture} from './tests/btvn-pipeline-fixture';import {createDraft} from './src/native/exams/store';import {examSections} from './src/native/exams/flexible-profile';
+const exam=pipelineFixture().exam;exam.rubricVersion='MTM-BTVN-10-v1';exam.questions.push({id:'self-fake',kind:'self',maxMillipoints:0,sourceRef:'Câu tự làm giả',prompt:'Chứng minh n(n+1) chẵn, n nguyên.',solution:'Hai số liên tiếp có một số chẵn.'});exam.questionCount++;exam.sections.push({label:'Tự làm',kind:'self',count:1});const created=createDraft(exam,'ui-fake',1000);assert.ok(created.ok);
+const html=renderToStaticMarkup(<AttemptAnswerSheet props={{exam,catalogUrl:'/btvn'}} state={{draft:created.value,sections:examSections(exam),states:['blank','blank','blank','answered'],activeQuestion:3,pdfReady:true}} compact/>);assert.match(html,/không cần nhập đáp án/);assert.doesNotMatch(html,/<input/);assert.match(html,/Tự làm/);export default {html,selfHasNoAnswerInput:true,unscoredNotice:true,browserVerified:false};`;
+const result=await build({stdin:{contents:source,resolveDir:process.cwd(),loader:'tsx'},bundle:true,write:false,platform:'node',format:'cjs',jsx:'automatic',loader:{'.css':'empty'},logLevel:'error'});
+const file=out+'/check.cjs';writeFileSync(file,result.outputFiles[0].text);const receipt=createRequire(import.meta.url)(file).default;
+writeFileSync(out+'/receipt.json',JSON.stringify(receipt,null,2));writeFileSync(out+'/self.html','<!doctype html><meta charset="utf-8">'+receipt.html);
+console.log('Đạt render phòng làm bài thật: câu tự làm có hướng dẫn, không có ô nhập, không lấy đáp án. Chưa kiểm trình duyệt.');

@@ -2,8 +2,8 @@ import type {PracticeExam} from './data';
 import type {Draft, Response} from './store';
 import {resultFor} from './result';
 
-export type ReviewStatus = 'correct' | 'partial' | 'wrong' | 'unanswered' | 'unscored';
-export const STATUS_LABELS: Record<ReviewStatus,string> = {correct:'Đúng toàn bộ',partial:'Đúng một phần',wrong:'Chưa đúng',unanswered:'Chưa trả lời',unscored:'Chưa tính được điểm'};
+export type ReviewStatus = 'correct' | 'partial' | 'wrong' | 'unanswered' | 'unscored' | 'self';
+export const STATUS_LABELS: Record<ReviewStatus,string> = {self:'Tự làm, xem lời giải, không tính điểm',correct:'Đúng toàn bộ',partial:'Đúng một phần',wrong:'Chưa đúng',unanswered:'Chưa trả lời',unscored:'Chưa tính được điểm'};
 export const statementLetters = ['a','b','c','d'];
 export const formatPoints = (points:number) => (points/1000).toLocaleString('vi-VN',{maximumFractionDigits:3});
 export function displayAnswer(answer:Response|undefined):string {
@@ -17,7 +17,7 @@ export function reviewRows(exam:PracticeExam,draft:Draft) {
     const hasResponse=Array.isArray(answer)?answer.some(v=>v!==null):typeof answer==='string'&&!!answer.trim();
     const scored=result?.score.ok?result.score.rows.find(r=>r.id===q.id):undefined;
     const earned=scored?.earnedMillipoints??0;
-    const status:ReviewStatus=!scored?'unscored':!hasResponse?'unanswered':earned===q.maxMillipoints?'correct':earned>0?'partial':'wrong';
+    const status:ReviewStatus=q.kind==='self'?'self':!scored?'unscored':!hasResponse?'unanswered':earned===q.maxMillipoints?'correct':earned>0?'partial':'wrong';
     return {q,index,answer,earned,status,invalidNumeric:result?.invalidNumeric.includes(q.id)??false};
   });
 }

@@ -27,7 +27,7 @@ const token=service.login(gate,'ok-ip');
 fails(()=>service.state('bad-token'),401);
 let state=service.start(token);assert.equal(state.attemptsUsed,1);assert.equal(state.draft!.deadline-state.draft!.startedAt,120*60000);
 assert.equal(service.start(token).draft!.attemptId,state.draft!.attemptId);
-const answers:Answers=Object.fromEntries(exam.questions.map(q=>[q.id,q.kind==='mc'?q.answer:q.kind==='tf'?q.answer:q.acceptedAnswers[0]]));
+const answers:Answers=Object.fromEntries(exam.questions.map(q=>[q.id,q.kind==='mc'?q.answer:q.kind==='tf'?q.answer:q.kind==='self'?'':q.acceptedAnswers[0]]));
 const id=state.draft!.attemptId;
 fails(()=>service.save(token,'other-attempt',answers),409);
 fails(()=>service.save(token,id,{unknown:'A'}),400);

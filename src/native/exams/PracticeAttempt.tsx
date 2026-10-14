@@ -3,7 +3,7 @@ import {phongThiV2} from '../flags';
 import FocusRoom from './FocusRoom';
 import {Link} from '../../migration/navigation';
 import type {Draft} from './store';
-import {draftExportFile,pendingQuestions,questionLabel} from './attempt-ui';
+import {draftExportFile,pendingQuestions,questionLabel,scoredQuestionCount} from './attempt-ui';
 import ExamConfirm from './ExamConfirm';
 import {localStore} from './local-store';
 import {usePracticeAttempt} from './usePracticeAttempt';
@@ -70,7 +70,7 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverr
           <button type="button" className="ep-primary ep-wide" disabled={startDisabled} onClick={begin}>{startLabel}</button>
         </section>:<>
           <div className="ep-toolbar ep-answer-toolbar">
-            {submitted?<strong role="status">{unsaved?'Đã nộp trên trang · chưa xác nhận lưu':'Đã nộp và lưu kết quả'}</strong>:<><span role="timer" aria-label="Thời gian còn lại" aria-live="off">Còn {Math.floor(seconds/60)}:{String(seconds%60).padStart(2,'0')}</span><span>{answered}/{exam.questions.length} câu đã trả lời đầy đủ{invalidCount>0?` · ${invalidCount} câu sai định dạng`:''}</span></>}
+            {submitted?<strong role="status">{unsaved?'Đã nộp trên trang · chưa xác nhận lưu':'Đã nộp và lưu kết quả'}</strong>:<><span role="timer" aria-label="Thời gian còn lại" aria-live="off">Còn {Math.floor(seconds/60)}:{String(seconds%60).padStart(2,'0')}</span><span>{answered}/{scoredQuestionCount(exam)} câu đã trả lời đầy đủ{invalidCount>0?` · ${invalidCount} câu sai định dạng`:''}</span></>}
           </div>
           {submitted?<>
             <AttemptResult props={props} state={state}/>

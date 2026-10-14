@@ -31,7 +31,7 @@ const token=service.login(gate,'ip-1'),other=service.login({...gate,phone:'09000
 assert.equal(service.state(other).attemptsUsed,0);assert.equal(service.state(token).dueAt,null);
 assert.throws(()=>service.login({...gate,studentCode:'unused'},'ip-extra'));
 let state=service.start(token);state=service.submit(token,state.draft!.attemptId,{});assert.equal(state.receipts[0].late,null);
-const answers=Object.fromEntries(service.exam.questions.map(q=>[q.id,q.kind==='mc'?q.answer:q.kind==='tf'?q.answer:q.acceptedAnswers[0]]));
+const answers=Object.fromEntries(service.exam.questions.map(q=>[q.id,q.kind==='mc'?q.answer:q.kind==='tf'?q.answer:q.kind==='self'?'':q.acceptedAnswers[0]]));
 now+=1000;state=service.start(token);now+=1000;state=service.submit(token,state.draft!.attemptId,answers);
 assert.equal(state.bestScore,10);assert.equal(state.receipts[1].late,null);
 service.reconcileActualClass(imported.students[0].studentCode,now-500);
@@ -53,7 +53,7 @@ assert.throws(()=>new HomeworkService(duplicateRepo,service.exam,0).login(gate,'
 for(const [a,b] of [['2026-10-12','2026-10-13'],['2026-10-14','2026-10-15'],['2026-10-16','2026-10-17']])assert.equal(pairedLessonCode('g12',a),pairedLessonCode('g12',b));
 assert.notEqual(pairedLessonCode('g11','2026-10-14'),pairedLessonCode('g12','2026-10-14'));assert.throws(()=>pairedLessonCode('g12','2026-02-30'));
 const mc={sheetId:'FAKE-MATERIAL',tab:'g12',programKey:'g12',columns:{date:'Kết thúc ca',homework:'BTVN',answer:'Đáp án BTVN'}};
-const mh=['Kết thúc ca','BTVN','Đáp án BTVN'],mr=[['2026-10-14T21:00:00+07:00','fake-pdf','fake-answer'],['2026-10-15T21:00:00+07:00','fake-pdf','fake-answer'],['14/10','pdf','answer'],['2026-10-14T21:00:00+07:00','pdf','']];
+const mh=['Kết thúc ca','BTVN','Đáp án BTVN'],mr=[['2026-10-14T21:00:00+07:00','https://source.invalid/fake-pdf.pdf','https://source.invalid/fake-answer.pdf'],['2026-10-15T21:00:00+07:00','https://source.invalid/fake-pdf.pdf','https://source.invalid/fake-answer.pdf'],['14/10','https://source.invalid/pdf.pdf','https://source.invalid/answer.pdf'],['2026-10-14T21:00:00+07:00','https://source.invalid/pdf.pdf','']];
 const watch=detectHomework(mh,mr,mc,[],Date.parse('2026-10-16T00:00:00Z'));assert.equal(watch.jobs.length,1);assert.equal(watch.pending.length,2);
 assert.equal(detectHomework(mh,mr,mc,watch.seen,Date.parse('2026-10-16T00:00:00Z')).jobs.length,0);
 assert.equal(handleHomework(service,{method:'POST',body:{action:'login',gate},ip:'root',host:'localhost'}).status,200);

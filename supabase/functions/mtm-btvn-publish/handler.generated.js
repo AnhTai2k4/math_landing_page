@@ -63,7 +63,7 @@ function validateAssessment(input) {
     else if (ids.has(q.id)) errors.push(prefix + "duplicate id");
     else ids.add(q.id);
     if (!text(q.sourceRef)) errors.push(prefix + "sourceRef required");
-    if (!units(q.maxMillipoints) || q.maxMillipoints === 0) errors.push(prefix + "positive integer millipoints required");
+    if (!units(q.maxMillipoints) || q.maxMillipoints === 0 && q.kind !== "self") errors.push(prefix + "positive integer millipoints required");
     else total += q.maxMillipoints;
     switch (q.kind) {
       case "mc":
@@ -85,13 +85,16 @@ function validateAssessment(input) {
         }
         break;
       }
+      case "self":
+        if (input.rubricVersion !== "MTM-BTVN-10-v1" || q.maxMillipoints !== 0 || "answer" in q || "acceptedAnswers" in q) errors.push(prefix + "self only allowed in BTVN without a key or points");
+        break;
       case "essay":
         break;
       default:
         errors.push(prefix + "unsupported question kind");
     }
   });
-  if (total !== 1e4) errors.push("exam: total must equal 10000 millipoints");
+  if (input.rubricVersion === "MTM-BTVN-10-v1" ? total <= 0 : total !== 1e4) errors.push(input.rubricVersion === "MTM-BTVN-10-v1" ? "exam: BTVN needs positive scored total" : "exam: total must equal 10000 millipoints");
   return { valid: !errors.length, errors };
 }
 
@@ -114,7 +117,7 @@ function validateMtmAssessment(input) {
 var FLEX_RUBRIC = "MTM-FLEX-10-v1";
 function validatePracticeProfile(input) {
   const e = input;
-  if (e?.rubricVersion !== FLEX_RUBRIC) return validateMtmAssessment(input);
+  if (e?.rubricVersion !== FLEX_RUBRIC && e?.rubricVersion !== "MTM-BTVN-10-v1") return validateMtmAssessment(input);
   const gate = validateAssessment(input);
   if (!gate.valid) return gate;
   const errors = [];
@@ -122,7 +125,7 @@ function validatePracticeProfile(input) {
   if (!Array.isArray(e.sections) || !e.sections.length || e.sections.length > 12) return { valid: false, errors: [...errors, "Sections required"] };
   let offset = 0;
   for (const section of e.sections) {
-    if (!section || typeof section.label !== "string" || !section.label.trim() || section.label.length > 100 || !["mc", "tf", "short"].includes(section.kind) || !Number.isSafeInteger(section.count) || section.count < 1 || section.count > 300) {
+    if (!section || typeof section.label !== "string" || !section.label.trim() || section.label.length > 100 || !(e.rubricVersion === "MTM-BTVN-10-v1" ? ["mc", "tf", "short", "self"] : ["mc", "tf", "short"]).includes(section.kind) || !Number.isSafeInteger(section.count) || section.count < 1 || section.count > 300) {
       errors.push("Invalid section");
       continue;
     }
@@ -187,6 +190,8 @@ function validatePracticeExam(input) {
     if (!boundedText(q.prompt ?? q.text ?? q.sourceRef, 2e4)) errors.push("Missing question text or source locator");
     if (q.prompt !== void 0 && !boundedText(q.prompt, 2e4)) errors.push("Invalid prompt");
     if (q.text !== void 0 && !boundedText(q.text, 2e4)) errors.push("Invalid text");
+    if (q.convertedFrom !== void 0 && (input.rubricVersion !== "MTM-BTVN-10-v1" || q.kind !== "short" || q.convertedFrom !== "essay")) errors.push("Invalid essay conversion");
+    if (q.kind === "self" && !boundedText(q.solution, 2e4) && !q.sourceContent?.solutions?.length) errors.push("Self question requires a solution");
     if (q.solution !== void 0 && !boundedText(q.solution, 2e4)) errors.push("Invalid solution");
     if (q.correctionNote !== void 0 && !boundedText(q.correctionNote, 2e3)) errors.push("Invalid correction note");
     if (q.sourceContent !== void 0) {
@@ -204,7 +209,7 @@ function validatePracticeExam(input) {
 var hash = async (bytes) => Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", Uint8Array.from(bytes).buffer))).map((x) => x.toString(16).padStart(2, "0")).join("");
 var canonical = (value) => JSON.stringify(value);
 function expectedSlots(exam) {
-  return exam.questions.flatMap((q) => q.kind === "tf" ? q.answer.map((expected, i) => ({ question_id: q.id, slot: "abcd"[i], expected })) : [{ question_id: q.id, slot: "answer", expected: q.kind === "short" ? q.acceptedAnswers : q.answer }]);
+  return exam.questions.flatMap((q) => q.kind === "tf" ? q.answer.map((expected, i) => ({ question_id: q.id, slot: "abcd"[i], expected })) : [{ question_id: q.id, slot: "answer", expected: q.kind === "self" ? "self" : q.kind === "short" ? q.acceptedAnswers : q.answer }]);
 }
 function ensure(value, message) {
   if (!value) throw Error(message);
@@ -251,7 +256,7 @@ function createBtvnPublishHandler(port, secret) {
       };
       const classDates = m.classDates ?? {};
       ensure(classDates && typeof classDates === "object" && !Array.isArray(classDates) && Object.entries(classDates).every(([name, date]) => m.classNames.includes(name) && typeof date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(date) && new Date(date).toISOString().slice(0, 10) === date), "INVALID_CLASS_DATES");
-      const material = { lessonCode: m.lessonCode, classNames: m.classNames, date: m.date, title: m.title, classDates, videoId: m.videoId ?? null, materialUrl: link(m.materialUrl), handoutUrl: link(m.handoutUrl), homeworkUrl: null };
+      const material = { lessonCode: m.lessonCode, classNames: m.classNames, date: m.date, title: m.title, classDates, videoId: m.videoId ?? null, materialUrl: link(m.materialUrl), handoutUrl: link(m.handoutUrl), homeworkUrl: null, videoUrl: link(m.videoUrl), homeworkNote: typeof m.homeworkNote === "string" ? m.homeworkNote.slice(0, 300) : void 0 };
       ensure(material.videoId === null || /^[a-zA-Z0-9_-]{11}$/.test(material.videoId), "INVALID_VIDEO");
       if (body.action === "error") {
         ensure(/^[A-Z0-9_]{1,80}$/.test(body.error_code ?? ""), "INVALID_ERROR");
@@ -268,6 +273,7 @@ function createBtvnPublishHandler(port, secret) {
       for (const slot of slots) {
         const matches = proof.slots.filter((x) => x.question_id === slot.question_id && x.slot === slot.slot), q = exam.questions.find((q2) => q2.id === slot.question_id);
         ensure(matches.length === 1 && canonical(matches[0].expected) === canonical(slot.expected), "REVIEW_MISMATCH");
+        if (q.convertedFrom === "essay" || q.kind === "self" || exam.rubricVersion === "MTM-BTVN-10-v1" && q.kind === "short") ensure(matches[0].conversion_verified === true, "CONVERSION_REVIEW_REQUIRED");
         const actual = matches[0].actual;
         ensure(q.kind === "short" ? typeof actual === "string" && normalizedShort(q.mode, actual) !== null && q.acceptedAnswers.some((a2) => normalizedShort(q.mode, a2) === normalizedShort(q.mode, actual)) : canonical(actual) === canonical(slot.expected), "REVIEW_MISMATCH");
       }

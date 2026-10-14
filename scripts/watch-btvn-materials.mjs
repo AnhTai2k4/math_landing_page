@@ -15,12 +15,13 @@ const input=JSON.parse(readFileSync(source,'utf8'));
 if(live){
   const allowed=['1rq76we9zUxMWN4ni77_agf23XZ1QQsfJ3DM5qX5gGUg','1161uGE4TsAQskIsJUeEoLH03IdYndrLSk5wr00FsTKk'];
   if(!allowed.includes(input.config?.sheetId))throw new Error('Chỉ cho phép hai nguồn học liệu trong lệnh, không nhận Sheet danh sách');
-  const reader=await build({entryPoints:['server/btvn/google-sheet-reader.ts'],bundle:true,write:false,platform:'node',format:'esm'});
-  const {readSheetValues}=await import('data:text/javascript;base64,'+Buffer.from(reader.outputFiles[0].text).toString('base64'));
-  input.values=await readSheetValues(input.config.sheetId,input.config.tab,process.env.MTM_MATERIALS_ACCESS_TOKEN??'');
+  const reader=await build({entryPoints:['server/btvn/material-grid-reader.ts'],bundle:true,write:false,platform:'node',format:'esm'});
+  const {readMaterialGrid}=await import('data:text/javascript;base64,'+Buffer.from(reader.outputFiles[0].text).toString('base64'));
+  input.values=await readMaterialGrid(input.config.sheetId,input.config.tab,process.env.MTM_MATERIALS_ACCESS_TOKEN??'',fetch,input.config.range??'A:K');
 }
 const seen=existsSync(checkpoint)?JSON.parse(readFileSync(checkpoint,'utf8')).seen:[];
-const [headers,...rows]=input.values;
+const [cells,...rows]=input.values;
+const headers=cells.map(c=>typeof c==='string'?c:c.text);
 const result=detectHomework(headers,rows,input.config,seen);
 // Output giữ cả jobs + seen, là receipt phục hồi nếu cập nhật checkpoint bị gián đoạn.
 writeFileSync(output,JSON.stringify(result,null,2)+'\n',{encoding:'utf8',flag:'wx'});

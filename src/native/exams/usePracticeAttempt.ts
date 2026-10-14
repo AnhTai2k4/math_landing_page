@@ -73,7 +73,7 @@ export function usePracticeAttempt({exam,previousExam,storeOverride,newAttemptsC
     if (!current || current.submittedAt !== null) return;
     if(!automatic&&!pdfReady){setNotice('Chưa thể nộp thủ công khi có phần câu hỏi chưa hiển thị. Bài làm vẫn được giữ; hãy tải lại trang để đọc đủ đề.');return;}
     const clock = Date.now();
-    const unanswered = exam.questions.filter(q => answerState(exam, q, current.answers) !== 'answered').length;
+    const unanswered = exam.questions.filter(q => q.kind!=='self' && answerState(exam, q, current.answers) !== 'answered').length;
     if (!automatic && remainingMs(current, clock) > 0 && unanswered > 0 && !confirmed) {setConfirmation('submit');return;}
     const result = submitDraft(exam, current, Date.now());
     if (!result.ok) { setNotice(result.message); return; }

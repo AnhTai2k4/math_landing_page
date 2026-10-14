@@ -22,7 +22,7 @@ let now=Date.parse('2026-10-15T10:00:00+07:00');const repo=new MemoryHomeworkRep
 const service=new HomeworkService(repo,exam,0,'fake',lessons[0].lessonCode,()=>now,lessons,{[lessons[1].lessonCode]:{...exam,id:exam.id+'-other'},foreign:exam});
 const token=service.login({studentCode:'FAKE-CODE'},'ip');assert.equal(service.state(token).lessons?.length,2);assert.throws(()=>service.select(token,'foreign'));
 let first=service.start(token);service.submit(token,first.draft!.attemptId,{});service.select(token,lessons[1].lessonCode);assert.equal(service.state(token).attemptsUsed,0);assert.equal(service.state(token).dueAt,null);
-const answers=Object.fromEntries(exam.questions.map(q=>[q.id,q.kind==='mc'?q.answer:q.kind==='tf'?q.answer:q.acceptedAnswers[0]]));
+const answers=Object.fromEntries(exam.questions.map(q=>[q.id,q.kind==='mc'?q.answer:q.kind==='tf'?q.answer:q.kind==='self'?'':q.acceptedAnswers[0]]));
 let other=service.start(token);assert.throws(()=>service.save(token,first.draft!.attemptId,{}));service.submit(token,other.draft!.attemptId,answers);now+=1000;other=service.start(token);service.submit(token,other.draft!.attemptId,{});assert.equal(service.state(token).bestScore,10);
 service.reconcileActualClass('FAKE-CODE',now-2000,lessons[1].lessonCode);assert.equal(service.state(token).receipts[0].late,true);assert.equal(service.state(token).lessons?.find(l=>l.lessonCode===lessons[1].lessonCode)?.late,true);
 const csv=scoresCsv(repo.all(),lessons[0].lessonCode);assert.ok(csv.includes(lessons[0].lessonCode)&&csv.includes(lessons[1].lessonCode));assert.equal(csv.split('\r\n').filter(Boolean).length,4);

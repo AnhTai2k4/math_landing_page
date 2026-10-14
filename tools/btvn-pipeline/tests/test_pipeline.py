@@ -10,7 +10,7 @@ def row():
     return dict(lesson_key='btvn-fake-1',class_name='LỚP GIẢ',lesson_date='2026-10-15',title='Bài giả 1',document='',handout='',video='',homework='https://pdf.example.invalid/hs.pdf',answers='https://pdf.example.invalid/gv.pdf')
 
 def extracted():
-    return {'certain':True,'question_only':True,'coverage_complete':True,'grade':12,'sections':[{'label':'I','kind':'mc','count':1},{'label':'II','kind':'tf','count':1},{'label':'III','kind':'short','count':1}], 'questions':[
+    return {'certain':True,'question_only':True,'coverage_complete':True,'weightPolicy':'source','grade':12,'sections':[{'label':'I','kind':'mc','count':1},{'label':'II','kind':'tf','count':1},{'label':'III','kind':'short','count':1}], 'questions':[
         {'id':'q1','sourceRef':'I Câu 1','kind':'mc','prompt':'1+1 bằng bao nhiêu?','choices':['1','2','3','4'],'answer':'B','solution':'1+1=2','maxMillipoints':3000,'questionCrops':[{'page':1,'x':0,'y':0,'width':100,'height':30}],'solutionCrops':[{'page':1,'x':0,'y':0,'width':100,'height':30}]},
         {'id':'q2','sourceRef':'II Câu 1','kind':'tf','prompt':'Kiểm bốn mệnh đề.','statements':['1=1','1=2','2=2','2=1'],'answer':[True,False,True,False],'solution':'Kiểm từng đẳng thức.','maxMillipoints':4000,'pointsByCorrectCount':[0,400,1000,2000,4000],'questionCrops':[{'page':1,'x':0,'y':30,'width':100,'height':30}],'solutionCrops':[{'page':1,'x':0,'y':30,'width':100,'height':30}]},
         {'id':'q3','sourceRef':'III Câu 1','kind':'short','prompt':'5/2 viết dạng thập phân?','mode':'numeric','acceptedAnswers':['2.5'],'solution':'5 chia 2 bằng 2.5','maxMillipoints':3000,'questionCrops':[{'page':1,'x':0,'y':60,'width':100,'height':30}],'solutionCrops':[{'page':1,'x':0,'y':60,'width':100,'height':30}]}
@@ -21,7 +21,11 @@ def review():
 
 class FakeAI:
     def __init__(self,result):self.result=result;self.calls=[]
-    def ask(self,*args):self.calls.append(args);return copy.deepcopy(self.result)
+    def ask(self,*args):
+        self.calls.append(args)
+        if 'Trả JSON {conversion_checks:' in args[0]:
+            return {'conversion_checks':{k:True for k in self.result.get('answers',{})},'reasoning':{k:'Mock đối chiếu lời giải nguồn giả, không phải AI thật.' for k in self.result.get('answers',{})}}
+        return copy.deepcopy(self.result)
 
 class FakeTransport:
     def __init__(self):self.calls=[]
@@ -194,10 +198,10 @@ class PipelineTests(unittest.TestCase):
     def test_uncertain_review_and_bad_rubric_fail_closed(self):
         self.independent.result['certain']=False
         self.assertEqual(self.worker().process(row()),'loi')
-        self.independent.result=review();self.primary.result['questions'][0]['maxMillipoints']=2500
+        self.independent.result=review();self.primary.result['questions'][0]['maxMillipoints']=-1
         self.assertEqual(self.worker().process(row()),'loi')
         self.assertEqual(self.publisher.payloads,[])
-        self.assertIn('10000',self.publisher.errors[-1]['reason'])
+        self.assertIn('positive integer',self.publisher.errors[-1]['reason'])
 
     def test_malformed_crop_and_missing_answer_source_block(self):
         self.primary.result['questions'][0]['questionCrops'][0]['width']=999

@@ -6,8 +6,9 @@ export type Question =
   | (Base & { kind: 'mc'; choices: [string, string, string, string]; answer: Choice })
   | (Base & { kind: 'tf'; answer: [boolean, boolean, boolean, boolean]; pointsByCorrectCount: [number, number, number, number, number] })
   | (Base & { kind: 'short'; mode: 'numeric' | 'rational' | 'exact'; acceptedAnswers: string[] })
-  | (Base & { kind: 'essay' });
-export type Assessment = { id: string; sourceHash: string; sourceRef: string; questionCount: number;
+  | (Base & { kind: 'essay' })
+  | (Base & { kind: 'self'; maxMillipoints: 0 });
+export type Assessment = { rubricVersion?:string; id: string; sourceHash: string; sourceRef: string; questionCount: number;
   answerKeyVerified: true; rubricVerified: true; questions: Question[] };
 export type Validation = { valid: boolean; errors: string[] };
 const record = (v: unknown): v is Record<string, unknown> => !!v && typeof v === 'object' && !Array.isArray(v);
@@ -54,7 +55,7 @@ export function validateAssessment(input: unknown): Validation {
     if (!text(q.id) || q.id !== q.id.trim()) errors.push(prefix + 'nonblank unpadded id required');
     else if (ids.has(q.id)) errors.push(prefix + 'duplicate id'); else ids.add(q.id);
     if (!text(q.sourceRef)) errors.push(prefix + 'sourceRef required');
-    if (!units(q.maxMillipoints) || q.maxMillipoints === 0) errors.push(prefix + 'positive integer millipoints required');
+    if (!units(q.maxMillipoints) || (q.maxMillipoints === 0 && q.kind !== 'self')) errors.push(prefix + 'positive integer millipoints required');
     else total += q.maxMillipoints;
     switch (q.kind) {
       case 'mc':
@@ -76,11 +77,14 @@ export function validateAssessment(input: unknown): Validation {
         }
         break;
       }
+      case 'self':
+        if (input.rubricVersion !== 'MTM-BTVN-10-v1' || q.maxMillipoints !== 0 || 'answer' in q || 'acceptedAnswers' in q) errors.push(prefix + 'self only allowed in BTVN without a key or points');
+        break;
       case 'essay': break;
       default: errors.push(prefix + 'unsupported question kind');
     }
   });
-  if (total !== 10000) errors.push('exam: total must equal 10000 millipoints');
+  if (input.rubricVersion === 'MTM-BTVN-10-v1' ? total <= 0 : total !== 10000) errors.push(input.rubricVersion==='MTM-BTVN-10-v1'?'exam: BTVN needs positive scored total':'exam: total must equal 10000 millipoints');
   return { valid: !errors.length, errors };
 }
 
@@ -101,7 +105,7 @@ export function scoreAssessment(input: unknown, submitted: unknown): ScoreResult
   for (const q of exam.questions) {
     const a = Object.hasOwn(submitted, q.id) ? submitted[q.id] : undefined;
     let earned: number | null = 0;
-    if (q.kind === 'essay') {
+    if (q.kind === 'self') { earned = 0; } else if (q.kind === 'essay') {
       if (!blank(a) && typeof a !== 'string') errors.push(q.id + ': essay answer must be text');
       if (!blank(a)) { manualPending.push(q.id); earned = null; }
     } else if (!blank(a)) {
@@ -123,7 +127,9 @@ export function scoreAssessment(input: unknown, submitted: unknown): ScoreResult
     rows.push({ id: q.id, earnedMillipoints: earned, maxMillipoints: q.maxMillipoints });
   }
   if (errors.length) return { ok: false, errors };
-  const earnedMillipoints = rows.reduce((sum, row) => sum + (row.earnedMillipoints ?? 0), 0);
+  const rawEarned = rows.reduce((sum, row) => sum + (row.earnedMillipoints ?? 0), 0);
+  const rawMax = rows.reduce((sum, row) => sum + row.maxMillipoints, 0);
+  const earnedMillipoints = exam.rubricVersion === 'MTM-BTVN-10-v1' ? Math.round(rawEarned / rawMax * 10000) : rawEarned;
   return { ok: true, earnedMillipoints, maxMillipoints: 10000,
     finalMillipoints: manualPending.length ? null : earnedMillipoints, manualPending, rows };
 }

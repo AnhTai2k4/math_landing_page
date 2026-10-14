@@ -39,7 +39,7 @@ export function buildExam(d:AdminDraft,hash:string,assetUrl:(path:string)=>strin
  if(flexible){exam.questionCount=questions.length;exam.rubricVersion=FLEX_RUBRIC;exam.sections=d.layout;exam.answerVerificationNote='Khóa và lời giải do quản trị MTM đối chiếu nguồn. Điểm luyện tập MTM thang 10; cách chia điểm hiển thị theo từng phần/câu, không phải điểm khảo thí chính thức HSA/TSA.';}
  const gate=validatePracticeExam(exam);if(!gate.valid)throw Error(gate.errors.join('\n'));return exam;
 }
-export function fullAnswers(exam:PracticeExam):Record<string,unknown>{return Object.fromEntries(exam.questions.map(q=>[q.id,q.kind==='mc'?q.answer:q.kind==='tf'?q.answer:q.acceptedAnswers[0]]));}
+export function fullAnswers(exam:PracticeExam):Record<string,unknown>{return Object.fromEntries(exam.questions.map(q=>[q.id,q.kind==='mc'?q.answer:q.kind==='tf'?q.answer:q.kind==='self'?'':q.acceptedAnswers[0]]));}
 export function parseKeyPaste(text:string):{mc:string[];tf:string[][];short:string[]}{
  const lines=text.trim().split(/\r?\n/).map(s=>s.trim()).filter(Boolean);if(lines.length!==3)throw Error('Dán đúng 3 dòng: 12 chữ A/B/C/D; 4 nhóm Đ/S; 6 số ngăn cách bằng dấu chấm phẩy.');
  const mc=lines[0].toUpperCase().replace(/[\s,;]+/g,'').split(''),tf=lines[1].toUpperCase().replace(/Đ/g,'D').split(/[\s;]+/).filter(Boolean).map(s=>s.split('')),short=lines[2].split(';').map(s=>s.trim());

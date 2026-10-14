@@ -22,11 +22,12 @@ export function shortFormatMessage(mode: string): string {
     : 'Chưa đúng định dạng: câu này chỉ nhận số thập phân, ví dụ 0,5 hoặc -2,75 (không nhận phân số như 1/2 hay biểu thức). Nếu nộp như vậy, câu này được 0 điểm.';
 }
 
-export type AnswerState = 'answered' | 'blank' | 'partial' | 'invalid';
+export type AnswerState = 'answered' | 'blank' | 'partial' | 'invalid' | 'self';
 
 /** "Đã trả lời đầy đủ" khi có câu trả lời VÀ hợp lệ định dạng; câu ngắn sai định dạng tách riêng;
  * câu Đ/S mới chọn một phần các ý là "partial". */
 export function answerState(exam: PracticeExam, q: PracticeQuestion, answers: Answers): AnswerState {
+  if (q.kind === 'self') return 'self';
   if (q.kind === 'short') {
     const status = shortAnswerStatus(q.mode, answers[q.id]);
     return status === 'valid' ? 'answered' : status === 'invalid' ? 'invalid' : 'blank';
@@ -46,10 +47,11 @@ export function questionLabel(exam: Pick<PracticeExam, 'questions' | 'sections'>
 }
 
 /** Danh sách câu chưa trả lời đầy đủ cho hộp xác nhận nộp bài (TT-01): trống hoặc sai định dạng. */
-export function pendingQuestions(exam: PracticeExam, answers: Answers): {index: number; id: string; label: string; state: Exclude<AnswerState, 'answered'>}[] {
+export function pendingQuestions(exam: PracticeExam, answers: Answers): {index: number; id: string; label: string; state: Exclude<AnswerState, 'answered'|'self'>}[] {
   return exam.questions.flatMap((q, index) => {
+    if(q.kind==='self')return [];
     const state = answerState(exam, q, answers);
-    return state === 'answered' ? [] : [{index, id: q.id, label: questionLabel(exam, index).full, state}];
+    return state === 'answered'||state === 'self' ? [] : [{index, id: q.id, label: questionLabel(exam, index).full, state}];
   });
 }
 
@@ -71,3 +73,5 @@ export function displayKeyAnswer(mode: string, value: string): string {
 export function draftExportFile(draft: {examId: string; startedAt: number}): {name: string; text: string} {
   return {name: `bai-lam-${draft.examId}-${draft.startedAt}.json`, text: JSON.stringify(draft, null, 2)};
 }
+
+export const scoredQuestionCount=(exam:Pick<PracticeExam,'questions'>)=>exam.questions.filter(q=>q.kind!=='self').length;

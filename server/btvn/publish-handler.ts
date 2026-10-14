@@ -8,7 +8,7 @@ export interface PublishPort {
 const hash=async(bytes:Uint8Array)=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',Uint8Array.from(bytes).buffer))).map(x=>x.toString(16).padStart(2,'0')).join('');
 const canonical=(value:unknown):string=>JSON.stringify(value);
 export type AnswerSlot={question_id:string;slot:string;expected:boolean|string|string[]};
-export function expectedSlots(exam:PracticeExam):AnswerSlot[]{return exam.questions.flatMap<AnswerSlot>(q=>q.kind==='tf'?q.answer.map((expected,i)=>({question_id:q.id,slot:'abcd'[i],expected})):[{question_id:q.id,slot:'answer',expected:q.kind==='short'?q.acceptedAnswers:q.answer}]);}
+export function expectedSlots(exam:PracticeExam):AnswerSlot[]{return exam.questions.flatMap<AnswerSlot>(q=>q.kind==='tf'?q.answer.map((expected,i)=>({question_id:q.id,slot:'abcd'[i],expected})):[{question_id:q.id,slot:'answer',expected:q.kind==='self'?'self':q.kind==='short'?q.acceptedAnswers:q.answer}]);}
 function ensure(value:unknown,message:string):asserts value {if(!value)throw Error(message);}
 function references(exam:PracticeExam){
  const refs:{path:string;sha256:string}[]=[];
@@ -39,7 +39,7 @@ export function createBtvnPublishHandler(port:PublishPort,secret:string){return 
   ensure(/^\d{4}-\d{2}-\d{2}$/.test(m.date)&&new Date(m.date).toISOString().slice(0,10)===m.date&&typeof m.title==='string'&&m.title.length>0&&m.title.length<=300,'INVALID_MATERIAL');
   const link=(v:unknown)=>{if(v===null||v===undefined||v==='')return null;ensure(typeof v==='string'&&v.length<=4096,'INVALID_MATERIAL_LINK');const u=new URL(v);ensure(u.protocol==='https:'&&!u.username&&!u.password,'INVALID_MATERIAL_LINK');return u.href;};
   const classDates=m.classDates??{};ensure(classDates&&typeof classDates==='object'&&!Array.isArray(classDates)&&Object.entries(classDates).every(([name,date])=>m.classNames.includes(name)&&typeof date==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(date)&&new Date(date).toISOString().slice(0,10)===date),'INVALID_CLASS_DATES');
-  const material={lessonCode:m.lessonCode,classNames:m.classNames,date:m.date,title:m.title,classDates,videoId:m.videoId??null,materialUrl:link(m.materialUrl),handoutUrl:link(m.handoutUrl),homeworkUrl:null};
+  const material={lessonCode:m.lessonCode,classNames:m.classNames,date:m.date,title:m.title,classDates,videoId:m.videoId??null,materialUrl:link(m.materialUrl),handoutUrl:link(m.handoutUrl),homeworkUrl:null,videoUrl:link(m.videoUrl),homeworkNote:typeof m.homeworkNote==='string'?m.homeworkNote.slice(0,300):undefined};
   // PDF BTVN chỉ mở qua chữ ký riêng; không trả đường nguồn trực tiếp của đề.
   ensure(material.videoId===null||/^[a-zA-Z0-9_-]{11}$/.test(material.videoId),'INVALID_VIDEO');
   if(body.action==='error'){
@@ -55,6 +55,7 @@ export function createBtvnPublishHandler(port:PublishPort,secret:string){return 
   for(const slot of slots){
    const matches=proof.slots.filter((x:any)=>x.question_id===slot.question_id&&x.slot===slot.slot),q=exam.questions.find(q=>q.id===slot.question_id)!;
    ensure(matches.length===1&&canonical(matches[0].expected)===canonical(slot.expected),'REVIEW_MISMATCH');
+   if(q.convertedFrom==='essay'||q.kind==='self'||(exam.rubricVersion==='MTM-BTVN-10-v1'&&q.kind==='short'))ensure(matches[0].conversion_verified===true,'CONVERSION_REVIEW_REQUIRED');
    const actual=matches[0].actual;
    ensure(q.kind==='short'?typeof actual==='string'&&normalizedShort(q.mode,actual)!==null&&q.acceptedAnswers.some(a=>normalizedShort(q.mode,a)===normalizedShort(q.mode,actual)):canonical(actual)===canonical(slot.expected),'REVIEW_MISMATCH');
   }

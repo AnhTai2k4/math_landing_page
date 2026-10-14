@@ -18,6 +18,7 @@ export type PracticeQuestion = Exclude<Question, {kind: 'essay'}> & {
   statements?: [string, string, string, string];
   sourceContent?:{questions:SourceSegment[];solutions:SourceSegment[]};
   correctionNote?:string;
+  convertedFrom?:'essay';
 
 };
 export interface PracticeExam extends Assessment {
@@ -93,6 +94,8 @@ export function validatePracticeExam(input: unknown): Validation {
     if (!boundedText(q.prompt ?? q.text ?? q.sourceRef, 20000)) errors.push('Missing question text or source locator');
     if (q.prompt !== undefined && !boundedText(q.prompt, 20000)) errors.push('Invalid prompt');
     if (q.text !== undefined && !boundedText(q.text, 20000)) errors.push('Invalid text');
+    if(q.convertedFrom!==undefined&&(input.rubricVersion!=='MTM-BTVN-10-v1'||q.kind!=='short'||q.convertedFrom!=='essay'))errors.push('Invalid essay conversion');
+    if(q.kind==='self'&&!boundedText(q.solution,20000)&&!q.sourceContent?.solutions?.length) errors.push('Self question requires a solution');
     if (q.solution !== undefined && !boundedText(q.solution, 20000)) errors.push('Invalid solution');
     if(q.correctionNote!==undefined&&!boundedText(q.correctionNote,2000))errors.push('Invalid correction note');
     if(q.sourceContent!==undefined){
