@@ -9,9 +9,9 @@ import {createHash} from 'node:crypto';
 const root=resolve(fileURLToPath(new URL('..',import.meta.url)));
 const pkg=process.env.MTM_PGLITE_DIR??'T:/Claude/SanPham/btvn-web-diem-danh/tools-sql/node_modules/@electric-sql/pglite';
 assert.ok(isAbsolute(pkg),'MTM_PGLITE_DIR phải là đường dẫn tuyệt đối');
-const {PGlite}=await import(pathToFileURL(join(pkg,'dist/index.js')).href);
+const {PGlite}=await import(pathToFileURL(join(pkg,...(pkg.replaceAll('\\','/').endsWith('/node_modules')?['@electric-sql/pglite']:[]),'dist/index.js')).href);
 const db=new PGlite(); // Không dataDir: DB bị huỷ khi đóng.
-const out=join(root,'.qa-temp/sql-6b');mkdirSync(out,{recursive:true});
+const out=join(root,'.qa-temp/dot-16/sql');mkdirSync(out,{recursive:true});
 const results=[],migrations=[];let currentCheck='Khởi tạo';
 const hash=s=>createHash('sha256').update(s).digest('hex');
 const query=(sql,args=[])=>db.query(sql,args);
@@ -34,8 +34,8 @@ const owner='11111111-1111-4111-8111-111111111111',other='22222222-2222-4222-822
 const admin=(name,args)=>rpc(name,args,'authenticated',owner);
 let cid,sids=[],oldCodes=[],session;
 try{
-  await check('Supabase giả tối thiểu và 5 migration nguyên văn, đúng thứ tự',async()=>{
-    await db.exec(`create role anon;create role authenticated;create role service_role;
+  await check('Supabase giả tối thiểu và 17 migration nguyên văn, đúng thứ tự',async()=>{
+    await db.exec(`create role anon;create role authenticated;create role service_role;create role authenticator;
       create schema auth;create table auth.users(id uuid primary key);
       create function auth.uid() returns uuid language sql stable as $$select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid$$;
       grant usage on schema auth to anon,authenticated,service_role;
@@ -45,8 +45,8 @@ try{
       create table storage.objects(id uuid default gen_random_uuid(),bucket_id text,name text,metadata jsonb);
       alter table storage.objects enable row level security;`);
     const files=readdirSync(join(root,'supabase/migrations')).filter(x=>x.endsWith('.sql')).sort().map(x=>'supabase/migrations/'+x);
-    assert.equal(files.length,4);files.push('supabase/migrations-pending/202610150005_btvn.sql');
-    for(const file of files){const sql=readFileSync(join(root,file),'utf8');await db.exec(sql);migrations.push({file,sha256:hash(sql)});}
+    assert.equal(files.length,4);files.push(...readdirSync(join(root,'supabase/migrations-pending')).filter(f=>f.endsWith('.sql')).sort((a,b)=>{const key=f=>f.replace(/^(\d+)_([0-9]+)_/,'$1~$2_').replace(/^(\d+)_/,'$1!_');return key(a).localeCompare(key(b));}).map(f=>'supabase/migrations-pending/'+f));
+    for(const file of files){const sql=readFileSync(join(root,file),'utf8').replace(/^\uFEFF/,'');await db.exec(sql);migrations.push({file,sha256:hash(sql)});}
     console.log('DB: '+await scalar('select version()'));
   });
   // Tất cả tên/SĐT/UUID bên dưới là dữ liệu giả được tạo ngay trong DB mới.
@@ -71,9 +71,10 @@ try{
   const identity={p_full_name:'  HỌC   SINH GIẢ 0 ',p_phone:'+84 900 000 000',p_class_name:' LỚP GIẢ SQL '};
   let identitySession;
   await check('Tên + SĐT + lớp: chuẩn hoá, SĐT phụ huynh, sai/trùng/inactive',async()=>{
+    const mismatch=await rpc('mtm_btvn_forgot',{...identity,p_class_name:'Sai'});assert.equal(mismatch.ok,true);assert.equal(mismatch.classMismatch,true);
     const good=await rpc('mtm_btvn_forgot',identity);assert.equal(good.ok,true);identitySession=good.session;
     assert.equal((await rpc('mtm_btvn_forgot',{...identity,p_phone:'0910000000'})).ok,true);
-    for(const change of [{p_full_name:'Sai'},{p_phone:'0909999999'},{p_class_name:'Sai'},{p_phone:'x'}])assert.deepEqual(await rpc('mtm_btvn_forgot',{...identity,...change}),{ok:false});
+    for(const change of [{p_full_name:'Sai'},{p_phone:'0909999999'},{p_phone:'x'}])assert.deepEqual(await rpc('mtm_btvn_forgot',{...identity,...change}),{ok:false});
     await query('update mtm_hw_private.students set full_name=$1,student_phone=$2 where id=$3',['Học sinh giả 0','0900000000',sids[6]]);
     assert.deepEqual(await rpc('mtm_btvn_forgot',identity),{ok:false});
     await query('update mtm_hw_private.students set active=false where id=$1',[sids[6]]);
@@ -88,10 +89,10 @@ try{
     await rejected(()=>rpc('mtm_btvn_issue_missing_code',{p_student_id:sids[3],p_days:90},'authenticated',other),'42501');
     await rejected(()=>db.transaction(async tx=>{await tx.exec('set local role service_role');await tx.query('select * from mtm_hw_private.students');}),'42501');
   });
-  await check('Limiter SQL 5/15 phút và reset cửa sổ',async()=>{
+  await check('Limiter SQL 120/15 phút và reset cửa sổ',async()=>{
     const key='a'.repeat(64);
-    for(let i=1;i<=7;i++)assert.equal((await rpc('mtm_btvn_gateway_rate',{p_network_key:key})).ok,i<=5);
-    assert.equal(await scalar('select hits from mtm_hw_private.btvn_limits where network_key=$1',[key]),7);
+    for(let i=1;i<=122;i++)assert.equal((await rpc('mtm_btvn_gateway_rate',{p_network_key:key})).ok,i<=120);
+    assert.equal(await scalar('select hits from mtm_hw_private.btvn_limits where network_key=$1',[key]),122);
     assert.deepEqual(await rpc('mtm_btvn_gateway_rate',{p_network_key:'bad'}),{ok:false});
     await query("update mtm_hw_private.btvn_limits set until_at=clock_timestamp()-interval '1 second' where network_key=$1",[key]);
     assert.equal((await rpc('mtm_btvn_gateway_rate',{p_network_key:key})).ok,true);
@@ -117,13 +118,13 @@ try{
   const edgeRequest=async(edge,body)=>{const r=await edge(new Request('https://sql.invalid',{method:'POST',headers:{Origin:'https://sql.invalid',apikey:'fake-key','Content-Type':'application/json'},body:JSON.stringify(body)}));return {status:r.status,body:await r.json()};};
   await check('Edge thật → limiter SQL chung resolve/forgot',async()=>{
     const edge=makeEdge('b'.repeat(64));
-    for(let i=0;i<5;i++){const r=await edgeRequest(edge,i%2?{operation:'forgot',fullName:'Học sinh giả 0',phone:'0900000000',className:'Lớp giả SQL'}:{operation:'resolve',code:'bad'});assert.equal(r.status,i%2?200:400);}
+    for(let i=0;i<120;i++){const r=await edgeRequest(edge,i%2?{operation:'forgot',fullName:'Học sinh giả 0',phone:'0900000000',className:'Lớp giả SQL'}:{operation:'resolve',code:'bad'});assert.equal(r.status,i%2?200:400);}
     assert.equal((await edgeRequest(edge,{operation:'forgot',fullName:'Học sinh giả 0',phone:'0900000000',className:'Lớp giả SQL'})).status,429);
-    assert.equal(await scalar('select hits from mtm_hw_private.btvn_limits where network_key=$1',['b'.repeat(64)]),6);
+    assert.equal(await scalar('select hits from mtm_hw_private.btvn_limits where network_key=$1',['b'.repeat(64)]),121);
   });
   const exam=JSON.parse(readFileSync(join(root,'server/btvn/demo-exam.json'),'utf8'));
   const material={lessonCode:'buoi-gia-sql',date:'2026-10-14',classDates:{'Lớp giả SQL':'2026-10-15'},title:'Buổi giả SQL',classNames:['Lớp giả SQL'],videoId:'abcdefghijk',materialUrl:null,handoutUrl:null,homeworkUrl:null};
-  await query('insert into mtm_hw_private.btvn_lessons(code,owner_id,class_ids,material,exam,active) values($1,$2,ARRAY[$3::uuid],$4,$5,true)',[material.lessonCode,owner,cid,JSON.stringify(material),JSON.stringify(exam)]);
+  await query('insert into mtm_hw_private.btvn_lessons(code,owner_id,class_ids,material,exam,active,publish_status) values($1,$2,ARRAY[$3::uuid],$4,$5,true,\'da_dang\')',[material.lessonCode,owner,cid,JSON.stringify(material),JSON.stringify(exam)]);
   const edge=makeEdge('c'.repeat(64));let now=Date.parse('2026-10-15T10:00:00+07:00');
   const repo=new SupabaseHomeworkRepository(transport,async body=>{const r=await edgeRequest(edge,body);assert.equal(r.status,200);return r.body;},()=>now);
   const adminRepo=new SupabaseHomeworkRepository({async rpc(name,args){try{return {data:await admin(name,args),error:null};}catch(e){return {data:null,error:{code:e.code}};}}},async()=>{throw new Error('Admin không login Edge');});

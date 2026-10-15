@@ -1,5 +1,6 @@
 {
   "framework": "vite",
+  "regions": ["sin1"],
   "buildCommand": "npm run build",
   "outputDirectory": "build",
   "rewrites": [

@@ -29,7 +29,7 @@ html=render(Cards,{lessons:[],busy:false,onHomework(){}});assert.ok(html.include
 html=render(LessonVideo,{lesson,demo:false});assert.ok(!html.includes('<iframe'));assert.ok(html.includes('https://www.youtube.com/watch?v=abcdefghijk'));
 html=render(LessonVideo,{lesson:{...lesson,videoEmbeddable:true},demo:false});assert.ok(html.includes('<iframe'));
 html=render(Gate,{studentCode:'',identity:{fullName:'',phone:'',className:''},busy:false,classNames:[],onCode(){},onIdentity(){},onLogin(){}});for(const text of ['Có mã','Không có mã','Chưa có lớp để chọn'])assert.ok(html.includes(text));
-const source=readFileSync(join(root,'src/native/homework/HomeworkSession.tsx'),'utf8');assert.ok(!source.includes('máy chủ thử'));assert.ok(source.includes('onState={setState}'));assert.ok(source.includes('state.draft.submittedAt===null?<ManagedAttempt'));
+const source=readFileSync(join(root,'src/native/homework/HomeworkSession.tsx'),'utf8');assert.ok(!source.includes('máy chủ thử'));assert.ok(source.includes('mergeHomeworkSave(previous,next)'));assert.ok(source.includes('state.draft.submittedAt===null?<ManagedAttempt'));
 for(const text of ['máy chủ thử','Kết quả luyện tập','Kết quả của bạn','Dữ liệu minh hoạ'])assert.ok(!overview(submitted).includes(text));
 console.log('Đạt SSR đợt 14: chưa làm, đã nộp, nộp muộn, chờ hạn, hết lượt, điểm cao nhất, quá hạn chưa nộp, lớp rỗng, video nhúng và dự phòng, hai cách vào.');
 

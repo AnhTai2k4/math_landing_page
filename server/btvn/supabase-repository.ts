@@ -5,7 +5,7 @@ import type {HomeworkState,LessonMaterial,GateInput} from '../../src/native/home
 import type {PracticeExam} from '../../src/native/exams/data';
 import type {Answers} from '../../src/native/exams/store';
 import {publicClassNames} from './class-config';
-import {hydratePrivateAssets,type PrivateAsset} from './private-assets';
+import {hydratePrivateAssets,SIGNED_ASSET_SECONDS,type PrivateAsset} from './private-assets';
 import {concealMonthlySolutions} from './monthly-policy';
 
 export interface RpcTransport {rpc(name:string,args:Record<string,unknown>):Promise<{data:unknown;error:null|{code?:string}}>}
@@ -69,12 +69,16 @@ export class SupabaseHomeworkRepository {
       if(action==='state'||action==='select'){
         const visible=monthly&&!next.solutionsAvailable?concealMonthlySolutions(snapshot.exam):snapshot.exam;
         next.exam=visible;
-        if(this.signAsset){const assets=await this.rpc<PrivateAsset[]>('mtm_btvn_assets',{p_session:session,p_lesson:snapshot.material.lessonCode});next.exam=await hydratePrivateAssets(visible,assets,this.signAsset);}
+        if(this.signAsset){const assets=await this.rpc<PrivateAsset[]>('mtm_btvn_assets',{p_session:session,p_lesson:snapshot.material.lessonCode});const signedAt=this.clock();next.exam=await hydratePrivateAssets(visible,assets,this.signAsset);if(assets.length)next.assetsExpiresAt=signedAt+SIGNED_ASSET_SECONDS*1000;}
         return next;
       }
       const updated=memory.get(code)!;
       const committed=await this.rpc<{ok:boolean}>('mtm_btvn_commit',{p_session:session,p_lesson:snapshot.material.lessonCode,p_revision:snapshot.revision,p_drafts:updated.drafts,p_receipts:updated.receipts});
-      if(committed.ok)return this.call(session,'state',snapshot.material.lessonCode);
+      if(committed.ok){
+        // Save chỉ xác nhận bản vừa commit, không đọc/ký lại đề và tài sản.
+        if(action==='save')return {...next,exam:null,lessons:undefined,saveOnly:true,revision:snapshot.revision+1};
+        return this.call(session,'state',snapshot.material.lessonCode);
+      }
     }
     throw new HomeworkError(409,'Bài đã thay đổi ở tab khác. Tải lại để tiếp tục.');
   }
