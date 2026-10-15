@@ -5,6 +5,7 @@ import {resultFor} from '../../src/native/exams/result';
 import {validatePracticeExam,type PracticeExam} from '../../src/native/exams/data';
 import type {HomeworkState,LessonMaterial} from '../../src/native/homework/btvn-contract';
 import type {HomeworkRepository,StudentWork} from './repository';
+import {lessonOpensAt,visibleLesson} from './opening-policy';
 
 export class HomeworkError extends Error {constructor(public status:number,message:string){super(message);}}
 export const GATE_ERROR='Không thể vào bài. Hãy kiểm tra thông tin hoặc thử lại sau.';
@@ -53,6 +54,8 @@ export class HomeworkService {
     const work=this.repo.get(session.code);if(!work)throw new HomeworkError(401,GATE_ERROR);return work;
   }
   private selected(token:string){return this.sessions.get(digest(token).toString('hex'))?.lessonCode??this.lessonCode;}
+  private opening(token:string){const work=this.work(token),material=this.materials.find(l=>l.lessonCode===this.selected(token));return material?lessonOpensAt(material,work.student.className):0;}
+  private assertOpen(token:string){if(this.clock()<this.opening(token))throw new HomeworkError(409,'Bài chưa mở. BTVN chỉ mở làm sau buổi học.');}
   private examFor(token:string){return this.selected(token)===this.lessonCode?this.exam:this.lessonExams[this.selected(token)];}
   private lessonWork(token:string){const work=this.work(token),code=this.selected(token);if(code===this.lessonCode)return work;
     const entry=work.lessons?.[code]??{drafts:[],receipts:[]};return {...work,drafts:entry.drafts,receipts:entry.receipts,student:{...work.student,nextActualClassAt:entry.nextActualClassAt}};
@@ -70,9 +73,10 @@ export class HomeworkService {
       const entry=l.lessonCode===this.lessonCode?{...root,nextActualClassAt:root.student.nextActualClassAt}:root.lessons?.[l.lessonCode];
       const receipts=entry?.receipts??[],best=receipts.length?Math.max(...receipts.map(r=>r.score)):null;
       const receipt=receipts.filter(r=>r.score===best).at(-1);
-      return {...l,date:l.classDates?.[root.student.className]??l.date,dueAt:entry?.nextActualClassAt??null,bestScore:best,late:receipt?.late??null,submittedAt:receipt?.submittedAt??null,available:l.lessonCode===this.lessonCode||!!this.lessonExams[l.lessonCode]};
+      return {...visibleLesson(l,root.student.className,this.clock()),dueAt:entry?.nextActualClassAt??null,bestScore:best,late:receipt?.late??null,submittedAt:receipt?.submittedAt??null,available:this.clock()>=lessonOpensAt(l,root.student.className)&&(l.lessonCode===this.lessonCode||!!this.lessonExams[l.lessonCode])};
     });
-    return {exam:this.examFor(token),fullName:work.student.fullName,className:work.student.className,lessonCode:this.selected(token),dueAt:work.student.nextActualClassAt??null,maxAttempts:this.maxAttempts,
+    const opensAt=this.opening(token);if(this.clock()<opensAt)return {exam:null,opensAt,canStart:false,solutionsAvailable:false,fullName:work.student.fullName,className:work.student.className,lessonCode:this.selected(token),dueAt:work.student.nextActualClassAt??null,maxAttempts:this.maxAttempts,attemptsUsed:0,draft:null,receipts:[],bestScore:null,demo:true,lessons};
+    return {exam:this.examFor(token),opensAt,canStart:true,fullName:work.student.fullName,className:work.student.className,lessonCode:this.selected(token),dueAt:work.student.nextActualClassAt??null,maxAttempts:this.maxAttempts,
       attemptsUsed:work.drafts.length,draft:work.drafts.at(-1)??null,receipts:work.receipts,bestScore:scores.length?Math.max(...scores):null,demo:true,lessons};
   }
   /** Chỉ phía vận hành gọi sau khi xác minh ca thực học, không mở API học sinh. */
@@ -83,6 +87,7 @@ export class HomeworkService {
     work.student.nextActualClassAt=startsAt;work.receipts=work.receipts.map(r=>({...r,late:r.submittedAt>=startsAt}));this.repo.put(work);
   }
   start(token:string){
+    this.assertOpen(token);
     let work=this.lessonWork(token);const previous=work.drafts.at(-1),now=this.clock();
     if(previous?.submittedAt===null){if(now<Math.min(previous.deadline,this.monthly(token)?.closesAt??Infinity))return this.state(token);if(this.monthly(token))return this.submit(token,previous.attemptId,previous.answers);this.submit(token,previous.attemptId,previous.answers);work=this.lessonWork(token);}
     const monthly=this.monthly(token);if(monthly&&(now<monthly.opensAt!||now>=monthly.closesAt!))throw new HomeworkError(409,'Bài kiểm tra chưa mở hoặc đã đóng.');
@@ -91,6 +96,7 @@ export class HomeworkService {
     work.drafts.push(made.value);this.putLesson(token,work);return this.state(token);
   }
   save(token:string,id:string,answers:Answers){
+    this.assertOpen(token);
     const work=this.lessonWork(token),draft=work.drafts.at(-1),now=this.clock();
     if(!draft||draft.attemptId!==id)throw new HomeworkError(409,'Lượt làm không hợp lệ.');
     if(draft.submittedAt!==null)return this.state(token);
@@ -100,6 +106,7 @@ export class HomeworkService {
     work.drafts[work.drafts.length-1]=checked.value;this.putLesson(token,work);return this.state(token);
   }
   submit(token:string,id:string,answers:Answers){
+    this.assertOpen(token);
     const work=this.lessonWork(token),draft=work.drafts.at(-1),now=this.clock(),exam=this.examFor(token);
     if(!draft||draft.attemptId!==id)throw new HomeworkError(409,'Lượt làm không hợp lệ.');
     if(draft.submittedAt!==null)return this.state(token);

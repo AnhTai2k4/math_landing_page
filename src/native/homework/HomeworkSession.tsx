@@ -1,4 +1,5 @@
 import {createAssetRenewal,mergeHomeworkSave} from './asset-renewal';
+import {scheduleOpeningRefresh} from './opening-refresh';
 import {useContext,useEffect,useMemo,useRef,useState} from 'react';
 import {displayClassName} from './presentation';
 import EntryNotice,{entryFailure} from './EntryNotice';
@@ -89,13 +90,19 @@ export default function HomeworkSession({pathname}:{pathname:string}){
     const data=await response.json().catch(()=>{throw new Error('Máy chủ chưa trả lời hợp lệ. Em thử lại sau.');});if(!response.ok)throw new Error(action==='login'?entryFailure(response.status,data.message):data.message??'Chưa kết nối được máy chủ.');return data as HomeworkState;
   }}),[pathname]);
   useEffect(()=>{mounted.current=true;void gateway.call('state').then(next=>{if(mounted.current){setState(next);setRoom(!!next.draft&&next.draft.submittedAt===null);}}).catch(()=>{}).finally(()=>{if(mounted.current)setChecking(false);});return()=>{mounted.current=false;};},[gateway]);
+  useEffect(()=>{
+    if(!state?.lessons)return;
+    let alive=true;const lessonCode=state.lessonCode;
+    const cancel=scheduleOpeningRefresh(state.lessons,async()=>{const next=await gateway.call('state',{lessonCode});if(alive)setState(previous=>previous?.lessonCode===lessonCode?{...previous,lessons:next.lessons}:previous);});
+    return ()=>{alive=false;cancel();};
+  },[gateway,state?.lessonCode,state?.lessons]);
   // Link ảnh/PDF sống 150 phút; chỉ gia hạn khi còn tối đa 30 phút hoặc ảnh lỗi.
   useEffect(()=>{
-    if(!state||state.demo||(!state.exam&&state.kind!=='kiem-tra-thang'))return;
+    if(!state||state.demo||(!state.exam&&!state.opensAt))return;
     let alive=true;const lesson=state.lessonCode;
     const renew=createAssetRenewal(async()=>{try{
       const next=await gateway.call('state',{lessonCode:lesson});
-      if(alive)setState(previous=>previous?.lessonCode===lesson?{...previous,exam:next.exam,assetsExpiresAt:next.assetsExpiresAt,canStart:next.canStart,solutionsAvailable:next.solutionsAvailable}:previous);
+      if(alive)setState(previous=>previous?.lessonCode===lesson?{...previous,exam:next.exam,lessons:next.lessons,assetsExpiresAt:next.assetsExpiresAt,canStart:next.canStart,solutionsAvailable:next.solutionsAvailable}:previous);
     }catch{ /* Giữ bài hiện tại khi mất mạng; lần kiểm sau thử lại. */ }});
     const check=(failed=false)=>void renew(state.assetsExpiresAt,failed);
     renewAssets.current=check;
@@ -112,7 +119,7 @@ export default function HomeworkSession({pathname}:{pathname:string}){
       <header className="btvn-top"><img src="/mtm-original-logo-420w.webp" alt="Minh Thành Math"/><div><b>Bài tập về nhà</b><p>Video buổi học và BTVN của lớp em</p></div><div className="btvn-me"><b>{state.fullName}</b><span>{displayClassName(state)}</span><button disabled={busy} onClick={async()=>{setBusy(true);try{await gateway.call('logout');setState(null);setRoom(false);}catch{setNotice('Chưa thoát phiên được.');}finally{setBusy(false);}}}>Thoát</button></div></header>
       {state.classMismatch&&<EntryNotice className={state.className}/>}
       {!room&&<LessonCards demo={state.demo} lessons={state.lessons??[]} busy={busy} onHomework={async code=>{setBusy(true);setNotice('');try{setState(await gateway.call('select',{lessonCode:code}));setRoom(true);requestAnimationFrame(()=>document.getElementById('btvn-summary')?.scrollIntoView({behavior:'smooth'}));}catch(error){setNotice(error instanceof Error?error.message:'Chưa mở được bài.');}finally{setBusy(false);}}}/>}
-      {room&&(state.exam||state.kind==='kiem-tra-thang')&&<><button className="btvn-btn btvn-back" disabled={busy} onClick={()=>setRoom(false)}>← Các buổi học</button>
+      {room&&(state.exam||state.opensAt!==undefined||state.kind==='kiem-tra-thang')&&<><button className="btvn-btn btvn-back" disabled={busy} onClick={()=>setRoom(false)}>← Các buổi học</button>
         {state.exam&&state.draft&&state.draft.submittedAt===null?<ManagedAttempt key={state.draft.attemptId} state={{...state,exam:state.exam}} gateway={gateway} onState={next=>setState(previous=>previous?mergeHomeworkSave(previous,next):next)}/>:<HomeworkOverview key={state.lessonCode+':'+(state.draft?.attemptId??'new')} state={state} busy={busy} onStart={()=>void run('start')}/>}
       </>}
 

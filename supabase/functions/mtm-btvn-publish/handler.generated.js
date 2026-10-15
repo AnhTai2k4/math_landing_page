@@ -205,6 +205,223 @@ function validatePracticeExam(input) {
   return { valid: errors.length === 0, errors };
 }
 
+// server/btvn/class-schedule.json
+var class_schedule_default = {
+  "2K9 9+": [
+    {
+      weekday: 1,
+      start: "17:30",
+      end: "19:30"
+    },
+    {
+      weekday: 3,
+      start: "17:30",
+      end: "19:30"
+    },
+    {
+      weekday: 5,
+      start: "17:30",
+      end: "19:30"
+    }
+  ],
+  "2K14": [
+    {
+      weekday: 1,
+      start: "18:00",
+      end: "20:00"
+    },
+    {
+      weekday: 4,
+      start: "09:00",
+      end: "11:00"
+    }
+  ],
+  "2K10 XPT": [
+    {
+      weekday: 1,
+      start: "19:30",
+      end: "21:30"
+    },
+    {
+      weekday: 6,
+      start: "15:30",
+      end: "17:30"
+    }
+  ],
+  "2K9 XPT": [
+    {
+      weekday: 1,
+      start: "19:30",
+      end: "21:30"
+    },
+    {
+      weekday: 2,
+      start: "19:30",
+      end: "21:30"
+    },
+    {
+      weekday: 4,
+      start: "19:30",
+      end: "21:30"
+    }
+  ],
+  "2K9 8+": [
+    {
+      weekday: 2,
+      start: "17:30",
+      end: "19:30"
+    },
+    {
+      weekday: 4,
+      start: "17:30",
+      end: "19:30"
+    },
+    {
+      weekday: 6,
+      start: "17:30",
+      end: "19:30"
+    }
+  ],
+  "2K10 9+": [
+    {
+      weekday: 2,
+      start: "19:30",
+      end: "21:30"
+    },
+    {
+      weekday: 7,
+      start: "08:00",
+      end: "10:00"
+    }
+  ],
+  "2K13": [
+    {
+      weekday: 2,
+      start: "20:00",
+      end: "22:00"
+    },
+    {
+      weekday: 5,
+      start: "20:00",
+      end: "22:00"
+    }
+  ],
+  "2K11 8+": [
+    {
+      weekday: 3,
+      start: "19:30",
+      end: "21:30"
+    },
+    {
+      weekday: 7,
+      start: "15:30",
+      end: "17:30"
+    }
+  ],
+  "2K11 XPT": [
+    {
+      weekday: 3,
+      start: "19:30",
+      end: "21:30"
+    },
+    {
+      weekday: 6,
+      start: "13:30",
+      end: "15:30"
+    }
+  ],
+  "HSA.2": [
+    {
+      weekday: 4,
+      start: "14:30",
+      end: "17:30"
+    }
+  ],
+  "2K12": [
+    {
+      weekday: 4,
+      start: "18:00",
+      end: "20:00"
+    },
+    {
+      weekday: 7,
+      start: "15:00",
+      end: "17:00"
+    }
+  ],
+  "2K15": [
+    {
+      weekday: 4,
+      start: "18:00",
+      end: "20:00"
+    },
+    {
+      weekday: 7,
+      start: "14:00",
+      end: "16:00"
+    }
+  ],
+  "2K11 9+": [
+    {
+      weekday: 4,
+      start: "19:30",
+      end: "21:30"
+    },
+    {
+      weekday: 7,
+      start: "13:30",
+      end: "15:30"
+    }
+  ],
+  "2K10 8+": [
+    {
+      weekday: 5,
+      start: "19:30",
+      end: "21:30"
+    },
+    {
+      weekday: 7,
+      start: "10:00",
+      end: "12:00"
+    }
+  ],
+  TSA: [
+    {
+      weekday: 7,
+      start: "14:00",
+      end: "17:00"
+    }
+  ],
+  HSA: [
+    {
+      weekday: 7,
+      start: "17:00",
+      end: "20:00"
+    }
+  ],
+  "2K9 HSA (TH\u1EE8 5)": [
+    {
+      weekday: 4,
+      start: "14:30",
+      end: "17:30"
+    }
+  ]
+};
+
+// server/btvn/class-schedule.ts
+function classOpeningTimes(material) {
+  const result = {};
+  for (const name of material.classNames) {
+    const date = material.classDates?.[name] ?? material.date;
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !Number.isFinite(Date.parse(date + "T00:00:00Z")) || (/* @__PURE__ */ new Date(date + "T00:00:00Z")).toISOString().slice(0, 10) !== date) throw Error("INVALID_CLASS_DATE");
+    const weekday = (/* @__PURE__ */ new Date(date + "T00:00:00Z")).getUTCDay() || 7;
+    const sessions = class_schedule_default[name]?.filter((s) => s.weekday === weekday) ?? [];
+    const end = sessions.map((s) => s.end).sort().at(-1) ?? "21:30";
+    result[name] = date + "T" + end + ":00+07:00";
+  }
+  return result;
+}
+
 // server/btvn/publish-handler.ts
 var hash = async (bytes) => Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", Uint8Array.from(bytes).buffer))).map((x) => x.toString(16).padStart(2, "0")).join("");
 var canonical = (value) => JSON.stringify(value);
@@ -239,9 +456,30 @@ function createBtvnPublishHandler(port, secret) {
       ensure(text2.length <= 48 * 1024 * 1024, "PAYLOAD_TOO_LARGE");
       const body = JSON.parse(text2);
       ensure(body && typeof body === "object" && !Array.isArray(body), "INVALID_PAYLOAD");
-      ensure(["lookup", "publish", "error"].includes(body.action) && /^[a-z0-9-]{1,160}$/.test(body.lesson_key), "INVALID_ACTION");
+      ensure(["lookup", "publish", "error", "update_material"].includes(body.action) && /^[a-z0-9-]{1,160}$/.test(body.lesson_key), "INVALID_ACTION");
       const previous = await port.rpc("lookup", { lesson_key: body.lesson_key });
       if (body.action === "lookup") return respond(200, previous);
+      if (body.action === "update_material") {
+        ensure(previous.status === "da_dang", "LESSON_NOT_PUBLISHED");
+        ensure(Object.keys(body).every((k) => ["action", "lesson_key", "material"].includes(k)), "INVALID_UPDATE");
+        const patch = body.material;
+        ensure(patch && typeof patch === "object" && !Array.isArray(patch) && Object.keys(patch).length > 0, "INVALID_UPDATE");
+        const allowed = ["videoId", "videoUrl", "materialUrl", "handoutUrl", "homeworkNote", "title", "classOpensAt"];
+        ensure(Object.keys(patch).every((k) => allowed.includes(k)), "INVALID_UPDATE");
+        for (const [key, value] of Object.entries(patch)) {
+          if (key === "videoId") ensure(value === null || typeof value === "string" && /^[a-zA-Z0-9_-]{11}$/.test(value), "INVALID_VIDEO");
+          else if (["videoUrl", "materialUrl", "handoutUrl"].includes(key)) {
+            if (value !== null) {
+              ensure(typeof value === "string" && value.length <= 4096, "INVALID_MATERIAL_LINK");
+              const url = new URL(value);
+              ensure(url.protocol === "https:" && !url.username && !url.password, "INVALID_MATERIAL_LINK");
+            }
+          } else if (key === "classOpensAt") {
+            ensure(value && typeof value === "object" && !Array.isArray(value) && Object.keys(value).length > 0 && Object.entries(value).every(([name, date]) => name.length > 0 && name.length <= 100 && typeof date === "string" && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/.test(date) && Number.isFinite(Date.parse(date)) && (/* @__PURE__ */ new Date(date.slice(0, 10) + "T00:00:00Z")).toISOString().slice(0, 10) === date.slice(0, 10)), "INVALID_CLASS_OPENING");
+          } else ensure(typeof value === "string" && value.length <= 300 && (key !== "title" || value.trim().length > 0), "INVALID_MATERIAL");
+        }
+        return respond(200, await port.rpc("update_material", { lesson_key: body.lesson_key, material: patch }));
+      }
       if (previous.status === "da_dang") return respond(200, { status: "already_published" });
       ensure(/^[a-f0-9]{64}$/.test(body.source_version ?? ""), "INVALID_VERSION");
       const kind = body.kind ?? "btvn";
@@ -259,7 +497,7 @@ function createBtvnPublishHandler(port, secret) {
       };
       const classDates = m.classDates ?? {};
       ensure(classDates && typeof classDates === "object" && !Array.isArray(classDates) && Object.entries(classDates).every(([name, date]) => m.classNames.includes(name) && typeof date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(date) && new Date(date).toISOString().slice(0, 10) === date), "INVALID_CLASS_DATES");
-      const material = { lessonCode: m.lessonCode, classNames: m.classNames, date: m.date, title: m.title, classDates, videoId: m.videoId ?? null, materialUrl: link(m.materialUrl), handoutUrl: link(m.handoutUrl), homeworkUrl: null, videoUrl: link(m.videoUrl), homeworkNote: typeof m.homeworkNote === "string" ? m.homeworkNote.slice(0, 300) : void 0 };
+      const material = { lessonCode: m.lessonCode, classNames: m.classNames, date: m.date, title: m.title, classDates, classOpensAt: classOpeningTimes({ ...m, classDates }), videoId: m.videoId ?? null, materialUrl: link(m.materialUrl), handoutUrl: link(m.handoutUrl), homeworkUrl: null, videoUrl: link(m.videoUrl), homeworkNote: typeof m.homeworkNote === "string" ? m.homeworkNote.slice(0, 300) : void 0 };
       ensure(material.videoId === null || /^[a-zA-Z0-9_-]{11}$/.test(material.videoId), "INVALID_VIDEO");
       if (body.action === "error") {
         ensure(/^[A-Z0-9_]{1,80}$/.test(body.error_code ?? ""), "INVALID_ERROR");

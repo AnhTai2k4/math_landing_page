@@ -33,7 +33,9 @@ class FakeTransport:
     def json(self,*args):raise AssertionError('No network in tests')
 
 class FakePublisher:
-    def __init__(self):self.rows={};self.payloads=[];self.errors=[];self.lookups=[]
+    def __init__(self):self.rows={};self.payloads=[];self.errors=[];self.lookups=[];self.updates=[]
+    def update_material(self,key,patch):
+        self.updates.append((key,copy.deepcopy(patch)));return {'status':'updated'}
     def lookup(self,key):self.lookups.append(key);return self.rows.get(key)
     def publish(self,payload):
         key=payload['lesson_key']
@@ -145,8 +147,54 @@ class PipelineTests(unittest.TestCase):
 
     def test_server_prevents_overwrite_even_new_worker_state(self):
         self.publisher.rows[row()['lesson_key']]='da_dang'
-        self.assertEqual(self.worker().process(row()),'already_published')
+        self.assertEqual(self.worker().process(row()),'updated')
         self.assertEqual(self.transport.calls,[])
+        self.assertFalse(self.publisher.payloads)
+        self.assertEqual(len(self.publisher.updates),1)
+
+    def test_round18_update_video_only_without_reextract_or_republish(self):
+        worker=self.worker();source=row()
+        self.assertEqual(worker.process(source),'da_dang')
+        calls=len(self.primary.calls)
+        source['video']='https://youtu.be/abcdefghijk'
+        source['handout']='https://pdf.example.invalid/new.pdf'
+        self.assertEqual(worker.process(source),'updated')
+        key,patch_=self.publisher.updates[0]
+        self.assertEqual(key,source['lesson_key'])
+        self.assertEqual(patch_,{'videoId':'abcdefghijk','videoUrl':None,'handoutUrl':source['handout']})
+        self.assertEqual(worker.process(source),'already_published')
+        source['video']=''
+        self.assertEqual(worker.process(source),'already_published')
+        self.assertEqual(len(self.primary.calls),calls)
+        self.assertEqual(len(self.publisher.payloads),1)
+
+    def test_round18_updates_retry_without_losing_published_receipt(self):
+        worker=self.worker();source=row();self.assertEqual(worker.process(source),'da_dang')
+        source['video']='https://youtu.be/abcdefghijk'
+        with patch.object(self.publisher,'update_material',side_effect=p.GateError('Tạm lỗi')):
+            self.assertEqual(worker.process(source),'loi')
+        self.assertEqual(worker.db.execute('SELECT status FROM receipts').fetchone()[0],'da_dang')
+        self.assertEqual(worker.process(source),'updated')
+
+    def test_round18_answer_same_drive_id_or_hs_label_blocked_before_download(self):
+        for answer in ('https://drive.google.com/open?id=abc123456789', 'https://pdf.example.invalid/De_HS.pdf'):
+            source=row();source['homework']='https://drive.google.com/file/d/abc123456789/view';source['answers']=answer
+            self.assertEqual(self.worker().process(source),'loi')
+        source=row();source['answers_label']='Đề toán_HS.pdf'
+        self.assertEqual(self.worker().process(source),'loi')
+        source=row();source['document']='https://drive.google.com/file/d/document123456/view'
+        source['answers']='https://drive.google.com/open?id=document123456'
+        self.assertNotEqual(source['answers'],source['homework'])
+        self.assertEqual(self.worker().process(source),'loi')
+        self.assertFalse(self.transport.calls)
+        self.assertFalse(self.publisher.payloads)
+
+    def test_round18_class_opens_at_per_class_and_fallback(self):
+        source=row();source['class_dates']={'Lớp A':'2026-10-16','Lớp B':'2026-10-18','Lớp thiếu':'2026-10-16'}
+        schedule=Path(self.temp.name)/'schedule.json'
+        schedule.write_text(json.dumps({'Lớp A':[{'weekday':5,'start':'17:30','end':'19:30'}],'Lớp B':[{'weekday':7,'start':'10:00','end':'12:00'}]}),encoding='utf-8')
+        with patch.dict(os.environ,{'BTVN_CLASS_SCHEDULE':str(schedule)}):
+            self.assertEqual(p.material(source)['classOpensAt'],{'Lớp A':'2026-10-16T19:30:00+07:00','Lớp B':'2026-10-18T12:00:00+07:00','Lớp thiếu':'2026-10-16T21:30:00+07:00'})
 
     def test_publisher_down_preserves_receipt_and_continues_next_row(self):
         w=self.worker()

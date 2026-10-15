@@ -249,6 +249,7 @@ def sheet_rows(raw, sheet):
             note=header_key(r['homework'])==header_key('Phần trắc nghiệm trong phiếu')
             r['homework_note']=r['homework'] if note else ''
             r['homework_labels']=[r['homework']]
+            r['answers_label']=r.get('answers','')
             r['homework_urls']=links('document' if note else 'homework')
             require(r['homework_urls'],'BTVN thiếu liên kết thật; không đoán từ tên chip')
             for key in ('document','handout','video','answers'):r[key]=links(key)[0] if links(key) else ''
@@ -436,12 +437,47 @@ def download_homework(row,config,transport):
     except GateError:raise
     except Exception:raise GateError('Không gộp được PDF nguồn; chưa đăng') from None
 
+def class_opens_at(row):
+    """Ngày của từng lớp, giờ VN; thiếu buổi khớp dùng 21:30."""
+    path=Path(os.environ.get('BTVN_CLASS_SCHEDULE',str(ROOT.parents[1]/'server/btvn/class-schedule.json')))
+    schedules=json.loads(path.read_text(encoding='utf-8')) if path.exists() else {}
+    result={}
+    for label,date in row.get('class_dates',{row['class_name']:row['lesson_date']}).items():
+        day=datetime.date.fromisoformat(date)
+        ends=[s['end'] for s in schedules.get(label,[]) if s['weekday']==day.isoweekday()]
+        end=max(ends) if ends else '21:30'
+        result[label]=datetime.datetime.combine(day,datetime.time.fromisoformat(end),datetime.timezone(datetime.timedelta(hours=7))).isoformat()
+    return result
+
+
+def source_file_identity(url):
+    parsed=urllib.parse.urlsplit(url)
+    if parsed.hostname in ('drive.google.com','www.drive.google.com'):
+        match=re.fullmatch(r'/file/d/([A-Za-z0-9_-]+)/?(?:view|preview)?',parsed.path)
+        return match.group(1) if match else urllib.parse.parse_qs(parsed.query).get('id',[url])[0]
+    return urllib.parse.urlunsplit((parsed.scheme,parsed.netloc,parsed.path,'',''))
+
+
+def check_answer_source(row):
+    answers=row.get('answers','')
+    if not answers:return
+    sources=list(row.get('homework_urls') or [row['homework']])
+    # Tài liệu là phiếu HS gốc ngay cả khi BTVN trỏ sang tệp cắt riêng.
+    if row.get('document'):sources.append(row['document'])
+    require(all(source_file_identity(answers)!=source_file_identity(url) for url in sources),'Đáp án trỏ trùng file HS; giữ lại, chưa đăng')
+    names=[answers]+[str(row.get(k,'')) for k in ('answers_label','answers_name','answer_name')]
+    require(not any('_hs' in urllib.parse.unquote(name).lower() for name in names),'Tên file đáp án chứa _HS; giữ lại, chưa đăng')
+
+
+MATERIAL_FIELDS=('videoId','videoUrl','materialUrl','handoutUrl','homeworkNote','title','classOpensAt')
+
+
 def material(row):
     video=row['video']
     u=urllib.parse.urlsplit(video);host=u.hostname
     candidate=(u.path[1:] if host=='youtu.be' else (urllib.parse.parse_qs(u.query).get('v',[''])[0] if u.path=='/watch' else u.path.split('/')[-1])) if host in ('youtu.be','youtube.com','www.youtube.com','m.youtube.com','youtube-nocookie.com','www.youtube-nocookie.com') else ''
     match=re.fullmatch(r'[A-Za-z0-9_-]{11}',candidate)
-    return {'lessonCode':row['lesson_key'],'classNames':[row['class_name']],'date':row['lesson_date'],'title':row['title'],'videoId':match.group(0) if match else None,'materialUrl':row['document'] or None,'handoutUrl':row['handout'] or None,'homeworkUrl':row['homework'] or None,'videoUrl':video if video and not match else None,'homeworkNote':row.get('homework_note','')}
+    return {'lessonCode':row['lesson_key'],'classNames':[row['class_name']],'date':row['lesson_date'],'title':row['title'],'videoId':match.group(0) if match else None,'materialUrl':row['document'] or None,'handoutUrl':row['handout'] or None,'homeworkUrl':row['homework'] or None,'videoUrl':video if video and not match else None,'homeworkNote':row.get('homework_note',''),'classOpensAt':class_opens_at(row)}
 
 class Publisher:
     def __init__(self,transport,url): self.transport,self.url=transport,url
@@ -460,6 +496,11 @@ class Publisher:
         require(result.get('status') in ('da_dang','already_published'),'Máy chủ chưa xác nhận đã đăng')
         return result
     def error(self,payload): return self.call({'action':'error',**payload})
+    def update_material(self,key,patch):
+        require(set(patch)<=set(MATERIAL_FIELDS),'Không được đổi đề hoặc tài sản qua cập nhật học liệu')
+        result=self.call({'action':'update_material','lesson_key':key,'material':patch})
+        require(result.get('status')=='updated','Máy chủ chưa xác nhận cập nhật học liệu')
+        return result
 
 class Worker:
     def __init__(self,config,transport,publisher,state,extractor=None,reviewer=None,validator=validate,extract_pdf_fn=extract_pdf):
@@ -467,12 +508,32 @@ class Worker:
         self.extractor=extractor or AI(transport,config['extractor']);self.reviewer=reviewer or AI(transport,config['reviewer'])
         self.validator,self.extract_pdf=validator,extract_pdf_fn
         self.db=sqlite3.connect(state);self.db.execute('CREATE TABLE IF NOT EXISTS receipts (lesson_key TEXT PRIMARY KEY, status TEXT, source_version TEXT, receipt TEXT)');self.db.commit()
+        self.db.execute('CREATE TABLE IF NOT EXISTS material_sync (lesson_key TEXT PRIMARY KEY, material TEXT)');self.db.commit()
+    def save_material(self,row):
+        value={k:v for k,v in material(row).items() if k in MATERIAL_FIELDS}
+        self.db.execute('INSERT OR REPLACE INTO material_sync VALUES (?,?)',(row['lesson_key'],json.dumps(value,ensure_ascii=False)));self.db.commit()
+    def sync_material(self,row):
+        current={k:v for k,v in material(row).items() if k in MATERIAL_FIELDS}
+        saved=self.db.execute('SELECT material FROM material_sync WHERE lesson_key=?',(row['lesson_key'],)).fetchone()
+        previous=json.loads(saved[0]) if saved else {}
+        # Ô trống trên Sheet không xóa video/tài liệu đã có trên nền tảng.
+        patch={k:v for k,v in current.items() if v not in (None,'') and previous.get(k)!=v}
+        if not patch:return 'already_published'
+        if 'videoId' in patch:patch['videoUrl']=None
+        elif 'videoUrl' in patch:patch['videoId']=None
+        self.publisher.update_material(row['lesson_key'],patch)
+        previous.update(patch)
+        self.db.execute('INSERT OR REPLACE INTO material_sync VALUES (?,?)',(row['lesson_key'],json.dumps(previous,ensure_ascii=False)));self.db.commit()
+        self.last_update_fields=list(patch)
+        return 'updated'
     def process(self,row):
         local=self.db.execute('SELECT status FROM receipts WHERE lesson_key=?',(row['lesson_key'],)).fetchone()
-        if local and local[0]=='da_dang':return 'already_published'
+        published=bool(local and local[0]=='da_dang')
         version=digest(encoded({'lesson_key':row['lesson_key'],'status':'source_not_fetched'}))
         try:
-            if self.publisher.lookup(row['lesson_key'])=='da_dang':return 'already_published'
+            check_answer_source(row)
+            published=published or self.publisher.lookup(row['lesson_key'])=='da_dang'
+            if published:return self.sync_material(row)
             require(row['answers'],'Có BTVN nhưng thiếu PDF đáp án')
             hs=download_homework(row,self.config,self.transport);gv=download_pdf(row['answers'],self.config,self.transport)
             require(digest(hs)!=digest(gv),'Đề và đáp án phải là 2 PDF riêng')
@@ -502,10 +563,15 @@ class Worker:
                 verification={'validator':True,'independent':True,'receipt_hash':digest(encoded(receipt)),'slots':slots,'provider':self.config['reviewer']['provider'],'model':actual_review.get('actual_model',self.config['reviewer']['model']),'extractor_provider':self.config['extractor']['provider']}
                 result=self.publisher.publish({'lesson_key':row['lesson_key'],'source_version':version,'material':material(row),'exam':exam,'assets':assets,'verification':verification})
                 self.db.execute('INSERT OR REPLACE INTO receipts VALUES (?,?,?,?)',(row['lesson_key'],'da_dang',version,json.dumps(receipt,ensure_ascii=False)));self.db.commit()
+                self.save_material(row)
                 return result['status']
         except Exception as e:
             # Only own gate messages are safe. Never log provider body, key or URL.
             reason=str(e) if isinstance(e,GateError) else 'Lỗi xử lý nội bộ; chưa được đăng'
+            if published:
+                self.last_reason=reason
+                notify(self.config,self.transport,row['lesson_key'],reason)
+                return 'loi'
             error={'lesson_key':row['lesson_key'],'source_version':version,'material':material(row),'error_code':'PIPELINE_GATE_FAILED','reason':reason[:1000]}
             try:
                 result=self.publisher.error(error)
@@ -541,6 +607,9 @@ def main():
         failed=False
         for row in rows:
             status=worker.process(row);print(row['lesson_key'],status);failed=failed or status=='loi'
+            if status=='updated':
+                what='video' if any(k in worker.last_update_fields for k in ('videoId','videoUrl')) else 'thông tin'
+                print('Đã cập nhật '+what+' bài '+row['lesson_key'])
         worker.db.close()
         if failed:raise GateError('Một hoặc nhiều buổi chưa đạt; đã giữ tiến trình và thử các buổi độc lập khác')
 

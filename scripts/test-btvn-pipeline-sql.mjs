@@ -16,8 +16,11 @@ const checks=[];async function check(name,fn){await fn();checks.push(name);conso
 const owner='11111111-1111-4111-8111-111111111111',cid='22222222-2222-4222-8222-222222222222';
 async function rpc(action,payload,role='mtm_btvn_publisher'){return db.transaction(async tx=>{await tx.exec('set local role '+role);return (await tx.query('select public.mtm_btvn_pipeline($1,$2::jsonb) result',[action,JSON.stringify(payload)])).rows[0].result;});}
 const fixture=pipelineFixture();
+// Đợt 18: bộ hồi quy này giả định buổi đã mở; ca khóa tương lai có test riêng.
+fixture.material.classOpensAt=Object.fromEntries(fixture.material.classNames.map(label=>[label,'2000-01-01T00:00:00Z']));
+fixture.material.date='2000-01-01';
 try{
- await check('17 migration nguyên văn trên PGlite, scope/bucket riêng',async()=>{
+ await check('Toàn bộ migration hiện hành nguyên văn trên PGlite, scope/bucket riêng',async()=>{
   await db.exec(`create role anon;create role authenticated;create role service_role;create role authenticator;
    create schema auth;create table auth.users(id uuid primary key);
    create function auth.uid() returns uuid language sql stable as $$select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid$$;
@@ -58,6 +61,8 @@ try{
  });
  await check('Lỗi giữ inactive; retry hợp lệ chuyển da_dang',async()=>{
   const f=pipelineFixture();f.lesson_key='fake-retry';f.material.lessonCode=f.lesson_key;
+  f.material.classOpensAt=Object.fromEntries(f.material.classNames.map(label=>[label,'2000-01-01T00:00:00Z']));
+  f.material.date='2000-01-01';
   assert.equal((await rpc('error',{...f,error_code:'MATH_MISMATCH'})).status,'loi');
   assert.equal((await db.query('select active from mtm_hw_private.btvn_lessons where code=$1',[f.lesson_key])).rows[0].active,false);
   assert.equal((await (await send(f)).json()).status,'da_dang');

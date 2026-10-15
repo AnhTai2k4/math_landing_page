@@ -1,5 +1,6 @@
 import {validatePracticeExam,type PracticeExam} from '../../src/native/exams/data';
 import {normalizedShort} from '../../src/native/exams/assessment';
+import {classOpeningTimes} from './class-schedule';
 export type PublishAsset={path:string;sha256:string;content_type:string;data_base64:string};
 export interface PublishPort {
  rpc(action:string,payload:Record<string,unknown>):Promise<any>;
@@ -29,9 +30,26 @@ export function createBtvnPublishHandler(port:PublishPort,secret:string){return 
  try{
   const text=await request.text();ensure(text.length<=48*1024*1024,'PAYLOAD_TOO_LARGE');
   const body=JSON.parse(text);ensure(body&&typeof body==='object'&&!Array.isArray(body),'INVALID_PAYLOAD');
-  ensure(['lookup','publish','error'].includes(body.action)&&/^[a-z0-9-]{1,160}$/.test(body.lesson_key),'INVALID_ACTION');
+  ensure(['lookup','publish','error','update_material'].includes(body.action)&&/^[a-z0-9-]{1,160}$/.test(body.lesson_key),'INVALID_ACTION');
   const previous=await port.rpc('lookup',{lesson_key:body.lesson_key});
   if(body.action==='lookup')return respond(200,previous);
+  if(body.action==='update_material'){
+   ensure(previous.status==='da_dang','LESSON_NOT_PUBLISHED');
+   ensure(Object.keys(body).every(k=>['action','lesson_key','material'].includes(k)),'INVALID_UPDATE');
+   const patch=body.material;
+   ensure(patch&&typeof patch==='object'&&!Array.isArray(patch)&&Object.keys(patch).length>0,'INVALID_UPDATE');
+   const allowed=['videoId','videoUrl','materialUrl','handoutUrl','homeworkNote','title','classOpensAt'];
+   ensure(Object.keys(patch).every(k=>allowed.includes(k)),'INVALID_UPDATE');
+   for(const [key,value] of Object.entries(patch)){
+    if(key==='videoId')ensure(value===null||typeof value==='string'&&/^[a-zA-Z0-9_-]{11}$/.test(value),'INVALID_VIDEO');
+    else if(['videoUrl','materialUrl','handoutUrl'].includes(key)){
+     if(value!==null){ensure(typeof value==='string'&&value.length<=4096,'INVALID_MATERIAL_LINK');const url=new URL(value);ensure(url.protocol==='https:'&&!url.username&&!url.password,'INVALID_MATERIAL_LINK');}
+    }else if(key==='classOpensAt'){
+     ensure(value&&typeof value==='object'&&!Array.isArray(value)&&Object.keys(value).length>0&&Object.entries(value).every(([name,date])=>name.length>0&&name.length<=100&&typeof date==='string'&&/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/.test(date)&&Number.isFinite(Date.parse(date))&&new Date(date.slice(0,10)+'T00:00:00Z').toISOString().slice(0,10)===date.slice(0,10)),'INVALID_CLASS_OPENING');
+    }else ensure(typeof value==='string'&&value.length<=300&&(key!=='title'||value.trim().length>0),'INVALID_MATERIAL');
+   }
+   return respond(200,await port.rpc('update_material',{lesson_key:body.lesson_key,material:patch}));
+  }
   if(previous.status==='da_dang')return respond(200,{status:'already_published'});
   ensure(/^[a-f0-9]{64}$/.test(body.source_version??''),'INVALID_VERSION');
   const kind=body.kind??'btvn';ensure(['btvn','kiem-tra-thang'].includes(kind),'INVALID_KIND');
@@ -41,7 +59,7 @@ export function createBtvnPublishHandler(port:PublishPort,secret:string){return 
   ensure(/^\d{4}-\d{2}-\d{2}$/.test(m.date)&&new Date(m.date).toISOString().slice(0,10)===m.date&&typeof m.title==='string'&&m.title.length>0&&m.title.length<=300,'INVALID_MATERIAL');
   const link=(v:unknown)=>{if(v===null||v===undefined||v==='')return null;ensure(typeof v==='string'&&v.length<=4096,'INVALID_MATERIAL_LINK');const u=new URL(v);ensure(u.protocol==='https:'&&!u.username&&!u.password,'INVALID_MATERIAL_LINK');return u.href;};
   const classDates=m.classDates??{};ensure(classDates&&typeof classDates==='object'&&!Array.isArray(classDates)&&Object.entries(classDates).every(([name,date])=>m.classNames.includes(name)&&typeof date==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(date)&&new Date(date).toISOString().slice(0,10)===date),'INVALID_CLASS_DATES');
-  const material={lessonCode:m.lessonCode,classNames:m.classNames,date:m.date,title:m.title,classDates,videoId:m.videoId??null,materialUrl:link(m.materialUrl),handoutUrl:link(m.handoutUrl),homeworkUrl:null,videoUrl:link(m.videoUrl),homeworkNote:typeof m.homeworkNote==='string'?m.homeworkNote.slice(0,300):undefined};
+  const material={lessonCode:m.lessonCode,classNames:m.classNames,date:m.date,title:m.title,classDates,classOpensAt:classOpeningTimes({...m,classDates}),videoId:m.videoId??null,materialUrl:link(m.materialUrl),handoutUrl:link(m.handoutUrl),homeworkUrl:null,videoUrl:link(m.videoUrl),homeworkNote:typeof m.homeworkNote==='string'?m.homeworkNote.slice(0,300):undefined};
   // PDF BTVN chỉ mở qua chữ ký riêng; không trả đường nguồn trực tiếp của đề.
   ensure(material.videoId===null||/^[a-zA-Z0-9_-]{11}$/.test(material.videoId),'INVALID_VIDEO');
   if(body.action==='error'){

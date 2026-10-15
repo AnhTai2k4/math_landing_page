@@ -124,7 +124,11 @@ class JavisTests(unittest.TestCase):
         routed=w.route_rows([row],self.config,NOW)
         self.assertEqual(routed[0]['class_dates'],{'LỚP GIẢ':'2026-10-15'})
         row['class_name']='HSA';self.assertEqual(w.route_rows([row],self.config,NOW),[])
-        row=f.row();row['lesson_date']='2026-10-16';self.assertEqual(w.route_rows([row],self.config,NOW),[])
+        row=f.row();row['lesson_date']='2026-10-16'
+        with self.assertRaises(w.p.GateError):w.route_rows([row],self.config,NOW)
+        self.config['classes']['LỚP GIẢ']['dates'].append('2026-10-16')
+        row['video']='https://youtu.be/abcdefghijk'
+        self.assertEqual(w.route_rows([row],self.config,NOW)[0]['video'],row['video'])
         row['lesson_date']='2026-10-14';self.assertEqual(w.route_rows([row],self.config,NOW),[])
         self.config['classes']['LỚP GIẢ']['dates']=[]
         with self.assertRaises(w.p.GateError):w.route_rows([f.row()],self.config,NOW)
@@ -184,6 +188,30 @@ class JavisTests(unittest.TestCase):
         worker=w.VersionWorker(self.config,f.FakeTransport(),publisher,self.root/'db.sqlite',f.FakeAI(f.extracted()),f.FakeAI(review),extract_pdf_fn=f.fake_pdf)
         self.addCleanup(worker.db.close)
         self.assertEqual(worker.process(row),'loi');self.assertFalse(publisher.payloads)
+
+    def test_round18_metadata_uses_old_version_key_and_no_exam_publish(self):
+        source=f.row();source['class_dates']={'LỚP GIẢ':'2026-10-15'}
+        publisher=f.FakePublisher();ai=f.FakeAI(f.extracted())
+        worker=w.VersionWorker(self.config,f.FakeTransport(),publisher,self.root/'db.sqlite',ai,f.FakeAI(f.review()),extract_pdf_fn=f.fake_pdf)
+        self.addCleanup(worker.db.close)
+        with patch.object(w.p,'material',w.material_base_wrapper):
+            self.assertEqual(worker.process(source),'da_dang')
+            key=publisher.payloads[0]['lesson_key']
+            source['video']='https://youtu.be/abcdefghijk'
+            self.assertEqual(worker.process(source),'updated')
+            self.assertEqual(publisher.updates[0][0],key)
+            self.assertEqual(worker.process(source),'already_published')
+        self.assertEqual(len(ai.calls),1)
+        self.assertEqual(len(publisher.payloads),1)
+
+    def test_round18_answer_hs_blocked_before_download(self):
+        source=f.row();source['class_dates']={'LỚP GIẢ':'2026-10-15'};source['answers_label']='Bài_HS.pdf'
+        transport=f.FakeTransport();publisher=f.FakePublisher()
+        worker=w.VersionWorker(self.config,transport,publisher,self.root/'db.sqlite',f.FakeAI(f.extracted()),f.FakeAI(f.review()),extract_pdf_fn=f.fake_pdf)
+        self.addCleanup(worker.db.close)
+        with self.assertRaisesRegex(w.p.GateError,'_HS'):worker.process(source)
+        self.assertFalse(transport.calls)
+        self.assertFalse(publisher.payloads)
 
     def test_strict_branding_and_lossless_crop(self):
         from PIL import Image,ImageChops
