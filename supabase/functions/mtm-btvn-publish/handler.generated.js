@@ -405,6 +405,18 @@ var class_schedule_default = {
       start: "14:30",
       end: "17:30"
     }
+  ],
+  "2K10 Th\u1EE9 3, 6": [
+    {
+      weekday: 2,
+      start: "19:30",
+      end: "21:30"
+    },
+    {
+      weekday: 5,
+      start: "19:30",
+      end: "21:30"
+    }
   ]
 };
 
@@ -412,14 +424,48 @@ var class_schedule_default = {
 function classOpeningTimes(material) {
   const result = {};
   for (const name of material.classNames) {
-    const date = material.classDates?.[name] ?? material.date;
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !Number.isFinite(Date.parse(date + "T00:00:00Z")) || (/* @__PURE__ */ new Date(date + "T00:00:00Z")).toISOString().slice(0, 10) !== date) throw Error("INVALID_CLASS_DATE");
-    const weekday = (/* @__PURE__ */ new Date(date + "T00:00:00Z")).getUTCDay() || 7;
+    const date2 = material.classDates?.[name] ?? material.date;
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date2) || !Number.isFinite(Date.parse(date2 + "T00:00:00Z")) || (/* @__PURE__ */ new Date(date2 + "T00:00:00Z")).toISOString().slice(0, 10) !== date2) throw Error("INVALID_CLASS_DATE");
+    const weekday = (/* @__PURE__ */ new Date(date2 + "T00:00:00Z")).getUTCDay() || 7;
     const sessions = class_schedule_default[name]?.filter((s) => s.weekday === weekday) ?? [];
     const end = sessions.map((s) => s.end).sort().at(-1) ?? "21:30";
-    result[name] = date + "T" + end + ":00+07:00";
+    result[name] = date2 + "T" + end + ":00+07:00";
   }
   return result;
+}
+
+// server/btvn/publish-attendance.ts
+var record2 = (v) => v && typeof v === "object" && !Array.isArray(v);
+var text2 = (v, max) => typeof v === "string" && v.trim().length > 0 && v.length <= max && !/[\x00-\x1f\x7f]/.test(v);
+var validAttendanceLabel = (v) => typeof v === "string" && /^2K\d{1,2}(?: (?:[89]\+|XPT|Thứ [2-7], [2-7]|HSA \((?:CN|THỨ 5)\)))?$/.test(v);
+var ensure = (v) => {
+  if (!v) throw Error("INVALID_ATTENDANCE");
+};
+var date = (v) => text2(v, 40) && /^\d{4}-\d{2}-\d{2}T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d{1,3})?(?:Z|[+-]\d{2}:\d{2})$/.test(v) && Number.isFinite(Date.parse(v)) && (/* @__PURE__ */ new Date(v.slice(0, 10) + "T00:00:00Z")).toISOString().slice(0, 10) === v.slice(0, 10);
+function attendanceRpc(body) {
+  if (!["sync_attendance", "sync_due", "support_report"].includes(body.action)) return null;
+  if (body.action === "support_report") {
+    ensure(Object.keys(body).every((k) => ["action", "since"].includes(k)) && date(body.since));
+    return { name: "support_report", payload: { p_since: body.since } };
+  }
+  ensure(Object.keys(body).every((k) => ["action", "apply", body.action === "sync_due" ? "sessions" : "rows"].includes(k)));
+  ensure(body.apply === void 0 || typeof body.apply === "boolean");
+  if (body.action === "sync_attendance") {
+    ensure(Array.isArray(body.rows) && body.rows.length > 0 && body.rows.length <= 1e4);
+    for (const r of body.rows) ensure(record2(r) && Object.keys(r).every((k) => ["label", "fullName", "phone", "source"].includes(k)) && validAttendanceLabel(r.label) && text2(r.fullName, 160) && typeof r.phone === "string" && /^0\d{9}$/.test(r.phone) && (r.source === void 0 || text2(r.source, 200)));
+    return { name: "sync_attendance", payload: { p_payload: { rows: body.rows }, p_apply: body.apply ?? false } };
+  }
+  ensure(Array.isArray(body.sessions) && body.sessions.length <= 2e3);
+  let count = 0;
+  const ids = /* @__PURE__ */ new Set();
+  for (const s of body.sessions) {
+    ensure(record2(s) && Object.keys(s).every((k) => ["classKey", "label", "startsAt", "sourceIdentity", "attendees"].includes(k)) && validAttendanceLabel(s.label) && text2(s.classKey, 100) && date(s.startsAt) && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:00\+07:00$/.test(s.startsAt) && text2(s.sourceIdentity, 300) && !ids.has(s.sourceIdentity) && Array.isArray(s.attendees) && s.attendees.length <= 1e3);
+    ids.add(s.sourceIdentity);
+    count += s.attendees.length;
+    ensure(count <= 2e4);
+    for (const a of s.attendees) ensure(record2(a) && Object.keys(a).every((k) => ["name", "phone", "status"].includes(k)) && text2(a.name, 160) && typeof a.phone === "string" && /^0\d{9}$/.test(a.phone) && typeof a.status === "string" && ["", "C", "M", "L", "K", "ON", "P", "PH P"].includes(a.status));
+  }
+  return { name: "sync_due", payload: { p_payload: { sessions: body.sessions }, p_apply: body.apply ?? false } };
 }
 
 // server/btvn/publish-handler.ts
@@ -428,7 +474,7 @@ var canonical = (value) => JSON.stringify(value);
 function expectedSlots(exam) {
   return exam.questions.flatMap((q) => q.kind === "tf" ? q.answer.map((expected, i) => ({ question_id: q.id, slot: "abcd"[i], expected })) : [{ question_id: q.id, slot: "answer", expected: q.kind === "self" ? "self" : q.kind === "short" ? q.acceptedAnswers : q.answer }]);
 }
-function ensure(value, message) {
+function ensure2(value, message) {
   if (!value) throw Error(message);
 }
 function references(exam) {
@@ -436,7 +482,7 @@ function references(exam) {
   for (const q of exam.questions) for (const s of [...q.sourceContent?.questions ?? [], ...q.sourceContent?.solutions ?? []]) refs.push(s);
   refs.push(...exam.sourceInstructions ?? [], ...exam.solutionInstructions ?? []);
   for (const pdf of [exam.sourcePdf, exam.mtmDocuments?.questions, exam.mtmDocuments?.solutions]) if (pdf) {
-    ensure(pdf.url.startsWith("/exam-assets/"), "PDF_MUST_BE_PRIVATE");
+    ensure2(pdf.url.startsWith("/exam-assets/"), "PDF_MUST_BE_PRIVATE");
     refs.push({ path: pdf.url.slice(1), sha256: pdf.sha256 });
   }
   return refs;
@@ -452,87 +498,92 @@ function createBtvnPublishHandler(port, secret) {
     for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
     if (diff) return respond(401, { error_code: "UNAUTHORIZED" });
     try {
-      const text2 = await request.text();
-      ensure(text2.length <= 48 * 1024 * 1024, "PAYLOAD_TOO_LARGE");
-      const body = JSON.parse(text2);
-      ensure(body && typeof body === "object" && !Array.isArray(body), "INVALID_PAYLOAD");
-      ensure(["lookup", "publish", "error", "update_material"].includes(body.action) && /^[a-z0-9-]{1,160}$/.test(body.lesson_key), "INVALID_ACTION");
+      const text3 = await request.text();
+      ensure2(text3.length <= 48 * 1024 * 1024, "PAYLOAD_TOO_LARGE");
+      const body = JSON.parse(text3);
+      ensure2(body && typeof body === "object" && !Array.isArray(body), "INVALID_PAYLOAD");
+      const attendance = attendanceRpc(body);
+      if (attendance) {
+        ensure2(new TextEncoder().encode(text3).length <= 10 * 1024 * 1024, "PAYLOAD_TOO_LARGE");
+        return respond(200, await port.rpc(attendance.name, attendance.payload));
+      }
+      ensure2(["lookup", "publish", "error", "update_material"].includes(body.action) && /^[a-z0-9-]{1,160}$/.test(body.lesson_key), "INVALID_ACTION");
       const previous = await port.rpc("lookup", { lesson_key: body.lesson_key });
       if (body.action === "lookup") return respond(200, previous);
       if (body.action === "update_material") {
-        ensure(previous.status === "da_dang", "LESSON_NOT_PUBLISHED");
-        ensure(Object.keys(body).every((k) => ["action", "lesson_key", "material"].includes(k)), "INVALID_UPDATE");
+        ensure2(previous.status === "da_dang", "LESSON_NOT_PUBLISHED");
+        ensure2(Object.keys(body).every((k) => ["action", "lesson_key", "material"].includes(k)), "INVALID_UPDATE");
         const patch = body.material;
-        ensure(patch && typeof patch === "object" && !Array.isArray(patch) && Object.keys(patch).length > 0, "INVALID_UPDATE");
+        ensure2(patch && typeof patch === "object" && !Array.isArray(patch) && Object.keys(patch).length > 0, "INVALID_UPDATE");
         const allowed = ["videoId", "videoUrl", "materialUrl", "handoutUrl", "homeworkNote", "title", "classOpensAt"];
-        ensure(Object.keys(patch).every((k) => allowed.includes(k)), "INVALID_UPDATE");
+        ensure2(Object.keys(patch).every((k) => allowed.includes(k)), "INVALID_UPDATE");
         for (const [key, value] of Object.entries(patch)) {
-          if (key === "videoId") ensure(value === null || typeof value === "string" && /^[a-zA-Z0-9_-]{11}$/.test(value), "INVALID_VIDEO");
+          if (key === "videoId") ensure2(value === null || typeof value === "string" && /^[a-zA-Z0-9_-]{11}$/.test(value), "INVALID_VIDEO");
           else if (["videoUrl", "materialUrl", "handoutUrl"].includes(key)) {
             if (value !== null) {
-              ensure(typeof value === "string" && value.length <= 4096, "INVALID_MATERIAL_LINK");
+              ensure2(typeof value === "string" && value.length <= 4096, "INVALID_MATERIAL_LINK");
               const url = new URL(value);
-              ensure(url.protocol === "https:" && !url.username && !url.password, "INVALID_MATERIAL_LINK");
+              ensure2(url.protocol === "https:" && !url.username && !url.password, "INVALID_MATERIAL_LINK");
             }
           } else if (key === "classOpensAt") {
-            ensure(value && typeof value === "object" && !Array.isArray(value) && Object.keys(value).length > 0 && Object.entries(value).every(([name, date]) => name.length > 0 && name.length <= 100 && typeof date === "string" && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/.test(date) && Number.isFinite(Date.parse(date)) && (/* @__PURE__ */ new Date(date.slice(0, 10) + "T00:00:00Z")).toISOString().slice(0, 10) === date.slice(0, 10)), "INVALID_CLASS_OPENING");
-          } else ensure(typeof value === "string" && value.length <= 300 && (key !== "title" || value.trim().length > 0), "INVALID_MATERIAL");
+            ensure2(value && typeof value === "object" && !Array.isArray(value) && Object.keys(value).length > 0 && Object.entries(value).every(([name, date2]) => name.length > 0 && name.length <= 100 && typeof date2 === "string" && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/.test(date2) && Number.isFinite(Date.parse(date2)) && (/* @__PURE__ */ new Date(date2.slice(0, 10) + "T00:00:00Z")).toISOString().slice(0, 10) === date2.slice(0, 10)), "INVALID_CLASS_OPENING");
+          } else ensure2(typeof value === "string" && value.length <= 300 && (key !== "title" || value.trim().length > 0), "INVALID_MATERIAL");
         }
         return respond(200, await port.rpc("update_material", { lesson_key: body.lesson_key, material: patch }));
       }
       if (previous.status === "da_dang") return respond(200, { status: "already_published" });
-      ensure(/^[a-f0-9]{64}$/.test(body.source_version ?? ""), "INVALID_VERSION");
+      ensure2(/^[a-f0-9]{64}$/.test(body.source_version ?? ""), "INVALID_VERSION");
       const kind = body.kind ?? "btvn";
-      ensure(["btvn", "kiem-tra-thang"].includes(kind), "INVALID_KIND");
-      if (kind === "kiem-tra-thang") ensure(typeof body.opensAt === "string" && typeof body.closesAt === "string" && /([zZ]|[+-]\d{2}:\d{2})$/.test(body.opensAt) && /([zZ]|[+-]\d{2}:\d{2})$/.test(body.closesAt) && Number.isFinite(Date.parse(body.opensAt)) && Date.parse(body.opensAt) >= Date.parse("2026-10-15T00:00:00+07:00") && Date.parse(body.closesAt) > Date.parse(body.opensAt), "INVALID_MONTHLY_WINDOW");
+      ensure2(["btvn", "kiem-tra-thang"].includes(kind), "INVALID_KIND");
+      if (kind === "kiem-tra-thang") ensure2(typeof body.opensAt === "string" && typeof body.closesAt === "string" && /([zZ]|[+-]\d{2}:\d{2})$/.test(body.opensAt) && /([zZ]|[+-]\d{2}:\d{2})$/.test(body.closesAt) && Number.isFinite(Date.parse(body.opensAt)) && Date.parse(body.opensAt) >= Date.parse("2026-10-15T00:00:00+07:00") && Date.parse(body.closesAt) > Date.parse(body.opensAt), "INVALID_MONTHLY_WINDOW");
       const m = body.material;
-      ensure(m?.lessonCode === body.lesson_key && Array.isArray(m.classNames) && m.classNames.length > 0 && m.classNames.length <= 50 && new Set(m.classNames).size === m.classNames.length && m.classNames.every((x) => typeof x === "string" && x.length > 0 && x.length <= 100), "INVALID_MATERIAL");
-      ensure(/^\d{4}-\d{2}-\d{2}$/.test(m.date) && new Date(m.date).toISOString().slice(0, 10) === m.date && typeof m.title === "string" && m.title.length > 0 && m.title.length <= 300, "INVALID_MATERIAL");
+      ensure2(m?.lessonCode === body.lesson_key && Array.isArray(m.classNames) && m.classNames.length > 0 && m.classNames.length <= 50 && new Set(m.classNames).size === m.classNames.length && m.classNames.every((x) => typeof x === "string" && x.length > 0 && x.length <= 100), "INVALID_MATERIAL");
+      ensure2(/^\d{4}-\d{2}-\d{2}$/.test(m.date) && new Date(m.date).toISOString().slice(0, 10) === m.date && typeof m.title === "string" && m.title.length > 0 && m.title.length <= 300, "INVALID_MATERIAL");
       const link = (v) => {
         if (v === null || v === void 0 || v === "") return null;
-        ensure(typeof v === "string" && v.length <= 4096, "INVALID_MATERIAL_LINK");
+        ensure2(typeof v === "string" && v.length <= 4096, "INVALID_MATERIAL_LINK");
         const u = new URL(v);
-        ensure(u.protocol === "https:" && !u.username && !u.password, "INVALID_MATERIAL_LINK");
+        ensure2(u.protocol === "https:" && !u.username && !u.password, "INVALID_MATERIAL_LINK");
         return u.href;
       };
       const classDates = m.classDates ?? {};
-      ensure(classDates && typeof classDates === "object" && !Array.isArray(classDates) && Object.entries(classDates).every(([name, date]) => m.classNames.includes(name) && typeof date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(date) && new Date(date).toISOString().slice(0, 10) === date), "INVALID_CLASS_DATES");
+      ensure2(classDates && typeof classDates === "object" && !Array.isArray(classDates) && Object.entries(classDates).every(([name, date2]) => m.classNames.includes(name) && typeof date2 === "string" && /^\d{4}-\d{2}-\d{2}$/.test(date2) && new Date(date2).toISOString().slice(0, 10) === date2), "INVALID_CLASS_DATES");
       const material = { lessonCode: m.lessonCode, classNames: m.classNames, date: m.date, title: m.title, classDates, classOpensAt: classOpeningTimes({ ...m, classDates }), videoId: m.videoId ?? null, materialUrl: link(m.materialUrl), handoutUrl: link(m.handoutUrl), homeworkUrl: null, videoUrl: link(m.videoUrl), homeworkNote: typeof m.homeworkNote === "string" ? m.homeworkNote.slice(0, 300) : void 0 };
-      ensure(material.videoId === null || /^[a-zA-Z0-9_-]{11}$/.test(material.videoId), "INVALID_VIDEO");
+      ensure2(material.videoId === null || /^[a-zA-Z0-9_-]{11}$/.test(material.videoId), "INVALID_VIDEO");
       if (body.action === "error") {
-        ensure(/^[A-Z0-9_]{1,80}$/.test(body.error_code ?? ""), "INVALID_ERROR");
+        ensure2(/^[A-Z0-9_]{1,80}$/.test(body.error_code ?? ""), "INVALID_ERROR");
         const reason = typeof body.reason === "string" && body.reason.length <= 1e3 && !/(https?:|@|bearer|sk-|secret|token|password|otp)/i.test(body.reason) ? body.reason.replace(/[\x00-\x1f]/g, " ") : "Kh\xF4ng \u0111\u1EA1t b\u1ED9 ki\u1EC3m; xem receipt ri\xEAng c\u1EE7a worker.";
         return respond(200, await port.rpc("error", { lesson_key: body.lesson_key, source_version: body.source_version, material, error_code: body.error_code, reason }));
       }
       const exam = body.exam;
-      ensure(validatePracticeExam(exam).valid && exam.durationMinutes === 120, "VALIDATOR_FAILED");
+      ensure2(validatePracticeExam(exam).valid && exam.durationMinutes === 120, "VALIDATOR_FAILED");
       const proof = body.verification;
-      ensure(proof?.validator === true && proof.independent === true && /^[a-f0-9]{64}$/.test(proof.receipt_hash ?? "") && typeof proof.provider === "string" && proof.provider.trim().length > 0 && typeof proof.model === "string" && proof.model.trim().length > 0, "REVIEW_REQUIRED");
+      ensure2(proof?.validator === true && proof.independent === true && /^[a-f0-9]{64}$/.test(proof.receipt_hash ?? "") && typeof proof.provider === "string" && proof.provider.trim().length > 0 && typeof proof.model === "string" && proof.model.trim().length > 0, "REVIEW_REQUIRED");
       const slots = expectedSlots(exam);
-      ensure(Array.isArray(proof.slots) && proof.slots.length === slots.length, "REVIEW_COVERAGE");
-      ensure(typeof proof.extractor_provider === "string" && proof.extractor_provider !== proof.provider, "INDEPENDENT_PROVIDER_REQUIRED");
+      ensure2(Array.isArray(proof.slots) && proof.slots.length === slots.length, "REVIEW_COVERAGE");
+      ensure2(typeof proof.extractor_provider === "string" && proof.extractor_provider !== proof.provider, "INDEPENDENT_PROVIDER_REQUIRED");
       for (const slot of slots) {
         const matches = proof.slots.filter((x) => x.question_id === slot.question_id && x.slot === slot.slot), q = exam.questions.find((q2) => q2.id === slot.question_id);
-        ensure(matches.length === 1 && canonical(matches[0].expected) === canonical(slot.expected), "REVIEW_MISMATCH");
-        if (q.convertedFrom === "essay" || q.kind === "self" || exam.rubricVersion === "MTM-BTVN-10-v1" && q.kind === "short") ensure(matches[0].conversion_verified === true, "CONVERSION_REVIEW_REQUIRED");
+        ensure2(matches.length === 1 && canonical(matches[0].expected) === canonical(slot.expected), "REVIEW_MISMATCH");
+        if (q.convertedFrom === "essay" || q.kind === "self" || exam.rubricVersion === "MTM-BTVN-10-v1" && q.kind === "short") ensure2(matches[0].conversion_verified === true, "CONVERSION_REVIEW_REQUIRED");
         const actual = matches[0].actual;
-        ensure(q.kind === "short" ? typeof actual === "string" && normalizedShort(q.mode, actual) !== null && q.acceptedAnswers.some((a2) => normalizedShort(q.mode, a2) === normalizedShort(q.mode, actual)) : canonical(actual) === canonical(slot.expected), "REVIEW_MISMATCH");
+        ensure2(q.kind === "short" ? typeof actual === "string" && normalizedShort(q.mode, actual) !== null && q.acceptedAnswers.some((a2) => normalizedShort(q.mode, a2) === normalizedShort(q.mode, actual)) : canonical(actual) === canonical(slot.expected), "REVIEW_MISMATCH");
       }
-      ensure(Array.isArray(body.assets) && body.assets.length > 0 && body.assets.length <= 500, "INVALID_ASSETS");
+      ensure2(Array.isArray(body.assets) && body.assets.length > 0 && body.assets.length <= 500, "INVALID_ASSETS");
       const assets = body.assets, paths = /* @__PURE__ */ new Set();
       let bytesTotal = 0;
       const decoded = await Promise.all(assets.map(async (asset) => {
-        ensure(typeof asset.path === "string" && /^[a-zA-Z0-9][a-zA-Z0-9_/-]*\.(png|pdf)$/.test(asset.path) && !asset.path.split("/").includes("..") && !asset.path.includes("//") && !paths.has(asset.path), "INVALID_PATH");
+        ensure2(typeof asset.path === "string" && /^[a-zA-Z0-9][a-zA-Z0-9_/-]*\.(png|pdf)$/.test(asset.path) && !asset.path.split("/").includes("..") && !asset.path.includes("//") && !paths.has(asset.path), "INVALID_PATH");
         paths.add(asset.path);
-        ensure(/^[a-f0-9]{64}$/.test(asset.sha256) && ["application/pdf", "image/png"].includes(asset.content_type) && asset.path.endsWith(asset.content_type === "image/png" ? ".png" : ".pdf"), "INVALID_ASSET");
-        ensure(typeof asset.data_base64 === "string" && /^[A-Za-z0-9+/]*={0,2}$/.test(asset.data_base64) && asset.data_base64.length <= 21 * 1024 * 1024, "INVALID_BASE64");
+        ensure2(/^[a-f0-9]{64}$/.test(asset.sha256) && ["application/pdf", "image/png"].includes(asset.content_type) && asset.path.endsWith(asset.content_type === "image/png" ? ".png" : ".pdf"), "INVALID_ASSET");
+        ensure2(typeof asset.data_base64 === "string" && /^[A-Za-z0-9+/]*={0,2}$/.test(asset.data_base64) && asset.data_base64.length <= 21 * 1024 * 1024, "INVALID_BASE64");
         const raw = atob(asset.data_base64), bytes = Uint8Array.from(raw, (c) => c.charCodeAt(0));
         bytesTotal += bytes.length;
-        ensure(bytes.length >= 8 && bytes.length <= 15 * 1024 * 1024 && bytesTotal <= 32 * 1024 * 1024 && await hash(bytes) === asset.sha256, "ASSET_HASH_MISMATCH");
-        ensure(asset.content_type === "image/png" ? bytes.slice(0, 8).every((x, i) => x === [137, 80, 78, 71, 13, 10, 26, 10][i]) : new TextDecoder().decode(bytes.slice(0, 5)) === "%PDF-", "INVALID_FILE_SIGNATURE");
+        ensure2(bytes.length >= 8 && bytes.length <= 15 * 1024 * 1024 && bytesTotal <= 32 * 1024 * 1024 && await hash(bytes) === asset.sha256, "ASSET_HASH_MISMATCH");
+        ensure2(asset.content_type === "image/png" ? bytes.slice(0, 8).every((x, i) => x === [137, 80, 78, 71, 13, 10, 26, 10][i]) : new TextDecoder().decode(bytes.slice(0, 5)) === "%PDF-", "INVALID_FILE_SIGNATURE");
         return { asset, bytes, storage_path: `btvn/${body.lesson_key}/${body.source_version}/${asset.path}` };
       }));
-      for (const ref of references(exam)) ensure(assets.some((a2) => a2.path === ref.path && a2.sha256 === ref.sha256), "ASSET_REFERENCE_MISSING");
+      for (const ref of references(exam)) ensure2(assets.some((a2) => a2.path === ref.path && a2.sha256 === ref.sha256), "ASSET_REFERENCE_MISSING");
       for (const item of decoded) await port.upload(item.storage_path, item.bytes, item.asset.content_type, item.asset.sha256);
       const metadata = decoded.map(({ asset, bytes, storage_path }) => ({ path: asset.path, sha256: asset.sha256, content_type: asset.content_type, bytes: bytes.length, storage_path }));
       return respond(200, await port.rpc("publish", { kind, opensAt: body.opensAt, closesAt: body.closesAt, lesson_key: body.lesson_key, source_version: body.source_version, material, exam, assets: metadata, verification: proof }));

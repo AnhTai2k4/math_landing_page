@@ -11,6 +11,7 @@ import sys
 import urllib.parse
 import urllib.request
 import runtime as r
+from attendance import run_attendance
 
 p = r.load_pipeline()
 
@@ -251,7 +252,7 @@ def run_batch(config, transport, publisher, root, now=None, extractor=None, revi
     now = now or r.now_vn()
     if not r.in_window(now):
         return {'status':'ngoai_lich', 'items':[]}
-    receipt = {'at':now.isoformat(), 'items':[], 'attendance_sync':'chờ Claude nối đồng bộ hạn trên VPS'}
+    receipt = {'at':now.isoformat(), 'items':[]}
     root.mkdir(parents=True, exist_ok=True)
     worker = VersionWorker(config, transport, publisher, root/'receipts.sqlite', extractor or NativeAI(transport,config['extractor']), reviewer or NativeAI(transport,config['reviewer']), validator=validator)
     pending=[]
@@ -300,6 +301,12 @@ def run_batch(config, transport, publisher, root, now=None, extractor=None, revi
         receipt['status']='loi_doc_nguon'
         report_error(config, root, 'discovery', 'BTVN: không đọc hoặc ghép được Sheet/lịch lớp; chưa đăng buổi bị lỗi.', now)
     finally:
+        # Sau xử lý bài để hạn áp dụng cả bài vừa đăng trong cùng lượt.
+        # Lỗi cấu hình/sổ/báo cáo không được chặn lớp hay receipt độc lập.
+        try:
+            receipt['attendance_sync']=run_attendance(config,transport,publisher,root,now)
+        except Exception:
+            receipt['attendance_sync']={'sync':'loi_noi_bo'}
         worker.db.close()
         flush_notifications(config,root,pending,now)
         directory = root/'receipts';directory.mkdir(exist_ok=True)

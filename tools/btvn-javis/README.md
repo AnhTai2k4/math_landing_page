@@ -131,7 +131,7 @@ curl --fail -sS -X POST "http://127.0.0.1:${JAVIS_PORT:-7777}/reminders/cancel" 
 - `receipts.sqlite` giữ phản hồi, lời giải độc lập, slot và provider/model thật. `receipts/*.json` ghi từng lượt, phiên bản/lớp/trạng thái và mục hạn còn chờ. Logs chỉ thông tin an toàn, không URL/token/khóa.
 - Lỗi lớp/buổi/lý do gửi ngay qua loopback `/reminders` notify, có `ok` mới ghi đã nhận. Cùng lỗi/ngày không gửi lại; lỗi gửi thất bại nằm outbox, thử lại lượt sau. Không bypass kênh Telegram thiếu bằng `allow_no_channel`.
 - Thành công xếp hàng, gom một tin ở lượt 23h; không có bài mới thì không gửi. Tin dài giữ phần dư cho lần tổng hợp sau, không bỏ mất dòng. Không có bảo đảm exactly-once Telegram nếu tiến trình chết giữa gửi và ghi receipt, vì reminders không có idempotency key.
-- **Đồng bộ hạn từ sổ điểm danh chưa nối trên VPS**. Receipt ghi chờ Claude; không dùng service_role để lách. Bài đạt vẫn theo quy tắc hạn đang chờ của web; Claude phải nối bước được cấp quyền và nghiệm thu riêng.
+- Đợt 21 đã nối mã đồng bộ sổ/hạn qua Edge dùng secret publish hiện hành. Triển khai và nghiệm thu VPS thật còn do Claude thực hiện theo phần dưới; không cấp service_role cho VPS.
 
 ## Kiểm offline trên PC
 
@@ -143,3 +143,48 @@ python tools/btvn-javis/btvn-tu-dang.py --dry-run
 ```
 
 Trong phiên này `python` không nằm PATH, lệnh thực tế dùng `C:/Users/Admin/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe`; tệp tạm/checkpoint đều trên T. Dry-run dùng transport/AI/publisher giả và fixture PDF cục bộ có sẵn, chặn urllib/socket, gọi validator PracticeExam thật. Chưa chứng minh chạy Linux, khóa FD kế thừa thật, API/hạn mức, SA/Drive, Telegram, cron hoặc đã đăng.
+
+## Đợt 21: sổ điểm danh, hạn nộp và báo cáo hỗ trợ
+
+Phần này là hướng dẫn triển khai cho Claude, Codex chỉ sửa và kiểm offline. Không tạo thêm lịch. Worker giữ nguyên khóa và lịch 7-23h hiện có. Cuối mỗi lượt, kể cả lượt lỗi nguồn bài, worker đọc sổ và đồng bộ rồi lấy báo cáo một giờ gần nhất. Chạy sau bước xử lý bài để tính hạn cả bài vừa đăng.
+
+### Edge, Claude chạy
+
+```powershell
+node scripts/build-btvn-publish.mjs
+node tools/btvn-javis/bundle-attendance.mjs .qa-temp/dot-21/attendance.bundle.mjs
+supabase functions deploy mtm-btvn-publish --project-ref <PROJECT_REF_DA_XAC_MINH> --no-verify-jwt
+```
+
+Đối chiếu project thật trước lệnh deploy, không dùng chuỗi mẫu. Giữ secret `MTM_BTVN_PUBLISH_SECRET` hiện hành, `SUPABASE_DB_URL`, `SUPABASE_URL` và `SUPABASE_SERVICE_ROLE_KEY` chỉ ở Edge. Không in/chuyển giá trị bí mật. Migrations 015-017 theo phiếu đã áp, không chạy lại từ đợt này. DB phải cho kết nối Edge `SET LOCAL ROLE service_role` và gọi ba RPC đã có. Pipeline cũ vẫn dùng `mtm_btvn_publisher` trong transaction riêng. Không cần cấp thêm quyền DB cho worker.
+
+Ba action POST, cùng header `X-MTM-Publish-Secret`:
+
+- `sync_attendance`: `{action, rows:[{label,fullName,phone,source}], apply:false}` gọi `mtm_btvn_sync_attendance_roster`. Mặc định dry-run, cờ apply phải boolean. Tối đa 10.000 dòng, không cho danh sách rỗng để tránh xóa toàn sổ.
+- `sync_due`: `{action, sessions:[{classKey,label,startsAt,sourceIdentity,attendees:[{name,phone,status}]}], apply:false}` gọi `mtm_btvn_sync_due`. Tối đa 2.000 buổi, 1.000 em/buổi, tổng 20.000 lượt. Payload đồng bộ tối đa 10 MiB. Nhãn đúng dạng MTM; DB kiểm lại lớp active.
+- `support_report`: `{action, since:"2026-10-15T00:00:00+07:00"}` gọi `mtm_btvn_support_report`. Response RPC có dữ liệu riêng tư, không in response thô hay lưu vào receipt. Worker chỉ xuất số lần thất bại theo nhãn lớp đã kiểm, nhãn tự do thành `Lớp chưa xác định`.
+
+### Cấu hình VPS
+
+1. Chép `worker.py`, `attendance.py` vào `<brain>/Javis/scripts/`; chép bundle và receipt SHA-256 vào `<brain>/Javis/btvn/`. Dùng cùng bundle đã kiểm; đọc lại hash trên VPS. Node 22 chạy bundle từ stdin, không cần repo, esbuild hoặc service role. Snapshot và payload chỉ ở RAM/pipe, không ghi file danh sách học sinh.
+2. Chia sẻ quyền xem sổ `Điểm danh 2026-2027`, ID `1vgkRI7re62pROu3uWog6OXBp5bViBSqbjLdytBfqXT4`, cho đúng SA hiện có. Worker dùng Sheets API readonly, `www.googleapis.com` phải ở allowlist. Không thay tài khoản hoặc nới quyền Drive. Chỉ tải bảy tab Thứ 2 đến Thứ 7 và Chủ nhật, vùng A1:ZZ2000. Chạm trần dòng/cột, tab thiếu/trống hoặc sai kiểu đều chặn đồng bộ.
+3. Đặt `BTVN_ATTENDANCE_MAP` trỏ file map riêng tư tuyệt đối trên VPS, hoặc thêm `attendance_map` vào config worker. Có thể đặt `BTVN_ATTENDANCE_BUNDLE` nếu bundle ở nơi khác. Không đưa map có SĐT hay snapshot thật vào Git/log. Mẫu cấu trúc không phải xác nhận toàn bộ lớp hiện hành:
+
+```json
+{
+  "schoolYear": 2026,
+  "fromDate": "2026-10-15",
+  "classes": {
+    "2k9 9+": "2K9 9+",
+    "hsa thứ 5": "2K9 HSA (THỨ 5)",
+    "hsa chủ nhật": "2K9 HSA (CN)"
+  }
+}
+```
+
+Map phải phủ các khối thực tế. Parser dùng ngày trường, múi giờ +07:00, tính cả buổi tương lai (ô trống dùng cho hạn dự kiến), từ 15/10/2026 nếu không khai `fromDate`. Operator đặt `toDate` theo phạm vi sổ đã đối soát để tránh payload cả năm vượt giới hạn. Có `pending` thì giữ cả hai bước sync, báo tổng quát. HSA thứ Năm/Chủ nhật dùng hai nhãn riêng. Có thể thêm `knownPhonesByCohort` dạng `{ "2K9": ["SO_GIA_HOAC_DU_LIEU_DA_DUYET"] }` vào map riêng tư: module bỏ khối khi có ít nhất ba dòng đã biết và dưới 50% đúng khóa. Không có tham số này thì bỏ kiểm lẫn khóa theo phiếu, không tự đọc DB.
+
+4. Claude kiểm trên VPS: Edge dry-run với dữ liệu giả được cấp phép, xác nhận `applied:false`; kiểm SA đọc đủ tab, map không có pending, rồi một lượt worker theo lịch/quyền hiện hành và readback tổng rows/sessions/applied, receipt không có tên/SĐT. Worker tự chạy roster dry-run và yêu cầu `invalid:0` trước apply để tránh thay toàn sổ bằng nhãn không active. `sync_attendance` thay toàn roster nên không được áp dụng dữ liệu giả trên DB thật. Không in báo cáo thô. Test `sync_due` apply phải dùng đúng sổ đã đối soát, không dùng fixture giả trên DB thật.
+5. Báo cáo một giờ gần nhất: chỉ khi có `dang_nhap_that_bai` mới in một dòng lớp/số lần để Javis tiếp nhận báo Telegram. Code này không tự gửi Telegram trực tiếp cho báo cáo hỗ trợ; cần nghiệm thu đường đọc stdout/log của Javis đang chạy. Lỗi tải sổ chỉ in một dòng mỗi ngày VN, lưu mã/ngày trong state. Báo cáo vẫn được thử khi tải sổ lỗi. Lỗi đồng bộ không chặn xử lý bài độc lập; receipt ghi trạng thái từng bước. Cửa sổ báo cáo có thể trùng nếu chạy lại trong giờ, hoặc thiếu nếu lịch bỏ lượt, không tuyên bố exactly-once.
+
+Kiểm offline sau đóng gói: `node scripts/run-tests.mjs`, `python -m unittest discover -s tools/btvn-javis/tests -v`, `npm run build`. Test Python đợt 21 gọi bundle thật bằng sổ giả nên cần tạo bundle trước. Không chạy `--live` trong phiên Codex này.
