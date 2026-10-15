@@ -1,0 +1,35 @@
+﻿import assert from 'node:assert/strict';
+import {createRequire} from 'node:module';
+import {join} from 'node:path';
+import {readFileSync} from 'node:fs';
+const root=process.env.MTM_ROOT!,require=createRequire(join(root,'package.json'));
+const {buildSync}=require('esbuild'),React=require('react'),{renderToStaticMarkup}=require('react-dom/server');
+function load(file:string){const code=buildSync({entryPoints:[join(root,file)],bundle:true,write:false,platform:'node',format:'cjs',jsx:'automatic',packages:'external',loader:{'.css':'empty'},logLevel:'silent'}).outputFiles[0].text;const mod={exports:{} as any};new Function('require','module','exports',code)((id:string)=>id.endsWith('.css')?{}:require(id),mod,mod.exports);return mod.exports;}
+const {default:Overview}=load('src/native/homework/HomeworkOverview.tsx');
+const {default:Cards,LessonVideo}=load('src/native/homework/LessonCards.tsx');
+const {default:Gate}=load('src/native/homework/HomeworkGate.tsx');
+const render=(c:any,p:any)=>renderToStaticMarkup(React.createElement(c,p));
+const dueAt=Date.parse('2026-10-16T17:30:00+07:00');
+const lesson={lessonCode:'gia',date:'2026-10-15',title:'Tên buổi giả',homeworkTitle:'Tên đề giả',classNames:['Lớp giả'],videoId:'abcdefghijk',videoEmbeddable:false,materialUrl:null,handoutUrl:null,homeworkUrl:null,dueAt:null,expectedDueAt:dueAt,bestScore:null,late:null,submittedAt:null,available:true};
+const exam={id:'fake',title:'Tên đề giả',durationMinutes:120,questions:[]};
+const initial={exam,fullName:'Học sinh GIẢ',className:'Lớp giả',lessonCode:'gia',dueAt:null,maxAttempts:5,attemptsUsed:0,draft:null,receipts:[],bestScore:null,demo:false,lessons:[lesson]};
+const overview=(state:any)=>render(Overview,{state,busy:false,onStart(){}});
+let html=overview(initial);assert.ok(html.includes('Bắt đầu làm bài'));assert.ok(html.includes('Hạn dự kiến: trước'));assert.equal((html.match(/Tên đề giả/g)||[]).length,1);assert.ok(html.includes('Tên buổi giả'));assert.ok(!html.includes('Xem lời giải'));
+const receipt={attemptId:'fake-2',attemptNumber:2,submittedAt:dueAt-1000,elapsedSeconds:20,score:7.5,late:false,timedOut:false};
+const first={...receipt,attemptId:'fake-1',attemptNumber:1,score:3.25};
+const submitted={...initial,dueAt,attemptsUsed:2,bestScore:7.5,draft:{attemptId:'fake-2',submittedAt:receipt.submittedAt},receipts:[first,receipt]};
+html=overview(submitted);for(const text of ['7,5/10','Điểm lượt này','Điểm cao nhất','3 lượt','Xem lời giải','Làm lượt tiếp','Lượt 1','Lượt 2','Đúng hạn'])assert.ok(html.includes(text),text);
+assert.ok(html.indexOf('Lượt 2</b>')<html.indexOf('Lượt 1</b>'));
+html=overview({...submitted,receipts:[{...receipt,late:true}]});assert.ok(html.includes('Nộp muộn'));
+html=overview({...submitted,receipts:[{...receipt,late:null}]});assert.ok(html.includes('Chờ xác minh hạn'));
+html=overview({...submitted,attemptsUsed:5});assert.ok(html.includes('đã dùng hết 5 lượt'));assert.ok(!html.includes('Làm lượt tiếp'));
+html=overview({...submitted,bestScore:9});assert.ok(html.includes('Điểm cao nhất: 9/10'));assert.ok(html.includes('7,5<small>'));
+html=render(Cards,{lessons:[{...lesson,dueAt:1}],busy:false,onHomework(){}});assert.ok(html.includes('Quá hạn · Chưa nộp'));assert.ok(html.includes('Tên đề giả'));assert.ok(html.includes('Tên buổi giả'));
+html=render(Cards,{lessons:[],busy:false,onHomework(){}});assert.ok(html.includes('Lớp em chưa có BTVN'));
+html=render(LessonVideo,{lesson,demo:false});assert.ok(!html.includes('<iframe'));assert.ok(html.includes('https://www.youtube.com/watch?v=abcdefghijk'));
+html=render(LessonVideo,{lesson:{...lesson,videoEmbeddable:true},demo:false});assert.ok(html.includes('<iframe'));
+html=render(Gate,{studentCode:'',identity:{fullName:'',phone:'',className:''},busy:false,classNames:[],onCode(){},onIdentity(){},onLogin(){}});for(const text of ['Có mã','Không có mã','Chưa có lớp để chọn'])assert.ok(html.includes(text));
+const source=readFileSync(join(root,'src/native/homework/HomeworkSession.tsx'),'utf8');assert.ok(!source.includes('máy chủ thử'));assert.ok(source.includes('onState={setState}'));assert.ok(source.includes('state.draft.submittedAt===null?<ManagedAttempt'));
+for(const text of ['máy chủ thử','Kết quả luyện tập','Kết quả của bạn','Dữ liệu minh hoạ'])assert.ok(!overview(submitted).includes(text));
+console.log('Đạt SSR đợt 14: chưa làm, đã nộp, nộp muộn, chờ hạn, hết lượt, điểm cao nhất, quá hạn chưa nộp, lớp rỗng, video nhúng và dự phòng, hai cách vào.');
+

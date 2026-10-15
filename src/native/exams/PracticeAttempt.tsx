@@ -36,6 +36,7 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverr
   const {sourceIssue,erratum,acceptedErratum,setAcceptedErratum,legacy,persisted,conflict,draft,notice,setNotice,unsaved,exportNotice,setExportNotice,pdfReady,setPdfReady,confirmation,setConfirmation,desktopLayout,setDesktopLayout,setActiveQuestion,setQuestionFocus,mobilePane,setMobilePane,leaveConfirmation,persist,finish,begin,submitted,sections,answered,invalidCount,seconds,startDisabled,startLabel,retake} = state;
   const [exitedAttempt,setExitedAttempt]=useState<string|null>(null);
   const focused=phongThiV2&&!!draft&&!submitted&&exitedAttempt!==draft.attemptId;
+  if(isHomework&&submitted)return <p role="status">Đang chờ máy chủ MTM xác nhận bài nộp của em…</p>;
   return <section className="ep-attempt">{leaveConfirmation}
     {focused?<FocusRoom key={draft.attemptId} props={props} state={state} onExit={()=>setExitedAttempt(draft.attemptId)}/>:<>
     {phongThiV2&&draft&&!submitted&&<button type="button" className="ep-primary" onClick={()=>setExitedAttempt(null)}>Vào lại phòng tập trung</button>}

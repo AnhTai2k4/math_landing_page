@@ -1,7 +1,8 @@
 import {useContext,useEffect,useMemo,useRef,useState} from 'react';
-import {homeworkLessonCaption,homeworkTitle,displayClassName} from './presentation';
+import {displayClassName} from './presentation';
 import EntryNotice,{entryFailure} from './EntryNotice';
 import LessonCards from './LessonCards';
+import HomeworkOverview from './HomeworkOverview';
 import HomeworkGate from './HomeworkGate';
 import PracticeAttempt from '../exams/PracticeAttempt';
 import type {Draft,Store} from '../exams/store';
@@ -23,13 +24,13 @@ function ManagedAttempt({state,gateway,onState}:{state:HomeworkState & {exam:Pra
   const alive=useRef(true),last=useRef<Draft|null>(state.draft),queue=useRef(Promise.resolve()),timer=useRef<ReturnType<typeof setTimeout>|undefined>(undefined);
   useEffect(()=>{alive.current=true;return()=>{alive.current=false;if(timer.current&&last.current){clearTimeout(timer.current);send(last.current);}};},[]);
   const send=(draft:Draft)=>{
-    if(alive.current){setSaving(true);setFailed(false);setNotice(draft.submittedAt===null?'Đang lưu bài trên máy chủ thử…':'Đang gửi bài đến máy chủ thử…');}
+    if(alive.current){setSaving(true);setFailed(false);setNotice(draft.submittedAt===null?'Đang lưu bài trên máy chủ MTM…':'Đang gửi bài đến máy chủ MTM…');}
     queue.current=queue.current.catch(()=>{}).then(async()=>{
       try{
         const next=await gateway.call(draft.submittedAt===null?'save':'submit',{lessonCode:state.lessonCode,attemptId:draft.attemptId,answers:draft.answers});
-        if(alive.current){setFailed(false);setNotice(next.draft?.submittedAt!==null?'Máy chủ thử đã nhận bài; điểm tính nằm ở bảng BTVN bên dưới.':'Đã lưu bài trên máy chủ thử.');
+        if(alive.current){setFailed(false);setNotice((next.draft!=null&&next.draft.submittedAt!==null)?'Máy chủ MTM đã nhận bài.':'Đã lưu bài trên máy chủ MTM.');
           // Re-mount sau submit để UI lấy thời điểm/đáp án máy chủ (timeout loại đáp án đến muộn).
-          if(next.draft?.submittedAt!==null)onState(next);
+          if((next.draft!=null&&next.draft.submittedAt!==null))onState(next);
         }
       }catch(error){if(alive.current){setFailed(true);setNotice(error instanceof Error?error.message:'Chưa gửi được. Giữ trang mở và thử lại.');}}
       finally{if(alive.current)setSaving(false);}
@@ -49,7 +50,7 @@ function ManagedAttempt({state,gateway,onState}:{state:HomeworkState & {exam:Pra
   return <><p role="status">{notice}</p>{failed&&<button disabled={saving} onClick={()=>last.current&&send(last.current)}>Gửi lại bài đang giữ</button>}
     <PracticeAttempt isHomework exam={state.exam} catalogUrl={location.pathname} contextLabel="BTVN" audienceLabel={displayClassName(state)} storeOverride={store}
       storageNotice="Bài làm gửi đến máy chủ MTM theo tài khoản em. Chỉ thông báo nhận bài từ máy chủ mới xác nhận đã nộp BTVN."
-      onRetake={()=>{setNotice('Dùng nút Mở lượt tiếp theo ở bảng BTVN bên dưới.');document.getElementById('btvn-summary')?.scrollIntoView({behavior:'smooth'});}}
+      onRetake={()=>{setNotice('Dùng nút Làm lượt tiếp ở phần kết quả BTVN.');document.getElementById('btvn-summary')?.scrollIntoView({behavior:'smooth'});}}
       questionReader={<HomeworkReader exam={state.exam}/>}/>
   </>;
 }
@@ -92,22 +93,17 @@ export default function HomeworkSession({pathname}:{pathname:string}){
   },[gateway,state?.lessonCode,state?.demo]);
   const run=async(action:'login'|'start',input?:GateInput)=>{setBusy(true);setNotice('');try{setState(await gateway.call(action,action==='login'?{gate:input}:{}));if(action==='start')setRoom(true);setGate({fullName:'',phone:'',className:''});setStudentCode('');}catch(error){setNotice(error instanceof Error?error.message:'Chưa kết nối được máy chủ. Em thử lại sau.');}finally{setBusy(false);}};
   if(!parts&&pathname!=='/btvn')return <section className="mig-container mig-panel"><h1>Đường dẫn BTVN không hợp lệ</h1></section>;
-  return <section className="mig-container ep-root btvn-session"><h1>Bài tập về nhà</h1><p>MTM sưu tầm và biên soạn</p>
+  return <section className="ep-root btvn-session">
     {state?.demo&&<p className="btvn-demo" role="note">Bản thử với học sinh giả và buổi mẫu. Chưa giao BTVN cho lớp thật.</p>}{notice&&<p role="alert">{notice}</p>}
+    {!state&&<header className="btvn-entry-heading"><img src="/mtm-original-logo-420w.webp" alt="Minh Thành Math"/><h1>Bài tập về nhà</h1><p>Vào lớp để xem bài giảng và hoàn thành BTVN của em.</p></header>}
     {checking?<p role="status">Đang kiểm tra phiên…</p>:!state?<HomeworkGate studentCode={studentCode} identity={gate} busy={busy} classNames={classNames} classesLoading={classesLoading} classesError={classesError} onReloadClasses={()=>void loadClasses()} onCode={setStudentCode} onIdentity={setGate} onLogin={input=>void run('login',input)}/>:<>
       <header className="btvn-top"><img src="/mtm-original-logo-420w.webp" alt="Minh Thành Math"/><div><b>Bài tập về nhà</b><p>Video buổi học và BTVN của lớp em</p></div><div className="btvn-me"><b>{state.fullName}</b><span>{displayClassName(state)}</span><button disabled={busy} onClick={async()=>{setBusy(true);try{await gateway.call('logout');setState(null);setRoom(false);}catch{setNotice('Chưa thoát phiên được.');}finally{setBusy(false);}}}>Thoát</button></div></header>
       {state.classMismatch&&<EntryNotice className={state.className}/>}
       {!room&&<LessonCards demo={state.demo} lessons={state.lessons??[]} busy={busy} onHomework={async code=>{setBusy(true);setNotice('');try{setState(await gateway.call('select',{lessonCode:code}));setRoom(true);requestAnimationFrame(()=>document.getElementById('btvn-summary')?.scrollIntoView({behavior:'smooth'}));}catch(error){setNotice(error instanceof Error?error.message:'Chưa mở được bài.');}finally{setBusy(false);}}}/>}
-      {room&&state.exam&&<><button className="btvn-btn" onClick={()=>setRoom(false)}>Quay lại các buổi học</button><section id="btvn-summary" className="mig-panel"><h2>{homeworkTitle(state)}</h2>
-        {homeworkLessonCaption(state)&&<p>{homeworkLessonCaption(state)}</p>}
-        <p>{state.attemptsUsed}/{state.maxAttempts} lượt · 120 phút/lượt · Điểm cao nhất: {state.bestScore===null?'Chưa có':state.bestScore+'/10'} · {state.dueAt!==null?'Hạn: '+new Date(state.dueAt).toLocaleString('vi-VN',{timeZone:'Asia/Ho_Chi_Minh'}):state.lessons?.find(l=>l.lessonCode===state.lessonCode)?.expectedDueAt!=null?'Hạn dự kiến: trước '+new Date(state.lessons.find(l=>l.lessonCode===state.lessonCode)!.expectedDueAt!).toLocaleString('vi-VN',{timeZone:'Asia/Ho_Chi_Minh'})+' (giờ vào buổi học tới)':'Hạn: chờ xác minh buổi học kế tiếp'} (giờ Việt Nam).</p>
-        <p>Mở lượt tính ngay là một lần làm. Điểm cao nhất tính cả lần nộp muộn. Hạn nộp là giờ vào buổi học kế tiếp mà em thực học.</p>
-        {(!state.draft||state.draft.submittedAt!==null)&&state.attemptsUsed<state.maxAttempts&&<button className="ep-primary" disabled={busy} onClick={()=>void run('start')}>{state.draft?'Mở lượt tiếp theo':'Bắt đầu làm bài'}</button>}
-        {state.receipts.length>0&&<ul>{state.receipts.map(r=><li key={r.attemptId}>Lượt {r.attemptNumber}: {r.score}/10 · {new Date(r.submittedAt).toLocaleString('vi-VN',{timeZone:'Asia/Ho_Chi_Minh'})} · {r.elapsedSeconds} giây{r.late===null?' · Chờ xác minh hạn':r.late?' · Nộp muộn':' · Đúng hạn'}{r.timedOut?' · Hết giờ':''}</li>)}</ul>}
-        <button disabled={busy} onClick={async()=>{setBusy(true);try{await gateway.call('logout');setState(null);}catch{setNotice('Chưa thoát phiên được.');}finally{setBusy(false);}}}>Thoát phiên</button>
-      </section>
-      {state.draft&&<ManagedAttempt key={state.draft.attemptId+':'+(state.draft.submittedAt??'open')} state={{...state,exam:state.exam}} gateway={gateway} onState={setState}/>}
+      {room&&state.exam&&<><button className="btvn-btn btvn-back" disabled={busy} onClick={()=>setRoom(false)}>← Các buổi học</button>
+        {state.draft&&state.draft.submittedAt===null?<ManagedAttempt key={state.draft.attemptId} state={{...state,exam:state.exam}} gateway={gateway} onState={setState}/>:<HomeworkOverview key={state.lessonCode+':'+(state.draft?.attemptId??'new')} state={state} busy={busy} onStart={()=>void run('start')}/>}
       </>}
+
     </>}
   </section>;
 }
