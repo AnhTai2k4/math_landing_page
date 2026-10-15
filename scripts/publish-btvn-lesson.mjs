@@ -4,7 +4,7 @@ import {pathToFileURL,fileURLToPath} from 'node:url';
 import {build} from 'esbuild';
 
 export async function validateLesson(payload){
- if(!payload||payload.action!=='publish'||Object.keys(payload).some(k=>!['action','lesson_key','source_version','material','exam','assets','verification'].includes(k)))throw Error('INVALID_LESSON');
+ if(!payload||payload.action!=='publish'||Object.keys(payload).some(k=>!['action','kind','opensAt','closesAt','lesson_key','source_version','material','exam','assets','verification'].includes(k)))throw Error('INVALID_LESSON');
  const bundled=await build({entryPoints:[fileURLToPath(new URL('../server/btvn/publish-handler.ts',import.meta.url))],bundle:true,write:false,platform:'neutral',format:'esm',target:'es2022',logLevel:'silent'});
  const {createBtvnPublishHandler}=await import('data:text/javascript;base64,'+Buffer.from(bundled.outputFiles[0].text).toString('base64'));
  let uploads=0,published=false;

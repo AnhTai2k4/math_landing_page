@@ -15,7 +15,8 @@ type Limit={count:number; until:number};
 export class HomeworkService {
   private sessions=new Map<string,Session>();
   private limits=new Map<string,Limit>();
-  readonly maxAttempts=5;
+  get maxAttempts(){return this.materials.find(l=>l.lessonCode===this.lessonCode)?.kind==='kiem-tra-thang'?1:5;}
+  private monthly(token:string){const m=this.materials.find(l=>l.lessonCode===this.selected(token));return m?.kind==='kiem-tra-thang'?m:undefined;}
   constructor(readonly repo:HomeworkRepository,readonly exam:PracticeExam,readonly dueAt:number,
     readonly classKey='lop-test-12',readonly lessonCode='buoi-mau-01',private clock=Date.now,readonly materials:LessonMaterial[]=[],readonly lessonExams:Record<string,PracticeExam>={}){
     const valid=validatePracticeExam(exam);if(!valid.valid)throw new Error(valid.errors.join('; '));
@@ -83,8 +84,9 @@ export class HomeworkService {
   }
   start(token:string){
     let work=this.lessonWork(token);const previous=work.drafts.at(-1),now=this.clock();
-    if(previous?.submittedAt===null){if(now<previous.deadline)return this.state(token);this.submit(token,previous.attemptId,previous.answers);work=this.lessonWork(token);}
-    if(work.drafts.length>=this.maxAttempts)throw new HomeworkError(409,'Đã dùng đủ 5 lượt làm bài.');
+    if(previous?.submittedAt===null){if(now<Math.min(previous.deadline,this.monthly(token)?.closesAt??Infinity))return this.state(token);if(this.monthly(token))return this.submit(token,previous.attemptId,previous.answers);this.submit(token,previous.attemptId,previous.answers);work=this.lessonWork(token);}
+    const monthly=this.monthly(token);if(monthly&&(now<monthly.opensAt!||now>=monthly.closesAt!))throw new HomeworkError(409,'Bài kiểm tra chưa mở hoặc đã đóng.');
+    if(work.drafts.length>=this.maxAttempts)throw new HomeworkError(409,'Đã dùng hết lượt làm bài.');
     const made=createDraft(this.examFor(token),randomBytes(16).toString('hex'),now);if(!made.ok)throw new Error(made.message);
     work.drafts.push(made.value);this.putLesson(token,work);return this.state(token);
   }
@@ -92,7 +94,7 @@ export class HomeworkService {
     const work=this.lessonWork(token),draft=work.drafts.at(-1),now=this.clock();
     if(!draft||draft.attemptId!==id)throw new HomeworkError(409,'Lượt làm không hợp lệ.');
     if(draft.submittedAt!==null)return this.state(token);
-    if(now>=draft.deadline)return this.submit(token,id,draft.answers);
+    if(now>=Math.min(draft.deadline,this.monthly(token)?.closesAt??Infinity))return this.submit(token,id,draft.answers);
     const checked=validateDraft({...draft,answers,updatedAt:Math.max(now,draft.updatedAt),revision:draft.revision+1},this.examFor(token));
     if(!checked.ok)throw new HomeworkError(400,'Bài làm không đúng định dạng.');
     work.drafts[work.drafts.length-1]=checked.value;this.putLesson(token,work);return this.state(token);
@@ -101,13 +103,13 @@ export class HomeworkService {
     const work=this.lessonWork(token),draft=work.drafts.at(-1),now=this.clock(),exam=this.examFor(token);
     if(!draft||draft.attemptId!==id)throw new HomeworkError(409,'Lượt làm không hợp lệ.');
     if(draft.submittedAt!==null)return this.state(token);
-    const timedOut=now>=draft.deadline;
+    const timedOut=now>=Math.min(draft.deadline,this.monthly(token)?.closesAt??Infinity);
     const checked=validateDraft({...draft,answers:timedOut?draft.answers:answers,updatedAt:Math.max(now,draft.updatedAt),revision:draft.revision+1},exam);
     if(!checked.ok)throw new HomeworkError(400,'Bài làm không đúng định dạng.');
     const submitted=submitDraft(exam,checked.value,now);if(!submitted.ok)throw new Error(submitted.message);
     const result=resultFor(exam,submitted.value);if(!result?.score.ok)throw new Error('Không chấm được');
     work.drafts[work.drafts.length-1]=submitted.value;
-    work.receipts.push({attemptId:id,attemptNumber:work.drafts.length,submittedAt:now,elapsedSeconds:Math.min(exam.durationMinutes*60,Math.floor((now-draft.startedAt)/1000)),score:result.score.earnedMillipoints/1000,late:work.student.nextActualClassAt===undefined?null:now>=work.student.nextActualClassAt,timedOut});
+    work.receipts.push({attemptId:id,attemptNumber:work.drafts.length,submittedAt:now,elapsedSeconds:Math.min(exam.durationMinutes*60,Math.floor((Math.min(now,this.monthly(token)?.closesAt??Infinity)-draft.startedAt)/1000)),score:result.score.earnedMillipoints/1000,late:work.student.nextActualClassAt===undefined?null:now>=work.student.nextActualClassAt,timedOut});
     this.putLesson(token,work);return this.state(token);
   }
 }

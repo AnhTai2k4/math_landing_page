@@ -34,6 +34,8 @@ export function createBtvnPublishHandler(port:PublishPort,secret:string){return 
   if(body.action==='lookup')return respond(200,previous);
   if(previous.status==='da_dang')return respond(200,{status:'already_published'});
   ensure(/^[a-f0-9]{64}$/.test(body.source_version??''),'INVALID_VERSION');
+  const kind=body.kind??'btvn';ensure(['btvn','kiem-tra-thang'].includes(kind),'INVALID_KIND');
+  if(kind==='kiem-tra-thang')ensure(typeof body.opensAt==='string'&&typeof body.closesAt==='string'&&/([zZ]|[+-]\d{2}:\d{2})$/.test(body.opensAt)&&/([zZ]|[+-]\d{2}:\d{2})$/.test(body.closesAt)&&Number.isFinite(Date.parse(body.opensAt))&&Date.parse(body.opensAt)>=Date.parse('2026-10-15T00:00:00+07:00')&&Date.parse(body.closesAt)>Date.parse(body.opensAt),'INVALID_MONTHLY_WINDOW');
   const m=body.material;
   ensure(m?.lessonCode===body.lesson_key&&Array.isArray(m.classNames)&&m.classNames.length>0&&m.classNames.length<=50&&new Set(m.classNames).size===m.classNames.length&&m.classNames.every((x:unknown)=>typeof x==='string'&&x.length>0&&x.length<=100),'INVALID_MATERIAL');
   ensure(/^\d{4}-\d{2}-\d{2}$/.test(m.date)&&new Date(m.date).toISOString().slice(0,10)===m.date&&typeof m.title==='string'&&m.title.length>0&&m.title.length<=300,'INVALID_MATERIAL');
@@ -74,6 +76,6 @@ export function createBtvnPublishHandler(port:PublishPort,secret:string){return 
   // Upload không ghi đè; port đối chiếu hash nếu tệp đã có từ lượt dở.
   for(const item of decoded)await port.upload(item.storage_path,item.bytes,item.asset.content_type,item.asset.sha256);
   const metadata=decoded.map(({asset,bytes,storage_path})=>({path:asset.path,sha256:asset.sha256,content_type:asset.content_type,bytes:bytes.length,storage_path}));
-  return respond(200,await port.rpc('publish',{lesson_key:body.lesson_key,source_version:body.source_version,material,exam,assets:metadata,verification:proof}));
+  return respond(200,await port.rpc('publish',{kind,opensAt:body.opensAt,closesAt:body.closesAt,lesson_key:body.lesson_key,source_version:body.source_version,material,exam,assets:metadata,verification:proof}));
  }catch{return respond(422,{error_code:'PUBLISH_REJECTED'});}
 };}

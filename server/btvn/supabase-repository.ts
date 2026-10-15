@@ -6,9 +6,11 @@ import type {PracticeExam} from '../../src/native/exams/data';
 import type {Answers} from '../../src/native/exams/store';
 import {publicClassNames} from './class-config';
 import {hydratePrivateAssets,type PrivateAsset} from './private-assets';
+import {concealMonthlySolutions} from './monthly-policy';
 
 export interface RpcTransport {rpc(name:string,args:Record<string,unknown>):Promise<{data:unknown;error:null|{code?:string}}>}
 export type DurableSnapshot={revision:number;work:StudentWork;exam?:PracticeExam;material?:LessonMaterial;lessons:LessonMaterial[]};
+function monthlyCards(lessons:LessonMaterial[],now:number){return lessons.map(l=>l.kind==='kiem-tra-thang'&&now<(l.closesAt??Infinity)?{...l,materialUrl:null,handoutUrl:null,homeworkUrl:null,homeworkUrls:[],videoId:null,videoUrl:null}:l);}
 /** Server-only. Không liệt kê học sinh, không giữ mã thô trong repository.
  * Mỗi request đọc snapshot có quyền; CAS DB là điểm commit duy nhất.
  * Edge Function giữ resolver cũ + limiter chung; transport phải trỏ đúng Edge đã có. */
@@ -50,16 +52,24 @@ export class SupabaseHomeworkRepository {
         if(action!=='state')throw new HomeworkError(404,'Lớp em chưa có BTVN trên web.');
         return {exam:null,fullName:snapshot.work.student.fullName,className:snapshot.work.student.className,lessonCode:'',dueAt:null,maxAttempts:5,attemptsUsed:0,draft:null,receipts:[],bestScore:null,demo:false,lessons:[]};
       }
+      const monthly=snapshot.material.kind==='kiem-tra-thang',now=this.clock();
+      if(monthly&&now<snapshot.material.opensAt!){
+        if(action!=='state'&&action!=='select')throw new HomeworkError(409,'Bài kiểm tra chưa mở.');
+        return {exam:null,kind:'kiem-tra-thang',opensAt:snapshot.material.opensAt,closesAt:snapshot.material.closesAt,solutionsAvailable:false,canStart:false,fullName:snapshot.work.student.fullName,className:snapshot.work.student.className,lessonCode:snapshot.material.lessonCode,dueAt:null,maxAttempts:1,attemptsUsed:0,draft:null,receipts:[],bestScore:null,demo:false,lessons:monthlyCards(snapshot.lessons,now) as HomeworkState['lessons']};
+      }
       const code=randomBytes(16).toString('hex'),work={...snapshot.work,student:{...snapshot.work.student,studentCode:code}};
       const memory=new MemoryHomeworkRepository([]);memory.put(work);
       const service=new HomeworkService(memory,snapshot.exam,0,'private',snapshot.material.lessonCode,this.clock,[snapshot.material]);
       const token=service.login({studentCode:code},'internal');
       const next=action==='start'?service.start(token):action==='save'?service.save(token,attemptId??'',answers??{}):action==='submit'?service.submit(token,attemptId??'',answers??{}):service.state(token);
       next.demo=false;
+      if(monthly){next.kind='kiem-tra-thang';next.opensAt=snapshot.material.opensAt;next.closesAt=snapshot.material.closesAt;next.solutionsAvailable=now>=snapshot.material.closesAt!;next.canStart=now<snapshot.material.closesAt!;}
       // Hạn/điểm mỗi thẻ lấy từ snapshot có quyền, không suy từ lịch lớp.
-      next.lessons=(snapshot.lessons as HomeworkState['lessons']);
+      next.lessons=monthlyCards(snapshot.lessons,now) as HomeworkState['lessons'];
       if(action==='state'||action==='select'){
-        if(this.signAsset){const assets=await this.rpc<PrivateAsset[]>('mtm_btvn_assets',{p_session:session,p_lesson:snapshot.material.lessonCode});next.exam=await hydratePrivateAssets(snapshot.exam,assets,this.signAsset);}
+        const visible=monthly&&!next.solutionsAvailable?concealMonthlySolutions(snapshot.exam):snapshot.exam;
+        next.exam=visible;
+        if(this.signAsset){const assets=await this.rpc<PrivateAsset[]>('mtm_btvn_assets',{p_session:session,p_lesson:snapshot.material.lessonCode});next.exam=await hydratePrivateAssets(visible,assets,this.signAsset);}
         return next;
       }
       const updated=memory.get(code)!;
