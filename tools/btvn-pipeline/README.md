@@ -73,3 +73,10 @@ Nếu PDF riêng tư, **Thành nhập** token chỉ đọc vào `BTVN_PDF_READ_T
 - Extractor đổi tự luận có đáp số gọn thành `short`, ghi `convertedFrom:"essay"`; tự luận chỉ có lời giải dài thành `self`, 0 điểm, không khóa chấm. Giữ TN/ĐS và đầy đủ lời giải/crop. Profile `MTM-BTVN-10-v1`: cộng điểm các câu tính điểm rồi quy 10; không đổi các profile cũ. Bài chỉ có self giữ chờ vì không có mẫu số để quy điểm, không tự ghi 0/10 hoặc 10/10.
 - Reviewer giải từ HS trước thấy lời giải. Sau đó đối chiếu mọi short/self với GV gốc, trả `conversion_checks` và lý do cụ thể. Thiếu/false/bất đồng giữ lỗi. Slot proof có `conversion_verified:true`; handler kiểm lại cho BTVN short/self trước upload. Hai receipt giải độc lập/kiểm chuyển được lưu riêng; lượt này toàn bộ adapter AI/service là giả.
 - Test đợt 8: `node scripts/run-tests.mjs tests/exams-btvn-round8.test.mts`; Python discover gồm test grid, lớp/ngày, gộp PDF thật giả, proof chuyển và hai receipt. `node scripts/check-btvn-round8-ui.mjs` render component phòng làm bài thật bằng dữ liệu giả; chỉ SSR, không phải browser.
+# Bổ sung đợt 17, 15/10/2026
+
+Renderer hiện dùng `pypdfium2` ở 200 dpi, không còn cần Poppler. Giữ crop PNG nguyên điểm ảnh, xuất marker Câu N kèm tọa độ từ PDFium search. Tên test cũ có chữ Poppler được giữ để đối chiếu lịch sử, phép kiểm hiện chạy PDFium thật.
+
+`BTVN_VALIDATOR` có thể trỏ bundle Node độc lập được dựng từ validator web thật; nếu không đặt vẫn dùng `validate.mjs` trong repo. Bản trích gửi reviewer được whitelist trường câu hỏi, không chỉ blacklist khóa đã biết.
+
+Bộ Javis VPS ở `../btvn-javis/README.md` bổ sung launcher khóa FD kế thừa, SA, Anthropic Messages, routing/classDates, khóa phiên bản, bộ lọc thương hiệu và thông báo. Đây là adapter của pipeline hiện hành, chưa kích hoạt trên VPS trong đợt offline. Các hướng dẫn/timer cũ trong tài liệu này là lịch sử, không bật thêm timer khi dùng Javis reminders.

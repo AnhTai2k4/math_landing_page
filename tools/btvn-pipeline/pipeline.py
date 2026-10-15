@@ -243,7 +243,8 @@ def sheet_rows(raw, sheet):
             if not date:
                 if not r['lesson_date'] or re.fullmatch(r'\\+',r['lesson_date']):continue
                 raise GateError('Ngày học không hợp lệ')
-            require(r['class_name'] and r['title'],'Thiếu lớp/bài')
+            require(r['class_name'],'Thiếu lớp/bài')
+            r['title']=r['title'] or r['homework']
             r['class_name']=material_class(r['class_name'],sheet);r['lesson_date']=date
             note=header_key(r['homework'])==header_key('Phần trắc nghiệm trong phiếu')
             r['homework_note']=r['homework'] if note else ''
@@ -280,14 +281,43 @@ def command(argv):
     except (OSError, subprocess.TimeoutExpired): raise GateError('Thiếu công cụ hoặc hết thời gian') from None
 
 def extract_pdf(raw, directory, tag):
-    target = directory / (tag + '.pdf'); target.write_bytes(pdf(raw))
-    try:text = command([os.getenv('BTVN_PDFTOTEXT','pdftotext'),'-enc','UTF-8','-layout',str(target),'-']).decode('utf-8')
-    except UnicodeError:raise GateError('PDF text không đọc được UTF-8') from None
-    require(len(text.strip()) >= 40 and re.search(r'(?:Câu|Cau)\s*\d+', text), 'PDF scan/không đọc được nhãn câu: chờ kiểm thủ công, không tự đăng')
-    command([os.getenv('BTVN_PDFTOPPM','pdftoppm'),'-r','120','-png',str(target),str(directory/tag)])
-    pages = sorted(directory.glob(tag + '-*.png'),key=lambda path:int(re.search(r'-(\d+)\.png$',path.name).group(1)))
-    require(0 < len(pages) <= 40, 'PDF không có ảnh hoặc vượt 40 trang tự động')
-    return text, pages
+    """PDFium không cần Poppler; ảnh 200 dpi, tọa độ marker tính bằng pixel."""
+    import pypdfium2 as pdfium
+    pdf(raw)
+    pages=[]; texts=[]; markers=[]
+    try:
+        with pdfium.PdfDocument(raw) as document:
+            require(0 < len(document) <= 40, 'PDF không có ảnh hoặc vượt 40 trang tự động')
+            scale=200/72
+            for index in range(len(document)):
+                page=document[index]
+                try:
+                    require(page.get_width()*page.get_height()*scale*scale <= 30000000,'Trang PDF vượt giới hạn điểm ảnh')
+                    textpage=page.get_textpage()
+                    try:
+                        text=textpage.get_text_range();texts.append(text)
+                        # Search trả chỉ số nội bộ PDFium; không dùng offset chuỗi Python.
+                        for label in dict.fromkeys(re.findall(r'(?:Câu|Cau)\s*\d+',text)):
+                            search=textpage.search(label)
+                            try:
+                                while (hit:=search.get_next()) is not None:
+                                    start,count=hit
+                                    boxes=[textpage.get_charbox(i) for i in range(start,start+count)]
+                                    markers.append({'page':index+1,'label':label,'x':int(min(b[0] for b in boxes)*scale),'y':int((page.get_height()-max(b[3] for b in boxes))*scale)})
+                            finally:search.close()
+                    finally:textpage.close()
+                    bitmap=page.render(scale=scale)
+                    try:
+                        path=directory/(tag+'-'+str(index+1)+'.png')
+                        image=bitmap.to_pil();image.save(path);image.close();pages.append(path)
+                    finally:bitmap.close()
+                finally:page.close()
+        text='\n\f\n'.join(texts)
+        require(len(text.strip())>=40 and bool(markers),'PDF scan/không đọc được nhãn câu: chờ kiểm thủ công, không tự đăng')
+        (directory/(tag+'-markers.json')).write_text(json.dumps(markers,ensure_ascii=False),encoding='utf-8')
+        return text,pages
+    except GateError:raise
+    except Exception:raise GateError('PDFium không đọc/render được PDF; chưa đăng') from None
 
 class AI:
     def __init__(self, transport, spec): self.transport,self.spec,self.last_receipt = transport,spec,None
@@ -308,7 +338,7 @@ class AI:
             return result
         except (KeyError,IndexError,TypeError,ValueError): raise GateError('AI không trả JSON đúng contract') from None
 
-EXTRACT_PROMPT = '''Trích tất cả câu hỏi/khóa từ cặp PDF riêng HS/GV; chỉ dùng đúng nguồn, không sửa số/chữ. Trả JSON {certain:true,question_only:true,coverage_complete:true,grade:10|11|12,sections:[{label,kind:"mc"|"tf"|"short"|"self",count}],questions:[{id:"q1",sourceRef:"Phần I Câu 1",kind,prompt,choices:[4 chuỗi nếu mc],answer:"A"|[4 boolean nếu tf],statements:[4 chuỗi nếu tf],mode:"numeric"|"rational"|"exact" nếu short,acceptedAnswers:[chuỗi] nếu short,solution:"lời giải nguồn",maxMillipoints:số nguyên,pointsByCorrectCount:[0,...,max] nếu tf,questionCrops:[{page:1,x:0,y:0,width:...,height:...}],solutionCrops:[...]}]}. Tọa độ crop là điểm ảnh trang PNG 120dpi, đủ toàn bộ câu gồm hình và lựa chọn; không chứa câu kế hoặc đáp án. BTVN: câu tự luận có đáp số gọn chuyển kind short, convertedFrom:"essay", có đáp số đúng lời giải nguồn. Câu tự luận dài giữ kind self, maxMillipoints:0, không answer/acceptedAnswers, giữ lời giải nguồn. TN và Đ/S giữ nguyên. Trọng số câu tính điểm lấy từ nguồn; nếu nguồn không có thang điểm thì dùng 1000 mỗi câu tính điểm và ghi weightPolicy:"equal-scored-question" (Đ/S [0,250,500,750,1000]); không dùng policy này cho đề luyện tập/thi thử. Tổng câu tính điểm quy về 10; phải có ít nhất một câu tính điểm. Theo homework_note chỉ lấy phần BTVN được chỉ rõ; tệp cắt trang giữ nguyên trang trong tệp, không lấy nhầm số trang trong tên tệp. Nếu scan, thiếu câu/khóa, nhãn mơ hồ, đề chứa đáp án hay không chắc crop, trả certain:false và reason. Các phần/câu theo thứ tự nguồn. Không sáng tác lời giải. Với nguồn có rubric ghi weightPolicy:"source".'''
+EXTRACT_PROMPT = '''Trích tất cả câu hỏi/khóa từ cặp PDF riêng HS/GV; chỉ dùng đúng nguồn, không sửa số/chữ. Trả JSON {certain:true,question_only:true,coverage_complete:true,grade:10|11|12,sections:[{label,kind:"mc"|"tf"|"short"|"self",count}],questions:[{id:"q1",sourceRef:"Phần I Câu 1",kind,prompt,choices:[4 chuỗi nếu mc],answer:"A"|[4 boolean nếu tf],statements:[4 chuỗi nếu tf],mode:"numeric"|"rational"|"exact" nếu short,acceptedAnswers:[chuỗi] nếu short,solution:"lời giải nguồn",maxMillipoints:số nguyên,pointsByCorrectCount:[0,...,max] nếu tf,questionCrops:[{page:1,x:0,y:0,width:...,height:...}],solutionCrops:[...]}]}. Tọa độ crop là điểm ảnh trang PNG 200dpi, đủ toàn bộ câu gồm hình và lựa chọn; không chứa câu kế hoặc đáp án. BTVN: câu tự luận có đáp số gọn chuyển kind short, convertedFrom:"essay", có đáp số đúng lời giải nguồn. Câu tự luận dài giữ kind self, maxMillipoints:0, không answer/acceptedAnswers, giữ lời giải nguồn. TN và Đ/S giữ nguyên. Trọng số câu tính điểm lấy từ nguồn; nếu nguồn không có thang điểm thì dùng 1000 mỗi câu tính điểm và ghi weightPolicy:"equal-scored-question" (Đ/S [0,250,500,750,1000]); không dùng policy này cho đề luyện tập/thi thử. Tổng câu tính điểm quy về 10; phải có ít nhất một câu tính điểm. Theo homework_note chỉ lấy phần BTVN được chỉ rõ; tệp cắt trang giữ nguyên trang trong tệp, không lấy nhầm số trang trong tên tệp. Nếu scan, thiếu câu/khóa, nhãn mơ hồ, đề chứa đáp án hay không chắc crop, trả certain:false và reason. Các phần/câu theo thứ tự nguồn. Không sáng tác lời giải. Với nguồn có rubric ghi weightPolicy:"source".'''
 
 REVIEW_PROMPT = '''Giải độc lập TOÀN BỘ đề từ ảnh và text HS trước khi xem đáp án; bạn không được cấp khóa/lời giải. Kiểm đầy đủ từng câu, cả hình/công thức/chữ/các lựa chọn so với bản trích, tính lại điều kiện/đơn vị. Trả JSON {certain:true,coverage_complete:true,question_only:true,display_complete:true,answers:{q1:"A",q2:[true,false,true,false],q3:"2,5",...},reasoning:{q1:"các bước độc lập và kiểm điều kiện",...}}. Phải đủ chính xác các id, boolean thật, short chuỗi số/rational đúng yêu cầu. self trả chuỗi "self" và giải độc lập đầy đủ; với short chuyển tự luận kiểm việc chuyển không làm mất điều kiện/đơn vị/nghiệm. Không chắc/thiếu/ảnh crop mất nội dung thì certain:false. Không lặp lại khóa của người soạn.'''
 
@@ -383,7 +413,7 @@ def assemble(row, config, extracted, hs, gv, hs_pages, gv_pages):
 
 def validate(exam):
     try:
-        p=subprocess.run([os.getenv('BTVN_NODE','node'),str(ROOT/'validate.mjs')],input=encoded(exam),capture_output=True,timeout=120)
+        p=subprocess.run([os.getenv('BTVN_NODE','node'),os.getenv('BTVN_VALIDATOR',str(ROOT/'validate.mjs'))],input=encoded(exam),capture_output=True,timeout=120)
         gate=json.loads(p.stdout)
         require(p.returncode==0 and gate.get('valid') is True,'Validator PracticeExam không đạt: '+'; '.join(gate.get('errors',[])))
     except (OSError,ValueError,subprocess.TimeoutExpired): raise GateError('Validator thật không khả dụng') from None
@@ -452,7 +482,7 @@ class Worker:
                 extracted=self.extractor.ask(EXTRACT_PROMPT+' Phạm vi BTVN: '+row.get('homework_note','')+'; Tên tệp nguồn: '+json.dumps(row.get('homework_labels',[]),ensure_ascii=False),f'Ảnh đầu: {len(hs_pages)} trang HS; ảnh sau: {len(gv_pages)} trang GV, page của crop đếm riêng từng PDF từ 1.\n'+hs_text+'\nĐÁP ÁN:\n'+gv_text,hs_pages+gv_pages)
                 exam,assets=assemble(row,self.config,extracted,hs,gv,hs_pages,gv_pages)
                 # Independent solving receives HS only and key-free transcription.
-                public=[{k:v for k,v in q.items() if k not in ('answer','acceptedAnswers','solution','sourceContent')} for q in exam['questions']]
+                public=[{k:v for k,v in q.items() if k in ('id','kind','prompt','choices','statements','mode','convertedFrom')} for q in exam['questions']]
                 display_pages=[]
                 for i,a in enumerate(assets):
                     if a['content_type']=='image/png' and '/q' in a['path']:

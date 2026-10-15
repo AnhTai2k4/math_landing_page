@@ -1,0 +1,56 @@
+{
+  "brain": "brain",
+  "sheets": [
+    {
+      "id": "1rq76we9zUxMWN4ni77_agf23XZ1QQsfJ3DM5qX5gGUg",
+      "format": "xlsx", "material_only_workbook": false,
+      "school_year": {"start_year": 2026, "start_month": 7},
+      "columns": {"class_name":"Lớp","lesson_date":"Ngày Dạy","title":"Tên bài học","document":"Tài liệu buổi học (HS)","handout":"Handout","video":"Record","homework":"BTVN","answers":"Đáp án BTVN"},
+      "tabs": [
+        {"name":"2K10","range":"A1:K2000"},
+        {"name":"2K11","range":"A1:K2000","columns":{"document":"Tài liệu buổi học (hs"}}
+      ]
+    },
+    {
+      "id": "1161uGE4TsAQskIsJUeEoLH03IdYndrLSk5wr00FsTKk",
+      "format": "xlsx", "material_only_workbook": false,
+      "school_year": {"start_year": 2026, "start_month": 7},
+      "columns": {"class_name":"Lớp","lesson_date":"Ngày Dạy","title":"Tên bài học","document":"Tài liệu buổi học (HS)","handout":"Handout","video":"Record","homework":"BTVN","answers":"Đáp án BTVN"},
+      "tabs": [
+        {"name":"2K9","range":"A1:K2000"},
+        {"name":"2K9 XPT","range":"A1:K2000"},
+        {"name":"2k10 T6","range":"A1:K2000","class_aliases":{"2k10 T6":"2K10 Thứ 3, 6","2K10 T6":"2K10 Thứ 3, 6","Thầy Tài":"2K10 Thứ 3, 6"}},
+        {"name":"2K10 XPT","range":"A1:K2000"},
+        {"name":"2K11 XPT","range":"A1:K2000"},
+        {"name":"HSA","range":"A1:K2000"},
+        {"name":"HSA .2","range":"A1:K2000"}
+      ]
+    }
+  ],
+  "extractor":{"provider":"openai","model":"CHON_MODEL_VISION_OPENAI","url":"https://api.openai.com/v1/chat/completions","key_env":"BTVN_EXTRACTOR_API_KEY"},
+  "reviewer":{"provider":"anthropic","model":"CHON_MODEL_VISION_ANTHROPIC","url":"https://api.anthropic.com/v1/messages","key_env":"BTVN_REVIEWER_API_KEY","max_tokens":16000},
+  "source":{"pdf_download_url_template":"https://www.googleapis.com/drive/v3/files/{id}?alt=media","pdf_auth_hosts":[]},
+  "source_publisher":"MTM sưu tầm và biên soạn",
+  "period":"GK1", "periods":[],
+  "allowed_hosts":["www.googleapis.com","api.openai.com","api.anthropic.com","CHON_HOST_EDGE"],
+  "classes": {
+    "2K9 9+":{"enabled":true,"dates":[],"weekdays":[]},
+    "2K9 8+":{"enabled":true,"dates":[],"weekdays":[]},
+    "2K9 XPT":{"enabled":true,"dates":[],"weekdays":[]},
+    "2K10 9+":{"enabled":true,"dates":[],"weekdays":[1,6]},
+    "2K10 8+":{"enabled":true,"dates":[],"weekdays":[4,6]},
+    "2K10 XPT":{"enabled":true,"dates":[],"weekdays":[]},
+    "2K10 Thứ 3, 6":{"enabled":true,"dates":[],"weekdays":[1,4]},
+    "2K11 8+":{"enabled":true,"dates":[],"weekdays":[]},
+    "2K11 9+":{"enabled":true,"dates":[],"weekdays":[]},
+    "2K11 XPT":{"enabled":true,"dates":[],"weekdays":[]}
+  },
+  "shared_lessons":[],
+  "notes":[
+    "Claude xác nhận toàn workbook chỉ có học liệu trước khi bật material_only_workbook; nếu không dùng grid API từng vùng được duyệt.",
+    "Chọn model vision, niên khóa, cột từng tab, periods và dates theo lịch thật. Thứ 0 là thứ Hai, thứ 6 là Chủ nhật.",
+    "shared_lessons: source_class, source_date ISO, classDates {nhãn lớp: ngày ISO}. Cùng cặp bài khai cùng ánh xạ cho hai dòng 8+/9+.",
+    "HSA/HSA .2 được đọc học liệu nhưng chưa thuộc lớp enabled. THCS mở bằng classes và tab cấu hình.",
+    "periods: [{start: ngày ISO, end: ngày ISO, period: GK1 hoặc CK1 hoặc GK2 hoặc CK2}], không chồng nhau. Chưa đặt ngày thay Thành."
+  ]
+}

@@ -1,0 +1,5 @@
+pypdfium2>=4.30,<6
+Pillow>=10.4,<13
+pypdf>=5,<7
+openpyxl>=3.1.5,<4
+google-auth[requests]>=2.35,<3
