@@ -24,9 +24,11 @@ export function parseAttendanceSheet(snapshot:Record<string,string[][]>,config:A
   const header=rows.find(r=>r[1]?.trim()==='TÊN LỚP');if(!header)throw Error('Thiếu hàng ngày');
   let current:{key:string;label:string;time:string}|null=null;
   for(const [i,row] of rows.entries()){
-   const match=/^Lớp \(([^)]+)\)/i.exec(row[0]??'');
+   // Khối HSA ghi "HSA" (thứ Năm) hoặc "Lớp HSA (2K9)" (Chủ nhật): khoá ánh xạ "hsa <tên tab>".
+   const hsa=/^(?:Lớp\s+)?HSA\b/i.test((row[0]??'').trim());
+   const match=hsa?[row[0],'hsa '+tab]:/^Lớp \(([^)]+)\)/i.exec(row[0]??'');
    if(match){blocks++;current=null;const key=normalizeName(match[1].split(/\s+-\s+/)[0]);const label=mapping[key];
-    const time=/^(\d{1,2})(?:h(\d{2})?)?\s*-/.exec(row[1]??'');
+    const time=/^(\d{1,2})(?:h(\d{2})?)?\s*-/i.exec(row[1]??'');
     if(!label||!time||+time[1]>23||+(time[2]??0)>59){pending.push({tab,row:i+1,reason:'Khối chưa ánh xạ hoặc giờ không hợp lệ'});continue;}
     current={key,label,time:time[1].padStart(2,'0')+':'+(time[2]??'00')};continue;
    }
