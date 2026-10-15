@@ -23,6 +23,7 @@ const html=render(Session,{pathname:'/btvn'});
 assert.ok(html.includes('Lớp em chưa có BTVN trên web. Khi thầy giao bài, buổi học và BTVN sẽ hiện ở đây.'));
 assert.ok(html.includes('>Thoát</button>'));assert.ok(!html.includes('Bắt đầu làm bài'));
 assert.ok(html.includes('MTM ghi em học lớp 2K9 9+, em đã được đưa vào đúng lớp.'));
+mkdirSync(join(root,'.qa-temp/dot-12'),{recursive:true});
 writeFileSync(join(root,'.qa-temp/dot-12/empty-ssr.html'),'<!doctype html><html lang="vi"><meta charset="utf-8">'+html+'</html>');
 const session='a'.repeat(64),calls:string[]=[];
 const snapshot={revision:0,lessons:[],work:{student:{studentCode:'',fullName:empty.fullName,phone:'',className:empty.className},drafts:[],receipts:[]}};

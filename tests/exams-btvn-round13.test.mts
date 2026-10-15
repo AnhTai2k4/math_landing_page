@@ -7,8 +7,12 @@ import {createVideoEmbedChecker} from '../server/btvn/video-embed';
 import {buildScorebook,buildClassReport,type ScoreRow} from '../server/btvn/scorebook';
 import {writeScorebookSheets} from '../server/btvn/sheets-writer';
 import LessonCards,{LessonVideo} from '../src/native/homework/LessonCards';
-const fixture=JSON.parse(readFileSync('.qa-temp/dot-13/diem-danh-gia.json','utf8'));
 const config=JSON.parse(readFileSync('server/btvn/attendance-map.example.json','utf8'));
+// Dữ liệu giả tự chứa, không phụ thuộc artifact cục bộ của đợt 13.
+const fixture={'Thứ 2':[['','TÊN LỚP','16/10','06/01'],...Array.from({length:11},(_,i)=>[
+ ['Lớp ('+Object.keys(config.classes)[i%Object.keys(config.classes).length]+')',i%2?'19h30-21h30':'13h30-15h30'],
+ ['Học sinh GIẢ '+i,'0900000001','C','On']
+]).flat()]};
 const parsed=parseAttendanceSheet(fixture,config);
 assert.equal(parsed.blocks,Object.values(fixture).flat().filter((r:any)=>/^Lớp \(/.test(r[0]??'')).length);
 assert.ok(parsed.sessions.length>0);assert.ok(parsed.sessions.some(s=>s.startsAt.includes('2027-01')));

@@ -49,6 +49,7 @@ assert.throws(()=>cli.monthlyPayload({'2K9 9+':[['Họ và tên','SĐT','Tháng 
 const publisher=await import(pathToFileURL(join(root,'scripts/publish-btvn-lesson.mjs')).href);
 assert.equal((await publisher.publishLesson({...fixture,kind:'kiem-tra-thang',opensAt:new Date(opensAt).toISOString(),closesAt:new Date(closesAt).toISOString()})).mode,'dry-run');
 await assert.rejects(publisher.validateLesson({...fixture,kind:'kiem-tra-thang'}));
-assert.ok(readFileSync(join(root,'src/migration/Home.tsx'),'utf8').includes('<LazyLeaderboard/>'));
+assert.ok(readFileSync(join(root,'src/migration/Experience.tsx'),'utf8').includes('<HomeLeaderboard compact/>'));
+assert.ok(!readFileSync(join(root,'src/migration/Home.tsx'),'utf8').includes('<LazyLeaderboard/>'));
 console.log('Đạt đợt 15: SSR dữ liệu/rỗng/lỗi; API mặc định tắt, cache, whitelist, không cookie; thi web một lượt, giờ mở/đóng, chấm server, khóa lời giải; CLI Sheet và publish dry-run.');
 
