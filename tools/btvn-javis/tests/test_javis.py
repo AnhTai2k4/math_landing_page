@@ -32,14 +32,14 @@ class JavisTests(unittest.TestCase):
 
     def test_vn_window_and_end(self):
         # 16/10/2026: chạy 24/7, chỉ dừng sau ngày kết thúc.
-        for hour in (0,6):self.assertFalse(r.in_window(NOW.replace(hour=hour)))
+        for hour in (0,6,7,14,23):self.assertTrue(r.in_window(NOW.replace(hour=hour)))
         self.assertTrue(r.in_window(dt.datetime(2027,10,15,23,59,tzinfo=r.VN)))
         self.assertFalse(r.in_window(dt.datetime(2027,10,16,7,tzinfo=r.VN)))
         self.assertTrue(r.in_window(dt.datetime(2026,10,15,0,tzinfo=dt.timezone.utc)))
 
     def test_launcher_outside_no_config_or_spawn(self):
         check=Mock();spawn=Mock()
-        self.assertEqual(launcher.launch(NOW.replace(hour=6),self.root,spawn,check),'[SILENT]')
+        self.assertEqual(launcher.launch(dt.datetime(2027,10,16,7,tzinfo=r.VN),self.root,spawn,check),'[SILENT]')
         check.assert_not_called();spawn.assert_not_called()
 
     def test_launcher_preflight_is_bounded_and_safe(self):
