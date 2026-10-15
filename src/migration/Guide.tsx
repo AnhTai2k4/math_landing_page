@@ -37,11 +37,24 @@ function Steps({parent}:{parent:boolean}){
   </div>
  </section>;}
 
+function Btvn({parent}:{parent:boolean}){return <section className="mg-card mg-web">
+ <h2>Bài tập về nhà trên web</h2>
+ <div className="mg-web-links"><Link className="mg-link" href="/btvn">Vào làm BTVN</Link></div>
+ <p className="mg-sub">Đã mở cho các lớp 2K9 (8+, 9+, XPT), 2K10 (9+, 8+, Thứ 3-6, XPT), 2K11 (8+, 9+, XPT).</p>
+ <p>{parent?'Con bấm':'Bấm'} <b>Không có mã</b>, nhập họ tên ({parent?'của con hoặc phụ huynh':'của em hoặc phụ huynh'}), số điện thoại đã đăng ký với trung tâm và chọn lớp.</p>
+ <ul className="mg-list">
+  <li>Hạn nộp là giờ vào buổi học kế tiếp; nộp sau hạn vẫn được nhưng ghi muộn.</li>
+  <li>Mỗi bài làm tối đa 5 lần, điểm tính lần cao nhất, cần đạt từ 7 điểm; nộp xong xem ngay lời giải.</li>
+  <li>Bài chưa đạt thì làm lại trên web; vẫn thấy quá khó thì nên tham gia buổi bổ trợ miễn phí của lớp.</li>
+  <li>Lớp HSA tạm thời vẫn làm BTVN như hiện tại.</li>
+ </ul>
+ <p className="mg-sub">{parent?'Anh/chị đã đổi số điện thoại':'Đã đổi số điện thoại'} hoặc không vào được thì nhắn Zalo trợ lý để trung tâm cập nhật.</p>
+</section>;}
+
 function Web({parent}:{parent:boolean}){return <section className="mg-card mg-web">
  <h2>{parent?'Con luyện đề trên web':'Luyện đề trên web'}</h2>
  <div className="mg-web-links"><Link className="mg-link" href="/luyen-tap">Luyện tập</Link><Link className="mg-link" href="/thi-thu">Thi thử</Link></div>
  <p>{parent?'Con luyện đề theo từng chương và làm đề thi thử. Nộp bài xong xem ngay điểm và lời giải chi tiết, không cần tạo tài khoản.':<>Chọn chương đang học hoặc đề thi thử, bấm <b>Bắt đầu làm bài</b>, làm xong bấm <b>Nộp bài</b> là xem ngay điểm và lời giải chi tiết. Không cần tạo tài khoản.</>}</p>
- <p className="mg-btvn">Bài tập về nhà vẫn làm trên SHub như hiện tại.</p>
 </section>;}
 
 function More({parent}:{parent:boolean}){return <details className="mg-card mg-more">
@@ -58,7 +71,7 @@ function More({parent}:{parent:boolean}){return <details className="mg-card mg-m
   <li>Tài liệu, link chỉ gửi sau khi trung tâm xác nhận đúng lớp. Lớp THCS không có Zoom, video.</li>
   <li><b>Kết quả luyện đề</b> lưu trên máy đang dùng: nên luyện trên một máy cố định.</li>
   <li><b>Cách chấm</b> đề 22 câu: trắc nghiệm 3 điểm, đúng/sai 4 điểm, trả lời ngắn 3 điểm.</li>
-  <li>Lỗi SHub: thử bằng laptop, vẫn lỗi thì nhắn trợ lý.</li>
+  <li>Lỗi khi làm bài: thử bằng laptop, vẫn lỗi thì nhắn trợ lý.</li>
  </ul>}
 </details>;}
 
@@ -67,11 +80,11 @@ export default function Guide(){const [who,setWho]=useState<Audience>(readAudien
  const pick=(next:Audience)=>{setWho(next);const url=new URL(location.href);url.searchParams.set('cho',next);history.replaceState(null,'',url.pathname+url.search);};
  const parent=who==='phu-huynh';
  return <div className="mtm-guide"><div className="mg-shell">
-  <header className="mg-head"><p className="mg-eyebrow">Minh Thành Math</p><h1>Hướng dẫn nhanh</h1><p className="mg-lead">{parent?'Hai kênh giúp anh/chị theo dõi việc học của con thuận tiện hơn: Zalo trợ lý lớp và web luyện đề có lời giải.':'Hai kênh học cùng MTM: Zalo trợ lý lớp để hỏi lịch, xin nghỉ, lấy tài liệu, hỏi bài và web luyện đề có lời giải.'}</p></header>
+  <header className="mg-head"><p className="mg-eyebrow">Minh Thành Math</p><h1>Hướng dẫn nhanh</h1><p className="mg-lead">{parent?'Ba kênh giúp anh/chị theo dõi việc học của con thuận tiện hơn: Zalo trợ lý lớp, bài tập về nhà trên web và web luyện đề có lời giải.':'Ba kênh học cùng MTM: Zalo trợ lý lớp để hỏi lịch, xin nghỉ, lấy tài liệu, hỏi bài; bài tập về nhà trên web; web luyện đề có lời giải.'}</p></header>
   <div className="mg-tabs" role="tablist" aria-label="Hướng dẫn dành cho">
    <button type="button" role="tab" id="mg-tab-hs" aria-selected={!parent} aria-controls="mg-panel" onClick={()=>pick('hoc-sinh')}>Học sinh</button>
    <button type="button" role="tab" id="mg-tab-ph" aria-selected={parent} aria-controls="mg-panel" onClick={()=>pick('phu-huynh')}>Phụ huynh</button>
   </div>
-  <div id="mg-panel" role="tabpanel" aria-labelledby={parent?'mg-tab-ph':'mg-tab-hs'}><Steps parent={parent}/><Web parent={parent}/><More parent={parent}/></div>
+  <div id="mg-panel" role="tabpanel" aria-labelledby={parent?'mg-tab-ph':'mg-tab-hs'}><Steps parent={parent}/><Btvn parent={parent}/><Web parent={parent}/><More parent={parent}/></div>
   <p className="mg-slogan">Minh Thành Math - Thinking gets sharp!</p>
  </div></div>;}
