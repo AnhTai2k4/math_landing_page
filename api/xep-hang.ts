@@ -1,4 +1,4 @@
-import {anonymousRankRow,validRankFilter} from '../server/btvn/rank-row';
+import {publicRankRow,validRankFilter} from '../server/btvn/rank-row';
 type Req={method?:string;query?:Record<string,string|string[]|undefined>};
 type Res={setHeader:(key:string,value:string)=>void;status:(n:number)=>{json:(value:unknown)=>void}};
 export function createRankApi(getEnv=()=>process.env,transport:typeof fetch=fetch){return async(req:Req,res:Res)=>{
@@ -17,7 +17,7 @@ export function createRankApi(getEnv=()=>process.env,transport:typeof fetch=fetc
   const data=await response.json();
   if(!Array.isArray(data)||data.length>10)throw Error('Invalid rows');
   // Ánh xạ rõ từng trường, không chuyển nguyên RPC ra công khai.
-  const rows=data.map(r=>anonymousRankRow(r,10));
+  const rows=data.map(r=>publicRankRow(r,10));
   res.setHeader('Cache-Control','public, max-age=0, s-maxage=300');
   return res.status(200).json({enabled:true,rows});
  }catch{return res.status(503).json({message:'Chưa tải được bảng xếp hạng. Vui lòng thử lại.'});}

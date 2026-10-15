@@ -23,7 +23,7 @@ const code=buildSync({entryPoints:[join(process.env.MTM_ROOT!,'src/native/homewo
 let cursor=0;const vals=[false,'2K9','btvn-tuan','',Array.from({length:10},(_,i)=>({...row,rank:i+1,fullName:'GIẢ '+i})),'ready',true,0,{state:'ready',row}];const mod={exports:{} as any};
 new Function('require','module','exports',code)((id:string)=>id==='react'?{...React,useState:()=>[vals[cursor++],()=>{}],useEffect(){}}:require(id),mod,mod.exports);
 const html=renderToStaticMarkup(React.createElement(mod.exports.default));
-for(let i=0;i<10;i++)assert.ok(!html.includes('GIẢ '+i));
+for(let i=0;i<10;i++)assert.ok(html.includes('GIẢ '+i));
 assert.ok(html.includes(row.fullName));
 assert.equal((html.match(/mtm-rank-medal mtm-rank-medal-/g)||[]).length,3);assert.equal((html.match(/<li /g)||[]).length,11);assert.ok(html.includes('Hạng của em'));assert.ok(html.includes('Hạng 17'));assert.ok(html.includes('Tất cả lớp trong khối'));assert.ok(html.includes('2K10'));assert.ok(html.includes('Kiểm tra cuối tháng'));assert.ok(!html.includes('mtm-rank-title"'));
 console.log('Đạt SSR full board: 3 podium, top10, own rank17, lớp và kỳ, title ID không trùng compact.');

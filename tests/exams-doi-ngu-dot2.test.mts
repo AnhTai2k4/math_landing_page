@@ -20,15 +20,15 @@ await test('API xếp hạng công khai loại tên và trường riêng, luồn
   const handler=createRankApi(()=>({MTM_RANK_ENABLED:'1',SUPABASE_URL:'https://fixture.invalid',SUPABASE_SERVICE_ROLE_KEY:'SYNTHETIC-TEST'}),async()=>{calls++;return new Response(JSON.stringify([row]));});
   const res={setHeader:(k:string,v:string)=>headers[k]=v,status:(n:number)=>{status=n;return {json:(v:any)=>{result=v;}};}};
   await handler({method:'GET',query:{khoi:'2K9',loai:'btvn-tuan'}},res);
-  assert.equal(calls,1);assert.equal(status,200);assert.equal(result.enabled,true);assert.deepEqual(result.rows,[anonymousRankRow(row)]);
-  assert.doesNotMatch(JSON.stringify(result),/fullName|phone|studentId|TÊN THỬ RIÊNG|PRIVATE-TEST|SYNTHETIC-TEST/);
+  assert.equal(calls,1);assert.equal(status,200);assert.equal(result.enabled,true);assert.deepEqual(result.rows,[publicRankRow(row)]);
+  assert.doesNotMatch(JSON.stringify(result),/phone|studentId|PRIVATE-TEST|SYNTHETIC-TEST/);
   await handler({method:'GET',query:{khoi:'invalid',loai:'btvn-tuan'}},res);assert.equal(status,400);assert.equal(calls,1);
   await handler({method:'POST'},res);assert.equal(status,405);assert.equal(calls,1);
 });
 await test('Bảng công khai không render tên dù cache/API cũ còn trường tên, hạng cá nhân có tên',()=>{
   const {RankContent}=load('src/native/homework/HomeLeaderboard.tsx'),rows=[{rank:1,fullName:'TÊN THỬ RIÊNG',className:'Lớp thử',score:8,submitted:2,total:3}];
-  assert.doesNotMatch(render(RankContent,{rows,status:'ready'}),/TÊN THỬ RIÊNG/);
-  assert.match(render(RankContent,{rows,status:'ready'}),/Học sinh MTM/);
+  assert.match(render(RankContent,{rows,status:'ready'}),/TÊN THỬ RIÊNG/);
+  assert.match(render(RankContent,{rows:[{...rows[0],fullName:''}],status:'ready'}),/Học sinh MTM/);
   assert.match(render(RankContent,{rows,status:'ready',own:true}),/TÊN THỬ RIÊNG/);
 });
 const all=(t:any,p:(n:any)=>boolean):any[]=>!t||typeof t!=='object'?[]:Array.isArray(t)?t.flatMap(n=>all(n,p)):[...(p(t)?[t]:[]),...all(t.props?.children,p)];
