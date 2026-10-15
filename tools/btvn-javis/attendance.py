@@ -7,7 +7,10 @@ from pathlib import Path
 import re
 import subprocess
 import urllib.parse
-import runtime as r
+try:
+    from . import runtime as r
+except ImportError:
+    import runtime as r
 
 SHEET = '1vgkRI7re62pROu3uWog6OXBp5bViBSqbjLdytBfqXT4'
 TABS = ['Thứ '+str(i) for i in range(2, 8)]+['Chủ nhật']
@@ -39,12 +42,12 @@ def download_tabs(transport):
     return tabs
 
 
-def parse_tabs(tabs, mapping, now):
+def parse_tabs(tabs, mapping, now, *, bundle_path=None):
     config=json.loads(Path(mapping).read_text(encoding='utf-8-sig'))
     # Giữ buổi tương lai có ô trống để RPC tính expected_due_at.
     # Operator có thể giới hạn fromDate/toDate trong map theo sổ đã đối soát.
     config.setdefault('fromDate','2026-10-15')
-    bundle=Path(os.environ.get('BTVN_ATTENDANCE_BUNDLE',str(r.brain_root()/'Javis/btvn/attendance.bundle.mjs')))
+    bundle=Path(os.environ.get('BTVN_ATTENDANCE_BUNDLE',str(bundle_path or r.brain_root()/'Javis/btvn/attendance.bundle.mjs')))
     run=subprocess.run(['node',str(bundle)],input=json.dumps({'tabs':tabs,'map':config},ensure_ascii=False).encode(),capture_output=True,timeout=60)
     if run.returncode or len(run.stdout)>10*1024*1024:
         raise ValueError('Parser không đạt')

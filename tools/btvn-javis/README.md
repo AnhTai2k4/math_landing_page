@@ -188,3 +188,45 @@ Map phải phủ các khối thực tế. Parser dùng ngày trường, múi gi�
 5. Báo cáo một giờ gần nhất: chỉ khi có `dang_nhap_that_bai` mới in một dòng lớp/số lần để Javis tiếp nhận báo Telegram. Code này không tự gửi Telegram trực tiếp cho báo cáo hỗ trợ; cần nghiệm thu đường đọc stdout/log của Javis đang chạy. Lỗi tải sổ chỉ in một dòng mỗi ngày VN, lưu mã/ngày trong state. Báo cáo vẫn được thử khi tải sổ lỗi. Lỗi đồng bộ không chặn xử lý bài độc lập; receipt ghi trạng thái từng bước. Cửa sổ báo cáo có thể trùng nếu chạy lại trong giờ, hoặc thiếu nếu lịch bỏ lượt, không tuyên bố exactly-once.
 
 Kiểm offline sau đóng gói: `node scripts/run-tests.mjs`, `python -m unittest discover -s tools/btvn-javis/tests -v`, `npm run build`. Test Python đợt 21 gọi bundle thật bằng sổ giả nên cần tạo bundle trước. Không chạy `--live` trong phiên Codex này.
+
+## Đợt 22: plugin báo điểm/điểm danh khi cần (15/10/2026)
+
+Theo chốt 18:20 của Thành, không xuất điểm mỗi giờ. Plugin chỉ đọc theo lời gọi, không gắn vào launcher/cron và không thay lịch worker đang chạy. Mã nguồn ở `plugin-btvn-bao-diem/`, mặc định `enabled: false`, `min_mode: readonly`, không hook. Cấu trúc register/schema đối chiếu trực tiếp với `D:/Javis os/system/plugins/datetime-vn` và `server/plugins_host.py`; đường dẫn skill `D:/Javis os/skills/javis-builder` không tồn tại ở PC này.
+
+### Đóng gói trên PC
+
+```sh
+node scripts/build-btvn-publish.mjs
+node tools/btvn-javis/bundle-attendance.mjs .qa-temp/dot-21/attendance.bundle.mjs
+node tools/btvn-javis/bundle-report.mjs .qa-temp/dot-22/report.bundle.mjs
+node scripts/run-tests.mjs
+python -m unittest discover -s tools/btvn-javis/tests -v
+npm run build -- --outDir .qa-build/dot-22
+node scripts/check-bundle-budget.mjs .qa-build/dot-22
+```
+
+Report bundle dùng chính `buildClassReport` và `bestReceipt` từ `server/btvn/scorebook.ts`, lịch lớp hiện hành từ JSON web. VPS cần Node 22. Python dùng các dependency hiện hành của worker; riêng đọc sổ cần google-auth và requests. Không cần OpenAI/Anthropic để chạy plugin báo cáo.
+
+### Edge, bước do Claude triển khai sau nghiệm thu
+
+```sh
+supabase functions deploy mtm-btvn-publish --project-ref <PROJECT_REF_DA_DOI_CHIEU> --no-verify-jwt
+```
+
+Lệnh chỉ là hướng dẫn, chưa chạy trong đợt Codex. Giữ cùng secret và quyền hiện hành. Kiểm DB đã có RPC migration 019 và `mtm_btvn_classes`; không tự chạy lại migrations đã áp. Edge whitelist hai action đọc, dùng cùng `X-MTM-Publish-Secret`:
+
+- `{ "action": "scorebook", "from": "2026-10-01" }`: gọi `mtm_btvn_scorebook(p_from, false)`, trả array rows. `from` bỏ trống mặc định 01/10, phải là ngày lịch hợp lệ từ 01/10/2026; cấm `apply`, `p_apply`, tên RPC tùy ý và mọi trường dư. Port cố định `false` trong câu SQL. Đầu ra chỉ giữ trường ScoreRow và ba trường receipt, không giữ phone/parentPhone hay trường bổ sung từ DB.
+- `{ "action": "classes" }`: gọi chính `mtm_btvn_classes()` như web, qua cùng `publicClassNames`, trả `{classNames:[...]}`. Action này cần để kiểm nhãn đúng cả khi lớp chưa có điểm. Không dùng lớp từ config mẫu, lịch tĩnh hoặc suy từ các dòng điểm làm danh sách lớp hợp lệ.
+
+Hai RPC chỉ đọc dùng `SET LOCAL ROLE service_role` trong transaction riêng như các action điểm danh; pipeline cũ vẫn dùng role riêng. Response không cache. Không in rows thật ra log/receipt.
+
+### Cài vào VPS, chưa bật ở bản bàn giao
+
+1. Chọn đúng brain của bot Zalo hiện hành. Chép `plugin.yaml`, `plugin.py`, `HUONG-DAN-BOT.md` vào `<brain>/plugins/btvn-bao-diem/` (hoặc `<brain>/Javis/plugins/` nếu host đang dùng đường cũ). Không sửa `system/plugins` của Javis. Giữ plugin tắt cho đến khi Claude nghiệm thu, bật trong giao diện quản lý plugin của đúng brain. Không tự mở quyền chạy user plugin toàn hệ thống.
+2. Dùng helper worker hiện hành `runtime.py`, `attendance.py` đã cập nhật trong đợt này. Nếu helper ở `<brain>/Javis/scripts/` như hướng dẫn đợt 21, đặt `BTVN_JAVIS_DIR` đúng thư mục đó; nếu không khai báo thì mặc định `<brain>/Javis/btvn/`. Giữ `btvn-pipeline` ở vị trí tương đối worker hiện hành hoặc đặt `BTVN_PIPELINE_DIR` rõ ràng. Helper được import bằng namespace riêng để tránh trùng module `runtime` của server. Không sửa repo Javis để cài plugin.
+3. Chép `attendance.bundle.mjs`, `report.bundle.mjs` và receipts vào `<brain>/Javis/btvn/`, đối chiếu SHA-256 sau chép. `BTVN_REPORT_BUNDLE`, `BTVN_ATTENDANCE_BUNDLE` có thể chỉ đường tuyệt đối nếu đặt nơi khác. Không cần chép repo/esbuild sang VPS.
+4. Plugin mặc định dùng `ctx.vault_root` làm brain, ưu tiên `JAVIS_BRAIN_ROOT` khi đã cấu hình. Dùng config worker hiện hành ở `<brain>/Javis/btvn/config.json` hoặc `BTVN_CONFIG`. `attendance_map` (hoặc `BTVN_ATTENDANCE_MAP`) phải trỏ map đã đối soát; đường tương đối tính từ thư mục config. Không đưa map có SĐT lên repo.
+5. Secret chỉ đọc từ `/data/state/btvn/publish.env` (hoặc `JAVIS_STATE_DIR/btvn/publish.env`) rồi `<brain>/Javis/btvn/.publish.env`, theo worker; tệp ưu tiên có mà sai thì dừng. URL phải HTTPS và đúng đường `/functions/v1/mtm-btvn-publish`. Không in secret hoặc đặt lại secret toàn tiến trình. SA theo `MTM_GOOGLE_SA_PATH` hoặc connector-files như worker, scope chỉ `spreadsheets.readonly`. Giữ `BTVN_ALLOW_NETWORK=1` theo cổng mạng worker khi triển khai đã được duyệt; không bật trong kiểm offline.
+6. Kiểm plugin xuất hiện đúng tool `btvn_bao_diem_lop`, thử với fixture đã duyệt trước. Sau khi có quyền kiểm dữ liệu thật, kiểm đúng lớp, giờ kết thúc, trạng thái điểm danh và không có SĐT. Không ghi dữ liệu thật vào log. Chỉ sau readback Claude mới bật cho bot dùng. Không dùng kiểm offline để khẳng định đã chạy VPS/SA/Edge thật.
+
+Tool tải mới sổ đúng lúc gọi, giữ snapshot trong RAM/pipe. Chỉ chuyển họ tên/trạng thái lớp được hỏi vào report bundle. Không lưu file điểm/điểm danh, không gọi sync/apply, không gửi Zalo. Điểm danh không rõ hoặc khối lẫn khóa trả lỗi một câu; ô trống không tự suy là vắng. Dùng `HUONG-DAN-BOT.md` để bot lấy phần (a)+(c), giữ phần (b) đối soát nội bộ và tránh trộn lớp. Lỗi mạng/quyền/cấu hình chỉ trả một câu tiếng Việt, không tiết lộ exception gốc.

@@ -468,6 +468,40 @@ function attendanceRpc(body) {
   return { name: "sync_due", payload: { p_payload: { sessions: body.sessions }, p_apply: body.apply ?? false } };
 }
 
+// server/btvn/class-config.ts
+function publicClassNames(names) {
+  if (!Array.isArray(names) || names.length > 200 || names.some((name) => typeof name !== "string" || !name.trim() || name.length > 100)) throw Error("C\u1EA5u h\xECnh l\u1EDBp ch\u01B0a h\u1EE3p l\u1EC7");
+  return [...new Set(names.map((name) => name.trim()))].sort((a, b) => a.localeCompare(b, "vi", { numeric: true }));
+}
+
+// server/btvn/publish-scorebook.ts
+function scorebookRpc(body) {
+  if (body.action === "classes") {
+    if (Object.keys(body).some((k) => k !== "action")) throw Error("INVALID_CLASSES");
+    return { name: "classes", payload: {} };
+  }
+  if (body.action !== "scorebook") return null;
+  const from = body.from === void 0 ? "2026-10-01" : body.from;
+  if (Object.keys(body).some((k) => !["action", "from"].includes(k)) || typeof from !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(from) || from < "2026-10-01" || !Number.isFinite(Date.parse(from)) || new Date(from).toISOString().slice(0, 10) !== from) throw Error("INVALID_SCOREBOOK");
+  return { name: "scorebook", payload: { p_from: from, p_apply: false } };
+}
+function scorebookResult(action, result) {
+  if (action === "classes") return { classNames: publicClassNames(result) };
+  if (!Array.isArray(result)) throw Error("INVALID_SCOREBOOK_RESULT");
+  return result.map((r) => ({
+    studentId: r.studentId,
+    fullName: r.fullName,
+    className: r.className,
+    lessonCode: r.lessonCode,
+    title: r.title,
+    date: r.date,
+    dueAt: r.dueAt,
+    expectedDueAt: r.expectedDueAt,
+    sourceIdentity: r.sourceIdentity,
+    receipts: r.receipts.map((s) => ({ score: s.score, submittedAt: s.submittedAt, late: s.late }))
+  }));
+}
+
 // server/btvn/publish-handler.ts
 var hash = async (bytes) => Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", Uint8Array.from(bytes).buffer))).map((x) => x.toString(16).padStart(2, "0")).join("");
 var canonical = (value) => JSON.stringify(value);
@@ -502,6 +536,8 @@ function createBtvnPublishHandler(port, secret) {
       ensure2(text3.length <= 48 * 1024 * 1024, "PAYLOAD_TOO_LARGE");
       const body = JSON.parse(text3);
       ensure2(body && typeof body === "object" && !Array.isArray(body), "INVALID_PAYLOAD");
+      const read = scorebookRpc(body);
+      if (read) return respond(200, scorebookResult(read.name, await port.rpc(read.name, read.payload)));
       const attendance = attendanceRpc(body);
       if (attendance) {
         ensure2(new TextEncoder().encode(text3).length <= 10 * 1024 * 1024, "PAYLOAD_TOO_LARGE");

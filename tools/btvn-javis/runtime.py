@@ -32,8 +32,8 @@ def brain_root():
     return Path(os.environ.get('JAVIS_BRAIN_ROOT', os.getcwd()))
 
 
-def config_path():
-    return Path(os.environ.get('BTVN_CONFIG', str(brain_root() / 'Javis/btvn/config.json')))
+def config_path(brain=None):
+    return Path(os.environ.get('BTVN_CONFIG', str((brain or brain_root()) / 'Javis/btvn/config.json')))
 
 
 def pipeline_dir():
@@ -65,9 +65,9 @@ def service_account():
     return paths[0]
 
 
-def publish_settings():
+def publish_settings(brain=None):
     # Tệp ưu tiên có mặt nhưng sai thì dừng; không lùi sang bản secret cũ.
-    for path in [state_root() / 'publish.env', brain_root() / 'Javis/btvn/.publish.env']:
+    for path in [state_root() / 'publish.env', (brain or brain_root()) / 'Javis/btvn/.publish.env']:
         if path.is_file():
             values = {}
             for line in path.read_text(encoding='utf-8').splitlines():

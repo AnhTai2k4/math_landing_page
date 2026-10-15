@@ -1,0 +1,37 @@
+import assert from 'node:assert/strict';
+import {createRequire} from 'node:module';
+import {readFileSync,writeFileSync} from 'node:fs';
+import {join} from 'node:path';
+const root=process.env.MTM_ROOT!,require=createRequire(join(root,'package.json'));
+const {buildSync}=require('esbuild'),React=require('react'),{renderToStaticMarkup}=require('react-dom/server');
+function load(file:string,hooks?:any){const code=buildSync({entryPoints:[join(root,file)],bundle:true,write:false,platform:'node',format:'cjs',jsx:'automatic',packages:'external',loader:{'.css':'empty'},logLevel:'silent'}).outputFiles[0].text;const mod={exports:{} as any};new Function('require','module','exports',code)((id:string)=>id==='react'&&hooks?{...React,...hooks}:require(id),mod,mod.exports);return mod.exports;}
+const render=(c:any,p:any={})=>renderToStaticMarkup(React.createElement(c,p));
+const lesson={lessonCode:'fake-locked',classNames:['2K9 8+'],date:'2099-10-15',title:'Bài giả',videoId:null,materialUrl:null,handoutUrl:null,homeworkUrl:null,dueAt:null,bestScore:null,late:null,submittedAt:null,available:false,locked:true,opensAt:Date.parse('2099-10-15T21:30:00+07:00')};
+const props={lessons:[lesson],busy:false,onHomework(){assert.fail('Không mở đề đang khóa');}};
+const {default:Cards,LOCKED_HOMEWORK_HELP}=load('src/native/homework/LessonCards.tsx');
+const html=render(Cards,props);
+assert.match(html,/🔒 Chưa mở · mở/);assert.match(html,/🔒 Chưa mở, mở lúc/);
+assert.match(html,/Chưa có bài cần làm\. Có 1 bài sẽ mở sau buổi học\./);
+assert.match(html,/BTVN của mỗi buổi mở sau khi buổi học đó kết thúc, hạn là giờ vào buổi học tới\./);
+assert.doesNotMatch(html,/Chưa làm BTVN|todo-card|class="todo"|btvn-btn primary|disabled=""|Invalid Date/);
+assert.doesNotMatch(render(Cards,{...props,lessons:[{...lesson,opensAt:undefined}]}),/Invalid Date/);
+const open=render(Cards,{...props,lessons:[{...lesson,available:true,opensAt:0}]});
+assert.match(open,/Em còn 1 buổi cần làm BTVN/);assert.match(open,/class="todo">Chưa làm BTVN/);assert.match(open,/btvn-btn primary/);
+let values:any[]=[],cursor=0;
+const hooks={useState:(v:any)=>{const i=cursor++;if(!(i in values))values[i]=typeof v==='function'?v():v;return [values[i],(next:any)=>values[i]=typeof next==='function'?next(values[i]):next];},useEffect(){}};
+const Interactive=load('src/native/homework/LessonCards.tsx',hooks).default;
+const draw=()=>{cursor=0;return Interactive(props);};
+function find(t:any,p:(n:any)=>boolean):any{if(!t||typeof t!=='object')return null;if(Array.isArray(t))return t.map(n=>find(n,p)).find(Boolean);return p(t)?t:find(t.props?.children,p);}
+const button=find(draw(),n=>n.type==='button'&&n.props.className==='btvn-btn locked');assert.equal(button.props.disabled,false);button.props.onClick();
+const clicked=renderToStaticMarkup(draw());assert.ok(clicked.includes(LOCKED_HOMEWORK_HELP));assert.match(clicked,/role="status"/);assert.match(clicked,/aria-describedby="locked-help-fake-locked"/);
+writeFileSync(join(root,'.qa-temp/dot-23/locked-clicked-ssr.html'),clicked);
+const Guide=load('src/migration/Guide.tsx').default;
+for(const who of ['hoc-sinh','phu-huynh']){
+ (globalThis as any).location={search:'?cho='+who};
+ const guide=render(Guide);for(const phrase of ['Gặp khó khi dùng web','Chưa mở','Không đăng nhập được','bố hoặc mẹ','không dấu','Chưa tải được nội dung','Chrome hoặc Safari','toàn màn hình','lớp và buổi học','https://zalo.me/0967365413'])assert.ok(guide.includes(phrase),phrase);
+ assert.match(guide,new RegExp('aria-labelledby="mg-tab-'+(who==='hoc-sinh'?'hs':'ph')+'"'));
+ writeFileSync(join(root,'.qa-temp/dot-23/guide-'+who+'-ssr.html'),guide);
+}
+delete (globalThis as any).location;
+const css=readFileSync(join(root,'src/native/homework/btvn-session.css'),'utf8');assert.match(css,/\.btvn-btn\.locked,\.btvn-btn\.locked:hover\{background:#eef0f3/);
+console.log('ĐẠT đợt 23: SSR khóa/mở/tổng quan, bấm giải thích, fallback giờ, hướng dẫn cả hai tab.');

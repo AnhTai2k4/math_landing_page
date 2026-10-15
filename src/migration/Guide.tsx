@@ -51,6 +51,16 @@ function Btvn({parent}:{parent:boolean}){return <section className="mg-card mg-w
  <p className="mg-sub">{parent?'Anh/chị đã đổi số điện thoại':'Đã đổi số điện thoại'} hoặc không vào được thì nhắn Zalo trợ lý để trung tâm cập nhật.</p>
 </section>;}
 
+export function WebHelp(){return <section className="mg-card mg-web">
+ <h2>Gặp khó khi dùng web</h2>
+ <ul className="mg-list">
+  <li><b>Bài chưa mở:</b> thẻ ghi “🔒 Chưa mở”, nút xám ghi “Chưa mở, mở lúc” kèm giờ. BTVN của mỗi buổi mở sau khi buổi học đó kết thúc, hạn là giờ vào buổi học tới. Tới giờ mở, tải lại trang rồi bấm <b>Làm BTVN</b>.</li>
+  <li><b>Không đăng nhập được:</b> chọn đúng lớp, nhập số điện thoại đã đăng ký với trung tâm (có thể là số của bố hoặc mẹ). Tên gõ không dấu cũng được. Nếu đã đổi số, nhắn trợ lý để trung tâm kiểm tra.</li>
+  <li><b>Trang báo “Chưa tải được nội dung” hoặc trắng trang:</b> tải lại trang, vẫn lỗi thì đóng hẳn trình duyệt rồi mở lại. Nếu mở link trong Zalo, bấm dấu ba chấm và mở bằng Chrome hoặc Safari.</li>
+  <li><b>Vẫn lỗi:</b> nhắn <a href={ZALO_ASSISTANT_URL} target="_blank" rel="noopener noreferrer">Zalo trợ lý</a> kèm ảnh chụp toàn màn hình báo lỗi (thấy cả thanh địa chỉ nếu được), điện thoại hay máy tính đang dùng, mở từ Zalo hay trình duyệt, lớp và buổi học muốn làm.</li>
+ </ul>
+</section>;}
+
 function Web({parent}:{parent:boolean}){return <section className="mg-card mg-web">
  <h2>{parent?'Con luyện đề trên web':'Luyện đề trên web'}</h2>
  <div className="mg-web-links"><Link className="mg-link" href="/luyen-tap">Luyện tập</Link><Link className="mg-link" href="/thi-thu">Thi thử</Link></div>
@@ -85,6 +95,6 @@ export default function Guide(){const [who,setWho]=useState<Audience>(readAudien
    <button type="button" role="tab" id="mg-tab-hs" aria-selected={!parent} aria-controls="mg-panel" onClick={()=>pick('hoc-sinh')}>Học sinh</button>
    <button type="button" role="tab" id="mg-tab-ph" aria-selected={parent} aria-controls="mg-panel" onClick={()=>pick('phu-huynh')}>Phụ huynh</button>
   </div>
-  <div id="mg-panel" role="tabpanel" aria-labelledby={parent?'mg-tab-ph':'mg-tab-hs'}><Steps parent={parent}/><Btvn parent={parent}/><Web parent={parent}/><More parent={parent}/></div>
+  <div id="mg-panel" role="tabpanel" aria-labelledby={parent?'mg-tab-ph':'mg-tab-hs'}><Steps parent={parent}/><Btvn parent={parent}/><Web parent={parent}/><WebHelp/><More parent={parent}/></div>
   <p className="mg-slogan">Minh Thành Math - Thinking gets sharp!</p>
  </div></div>;}

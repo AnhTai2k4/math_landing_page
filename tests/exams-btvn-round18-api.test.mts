@@ -30,7 +30,7 @@ function load(file:string){const code=buildSync({entryPoints:[join(root,file)],b
 const future=Date.now()+86400000;
 const lessons=[{...state.lessons![0],opensAt:future,locked:true,available:true,bestScore:null},{...state.lessons![0],lessonCode:'opened',opensAt:0,locked:false,available:true,bestScore:null}];
 const html=renderToStaticMarkup(React.createElement(load('src/native/homework/LessonCards.tsx'),{lessons,busy:false,onHomework(){}}));
-assert.ok(html.includes('Em còn 1 buổi cần làm BTVN'));assert.ok(html.includes('Mở làm sau buổi học:'));assert.match(html,/disabled=""[^>]*>Làm BTVN · Mở/);assert.ok(html.includes('▶ Xem video'));
+assert.ok(html.includes('Em còn 1 buổi cần làm BTVN'));assert.ok(html.includes('Mở làm sau buổi học:'));assert.match(html,/<button class="btvn-btn locked">🔒 Chưa mở, mở lúc/);assert.ok(html.includes('▶ Xem video'));
 now=opening-1;snapshot.exam=undefined;
 // Snapshot theo whitelist SQL: không có bestScore/late/submittedAt/dueAt.
 snapshot.lessons=[{lessonCode:material.lessonCode,classNames:material.classNames,date:material.date,title:material.title,classOpensAt:material.classOpensAt,videoId:material.videoId,materialUrl:null,handoutUrl:null,homeworkUrl:null,available:false,locked:true} as any];

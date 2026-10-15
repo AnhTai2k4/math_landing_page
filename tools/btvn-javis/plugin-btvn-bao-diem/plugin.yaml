@@ -1,0 +1,10 @@
+name: BTVN báo điểm và điểm danh
+slug: btvn-bao-diem
+version: 1.0.0
+description: Lấy báo cáo một lớp khi cần sau ca học, không gửi tin và không lưu dữ liệu học sinh.
+author: Minh Thành Math
+enabled: false
+min_mode: readonly
+tools:
+  - btvn_bao_diem_lop
+hooks: []

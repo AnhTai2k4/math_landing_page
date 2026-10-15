@@ -1,0 +1,22 @@
+import {publicClassNames} from './class-config';
+import type {ScoreRow} from './scorebook';
+
+/** Read actions dùng cùng secret; không cho caller chọn RPC hoặc bật apply. */
+export function scorebookRpc(body:any):{name:string;payload:Record<string,unknown>}|null {
+ if(body.action==='classes'){
+  if(Object.keys(body).some(k=>k!=='action'))throw Error('INVALID_CLASSES');
+  return {name:'classes',payload:{}};
+ }
+ if(body.action!=='scorebook')return null;
+ const from=body.from===undefined?'2026-10-01':body.from;
+ if(Object.keys(body).some(k=>!['action','from'].includes(k))||typeof from!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(from)||from<'2026-10-01'||!Number.isFinite(Date.parse(from))||new Date(from).toISOString().slice(0,10)!==from)throw Error('INVALID_SCOREBOOK');
+ return {name:'scorebook',payload:{p_from:from,p_apply:false}};
+}
+
+/** Allowlist đầu ra, kể cả khi RPC về sau thêm trường riêng tư. */
+export function scorebookResult(action:string,result:any) {
+ if(action==='classes')return {classNames:publicClassNames(result)};
+ if(!Array.isArray(result))throw Error('INVALID_SCOREBOOK_RESULT');
+ return result.map((r:any):ScoreRow=>({studentId:r.studentId,fullName:r.fullName,className:r.className,lessonCode:r.lessonCode,title:r.title,date:r.date,dueAt:r.dueAt,expectedDueAt:r.expectedDueAt,sourceIdentity:r.sourceIdentity,
+  receipts:r.receipts.map((s:any)=>({score:s.score,submittedAt:s.submittedAt,late:s.late}))}));
+}

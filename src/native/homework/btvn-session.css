@@ -22,3 +22,6 @@
 /* Đợt 19: bố cục thẻ và điều hướng trang chủ. */
 .btvn-home-logo{display:inline-flex;flex-shrink:0;align-items:center}.btvn-top .btvn-home-logo img{max-width:100%;width:148px;height:62px}.btvn-home-link{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 12px;border:1px solid #c4cfe0;border-radius:10px;color:#233463;background:#fff;font-size:14px;font-weight:700;text-decoration:none;white-space:nowrap}.btvn-entry-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}.btvn-entry-bar .btvn-home-logo img{width:148px;height:auto}.btvn-me{flex-wrap:wrap}.btvn-me b,.btvn-me span{overflow-wrap:anywhere;min-width:0}
 @media(max-width:700px){.btvn-top .btvn-home-logo img{width:120px;height:48px}.btvn-session .btvn-top{flex-wrap:wrap}.btvn-me{width:100%;margin-left:0;gap:8px 12px}.btvn-me .btvn-home-link{margin-right:auto}}
+
+/* Đợt 23: bài chưa mở dùng màu xám, bấm để xem giải thích. */
+.btvn-card .locked{color:#566070}.btvn-btn.locked,.btvn-btn.locked:hover{background:#eef0f3;color:#566070;border-color:#cdd2da}.btvn-card.locked-card .btvn-chip.review,.btvn-card.locked-card .btvn-after{background:#eef0f3;color:#566070;border-color:#cdd2da}

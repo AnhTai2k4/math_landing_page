@@ -2,13 +2,15 @@
 const sha=async bytes=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))).map(x=>x.toString(16).padStart(2,'0')).join('');
 export function createPublishPort(sql,storage){return {
  async rpc(action,payload){
-  if(['sync_attendance','sync_due','support_report'].includes(action))return sql.begin(async tx=>{
-   // Chỉ ba RPC whitelisted, quyền transaction không lọt sang pipeline.
+  if(['sync_attendance','sync_due','support_report','scorebook','classes'].includes(action))return sql.begin(async tx=>{
+   // RPC whitelisted, quyền transaction không lọt sang pipeline.
    await tx`SET LOCAL ROLE service_role`;
    let rows;
    if(action==='sync_attendance')rows=await tx`SELECT public.mtm_btvn_sync_attendance_roster(${sql.json(payload.p_payload)},${payload.p_apply}) AS result`;
    else if(action==='sync_due')rows=await tx`SELECT public.mtm_btvn_sync_due(${sql.json(payload.p_payload)},${payload.p_apply}) AS result`;
-   else rows=await tx`SELECT public.mtm_btvn_support_report(${payload.p_since}::timestamptz) AS result`;
+   else if(action==='support_report')rows=await tx`SELECT public.mtm_btvn_support_report(${payload.p_since}::timestamptz) AS result`;
+   else if(action==='scorebook')rows=await tx`SELECT public.mtm_btvn_scorebook(${payload.p_from}::date,false) AS result`;
+   else rows=await tx`SELECT public.mtm_btvn_classes() AS result`;
    return rows[0].result;
   });
   if(!['lookup','publish','error','update_material'].includes(action))throw Error('Invalid publisher action');

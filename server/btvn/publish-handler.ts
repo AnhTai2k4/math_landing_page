@@ -2,6 +2,7 @@ import {validatePracticeExam,type PracticeExam} from '../../src/native/exams/dat
 import {normalizedShort} from '../../src/native/exams/assessment';
 import {classOpeningTimes} from './class-schedule';
 import {attendanceRpc} from './publish-attendance';
+import {scorebookRpc,scorebookResult} from './publish-scorebook';
 export type PublishAsset={path:string;sha256:string;content_type:string;data_base64:string};
 export interface PublishPort {
  rpc(action:string,payload:Record<string,unknown>):Promise<any>;
@@ -31,6 +32,8 @@ export function createBtvnPublishHandler(port:PublishPort,secret:string){return 
  try{
   const text=await request.text();ensure(text.length<=48*1024*1024,'PAYLOAD_TOO_LARGE');
   const body=JSON.parse(text);ensure(body&&typeof body==='object'&&!Array.isArray(body),'INVALID_PAYLOAD');
+  const read=scorebookRpc(body);
+  if(read)return respond(200,scorebookResult(read.name,await port.rpc(read.name,read.payload)));
   const attendance=attendanceRpc(body);
   if(attendance){ensure(new TextEncoder().encode(text).length<=10*1024*1024,'PAYLOAD_TOO_LARGE');return respond(200,await port.rpc(attendance.name,attendance.payload));}
   ensure(['lookup','publish','error','update_material'].includes(body.action)&&/^[a-z0-9-]{1,160}$/.test(body.lesson_key),'INVALID_ACTION');

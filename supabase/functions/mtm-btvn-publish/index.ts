@@ -1,4 +1,4 @@
-// CHƯA DEPLOY. Pipeline dùng mtm_btvn_publisher; ba RPC điểm danh dùng SET LOCAL ROLE service_role.
+// CHƯA DEPLOY. Pipeline dùng mtm_btvn_publisher; RPC điểm danh/báo cáo dùng SET LOCAL ROLE service_role.
 import {createClient} from 'npm:@supabase/supabase-js@2.117.3';
 import postgres from 'npm:postgres@3.4.5';
 import {createBtvnPublishHandler} from './handler.generated.js';
