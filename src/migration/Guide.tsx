@@ -40,7 +40,7 @@ function Steps({parent}:{parent:boolean}){
 function Btvn({parent}:{parent:boolean}){return <section className="mg-card mg-web">
  <h2>Bài tập về nhà trên web</h2>
  <div className="mg-web-links"><Link className="mg-link" href="/btvn">Vào làm BTVN</Link></div>
- <p>{parent?'Con làm BTVN ngay trên web: bấm':'Bấm'} <b>Không có mã</b>, nhập họ tên {parent?'con hoặc phụ huynh':'của em hoặc phụ huynh'}, số điện thoại (đúng số đã đăng ký với trung tâm) và chọn lớp. Hạn nộp là giờ vào buổi học kế tiếp; nộp sau hạn vẫn được nhưng bị ghi muộn. Mỗi bài làm được tối đa 5 lần, điểm tính lần cao nhất, nộp xong xem lời giải ngay.{parent?' Ảnh bảng điểm vẫn gửi nhóm phụ huynh sau mỗi buổi.':' Cần đạt từ 7 điểm.'}</p>
+ <p>{parent?'Con làm BTVN ngay trên web: bấm':'Bấm'} <b>Không có mã</b>, nhập họ tên {parent?'con hoặc phụ huynh':'của em hoặc phụ huynh'}, số điện thoại (đúng số đã đăng ký với trung tâm) và chọn lớp. Hạn nộp là trước giờ vào buổi học kế tiếp; nộp sau hạn vẫn được nhưng bị ghi muộn. Mỗi bài làm được tối đa 5 lần, điểm tính lần cao nhất, nộp xong xem lời giải ngay.{parent?' Ảnh bảng điểm vẫn gửi nhóm phụ huynh sau mỗi buổi.':' Cần đạt từ 7 điểm.'}</p>
  <p className="mg-sub">{parent?'Anh/chị đã đổi số điện thoại':'Đã đổi số điện thoại'} hoặc không vào được thì nhắn Zalo trợ lý để trung tâm cập nhật.</p>
 </section>;}
 
