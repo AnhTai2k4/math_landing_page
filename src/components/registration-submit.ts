@@ -20,4 +20,4 @@ export function createRegistrationGate(){
  };
 }
 
-export function emailRegistration(data:Registration){const mode=data.message==='online'?'Online':'Trực tiếp';return {...data,study_mode:mode,notes:data.notes||'',group_size:data.groupSize||'',group_interest:!!data.groupInterest,message:[mode,data.groupSize?'Nhóm: '+data.groupSize+' bạn (tính cả người đăng ký)':data.groupInterest?'Quan tâm đăng ký nhóm — chưa chốt số bạn':'',data.notes?'Lời nhắn: '+data.notes:''].filter(Boolean).join('\n')}}
+export function emailRegistration(data:Registration){const mode=data.message==='online'?'Online':'Trực tiếp';return {...data,study_mode:mode,notes:data.notes||'',group_size:data.groupSize||'',group_interest:!!data.groupInterest,message:[mode,data.groupSize?'Nhóm: '+data.groupSize+' bạn (tính cả người đăng ký)':data.groupInterest?'Quan tâm đăng ký nhóm · chưa chốt số bạn':'',data.notes?'Lời nhắn: '+data.notes:''].filter(Boolean).join('\n')}}

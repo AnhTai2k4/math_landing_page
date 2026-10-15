@@ -101,8 +101,8 @@ export function RegisterSection() {
                     <SelectItem value="10">Lớp 10</SelectItem>
                     <SelectItem value="11">Lớp 11</SelectItem>
                     <SelectItem value="12">Lớp 12</SelectItem>
-                    <SelectItem value="hsa">HSA — đánh giá năng lực</SelectItem>
-                    <SelectItem value="tsa">TSA — đánh giá tư duy</SelectItem>
+                    <SelectItem value="hsa">HSA · đánh giá năng lực</SelectItem>
+                    <SelectItem value="tsa">TSA · đánh giá tư duy</SelectItem>
                     <SelectItem value="thcs">THCS</SelectItem>
                   </SelectContent>
                 </Select>

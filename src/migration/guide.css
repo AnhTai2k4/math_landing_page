@@ -1,7 +1,7 @@
 .mtm-guide{background:#f4f6fb;color:#213269;padding:28px 0 56px;min-height:65vh}
 .mg-shell{width:min(720px,calc(100% - 32px));margin:auto}
 .mg-head{margin-bottom:14px}
-.mg-eyebrow{font-size:12px;letter-spacing:.12em;font-weight:700;text-transform:uppercase;color:#927100;margin:0 0 4px}
+.mg-eyebrow{font-size:12px;letter-spacing:.12em;font-weight:700;text-transform:uppercase;color:#806200;margin:0 0 4px}
 .mg-head h1{font-size:clamp(28px,4vw,38px);line-height:1.25;font-weight:800;margin:0;color:#213269}
 .mg-lead{font-size:17px;line-height:1.65;color:#47536c;margin:8px 0 0}
 .mg-sub{font-size:15.5px;color:#47536c;margin:8px 0 0!important}

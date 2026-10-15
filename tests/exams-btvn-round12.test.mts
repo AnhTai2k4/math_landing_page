@@ -17,7 +17,8 @@ assert.ok(render(Gate,{studentCode:'',identity:{fullName:'',phone:'',className:'
 assert.ok(render('p',{children:entryFailure(401)}).includes(ENTRY_ERROR));assert.ok(ENTRY_ERROR.includes('Zalo 0967365413'));assert.notEqual(entryFailure(503),ENTRY_ERROR);assert.notEqual(entryFailure(429),ENTRY_ERROR);
 assert.deepEqual(publicClassNames(['2K10 8+','2K9 9+','2K9 8+']),['2K9 8+','2K9 9+','2K10 8+']);
 const empty={exam:null,fullName:'Học sinh GIẢ',className:'2K9 9+',lessonCode:'',dueAt:null,maxAttempts:5,attemptsUsed:0,draft:null,receipts:[],bestScore:null,demo:false,lessons:[],classMismatch:true};
-const hooks={useState:(v:any)=>[v===null?empty:v===true?false:v,()=>{}],useEffect(){},useMemo:(fn:any)=>fn(),useRef:(v:any)=>({current:v})};
+let hookIndex=0;
+const hooks={useState:(v:any)=>{const index=hookIndex++;return [index===0?empty:v===true?false:typeof v==='function'?v():v,()=>{}];},useEffect(){},useMemo:(fn:any)=>fn(),useRef:(v:any)=>({current:v})};
 const {default:Session}=load('src/native/homework/HomeworkSession.tsx',hooks);
 const html=render(Session,{pathname:'/btvn'});
 assert.ok(html.includes('Lớp em chưa có BTVN trên web. Khi thầy giao bài, buổi học và BTVN sẽ hiện ở đây.'));

@@ -4,16 +4,19 @@ import ExamConfirm from './ExamConfirm';
 
 /** Capture popstate before the shared router's bubble listener can unmount us.
  * Query/hash changes on the same attempt are safe and never reset its RAM. */
-export function useUnsavedGuard(hasUnsaved: () => boolean, message = 'Bài đang làm chưa được lưu trên trình duyệt. Rời trang sẽ mất phần chưa lưu. Bạn có muốn rời trang?') {
+export function useUnsavedGuard(hasUnsaved: () => boolean, message = 'Bài đang làm chưa được lưu trên trình duyệt. Rời trang sẽ mất phần chưa lưu. Bạn có muốn rời trang?', enabled=true) {
   const readUnsaved = useRef(hasUnsaved);
   const [pending,setPending]=useState<{href:string;traversal:boolean}|null>(null);
   const approved=useRef<string|null>(null);
   readUnsaved.current = hasUnsaved;
   useEffect(() => {
+    if(!enabled)return;
     let acceptedUrl = location.href;
     const leavingAttempt = (href: string) => {
       const next = new URL(href, location.href), previous = new URL(acceptedUrl);
-      return next.origin !== previous.origin || next.pathname.replace(/\/$/, '') !== previous.pathname.replace(/\/$/, '');
+      const path=(url:URL)=>url.pathname.replace(/\/$/, '');
+      return next.origin !== previous.origin || path(next) !== path(previous) ||
+        path(previous)==='/luyen-tap'&&['id','luot'].some(key=>next.searchParams.get(key)!==previous.searchParams.get(key));
     };
     const beforeUnload = (event: BeforeUnloadEvent) => {
       if (!readUnsaved.current()) return;
@@ -55,6 +58,6 @@ export function useUnsavedGuard(hasUnsaved: () => boolean, message = 'Bài đang
       window.removeEventListener('mtm:migration:navigate', acceptedNavigation);
       window.removeEventListener('hashchange', acceptedNavigation);
     };
-  }, []);
-  return pending?createElement(ExamConfirm,{title:'Có rời trang đang làm?',message,confirmLabel:'Rời trang',onCancel:()=>setPending(null),onConfirm:()=>{approved.current=pending.href;setPending(null);if(pending.traversal)history.back();else navigate(pending.href);}}):null;
+  }, [enabled]);
+  return enabled&&pending?createElement(ExamConfirm,{title:'Có rời trang đang làm?',message,confirmLabel:'Rời trang',onCancel:()=>setPending(null),onConfirm:()=>{approved.current=pending.href;setPending(null);if(pending.traversal)history.back();else navigate(pending.href);}}):null;
 }

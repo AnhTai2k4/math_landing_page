@@ -1,9 +1,10 @@
-import {useEffect,useState} from 'react';
-import {Link} from './navigation';
+import {useEffect,useState,type KeyboardEvent} from 'react';
+import {Link,navigate,useRoute} from './navigation';
 import {ArrowUpRight} from 'lucide-react';
 import './guide.css';
 
-export const ZALO_ASSISTANT_URL='https://zalo.me/0967365413';
+import {ZALO_ASSISTANT_URL} from '../components/mtm-contact';
+export {ZALO_ASSISTANT_URL} from '../components/mtm-contact';
 type Audience='hoc-sinh'|'phu-huynh';
 const readAudience=():Audience=>new URLSearchParams(location.search).get('cho')==='phu-huynh'?'phu-huynh':'hoc-sinh';
 
@@ -57,7 +58,7 @@ export function WebHelp(){return <section className="mg-card mg-web">
   <li><b>Bài chưa mở:</b> thẻ ghi “🔒 Chưa mở”, nút xám ghi “Chưa mở, mở lúc” kèm giờ. BTVN của mỗi buổi mở sau khi buổi học đó kết thúc, hạn là giờ vào buổi học tới. Tới giờ mở, tải lại trang rồi bấm <b>Làm BTVN</b>.</li>
   <li><b>Không đăng nhập được:</b> chọn đúng lớp, nhập số điện thoại đã đăng ký với trung tâm (có thể là số của bố hoặc mẹ). Tên gõ không dấu cũng được. Nếu đã đổi số, nhắn trợ lý để trung tâm kiểm tra.</li>
   <li><b>Trang báo “Chưa tải được nội dung” hoặc trắng trang:</b> tải lại trang, vẫn lỗi thì đóng hẳn trình duyệt rồi mở lại. Nếu mở link trong Zalo, bấm dấu ba chấm và mở bằng Chrome hoặc Safari.</li>
-  <li><b>Vẫn lỗi:</b> nhắn <a href={ZALO_ASSISTANT_URL} target="_blank" rel="noopener noreferrer">Zalo trợ lý</a> kèm ảnh chụp toàn màn hình báo lỗi (thấy cả thanh địa chỉ nếu được), điện thoại hay máy tính đang dùng, mở từ Zalo hay trình duyệt, lớp và buổi học muốn làm.</li>
+  <li><b>Vẫn lỗi:</b> nhắn <a href={ZALO_ASSISTANT_URL} target="_blank" rel="noopener noreferrer">Zalo trợ lý</a> kèm ảnh chụp toàn màn hình báo lỗi, điện thoại hay máy tính đang dùng, mở từ Zalo hay trình duyệt, lớp và buổi học muốn làm. Che tên, số điện thoại, mã học sinh và thông tin riêng trong thanh địa chỉ trước khi gửi ảnh.</li>
  </ul>
 </section>;}
 
@@ -86,15 +87,22 @@ function More({parent}:{parent:boolean}){return <details className="mg-card mg-m
 </details>;}
 
 export default function Guide(){const [who,setWho]=useState<Audience>(readAudience);
- useEffect(()=>{const sync=()=>setWho(readAudience());addEventListener('popstate',sync);return()=>removeEventListener('popstate',sync);},[]);
- const pick=(next:Audience)=>{setWho(next);const url=new URL(location.href);url.searchParams.set('cho',next);history.replaceState(null,'',url.pathname+url.search);};
+ const {search}=useRoute();
+ useEffect(()=>setWho(readAudience()),[search]);
+ const pick=(next:Audience)=>{setWho(next);const url=new URL(location.href);url.searchParams.set('cho',next);navigate(url.pathname+url.search,{replace:true});};
+ const tabKey=(event:KeyboardEvent<HTMLButtonElement>)=>{
+  if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;
+  event.preventDefault();
+  const next=event.key==='Home'?'hoc-sinh':event.key==='End'?'phu-huynh':who==='hoc-sinh'?'phu-huynh':'hoc-sinh';
+  pick(next);document.getElementById(next==='hoc-sinh'?'mg-tab-hs':'mg-tab-ph')?.focus();
+ };
  const parent=who==='phu-huynh';
  return <div className="mtm-guide"><div className="mg-shell">
   <header className="mg-head"><p className="mg-eyebrow">Minh Thành Math</p><h1>Hướng dẫn nhanh</h1><p className="mg-lead">{parent?'Ba kênh giúp anh/chị theo dõi việc học của con thuận tiện hơn: Zalo trợ lý lớp, bài tập về nhà trên web và web luyện đề có lời giải.':'Ba kênh học cùng MTM: Zalo trợ lý lớp để hỏi lịch, xin nghỉ, lấy tài liệu, hỏi bài; bài tập về nhà trên web; web luyện đề có lời giải.'}</p></header>
   <div className="mg-tabs" role="tablist" aria-label="Hướng dẫn dành cho">
-   <button type="button" role="tab" id="mg-tab-hs" aria-selected={!parent} aria-controls="mg-panel" onClick={()=>pick('hoc-sinh')}>Học sinh</button>
-   <button type="button" role="tab" id="mg-tab-ph" aria-selected={parent} aria-controls="mg-panel" onClick={()=>pick('phu-huynh')}>Phụ huynh</button>
+   <button type="button" role="tab" id="mg-tab-hs" tabIndex={parent?-1:0} aria-selected={!parent} aria-controls="mg-panel" onKeyDown={tabKey} onClick={()=>pick('hoc-sinh')}>Học sinh</button>
+   <button type="button" role="tab" id="mg-tab-ph" tabIndex={parent?0:-1} aria-selected={parent} aria-controls="mg-panel" onKeyDown={tabKey} onClick={()=>pick('phu-huynh')}>Phụ huynh</button>
   </div>
-  <div id="mg-panel" role="tabpanel" aria-labelledby={parent?'mg-tab-ph':'mg-tab-hs'}><Steps parent={parent}/><Btvn parent={parent}/><Web parent={parent}/><WebHelp/><More parent={parent}/></div>
+  <div id="mg-panel" role="tabpanel" tabIndex={0} aria-labelledby={parent?'mg-tab-ph':'mg-tab-hs'}><Steps parent={parent}/><Btvn parent={parent}/><Web parent={parent}/><WebHelp/><More parent={parent}/></div>
   <p className="mg-slogan">Minh Thành Math - Thinking gets sharp!</p>
  </div></div>;}

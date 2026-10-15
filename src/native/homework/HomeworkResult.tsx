@@ -5,7 +5,7 @@ import {points,time,date} from './types';
 import PdfViewer from './PrivatePdf';
 export {PdfViewer};
 const labels={correct:'Đúng',wrong:'Sai',partial:'Đúng một phần',blank:'Chưa trả lời'};
-const answerText=(v:unknown)=>Array.isArray(v)?v.map((x,i)=>`${String.fromCharCode(97+i)}) ${x===true?'Đúng':x===false?'Sai':'—'}`).join('; '):String(v??'—');
+const answerText=(v:unknown)=>Array.isArray(v)?v.map((x,i)=>`${String.fromCharCode(97+i)}) ${x===true?'Đúng':x===false?'Sai':'Chưa trả lời'}`).join('; '):String(v??'Chưa trả lời');
 export default function HomeworkResult({result,api,session,onBack}:{result:Result;api:HomeworkApi;session:string;onBack:()=>void}){
  const [pdf,setPdf]=useState<'questions'|'solutions'|null>(null),heading=useRef<HTMLHeadingElement>(null);
  useEffect(()=>{heading.current?.focus();heading.current?.scrollIntoView({block:'start'});},[result.attemptId]);

@@ -1,8 +1,9 @@
 import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
-import {readFileSync,writeFileSync} from 'node:fs';
+import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 import {join} from 'node:path';
 const root=process.env.MTM_ROOT!,require=createRequire(join(root,'package.json'));
+mkdirSync(join(root,'.qa-temp/dot-23'),{recursive:true});
 const {buildSync}=require('esbuild'),React=require('react'),{renderToStaticMarkup}=require('react-dom/server');
 function load(file:string,hooks?:any){const code=buildSync({entryPoints:[join(root,file)],bundle:true,write:false,platform:'node',format:'cjs',jsx:'automatic',packages:'external',loader:{'.css':'empty'},logLevel:'silent'}).outputFiles[0].text;const mod={exports:{} as any};new Function('require','module','exports',code)((id:string)=>id==='react'&&hooks?{...React,...hooks}:require(id),mod,mod.exports);return mod.exports;}
 const render=(c:any,p:any={})=>renderToStaticMarkup(React.createElement(c,p));
@@ -27,7 +28,7 @@ const clicked=renderToStaticMarkup(draw());assert.ok(clicked.includes(LOCKED_HOM
 writeFileSync(join(root,'.qa-temp/dot-23/locked-clicked-ssr.html'),clicked);
 const Guide=load('src/migration/Guide.tsx').default;
 for(const who of ['hoc-sinh','phu-huynh']){
- (globalThis as any).location={search:'?cho='+who};
+ (globalThis as any).location={pathname:'/huong-dan',search:'?cho='+who,hash:''};
  const guide=render(Guide);for(const phrase of ['Gặp khó khi dùng web','Chưa mở','Không đăng nhập được','bố hoặc mẹ','không dấu','Chưa tải được nội dung','Chrome hoặc Safari','toàn màn hình','lớp và buổi học','https://zalo.me/0967365413'])assert.ok(guide.includes(phrase),phrase);
  assert.match(guide,new RegExp('aria-labelledby="mg-tab-'+(who==='hoc-sinh'?'hs':'ph')+'"'));
  writeFileSync(join(root,'.qa-temp/dot-23/guide-'+who+'-ssr.html'),guide);

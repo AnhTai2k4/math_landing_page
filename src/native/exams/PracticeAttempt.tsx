@@ -1,3 +1,4 @@
+import {displayTitle as titleText} from '../../components/display-text';
 import {lazy,Suspense,useState} from 'react';
 import {phongThiV2} from '../flags';
 import FocusRoom from './FocusRoom';
@@ -30,8 +31,8 @@ function exportDraft(draft: Draft): boolean {
 }
 
 /** kind: 'exam' cho Thi thử (/thi-thu), 'practice' (mặc định) cho Luyện tập; chỉ đổi chữ hiển thị. */
-export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverride,questionReader,renderText,renderSolutionExtra,contextLabel,audienceLabel,displayTitle,kind='practice',isHomework=false,newAttemptsClosed,storageNotice,onRetake}: PracticeAttemptProps) {
-  const props = {exam,previousExam,catalogUrl,storeOverride,questionReader,renderText,renderSolutionExtra,contextLabel,audienceLabel,displayTitle,kind,isHomework,newAttemptsClosed,storageNotice,onRetake};
+export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverride,questionReader,renderText,renderSolutionExtra,contextLabel,audienceLabel,displayTitle,kind='practice',isHomework=false,newAttemptsClosed,storageNotice,saveStatus,onRetrySave,onRetake}: PracticeAttemptProps) {
+  const props = {exam,previousExam,catalogUrl,storeOverride,questionReader,renderText,renderSolutionExtra,contextLabel,audienceLabel,displayTitle,kind,isHomework,newAttemptsClosed,storageNotice,saveStatus,onRetrySave,onRetake};
   const state = usePracticeAttempt(props);
   const {sourceIssue,erratum,acceptedErratum,setAcceptedErratum,legacy,persisted,conflict,draft,notice,setNotice,unsaved,exportNotice,setExportNotice,pdfReady,setPdfReady,confirmation,setConfirmation,desktopLayout,setDesktopLayout,setActiveQuestion,setQuestionFocus,mobilePane,setMobilePane,leaveConfirmation,persist,finish,begin,submitted,sections,answered,invalidCount,seconds,startDisabled,startLabel,retake} = state;
   const [exitedAttempt,setExitedAttempt]=useState<string|null>(null);
@@ -61,7 +62,7 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverr
       <div className="ep-pdf-pane">
         {submitted&&!questionReader&&exam.sourcePdf&&<h2 className="ep-pdf-after">Đề bài đã làm</h2>}
         {submitted&&questionReader?<details className="ep-read-again"><summary>Đọc lại toàn bộ đề bài</summary>{questionReader}</details>:questionReader}
-        {exam.sourcePdf&&<Suspense fallback={<p role="status">Đang mở bản câu hỏi…</p>}><QuestionPdf file={exam.sourcePdf} title={exam.title} onReady={setPdfReady}/></Suspense>}
+        {exam.sourcePdf&&<Suspense fallback={<p role="status">Đang mở bản câu hỏi…</p>}><QuestionPdf file={exam.sourcePdf} title={titleText(exam.title)} onReady={setPdfReady}/></Suspense>}
         {exam.sourcePdf&&!pdfReady&&<p><a href={exam.sourceUrl} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer">Xem nguồn để đối chiếu</a> · Nguồn gốc có thể chứa đáp án hoặc mã đề khác; chưa mở làm bài khi không xem được bản câu hỏi.</p>}
       </div>
       <div className="ep-answer-pane" aria-label={submitted?'Kết quả bài làm':'Phiếu trả lời'}>

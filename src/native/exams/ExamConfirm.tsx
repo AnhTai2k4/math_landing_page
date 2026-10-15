@@ -4,6 +4,7 @@ import {createPortal} from 'react-dom';
 export type ConfirmItem={key:string;label:string;detail?:string;ariaLabel?:string;group?:string;warn?:boolean;onSelect:()=>void};
 export default function ExamConfirm({title,message,confirmLabel,onConfirm,onCancel,cancelLabel='Hủy · giữ bài hiện tại',items,itemsLabel}:{title:string;message:string;confirmLabel:string;onConfirm:()=>void;onCancel:()=>void;cancelLabel?:string;items?:ConfirmItem[];itemsLabel?:string}) {
   const host=useRef<HTMLDivElement>(null),cancel=useRef<HTMLButtonElement>(null),id=useId();
+  useEffect(()=>{if(document.fullscreenElement)void document.exitFullscreen().catch(()=>{});},[]);
   useEffect(()=>{const previous=document.activeElement as HTMLElement|null;cancel.current?.focus();return()=>{if(previous?.isConnected)previous.focus();};},[]);
   useEffect(()=>{window.addEventListener('mtm:cancel-confirm',onCancel);return()=>window.removeEventListener('mtm:cancel-confirm',onCancel);},[onCancel]);
   useEffect(()=>{const contain=(event:FocusEvent)=>{const dialogs=document.querySelectorAll('[role="alertdialog"]');if(dialogs[dialogs.length-1]===host.current&&!host.current?.contains(event.target as Node))cancel.current?.focus();};document.addEventListener('focusin',contain);return()=>document.removeEventListener('focusin',contain);},[]);

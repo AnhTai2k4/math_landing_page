@@ -10,7 +10,7 @@ import {erratumFor} from './practice-errata';
 import type {PracticeAttemptProps} from './attempt-types';
 
 /** Một instance cho mỗi lượt đang mở; RAM, đồng hồ và kiểm xung đột giữ cùng vòng đời. */
-export function usePracticeAttempt({exam,previousExam,storeOverride,newAttemptsClosed,onRetake}: PracticeAttemptProps) {
+export function usePracticeAttempt({exam,previousExam,storeOverride,newAttemptsClosed,onRetake,isHomework=false}: PracticeAttemptProps) {
   const getStore=useCallback(()=>storeOverride??localStore(),[storeOverride]);
   const sourceIssue=SOURCE_HOLDS[exam.id];
   const erratum=erratumFor(exam.id);
@@ -34,7 +34,8 @@ export function usePracticeAttempt({exam,previousExam,storeOverride,newAttemptsC
   useEffect(() => {
     if (draft?.submittedAt != null) resultHeading.current?.focus();
   }, [draft?.attemptId, draft?.submittedAt]);
-  const leaveConfirmation=useUnsavedGuard(() => dirty.current);
+  // BTVN có một guard theo ACK máy chủ ở HomeworkSession, tránh hai guard tranh popstate.
+  const leaveConfirmation=useUnsavedGuard(() => dirty.current,undefined,!isHomework);
 
   const persist = useCallback((next: Draft) => {
     // RAM is authoritative for this mounted attempt, even when storage refuses.

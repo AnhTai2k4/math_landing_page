@@ -8,7 +8,7 @@ export function HeroSection() {
         <div className="mtm-hero-copy">
           <p className="mtm-eyebrow">MINH THÀNH MATH · MỘT NƠI ĐỂ CÙNG NHAU LỚN LÊN</p>
           <h1 id="hero-heading">Học cùng nhau.<br /><span>Vững vàng</span> từng bước.</h1>
-          <p className="mtm-lead">MTM lớn lên từ tình yêu thương của học sinh, sự tin tưởng của phụ huynh và tâm huyết của cả đội ngũ. Ở đây, chúng mình cùng học Toán, cùng hỏi, cùng sửa sai — và cùng giữ thật nhiều kỷ niệm.</p>
+          <p className="mtm-lead">MTM lớn lên từ tình yêu thương của học sinh, sự tin tưởng của phụ huynh và tâm huyết của cả đội ngũ. Ở đây, chúng mình cùng học Toán, cùng hỏi, cùng sửa sai · và cùng giữ thật nhiều kỷ niệm.</p>
           <div className="mtm-subjects" aria-label="Chương trình học"><span>THCS</span><span>THPT</span><span>HSA</span><span>TSA</span></div>
           <div className="mtm-actions">
             <a className="mtm-primary" href="#register">Tìm lớp phù hợp <ArrowUpRight size={21} aria-hidden="true" /></a>

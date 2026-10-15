@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {readFileSync,writeFileSync} from 'node:fs';
-const source=readFileSync(new URL('../src/migration/Notebook.tsx',import.meta.url),'utf8');
+import {join} from 'node:path';
+const source=readFileSync(join(process.env.MTM_ROOT!,'src/migration/Notebook.tsx'),'utf8');
 const rows:{name:string;pass:boolean;error?:string}[]=[];
 function test(name:string,fn:()=>void){try{fn();rows.push({name,pass:true});}catch(e){rows.push({name,pass:false,error:e instanceof Error?e.message:String(e)});}}
 test('Saved tasks expose an edit action',()=>assert.match(source,/aria-label=\{'Sửa việc '/));
