@@ -2,7 +2,7 @@
 const sha=async bytes=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))).map(x=>x.toString(16).padStart(2,'0')).join('');
 export function createPublishPort(sql,storage){return {
  async rpc(action,payload){
-  if(!['lookup','publish','error'].includes(action))throw Error('Invalid publisher action');
+  if(!['lookup','publish','error','update_material'].includes(action))throw Error('Invalid publisher action');
   return sql.begin(async tx=>{
    await tx`SET LOCAL ROLE mtm_btvn_publisher`;
    // sql.json: postgres.js tự JSON hoá tham số jsonb; JSON.stringify trước sẽ thành chuỗi jsonb (lỗi "Payload invalid" trên cloud 15/10).

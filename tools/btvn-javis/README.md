@@ -1,5 +1,13 @@
 # BTVN tự đăng trên Javis VPS, đợt 17
 
+## Bổ sung đợt 18
+
+Worker nhận cả buổi tương lai đã có lịch xác nhận. Record được ghi sẵn cho buổi tương lai vẫn nhận; quyền làm bài do máy chủ khóa theo `classOpensAt`. Mỗi lớp lấy ngày riêng trong `class_dates`, giờ kết thúc buổi từ `server/btvn/class-schedule.json`, ISO có múi giờ `+07:00`. Không có buổi khớp thì dùng 21:30 ngày học.
+
+Khi triển khai VPS, chép `server/btvn/class-schedule.json` vào vùng cấu hình và đặt `BTVN_CLASS_SCHEDULE` trỏ đường dẫn tuyệt đối của tệp đã chép. Giữ nguyên `receipts.sqlite`: worker dùng receipt cũ để tìm đúng khóa bài đợt 17, vốn chứa hash metadata. Khi chỉ thêm video/tài liệu, worker gọi `update_material`, không chạy AI hoặc đăng lại đề. Nếu mất receipt và metadata đã thay đổi, chưa thể tự nhận lại khóa phiên bản cũ bằng chỉ một dòng Sheet; phải khôi phục receipt trước khi chạy.
+
+Metadata đã đồng bộ lưu trong bảng SQLite `material_sync`; chỉ cập nhật giá trị mới không trống, không xóa video/tài liệu vì ô Sheet rỗng. Lỗi cập nhật giữ nguyên receipt đã đăng để thử lại lượt sau. Thông báo tổng hợp ghi rõ `Đã cập nhật video bài ...` hoặc `Đã cập nhật thông tin bài ...`. Đáp án trùng ID file HS hoặc tên chip/URL chứa `_HS` bị giữ trước tải PDF và trước đăng.
+
 Chỉ là bộ mã và hướng dẫn bàn giao. Đợt này không kết nối mạng thật, không tạo lịch, không chạy AI trả phí, không đăng bài. Claude là chủ triển khai. Không dùng `service_role`, không đọc danh sách học sinh.
 
 ## Các tệp và đường dẫn

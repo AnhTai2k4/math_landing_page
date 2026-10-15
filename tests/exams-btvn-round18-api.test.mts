@@ -1,0 +1,43 @@
+import assert from 'node:assert/strict';
+import {createRequire} from 'node:module';
+import {join} from 'node:path';
+import {pipelineFixture} from './btvn-pipeline-fixture';
+import {SupabaseHomeworkRepository,type DurableSnapshot} from '../server/btvn/supabase-repository';
+import {HomeworkService} from '../server/btvn/service';
+import {MemoryHomeworkRepository} from '../server/btvn/repository';
+import {lessonOpensAt} from '../server/btvn/opening-policy';
+import {scheduleOpeningRefresh} from '../src/native/homework/opening-refresh';
+const fixture=pipelineFixture(),className=fixture.material.classNames[0];
+const opening=Date.parse('2026-10-15T19:30:00+07:00');let now=opening-1;
+const material={...fixture.material,classNames:[className,'Lớp khác'],classOpensAt:{[className]:new Date(opening).toISOString(),'Lớp khác':'2026-10-16T12:30:00Z'},videoId:'abcdefghijk',homeworkUrl:'https://private.invalid/de.pdf',handoutUrl:'https://private.invalid/handout.pdf',materialUrl:'https://private.invalid/material.pdf'};
+const work={student:{studentCode:'FAKE',fullName:'Học sinh giả',className,phone:''},drafts:[],receipts:[]};
+const memory=new MemoryHomeworkRepository([]);memory.put(structuredClone(work));
+const service=new HomeworkService(memory,fixture.exam,0,'fake',material.lessonCode,()=>now,[material]);const token=service.login({studentCode:'FAKE'},'fake');
+let state=service.state(token);assert.equal(state.exam,null);assert.equal(state.canStart,false);assert.equal(state.lessons![0].homeworkUrl,null);assert.equal(state.lessons![0].videoId,'abcdefghijk');
+for(const action of ['start','save','submit'] as const)assert.throws(()=>action==='start'?service.start(token):service[action](token,'fake',{}),/chưa mở/);
+let calls:string[]=[],signed=0;
+let snapshot:DurableSnapshot={revision:0,material,lessons:[material],work:structuredClone(work)};
+const repo=new SupabaseHomeworkRepository({async rpc(name,args){calls.push(name);if(name==='mtm_btvn_read')return {data:structuredClone(snapshot),error:null};if(name==='mtm_btvn_assets')return {data:[],error:null};if(name==='mtm_btvn_commit'){snapshot={...snapshot,revision:snapshot.revision+1,work:{...snapshot.work,drafts:args.p_drafts as any,receipts:args.p_receipts as any}};return {data:{ok:true},error:null};}throw Error(name);}},async()=>({}),()=>now,async()=>{signed++;return 'https://private.invalid/signed';});
+for(const action of ['state','select'] as const){state=await repo.call('fake',action,material.lessonCode);assert.equal(state.exam,null);assert.equal(state.draft,null);assert.deepEqual(state.receipts,[]);assert.equal(state.lessons![0].opensAt,opening);assert.equal(state.lessons![0].handoutUrl,null);assert.equal(state.lessons![0].videoId,'abcdefghijk');}
+assert.equal(state.lessons![0].bestScore,null);assert.equal(state.lessons![0].late,null);assert.equal(state.lessons![0].submittedAt,null);assert.equal(state.lessons![0].available,false);
+for(const action of ['start','save','submit'] as const)await assert.rejects(repo.call('fake',action,material.lessonCode,'fake',{}),/chưa mở/);
+assert.equal(signed,0);assert.ok(calls.every(name=>name==='mtm_btvn_read'));
+assert.equal(lessonOpensAt(material,'Lớp khác'),Date.parse('2026-10-16T12:30:00Z'));
+assert.equal(lessonOpensAt(fixture.material,className),Date.parse('2026-10-15T21:30:00+07:00'));
+now=opening;snapshot.exam=fixture.exam;state=await repo.call('fake','start',material.lessonCode);assert.ok(state.exam);assert.ok(state.draft);assert.equal(state.canStart,true);
+const root=process.env.MTM_ROOT??process.cwd(),require=createRequire(join(root,'package.json')),{buildSync}=require('esbuild'),React=require('react'),{renderToStaticMarkup}=require('react-dom/server');
+function load(file:string){const code=buildSync({entryPoints:[join(root,file)],bundle:true,write:false,platform:'node',format:'cjs',jsx:'automatic',packages:'external',loader:{'.css':'empty'},logLevel:'silent'}).outputFiles[0].text;const mod={exports:{} as any};new Function('require','module','exports',code)(require,mod,mod.exports);return mod.exports.default;}
+const future=Date.now()+86400000;
+const lessons=[{...state.lessons![0],opensAt:future,locked:true,available:true,bestScore:null},{...state.lessons![0],lessonCode:'opened',opensAt:0,locked:false,available:true,bestScore:null}];
+const html=renderToStaticMarkup(React.createElement(load('src/native/homework/LessonCards.tsx'),{lessons,busy:false,onHomework(){}}));
+assert.ok(html.includes('Em còn 1 buổi cần làm BTVN'));assert.ok(html.includes('Mở làm sau buổi học:'));assert.match(html,/disabled=""[^>]*>Làm BTVN · Mở/);assert.ok(html.includes('▶ Xem video'));
+now=opening-1;snapshot.exam=undefined;
+// Snapshot theo whitelist SQL: không có bestScore/late/submittedAt/dueAt.
+snapshot.lessons=[{lessonCode:material.lessonCode,classNames:material.classNames,date:material.date,title:material.title,classOpensAt:material.classOpensAt,videoId:material.videoId,materialUrl:null,handoutUrl:null,homeworkUrl:null,available:false,locked:true} as any];
+const stripped=await repo.call('fake','state',material.lessonCode);
+const lockedHtml=renderToStaticMarkup(React.createElement(load('src/native/homework/LessonCards.tsx'),{lessons:stripped.lessons,busy:false,onHomework(){}}));
+assert.ok(!lockedHtml.includes('đang chờ chuẩn bị'));assert.ok(!lockedHtml.includes('Invalid Date'));
+let task:(()=>void)|undefined,delay=0,refreshes=0,cleared=0;
+const cancel=scheduleOpeningRefresh(stripped.lessons!,async()=>{refreshes++;},()=>now,{set(fn,ms){task=fn;delay=ms;return 1;},clear(){cleared++;}});
+assert.equal(refreshes,0);assert.equal(delay,51);now=opening+50;task!();await Promise.resolve();assert.equal(refreshes,1);assert.equal(delay,30000);cancel();assert.equal(cleared,1);task!();assert.equal(refreshes,1);
+console.log('Đạt API/SSR đợt 18: khóa start/save/submit theo lớp, không trả đề hoặc ký ảnh, vẫn có video, ranh giờ mở, fallback 21:30, thẻ khóa và bộ đếm chỉ bài đã mở. Dữ liệu giả, không mạng.');

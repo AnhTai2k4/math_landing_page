@@ -85,7 +85,7 @@ def route_rows(rows, config, now):
         if not scope or not scope.get('enabled'):
             continue
         date = dt.date.fromisoformat(source['lesson_date'])
-        if date < dt.date(2026, 10, 15) or date > now.astimezone(r.VN).date() or date > r.END:
+        if date < dt.date(2026, 10, 15) or date > r.END:
             continue
         calendar = scope.get('dates', [])
         p.require(date.isoformat() in calendar or date.weekday() in scope.get('weekdays', []), 'Ngày buổi chưa khớp lịch lớp '+name)
@@ -142,6 +142,9 @@ class JavisPublisher(p.Publisher):
     def publish(self, payload):
         p.require(r.now_vn().date() <= r.END, 'Đã hết thời hạn tự đăng')
         return super().publish(payload)
+    def update_material(self,key,patch):
+        p.require(r.now_vn().date() <= r.END, 'Đã hết thời hạn tự cập nhật')
+        return super().update_material(key,patch)
 
 
 class VersionWorker(p.Worker):
@@ -152,17 +155,23 @@ class VersionWorker(p.Worker):
         periods=[x['period'] for x in self.config.get('periods',[]) if x['start']<=row['lesson_date']<=x['end']]
         p.require(len(periods)==1 and periods[0] in ('GK1','CK1','GK2','CK2'),'Buổi học chưa thuộc đúng một kỳ đã cấu hình')
         self.config['period']=periods[0]
+        p.check_answer_source(row)
         self.transport = CachedTransport(self.transport.transport if isinstance(self.transport, CachedTransport) else self.transport)
         hs = p.download_homework(row, self.config, self.transport)
         p.require(row['answers'], 'Có BTVN nhưng thiếu PDF đáp án')
         gv = p.download_pdf(row['answers'], self.config, self.transport)
+        source_version=p.digest(hs+gv)
+        # Đợt 17 đã băm cả metadata. Giữ đúng khóa đã đăng nếu nội dung PDF
+        # không đổi, kể cả sau khi Sheet bổ sung video/tài liệu.
+        prefix=row['lesson_key'][:80]+'-v-'
+        existing=[key for key, in self.db.execute('SELECT lesson_key FROM receipts WHERE status=? AND source_version=?',('da_dang',source_version)) if key.startswith(prefix)]
         version = p.digest(hs + gv + p.encoded(material(row)))
-        row['lesson_key'] = row['lesson_key'][:80] + '-v-' + version[:40]
+        row['lesson_key'] = existing[-1] if existing else prefix + version[:40]
         self.last_key=row['lesson_key'];self.last_source_version=p.digest(hs+gv)
         status=super().process(row)
         if status=='loi':
             saved=self.db.execute('SELECT receipt FROM receipts WHERE lesson_key=?',(row['lesson_key'],)).fetchone()
-            if saved:self.last_reason=json.loads(saved[0]).get('reason')
+            if saved and not self.last_reason:self.last_reason=json.loads(saved[0]).get('reason')
         return status
 
 
@@ -277,6 +286,10 @@ def run_batch(config, transport, publisher, root, now=None, extractor=None, revi
                 receipt['items'].append({'lesson_key':worker.last_key,'source_version':worker.last_source_version,'classes':row['class_dates'],'status':status,'reason':worker.last_reason})
                 if status == 'da_dang':
                     pending.append(label)
+                elif status == 'updated':
+                    fields=getattr(worker,'last_update_fields',[])
+                    what='video' if any(k in fields for k in ('videoId','videoUrl')) else 'thông tin'
+                    pending.append('Đã cập nhật '+what+' bài '+label)
                 elif status == 'loi':
                     report_error(config, root, worker.last_key, 'BTVN lỗi: '+label+'; '+(worker.last_reason or 'không đạt kiểm độc lập, chưa đăng'), now)
             except Exception as error:
