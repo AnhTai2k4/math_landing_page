@@ -34,3 +34,5 @@
 .mg-more a{color:#1d4ed8;text-decoration:underline;font-weight:600}
 .mg-slogan{text-align:center;font-weight:800;color:#213269;margin:22px 0 0}
 @media(max-width:600px){.mtm-guide{padding-top:18px}.mg-card{padding:16px}.mg-steps{padding:4px 16px}.mg-step-zalo{flex-wrap:wrap}.mg-step-zalo .mg-step-body{flex:1 1 calc(100% - 50px)}.mg-step-zalo .mg-qr{margin-left:50px;width:150px;height:150px}.mg-tabs button{max-width:none}.mg-link{max-width:none}}
+.mg-list{margin:4px 0 10px;padding-left:20px;list-style:disc}
+.mg-list li{margin:0 0 6px}
