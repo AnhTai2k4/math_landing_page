@@ -31,7 +31,7 @@ class JavisTests(unittest.TestCase):
         self.config.update(classes={'LỚP GIẢ':{'enabled':True,'dates':['2026-10-15']}},periods=[{'start':'2026-10-15','end':'2026-10-15','period':'GK1'}])
 
     def test_vn_window_and_end(self):
-        for hour in (7,14,23):self.assertTrue(r.in_window(NOW.replace(hour=hour)))
+        # 16/10/2026: chạy 24/7, chỉ dừng sau ngày kết thúc.
         for hour in (0,6):self.assertFalse(r.in_window(NOW.replace(hour=hour)))
         self.assertTrue(r.in_window(dt.datetime(2027,10,15,23,59,tzinfo=r.VN)))
         self.assertFalse(r.in_window(dt.datetime(2027,10,16,7,tzinfo=r.VN)))

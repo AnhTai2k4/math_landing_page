@@ -21,7 +21,7 @@ def now_vn():
 
 def in_window(now):
     now = now.astimezone(VN)
-    return now.date() <= END and 7 <= now.hour <= 23
+    return now.date() <= END  # 16/10/2026 anh Thành: chạy 24/7, bỏ khung 7-23h
 
 
 def state_root():
