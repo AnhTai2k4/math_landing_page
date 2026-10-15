@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /quan-tri
+Disallow: /admin
+Disallow: /api
+Disallow: /btvn
+Disallow: /so-tay
+Sitemap: https://www.minhthanhmath.vn/sitemap.xml

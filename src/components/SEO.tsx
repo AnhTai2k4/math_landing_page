@@ -55,7 +55,7 @@ export function SEO({
       <meta name="geo.placename" content="Ha Noi" />
 
       {/* Mobile Optimization */}
-      <meta name="theme-color" content="#233463" />
+      <meta name="theme-color" content="#213269" />
     </Helmet>
   );
 }

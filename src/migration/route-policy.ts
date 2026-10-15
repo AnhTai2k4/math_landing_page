@@ -1,3 +1,4 @@
+import examMetadata from '../native/exams/public-metadata.json';
 import {resolveNativeLesson,nativeLessonUrl,publicSnapshot,HIDDEN_SNAPSHOT_EXAMS} from '../native/model';
 import {courses,findCourse,courseSummary,lessonCount} from './catalogue';
 export const OFFICIAL_ORIGIN='https://www.minhthanhmath.vn';
@@ -11,6 +12,8 @@ export function catalogURL(state:CatalogState){const p=new URLSearchParams({lop:
 export function normalizePublicPath(path:string){if(!path.startsWith('/')||path.includes('\\'))return'/not-found';return path.replace(/\/+$/,'')||'/';}
 export function routeMetadata(pathname:string,hostname:string,search=''){
  if(pathname==='/btvn'||/^\/btvn\/[^/]+\/[^/]+$/.test(pathname))return{known:true,path:pathname,title:'Bài tập về nhà | Minh Thành Math',description:'Bài tập theo buổi dành cho lớp được cấp quyền.',url:OFFICIAL_ORIGIN+pathname,ogImage:OFFICIAL_ORIGIN+'/mtm-original-logo.png',robots:'noindex, nofollow'};
+ const publicExam=examMetadata.find(e=>pathname==='/thi-thu/'+e.id);
+ if(publicExam)return{known:true,path:pathname,title:publicExam.title+' | Minh Thành Math',description:'Thi thử Toán tại Minh Thành Math. Xem thông tin đề, làm bài và đọc lời giải sau khi nộp. MTM sưu tầm và biên soạn.',url:OFFICIAL_ORIGIN+pathname,ogImage:OFFICIAL_ORIGIN+'/mtm-original-logo.png',robots:'noindex, follow'};
  const lesson=resolveNativeLesson(pathname,search),resource=pathname.startsWith('/thi-thu/')?publicSnapshot.exams.find(x=>'/thi-thu/'+x.id===pathname):pathname.startsWith('/tai-lieu/')?publicSnapshot.documents.find(x=>'/tai-lieu/'+x.id===pathname):undefined;
  if(resource&&!lesson&&pathname.startsWith('/thi-thu/')&&HIDDEN_SNAPSHOT_EXAMS.has(resource.id))return{known:true,path:pathname,title:'Đề không còn trong danh sách | Minh Thành Math',description:'Mục đề cũ không có nội dung. Xem các đề thi thử đang mở tại trang Thi thử.',url:OFFICIAL_ORIGIN+pathname,ogImage:OFFICIAL_ORIGIN+'/mtm-original-logo.png',robots:'noindex, follow'};
  if(lesson||resource){const title=lesson?.lesson.title??resource!.title,description=lesson?.lesson.subtitle||resource?.description||'Nội dung đang được tích hợp trực tiếp vào website MTM; chưa có kết nối dữ liệu tài khoản.';return{known:true,path:pathname,title:title+' | Minh Thành Math',description,url:OFFICIAL_ORIGIN+(lesson?nativeLessonUrl(lesson.course,lesson.lesson):pathname),ogImage:OFFICIAL_ORIGIN+(lesson?.course.image??'/mtm-original-logo.png'),robots:'noindex, follow'};}

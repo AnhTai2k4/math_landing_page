@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
+import {join} from 'node:path';
 import {test} from 'node:test';
 import {courses,normal} from '../src/migration/catalogue';
 import {nativeLessonUrl} from '../src/native/model';
@@ -100,7 +101,7 @@ test('Filtering accepts frozen source data and leaves it byte-equivalent',()=>{
 });
 
 // Source contracts supplement pure-state tests; real focus/tab interaction needs a browser.
-const ui=readFileSync(new URL('../src/native/NativeCourses.tsx',import.meta.url),'utf8');
+const ui=readFileSync(join(process.env.MTM_ROOT??process.cwd(),'src/native/NativeCourses.tsx'),'utf8');
 test('Clear control is labelled, uses a native button and focuses the referenced input',()=>{
  assert.match(ui,/<input ref=\{searchInput\} aria-label="Tìm kiếm bài học"/);
  assert.match(ui,/<button type="button" aria-label="Xóa tìm kiếm bài học" onClick=\{clearSearch\}/);

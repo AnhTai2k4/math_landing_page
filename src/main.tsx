@@ -7,3 +7,4 @@
 
   createRoot(document.getElementById("root")!).render(<App />);
   
+import './styles/dot-20.css';

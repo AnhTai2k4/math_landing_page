@@ -1,10 +1,11 @@
+import {LoadingCards} from '../../components/LoadingCards';
 import {useEffect,useState} from 'react';
 import './leaderboard.css';
 export type RankRow={rank:number;fullName:string;className:string;score:number;submitted:number;total:number};
 export const rankEmpty='Bảng xếp hạng bắt đầu từ 15/10/2026. Chưa có bài trong kỳ này.';
 const tabs=[['btvn-tuan','BTVN tuần'],['btvn-thang','BTVN tháng'],['kiem-tra-thang','Kiểm tra cuối tháng']] as const;
 export function RankContent({rows,status}:{rows:RankRow[];status:'loading'|'ready'|'error'}){
- if(status==='loading')return <p role="status">Đang tải bảng xếp hạng…</p>;
+ if(status==='loading')return <LoadingCards label="Đang tải bảng xếp hạng…"/>;
  if(status==='error')return <p role="alert">Chưa tải được bảng xếp hạng. Vui lòng thử lại.</p>;
  if(!rows.length)return <p>{rankEmpty}</p>;
  return <ol className="mtm-rank-list">{rows.map(row=><li key={row.rank} className={row.rank<=3?'mtm-rank-top':''}><b className="mtm-rank-place" aria-label={'Hạng '+row.rank}>{row.rank}</b><div><strong>{row.fullName}</strong><small>{row.className} · Đã nộp {row.submitted}/{row.total} bài</small></div><b className="mtm-rank-score">{row.score.toLocaleString('vi-VN',{maximumFractionDigits:2})}<small>/10</small></b></li>)}</ol>;
