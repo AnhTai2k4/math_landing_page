@@ -35,7 +35,7 @@ for(const value of [true,false,null]){
 }
 const zoom=renderToStaticMarkup(React.createElement(LessonVideo,{demo:false,lesson:{videoId:null,videoUrl:'https://example.zoom.us/rec/a',lessonCode:'fake'} as any}));assert.ok(zoom.includes('Xem record Zoom'));
 const row:ScoreRow={studentId:'a',fullName:'Học sinh GIẢ',className:'2K9 9+',lessonCode:'a',title:'Đề giả',date:'2026-10-15',dueAt:Date.parse('2026-10-16T17:30:00+07:00'),receipts:[{score:7.5,late:true,submittedAt:Date.parse('2026-10-17T00:00:00+07:00')}]};
-const rows=[row,{...row,lessonCode:'b',receipts:[]},{...row,studentId:'qa',sourceIdentity:'qa:x'},{...row,studentId:'old',date:'2026-10-14'}];
+const rows=[row,{...row,lessonCode:'b',receipts:[]},{...row,studentId:'qa',sourceIdentity:'qa:x'},{...row,studentId:'old',date:'2026-09-30'}];
 const book=buildScorebook(rows,Date.parse('2026-10-18'));assert.equal(book.length,1);assert.equal(book[0].values.length,2);assert.deepEqual(book[0].values[1],['Học sinh GIẢ','7,5 (muộn)','Chưa nộp','3,75']);
 assert.equal(buildScorebook([{...row,receipts:[]}],0)[0].values[1][1],'');
 const cards=renderToStaticMarkup(React.createElement(LessonCards,{busy:false,onHomework:()=>{},lessons:[{lessonCode:'fake',classNames:['2K9 9+'],date:'2026-10-15',title:'Giả',videoId:null,materialUrl:null,handoutUrl:null,homeworkUrl:null,dueAt:null,expectedDueAt:row.dueAt,bestScore:null,late:null,submittedAt:null,available:true}]}));

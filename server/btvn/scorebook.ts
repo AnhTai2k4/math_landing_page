@@ -1,5 +1,5 @@
 export type ScoreRow={studentId:string;fullName:string;className:string;lessonCode:string;title:string;date:string;dueAt:number|null;expectedDueAt?:number|null;sourceIdentity?:string;receipts:{score:number;submittedAt:number;late:boolean|null}[]};
-const eligible=(rows:ScoreRow[])=>rows.filter(r=>r.date>='2026-10-15'&&!r.sourceIdentity?.startsWith('qa:'));
+const eligible=(rows:ScoreRow[])=>rows.filter(r=>r.date>='2026-10-01'&&!r.sourceIdentity?.startsWith('qa:'));
 export const bestReceipt=(row:ScoreRow)=>[...row.receipts].filter(r=>r.submittedAt>=Date.parse('2026-10-15T00:00:00+07:00')).sort((a,b)=>b.score-a.score||b.submittedAt-a.submittedAt)[0];
 const point=(n:number)=>n.toLocaleString('vi-VN',{maximumFractionDigits:2});
 export function buildScorebook(input:ScoreRow[],now=Date.now()){
