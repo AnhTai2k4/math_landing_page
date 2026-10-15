@@ -438,13 +438,27 @@ def download_homework(row,config,transport):
     except Exception:raise GateError('Không gộp được PDF nguồn; chưa đăng') from None
 
 def class_opens_at(row):
-    """Ngày của từng lớp, giờ VN; thiếu buổi khớp dùng 21:30."""
+    """Cùng luật JSON với web. Lớp ngoài luật giữ lịch dự phòng cũ."""
+    rules_path=Path(os.environ.get('BTVN_CLASS_RULES',str(ROOT.parents[1]/'server/btvn/class-rules.json')))
+    require(rules_path.is_file(),'Thiếu class-rules.json; chưa tạo giờ mở')
+    rules=json.loads(rules_path.read_text(encoding='utf-8-sig'))['classes']
     path=Path(os.environ.get('BTVN_CLASS_SCHEDULE',str(ROOT.parents[1]/'server/btvn/class-schedule.json')))
     schedules=json.loads(path.read_text(encoding='utf-8')) if path.exists() else {}
     result={}
     for label,date in row.get('class_dates',{row['class_name']:row['lesson_date']}).items():
         day=datetime.date.fromisoformat(date)
-        ends=[s['end'] for s in schedules.get(label,[]) if s['weekday']==day.isoweekday()]
+        rule=rules.get(label)
+        if rule:
+            opening=rule['open']
+            if opening['type']=='paired':
+                target=opening.get('days',{}).get(str(day.isoweekday()),day.isoweekday())
+                day+=datetime.timedelta(days=target-day.isoweekday())
+                source=rules[opening.get('sourceLabel',label)]
+            else:
+                source=rule
+            ends=[s['end'] for s in source['sessions'] if s['weekday']==day.isoweekday()]
+        else:
+            ends=[s['end'] for s in schedules.get(label,[]) if s['weekday']==day.isoweekday()]
         end=max(ends) if ends else '21:30'
         result[label]=datetime.datetime.combine(day,datetime.time.fromisoformat(end),datetime.timezone(datetime.timedelta(hours=7))).isoformat()
     return result

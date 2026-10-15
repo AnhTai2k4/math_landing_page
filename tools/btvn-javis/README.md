@@ -1,8 +1,14 @@
 # BTVN tự đăng trên Javis VPS, đợt 17
 
+## Bổ sung đợt 24
+
+Luật mở chuẩn nằm trong `server/btvn/class-rules.json`, dùng chung với web. Chép tệp này vào `<brain>/Javis/btvn/class-rules.json` và đặt `BTVN_CLASS_RULES` bằng đường dẫn tuyệt đối tương ứng. Thiếu tệp thì worker giữ bài, không tự mở theo lịch cũ. Ngày ngoài buổi khớp của lớp có luật dùng 21:30 như web; lớp ngoài luật vẫn dùng lịch dự phòng cũ. Cặp 2K9 8+/9+ mở sau buổi 9+ đầu cặp; 2K10 9+ buổi Chủ nhật mở sau buổi thứ Sáu.
+
+`.qa-temp/dot-24/config.vps.json` là bản đề xuất để merge, không ghi đè cấu hình VPS. Giữ `allowed_hosts`, `attendance_map`, bí mật và receipt hiện hành. Bản mẫu thiếu `attendance_map`, host Edge còn placeholder. Bộ model được đề xuất theo phiếu, chưa xác minh quyền/hạn mức thực tế. Kỳ được duyệt kết thúc 15/06/2027; buổi sau đó bị chặn cho đến khi bổ sung kỳ hợp lệ. Đóng gói lại attendance bundle từ mã hiện hành sau khi cập nhật luật; Edge tự gắn luật chuẩn khi nhận `sync_due`, worker không gửi luật do client quyết định.
+
 ## Bổ sung đợt 18
 
-Worker nhận cả buổi tương lai đã có lịch xác nhận. Record được ghi sẵn cho buổi tương lai vẫn nhận; quyền làm bài do máy chủ khóa theo `classOpensAt`. Mỗi lớp lấy ngày riêng trong `class_dates`, giờ kết thúc buổi từ `server/btvn/class-schedule.json`, ISO có múi giờ `+07:00`. Không có buổi khớp thì dùng 21:30 ngày học.
+Worker nhận cả buổi tương lai đã có lịch xác nhận. Record được ghi sẵn cho buổi tương lai vẫn nhận; quyền làm bài do máy chủ khóa theo `classOpensAt`. Mỗi lớp lấy ngày riêng trong `class_dates`, ISO có múi giờ `+07:00`. Từ đợt 24 dùng luật mở ở mục trên; lịch dự phòng `class-schedule.json` và 21:30 chỉ dành cho nhãn ngoài luật chuẩn.
 
 Khi triển khai VPS, chép `server/btvn/class-schedule.json` vào vùng cấu hình và đặt `BTVN_CLASS_SCHEDULE` trỏ đường dẫn tuyệt đối của tệp đã chép. Giữ nguyên `receipts.sqlite`: worker dùng receipt cũ để tìm đúng khóa bài đợt 17, vốn chứa hash metadata. Khi chỉ thêm video/tài liệu, worker gọi `update_material`, không chạy AI hoặc đăng lại đề. Nếu mất receipt và metadata đã thay đổi, chưa thể tự nhận lại khóa phiên bản cũ bằng chỉ một dòng Sheet; phải khôi phục receipt trước khi chạy.
 

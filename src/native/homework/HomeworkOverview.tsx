@@ -6,7 +6,7 @@ import {LessonVideo} from './LessonCards';
 
 export const homeworkDate=(at:number)=>new Date(at).toLocaleString('vi-VN',{timeZone:'Asia/Ho_Chi_Minh',hour:'2-digit',minute:'2-digit',weekday:'long',day:'2-digit',month:'2-digit'});
 export function HomeworkDeadline({lesson,dueAt}:{lesson?:HomeworkLesson;dueAt:number|null}){
-  return <p className="btvn-deadline">{dueAt!==null?'Hạn: trước '+homeworkDate(dueAt)+' (giờ vào buổi học tới)':lesson?.expectedDueAt!=null?'Hạn dự kiến: trước '+homeworkDate(lesson.expectedDueAt)+' (giờ vào buổi học tới)':'Hạn: chờ xác minh buổi học kế tiếp'} (giờ Việt Nam).</p>;
+  return <p className="btvn-deadline">{dueAt!==null?'Hạn: trước '+homeworkDate(dueAt)+' (theo lịch lớp)':lesson?.expectedDueAt!=null?'Hạn dự kiến: trước '+homeworkDate(lesson.expectedDueAt)+' (theo lịch lớp)':'Hạn: chờ xác minh lịch lớp và ca học'} (giờ Việt Nam).</p>;
 }
 export default function HomeworkOverview({state,busy,onStart}:{state:HomeworkState;busy:boolean;onStart:()=>void}){
   const [solutions,setSolutions]=useState(false),[video,setVideo]=useState(false);

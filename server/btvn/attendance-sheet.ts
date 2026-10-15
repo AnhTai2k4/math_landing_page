@@ -1,6 +1,6 @@
 import {normalizeName,normalizePhone} from './roster';
-export type AttendanceSession={classKey:string;label:string;startsAt:string;sourceIdentity:string;attendees:{name:string;phone:string;status:string}[]};
-export type AttendanceMap={schoolYear:number;classes:Record<string,string>;fromDate?:string;toDate?:string};
+export type AttendanceSession={classKey:string;label:string;startsAt:string;sourceIdentity:string;cancelled?:boolean;replacesAt?:string;attendees:{name:string;phone:string;status:string}[]};
+export type AttendanceMap={schoolYear:number;classes:Record<string,string>;fromDate?:string;toDate?:string;sessionOverrides?:{label:string;plannedStartsAt:string;actualStartsAt?:string;cancelled?:true}[]};
 /** Trả C/M/ON (có học), L/K (vắng), '' (trống) hoặc null (ghi chú không rõ, coi như không học). */
 export function classifyCell(raw:string):string|null{
  const v=raw.trim(),n=normalizeName(v);if(!v)return '';
@@ -51,6 +51,22 @@ export function parseAttendanceSheet(snapshot:Record<string,string[][]>,config:A
     if(!session){session={classKey:current.key,label:current.label,startsAt,sourceIdentity,attendees:[]};sessions.push(session);}
     session.attendees.push({name,phone,status});
    }
+  }
+ }
+ // Chỉ điều chỉnh khi operator đã đối soát lịch; không suy diễn ghi chú tự do hoặc vắng cá nhân.
+ const overrideKeys=new Set<string>();
+ const validTime=(v:string)=>typeof v==='string'&&/^\d{4}-\d{2}-\d{2}T(?:[01]\d|2[0-3]):[0-5]\d:00\+07:00$/.test(v)&&Number.isFinite(Date.parse(v))&&new Date(v.slice(0,10)+'T00:00:00Z').toISOString().slice(0,10)===v.slice(0,10);
+ for(const o of config.sessionOverrides??[]){
+  const key=o.label+':'+o.plannedStartsAt;
+  if(overrideKeys.has(key)||!validTime(o.plannedStartsAt)||!!o.actualStartsAt===!!o.cancelled||(o.actualStartsAt&&!validTime(o.actualStartsAt)))throw Error('INVALID_SESSION_OVERRIDE');
+  overrideKeys.add(key);
+  const original=sessions.filter(s=>s.label===o.label&&s.startsAt===o.plannedStartsAt);
+  if(original.length!==1)throw Error('SESSION_OVERRIDE_NOT_FOUND');
+  if(o.cancelled)original[0].cancelled=true;
+  else {
+   const replacement=sessions.filter(s=>s.label===o.label&&s.startsAt===o.actualStartsAt);
+   if(replacement.length!==1||replacement[0]===original[0]||replacement[0].replacesAt)throw Error('SESSION_REPLACEMENT_NOT_FOUND');
+   original[0].cancelled=true;replacement[0].replacesAt=o.plannedStartsAt;
   }
  }
  return {sessions,pending,blocks};

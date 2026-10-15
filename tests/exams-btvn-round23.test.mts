@@ -12,7 +12,7 @@ const {default:Cards,LOCKED_HOMEWORK_HELP}=load('src/native/homework/LessonCards
 const html=render(Cards,props);
 assert.match(html,/🔒 Chưa mở · mở/);assert.match(html,/🔒 Chưa mở, mở lúc/);
 assert.match(html,/Chưa có bài cần làm\. Có 1 bài sẽ mở sau buổi học\./);
-assert.match(html,/BTVN của mỗi buổi mở sau khi buổi học đó kết thúc, hạn là giờ vào buổi học tới\./);
+assert.match(html,/Giờ mở và hạn nộp theo lịch riêng của lớp\. Em xem thời gian cụ thể trên từng bài\./);
 assert.doesNotMatch(html,/Chưa làm BTVN|todo-card|class="todo"|btvn-btn primary|disabled=""|Invalid Date/);
 assert.doesNotMatch(render(Cards,{...props,lessons:[{...lesson,opensAt:undefined}]}),/Invalid Date/);
 const open=render(Cards,{...props,lessons:[{...lesson,available:true,opensAt:0}]});

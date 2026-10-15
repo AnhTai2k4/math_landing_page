@@ -205,220 +205,444 @@ function validatePracticeExam(input) {
   return { valid: errors.length === 0, errors };
 }
 
-// server/btvn/class-schedule.json
-var class_schedule_default = {
-  "2K9 9+": [
-    {
-      weekday: 1,
-      start: "17:30",
-      end: "19:30"
-    },
-    {
-      weekday: 3,
-      start: "17:30",
-      end: "19:30"
-    },
-    {
-      weekday: 5,
-      start: "17:30",
-      end: "19:30"
-    }
+// server/btvn/class-rules.json
+var class_rules_default = {
+  timezone: "Asia/Ho_Chi_Minh",
+  notes: [
+    "C\u1EB7p T4-T5 m\u1EDF sau T4; 2K10 Th\u1EE9 3, 6 h\u1EA1n c\xF9ng th\u1EE9 tu\u1EA7n sau theo hai gi\u1EA3 \u0111\u1ECBnh trong thi\u1EBFt k\u1EBF \u0111\u1EE3t 24."
   ],
-  "2K14": [
-    {
-      weekday: 1,
-      start: "18:00",
-      end: "20:00"
+  classes: {
+    "2K9 9+": {
+      sessions: [
+        {
+          weekday: 1,
+          start: "17:30",
+          end: "19:30"
+        },
+        {
+          weekday: 3,
+          start: "17:30",
+          end: "19:30"
+        },
+        {
+          weekday: 5,
+          start: "17:30",
+          end: "19:30"
+        }
+      ],
+      open: {
+        type: "paired",
+        sourceLabel: "2K9 9+",
+        days: {
+          "1": 1,
+          "2": 1,
+          "3": 3,
+          "4": 3,
+          "5": 5,
+          "6": 5
+        }
+      },
+      due: {
+        type: "pair_next"
+      }
     },
-    {
-      weekday: 4,
-      start: "09:00",
-      end: "11:00"
-    }
-  ],
-  "2K10 XPT": [
-    {
-      weekday: 1,
-      start: "19:30",
-      end: "21:30"
+    "2K14": {
+      sessions: [
+        {
+          weekday: 1,
+          start: "18:00",
+          end: "20:00"
+        },
+        {
+          weekday: 4,
+          start: "09:00",
+          end: "11:00"
+        }
+      ],
+      open: {
+        type: "after_session"
+      },
+      due: {
+        type: "same_weekday_next_week"
+      }
     },
-    {
-      weekday: 6,
-      start: "15:30",
-      end: "17:30"
-    }
-  ],
-  "2K9 XPT": [
-    {
-      weekday: 1,
-      start: "19:30",
-      end: "21:30"
+    "2K10 XPT": {
+      sessions: [
+        {
+          weekday: 1,
+          start: "19:30",
+          end: "21:30"
+        },
+        {
+          weekday: 6,
+          start: "15:30",
+          end: "17:30"
+        }
+      ],
+      open: {
+        type: "after_session"
+      },
+      due: {
+        type: "same_weekday_next_week"
+      }
     },
-    {
-      weekday: 2,
-      start: "19:30",
-      end: "21:30"
+    "2K9 XPT": {
+      sessions: [
+        {
+          weekday: 1,
+          start: "19:30",
+          end: "21:30"
+        },
+        {
+          weekday: 2,
+          start: "19:30",
+          end: "21:30"
+        },
+        {
+          weekday: 4,
+          start: "19:30",
+          end: "21:30"
+        }
+      ],
+      open: {
+        type: "after_session"
+      },
+      due: {
+        type: "map",
+        days: {
+          "1": {
+            weekday: 1,
+            weeks: 1
+          },
+          "2": {
+            weekday: 4,
+            weeks: 0
+          },
+          "4": {
+            weekday: 2,
+            weeks: 1
+          }
+        }
+      }
     },
-    {
-      weekday: 4,
-      start: "19:30",
-      end: "21:30"
-    }
-  ],
-  "2K9 8+": [
-    {
-      weekday: 2,
-      start: "17:30",
-      end: "19:30"
+    "2K9 8+": {
+      sessions: [
+        {
+          weekday: 2,
+          start: "17:30",
+          end: "19:30"
+        },
+        {
+          weekday: 4,
+          start: "17:30",
+          end: "19:30"
+        },
+        {
+          weekday: 6,
+          start: "17:30",
+          end: "19:30"
+        }
+      ],
+      open: {
+        type: "paired",
+        sourceLabel: "2K9 9+",
+        days: {
+          "1": 1,
+          "2": 1,
+          "3": 3,
+          "4": 3,
+          "5": 5,
+          "6": 5
+        }
+      },
+      due: {
+        type: "pair_next"
+      }
     },
-    {
-      weekday: 4,
-      start: "17:30",
-      end: "19:30"
+    "2K10 9+": {
+      sessions: [
+        {
+          weekday: 2,
+          start: "19:30",
+          end: "21:30"
+        },
+        {
+          weekday: 5,
+          start: "19:30",
+          end: "21:30"
+        },
+        {
+          weekday: 7,
+          start: "08:00",
+          end: "10:00"
+        }
+      ],
+      open: {
+        type: "paired",
+        sourceLabel: "2K10 9+",
+        days: {
+          "7": 5
+        }
+      },
+      due: {
+        type: "slot_by_attendance"
+      }
     },
-    {
-      weekday: 6,
-      start: "17:30",
-      end: "19:30"
-    }
-  ],
-  "2K10 9+": [
-    {
-      weekday: 2,
-      start: "19:30",
-      end: "21:30"
+    "2K13": {
+      sessions: [
+        {
+          weekday: 2,
+          start: "20:00",
+          end: "22:00"
+        },
+        {
+          weekday: 5,
+          start: "20:00",
+          end: "22:00"
+        }
+      ],
+      open: {
+        type: "after_session"
+      },
+      due: {
+        type: "same_weekday_next_week"
+      }
     },
-    {
-      weekday: 7,
-      start: "08:00",
-      end: "10:00"
-    }
-  ],
-  "2K13": [
-    {
-      weekday: 2,
-      start: "20:00",
-      end: "22:00"
+    "2K11 8+": {
+      sessions: [
+        {
+          weekday: 3,
+          start: "19:30",
+          end: "21:30"
+        },
+        {
+          weekday: 7,
+          start: "15:30",
+          end: "17:30"
+        }
+      ],
+      open: {
+        type: "after_session"
+      },
+      due: {
+        type: "same_weekday_next_week"
+      }
     },
-    {
-      weekday: 5,
-      start: "20:00",
-      end: "22:00"
-    }
-  ],
-  "2K11 8+": [
-    {
-      weekday: 3,
-      start: "19:30",
-      end: "21:30"
+    "2K11 XPT": {
+      sessions: [
+        {
+          weekday: 3,
+          start: "19:30",
+          end: "21:30"
+        },
+        {
+          weekday: 6,
+          start: "13:30",
+          end: "15:30"
+        }
+      ],
+      open: {
+        type: "after_session"
+      },
+      due: {
+        type: "same_weekday_next_week"
+      }
     },
-    {
-      weekday: 7,
-      start: "15:30",
-      end: "17:30"
-    }
-  ],
-  "2K11 XPT": [
-    {
-      weekday: 3,
-      start: "19:30",
-      end: "21:30"
+    "HSA.2": {
+      sessions: [
+        {
+          weekday: 4,
+          start: "14:30",
+          end: "17:30"
+        }
+      ],
+      open: {
+        type: "after_session"
+      },
+      due: {
+        type: "next_session"
+      }
     },
-    {
-      weekday: 6,
-      start: "13:30",
-      end: "15:30"
-    }
-  ],
-  "HSA.2": [
-    {
-      weekday: 4,
-      start: "14:30",
-      end: "17:30"
-    }
-  ],
-  "2K12": [
-    {
-      weekday: 4,
-      start: "18:00",
-      end: "20:00"
+    "2K12": {
+      sessions: [
+        {
+          weekday: 4,
+          start: "18:00",
+          end: "20:00"
+        },
+        {
+          weekday: 7,
+          start: "15:00",
+          end: "17:00"
+        }
+      ],
+      open: {
+        type: "after_session"
+      },
+      due: {
+        type: "same_weekday_next_week"
+      }
     },
-    {
-      weekday: 7,
-      start: "15:00",
-      end: "17:00"
-    }
-  ],
-  "2K15": [
-    {
-      weekday: 4,
-      start: "18:00",
-      end: "20:00"
+    "2K15": {
+      sessions: [
+        {
+          weekday: 4,
+          start: "18:00",
+          end: "20:00"
+        },
+        {
+          weekday: 7,
+          start: "14:00",
+          end: "16:00"
+        }
+      ],
+      open: {
+        type: "after_session"
+      },
+      due: {
+        type: "same_weekday_next_week"
+      }
     },
-    {
-      weekday: 7,
-      start: "14:00",
-      end: "16:00"
-    }
-  ],
-  "2K11 9+": [
-    {
-      weekday: 4,
-      start: "19:30",
-      end: "21:30"
+    "2K11 9+": {
+      sessions: [
+        {
+          weekday: 4,
+          start: "19:30",
+          end: "21:30"
+        },
+        {
+          weekday: 7,
+          start: "13:30",
+          end: "15:30"
+        }
+      ],
+      open: {
+        type: "after_session"
+      },
+      due: {
+        type: "same_weekday_next_week"
+      }
     },
-    {
-      weekday: 7,
-      start: "13:30",
-      end: "15:30"
-    }
-  ],
-  "2K10 8+": [
-    {
-      weekday: 5,
-      start: "19:30",
-      end: "21:30"
+    "2K10 8+": {
+      sessions: [
+        {
+          weekday: 5,
+          start: "19:30",
+          end: "21:30"
+        },
+        {
+          weekday: 7,
+          start: "10:00",
+          end: "12:00"
+        }
+      ],
+      open: {
+        type: "after_session"
+      },
+      due: {
+        type: "same_weekday_next_week"
+      }
     },
-    {
-      weekday: 7,
-      start: "10:00",
-      end: "12:00"
-    }
-  ],
-  TSA: [
-    {
-      weekday: 7,
-      start: "14:00",
-      end: "17:00"
-    }
-  ],
-  HSA: [
-    {
-      weekday: 7,
-      start: "17:00",
-      end: "20:00"
-    }
-  ],
-  "2K9 HSA (TH\u1EE8 5)": [
-    {
-      weekday: 4,
-      start: "14:30",
-      end: "17:30"
-    }
-  ],
-  "2K10 Th\u1EE9 3, 6": [
-    {
-      weekday: 2,
-      start: "19:30",
-      end: "21:30"
+    TSA: {
+      sessions: [
+        {
+          weekday: 7,
+          start: "14:00",
+          end: "17:00"
+        }
+      ],
+      open: {
+        type: "after_session"
+      },
+      due: {
+        type: "same_weekday_next_week"
+      }
     },
-    {
-      weekday: 5,
-      start: "19:30",
-      end: "21:30"
+    HSA: {
+      sessions: [
+        {
+          weekday: 7,
+          start: "17:00",
+          end: "20:00"
+        }
+      ],
+      open: {
+        type: "after_session"
+      },
+      due: {
+        type: "next_session"
+      }
+    },
+    "2K9 HSA (TH\u1EE8 5)": {
+      sessions: [
+        {
+          weekday: 4,
+          start: "14:30",
+          end: "17:30"
+        }
+      ],
+      open: {
+        type: "after_session"
+      },
+      due: {
+        type: "next_session"
+      }
+    },
+    "2K10 Th\u1EE9 3, 6": {
+      sessions: [
+        {
+          weekday: 2,
+          start: "19:30",
+          end: "21:30"
+        },
+        {
+          weekday: 5,
+          start: "19:30",
+          end: "21:30"
+        }
+      ],
+      open: {
+        type: "after_session"
+      },
+      due: {
+        type: "same_weekday_next_week"
+      }
+    },
+    "2K9 HSA (CN)": {
+      sessions: [
+        {
+          weekday: 7,
+          start: "17:00",
+          end: "20:00"
+        }
+      ],
+      open: {
+        type: "after_session"
+      },
+      due: {
+        type: "next_session"
+      }
     }
-  ]
+  }
 };
+
+// server/btvn/class-rules.ts
+var classRules = class_rules_default;
+var rules = class_rules_default.classes;
+function lessonDay(value) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value) || !Number.isFinite(Date.parse(value + "T00:00:00Z")) || (/* @__PURE__ */ new Date(value + "T00:00:00Z")).toISOString().slice(0, 10) !== value) throw Error("INVALID_CLASS_DATE");
+  return /* @__PURE__ */ new Date(value + "T00:00:00Z");
+}
+var weekday = (d) => d.getUTCDay() || 7;
+var shift = (d, n) => new Date(d.getTime() + n * 864e5);
+var iso = (d, time) => d.toISOString().slice(0, 10) + "T" + time + ":00+07:00";
+var slot = (r, day) => r.sessions.filter((s) => s.weekday === day).sort((a, b) => a.start.localeCompare(b.start)).at(-1);
+function opensAt(label, lessonDate) {
+  const d = lessonDay(lessonDate), w = weekday(d), r = rules[label];
+  if (!r) return iso(d, "21:30");
+  const sourceDay = r.open.days?.[String(w)] ?? w, source = rules[r.open.sourceLabel ?? label];
+  return iso(shift(d, sourceDay - w), slot(source, sourceDay)?.end ?? "21:30");
+}
 
 // server/btvn/class-schedule.ts
 function classOpeningTimes(material) {
@@ -426,10 +650,7 @@ function classOpeningTimes(material) {
   for (const name of material.classNames) {
     const date2 = material.classDates?.[name] ?? material.date;
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date2) || !Number.isFinite(Date.parse(date2 + "T00:00:00Z")) || (/* @__PURE__ */ new Date(date2 + "T00:00:00Z")).toISOString().slice(0, 10) !== date2) throw Error("INVALID_CLASS_DATE");
-    const weekday = (/* @__PURE__ */ new Date(date2 + "T00:00:00Z")).getUTCDay() || 7;
-    const sessions = class_schedule_default[name]?.filter((s) => s.weekday === weekday) ?? [];
-    const end = sessions.map((s) => s.end).sort().at(-1) ?? "21:30";
-    result[name] = date2 + "T" + end + ":00+07:00";
+    result[name] = opensAt(name, date2);
   }
   return result;
 }
@@ -459,13 +680,15 @@ function attendanceRpc(body) {
   let count = 0;
   const ids = /* @__PURE__ */ new Set();
   for (const s of body.sessions) {
-    ensure(record2(s) && Object.keys(s).every((k) => ["classKey", "label", "startsAt", "sourceIdentity", "attendees"].includes(k)) && validAttendanceLabel(s.label) && text2(s.classKey, 100) && date(s.startsAt) && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:00\+07:00$/.test(s.startsAt) && text2(s.sourceIdentity, 300) && !ids.has(s.sourceIdentity) && Array.isArray(s.attendees) && s.attendees.length <= 1e3);
+    ensure(record2(s) && Object.keys(s).every((k) => ["classKey", "label", "startsAt", "sourceIdentity", "attendees", "cancelled", "replacesAt"].includes(k)) && validAttendanceLabel(s.label) && text2(s.classKey, 100) && date(s.startsAt) && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:00\+07:00$/.test(s.startsAt) && text2(s.sourceIdentity, 300) && !ids.has(s.sourceIdentity) && Array.isArray(s.attendees) && s.attendees.length <= 1e3);
     ids.add(s.sourceIdentity);
+    ensure(s.cancelled === void 0 || typeof s.cancelled === "boolean");
+    ensure(s.replacesAt === void 0 || date(s.replacesAt) && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:00\+07:00$/.test(s.replacesAt) && s.replacesAt !== s.startsAt && s.cancelled !== true);
     count += s.attendees.length;
     ensure(count <= 2e4);
     for (const a of s.attendees) ensure(record2(a) && Object.keys(a).every((k) => ["name", "phone", "status"].includes(k)) && text2(a.name, 160) && typeof a.phone === "string" && /^0\d{9}$/.test(a.phone) && typeof a.status === "string" && ["", "C", "M", "L", "K", "ON", "P", "PH P"].includes(a.status));
   }
-  return { name: "sync_due", payload: { p_payload: { sessions: body.sessions }, p_apply: body.apply ?? false } };
+  return { name: "sync_due", payload: { p_payload: { sessions: body.sessions, classRules }, p_apply: body.apply ?? false } };
 }
 
 // server/btvn/class-config.ts
@@ -476,6 +699,10 @@ function publicClassNames(names) {
 
 // server/btvn/publish-scorebook.ts
 function scorebookRpc(body) {
+  if (body.action === "opening_materials") {
+    if (Object.keys(body).some((k) => !["action", "lesson_key"].includes(k)) || body.lesson_key !== void 0 && (typeof body.lesson_key !== "string" || !/^[a-z0-9-]{1,160}$/.test(body.lesson_key))) throw Error("INVALID_OPENING_READ");
+    return { name: "opening_materials", payload: { p_code: body.lesson_key ?? null } };
+  }
   if (body.action === "classes") {
     if (Object.keys(body).some((k) => k !== "action")) throw Error("INVALID_CLASSES");
     return { name: "classes", payload: {} };
@@ -486,6 +713,10 @@ function scorebookRpc(body) {
   return { name: "scorebook", payload: { p_from: from, p_apply: false } };
 }
 function scorebookResult(action, result) {
+  if (action === "opening_materials") {
+    if (!Array.isArray(result) || result.length > 2e4) throw Error("INVALID_OPENING_RESULT");
+    return result.map((r) => ({ lessonCode: r.lessonCode, date: r.date, classNames: r.classNames, classDates: r.classDates }));
+  }
   if (action === "classes") return { classNames: publicClassNames(result) };
   if (!Array.isArray(result)) throw Error("INVALID_SCOREBOOK_RESULT");
   return result.map((r) => ({
@@ -598,12 +829,12 @@ function createBtvnPublishHandler(port, secret) {
       const slots = expectedSlots(exam);
       ensure2(Array.isArray(proof.slots) && proof.slots.length === slots.length, "REVIEW_COVERAGE");
       ensure2(typeof proof.extractor_provider === "string" && proof.extractor_provider !== proof.provider, "INDEPENDENT_PROVIDER_REQUIRED");
-      for (const slot of slots) {
-        const matches = proof.slots.filter((x) => x.question_id === slot.question_id && x.slot === slot.slot), q = exam.questions.find((q2) => q2.id === slot.question_id);
-        ensure2(matches.length === 1 && canonical(matches[0].expected) === canonical(slot.expected), "REVIEW_MISMATCH");
+      for (const slot2 of slots) {
+        const matches = proof.slots.filter((x) => x.question_id === slot2.question_id && x.slot === slot2.slot), q = exam.questions.find((q2) => q2.id === slot2.question_id);
+        ensure2(matches.length === 1 && canonical(matches[0].expected) === canonical(slot2.expected), "REVIEW_MISMATCH");
         if (q.convertedFrom === "essay" || q.kind === "self" || exam.rubricVersion === "MTM-BTVN-10-v1" && q.kind === "short") ensure2(matches[0].conversion_verified === true, "CONVERSION_REVIEW_REQUIRED");
         const actual = matches[0].actual;
-        ensure2(q.kind === "short" ? typeof actual === "string" && normalizedShort(q.mode, actual) !== null && q.acceptedAnswers.some((a2) => normalizedShort(q.mode, a2) === normalizedShort(q.mode, actual)) : canonical(actual) === canonical(slot.expected), "REVIEW_MISMATCH");
+        ensure2(q.kind === "short" ? typeof actual === "string" && normalizedShort(q.mode, actual) !== null && q.acceptedAnswers.some((a2) => normalizedShort(q.mode, a2) === normalizedShort(q.mode, actual)) : canonical(actual) === canonical(slot2.expected), "REVIEW_MISMATCH");
       }
       ensure2(Array.isArray(body.assets) && body.assets.length > 0 && body.assets.length <= 500, "INVALID_ASSETS");
       const assets = body.assets, paths = /* @__PURE__ */ new Set();

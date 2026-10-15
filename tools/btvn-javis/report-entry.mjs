@@ -1,7 +1,8 @@
 // Một request qua stdin, một văn bản qua stdout. Không mạng, không ghi dữ liệu.
 import {buildClassReport,bestReceipt} from '../../server/btvn/scorebook.ts';
 import {classOpeningTimes} from '../../server/btvn/class-schedule.ts';
-import schedule from '../../server/btvn/class-schedule.json';
+import rules from '../../server/btvn/class-rules.json';
+const schedule=Object.fromEntries(Object.entries(rules.classes).map(([label,rule])=>[label,rule.sessions]));
 
 export function renderReport({rows,sessions,lop,so_buoi=1,now=Date.now()}){
  if(!Array.isArray(rows)||!Array.isArray(sessions)||!Number.isFinite(now)||!Number.isInteger(so_buoi)||so_buoi<1||so_buoi>20)throw Error();

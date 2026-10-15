@@ -1,0 +1,419 @@
+{
+  "timezone": "Asia/Ho_Chi_Minh",
+  "notes": [
+    "Cặp T4-T5 mở sau T4; 2K10 Thứ 3, 6 hạn cùng thứ tuần sau theo hai giả định trong thiết kế đợt 24."
+  ],
+  "classes": {
+    "2K9 9+": {
+      "sessions": [
+        {
+          "weekday": 1,
+          "start": "17:30",
+          "end": "19:30"
+        },
+        {
+          "weekday": 3,
+          "start": "17:30",
+          "end": "19:30"
+        },
+        {
+          "weekday": 5,
+          "start": "17:30",
+          "end": "19:30"
+        }
+      ],
+      "open": {
+        "type": "paired",
+        "sourceLabel": "2K9 9+",
+        "days": {
+          "1": 1,
+          "2": 1,
+          "3": 3,
+          "4": 3,
+          "5": 5,
+          "6": 5
+        }
+      },
+      "due": {
+        "type": "pair_next"
+      }
+    },
+    "2K14": {
+      "sessions": [
+        {
+          "weekday": 1,
+          "start": "18:00",
+          "end": "20:00"
+        },
+        {
+          "weekday": 4,
+          "start": "09:00",
+          "end": "11:00"
+        }
+      ],
+      "open": {
+        "type": "after_session"
+      },
+      "due": {
+        "type": "same_weekday_next_week"
+      }
+    },
+    "2K10 XPT": {
+      "sessions": [
+        {
+          "weekday": 1,
+          "start": "19:30",
+          "end": "21:30"
+        },
+        {
+          "weekday": 6,
+          "start": "15:30",
+          "end": "17:30"
+        }
+      ],
+      "open": {
+        "type": "after_session"
+      },
+      "due": {
+        "type": "same_weekday_next_week"
+      }
+    },
+    "2K9 XPT": {
+      "sessions": [
+        {
+          "weekday": 1,
+          "start": "19:30",
+          "end": "21:30"
+        },
+        {
+          "weekday": 2,
+          "start": "19:30",
+          "end": "21:30"
+        },
+        {
+          "weekday": 4,
+          "start": "19:30",
+          "end": "21:30"
+        }
+      ],
+      "open": {
+        "type": "after_session"
+      },
+      "due": {
+        "type": "map",
+        "days": {
+          "1": {
+            "weekday": 1,
+            "weeks": 1
+          },
+          "2": {
+            "weekday": 4,
+            "weeks": 0
+          },
+          "4": {
+            "weekday": 2,
+            "weeks": 1
+          }
+        }
+      }
+    },
+    "2K9 8+": {
+      "sessions": [
+        {
+          "weekday": 2,
+          "start": "17:30",
+          "end": "19:30"
+        },
+        {
+          "weekday": 4,
+          "start": "17:30",
+          "end": "19:30"
+        },
+        {
+          "weekday": 6,
+          "start": "17:30",
+          "end": "19:30"
+        }
+      ],
+      "open": {
+        "type": "paired",
+        "sourceLabel": "2K9 9+",
+        "days": {
+          "1": 1,
+          "2": 1,
+          "3": 3,
+          "4": 3,
+          "5": 5,
+          "6": 5
+        }
+      },
+      "due": {
+        "type": "pair_next"
+      }
+    },
+    "2K10 9+": {
+      "sessions": [
+        {
+          "weekday": 2,
+          "start": "19:30",
+          "end": "21:30"
+        },
+        {
+          "weekday": 5,
+          "start": "19:30",
+          "end": "21:30"
+        },
+        {
+          "weekday": 7,
+          "start": "08:00",
+          "end": "10:00"
+        }
+      ],
+      "open": {
+        "type": "paired",
+        "sourceLabel": "2K10 9+",
+        "days": {
+          "7": 5
+        }
+      },
+      "due": {
+        "type": "slot_by_attendance"
+      }
+    },
+    "2K13": {
+      "sessions": [
+        {
+          "weekday": 2,
+          "start": "20:00",
+          "end": "22:00"
+        },
+        {
+          "weekday": 5,
+          "start": "20:00",
+          "end": "22:00"
+        }
+      ],
+      "open": {
+        "type": "after_session"
+      },
+      "due": {
+        "type": "same_weekday_next_week"
+      }
+    },
+    "2K11 8+": {
+      "sessions": [
+        {
+          "weekday": 3,
+          "start": "19:30",
+          "end": "21:30"
+        },
+        {
+          "weekday": 7,
+          "start": "15:30",
+          "end": "17:30"
+        }
+      ],
+      "open": {
+        "type": "after_session"
+      },
+      "due": {
+        "type": "same_weekday_next_week"
+      }
+    },
+    "2K11 XPT": {
+      "sessions": [
+        {
+          "weekday": 3,
+          "start": "19:30",
+          "end": "21:30"
+        },
+        {
+          "weekday": 6,
+          "start": "13:30",
+          "end": "15:30"
+        }
+      ],
+      "open": {
+        "type": "after_session"
+      },
+      "due": {
+        "type": "same_weekday_next_week"
+      }
+    },
+    "HSA.2": {
+      "sessions": [
+        {
+          "weekday": 4,
+          "start": "14:30",
+          "end": "17:30"
+        }
+      ],
+      "open": {
+        "type": "after_session"
+      },
+      "due": {
+        "type": "next_session"
+      }
+    },
+    "2K12": {
+      "sessions": [
+        {
+          "weekday": 4,
+          "start": "18:00",
+          "end": "20:00"
+        },
+        {
+          "weekday": 7,
+          "start": "15:00",
+          "end": "17:00"
+        }
+      ],
+      "open": {
+        "type": "after_session"
+      },
+      "due": {
+        "type": "same_weekday_next_week"
+      }
+    },
+    "2K15": {
+      "sessions": [
+        {
+          "weekday": 4,
+          "start": "18:00",
+          "end": "20:00"
+        },
+        {
+          "weekday": 7,
+          "start": "14:00",
+          "end": "16:00"
+        }
+      ],
+      "open": {
+        "type": "after_session"
+      },
+      "due": {
+        "type": "same_weekday_next_week"
+      }
+    },
+    "2K11 9+": {
+      "sessions": [
+        {
+          "weekday": 4,
+          "start": "19:30",
+          "end": "21:30"
+        },
+        {
+          "weekday": 7,
+          "start": "13:30",
+          "end": "15:30"
+        }
+      ],
+      "open": {
+        "type": "after_session"
+      },
+      "due": {
+        "type": "same_weekday_next_week"
+      }
+    },
+    "2K10 8+": {
+      "sessions": [
+        {
+          "weekday": 5,
+          "start": "19:30",
+          "end": "21:30"
+        },
+        {
+          "weekday": 7,
+          "start": "10:00",
+          "end": "12:00"
+        }
+      ],
+      "open": {
+        "type": "after_session"
+      },
+      "due": {
+        "type": "same_weekday_next_week"
+      }
+    },
+    "TSA": {
+      "sessions": [
+        {
+          "weekday": 7,
+          "start": "14:00",
+          "end": "17:00"
+        }
+      ],
+      "open": {
+        "type": "after_session"
+      },
+      "due": {
+        "type": "same_weekday_next_week"
+      }
+    },
+    "HSA": {
+      "sessions": [
+        {
+          "weekday": 7,
+          "start": "17:00",
+          "end": "20:00"
+        }
+      ],
+      "open": {
+        "type": "after_session"
+      },
+      "due": {
+        "type": "next_session"
+      }
+    },
+    "2K9 HSA (THỨ 5)": {
+      "sessions": [
+        {
+          "weekday": 4,
+          "start": "14:30",
+          "end": "17:30"
+        }
+      ],
+      "open": {
+        "type": "after_session"
+      },
+      "due": {
+        "type": "next_session"
+      }
+    },
+    "2K10 Thứ 3, 6": {
+      "sessions": [
+        {
+          "weekday": 2,
+          "start": "19:30",
+          "end": "21:30"
+        },
+        {
+          "weekday": 5,
+          "start": "19:30",
+          "end": "21:30"
+        }
+      ],
+      "open": {
+        "type": "after_session"
+      },
+      "due": {
+        "type": "same_weekday_next_week"
+      }
+    },
+    "2K9 HSA (CN)": {
+      "sessions": [
+        {
+          "weekday": 7,
+          "start": "17:00",
+          "end": "20:00"
+        }
+      ],
+      "open": {
+        "type": "after_session"
+      },
+      "due": {
+        "type": "next_session"
+      }
+    }
+  }
+}

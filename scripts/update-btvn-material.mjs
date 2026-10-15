@@ -29,7 +29,7 @@ export async function openingBackfill(materials,options={}){
  // Kiểm toàn bộ trước khi gửi lần đầu, tránh cập nhật dở do đầu vào sai.
  const updates=materials.map(m=>({code:m.lessonCode,patch:{classOpensAt:classOpeningTimes(m)}}));
  for(const u of updates)await updateMaterial(u.code,u.patch);
- const results=[];for(const u of updates)results.push(await updateMaterial(u.code,u.patch,options));
+ const results=[];for(const u of updates)results.push({...await updateMaterial(u.code,u.patch,options),classOpensAt:u.patch.classOpensAt});
  return results;
 }
 export async function main(args=process.argv.slice(2)){

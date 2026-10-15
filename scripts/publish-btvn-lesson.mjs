@@ -3,6 +3,13 @@ import {readFile,stat} from 'node:fs/promises';
 import {pathToFileURL,fileURLToPath} from 'node:url';
 import {build} from 'esbuild';
 
+export async function withClassOpenings(payload){
+ if(!payload?.material)throw Error('INVALID_MATERIAL');
+ const bundle=await build({entryPoints:[fileURLToPath(new URL('../server/btvn/class-schedule.ts',import.meta.url))],bundle:true,write:false,platform:'neutral',format:'esm',logLevel:'silent'});
+ const {classOpeningTimes}=await import('data:text/javascript;base64,'+Buffer.from(bundle.outputFiles[0].text).toString('base64'));
+ return {...payload,material:{...payload.material,classOpensAt:classOpeningTimes(payload.material)}};
+}
+
 export async function validateLesson(payload){
  if(!payload||payload.action!=='publish'||Object.keys(payload).some(k=>!['action','kind','opensAt','closesAt','lesson_key','source_version','material','exam','assets','verification'].includes(k)))throw Error('INVALID_LESSON');
  const bundled=await build({entryPoints:[fileURLToPath(new URL('../server/btvn/publish-handler.ts',import.meta.url))],bundle:true,write:false,platform:'neutral',format:'esm',target:'es2022',logLevel:'silent'});
@@ -16,6 +23,7 @@ export async function validateLesson(payload){
 }
 
 export async function publishLesson(payload,{live=false,env={},transport=fetch}={}){
+ payload=await withClassOpenings(payload);
  const summary=await validateLesson(payload);
  if(!live)return {mode:'dry-run',...summary,written:false};
  const endpoint=env.BTVN_PUBLISH_URL,secret=env.BTVN_PUBLISH_SECRET;

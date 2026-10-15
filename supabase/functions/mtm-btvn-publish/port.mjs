@@ -2,7 +2,7 @@
 const sha=async bytes=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))).map(x=>x.toString(16).padStart(2,'0')).join('');
 export function createPublishPort(sql,storage){return {
  async rpc(action,payload){
-  if(['sync_attendance','sync_due','support_report','scorebook','classes'].includes(action))return sql.begin(async tx=>{
+  if(['sync_attendance','sync_due','support_report','scorebook','classes','opening_materials'].includes(action))return sql.begin(async tx=>{
    // RPC whitelisted, quyền transaction không lọt sang pipeline.
    await tx`SET LOCAL ROLE service_role`;
    let rows;
@@ -10,6 +10,7 @@ export function createPublishPort(sql,storage){return {
    else if(action==='sync_due')rows=await tx`SELECT public.mtm_btvn_sync_due(${sql.json(payload.p_payload)},${payload.p_apply}) AS result`;
    else if(action==='support_report')rows=await tx`SELECT public.mtm_btvn_support_report(${payload.p_since}::timestamptz) AS result`;
    else if(action==='scorebook')rows=await tx`SELECT public.mtm_btvn_scorebook(${payload.p_from}::date,false) AS result`;
+   else if(action==='opening_materials')rows=await tx`SELECT public.mtm_btvn_opening_materials(${payload.p_code}::text) AS result`;
    else rows=await tx`SELECT public.mtm_btvn_classes() AS result`;
    return rows[0].result;
   });

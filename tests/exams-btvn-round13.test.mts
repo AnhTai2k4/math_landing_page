@@ -39,7 +39,7 @@ const rows=[row,{...row,lessonCode:'b',receipts:[]},{...row,studentId:'qa',sourc
 const book=buildScorebook(rows,Date.parse('2026-10-18'));assert.equal(book.length,1);assert.equal(book[0].values.length,2);assert.deepEqual(book[0].values[1],['Học sinh GIẢ','7,5 (muộn)','Chưa nộp','3,75']);
 assert.equal(buildScorebook([{...row,receipts:[]}],0)[0].values[1][1],'');
 const cards=renderToStaticMarkup(React.createElement(LessonCards,{busy:false,onHomework:()=>{},lessons:[{lessonCode:'fake',classNames:['2K9 9+'],date:'2026-10-15',title:'Giả',videoId:null,materialUrl:null,handoutUrl:null,homeworkUrl:null,dueAt:null,expectedDueAt:row.dueAt,bestScore:null,late:null,submittedAt:null,available:true}]}));
-assert.ok(cards.includes('Hạn dự kiến: trước'));assert.ok(cards.includes('giờ vào buổi học tới'));
+assert.ok(cards.includes('Hạn dự kiến: trước'));assert.ok(cards.includes('theo lịch lớp'));
 const report=buildClassReport(rows,'a','2K9 9+');assert.ok(report.includes('quý phụ huynh và các con'));assert.ok(report.includes('Nộp muộn: Học sinh GIẢ - 7,5/10'));assert.ok(report.includes('1/1'));assert.ok(!report.includes('—'));
 let request:any;await writeScorebookSheets('fake-id','fake-token',book,async(url,init)=>{request={url,...init};return {ok:true};});
 assert.ok(request.url.endsWith('/values:batchUpdate'));assert.equal(JSON.parse(request.body).valueInputOption,'RAW');assert.equal(JSON.parse(request.body).data[0].range,"'2K9 9+'!A1");

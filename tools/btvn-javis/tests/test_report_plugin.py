@@ -4,6 +4,7 @@ import json
 import os
 from pathlib import Path
 import sys
+import subprocess
 import tempfile
 import unittest
 from unittest.mock import Mock, patch
@@ -49,7 +50,7 @@ class ReportPluginTests(unittest.TestCase):
             ['Em Giả Một', '0900000001', 'C', ''], ['Em Giả Hai', '0900000002', 'L', ''],
             ['Em Giả Ba', '0900000003', 'K', ''], ['Em Giả Bốn', '0900000004', 'ON', '']]
         self.client.request.return_value = json.dumps({'valueRanges': [{'range': "'"+tab+"'!A1:ZZ2000", 'values': rows} for tab, rows in self.tabs.items()]}).encode()
-        env = patch.dict(os.environ, {'BTVN_ATTENDANCE_BUNDLE': str(ROOT/'.qa-temp/dot-21/attendance.bundle.mjs'), 'BTVN_REPORT_BUNDLE': str(ROOT/'.qa-temp/dot-22/report.bundle.mjs')})
+        env = patch.dict(os.environ, {'BTVN_ATTENDANCE_BUNDLE': str(ROOT/'.qa-temp/dot-24/attendance.bundle.mjs'), 'BTVN_REPORT_BUNDLE': str(ROOT/'.qa-temp/dot-24/report.bundle.mjs')})
         env.start(); self.addCleanup(env.stop)
 
     def report(self, args=None, **kw):
@@ -68,11 +69,21 @@ class ReportPluginTests(unittest.TestCase):
 
     def test_two_sessions_and_same_day_not_finished(self):
         self.assertIn('Bài trước', self.report({'lop': '2K9 8+', 'so_buoi': 2}))
-        self.runtime.now_vn.return_value = self.now.replace(hour=18)
+        # Cặp T4-T5 mở sau T4: kiểm trước giờ kết thúc T4.
+        self.runtime.now_vn.return_value = self.now.replace(day=14, hour=18)
         text = self.report()
         self.assertNotIn('Bài giả 15/10', text)
         self.assertIn('Bài trước', text)
         self.assertNotIn('Em Giả Ba | vắng', text)
+
+    def test_canonical_friday_and_hsa_sunday_attendance_endings(self):
+        for label, start, now in [('2K10 9+', '2026-10-16T19:30:00+07:00', '2026-10-16T22:00:00+07:00'),
+                                  ('2K9 HSA (CN)', '2026-10-18T17:00:00+07:00', '2026-10-18T20:05:00+07:00')]:
+            payload = dict(rows=[], lop=label, now=dt.datetime.fromisoformat(now).timestamp()*1000,
+                           sessions=[dict(label=label, startsAt=start, attendees=[dict(name='Em Giả', status='C')])])
+            result = subprocess.run(['node', os.environ['BTVN_REPORT_BUNDLE']], input=json.dumps(payload).encode(), capture_output=True, timeout=20)
+            self.assertEqual(result.returncode, 0)
+            self.assertIn('Em Giả | có mặt', result.stdout.decode())
 
     def test_wrong_label_only_fetches_classes(self):
         text = self.report({'lop': '2k9 8+'})

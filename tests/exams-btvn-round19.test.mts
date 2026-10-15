@@ -13,7 +13,7 @@ assert.ok(hero.indexOf('mig-hero-copy')<hero.indexOf('mig-hero-ranking'));
 assert.equal((hero.match(/id="mtm-rank-title"/g)||[]).length,1);
 assert.equal((hero.match(/aria-pressed=/g)||[]).length,3);
 assert.equal((hero.match(/<option/g)||[]).length,3);
-const home=readFileSync(join(root,'src/migration/Home.tsx'),'utf8');assert.ok(!home.includes('LazyLeaderboard'));
+const home=readFileSync(join(root,'src/migration/Home.tsx'),'utf8');assert.ok(home.includes('<MigrationHero/><LazyLeaderboard/>'));
 const css=readFileSync(join(root,'src/native/homework/leaderboard.css'),'utf8');assert.match(css,/@media\(max-width:760px\).*grid-template-columns:minmax\(0,1fr\)/);
 const empty={exam:null,fullName:'Học sinh GIẢ',className:'2K9 9+',lessonCode:'',dueAt:null,maxAttempts:5,attemptsUsed:0,draft:null,receipts:[],bestScore:null,demo:false,lessons:[]};
 function session(state:any,room=false){let slot=0;const hooks={useState:(v:any)=>{const i=slot++;return [i===0?state:i===6?room:v===true?false:v,()=>{}];},useEffect(){},useMemo:(fn:any)=>fn(),useRef:(v:any)=>({current:v})};return render(load('src/native/homework/HomeworkSession.tsx',hooks).default,{pathname:'/btvn'});}

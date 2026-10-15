@@ -4,8 +4,8 @@ import {join} from 'node:path';
 import {classOpeningTimes} from '../server/btvn/class-schedule';
 import {createBtvnPublishHandler} from '../server/btvn/publish-handler';
 
-assert.deepEqual(classOpeningTimes({classNames:['2K9 9+','2K9 8+'],date:'2026-10-16',classDates:{'2K9 8+':'2026-10-17'}}),{'2K9 9+':'2026-10-16T19:30:00+07:00','2K9 8+':'2026-10-17T19:30:00+07:00'});
-assert.equal(classOpeningTimes({classNames:['2K10 9+'],date:'2026-10-18'})['2K10 9+'],'2026-10-18T10:00:00+07:00');
+assert.deepEqual(classOpeningTimes({classNames:['2K9 9+','2K9 8+'],date:'2026-10-16',classDates:{'2K9 8+':'2026-10-17'}}),{'2K9 9+':'2026-10-16T19:30:00+07:00','2K9 8+':'2026-10-16T19:30:00+07:00'});
+assert.equal(classOpeningTimes({classNames:['2K10 9+'],date:'2026-10-18'})['2K10 9+'],'2026-10-16T21:30:00+07:00');
 assert.equal(classOpeningTimes({classNames:['Lớp chưa có lịch'],date:'2026-10-18'})['Lớp chưa có lịch'],'2026-10-18T21:30:00+07:00');
 assert.equal(classOpeningTimes({classNames:['2K9 9+'],date:'2026-10-18'})['2K9 9+'],'2026-10-18T21:30:00+07:00');
 assert.throws(()=>classOpeningTimes({classNames:['x'],date:'2026-02-30'}));

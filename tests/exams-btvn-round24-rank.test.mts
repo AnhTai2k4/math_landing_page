@@ -1,0 +1,27 @@
+﻿import assert from 'node:assert/strict';
+import {createMyRankApi} from '../api/xep-hang-cua-em';
+import {createRankApi} from '../api/xep-hang';
+const env={MTM_RANK_ENABLED:'1',MTM_BTVN_ENABLED:'1',SUPABASE_URL:'https://fixture.invalid',SUPABASE_SERVICE_ROLE_KEY:'FIXTURE'};
+const row={rank:17,fullName:'Học sinh GIẢ',className:'2K9 9+',score:8,submitted:1,total:2};
+let calls=0;const handler=createMyRankApi(()=>env,async(url,init)=>{calls++;assert.ok(String(url).endsWith('/mtm_btvn_my_rank'));const payload=JSON.parse(String(init?.body));assert.equal(payload.p_session,'a'.repeat(64));assert.equal(payload.p_class,null);assert.ok(!('p_student' in payload));return new Response(JSON.stringify({...row,phone:'SECRET',id:'SECRET'}));});
+async function invoke(api:any,extra:any={}){let status=0,body:any;const headers:any={};await api({method:'POST',headers:{origin:'https://minhthanhmath.vn',host:'minhthanhmath.vn',cookie:'mtm_btvn_demo='+'a'.repeat(64)},body:{khoi:'2K9',loai:'btvn-tuan'},...extra},{setHeader:(k:string,v:string)=>headers[k]=v,status:(n:number)=>{status=n;return{json:(v:any)=>body=v};}});return{status,headers,body};}
+let r=await invoke(handler);assert.equal(r.status,200);assert.deepEqual(r.body.row,row);assert.match(r.headers['Cache-Control'],/no-store/);assert.equal(r.headers.Vary,'Cookie');
+assert.equal((await invoke(handler,{body:{khoi:'2K9',loai:'btvn-tuan',studentId:'victim'}})).status,400);
+assert.equal((await invoke(handler,{headers:{origin:'https://evil.invalid',host:'minhthanhmath.vn',cookie:'mtm_btvn_demo='+'a'.repeat(64)}})).status,403);
+assert.equal((await invoke(handler,{headers:{origin:'https://minhthanhmath.vn',host:'minhthanhmath.vn'}})).status,401);
+assert.equal((await invoke(handler,{method:'GET'})).status,405);assert.equal(calls,1);
+const invalid=createMyRankApi(()=>env,async()=>new Response(JSON.stringify({...row,rank:0})));assert.equal((await invoke(invalid)).status,503);
+const revoked=createMyRankApi(()=>env,async()=>new Response('{}',{status:403}));assert.equal((await invoke(revoked)).status,401);
+const filtered=createRankApi(()=>env,async(url,init)=>{const p=JSON.parse(String(init?.body));assert.equal(p.p_class,'2K9 9+');return new Response(JSON.stringify([{...row,rank:1}]));});
+r=await invoke(filtered,{method:'GET',query:{khoi:'2K9',loai:'btvn-thang',lop:'2K9 9+'}});assert.equal(r.status,200);
+assert.equal((await invoke(filtered,{method:'GET',query:{khoi:'2K9',loai:'btvn-thang',lop:'2K10 9+'}})).status,400);
+console.log('Đạt API hạng riêng: ngoài top10, whitelist, no-store, cookie server, chặn ID người khác, origin, phiên thiếu/hết hạn và lọc lớp.');
+import {createRequire} from 'node:module';
+import {join} from 'node:path';
+const require=createRequire(join(process.env.MTM_ROOT!,'package.json')),React=require('react'),{renderToStaticMarkup}=require('react-dom/server'),{buildSync}=require('esbuild');
+const code=buildSync({entryPoints:[join(process.env.MTM_ROOT!,'src/native/homework/HomeLeaderboard.tsx')],bundle:true,write:false,platform:'node',format:'cjs',jsx:'automatic',packages:'external',loader:{'.css':'empty'},logLevel:'silent'}).outputFiles[0].text;
+let cursor=0;const vals=[false,'2K9','btvn-tuan','',Array.from({length:10},(_,i)=>({...row,rank:i+1,fullName:'GIẢ '+i})),'ready',true,0,{state:'ready',row}];const mod={exports:{} as any};
+new Function('require','module','exports',code)((id:string)=>id==='react'?{...React,useState:()=>[vals[cursor++],()=>{}],useEffect(){}}:require(id),mod,mod.exports);
+const html=renderToStaticMarkup(React.createElement(mod.exports.default));
+assert.equal((html.match(/mtm-rank-medal mtm-rank-medal-/g)||[]).length,3);assert.equal((html.match(/<li /g)||[]).length,11);assert.ok(html.includes('Hạng của em'));assert.ok(html.includes('Hạng 17'));assert.ok(html.includes('Tất cả lớp trong khối'));assert.ok(html.includes('2K10'));assert.ok(html.includes('Kiểm tra cuối tháng'));assert.ok(!html.includes('mtm-rank-title"'));
+console.log('Đạt SSR full board: 3 podium, top10, own rank17, lớp và kỳ, title ID không trùng compact.');

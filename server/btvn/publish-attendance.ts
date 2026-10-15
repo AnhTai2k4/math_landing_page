@@ -1,3 +1,4 @@
+import {classRules} from './class-rules';
 const record=(v:any)=>v&&typeof v==='object'&&!Array.isArray(v);
 const text=(v:any,max:number)=>typeof v==='string'&&v.trim().length>0&&v.length<=max&&!/[\x00-\x1f\x7f]/.test(v);
 // DB kiểm lại lớp active. Cổng chỉ nhận nhãn lớp MTM, không nhận tên tuỳ ý.
@@ -21,9 +22,11 @@ export function attendanceRpc(body:any):{name:string;payload:Record<string,unkno
  ensure(Array.isArray(body.sessions)&&body.sessions.length<=2000);
  let count=0;const ids=new Set<string>();
  for(const s of body.sessions){
-  ensure(record(s)&&Object.keys(s).every(k=>['classKey','label','startsAt','sourceIdentity','attendees'].includes(k))&&validAttendanceLabel(s.label)&&text(s.classKey,100)&&date(s.startsAt)&&/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:00\+07:00$/.test(s.startsAt)&&text(s.sourceIdentity,300)&&!ids.has(s.sourceIdentity)&&Array.isArray(s.attendees)&&s.attendees.length<=1000);ids.add(s.sourceIdentity);
+  ensure(record(s)&&Object.keys(s).every(k=>['classKey','label','startsAt','sourceIdentity','attendees','cancelled','replacesAt'].includes(k))&&validAttendanceLabel(s.label)&&text(s.classKey,100)&&date(s.startsAt)&&/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:00\+07:00$/.test(s.startsAt)&&text(s.sourceIdentity,300)&&!ids.has(s.sourceIdentity)&&Array.isArray(s.attendees)&&s.attendees.length<=1000);ids.add(s.sourceIdentity);
+  ensure(s.cancelled===undefined||typeof s.cancelled==='boolean');
+  ensure(s.replacesAt===undefined||date(s.replacesAt)&&/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:00\+07:00$/.test(s.replacesAt)&&s.replacesAt!==s.startsAt&&s.cancelled!==true);
   count+=s.attendees.length;ensure(count<=20000);
   for(const a of s.attendees)ensure(record(a)&&Object.keys(a).every(k=>['name','phone','status'].includes(k))&&text(a.name,160)&&typeof a.phone==='string'&&/^0\d{9}$/.test(a.phone)&&typeof a.status==='string'&&['','C','M','L','K','ON','P','PH P'].includes(a.status));
  }
- return {name:'sync_due',payload:{p_payload:{sessions:body.sessions},p_apply:body.apply??false}};
+ return {name:'sync_due',payload:{p_payload:{sessions:body.sessions,classRules},p_apply:body.apply??false}};
 }

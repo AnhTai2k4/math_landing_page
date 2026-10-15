@@ -3,6 +3,10 @@ import type {ScoreRow} from './scorebook';
 
 /** Read actions dùng cùng secret; không cho caller chọn RPC hoặc bật apply. */
 export function scorebookRpc(body:any):{name:string;payload:Record<string,unknown>}|null {
+ if(body.action==='opening_materials'){
+  if(Object.keys(body).some(k=>!['action','lesson_key'].includes(k))||(body.lesson_key!==undefined&&(typeof body.lesson_key!=='string'||!/^[a-z0-9-]{1,160}$/.test(body.lesson_key))))throw Error('INVALID_OPENING_READ');
+  return {name:'opening_materials',payload:{p_code:body.lesson_key??null}};
+ }
  if(body.action==='classes'){
   if(Object.keys(body).some(k=>k!=='action'))throw Error('INVALID_CLASSES');
   return {name:'classes',payload:{}};
@@ -15,6 +19,10 @@ export function scorebookRpc(body:any):{name:string;payload:Record<string,unknow
 
 /** Allowlist đầu ra, kể cả khi RPC về sau thêm trường riêng tư. */
 export function scorebookResult(action:string,result:any) {
+ if(action==='opening_materials'){
+  if(!Array.isArray(result)||result.length>20000)throw Error('INVALID_OPENING_RESULT');
+  return result.map(r=>({lessonCode:r.lessonCode,date:r.date,classNames:r.classNames,classDates:r.classDates}));
+ }
  if(action==='classes')return {classNames:publicClassNames(result)};
  if(!Array.isArray(result))throw Error('INVALID_SCOREBOOK_RESULT');
  return result.map((r:any):ScoreRow=>({studentId:r.studentId,fullName:r.fullName,className:r.className,lessonCode:r.lessonCode,title:r.title,date:r.date,dueAt:r.dueAt,expectedDueAt:r.expectedDueAt,sourceIdentity:r.sourceIdentity,

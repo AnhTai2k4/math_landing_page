@@ -35,7 +35,9 @@ now=opening-1;snapshot.exam=undefined;
 // Snapshot theo whitelist SQL: không có bestScore/late/submittedAt/dueAt.
 snapshot.lessons=[{lessonCode:material.lessonCode,classNames:material.classNames,date:material.date,title:material.title,classOpensAt:material.classOpensAt,videoId:material.videoId,materialUrl:null,handoutUrl:null,homeworkUrl:null,available:false,locked:true} as any];
 const stripped=await repo.call('fake','state',material.lessonCode);
-const lockedHtml=renderToStaticMarkup(React.createElement(load('src/native/homework/LessonCards.tsx'),{lessons:stripped.lessons,busy:false,onHomework(){}}));
+// UI dùng Date.now; khóa đồng hồ theo fixture thay vì phụ thuộc ngày chạy suite.
+const realNow=Date.now;let lockedHtml:string;
+try{Date.now=()=>now;lockedHtml=renderToStaticMarkup(React.createElement(load('src/native/homework/LessonCards.tsx'),{lessons:stripped.lessons,busy:false,onHomework(){}}));}finally{Date.now=realNow;}
 assert.ok(!lockedHtml.includes('đang chờ chuẩn bị'));assert.ok(!lockedHtml.includes('Invalid Date'));
 let task:(()=>void)|undefined,delay=0,refreshes=0,cleared=0;
 const cancel=scheduleOpeningRefresh(stripped.lessons!,async()=>{refreshes++;},()=>now,{set(fn,ms){task=fn;delay=ms;return 1;},clear(){cleared++;}});

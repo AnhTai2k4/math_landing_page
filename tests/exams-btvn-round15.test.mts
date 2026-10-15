@@ -18,7 +18,7 @@ const render=(props:any)=>renderToStaticMarkup(React.createElement(RankContent,p
 const row={rank:1,fullName:'Học sinh GIẢ đầy đủ',className:'2K9 9+',score:8.5,submitted:2,total:3};
 assert.ok(render({rows:[row],status:'ready'}).includes('Học sinh GIẢ đầy đủ'));assert.ok(render({rows:[row],status:'ready'}).includes('mtm-rank-top'));assert.ok(render({rows:[],status:'ready'}).includes(rankEmpty));assert.ok(render({rows:[],status:'error'}).includes('role="alert"'));assert.ok(render({rows:[],status:'loading'}).includes('Đang tải'));
 let calls=0;const env={MTM_RANK_ENABLED:'1',SUPABASE_URL:'https://fake.invalid',SUPABASE_SERVICE_ROLE_KEY:'FAKE-SERVICE-KEY'};
-const api=createRankApi(()=>env,async(url,init)=>{calls++;assert.ok(String(url).endsWith('/rpc/mtm_btvn_leaderboard'));assert.equal(JSON.parse(String(init?.body)).p_period,null);assert.ok(!('cookie' in (init?.headers??{})));return new Response(JSON.stringify([{...row,studentId:'MUST-NOT-LEAK',phone:'MUST-NOT-LEAK'}]));});
+const api=createRankApi(()=>env,async(url,init)=>{calls++;assert.ok(String(url).endsWith('/rpc/mtm_btvn_leaderboard_class'));assert.equal(JSON.parse(String(init?.body)).p_class,null);assert.ok(!('cookie' in (init?.headers??{})));return new Response(JSON.stringify([{...row,studentId:'MUST-NOT-LEAK',phone:'MUST-NOT-LEAK'}]));});
 async function request(handler:any,query:any={khoi:'2K9',loai:'btvn-tuan'},method='GET'){const headers:any={};let status=0,body:any;await handler({query,method,headers:{cookie:'DO-NOT-FORWARD'}},{setHeader:(k:string,v:string)=>headers[k]=v,status:(n:number)=>{status=n;return {json:(v:any)=>body=v};}});return {status,headers,body};}
 let response=await request(api);assert.equal(response.status,200);assert.equal(response.headers['Cache-Control'],'public, max-age=0, s-maxage=300');assert.ok(!JSON.stringify(response.body).includes('MUST-NOT-LEAK'));assert.ok(!response.headers['Set-Cookie']);
 assert.equal((await request(api,{khoi:['2K9'],loai:'btvn-tuan'})).status,400);assert.equal((await request(api,undefined,'POST')).status,405);assert.equal(calls,1);
@@ -50,6 +50,6 @@ const publisher=await import(pathToFileURL(join(root,'scripts/publish-btvn-lesso
 assert.equal((await publisher.publishLesson({...fixture,kind:'kiem-tra-thang',opensAt:new Date(opensAt).toISOString(),closesAt:new Date(closesAt).toISOString()})).mode,'dry-run');
 await assert.rejects(publisher.validateLesson({...fixture,kind:'kiem-tra-thang'}));
 assert.ok(readFileSync(join(root,'src/migration/Experience.tsx'),'utf8').includes('<HomeLeaderboard compact/>'));
-assert.ok(!readFileSync(join(root,'src/migration/Home.tsx'),'utf8').includes('<LazyLeaderboard/>'));
+assert.ok(readFileSync(join(root,'src/migration/Home.tsx'),'utf8').includes('<MigrationHero/><LazyLeaderboard/>'));
 console.log('Đạt đợt 15: SSR dữ liệu/rỗng/lỗi; API mặc định tắt, cache, whitelist, không cookie; thi web một lượt, giờ mở/đóng, chấm server, khóa lời giải; CLI Sheet và publish dry-run.');
 
