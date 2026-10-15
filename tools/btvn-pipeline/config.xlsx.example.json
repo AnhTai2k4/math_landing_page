@@ -25,6 +25,6 @@
   "source":{"pdf_download_url_template":null,"pdf_bearer_env":null,"pdf_auth_hosts":[]},
   "source_publisher":"Minh Thành Math — operator xác nhận nguồn",
   "period":"GK1",
-  "allowed_hosts":["www.googleapis.com","ai-a.example.invalid","ai-b.example.invalid","publisher.example.invalid","pdf.example.invalid","notify.example.invalid"],
+  "allowed_hosts":["www.youtube.com","www.googleapis.com","ai-a.example.invalid","ai-b.example.invalid","publisher.example.invalid","pdf.example.invalid","notify.example.invalid"],
   "note":"Mẫu giả. Chỉ đặt material_only_workbook=true sau khi xác nhận TOÀN workbook chỉ có học liệu. files.export không xuất riêng tab/range; nếu lẫn HS dùng grid theo vùng đã duyệt. Không tự nới scope/token. Năm học/tab/range do operator xác minh."
 }

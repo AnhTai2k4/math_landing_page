@@ -44,10 +44,11 @@ export function createBtvnPublishHandler(port:PublishPort,secret:string){return 
    ensure(Object.keys(body).every(k=>['action','lesson_key','material'].includes(k)),'INVALID_UPDATE');
    const patch=body.material;
    ensure(patch&&typeof patch==='object'&&!Array.isArray(patch)&&Object.keys(patch).length>0,'INVALID_UPDATE');
-   const allowed=['videoId','videoUrl','materialUrl','handoutUrl','homeworkNote','title','classOpensAt'];
+   const allowed=['videoId','videoUrl','materialUrl','handoutUrl','homeworkNote','title','titleSource','classOpensAt'];
    ensure(Object.keys(patch).every(k=>allowed.includes(k)),'INVALID_UPDATE');
    for(const [key,value] of Object.entries(patch)){
-    if(key==='videoId')ensure(value===null||typeof value==='string'&&/^[a-zA-Z0-9_-]{11}$/.test(value),'INVALID_VIDEO');
+    if(key==='titleSource')ensure(value==='sheet'||value==='auto','INVALID_TITLE_SOURCE');
+    else if(key==='videoId')ensure(value===null||typeof value==='string'&&/^[a-zA-Z0-9_-]{11}$/.test(value),'INVALID_VIDEO');
     else if(['videoUrl','materialUrl','handoutUrl'].includes(key)){
      if(value!==null){ensure(typeof value==='string'&&value.length<=4096,'INVALID_MATERIAL_LINK');const url=new URL(value);ensure(url.protocol==='https:'&&!url.username&&!url.password,'INVALID_MATERIAL_LINK');}
     }else if(key==='classOpensAt'){
@@ -61,11 +62,15 @@ export function createBtvnPublishHandler(port:PublishPort,secret:string){return 
   const kind=body.kind??'btvn';ensure(['btvn','kiem-tra-thang'].includes(kind),'INVALID_KIND');
   if(kind==='kiem-tra-thang')ensure(typeof body.opensAt==='string'&&typeof body.closesAt==='string'&&/([zZ]|[+-]\d{2}:\d{2})$/.test(body.opensAt)&&/([zZ]|[+-]\d{2}:\d{2})$/.test(body.closesAt)&&Number.isFinite(Date.parse(body.opensAt))&&Date.parse(body.opensAt)>=Date.parse('2026-10-15T00:00:00+07:00')&&Date.parse(body.closesAt)>Date.parse(body.opensAt),'INVALID_MONTHLY_WINDOW');
   const m=body.material;
+  ensure(m?.homeworkScope===undefined||typeof m.homeworkScope==='string'&&m.homeworkScope.length>0&&m.homeworkScope.length<=300,'INVALID_HOMEWORK_SCOPE');
+  ensure(m?.homeworkScopeSource===undefined||['sheet','auto','whole_file'].includes(m.homeworkScopeSource),'INVALID_HOMEWORK_SCOPE_SOURCE');
+  ensure((m?.homeworkScope===undefined)===(m?.homeworkScopeSource===undefined),'INVALID_HOMEWORK_SCOPE');
+  ensure(m?.titleSource===undefined||m.titleSource==='sheet'||m.titleSource==='auto','INVALID_TITLE_SOURCE');
   ensure(m?.lessonCode===body.lesson_key&&Array.isArray(m.classNames)&&m.classNames.length>0&&m.classNames.length<=50&&new Set(m.classNames).size===m.classNames.length&&m.classNames.every((x:unknown)=>typeof x==='string'&&x.length>0&&x.length<=100),'INVALID_MATERIAL');
   ensure(/^\d{4}-\d{2}-\d{2}$/.test(m.date)&&new Date(m.date).toISOString().slice(0,10)===m.date&&typeof m.title==='string'&&m.title.length>0&&m.title.length<=300,'INVALID_MATERIAL');
   const link=(v:unknown)=>{if(v===null||v===undefined||v==='')return null;ensure(typeof v==='string'&&v.length<=4096,'INVALID_MATERIAL_LINK');const u=new URL(v);ensure(u.protocol==='https:'&&!u.username&&!u.password,'INVALID_MATERIAL_LINK');return u.href;};
   const classDates=m.classDates??{};ensure(classDates&&typeof classDates==='object'&&!Array.isArray(classDates)&&Object.entries(classDates).every(([name,date])=>m.classNames.includes(name)&&typeof date==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(date)&&new Date(date).toISOString().slice(0,10)===date),'INVALID_CLASS_DATES');
-  const material={lessonCode:m.lessonCode,classNames:m.classNames,date:m.date,title:m.title,classDates,classOpensAt:classOpeningTimes({...m,classDates}),videoId:m.videoId??null,materialUrl:link(m.materialUrl),handoutUrl:link(m.handoutUrl),homeworkUrl:null,videoUrl:link(m.videoUrl),homeworkNote:typeof m.homeworkNote==='string'?m.homeworkNote.slice(0,300):undefined};
+  const material={lessonCode:m.lessonCode,classNames:m.classNames,date:m.date,title:m.title,titleSource:m.titleSource??'sheet',homeworkScope:m.homeworkScope,homeworkScopeSource:m.homeworkScopeSource,classDates,classOpensAt:classOpeningTimes({...m,classDates}),videoId:m.videoId??null,materialUrl:link(m.materialUrl),handoutUrl:link(m.handoutUrl),homeworkUrl:null,videoUrl:link(m.videoUrl),homeworkNote:typeof m.homeworkNote==='string'?m.homeworkNote.slice(0,300):undefined};
   // PDF BTVN chỉ mở qua chữ ký riêng; không trả đường nguồn trực tiếp của đề.
   ensure(material.videoId===null||/^[a-zA-Z0-9_-]{11}$/.test(material.videoId),'INVALID_VIDEO');
   if(body.action==='error'){

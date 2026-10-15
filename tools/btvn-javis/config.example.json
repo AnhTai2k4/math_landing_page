@@ -32,7 +32,7 @@
   "source":{"pdf_download_url_template":"https://www.googleapis.com/drive/v3/files/{id}?alt=media","pdf_auth_hosts":[]},
   "source_publisher":"MTM sưu tầm và biên soạn",
   "period":"GK1", "periods":[],
-  "allowed_hosts":["www.googleapis.com","api.openai.com","api.anthropic.com","CHON_HOST_EDGE"],
+  "allowed_hosts":["www.youtube.com","www.googleapis.com","api.openai.com","api.anthropic.com","CHON_HOST_EDGE"],
   "classes": {
     "2K9 9+":{"enabled":true,"dates":[],"weekdays":[]},
     "2K9 8+":{"enabled":true,"dates":[],"weekdays":[]},

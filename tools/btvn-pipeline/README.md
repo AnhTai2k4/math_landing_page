@@ -1,5 +1,19 @@
 # Bộ dựng BTVN đợt 9 (bản local, chưa triển khai)
 
+## Đợt 25: tự đặt tên buổi học
+
+Worker giữ `sheet_title` riêng trước fallback tên tệp. Tên Sheet có chủ đề được giữ nguyên với `material.titleSource="sheet"`, không gọi AI đặt tên. Ô trống hoặc tên chung như `chữa BTVN`, `buổi 1`, `ôn tập` dùng extractor cấu hình hiện có (OpenAI trên VPS) để đặt tên tiếng Việt 3-10 chữ. Nguồn chỉ gồm chữ PDF BTVN HS, PDF `document`/`handout` và tiêu đề video; không dùng PDF đáp án cho việc đặt tên. Tên tự đặt có `titleSource="auto"`; LessonCards hiển thị như tên thông thường.
+
+YouTube dùng GET oEmbed tại `www.youtube.com`, cần thêm đúng host này vào `allowed_hosts`. Drive dùng GET `www.googleapis.com/drive/v3/files/<id>?fields=name`; GoogleTransport trên Javis cấp bearer SA chỉ cho `www.googleapis.com`. Pipeline độc lập dùng `source.pdf_bearer_env` chỉ khi host nằm trong `source.pdf_auth_hosts`. Không chuyển bearer sang YouTube, không đi theo redirect, không nhận URL thư mục Drive. Metadata giới hạn 64 KiB; mỗi PDF tối đa 15 MB/40 trang, chữ đưa vào lời nhắc tối đa 18000 ký tự mỗi PDF.
+
+AI trả `{title, confidence, sources_used}`; chỉ nhận confidence từ 0.7 đến 1 và mã nguồn thực sự có trong lời nhắc (`homework`, `document`, `handout`, `video`). Thiếu nguồn, lỗi AI hoặc JSON không đạt thì dùng tên đề trong `homework_labels`/`homework_title`, sau đó `Buổi học <ngày ISO>`. Fallback cũng mang nguồn `auto` và được cache, không gọi AI lặp trên cùng nguồn. Không xem đây là bằng chứng AI thật đã chạy.
+
+SQLite `title_sync` lưu quyết định theo băm nội dung PDF, metadata video, liên kết và tên đề. Không băm chữ PDF trích xuất để tránh gọi lại vì PDFium/pypdf khác khoảng trắng; không lưu chữ nguồn. `title_receipts` lưu confidence, nguồn đã dùng và receipt AI nếu có. Video/handout mới, PDF sửa tại cùng URL hoặc tên video đổi sẽ làm xét lại tên auto; giữ tên Sheet có chủ đề đã lưu dù Sheet sau đó trống. Đồng bộ tên dùng `update_material`, chỉ thêm `title` và `titleSource` khi không có metadata khác thay đổi, không gửi exam/assets, không dựng hoặc đăng lại đề. Lỗi cập nhật giữ quyết định AI để thử gửi lại ở lượt sau.
+
+Migration `supabase/migrations-pending/202610150023_btvn_auto_title.sql` thêm allowlist `titleSource` vào RPC cập nhật metadata, giữ khóa/scope/lịch sử của đợt 18. Cần operator áp dụng migration này và triển khai handler mới trước khi bật worker mới; các thao tác đó chưa thực hiện trong đợt 25. Giữ SQLite qua các lượt để tránh mất lịch sử cache; chưa có metadata cũ trong state thì worker không thể chứng minh nguồn tên đã sửa tay ngoài Sheet.
+
+Kiểm offline: `node scripts/run-tests.mjs`, `python -m unittest discover -s tools/btvn-pipeline/tests -v`, `python -m unittest discover -s tools/btvn-javis/tests -v`. Build QA bằng `node node_modules/vite/bin/vite.js build --outDir .qa-build/dot-25`, không dùng thư mục `build/` trong phiếu đợt 25.
+
 ## Đường XLSX qua Drive (đợt 9)
 
 `config.xlsx.example.json` là mẫu **giả**. Cài `openpyxl` theo requirements vào venv VPS; không cài thêm trong runtime hệ thống. `format:"xlsx"` gọi `GET https://www.googleapis.com/drive/v3/files/{id}/export?mimeType=application/vnd.openxmlformats-officedocument.spreadsheetml.sheet` bằng token chỉ đọc học liệu. Giới hạn export 10 MB; không ghi XLSX xuống đĩa. Mỗi workbook tải một lần/lượt, giữ hyperlink (kể cả tên chip có hyperlink trong bản export), text và ngày; chỉ chiếu tab/range hữu hạn đã cấu hình trong A:K, tối đa 100000 ô. Công thức bị chặn; chip không có hyperlink giữ lỗi, không đoán URL.
@@ -80,3 +94,9 @@ Renderer hiện dùng `pypdfium2` ở 200 dpi, không còn cần Poppler. Giữ 
 `BTVN_VALIDATOR` có thể trỏ bundle Node độc lập được dựng từ validator web thật; nếu không đặt vẫn dùng `validate.mjs` trong repo. Bản trích gửi reviewer được whitelist trường câu hỏi, không chỉ blacklist khóa đã biết.
 
 Bộ Javis VPS ở `../btvn-javis/README.md` bổ sung launcher khóa FD kế thừa, SA, Anthropic Messages, routing/classDates, khóa phiên bản, bộ lọc thương hiệu và thông báo. Đây là adapter của pipeline hiện hành, chưa kích hoạt trên VPS trong đợt offline. Các hướng dẫn/timer cũ trong tài liệu này là lịch sử, không bật thêm timer khi dùng Javis reminders.
+# Phạm vi BTVN từ Sheet (đợt 26)
+Thêm cột `Phạm vi BTVN` cạnh BTVN; cũng nhận `Ghi chú BTVN`, `BTVN từ câu`, `Phạm vi`, không phân biệt hoa/thường và dấu.
+Ví dụ: `Câu 15-35`, `câu 15 đến 35`, `Từ câu 15`, `15-35`, `Câu 1-10, 21-30`.
+Chọn mục/trang: `Phần III`, `Bài tập về nhà`, `Trang 5-7` (trang trong PDF, không phải số trên tên tệp).
+Để trống: nhận diện chữ/vị trí PDF và AI xác nhận; confidence dưới 0.8 hoặc không có mục thì `whole_file`; có chú thích thì tuyệt đối không fallback.
+Số câu gốc HS/GV phải khớp dù web đánh lại q1..qN; mơ hồ, thiếu câu/đáp án hoặc đổi phạm vi bài đã đăng thì giữ bài để xử lý, không tự sửa đề đã đăng.

@@ -236,3 +236,16 @@ Hai RPC chỉ đọc dùng `SET LOCAL ROLE service_role` trong transaction riên
 6. Kiểm plugin xuất hiện đúng tool `btvn_bao_diem_lop`, thử với fixture đã duyệt trước. Sau khi có quyền kiểm dữ liệu thật, kiểm đúng lớp, giờ kết thúc, trạng thái điểm danh và không có SĐT. Không ghi dữ liệu thật vào log. Chỉ sau readback Claude mới bật cho bot dùng. Không dùng kiểm offline để khẳng định đã chạy VPS/SA/Edge thật.
 
 Tool tải mới sổ đúng lúc gọi, giữ snapshot trong RAM/pipe. Chỉ chuyển họ tên/trạng thái lớp được hỏi vào report bundle. Không lưu file điểm/điểm danh, không gọi sync/apply, không gửi Zalo. Điểm danh không rõ hoặc khối lẫn khóa trả lỗi một câu; ô trống không tự suy là vắng. Dùng `HUONG-DAN-BOT.md` để bot lấy phần (a)+(c), giữ phần (b) đối soát nội bộ và tránh trộn lớp. Lỗi mạng/quyền/cấu hình chỉ trả một câu tiếng Việt, không tiết lộ exception gốc.
+## Đợt 25: tên buổi học khi Sheet chưa ghi chủ đề
+
+`VersionWorker` dùng bộ đặt tên chung trong `tools/btvn-pipeline/pipeline.py`, giữ khóa phiên bản đã đăng khi chỉ đổi tên/video/handout. Sheet có tên chủ đề thì giữ nguyên, không gọi AI đặt tên. Tên trống/chung chung dùng chữ PDF BTVN HS, PDF tài liệu/handout và tiêu đề video, trả tên tiếng Việt 3-10 chữ cùng confidence/nguồn. AI lỗi hoặc thiếu căn cứ thì dùng tên đề, sau đó ngày học. Không dùng đáp án để đặt tên.
+
+`material.titleSource` là `sheet` hoặc `auto`; thẻ web không thêm nhãn tự đặt. Quyết định auto được cache theo nội dung nguồn trong SQLite, PDF đổi tại cùng URL và video/handout đến sau được xét lại. Cập nhật metadata qua `update_material`, không thay đề hay assets và không đăng lại bài. GoogleTransport hiện có cấp SA cho GET tên file Drive; YouTube oEmbed chỉ cần host `www.youtube.com` trong allowlist, không nhận bearer. Chi tiết giới hạn, fallback, cache và kiểm thử: `../btvn-pipeline/README.md`, mục đợt 25.
+
+Trước triển khai VPS, operator cần áp dụng migration chờ `202610150023_btvn_auto_title.sql`, cập nhật Edge handler, mã pipeline/worker và thêm `www.youtube.com` vào cấu hình thật đang dùng, giữ nguyên các host đã duyệt. Phiên Codex đợt 25 chỉ sửa/kiểm cục bộ, chưa chạy API, chưa áp dụng SQL, chưa ghi mạng. Biên bản: `.qa-temp/dot-25/BIEN-BAN-DOT-25.md`. Không build vào `build/` cho đợt này.
+# Phạm vi BTVN từ Sheet (đợt 26)
+Thêm cột `Phạm vi BTVN`; worker dùng chung bộ chọn của `tools/btvn-pipeline`, không cần đổi giao diện web.
+Ví dụ: `Câu 15-35`, `câu 15 đến 35`, `Từ câu 15`, `15-35`, `Câu 1-10, 21-30`.
+Cũng nhận `Ghi chú BTVN`, `BTVN từ câu`, `Phạm vi`; chọn mục bằng `Phần III`, `Bài tập về nhà`, hoặc `Trang 5-7`.
+Ô trống: AI xác nhận vùng từ chữ/vị trí PDF, confidence dưới 0.8 hoặc không có mục ghi `whole_file`; chú thích sai thì giữ bài.
+Receipt lưu `scope_source`; material lưu `homeworkScope`/`homeworkScopeSource`; lệch câu GV hoặc đổi phạm vi bài đã đăng thì giữ bài, không đăng lại.

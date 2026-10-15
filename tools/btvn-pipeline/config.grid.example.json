@@ -61,7 +61,7 @@
   },
   "source_publisher": "Minh Thành Math — nguồn học liệu được operator xác nhận",
   "period": "GK1",
-  "allowed_hosts": [
+  "allowed_hosts": ["www.youtube.com",
     "sheets.example.invalid",
     "ai-a.example.invalid",
     "ai-b.example.invalid",

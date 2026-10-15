@@ -56,7 +56,9 @@ class ClassRulesTests(unittest.TestCase):
     def test_proposal_aliases_periods_and_allowlist(self):
         config = json.loads((REPO / '.qa-temp/dot-24/config.vps.json').read_text(encoding='utf-8'))
         example = json.loads((HERE / 'config.example.json').read_text(encoding='utf-8'))
-        self.assertEqual(config['allowed_hosts'], example['allowed_hosts'])
+        # Proposal đợt 24 giữ nguyên lịch sử; đợt 25 thêm host oEmbed vào mẫu.
+        self.assertEqual(config['allowed_hosts'], [host for host in example['allowed_hosts'] if host!='www.youtube.com'])
+        self.assertIn('www.youtube.com',example['allowed_hosts'])
         self.assertEqual(config.get('attendance_map'), example.get('attendance_map'))
         self.assertEqual(config['extractor']['model'], 'gpt-5.5')
         self.assertEqual(config['reviewer']['model'], 'claude-sonnet-5-5')

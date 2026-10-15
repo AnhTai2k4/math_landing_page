@@ -110,7 +110,7 @@ def route_rows(rows, config, now):
     # Gộp hai dòng cùng nguồn khi có cùng classDates được xác nhận rõ.
     groups = {}
     for row in selected:
-        key = p.digest(p.encoded([row['class_dates'], row.get('homework_urls',[row['homework']]), row['answers']]))
+        key = p.digest(p.encoded([row['class_dates'], row.get('homework_urls',[row['homework']]), row['answers'],row.get('homework_scope','')]))
         row['lesson_key']='btvn-'+p.digest(p.encoded(row['class_dates']))[:40]
         groups.setdefault(key, row)
     return list(groups.values())
