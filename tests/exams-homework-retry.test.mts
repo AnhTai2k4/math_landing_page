@@ -36,18 +36,42 @@ for(const changed of [
   {...state,receipts:[{...state.receipts[0],attemptId:'another-fake-attempt'}]},
   {...state,draft:{...draft,submittedAt:null}},
   {...state,draft:{...draft,examVersionHash:'c'.repeat(64)}},
+  {...state,draft:{...draft,examId:'another-fake-exam'}},
+  {...state,draft:{...draft,rubricVersion:'another-fake-rubric'}},
+  {...state,receipts:[state.receipts[0],{...state.receipts[0]}]},
+  ...[-1,11,NaN,Infinity].map(score=>({...state,receipts:[{...state.receipts[0],score}]})),
   {...state,solutionsAvailable:false},
 ])assert.deepEqual(homeworkRetryQuestions(changed),[],'Không mở khi chưa ACK đúng bản nộp, khác phiên bản hoặc lời giải còn khóa');
 assert.deepEqual(homeworkRetryQuestions({...state,receipts:[{...state.receipts[0],submittedAt:2001}]}).map((r:any)=>r.question.id),['fake-mc','fake-tf'],'Biên nhận cùng lượt không bị khóa chỉ vì thời điểm máy chủ lệch draft');
+assert.deepEqual(homeworkRetryQuestions({...state,receipts:[{...state.receipts[0],elapsedSeconds:-1}]}).map((r:any)=>r.question.id),['fake-mc','fake-tf'],'Thời lượng máy chủ âm không khóa ôn của đúng lượt đã có điểm');
+for(const answers of [null,[],undefined]){
+  const malformed={...state,draft:{...draft,answers}} as unknown as HomeworkState;
+  assert.doesNotThrow(()=>homeworkRetryQuestions(malformed),'Snapshot hỏng không làm đổ màn kết quả');
+  assert.deepEqual(homeworkRetryQuestions(malformed),[],'Không đoán câu ôn từ snapshot answers hỏng');
+}
 assert.deepEqual(homeworkRetryQuestions({...state,exam:{...exam,questions:exam.questions.map(q=>({...q,solution:undefined}))}}),[]);
 assert.deepEqual(homeworkRetryQuestions({...state,draft:{...draft,answers:{'fake-mc':'C','fake-tf':[true,true,false,true],'fake-short':'1/2'}}}),[]);
-assert.deepEqual(homeworkRetryQuestions({...state,draft:{...draft,answers:{}}}),[],'Không coi bỏ trống là một câu đã làm sai');
+const blankState:HomeworkState={...state,draft:{...draft,answers:{'fake-mc':null,'fake-tf':[null,null,null,null],'fake-short':' \t '}},bestScore:0,receipts:[{...state.receipts[0],score:0}]};
+const retryIds=(input:HomeworkState)=>homeworkRetryQuestions(input).map((r:any)=>r.question.id);
+assert.deepEqual(retryIds(blankState),['fake-mc','fake-tf','fake-short'],'Cho ôn MC, Đ/S và câu ngắn bỏ trống của bản nộp đã ACK');
+assert.deepEqual(retryIds({...blankState,draft:{...blankState.draft!,answers:{}}}),['fake-mc','fake-tf','fake-short'],'Câu không có khóa trả lời trong snapshot cũng là câu bỏ trống');
+assert.deepEqual(retryIds({...blankState,draft:{...blankState.draft!,answers:{...blankState.draft!.answers,'fake-mc':' \t '}}}),[],'Đáp án MC hỏng không được coi là snapshot bỏ trống hợp lệ');
+for(const changed of [
+  {...blankState,receipts:[]},
+  {...blankState,receipts:[{...blankState.receipts[0],attemptId:'another-fake-attempt'}]},
+  {...blankState,draft:{...blankState.draft!,submittedAt:null}},
+  {...blankState,draft:{...blankState.draft!,examVersionHash:'c'.repeat(64)}},
+  {...blankState,solutionsAvailable:false},
+  {...blankState,kind:'kiem-tra-thang' as const,solutionsAvailable:false},
+])assert.deepEqual(retryIds(changed),[],'Bỏ trống vẫn giữ cổng ACK, bản nộp, phiên bản và lời giải, kể cả kiểm tra tháng đang khóa');
+assert.deepEqual(retryIds({...blankState,exam:{...exam,questions:exam.questions.map(q=>({...q,solution:undefined}))}}),[],'Không ôn câu bỏ trống khi không có lời giải nguồn');
 // PDF đề đầy đủ ở màn kết quả không có nghĩa phần ôn nhúng được các mệnh đề.
 for(const statements of [undefined,[],['','','',''],['Ý a','Ý b','Ý c'],['Ý a','Ý b','Ý c',' \t '],new Array(4)]){
   const pdfOnly={...exam,sourcePdf:{url:'https://example.invalid/fake.pdf',verified:true,sha256:'e'.repeat(64),bytes:100,totalPages:1,questionPages:[1]},questions:exam.questions.map(q=>q.kind==='tf'?{...q,statements}:q)};
   if(statements===undefined)assert.equal(validatePracticeExam(pdfOnly).valid,true,'Đề PDF đầy đủ hợp lệ nhưng phần ôn phải kiểm riêng nội dung hiển thị');
   const available=homeworkRetryQuestions({...state,exam:pdfOnly}).map((r:any)=>r.question.id);
   assert.ok(!available.includes('fake-tf'),'Không mời ôn Đ/S khi chỉ có stem và không hiển thị được bốn mệnh đề');
+  assert.ok(!retryIds({...blankState,exam:pdfOnly}).includes('fake-tf'),'Câu Đ/S bỏ trống vẫn bị loại khi thiếu văn bản của bốn mệnh đề');
   if(statements===undefined)assert.deepEqual(available,['fake-mc'],'Giữ câu trắc nghiệm hợp lệ trong cùng đề PDF');
 }
 const cropTf={...exam,questions:exam.questions.map(q=>q.kind==='tf'?{...q,statements:undefined,sourceContent:{questions:[{path:'fake-tf.png',sha256:'f'.repeat(64),sourcePage:1,width:600,height:400}],solutions:[{path:'fake-solution.png',sha256:'e'.repeat(64),sourcePage:2,width:600,height:400}]}}:q)};
@@ -98,12 +122,43 @@ function find(tree:any,predicate:(node:any)=>boolean):any{
   return predicate(tree)?tree:find(tree.props?.children,predicate);
 }
 const button=(tree:any,label:string)=>find(tree,n=>n.type==='button'&&n.props.children===label);
+const openSolution=(draw:()=>any)=>{
+  const tree=draw(),trigger=button(tree,'Xem lời giải đầy đủ của câu ôn')??button(tree,'Mở lại lời giải đã xem');
+  assert.ok(trigger);trigger.props.onClick();
+  const confirmation=button(draw(),'Vẫn mở lời giải');
+  if(confirmation)confirmation.props.onClick();
+  return draw();
+};
 const statementGroup=(tree:any,index:number)=>find(tree,n=>n.type==='fieldset'&&find(n,c=>c.props?.id===`:retry-test:-statement-${index}`));
 const exerciseIn=(tree:any)=>find(tree,n=>typeof n.type==='function'&&n.type.name==='RetryExercise');
-const nextButton=(tree:any)=>{const node=exerciseIn(tree),previousValues=values,previousCursor=cursor;values=[];cursor=0;const next=button(node.type(node.props),'Ôn câu chưa đúng tiếp theo');values=previousValues;cursor=previousCursor;return next;};
+const nextButton=(tree:any)=>{const node=exerciseIn(tree),previousValues=values,previousCursor=cursor;values=[];cursor=0;const next=button(node.type(node.props),'Ôn câu chưa xong tiếp theo');values=previousValues;cursor=previousCursor;return next;};
 const original=JSON.stringify(state),originalFetch=globalThis.fetch;
 globalThis.fetch=()=>{throw Error('Phần ôn cục bộ không được gửi yêu cầu mạng');};
 try{
+  const blankSnapshot=JSON.stringify(blankState);
+  for(const [index,question] of exam.questions.entries()){
+    values=[{key:draft.attemptId+':'+exam.versionHash,selected:question.id,open:true,correct:[]}];cursor=0;
+    const blankParent=Retry({state:blankState}),blankExercise=exerciseIn(blankParent);
+    assert.equal(blankExercise.props.item.question.id,question.id,'Có thể chọn từng loại câu bỏ trống để ôn');
+    assert.equal(blankExercise.props.canAttemptAgain,true,'Ôn câu bỏ trống giữ giới hạn xem phản hồi khi còn lượt tính điểm');
+    const blankValues:any[]=[];
+    const drawBlank=()=>{values=blankValues;cursor=0;return blankExercise.type(blankExercise.props);};
+    let blankTree=drawBlank();
+    const submitted=renderToStaticMarkup(find(blankTree,n=>n.type==='details'));
+    assert.match(submitted,index===1?/a\) Chưa chọn; b\) Chưa chọn; c\) Chưa chọn; d\) Chưa chọn/:/Câu trả lời đã nộp: Chưa trả lời/,'Giữ cách hiển thị bản nộp bỏ trống, không điền đáp án thử vào snapshot');
+    if(index===0)find(blankTree,n=>n.type==='input'&&n.props.value==='C').props.onChange();
+    else if(index===1){
+      for(const [i,value] of [true,true,false,true].entries()){
+        const group=statementGroup(drawBlank(),i);
+        const choice=find(group,n=>n.type==='label'&&n.props.children[1].props.children===(value?'Đúng':'Sai'));
+        find(choice,n=>n.type==='input').props.onChange();
+      }
+    }else find(blankTree,n=>n.type==='input'&&n.props.type==='text').props.onChange({target:{value:'1/2'}});
+    blankTree=drawBlank();
+    find(blankTree,n=>n.type==='form').props.onSubmit({preventDefault(){}});
+    assert.match(renderToStaticMarkup(find(drawBlank(),n=>n.props?.role==='status')),/Em đã làm đúng câu này/,'Câu bỏ trống có thể được hoàn thành trong phiên ôn');
+    assert.equal(JSON.stringify(blankState),blankSnapshot,'Thử câu bỏ trống không sửa bản nộp, biên nhận, điểm hay lượt');
+  }
   for(const input of unreadableCropStates){
     values=[{key:input.draft!.attemptId+':'+input.exam!.versionHash,selected:'fake-tf',open:true,correct:[]}];cursor=0;
     const html=renderToStaticMarkup(Retry({state:input}));
@@ -117,11 +172,12 @@ try{
   function drawParent(input=state){values=parentValues;cursor=0;return Retry({state:input});}
   let tree=drawParent();
   const closedHtml=renderToStaticMarkup(tree);assert.match(closedHtml,/không tính điểm và không dùng thêm lượt/);assert.ok(!closedHtml.includes('fake-mc'));
+  assert.match(closedHtml,/câu sai hoặc bỏ trống/,'Lời dẫn nói rõ phạm vi ôn cả câu chưa làm');
   assert.ok(!closedHtml.includes('Câu trả lời thử được giữ'),'Chú thích nháp chỉ hiện sau khi mở phần ôn');
   button(tree,'Ôn một câu của lượt này').props.onClick();tree=drawParent();
   assert.match(renderToStaticMarkup(tree),/Tải lại trang, đổi lượt, gặp bản đề khác, mất biên nhận của lượt hoặc mất quyền xem lời giải sẽ xóa phần thử này\./,'Mô tả đúng các ranh giới xóa nháp đã kiểm');
   const progress=()=>renderToStaticMarkup(find(drawParent(),n=>n.props?.className==='btvn-retry-status'));
-  assert.match(progress(),/Đã sửa đúng 0\/2 câu/);
+  assert.match(progress(),/Đã làm đúng 0\/2 câu/);
   const exerciseNode=find(tree,n=>typeof n.type==='function'&&n.type.name==='RetryExercise');assert.ok(exerciseNode);
   const exerciseValues:any[]=[];
   const draw=()=>{values=exerciseValues;cursor=0;return exerciseNode.type(exerciseNode.props);};
@@ -146,14 +202,14 @@ try{
   values=[];cursor=0;
   const prefacedNode=exerciseNode.type({...exerciseNode.props,item:{question:{...exam.questions[0],solution:prefacedSolution},index:0}});
   assert.equal(button(prefacedNode,'Xem gợi ý bước 1'),null,'Nguồn có mở đầu quan trọng chỉ xem bản đầy đủ');
-  button(prefacedNode,'Xem lời giải đầy đủ của câu ôn').props.onClick();cursor=0;
-  const prefacedOpen=exerciseNode.type({...exerciseNode.props,item:{question:{...exam.questions[0],solution:prefacedSolution},index:0}});
+  const drawPrefaced=()=>{cursor=0;return exerciseNode.type({...exerciseNode.props,item:{question:{...exam.questions[0],solution:prefacedSolution},index:0}});};
+  const prefacedOpen=openSolution(drawPrefaced);
   assert.ok(find(prefacedOpen,n=>n.props?.fallback===prefacedSolution),'Bản đầy đủ vẫn giữ nguyên điều kiện và các bước nguồn');
   values=[];cursor=0;
   const prefacedCropProps={...exerciseNode.props,item:{question:{...exam.questions[0],solution:prefacedSolution,sourceContent:{questions:[],solutions:[{path:'fake-unavailable.png',sha256:'f'.repeat(64),sourcePage:1,width:600,height:400,privateUnavailable:true}]}},index:0}};
   const prefacedCrop=exerciseNode.type(prefacedCropProps);
-  button(prefacedCrop,'Xem lời giải đầy đủ của câu ôn').props.onClick();cursor=0;
-  const prefacedCropOpen=exerciseNode.type(prefacedCropProps),cropSource=find(prefacedCropOpen,n=>n.props?.kind==='solution');
+  const drawPrefacedCrop=()=>{cursor=0;return exerciseNode.type(prefacedCropProps);};
+  const prefacedCropOpen=openSolution(drawPrefacedCrop),cropSource=find(prefacedCropOpen,n=>n.props?.kind==='solution');
   assert.equal(cropSource.props.context,'review','Ảnh lời giải được mở trong ngữ cảnh ôn');
   assert.equal(find(cropSource.props.errorFallback,n=>n.props?.text===prefacedSolution)?.props.text,prefacedSolution,'Ảnh lỗi vẫn có bản chữ nguyên vẹn của đúng câu');
   const prefacedCropHtml=renderToStaticMarkup(prefacedCropOpen);
@@ -168,37 +224,61 @@ try{
   assert.equal(initialStatus.props.className,undefined,'Chưa kiểm tra thì vùng live không dựng khung kết quả rỗng');
   assert.equal(renderToStaticMarkup(initialStatus).replace(/<[^>]*>/g,''),'','Chưa có kết quả thì vùng live chưa đọc nội dung');
   const support=find(exercise,n=>n.props?.className==='btvn-retry-support');assert.ok(button(support,'Xem gợi ý bước 1'));assert.ok(button(support,'Xem lời giải đầy đủ của câu ôn'),'Gợi ý và lời giải cùng một nhóm hỗ trợ');
+  const confirmValues:any[]=[];
+  const drawConfirm=()=>{values=confirmValues;cursor=0;return exerciseNode.type({...exerciseNode.props,onDraftChange:undefined,onCorrect(){}});};
+  find(drawConfirm(),n=>n.type==='input'&&n.props.value==='C').props.onChange();
+  let confirmTree=drawConfirm(),confirmFocusCount=0;
+  const confirmTrigger=button(confirmTree,'Xem lời giải đầy đủ của câu ôn');
+  confirmTrigger.ref.current={focus(){confirmFocusCount++;}};
+  confirmTrigger.props.onClick();confirmTree=drawConfirm();
+  assert.equal(button(confirmTree,'Xem lời giải đầy đủ của câu ôn').props['aria-expanded'],false,'Lần bấm đầu chỉ hỏi xác nhận khi còn lượt');
+  assert.equal(button(confirmTree,'Xem lời giải đầy đủ của câu ôn').props['aria-describedby'],':retry-test:-solution-warning');
+  assert.equal(find(confirmTree,n=>n.props?.fallback===exam.questions[0].solution),null,'Chưa xác nhận thì chưa dựng lời giải');
+  assert.match(renderToStaticMarkup(find(confirmTree,n=>n.props?.id===':retry-test:-solution-warning')),/Em còn lượt tính điểm/);
+  button(confirmTree,'Tiếp tục tự làm').props.onClick();confirmTree=drawConfirm();
+  assert.equal(button(confirmTree,'Vẫn mở lời giải'),null,'Có thể hủy xác nhận ngay trong trang');
+  assert.equal(find(confirmTree,n=>n.type==='input'&&n.props.value==='C').props.checked,true,'Hủy xác nhận giữ câu trả lời đang thử');
+  assert.equal(confirmFocusCount,1,'Hủy trả focus về nút mở lời giải');
+  confirmTree=openSolution(drawConfirm);
+  assert.ok(button(confirmTree,'Đóng lời giải câu ôn'),'Vẫn cho mở khi em xác nhận');
+  assert.equal(confirmFocusCount,2,'Xác nhận trả focus về nút đóng lời giải');
+  button(confirmTree,'Đóng lời giải câu ôn').props.onClick();confirmTree=drawConfirm();
+  button(confirmTree,'Mở lại lời giải đã xem').props.onClick();confirmTree=drawConfirm();
+  assert.ok(button(confirmTree,'Đóng lời giải câu ôn'),'Mở lại lời giải đã xem không hỏi lặp');
+  assert.equal(button(confirmTree,'Vẫn mở lời giải'),null);
+  assert.equal(find(confirmTree,n=>n.type==='input'&&n.props.value==='C').props.checked,true,'Mở, đóng lời giải giữ nháp');
+  exercise=draw();
   find(exercise,n=>n.type==='input'&&n.props.value==='A').props.onChange();exercise=draw();
   find(exercise,n=>n.type==='form').props.onSubmit({preventDefault(){}});exercise=draw();assert.match(renderToStaticMarkup(exercise),/Chưa khớp đáp án/);
   find(exercise,n=>n.type==='input'&&n.props.value==='C').props.onChange();exercise=draw();assert.ok(!renderToStaticMarkup(exercise).includes('Chưa khớp đáp án'));
-  find(exercise,n=>n.type==='form').props.onSubmit({preventDefault(){}});exercise=draw();assert.match(renderToStaticMarkup(exercise),/Em đã sửa được lỗi này/);assert.match(find(exercise,n=>n.props?.role==='status').props.className,/btvn-retry-success/);
+  find(exercise,n=>n.type==='form').props.onSubmit({preventDefault(){}});exercise=draw();assert.match(renderToStaticMarkup(exercise),/Em đã làm đúng câu này/);assert.match(find(exercise,n=>n.props?.role==='status').props.className,/btvn-retry-success/);
   assert.equal((renderToStaticMarkup(exercise).match(/role="status"/g)??[]).length,1,'Chấm đúng chỉ có một vùng trạng thái kết quả');
   const progressNode=find(drawParent(),n=>n.props?.className==='btvn-retry-status');
   assert.equal(progressNode.props['aria-live'],undefined,'Không đọc lại toàn bộ tiến độ khi số câu đúng tăng');
   assert.equal(progressNode.props.children[0].props['aria-live'],undefined,'Bộ đếm câu không có live region');
   assert.match(renderToStaticMarkup(find(progressNode,n=>n.props?.['aria-live']==='polite')),/Đang ôn/,'Chỉ nhãn câu đang ôn được đọc khi đổi câu');
   assert.match(nextButton(drawParent()).props.className,/btvn-retry-start/,'Sau sửa đúng, nút chuyển câu được nhấn màu vàng');
-  assert.match(progress(),/Đã sửa đúng 1\/2 câu/);
+  assert.match(progress(),/Đã làm đúng 1\/2 câu/);
   find(exercise,n=>n.type==='form').props.onSubmit({preventDefault(){}});
-  assert.match(progress(),/Đã sửa đúng 1\/2 câu/,'Kiểm lại cùng câu đúng không tăng bộ đếm');
-  const correctedPill=find(drawParent(),n=>n.type==='button'&&n.props['aria-label']?.includes('Đã sửa đúng trong phiên ôn'));
-  assert.ok(correctedPill,'Pill ghi nhận đã sửa đúng mà không ghi điểm/lượt');
-  assert.equal(correctedPill.props['aria-label'],'I · Trắc nghiệm · Câu 1 · Đã sửa đúng trong phiên ôn','Nhãn trợ năng giữ tên phần và trạng thái đầy đủ');
+  assert.match(progress(),/Đã làm đúng 1\/2 câu/,'Kiểm lại cùng câu đúng không tăng bộ đếm');
+  const correctedPill=find(drawParent(),n=>n.type==='button'&&n.props['aria-label']?.includes('Đã làm đúng trong phiên ôn'));
+  assert.ok(correctedPill,'Pill ghi nhận đã làm đúng mà không ghi điểm/lượt');
+  assert.equal(correctedPill.props['aria-label'],'I · Trắc nghiệm · Câu 1 · Đã làm đúng trong phiên ôn','Nhãn trợ năng giữ tên phần và trạng thái đầy đủ');
   assert.equal(find(correctedPill,n=>n.props?.className==='btvn-retry-pill-compact').props.children,'I · Câu 1','Nhãn mobile gọn nhưng không lẫn Câu 1 ở hai phần');
   button(exercise,'Xem gợi ý bước 1').props.onClick();exercise=draw();let html=renderToStaticMarkup(exercise);assert.match(html,/Trừ 1 ở hai vế/);assert.ok(!html.includes('Chia hai vế cho 2'));assert.ok(find(exercise,n=>n.props?.className==='btvn-retry-hints'),'Gợi ý có khung riêng để phân biệt với đề bài');
   button(exercise,'Xem gợi ý bước 2').props.onClick();exercise=draw();html=renderToStaticMarkup(exercise);assert.match(html,/Chia hai vế cho 2/);assert.equal(button(exercise,'Đã mở hết các bước nguồn').props.disabled,true);
-  button(exercise,'Xem lời giải đầy đủ của câu ôn').props.onClick();exercise=draw();assert.equal(button(exercise,'Đóng lời giải câu ôn').props['aria-expanded'],true);
+  exercise=openSolution(draw);assert.equal(button(exercise,'Đóng lời giải câu ôn').props['aria-expanded'],true);
   const full=find(exercise,n=>n.props?.fallback===exam.questions[0].solution);assert.ok(full,'Đưa đúng lời giải gốc, đúng exam/version/question vào renderer');assert.equal(full.props.examId,exam.id);assert.equal(full.props.questionId,'fake-mc');assert.equal(full.props.versionHash,exam.versionHash);
-  button(exercise,'Thử lại từ đầu').props.onClick();exercise=draw();assert.ok(!renderToStaticMarkup(exercise).includes('Em đã sửa được lỗi này'));assert.equal(find(exercise,n=>n.type==='input'&&n.props.value==='C').props.checked,false);assert.ok(button(exercise,'Xem gợi ý bước 1'));
-  assert.match(progress(),/Đã sửa đúng 0\/2 câu/,'Reset câu đúng phải giảm bộ đếm');
-  assert.equal(find(drawParent(),n=>n.type==='button'&&n.props['aria-label']?.includes('Đã sửa đúng trong phiên ôn')),null,'Reset xóa trạng thái đúng của pill');
+  button(exercise,'Thử lại từ đầu').props.onClick();exercise=draw();assert.ok(!renderToStaticMarkup(exercise).includes('Em đã làm đúng câu này'));assert.equal(find(exercise,n=>n.type==='input'&&n.props.value==='C').props.checked,false);assert.ok(button(exercise,'Xem gợi ý bước 1'));
+  assert.match(progress(),/Đã làm đúng 0\/2 câu/,'Reset câu đúng phải giảm bộ đếm');
+  assert.equal(find(drawParent(),n=>n.type==='button'&&n.props['aria-label']?.includes('Đã làm đúng trong phiên ôn')),null,'Reset xóa trạng thái đúng của pill');
   assert.equal(button(exercise,'Thử lại từ đầu').props['aria-label'],'Thử lại từ đầu câu này');
   button(exercise,'Thử lại từ đầu').props.onClick();exercise=draw();
   assert.equal(renderToStaticMarkup(find(exercise,n=>n.props?.role==='status')).replace(/<[^>]*>/g,''),'','Reset nháp đang trống không báo đã đổi lựa chọn');
   find(exercise,n=>n.type==='input'&&n.props.value==='C').props.onChange();exercise=draw();
   assert.match(find(drawParent(),n=>n.type==='button'&&n.props['aria-label']?.startsWith('I · Trắc nghiệm')).props.className,/has-draft/,'Câu đang thử có dấu hiệu nháp');
   find(exercise,n=>n.type==='form').props.onSubmit({preventDefault(){}});
-  assert.match(progress(),/Đã sửa đúng 1\/2 câu/,'Chỉ chấm đúng lại mới phục hồi tiến độ');
+  assert.match(progress(),/Đã làm đúng 1\/2 câu/,'Chỉ chấm đúng lại mới phục hồi tiến độ');
   tree=drawParent();assert.equal(find(tree,n=>n.type==='select'),null);const tfPill=find(tree,n=>n.type==='button'&&n.props['aria-label']==='II · Đúng sai · Câu 1');assert.equal(tfPill.props['aria-pressed'],false);nextButton(tree).props.onClick();tree=drawParent();const selected=find(tree,n=>typeof n.type==='function'&&n.type.name==='RetryExercise');assert.equal(selected.props.item.question.id,'fake-tf');assert.notEqual(selected.key,exerciseNode.key,'Đổi câu phải tạo state ôn riêng');assert.equal(find(tree,n=>n.type==='button'&&n.props['aria-label']==='II · Đúng sai · Câu 1').props['aria-pressed'],true);
   assert.match(progress(),/Đang ôn II · Đúng sai · Câu 1/,'Thông báo câu đang ôn khi chuyển bằng bàn phím');
   const tfValues:any[]=[];
@@ -241,7 +321,11 @@ try{
     assert.equal(group.props['aria-describedby'],`:retry-test:-statement-${i}`,'Chỉ liên kết văn bản mệnh đề, không chỉ riêng ý lệch');
   }
   // Chỉ sau khi mở lời giải mới liệt kê và liên kết lỗi với mệnh đề tương ứng.
-  tfTree=drawTf();button(tfTree,'Xem lời giải đầy đủ của câu ôn').props.onClick();tfTree=drawTf();
+  button(drawTf(),'Xem lời giải đầy đủ của câu ôn').props.onClick();tfTree=drawTf();
+  assert.ok(button(tfTree,'Vẫn mở lời giải'));
+  assert.ok(!renderToStaticMarkup(find(tfTree,n=>n.props?.role==='status')).includes('Các ý chưa khớp:'),'Đang xác nhận vẫn không tiết lộ ý sai');
+  assert.equal(statementGroup(tfTree,1).props['aria-invalid'],undefined);
+  button(tfTree,'Vẫn mở lời giải').props.onClick();tfTree=drawTf();
   assert.match(renderToStaticMarkup(find(tfTree,n=>n.props?.role==='status')),/Các ý chưa khớp: Ý b\./);
   assert.equal(statementGroup(tfTree,1).props.className,'is-mismatch');
   assert.equal(statementGroup(tfTree,1).props['aria-invalid'],true);
@@ -262,31 +346,31 @@ try{
     assert.equal(statementGroup(tfTree,i).props['aria-invalid'],undefined,'Đổi lựa chọn xóa aria-invalid cũ');
     assert.equal(statementGroup(tfTree,i).props['aria-describedby'],`:retry-test:-statement-${i}`,'Đổi lựa chọn xóa liên kết lỗi cũ');
   }
-  tfTree=drawTf();find(tfTree,n=>n.type==='form').props.onSubmit({preventDefault(){}});assert.match(renderToStaticMarkup(drawTf()),/Em đã sửa được lỗi này/);
-  assert.match(progress(),/Đã sửa đúng 2\/2 câu/);
+  tfTree=drawTf();find(tfTree,n=>n.type==='form').props.onSubmit({preventDefault(){}});assert.match(renderToStaticMarkup(drawTf()),/Em đã làm đúng câu này/);
+  assert.match(progress(),/Đã làm đúng 2\/2 câu/);
   assert.equal(nextButton(drawParent()).props.disabled,true,'Hết câu chưa đúng thì không ép luyện thêm');
   const completeNode=exerciseIn(drawParent());values=tfValues;cursor=0;
   const completed=completeNode.type(completeNode.props),completedStatus=find(completed,n=>n.props?.role==='status');
   assert.match(completedStatus.props.className,/btvn-retry-feedback btvn-retry-success/,'Hoàn tất dùng chung hộp phản hồi có khung');
   const completedHtml=renderToStaticMarkup(completed);
-  assert.match(completedHtml,/Em đã sửa đúng các câu trong phiên ôn này/);
+  assert.match(completedHtml,/Em đã làm đúng các câu trong phiên ôn này/);
   assert.equal((completedHtml.match(/role="status"/g)??[]).length,1,'Thông báo hoàn tất nằm trong cùng một vùng kết quả');
   // Tiến độ và hộp kết quả cùng đi theo câu trả lời đang thử.
   find(completed,n=>n.type==='input'&&n.props.name===':retry-test:-tf-1'&&n.props.checked===false).props.onChange();
-  assert.match(progress(),/Đã sửa đúng 1\/2 câu/,'Đổi một ý sau khi đúng phải giảm tiến độ ngay trước lần chấm sau');
+  assert.match(progress(),/Đã làm đúng 1\/2 câu/,'Đổi một ý sau khi đúng phải giảm tiến độ ngay trước lần chấm sau');
   const changedTfPill=find(drawParent(),n=>n.type==='button'&&n.props['aria-label']?.startsWith('II · Đúng sai'));
   assert.match(changedTfPill.props.className,/has-draft/);
   assert.ok(!changedTfPill.props.className.includes('is-correct'));
   assert.match(changedTfPill.props['aria-label'],/Có nháp đang làm dở/,'Nhãn trợ năng không còn báo đúng sau khi thay đáp án');
   assert.equal(nextButton(drawParent()).props.disabled,true,'Đang ở câu chưa đúng duy nhất thì giữ giải thích nút tắt');
   values=tfValues;cursor=0;const completedChanged=completeNode.type(completeNode.props);
-  assert.ok(!renderToStaticMarkup(find(completedChanged,n=>n.props?.role==='status')).includes('Em đã sửa đúng các câu'),'Đang chờ chấm lại thì không lặp lời chúc hoàn tất');
+  assert.ok(!renderToStaticMarkup(find(completedChanged,n=>n.props?.role==='status')).includes('Em đã làm đúng các câu'),'Đang chờ chấm lại thì không lặp lời chúc hoàn tất');
   find(completedChanged,n=>n.type==='form').props.onSubmit({preventDefault(){}});
   values=tfValues;cursor=0;const completedWrong=completeNode.type(completeNode.props),completedWrongStatus=find(completedWrong,n=>n.props?.role==='status');
   assert.match(completedWrongStatus.props.className,/btvn-retry-error/);
   assert.match(renderToStaticMarkup(completedWrongStatus),/Chưa khớp đáp án/);
-  assert.ok(!renderToStaticMarkup(completedWrongStatus).includes('Em đã sửa đúng các câu'),'Không đặt lời chúc hoàn tất trong hộp lỗi sau khi đã hoàn thành rồi thử sai');
-  assert.ok(completedHtml.indexOf('Ôn câu chưa đúng tiếp theo')<completedHtml.indexOf('btvn-retry-support'),'Nút chuyển câu nằm cạnh kết quả, trước gợi ý và lời giải dài');
+  assert.ok(!renderToStaticMarkup(completedWrongStatus).includes('Em đã làm đúng các câu'),'Không đặt lời chúc hoàn tất trong hộp lỗi sau khi đã hoàn thành rồi thử sai');
+  assert.ok(completedHtml.indexOf('Ôn câu chưa xong tiếp theo')<completedHtml.indexOf('btvn-retry-support'),'Nút chuyển câu nằm cạnh kết quả, trước gợi ý và lời giải dài');
   // Hết lượt tính điểm: phản hồi từng ý được mở dù lời giải còn đóng.
   const exhaustedState={...state,attemptsUsed:state.maxAttempts};
   values=[{key:draft.attemptId+':'+exam.versionHash,selected:'fake-tf',open:true,correct:[]}];cursor=0;
@@ -306,6 +390,9 @@ try{
   assert.match(renderToStaticMarkup(find(exhaustedWrong,n=>n.props?.role==='status')),/Các ý chưa khớp: Ý b\./);
   assert.equal(statementGroup(exhaustedWrong,1).props['aria-invalid'],true);
   assert.equal(statementGroup(exhaustedWrong,1).props.className,'is-mismatch');
+  button(exhaustedWrong,'Xem lời giải đầy đủ của câu ôn').props.onClick();
+  assert.ok(button(drawExhausted(),'Đóng lời giải câu ôn'),'Hết lượt tính điểm thì mở trực tiếp');
+  assert.equal(button(drawExhausted(),'Vẫn mở lời giải'),null,'Hết lượt không hỏi cảnh báo thừa');
   values=[];cursor=0;
   const exhaustedRestored=exhaustedNode.type({...exhaustedNode.props,savedDraft:{answer:[true,false,false,true],verdict:'wrong',hints:0,solution:true,solutionViewed:true,needsRecheck:false}});
   assert.equal(button(exhaustedRestored,'Đóng lời giải câu ôn').props['aria-expanded'],true,'Hết lượt vẫn khôi phục lời giải đang mở');
@@ -314,25 +401,25 @@ try{
   const shortValues:any[]=[];
   const drawShort=()=>{values=shortValues;cursor=0;return selected.type({...selected.props,exam,item:{question:exam.questions[2],index:2},onDraftChange:undefined,onCorrect(){}});};
   let shortTree=drawShort();find(shortTree,n=>n.type==='input'&&n.props.type==='text').props.onChange({target:{value:'1/0'}});shortTree=drawShort();find(shortTree,n=>n.type==='form').props.onSubmit({preventDefault(){}});assert.equal(find(drawShort(),n=>n.type==='input').props['aria-invalid'],true);
-  find(drawShort(),n=>n.type==='input').props.onChange({target:{value:'2/4'}});shortTree=drawShort();find(shortTree,n=>n.type==='form').props.onSubmit({preventDefault(){}});assert.match(renderToStaticMarkup(drawShort()),/Em đã sửa được lỗi này/);
+  find(drawShort(),n=>n.type==='input').props.onChange({target:{value:'2/4'}});shortTree=drawShort();find(shortTree,n=>n.type==='form').props.onSubmit({preventDefault(){}});assert.match(renderToStaticMarkup(drawShort()),/Em đã làm đúng câu này/);
   tree=drawParent();
   button(tree,'Đóng phần ôn').props.onClick();assert.ok(button(drawParent(),'Ôn một câu của lượt này'));
-  button(drawParent(),'Ôn một câu của lượt này').props.onClick();assert.match(progress(),/Đã sửa đúng 1\/2 câu/,'Đóng/mở cùng phiên giữ tiến độ của các câu trả lời hiện tại');
+  button(drawParent(),'Ôn một câu của lượt này').props.onClick();assert.match(progress(),/Đã làm đúng 1\/2 câu/,'Đóng/mở cùng phiên giữ tiến độ của các câu trả lời hiện tại');
   const nextAttempt={...state,draft:{...draft,attemptId:'fake-attempt-next'},receipts:[{...state.receipts[0],attemptId:'fake-attempt-next'}]};
-  tree=drawParent(nextAttempt);assert.ok(button(tree,'Ôn một câu của lượt này'));button(tree,'Ôn một câu của lượt này').props.onClick();tree=drawParent(nextAttempt);assert.equal(find(tree,n=>n.type==='button'&&n.props.className?.includes('is-correct')),null,'Lượt mới không giữ dấu đã sửa đúng của lượt trước');assert.equal(find(tree,n=>typeof n.type==='function'&&n.type.name==='RetryExercise').props.item.question.id,'fake-mc','Lượt mới chọn lại câu đầu');
-  assert.match(renderToStaticMarkup(find(tree,n=>n.props?.className==='btvn-retry-status')),/Đã sửa đúng 0\/2 câu/);
+  tree=drawParent(nextAttempt);assert.ok(button(tree,'Ôn một câu của lượt này'));button(tree,'Ôn một câu của lượt này').props.onClick();tree=drawParent(nextAttempt);assert.equal(find(tree,n=>n.type==='button'&&n.props.className?.includes('is-correct')),null,'Lượt mới không giữ dấu đã làm đúng của lượt trước');assert.equal(find(tree,n=>typeof n.type==='function'&&n.type.name==='RetryExercise').props.item.question.id,'fake-mc','Lượt mới chọn lại câu đầu');
+  assert.match(renderToStaticMarkup(find(tree,n=>n.props?.className==='btvn-retry-status')),/Đã làm đúng 0\/2 câu/);
   const nextVersion={...nextAttempt,exam:{...exam,versionHash:'d'.repeat(64)},draft:{...nextAttempt.draft,examVersionHash:'d'.repeat(64)}};assert.ok(button(drawParent(nextVersion),'Ôn một câu của lượt này'),'Đổi phiên bản cũng đóng phần ôn cũ');
-  button(drawParent(nextVersion),'Ôn một câu của lượt này').props.onClick();assert.match(renderToStaticMarkup(find(drawParent(nextVersion),n=>n.props?.className==='btvn-retry-status')),/Đã sửa đúng 0\/2 câu/);
+  button(drawParent(nextVersion),'Ôn một câu của lượt này').props.onClick();assert.match(renderToStaticMarkup(find(drawParent(nextVersion),n=>n.props?.className==='btvn-retry-status')),/Đã làm đúng 0\/2 câu/);
   values=[{key:draft.attemptId+':'+exam.versionHash,selected:'fake-tf',open:true,correct:['fake-tf']}];cursor=0;
   const wrapped=Retry({state});nextButton(wrapped).props.onClick();cursor=0;
   assert.equal(find(Retry({state}),n=>typeof n.type==='function'&&n.type.name==='RetryExercise').props.item.question.id,'fake-mc','Chuyển từ câu cuối về câu chưa đúng đầu, bỏ qua câu đã sửa');
   values=[{key:draft.attemptId+':'+exam.versionHash,selected:'fake-mc',open:true,correct:['fake-tf']}];cursor=0;
   const lastRemaining=exerciseIn(Retry({state}));values=[];cursor=0;
-  const lastRemainingTree=lastRemaining.type(lastRemaining.props),lastButton=button(lastRemainingTree,'Ôn câu chưa đúng tiếp theo');
+  const lastRemainingTree=lastRemaining.type(lastRemaining.props),lastButton=button(lastRemainingTree,'Ôn câu chưa xong tiếp theo');
   assert.equal(lastButton.props.disabled,true);
   assert.equal(lastButton.props['aria-describedby'],':retry-test:-remaining');
-  assert.match(renderToStaticMarkup(lastRemainingTree),/Em đang ở câu chưa đúng còn lại/,'Nút tắt được giải thích khi chỉ còn chính câu đang ôn');
-  assert.ok(!renderToStaticMarkup(lastRemainingTree).includes('Em đã sửa đúng các câu trong phiên ôn này'),'Không chúc mừng toàn bộ khi còn một câu chưa đúng');
+  assert.match(renderToStaticMarkup(lastRemainingTree),/Em đang ở câu còn lại chưa đúng hoặc còn bỏ trống/,'Nút tắt được giải thích khi chỉ còn chính câu đang ôn');
+  assert.ok(!renderToStaticMarkup(lastRemainingTree).includes('Em đã làm đúng các câu trong phiên ôn này'),'Không chúc mừng toàn bộ khi còn một câu chưa đúng');
   const wrongShortState={...state,draft:{...draft,answers:{...draft.answers,'fake-short':'1/3'}}};
   values=[];cursor=0;let shortParent=Retry({state:wrongShortState});
   button(shortParent,'Ôn một câu của lượt này').props.onClick();cursor=0;
@@ -385,13 +472,13 @@ try{
   find(memoryTree,n=>n.type==='input'&&n.props.value==='A').props.onChange();
   assert.match(renderToStaticMarkup(submitMemory()),/Chưa khớp đáp án/);
   button(drawMemoryExercise(),'Xem gợi ý bước 1').props.onClick();
-  button(drawMemoryExercise(),'Xem lời giải đầy đủ của câu ôn').props.onClick();
+  openSolution(drawMemoryExercise);
 
   chooseMemoryQuestion('fake-tf');
   for(const [i,value] of [true,false,false,true].entries())chooseMemoryTf(i,value);
   assert.match(renderToStaticMarkup(submitMemory()),/Có ý chưa khớp/);
   assert.equal(statementGroup(drawMemoryExercise(),1).props['aria-invalid'],undefined,'Nháp Đ/S chưa mở lời giải vẫn không lộ ý sai');
-  button(drawMemoryExercise(),'Xem lời giải đầy đủ của câu ôn').props.onClick();
+  openSolution(drawMemoryExercise);
 
   chooseMemoryQuestion('fake-short');
   find(drawMemoryExercise(),n=>n.type==='input'&&n.props.type==='text').props.onChange({target:{value:'1/0'}});
@@ -462,11 +549,11 @@ try{
   memoryTree=chooseMemoryQuestion('fake-mc');
   find(memoryTree,n=>n.type==='input'&&n.props.value==='C').props.onChange();
   submitMemory();
-  assert.match(renderToStaticMarkup(find(drawMemoryParent(),n=>n.props?.className==='btvn-retry-status')),/Đã sửa đúng 1\/3 câu/);
+  assert.match(renderToStaticMarkup(find(drawMemoryParent(),n=>n.props?.className==='btvn-retry-status')),/Đã làm đúng 1\/3 câu/);
   memoryTree=drawMemoryExercise();button(memoryTree,'Thử lại từ đầu').props.onClick();
-  assert.match(renderToStaticMarkup(find(drawMemoryParent(),n=>n.props?.className==='btvn-retry-status')),/Đã sửa đúng 0\/3 câu/,'Reset câu MC đúng loại khỏi tiến độ cùng phiên có nháp khác');
+  assert.match(renderToStaticMarkup(find(drawMemoryParent(),n=>n.props?.className==='btvn-retry-status')),/Đã làm đúng 0\/3 câu/,'Reset câu MC đúng loại khỏi tiến độ cùng phiên có nháp khác');
   const resetMcPill=find(drawMemoryParent(),n=>n.type==='button'&&n.props['aria-label']?.startsWith('I · Trắc nghiệm'));
-  assert.ok(!resetMcPill.props['aria-label'].includes('Đã sửa đúng'));
+  assert.ok(!resetMcPill.props['aria-label'].includes('Đã làm đúng'));
   assert.ok(!resetMcPill.props.className.includes('has-draft'),'Reset câu trống cũng bỏ dấu nháp của đúng câu đó');
   memoryTree=chooseMemoryQuestion('fake-tf');
   assert.equal(find(statementGroup(memoryTree,1),n=>n.type==='input'&&n.props.checked===true)?.props.checked,true,'Reset câu MC đúng vẫn giữ nháp Đ/S của câu khác');
@@ -480,23 +567,23 @@ try{
   assert.ok(button(memoryTree,'Xem gợi ý bước 1'));
   assert.ok(button(memoryTree,'Xem lời giải đầy đủ của câu ôn'));
   find(memoryTree,n=>n.type==='input'&&n.props.value==='A').props.onChange();
-  button(drawMemoryExercise(nextMemoryAttempt),'Xem lời giải đầy đủ của câu ôn').props.onClick();
+  openSolution(()=>drawMemoryExercise(nextMemoryAttempt));
   const nextMemoryVersion={...nextMemoryAttempt,exam:{...exam,versionHash:'f'.repeat(64)},draft:{...nextMemoryAttempt.draft,examVersionHash:'f'.repeat(64)}};
   assert.ok(button(drawMemoryParent(nextMemoryVersion),'Ôn một câu của lượt này'),'Bản đề mới đóng phiên ôn cũ');
   button(drawMemoryParent(nextMemoryVersion),'Ôn một câu của lượt này').props.onClick();
   memoryTree=drawMemoryExercise(nextMemoryVersion);
   assert.equal(find(memoryTree,n=>n.type==='input'&&n.props.value==='A').props.checked,false,'Phiên bản mới không hồi sinh câu trả lời');
   assert.ok(button(memoryTree,'Xem lời giải đầy đủ của câu ôn'),'Phiên bản mới không tự mở lời giải cũ');
-  button(memoryTree,'Xem lời giải đầy đủ của câu ôn').props.onClick();
+  openSolution(()=>drawMemoryExercise(nextMemoryVersion));
   assert.equal(drawMemoryParent({...nextMemoryVersion,solutionsAvailable:false}),null,'Khóa lời giải tháo phần ôn');
   assert.ok(button(drawMemoryParent(nextMemoryVersion),'Ôn một câu của lượt này'),'Khôi phục quyền vẫn bắt đầu phần ôn đóng');
   button(drawMemoryParent(nextMemoryVersion),'Ôn một câu của lượt này').props.onClick();
   assert.ok(button(drawMemoryExercise(nextMemoryVersion),'Xem lời giải đầy đủ của câu ôn'),'Không hồi sinh lời giải sau khi quyền đã bị thu hồi');
-  button(drawMemoryExercise(nextMemoryVersion),'Xem lời giải đầy đủ của câu ôn').props.onClick();
+  openSolution(()=>drawMemoryExercise(nextMemoryVersion));
   assert.equal(drawMemoryParent({...nextMemoryVersion,receipts:[]}),null,'Mất biên nhận đúng lượt cũng tháo phần ôn và bỏ nháp');
   assert.ok(button(drawMemoryParent(nextMemoryVersion),'Ôn một câu của lượt này'));
   button(drawMemoryParent(nextMemoryVersion),'Ôn một câu của lượt này').props.onClick();
   assert.ok(button(drawMemoryExercise(nextMemoryVersion),'Xem lời giải đầy đủ của câu ôn'),'Có lại ACK không tự mở lời giải nháp trước đó');
   assert.equal(JSON.stringify(wrongShortState),unchangedSnapshot,'Nháp trong RAM không sửa state, snapshot, receipt, điểm hay lượt');
 }finally{globalThis.fetch=originalFetch;}
-console.log('Đạt ôn một lỗi BTVN: ACK đúng lượt và khóa lời giải; câu sai có nguồn; Toán kiểm độc lập; nháp MC/Đ/S/câu ngắn theo câu trong RAM, chuyển câu, đóng mở và reset; đổi lượt/phiên bản hoặc mất quyền xóa nháp; giữ nguyên điểm/lượt và không gọi mạng.');
+console.log('Đạt ôn một lỗi BTVN: ACK đúng lượt và khóa lời giải; câu sai hoặc bỏ trống có nguồn; MC/Đ/S/câu ngắn bỏ trống giữ snapshot; Toán kiểm độc lập; nháp MC/Đ/S/câu ngắn theo câu trong RAM, chuyển câu, đóng mở và reset; đổi lượt/phiên bản hoặc mất quyền xóa nháp; giữ nguyên điểm/lượt và không gọi mạng.');

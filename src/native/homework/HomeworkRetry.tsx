@@ -6,6 +6,7 @@ import {normalizedShort} from '../exams/assessment';
 import {displayAnswer,reviewRows,statementLetters} from '../exams/review';
 import {questionLabel,shortInterpretationMessage} from '../exams/attempt-ui';
 import {hasReadableTfStatements} from '../exams/question-statements';
+import {acknowledgedHomeworkReceipt} from './result-summary';
 import MathText from '../math/MathText';
 import MtmSourceContent from '../exams/MtmSourceContent';
 import './homework-retry.css';
@@ -16,11 +17,9 @@ type RetryQuestion={question:PracticeQuestion;index:number};
 /** Only the acknowledged submitted snapshot can supply this optional local exercise. */
 export function homeworkRetryQuestions(state:HomeworkState):RetryQuestion[]{
   const {exam,draft}=state;
-  if(!exam||!draft||draft.submittedAt===null||state.solutionsAvailable===false)return [];
-  const receipt=state.receipts.find(r=>r.attemptId===draft.attemptId&&Number.isFinite(r.score));
-  if(!receipt)return [];
+  if(!exam||!draft||state.solutionsAvailable===false||!acknowledgedHomeworkReceipt(state)||!draft.answers||typeof draft.answers!=='object'||Array.isArray(draft.answers))return [];
   return reviewRows(exam,draft).filter(({q,status})=>
-    (status==='wrong'||status==='partial')&&
+    (status==='wrong'||status==='partial'||status==='unanswered')&&
     !!(q.prompt?.trim()||q.text?.trim()||q.sourceContent?.questions?.length)&&
     // Phần ôn không mở PDF đề: ảnh nguồn không thay thế văn bản của bốn mệnh đề Đ/S.
     (q.kind!=='tf'||hasReadableTfStatements(q))&&
@@ -77,7 +76,7 @@ export function retryMismatchStatements(q:PracticeQuestion,answer:Response):stri
 }
 
 const feedback:Record<RetryVerdict,string>={
-  correct:'Em đã sửa được lỗi này. Hãy đối chiếu lời giải để hiểu rõ cách làm.',
+  correct:'Em đã làm đúng câu này. Hãy đối chiếu lời giải để hiểu rõ cách làm.',
   wrong:'Chưa khớp đáp án. Em có thể thử lại hoặc mở lời giải để đối chiếu.',
   incomplete:'Em trả lời đủ câu rồi chọn Kiểm tra lại nhé.',
   invalid:'Câu trả lời chưa đúng định dạng. Em xem hướng dẫn ngay dưới ô trả lời.',
@@ -90,6 +89,8 @@ function RetryExercise({exam,item,submittedAnswer,onCorrect,onNext,hasNext,compl
     const draft=savedDraft??emptyRetryDraft(q);
     return {...draft,solution:canAttemptAgain?false:draft.solution,solutionViewed:draft.solutionViewed||draft.solution};
   });
+  const [confirmSolution,setConfirmSolution]=useState(false);
+  const solutionButton=useRef<HTMLButtonElement|null>(null);
   const {answer,verdict,hints,solution,solutionViewed,needsRecheck}=retry;
   const revise=(patch:Partial<RetryDraft>)=>{const next={...retry,...patch};setRetry(next);onDraftChange?.(next);};
   const {steps,reason}=sourceRetryStepInfo(q.solution),label=questionLabel(exam,index).full;
@@ -113,15 +114,16 @@ function RetryExercise({exam,item,submittedAnswer,onCorrect,onNext,hasNext,compl
         return <fieldset key={i} className={mismatch?'is-mismatch':undefined} aria-invalid={mismatch||undefined} aria-describedby={instance+'-statement-'+i+(mismatch?' '+feedbackId:'')}><legend>Ý {statementLetters[i]}</legend><div className="btvn-retry-tf-row"><p id={instance+'-statement-'+i} className="btvn-retry-text btvn-retry-statement"><MathText text={q.statements?.[i]??''}/></p><div className="btvn-retry-choices">{[true,false].map(value=><label key={String(value)}><input type="radio" name={instance+'-tf-'+i} checked={Array.isArray(answer)&&answer[i]===value} onChange={()=>{const next=Array.isArray(answer)?[...answer]:[null,null,null,null];next[i]=value;change(next);}}/><span>{value?'Đúng':'Sai'}</span></label>)}</div></div></fieldset>;
       })}</div>}
       {q.kind==='short'&&<div><label htmlFor={instance+'-answer'}>Em thử lại câu trả lời</label><input id={instance+'-answer'} className="btvn-retry-short" type="text" maxLength={500} autoComplete="off" spellCheck={false} value={typeof answer==='string'?answer:''} aria-invalid={verdict==='invalid'||undefined} aria-describedby={`${instance}-format ${instance}-interpretation`+(hasFeedback?' '+feedbackId:'')} onChange={event=>change(event.target.value)}/><div aria-live="polite" aria-atomic="true"><p className={'btvn-footnote ep-short-interpretation'+(typeof answer==='string'&&/^[+-]?\d+[.,]\d{3}$/.test(answer.trim())?' is-ambiguous':'')} id={instance+'-interpretation'}>{shortInterpretationMessage(q.mode,answer)}</p><p className="btvn-footnote" id={instance+'-format'}>{q.mode==='numeric'?'Nhập số nguyên hoặc thập phân bằng dấu phẩy hoặc dấu chấm, không nhập đơn vị hay biểu thức.':q.mode==='rational'?'Nhập số nguyên, số thập phân hoặc phân số, ví dụ -3/4; không nhập đơn vị hay biểu thức.':'Nhập chính xác theo yêu cầu đề, có phân biệt chữ hoa và chữ thường.'}</p></div></div>}
-      <div className="btvn-overview-actions"><button type="submit" className="btvn-btn primary">Kiểm tra lại</button><button type="button" className="btvn-btn" aria-label="Thử lại từ đầu câu này" onClick={()=>revise({...emptyRetryDraft(q),needsRecheck:hasRetryAnswer(answer)||corrected})}>Thử lại từ đầu</button></div>
+      <div className="btvn-overview-actions"><button type="submit" className="btvn-btn primary">Kiểm tra lại</button><button type="button" className="btvn-btn" aria-label="Thử lại từ đầu câu này" onClick={()=>{setConfirmSolution(false);revise({...emptyRetryDraft(q),needsRecheck:hasRetryAnswer(answer)||corrected});}}>Thử lại từ đầu</button></div>
     </form>
-    <div id={feedbackId} role="status" aria-live="polite" aria-atomic="true" tabIndex={-1} ref={node=>{if(node&&hasFeedback&&focused.current.restoreFeedback){focused.current.restoreFeedback=false;focused.current.sequence=focusSeq;node.focus();}}} className={hasFeedback?'btvn-retry-feedback '+(verdict&&verdict!=='correct'?'btvn-retry-error':verdict==='correct'||showComplete?'btvn-retry-success':'btvn-retry-notice'):undefined}>{verdict&&<p>{q.kind==='tf'&&verdict==='wrong'&&!canShowMismatches?'Có ý chưa khớp. Em đọc lại từng mệnh đề hoặc mở lời giải.':feedback[verdict]}</p>}{!verdict&&needsRecheck&&<p>Em đã đổi lựa chọn. Bấm Kiểm tra lại để chấm lại câu này.</p>}{mismatches.length>0&&<p>Các ý chưa khớp: {mismatches.map(letter=>'Ý '+letter).join(', ')}. Em đọc lại từng mệnh đề rồi thử lại.</p>}{showComplete&&<p>Em đã sửa đúng các câu trong phiên ôn này. Em có thể nghỉ hoặc xem lại cách làm.</p>}</div>
-    <div className="btvn-retry-next-bar"><button type="button" className={'btvn-btn'+(corrected&&hasNext?' btvn-retry-start':'')} disabled={!hasNext} aria-describedby={!hasNext&&!complete?instance+'-remaining':undefined} onClick={onNext}>Ôn câu chưa đúng tiếp theo</button>{!hasNext&&!complete&&<p id={instance+'-remaining'} className="btvn-footnote">Em đang ở câu chưa đúng còn lại.</p>}</div>
+    <div id={feedbackId} role="status" aria-live="polite" aria-atomic="true" tabIndex={-1} ref={node=>{if(node&&hasFeedback&&focused.current.restoreFeedback){focused.current.restoreFeedback=false;focused.current.sequence=focusSeq;node.focus();}}} className={hasFeedback?'btvn-retry-feedback '+(verdict&&verdict!=='correct'?'btvn-retry-error':verdict==='correct'||showComplete?'btvn-retry-success':'btvn-retry-notice'):undefined}>{verdict&&<p>{q.kind==='tf'&&verdict==='wrong'&&!canShowMismatches?'Có ý chưa khớp. Em đọc lại từng mệnh đề hoặc mở lời giải.':feedback[verdict]}</p>}{!verdict&&needsRecheck&&<p>Em đã đổi lựa chọn. Bấm Kiểm tra lại để chấm lại câu này.</p>}{mismatches.length>0&&<p>Các ý chưa khớp: {mismatches.map(letter=>'Ý '+letter).join(', ')}. Em đọc lại từng mệnh đề rồi thử lại.</p>}{showComplete&&<p>Em đã làm đúng các câu trong phiên ôn này. Em có thể nghỉ hoặc xem lại cách làm.</p>}</div>
+    <div className="btvn-retry-next-bar"><button type="button" className={'btvn-btn'+(corrected&&hasNext?' btvn-retry-start':'')} disabled={!hasNext} aria-describedby={!hasNext&&!complete?instance+'-remaining':undefined} onClick={onNext}>Ôn câu chưa xong tiếp theo</button>{!hasNext&&!complete&&<p id={instance+'-remaining'} className="btvn-footnote">Em đang ở câu còn lại chưa đúng hoặc còn bỏ trống.</p>}</div>
     {q.correctionNote&&<p><strong>Đính chính MTM:</strong> <MathText text={q.correctionNote}/></p>}
     <div className="btvn-retry-support">
       {steps.length>0&&<button type="button" className="btvn-btn" disabled={hints>=steps.length} aria-controls={instance+'-hints'} onClick={()=>revise({hints:Math.min(steps.length,hints+1)})}>{hints>=steps.length?'Đã mở hết các bước nguồn':'Xem gợi ý bước '+(hints+1)}</button>}
-      <button type="button" className="btvn-btn" aria-expanded={solution} aria-controls={instance+'-solution'} onClick={()=>revise({solution:!solution,solutionViewed:true})}>{solution?'Đóng lời giải câu ôn':solutionViewed?'Mở lại lời giải đã xem':'Xem lời giải đầy đủ của câu ôn'}</button>
+      <button type="button" ref={solutionButton} className="btvn-btn" aria-expanded={solution} aria-controls={instance+'-solution'} aria-describedby={confirmSolution?instance+'-solution-warning':undefined} onClick={()=>{if(!solution&&!solutionViewed&&canAttemptAgain){setConfirmSolution(true);return;}setConfirmSolution(false);revise({solution:!solution,solutionViewed:true});}}>{solution?'Đóng lời giải câu ôn':solutionViewed?'Mở lại lời giải đã xem':'Xem lời giải đầy đủ của câu ôn'}</button>
     </div>
+    {confirmSolution&&<div className="btvn-retry-feedback btvn-retry-notice" role="group" aria-labelledby={instance+'-solution-warning'}><p id={instance+'-solution-warning'}>Em còn lượt tính điểm. Lượt làm sau khi đã xem lời giải vẫn tính điểm.</p><div className="btvn-overview-actions"><button type="button" className="btvn-btn" onClick={()=>{setConfirmSolution(false);revise({solution:true,solutionViewed:true});solutionButton.current?.focus();}}>Vẫn mở lời giải</button><button type="button" className="btvn-btn" onClick={()=>{setConfirmSolution(false);solutionButton.current?.focus();}}>Tiếp tục tự làm</button></div></div>}
     {steps.length>0?<><div id={instance+'-hints'} className="btvn-retry-hints" aria-live="polite">{steps.slice(0,hints).map((step,i)=><p className="btvn-retry-text" key={i}><MathText text={step}/></p>)}</div>{hints>0&&<p className="btvn-footnote">Các bước được trích nguyên văn từ lời giải của câu này. Em xem bản đầy đủ để đối chiếu.</p>}</>:<p className="btvn-footnote">{reason==='preamble'?'Em mở lời giải đầy đủ để xem trọn phần mở đầu, điều kiện và cách làm.':'Em mở lời giải đầy đủ để xem cách làm của câu này.'}</p>}
     {solution&&<div id={instance+'-solution'}>{q.sourceContent?.solutions?.length?<MtmSourceContent segments={q.sourceContent.solutions} assetBase="/practice-media/source-crops" label={q.sourceRef} kind="solution" context="review" errorFallback={q.solution?.trim()?<p className="btvn-retry-text"><MathText text={q.solution}/></p>:undefined}/>:<Suspense fallback={<p>Đang mở lời giải…</p>}><DetailedSolution examId={exam.id} versionHash={exam.versionHash} questionId={q.id} fallback={q.solution!}/></Suspense>}</div>}
   </div>;
@@ -143,15 +145,15 @@ export default function HomeworkRetry({state}:{state:HomeworkState}){
   const selectedIndex=questions.indexOf(item);
   const next=Array.from({length:questions.length-1},(_,i)=>questions[(selectedIndex+i+1)%questions.length]).find(({question})=>!current.correct.includes(question.id));
   return <section className="btvn-sheet btvn-retry" aria-labelledby={instance+'-title'}>
-    <h2 id={instance+'-title'}>Sửa một lỗi, hiểu thêm một chút</h2>
-    <p>Em muốn thử lại một câu chưa đúng trong lượt vừa nộp? Phần ôn này không tính điểm và không dùng thêm lượt BTVN.</p>
+    <h2 id={instance+'-title'}>Ôn một câu, hiểu thêm một chút</h2>
+    <p>Em muốn ôn một câu sai hoặc bỏ trống trong lượt vừa nộp? Phần ôn này không tính điểm và không dùng thêm lượt BTVN.</p>
     {current.open&&<p className="btvn-footnote">Câu trả lời thử được giữ khi em đổi câu hoặc đóng phần ôn. Tải lại trang, đổi lượt, gặp bản đề khác, mất biên nhận của lượt hoặc mất quyền xem lời giải sẽ xóa phần thử này.</p>}
     <button type="button" className={'btvn-btn'+(current.open?'':' btvn-retry-start')} aria-expanded={current.open} aria-controls={instance+'-practice'} onClick={()=>update(value=>({...value,open:!value.open}))}>{current.open?'Đóng phần ôn':'Ôn một câu của lượt này'}</button>
-    {current.open&&<div id={instance+'-practice'}><p className="btvn-retry-status"><span>Đã sửa đúng {correctedCount}/{questions.length} câu trong phiên ôn.</span> <span aria-live="polite" aria-atomic="true">Đang ôn {questionLabel(state.exam,item.index).full}.</span></p><div className="btvn-retry-nav" role="group" aria-label="Chọn câu để ôn">{questions.map(({question,index})=>{
+    {current.open&&<div id={instance+'-practice'}><p className="btvn-retry-status"><span>Đã làm đúng {correctedCount}/{questions.length} câu trong phiên ôn.</span> <span aria-live="polite" aria-atomic="true">Đang ôn {questionLabel(state.exam,item.index).full}.</span></p><div className="btvn-retry-nav" role="group" aria-label="Chọn câu để ôn">{questions.map(({question,index})=>{
       const corrected=current.correct.includes(question.id),label=questionLabel(state.exam!,index);
       const hasDraft=!corrected&&hasRetryAnswer(current.drafts?.[question.id]?.answer??null);
       const part=label.part.split(' · ')[0].replace(/^Phần\s+/iu,''),compact=(part?part+' · ':'')+'Câu '+label.number;
-      return <button type="button" key={question.id} className={'btvn-retry-pill'+(corrected?' is-correct':'')+(hasDraft?' has-draft':'')} aria-pressed={item.question.id===question.id} aria-label={label.full+(corrected?' · Đã sửa đúng trong phiên ôn':hasDraft?' · Có nháp đang làm dở':'')} onClick={()=>update(value=>({...value,selected:question.id,focusQuestion:question.id,focusSeq:(value.focusSeq??0)+1}))}>{corrected&&<span aria-hidden="true">✓ </span>}<span className="btvn-retry-pill-full" aria-hidden="true">{label.full}</span><span className="btvn-retry-pill-compact" aria-hidden="true">{compact}</span>{corrected&&<span className="btvn-retry-complete" aria-hidden="true"> · Đã sửa đúng</span>}</button>;
+      return <button type="button" key={question.id} className={'btvn-retry-pill'+(corrected?' is-correct':'')+(hasDraft?' has-draft':'')} aria-pressed={item.question.id===question.id} aria-label={label.full+(corrected?' · Đã làm đúng trong phiên ôn':hasDraft?' · Có nháp đang làm dở':'')} onClick={()=>update(value=>({...value,selected:question.id,focusQuestion:question.id,focusSeq:(value.focusSeq??0)+1}))}>{corrected&&<span aria-hidden="true">✓ </span>}<span className="btvn-retry-pill-full" aria-hidden="true">{label.full}</span><span className="btvn-retry-pill-compact" aria-hidden="true">{compact}</span>{corrected&&<span className="btvn-retry-complete" aria-hidden="true"> · Đã làm đúng</span>}</button>;
     })}</div><RetryExercise key={key+':'+item.question.id} exam={state.exam} item={item} submittedAnswer={state.draft?.answers[item.question.id]} savedDraft={current.drafts?.[item.question.id]} onDraftChange={draft=>update(value=>({...value,correct:draft.verdict==='correct'?value.correct:value.correct.filter(id=>id!==item.question.id),drafts:{...value.drafts,[item.question.id]:draft}}))} onCorrect={id=>update(value=>value.correct.includes(id)?value:{...value,correct:[...value.correct,id]})} onNext={()=>{if(next)update(value=>({...value,selected:next.question.id,focusQuestion:next.question.id,focusSeq:(value.focusSeq??0)+1}));}} hasNext={!!next} complete={correctedCount===questions.length} corrected={current.correct.includes(item.question.id)} focusTitle={current.focusQuestion===item.question.id} focusSeq={current.focusSeq??0} canAttemptAgain={state.attemptsUsed<state.maxAttempts}/></div>}
   </section>;
 }

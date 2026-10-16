@@ -86,11 +86,43 @@ def configured_date(value, config, reason):
     return dt.date.fromisoformat(day)
 
 
+def configured_periods(config):
+    """Không so chuỗi ngày thô sau khi cổng nhận nguồn đã chuẩn hóa ngày."""
+    periods = config.get('periods', [])
+    p.require(isinstance(periods, list), 'Danh sách kỳ không hợp lệ')
+    result = []
+    for item in periods:
+        p.require(isinstance(item, dict), 'Cấu hình kỳ không hợp lệ')
+        start = configured_date(item.get('start'), config, 'Ngày bắt đầu kỳ không hợp lệ')
+        end = configured_date(item.get('end'), config, 'Ngày kết thúc kỳ không hợp lệ')
+        p.require(start <= end, 'Ngày kết thúc kỳ trước ngày bắt đầu')
+        p.require(item.get('period') in ('GK1', 'CK1', 'GK2', 'CK2'), 'Tên kỳ không hợp lệ')
+        result.append((start, end, item['period']))
+    return result
+
+
+def row_source_fields(row):
+    """So nguồn thực sự tải, giữ riêng phạm vi, ghi chú và đáp án."""
+    return {'khac_danh_sach_tep': row.get('homework_urls') or [row['homework']],
+            'khac_dap_an': row['answers'], 'khac_pham_vi': row.get('homework_scope', ''),
+            'khac_ghi_chu': row.get('homework_note', '')}
+
+
+def row_source_identity(row):
+    return p.digest(p.encoded(row_source_fields(row)))
+
+
+def row_source_conflicts(first, other):
+    """Chỉ xuất mã cố định, không đưa URL hoặc nội dung ghi chú vào receipt."""
+    first_fields, other_fields = row_source_fields(first), row_source_fields(other)
+    return [code for code, value in first_fields.items() if value != other_fields[code]]
+
+
 def route_rows(rows, config, now, row_events=None):
     """Chỉ lấy lịch đã xác nhận; không suy lịch 8+/9+ từ tên lớp."""
     classes = config['classes']
     start=configured_date(config.get('material_start_date','2026-10-05'),config,'Mốc học liệu không hợp lệ')
-    period_starts=[configured_date(item['start'],config,'Ngày bắt đầu kỳ không hợp lệ') for item in config.get('periods',[])]
+    period_starts=[start for start, _end, _period in configured_periods(config)]
     if period_starts:start=max(start,min(period_starts))
     selected = []
     for source in rows:
@@ -139,7 +171,7 @@ def route_rows(rows, config, now, row_events=None):
     # Gộp hai dòng cùng nguồn khi có cùng classDates được xác nhận rõ.
     groups = {}
     for row in selected:
-        key = p.digest(p.encoded([row['class_dates'], row.get('homework_urls',[row['homework']]), row['answers'],row.get('homework_scope','')]))
+        key = p.digest(p.encoded([row['class_dates'], row_source_identity(row)]))
         row['lesson_key']='btvn-'+p.digest(p.encoded(row['class_dates']))[:40]
         groups.setdefault(key, row)
     return list(groups.values())
@@ -182,7 +214,8 @@ class VersionWorker(p.Worker):
         # Tải lại nguồn để phát hiện sửa nội dung tại cùng URL Drive.
         row = copy.deepcopy(source)
         self.last_reason=None;self.last_key=row['lesson_key'];self.last_source_version=None
-        periods=[x['period'] for x in self.config.get('periods',[]) if x['start']<=row['lesson_date']<=x['end']]
+        day = configured_date(row['lesson_date'], self.config, 'Ngày học không hợp lệ')
+        periods=[period for start, end, period in configured_periods(self.config) if start <= day <= end]
         p.require(len(periods)==1 and periods[0] in ('GK1','CK1','GK2','CK2'),'Buổi học chưa thuộc đúng một kỳ đã cấu hình')
         self.config['period']=periods[0]
         p.check_answer_source(row)
@@ -311,18 +344,20 @@ def run_batch(config, transport, publisher, root, now=None, extractor=None, revi
             if event['status']=='loi':
                 report_error(config,root,event['lesson_key']+'-share','BTVN lỗi chia bài: '+event['reason'],now)
         # Hai dòng có cùng bản đồ ngày chỉ được nhận một nguồn nhất quán.
-        unique={};conflicts=set()
+        unique={};conflicts={}
         for row in rows:
             key=row['lesson_key']
-            identity=p.encoded([row.get('homework_urls',[row['homework']]),row['answers']])
-            if key in unique and unique[key][0]!=identity:conflicts.add(key)
-            else:unique[key]=(identity,row)
-        for key in conflicts:
-            row=unique[key][1]
-            reason='Hai dòng chung bài có nguồn khác nhau, cần đối chiếu'
-            receipt['items'].append({'lesson_key':key,'status':'loi','reason':reason})
+            if key not in unique:
+                unique[key]=row
+                continue
+            codes=row_source_conflicts(unique[key],row)
+            if codes:conflicts.setdefault(key,set()).update(codes)
+        for key,codes in conflicts.items():
+            row=unique[key]
+            reason='Hai dòng chung bài xung đột: '+', '.join(sorted(codes))
+            receipt['items'].append({'lesson_key':key,'classes':row['class_dates'],'status':'loi','reason':reason})
             report_error(config,root,key,'BTVN lỗi: '+', '.join(row['class_dates'])+'; '+row['lesson_date']+'; '+reason,now)
-        rows=[value[1] for key,value in unique.items() if key not in conflicts]
+        rows=[row for key,row in unique.items() if key not in conflicts]
         for row in rows:
             if r.now_vn().date() > r.END:
                 break
