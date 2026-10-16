@@ -19,6 +19,7 @@ const FormulaMatch=lazy(()=>import('./FormulaMatch'));
 const LineGraphGame=lazy(()=>import('./LineGraphGame'));
 const ErrorHunt=lazy(()=>import('./ErrorHunt'));
 const StepSolver=lazy(()=>import('./StepSolver'));
+const DomainCheck=lazy(()=>import('./DomainCheck'));
 const ChapterShelf=lazy(()=>loadShelf().then(m=>({default:m.ChapterShelf})));
 const PracticeDetail=lazy(()=>Promise.all([loadShelf(),import('./ChapterPractice')]).then(([m])=>({default:m.PracticeDetail})));
 export {practiceURL};
@@ -61,6 +62,7 @@ export default function PracticeLibrary(){
           <PracticeTool key={'graph:'+selected.id+':'+chapter.id} label="Trò tự luyện · Đọc đồ thị đường thẳng" loading="Đang tải trò đồ thị…"><LineGraphGame/></PracticeTool>
           <PracticeTool key={'error:'+selected.id+':'+chapter.id} label="Trò tự luyện · Săn lỗi biến đổi" loading="Đang tải trò săn lỗi…"><ErrorHunt/></PracticeTool>
           <PracticeTool key={'solver:'+selected.id+':'+chapter.id} label="Tự luyện · Giải từng bước" loading="Đang tải bài giải từng bước…"><StepSolver/></PracticeTool>
+          <PracticeTool key={'domain:'+selected.id+':'+chapter.id} label="Mini game · Soi điều kiện" loading="Đang tải bài soi điều kiện…"><DomainCheck/></PracticeTool>
         </>}
         {painted?<Suspense fallback={<div className="cp-shelf-loading" role="status" aria-live="polite">Đang tải danh sách bài…</div>}><ChapterShelf selected={selected} chapter={chapter}/></Suspense>:<div className="cp-shelf-loading" role="status" aria-live="polite">Đang tải danh sách bài…</div>}
       </div>

@@ -5,7 +5,7 @@ import './practice-saved-work.css';
 export type PendingPractice={id:string;title:string;href:string;updatedAt:number;deadline:number};
 export type PracticeHistoryItem={attemptId:string;examId:string;title:string;href:string;submittedAt:number};
 
-export function PracticeResume({items,incomplete,label='chương'}:{items:PendingPractice[];incomplete:boolean;label?:string}){
+export function PracticeResume({items,incomplete,label='chương',snapshotAt=Date.now()}:{items:PendingPractice[];incomplete:boolean;label?:string;snapshotAt?:number}){
   const [expanded,setExpanded]=useState(false),id=useId();
   const sorted=[...items].sort((a,b)=>b.updatedAt-a.updatedAt||a.id.localeCompare(b.id)),shown=expanded?sorted:sorted.slice(0,3);
   return <section className="cp-saved-work" aria-labelledby={id+'-title'}>
@@ -13,7 +13,7 @@ export function PracticeResume({items,incomplete,label='chương'}:{items:Pendin
     <p>Chỉ đọc bản lưu trên trình duyệt này. Đồng hồ vẫn chạy khi em rời bài; bài hết giờ sẽ được kiểm tra khi mở lại.</p>
     {incomplete&&<p role="status">Chưa đọc được đầy đủ bản lưu. Danh sách dưới đây có thể thiếu bài; dữ liệu gốc được giữ nguyên.</p>}
     {!items.length?<p>{incomplete?'Chưa tìm thấy bài chưa nộp trong phần đọc được.':'Chưa có bài chưa nộp trong '+label+' trên trình duyệt này.'}</p>:<>
-      <ul id={id+'-items'}>{shown.map(item=><li key={item.id}><h4>{item.title}</h4><p>Lưu gần nhất: <time dateTime={new Date(item.updatedAt).toISOString()}>{new Date(item.updatedAt).toLocaleString('vi-VN')}</time></p><p>Hạn làm bài: <time dateTime={new Date(item.deadline).toISOString()}>{new Date(item.deadline).toLocaleString('vi-VN')}</time></p><Link className="mig-button outline" href={item.href}>Mở bài chưa nộp: {item.title}</Link></li>)}</ul>
+      <ul id={id+'-items'}>{shown.map(item=><li key={item.id}><h4>{item.title}</h4><p><strong>{item.deadline<=snapshotAt?'Đã hết thời gian làm bài':'Chưa hết hạn tại lần đọc danh sách'}</strong></p><p>Lưu gần nhất: <time dateTime={new Date(item.updatedAt).toISOString()}>{new Date(item.updatedAt).toLocaleString('vi-VN')}</time></p><p>Hạn làm bài: <time dateTime={new Date(item.deadline).toISOString()}>{new Date(item.deadline).toLocaleString('vi-VN')}</time></p><Link className="mig-button outline" href={item.href}>Mở bài chưa nộp: {item.title}</Link></li>)}</ul>
       {items.length>3&&<button type="button" aria-expanded={expanded} aria-controls={id+'-items'} onClick={()=>setExpanded(value=>!value)}>{expanded?'Thu gọn còn 3 bài':'Xem cả '+items.length+' bài chưa nộp'}</button>}
     </>}
   </section>;
