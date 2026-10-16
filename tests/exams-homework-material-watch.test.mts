@@ -66,6 +66,55 @@ assert.equal(run([noteRow('2026-10-14T21:00:00+07:00')],[digest(base)]).pending[
 
 const scoped=run([noteRow('2026-10-14T21:00:00+07:00')]);
 assert.notEqual(scoped.jobs[0].id,local.jobs[0].id,'Phạm vi tham gia fingerprint');
+for(const changedNote of [note+'.','PHAN TRAC NGHIEM TRONG PHIEU']){
+ const changed=run([noteRow('2026-10-14T21:00:00+07:00',changedNote)],scoped.seen,config,scoped.seenSources);
+ assert.equal(changed.jobs.length,0);
+ assert.equal(changed.pending[0]?.code,'scope_changed','Checkpoint phải giữ dấu tiếng Việt và dấu câu như đối soát cùng lượt đọc');
+ assert.deepEqual(changed.seen,scoped.seen);
+}
+for(const equivalent of [note.toUpperCase(),note.normalize('NFD'),' '+note+' ']){
+ const repeat=run([noteRow('2026-10-14T21:00:00+07:00',equivalent)],scoped.seen,config,scoped.seenSources);
+ assert.deepEqual(repeat.jobs,[]);assert.deepEqual(repeat.pending,[]);
+}
+// Metadata trước v2 đã mất dấu và dấu câu. Không tự nhận thành phạm vi đã xác minh.
+const legacyNoteKey='phantracnghiemtrongphieu';
+const legacyId=createHash('sha256').update(JSON.stringify(['fake-2026-10-14',[base],answer,legacyNoteKey])).digest('hex');
+const legacyMetadata:SeenHomeworkSource={id:legacyId,lessonCode:'fake-2026-10-14',homeworkUrls:[base],homeworkNoteKey:legacyNoteKey,answer};
+for(const changedNote of [note,note+'.','PHAN TRAC NGHIEM TRONG PHIEU']){
+ const previous=JSON.stringify(legacyMetadata);
+ const held=run([noteRow('2026-10-14T21:00:00+07:00',changedNote)],[legacyId],config,[legacyMetadata]);
+ assert.deepEqual(held.jobs,[]);assert.equal(held.pending[0]?.code,'legacy_scope_unknown');
+ assert.equal(held.pending[0]?.requiresScopeReview,true);assert.deepEqual(held.seen,[legacyId]);
+ assert.equal(JSON.stringify(legacyMetadata),previous,'Không sửa metadata cũ để tự nâng phiên bản');
+ assert.deepEqual(held.seenSources,[legacyMetadata],'Giữ metadata cũ để đối soát receipt');
+}
+const mixedLegacy=run([row('2026-10-12T21:00:00+07:00'),noteRow('2026-10-14T21:00:00+07:00')],[legacyId],config,[legacyMetadata]);
+assert.deepEqual(mixedLegacy.jobs.map(job=>job.lessonCode),['fake-2026-10-12'],'Metadata cũ biết mã bài chỉ giữ đúng bài cần đối soát');
+const emptyLegacyId=createHash('sha256').update(JSON.stringify(['fake-2026-10-14',[base],answer,''])).digest('hex');
+const emptyLegacy:SeenHomeworkSource={id:emptyLegacyId,lessonCode:'fake-2026-10-14',homeworkUrls:[base],homeworkNoteKey:'',answer};
+const emptyLegacyBefore=JSON.stringify(emptyLegacy);
+for(const current of [row('2026-10-14T21:00:00+07:00'),noteRow('2026-10-14T21:00:00+07:00')]){
+ const held=run([current],[emptyLegacyId],config,[emptyLegacy]);
+ assert.deepEqual(held.jobs,[]);assert.deepEqual(held.seen,[emptyLegacyId]);assert.deepEqual(held.seenSources,[emptyLegacy]);
+ assert.equal(held.pending[0]?.code,'legacy_scope_unknown');assert.equal(held.pending[0]?.requiresScopeReview,true);
+ assert.match(held.pending[0].reason,/Checkpoint chưa mang phiên bản 2/);
+ assert.match(held.pending[0].reason,/receipt trước khi đổi id/);
+ assert.doesNotMatch(held.pending[0].reason,/đã bỏ dấu/,'Ghi chú cũ trống không chứng minh đã mất dấu');
+}
+assert.match(run([row('2026-10-14T21:00:00+07:00')],[emptyLegacyId],config,[emptyLegacy]).pending[0].reason,/cũ và hiện tại đều trống/);
+assert.equal(JSON.stringify(emptyLegacy),emptyLegacyBefore);
+for(const [current,versioned,code] of [
+ [noteRow('2026-10-14T21:00:00+07:00',note+'.'),scoped,'scope_changed'],
+ [row('2026-10-14T21:00:00+07:00',[base,a]),local,'source_changed'],
+ [row('2026-10-14T21:00:00+07:00',[base],b),local,'source_changed'],
+] as const)for(const previous of [[emptyLegacy,...versioned.seenSources],[...versioned.seenSources,emptyLegacy]]){
+ const saved=JSON.stringify(previous),seen=[emptyLegacyId,...versioned.seen];
+ const held=run([current],seen,config,previous);
+ assert.deepEqual(held.jobs,[]);assert.equal(held.pending[0]?.code,code,'Metadata v1 không che thay đổi đã đối soát được bằng v2');
+ assert.deepEqual(held.pending[0]?.previousIds,versioned.seen);
+ assert.deepEqual(held.seen,seen);assert.equal(JSON.stringify(previous),saved,'Không nâng metadata hoặc sửa checkpoint đầu vào');
+ assert.equal(held.seenSources.some(source=>source.id===emptyLegacyId&&source.fingerprintVersion===undefined),true);
+}
 for(const [current,previous] of [[noteRow('2026-10-14T21:00:00+07:00'),local],[row('2026-10-14T21:00:00+07:00'),scoped]] as const){
  const stateBefore=JSON.stringify(previous),changed=run([current],previous.seen,config,previous.seenSources);
  assert.equal(changed.jobs.length,0,'Đổi phạm vi không tự tạo bài thay thế');
@@ -92,6 +141,37 @@ for(const conflict of [row('2026-10-13T21:00:00+07:00',[a]),row('2026-10-13T21:0
  assert.equal(result.pending[0].code,'source_conflict');
  assert.equal(result.pending[0].lessonCode,'fake-2026-10-12');
  assert.match(result.pending[0].reason,/xung đột/);
+}
+for(const date of ['', '2026-10-12T14:00:00Z'])for(const links of [[a],[]]){
+ const result=run([row('2026-10-05T21:00:00+07:00'),row('2026-10-12T21:00:00+07:00'),row(date,links,b),row('2026-10-13T21:00:00+07:00')]);
+ assert.deepEqual(result.jobs.map(job=>job.lessonCode),['fake-2026-10-05']);
+ assert.equal(result.pending[0]?.code,'source_conflict','Đáp án dòng nối phải đối soát trước URL hoặc giờ');
+ assert.deepEqual(result.pending[0]?.fields,links.length?['answer','homeworkUrl']:['answer']);assert.deepEqual(result.pending[0]?.sourceRows,[3,4]);
+ assert.equal(result.seenSources.some(source=>source.lessonCode==='fake-2026-10-12'),false);
+}
+for(const date of ['', '2026-10-12T14:00:00Z']){
+ const result=run([row('2026-10-12T21:00:00+07:00'),row(date,[base,a],answer),row('',[b],'')]);
+ assert.deepEqual(result.jobs[0].homeworkUrls,[base,a,b],'Đáp án trùng ở dòng nối không cắt cha hoặc bỏ PDF tiếp theo');
+ assert.deepEqual(result.pending,[]);
+}
+const copiedAnswerWithoutDate=run([row('2026-10-12T21:00:00+07:00'),row('',[a],answer),row('',[b],''),row('2026-10-13T21:00:00+07:00')]);
+assert.deepEqual(copiedAnswerWithoutDate.jobs,[],'Không gắn PDF lạ có đáp án sao chép vào bài cha, không cho nhóm xung đột sống lại');
+assert.equal(copiedAnswerWithoutDate.pending[0]?.code,'source_conflict');
+assert.deepEqual(copiedAnswerWithoutDate.pending[0]?.fields,['homeworkUrl']);
+assert.deepEqual(copiedAnswerWithoutDate.pending[0]?.sourceRows,[2,3]);
+assert.deepEqual(copiedAnswerWithoutDate.seen,[]);assert.deepEqual(copiedAnswerWithoutDate.seenSources,[]);
+const futurePairedAnswer=detectHomework(headers,[row('2026-10-12T21:00:00+07:00'),row('2026-10-13T21:00:00+07:00',[base],b)],config,[],Date.parse('2026-10-13T00:00:00Z'));
+assert.deepEqual(futurePairedAnswer.jobs.map(job=>job.lessonCode),['fake-2026-10-12'],'Ca chưa kết thúc không xóa job của ca đã đủ điều kiện');
+assert.deepEqual(futurePairedAnswer.pending,[{row:3,reason:'Cần giờ kết thúc ca đã xác minh'}]);
+const missingPairedUrl=run([row('2026-10-12T21:00:00+07:00'),row('2026-10-13T21:00:00+07:00',[],b)]);
+assert.deepEqual(missingPairedUrl.jobs.map(job=>job.lessonCode),['fake-2026-10-12'],'Ca thiếu URL không xóa job của ca đã đủ điều kiện');
+assert.deepEqual(missingPairedUrl.pending,[{row:3,reason:'Chờ URL thật của học liệu'}]);
+for(const date of ['2026-10-12T21:00:00+07:00','2026-10-12T14:00:00Z']){
+ const result=run([row('2026-10-12T21:00:00+07:00'),row(date,[a],answer)]);
+ assert.deepEqual(result.jobs,[]);assert.equal(result.pending[0]?.code,'source_conflict');
+ assert.deepEqual(result.pending[0]?.fields,['homeworkUrl'],'Dòng có ngày và đáp án phải đối soát URL chính như trước');
+ const supplementary=run([row('2026-10-12T21:00:00+07:00'),row(date,[a],'')]);
+ assert.deepEqual(supplementary.jobs[0].homeworkUrls,[base,a]);assert.deepEqual(supplementary.pending,[]);
 }
 const punctuated=[noteRow('2026-10-12T21:00:00+07:00'),noteRow('2026-10-13T21:00:00+07:00',note+'.')];
 assert.equal(run(punctuated).pending[0].code,'source_conflict','So note trim giống reader, không âm thầm gộp câu chữ khác nhau');
@@ -232,6 +312,16 @@ try{
  assert.deepEqual(JSON.parse(readFileSync(checkpoint,'utf8')).seenSources,first.seenSources,'CLI ghi metadata cùng receipt');
  const repeat=cli(2,[row('2024-02-28T21:00:00+07:00')]);
  assert.equal(repeat.jobs.length,0,'CLI đọc lại metadata và không dựng trùng');
+ assert.equal(first.seenSources[0].fingerprintVersion,2,'CLI lưu phiên bản fingerprint để lần đọc sau đối soát đúng chuẩn');
+ const oldSource:SeenHomeworkSource={lessonCode:first.seenSources[0].lessonCode,homeworkUrls:[base],homeworkNoteKey:'',answer,id:''};
+ oldSource.id=createHash('sha256').update(JSON.stringify([oldSource.lessonCode,oldSource.homeworkUrls,answer,''])).digest('hex');
+ const oldCheckpoint=join(fixtureDir,'checkpoint-v1.json'),oldReceipt=join(fixtureDir,'receipt-v1.json');
+ writeFileSync(oldCheckpoint,JSON.stringify({seen:[oldSource.id],seenSources:[oldSource]}),'utf8');
+ const oldRun=spawnSync(process.execPath,[join(root,'scripts','watch-btvn-materials.mjs'),input,oldCheckpoint,oldReceipt],{cwd:root,encoding:'utf8'});
+ assert.equal(oldRun.status,0,oldRun.stderr||oldRun.stdout);
+ const heldReceipt=JSON.parse(readFileSync(oldReceipt,'utf8')),heldCheckpoint=JSON.parse(readFileSync(oldCheckpoint,'utf8'));
+ assert.deepEqual(heldReceipt.jobs,[]);assert.equal(heldReceipt.pending[0]?.code,'legacy_scope_unknown');
+ assert.deepEqual(heldCheckpoint.seen,[oldSource.id]);assert.deepEqual(heldCheckpoint.seenSources,[oldSource],'CLI không nâng metadata v1 hoặc tự nhận nguồn đã đối soát');
  const scopeChange=cli(3,[noteRow('2024-02-28T21:00:00+07:00')]);
  assert.equal(scopeChange.jobs.length,0);
  assert.equal(scopeChange.pending[0].code,'scope_changed','CLI giữ metadata qua checkpoint để phát hiện đổi phạm vi');

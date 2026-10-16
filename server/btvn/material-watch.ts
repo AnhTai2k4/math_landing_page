@@ -6,15 +6,18 @@ import {comparableHomeworkNote,materialConflict} from './material-conflict';
 export type MaterialConfig={sheetId:string;tab:string;programKey:string;columns:{date:string;homework:string;answer:string;material?:string};confirmedSessions?:Record<string,string>};
 export type BuildJob={id:string;lessonCode:string;sheetId:string;tab:string;row:number;homework:string;homeworkUrls?:string[];homeworkNote?:string;answer:string;status:'cho_dung'};
 /** Metadata đi kèm seen; SHA cũ không thể cho biết phạm vi hoặc tập URL trước đó. */
-export type SeenHomeworkSource={id:string;lessonCode:string;homeworkUrls:string[];homeworkNoteKey:string;answer:string};
+export type SeenHomeworkSource={id:string;lessonCode:string;homeworkUrls:string[];homeworkNoteKey:string;answer:string;fingerprintVersion?:2};
 type PendingHomework={row:number;reason:string;lessonCode?:string;code?:'source_conflict'|'scope_changed'|'source_changed'|'legacy_scope_unknown'|'legacy_checkpoint_unknown';previousIds?:string[];requiresScopeReview?:boolean;sourceRows?:[number,number];fields?:string[]};
 type DraftJob=Omit<BuildJob,'id'>;
 const noteKey=headerKey('Phần trắc nghiệm trong phiếu');
 const hash=(value:unknown)=>createHash('sha256').update(JSON.stringify(value)).digest('hex');
 const sortedUrls=(urls:string[])=>[...new Set(urls)].sort();
-const sourceId=(source:Omit<SeenHomeworkSource,'id'>)=>hash([source.lessonCode,sortedUrls(source.homeworkUrls),source.answer,source.homeworkNoteKey]);
+const sourceId=(source:Omit<SeenHomeworkSource,'id'>)=>hash([
+ ...(source.fingerprintVersion===2?['homework-source-v2']:[]),
+ source.lessonCode,sortedUrls(source.homeworkUrls),source.answer,source.homeworkNoteKey,
+]);
 const jobSource=(job:DraftJob):SeenHomeworkSource=>{
- const source={lessonCode:job.lessonCode,homeworkUrls:sortedUrls(job.homeworkUrls??[job.homework]),homeworkNoteKey:headerKey(job.homeworkNote??''),answer:job.answer};
+ const source={fingerprintVersion:2 as const,lessonCode:job.lessonCode,homeworkUrls:sortedUrls(job.homeworkUrls??[job.homework]),homeworkNoteKey:comparableHomeworkNote(job.homeworkNote),answer:job.answer};
  return {...source,id:sourceId(source)};
 };
 
@@ -47,17 +50,24 @@ export function detectHomework(headers:string[],rows:MaterialCell[][],config:Mat
    const vnDate=new Date(finish+7*3600000).toISOString().slice(0,10);
    try{lessonCode=pairedLessonCode(config.programKey,vnDate);}catch{/* Giữ lý do chờ cấu hình ở dưới. */}
   }
-  // Đối soát ghi chú trước URL/đáp án, kể cả ca khác cùng mã bài.
+  // Ghi chú tường minh phải đối soát sớm. Đáp án/URL chỉ đối soát sớm
+  // với dòng nối; ca khác phải đủ URL và giờ trước khi được cô lập nhóm.
   const scopedParent=continuation?parent?.job:lessonCode?groups.get(lessonCode):undefined;
-  if(note&&scopedParent&&comparableHomeworkNote(scopedParent.homeworkNote)!==comparableHomeworkNote(raw)){
+  const earlyDifferences=scopedParent?[
+    note&&comparableHomeworkNote(scopedParent.homeworkNote)!==comparableHomeworkNote(raw)?'homeworkNote':'',
+    continuation&&answer&&scopedParent.answer!==answer?'answer':'',
+    continuation&&answer&&urls.length&&scopedParent.homework!==urls[0]?'homeworkUrl':'',
+  ].filter(Boolean):[];
+  if(scopedParent&&earlyDifferences.length){
     const code=scopedParent.lessonCode;
-    pending.push(materialConflict(code,[scopedParent.row,i+2],['homeworkNote']));
+    pending.push(materialConflict(code,[scopedParent.row,i+2],earlyDifferences));
     groups.delete(code);conflicted.add(code);parent=undefined;continue;
   }
   if(lessonCode&&conflicted.has(lessonCode)){parent=undefined;continue;}
   if(!urls.length){pending.push({row:i+2,reason:'Chờ URL thật của học liệu'});if(!(note&&continuation))parent=undefined;continue;}
-  if(!answer&&parent&&continuation){
-   // URL phụ thường kế thừa phạm vi cha.
+  if(parent&&continuation&&(!date||!answer)){
+   // Dòng không đáp án là tệp phụ. Dòng không ngày có đáp án chỉ kế thừa
+   // sau khi URL chính và đáp án đã khớp cha ở bước đối soát bên trên.
    parent.job.homeworkUrls=[...new Set([...(parent.job.homeworkUrls??[parent.job.homework]),...urls])];continue;
   }
   parent=undefined;
@@ -82,20 +92,30 @@ export function detectHomework(headers:string[],rows:MaterialCell[][],config:Mat
  const known=new Set(seen),sources=new Map<string,SeenHomeworkSource>(),jobs:BuildJob[]=[];
  // Chỉ dùng metadata nhất quán với SHA đang có. Không sửa object bên gọi giữ.
  for(const source of previousSources){
-  if(source&&typeof source.id==='string'&&typeof source.lessonCode==='string'&&Array.isArray(source.homeworkUrls)&&source.homeworkUrls.every(url=>typeof url==='string')&&typeof source.homeworkNoteKey==='string'&&typeof source.answer==='string'&&known.has(source.id)&&sourceId(source)===source.id){
+  if(source&&(source.fingerprintVersion===undefined||source.fingerprintVersion===2)&&typeof source.id==='string'&&typeof source.lessonCode==='string'&&Array.isArray(source.homeworkUrls)&&source.homeworkUrls.every(url=>typeof url==='string')&&typeof source.homeworkNoteKey==='string'&&typeof source.answer==='string'&&known.has(source.id)&&sourceId(source)===source.id){
    sources.set(source.id,{...source,homeworkUrls:sortedUrls(source.homeworkUrls)});
   }
  }
  const prepared=[...groups.values()].map(job=>({job,source:jobSource(job)}));
- // Khóa mới chứa cả scope, nên có thể phục hồi metadata hiện tại khi SHA khớp.
+ // Chỉ v2 giữ nguyên dấu/phạm vi, được phục hồi từ SHA khớp. Không tự nâng v1.
  for(const {source} of prepared)if(known.has(source.id))sources.set(source.id,source);
  const unknownSeen=[...known].filter(id=>!sources.has(id));
  for(const {job,source} of prepared){
   if(known.has(source.id))continue;
   const previous=[...sources.values()].filter(item=>item.lessonCode===job.lessonCode);
   if(previous.length){
-   const scopeChanged=previous.some(item=>item.homeworkNoteKey!==source.homeworkNoteKey);
-   pending.push({row:job.row,lessonCode:job.lessonCode,code:scopeChanged?'scope_changed':'source_changed',previousIds:previous.map(item=>item.id),...(scopeChanged?{requiresScopeReview:true}:{}),reason:scopeChanged?'Phạm vi BTVN đã đổi; cần đối soát bài cũ trước khi dựng bài thay thế':'Tập URL hoặc đáp án BTVN đã đổi; cần đối soát bài cũ trước khi dựng bài thay thế'});
+   const versioned=previous.filter(item=>item.fingerprintVersion===2);
+   if(!versioned.length){
+    const reason=previous.some(item=>item.homeworkNoteKey!=='')
+     ?'Metadata cũ đã bỏ dấu hoặc dấu câu của phạm vi; cần đối soát receipt trước khi chuyển sổ'
+     :source.homeworkNoteKey===''
+      ?'Checkpoint chưa mang phiên bản 2; ghi chú cũ và hiện tại đều trống; cần đối soát receipt trước khi đổi id'
+      :'Checkpoint chưa mang phiên bản 2; ghi chú cũ trống, hiện tại có ghi chú; cần đối soát receipt trước khi đổi id';
+    pending.push({row:job.row,lessonCode:job.lessonCode,code:'legacy_scope_unknown',previousIds:previous.map(item=>item.id),requiresScopeReview:true,reason});
+    continue;
+   }
+   const scopeChanged=versioned.some(item=>item.homeworkNoteKey!==source.homeworkNoteKey);
+   pending.push({row:job.row,lessonCode:job.lessonCode,code:scopeChanged?'scope_changed':'source_changed',previousIds:versioned.map(item=>item.id),...(scopeChanged?{requiresScopeReview:true}:{}),reason:scopeChanged?'Phạm vi BTVN đã đổi; cần đối soát bài cũ trước khi dựng bài thay thế':'Tập URL hoặc đáp án BTVN đã đổi; cần đối soát bài cũ trước khi dựng bài thay thế'});
    continue;
   }
   if(unknownSeen.length){
