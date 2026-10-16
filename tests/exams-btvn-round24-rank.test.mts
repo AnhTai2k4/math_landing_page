@@ -21,7 +21,7 @@ import {join} from 'node:path';
 const require=createRequire(join(process.env.MTM_ROOT!,'package.json')),React=require('react'),{renderToStaticMarkup}=require('react-dom/server'),{buildSync}=require('esbuild');
 const code=buildSync({entryPoints:[join(process.env.MTM_ROOT!,'src/native/homework/HomeLeaderboard.tsx')],bundle:true,write:false,platform:'node',format:'cjs',jsx:'automatic',packages:'external',loader:{'.css':'empty'},logLevel:'silent'}).outputFiles[0].text;
 let cursor=0;const vals=[false,'2K9','btvn-tuan','',Array.from({length:10},(_,i)=>({...row,rank:i+1,fullName:'GIẢ '+i})),'ready',true,0,{state:'ready',row}];const mod={exports:{} as any};
-new Function('require','module','exports',code)((id:string)=>id==='react'?{...React,useState:()=>[vals[cursor++],()=>{}],useEffect(){}}:require(id),mod,mod.exports);
+new Function('require','module','exports',code)((id:string)=>id==='react'?{...React,useState:(initial:any)=>[cursor<vals.length?vals[cursor++]:typeof initial==='function'?initial():initial,()=>{}],useEffect(){}}:require(id),mod,mod.exports);
 const html=renderToStaticMarkup(React.createElement(mod.exports.default));
 for(let i=0;i<10;i++)assert.ok(html.includes('GIẢ '+i));
 assert.ok(html.includes(row.fullName));

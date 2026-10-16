@@ -14,6 +14,7 @@ import {readAux,writeAux,roomShortcut,warningBand} from './room-aux';
 import {RoomAnswerContext} from './RoomAnswerContext';
 import {RoomQuestionContext} from './RoomQuestionContext';
 import './focus-room.css';
+import './r104-room.css';
 import RoomNotice from './RoomNotice';
 import HomeworkBrowserHelp from '../homework/HomeworkBrowserHelp';
 const QuestionPdf=lazy(()=>import('./QuestionPdf'));
@@ -74,12 +75,20 @@ export default function FocusRoom({props,state,onExit}:{props:PracticeAttemptPro
   const titleSubtitle=titleParts.flatMap(part=>part.match(/^(Chương[^:]*|Bài\s+\d+)/i)?.[0]??[]).join(' · ');
   const shortTitle=titleParts.filter(part=>!/^Chương/i.test(part)).map(part=>part.replace(/^Bài\s+\d+\s*:\s*/i,'')).join(' · ')||fullTitle;
   const inlineChoices=q.kind==='mc'&&(!!roomSourceDisplay(q)?.choices?.length||!!questionReader&&!q.sourceContent);
-  const answerStatus=q.kind==='mc'?(answer?`Đã chọn ${answer}`:'Chưa trả lời'):q.kind==='tf'?`${tfAnswers.filter(v=>typeof v==='boolean').length}/4 ý đã chọn`:shortAnswerStatus(q.mode,answer,shortFormat)==='invalid'?'Sai định dạng':typeof answer==='string'&&answer.trim()?`Đã nhập ${answer}`:'Chưa trả lời';
+  const answerStatus=q.kind==='mc'?(answer?`Đã chọn ${answer}`:'Chưa trả lời'):q.kind==='tf'?`${tfAnswers.filter(v=>typeof v==='boolean').length}/4 ý đã chọn`:q.kind==='short'&&shortAnswerStatus(q.mode,answer,shortFormat)==='invalid'?'Sai định dạng':typeof answer==='string'&&answer.trim()?`Đã nhập ${answer}`:'Chưa trả lời';
   const saveLabel=props.isHomework?(props.saveStatus??'Đang giữ trên trang'):(unsaved?'Chưa lưu bài':'Đã lưu');
   const saveAction=!!(props.onRetrySave||props.onAcceptClosed);
   const showSaveStatus=saveAction||props.savePending;
   const closeSheet=()=>{setSheet(false);sheetButton.current?.focus();};
-  return createPortal(<div ref={host} tabIndex={-1} className={`ep-root fr-room${aux.dark?' fr-dark':''}`} aria-label="Phòng làm bài tập trung" style={{'--fr-font':aux.font} as React.CSSProperties}>
+  useEffect(()=>{
+    if(sheet)return;
+    const panel=sheetPanel.current,selected=panel?.querySelector<HTMLElement>('[aria-current="step"]');
+    if(!panel||!selected)return;
+    const bounds=panel.getBoundingClientRect(),item=selected.getBoundingClientRect();
+    const delta=item.left<bounds.left+8?item.left-bounds.left-8:item.right>bounds.right-8?item.right-bounds.right+8:0;
+    if(delta)panel.scrollTo({left:panel.scrollLeft+delta,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+  },[activeQuestion,sheet]);
+  return createPortal(<div ref={host} tabIndex={-1} className={`ep-root fr-room r104-room${aux.dark?' fr-dark':''}`} aria-label="Phòng làm bài tập trung" style={{'--fr-font':aux.font} as React.CSSProperties}>
     <header className="fr-top"><div className="fr-brand"><span className="fr-brand-symbol"><img src="/mtm-original-logo-420w.webp" alt="Minh Thành Math" width="160" height="30"/></span><b aria-hidden="true">MTM</b></div><div className="fr-title"><button className="fr-title-button" aria-label={`Xem tên đầy đủ: ${fullTitle}`} aria-expanded={titleOpen} onClick={()=>setTitleOpen(v=>!v)}><strong title={fullTitle}><span className="fr-title-long">{fullTitle}</span><span className="fr-title-short">{shortTitle}</span></strong></button><small>{titleSubtitle||'Minh Thành Math'}</small></div><time className={`fr-clock fr-band-${band}`} role="timer" aria-label="Thời gian còn lại" aria-live="off"><small>THỜI GIAN CÒN LẠI</small><strong>{Math.floor(seconds/60)}:{String(seconds%60).padStart(2,'0')}</strong></time><div className="fr-progress"><span>{answered}/{scoredQuestionCount(exam)} câu đã làm</span><progress aria-label="Tiến độ làm bài" max={scoredQuestionCount(exam)} value={answered}/></div><button className={`fr-submit${answered===scoredQuestionCount(exam)||seconds<=300?' is-ready':''}`} disabled={!pdfReady} onClick={()=>finish(false)}>Nộp bài</button><button ref={menuButton} className="fr-menu-toggle" aria-label="Tiện ích phòng làm bài" aria-expanded={menu} aria-controls="fr-actions" onClick={()=>setMenu(v=>!v)}><span aria-hidden="true">⋯</span><span className="fr-menu-label">Tiện ích</span></button><div id="fr-actions" className={`fr-actions${menu?' is-open':''}`}><button className="fr-menu-title" onClick={()=>{setTitleOpen(true);setMenu(false);}}>Tên đề: {fullTitle}</button><button onClick={()=>{void toggleFull();setMenu(false);}}>{full?'Thoát toàn màn hình':'Toàn màn hình'}</button><button onClick={onExit}>Thoát tập trung</button><button disabled={!pdfReady} onClick={()=>{setMenu(false);finish(false);}}>Nộp bài</button><button aria-expanded={tools} onClick={()=>{setTools(v=>!v);setMenu(false);}}>{props.isHomework&&props.homeworkSelfCheck?'Tự kiểm / Tiện ích':'Tiện ích'}</button><button aria-expanded={help} onClick={()=>{setHelp(v=>!v);setMenu(false);}}>{props.isHomework?'Hướng dẫn / Zalo':'Phím tắt ?'}</button></div></header>
     {titleOpen&&<section className="fr-tool-panel" aria-label="Tên đầy đủ của đề"><strong>{fullTitle}</strong><button onClick={()=>setTitleOpen(false)}>Đóng tên đề</button></section>}
     {(notice||unsaved)&&!showSaveStatus&&<p className="fr-notice" role="alert">{notice||'Chưa xác nhận lưu bài. Hãy giữ trang mở và tải bản lưu.'}{unsaved&&<button onClick={()=>{onExit();}}>Mở bản lưu bài làm</button>}</p>}
