@@ -1,0 +1,21 @@
+.cp-graph-game{color:#213269;min-width:0;font-size:18px;line-height:1.6}
+.cp-graph-game h3{font-size:24px}.cp-graph-game h4{font-size:21px}
+.cp-graph-note{color:#465776;font-size:16px}
+.cp-graph-card{padding:20px;border:1px solid #d7deea;border-radius:16px;background:#fff;margin-top:16px;min-width:0}
+.cp-graph-plot{display:block;width:100%;max-width:420px;height:auto;margin:12px auto;background:#fff}
+.cp-graph-grid line{stroke:#e1e6ee;stroke-width:1}
+.cp-graph-axis{stroke:#213269;fill:none;stroke-width:1.5}
+.cp-graph-ticks{fill:#213269;font-size:12px}
+.cp-graph-line{stroke:#213269;stroke-width:3;fill:none}
+.cp-graph-points{fill:#ffcf24;stroke:#213269;stroke-width:1.5}
+.cp-graph-point-labels{fill:#213269;font-size:13px;font-weight:700}
+.cp-graph-choices,.cp-graph-actions{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
+.cp-graph-game button{min-height:48px;padding:10px 16px;border:1px solid #8291ae;border-radius:10px;background:#fff;color:#213269;font:inherit;cursor:pointer;overflow-wrap:anywhere}
+.cp-graph-game button.cp-graph-primary,.cp-graph-game button[aria-pressed=true]{background:#213269;color:#fff;border-color:#213269}
+.cp-graph-game button:disabled{opacity:1;cursor:default}
+.cp-graph-game :focus-visible{outline:3px solid #213269;outline-offset:4px}
+.cp-graph-game button[aria-pressed=true]:focus-visible{outline-color:#b08200}
+.cp-graph-feedback{padding:14px;border-left:4px solid #ffcf24;background:#f5f7fb;margin:16px 0}
+.cp-graph-game details{border-top:1px solid #d7deea;padding-top:10px;margin-top:12px}
+.cp-graph-game summary{min-height:44px;padding:8px 0;cursor:pointer;font-weight:700;overflow-wrap:anywhere}
+@media(max-width:520px){.cp-graph-card{padding:12px}.cp-graph-choices{flex-direction:column}.cp-graph-choices button{text-align:left;width:100%}}

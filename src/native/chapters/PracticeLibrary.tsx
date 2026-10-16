@@ -1,6 +1,7 @@
 import {lazy,Suspense,useEffect,useState} from 'react';
 import {Link,useRoute} from '../../migration/navigation';
 import {practiceURL,tracks} from './practice-shared';
+import PracticeTool from './PracticeTool';
 // Nhập tĩnh ChapterPractice (chỉ phần mã giao diện, KHÔNG có ngân hàng đề) như trước KT-06 để giữ nguyên thứ tự CSS:
 // katex, math-text, result-summary, mtm-source-content, theory-tables, chapters, exams. Đã thử nhập riêng từng CSS nhưng
 // Vite đặt CSS riêng của chunk lên trước CSS dùng chung nên đổi giao diện nút/summary (review Codex đợt 3; so computed style).
@@ -15,6 +16,7 @@ const loadShelf=()=>import('./PracticeShelf').then(m=>{shelfReady=true;return m;
 const QuickRecall=lazy(()=>import('./QuickRecall'));
 const MentalMath=lazy(()=>import('./MentalMath'));
 const FormulaMatch=lazy(()=>import('./FormulaMatch'));
+const LineGraphGame=lazy(()=>import('./LineGraphGame'));
 const ChapterShelf=lazy(()=>loadShelf().then(m=>({default:m.ChapterShelf})));
 const PracticeDetail=lazy(()=>Promise.all([loadShelf(),import('./ChapterPractice')]).then(([m])=>({default:m.PracticeDetail})));
 export {practiceURL};
@@ -35,9 +37,6 @@ export default function PracticeLibrary(){
   const chapter=selected?.chapters.find(c=>c.id===params.get('chuong'))??selected?.chapters[0];
   const requested=params.get('id'),view=params.get('luot');
   const painted=useAfterFirstPaint();
-  const [recallReady,setRecallReady]=useState(false);
-  const [mentalReady,setMentalReady]=useState(false);
-  const [formulaReady,setFormulaReady]=useState(false);
   if(requested||view)return <Suspense fallback={<div className="mig-container mig-route-loading" role="status" aria-live="polite">Đang tải bài luyện…</div>}><PracticeDetail/></Suspense>;
   if(!selected||!chapter)return <section className="mig-container mig-panel"><h1>Chưa đọc được danh mục luyện tập</h1><Link href="/thi-thu">Về Thi thử</Link></section>;
   return <section className="mig-container cp-library ep-root">
@@ -53,9 +52,12 @@ export default function PracticeLibrary(){
       </aside>
       <div className="cp-chapter-content">
         <h2>{chapter.title}</h2><p>{chapter.forms.join(' · ')}</p>
-        {['10','11','12'].includes(selected.id)&&<details className="cp-theory" key={selected.id+':'+chapter.id} onToggle={event=>{if(event.currentTarget.open)setRecallReady(true);}}><summary>Ôn nhanh công thức</summary>{recallReady&&<Suspense fallback={<p role="status">Đang tải bộ thẻ…</p>}><QuickRecall key={selected.id+':'+chapter.id} track={selected.id} chapter={chapter.id}/></Suspense>}</details>}
-        {['10','11','12'].includes(selected.id)&&<details className="cp-theory" key={'mental:'+selected.id+':'+chapter.id} onToggle={event=>{if(event.currentTarget.open)setMentalReady(true);}}><summary>Trò tự luyện · Tính nhẩm 5 câu</summary>{mentalReady&&<Suspense fallback={<p role="status">Đang tải trò tính nhẩm…</p>}><MentalMath key={selected.id+':'+chapter.id}/></Suspense>}</details>}
-        {['10','11','12'].includes(selected.id)&&<details className="cp-theory" key={'formula:'+selected.id+':'+chapter.id} onToggle={event=>{if(event.currentTarget.open)setFormulaReady(true);}}><summary>Trò tự ôn · Nhận diện công thức</summary>{formulaReady&&<Suspense fallback={<p role="status">Đang tải trò ghép thẻ…</p>}><FormulaMatch key={selected.id+':'+chapter.id} track={selected.id} chapter={chapter.id}/></Suspense>}</details>}
+        {['10','11','12'].includes(selected.id)&&<>
+          <PracticeTool key={'recall:'+selected.id+':'+chapter.id} label="Ôn nhanh công thức" loading="Đang tải bộ thẻ…"><QuickRecall track={selected.id} chapter={chapter.id}/></PracticeTool>
+          <PracticeTool key={'mental:'+selected.id+':'+chapter.id} label="Trò tự luyện · Tính nhẩm 5 câu" loading="Đang tải trò tính nhẩm…"><MentalMath/></PracticeTool>
+          <PracticeTool key={'formula:'+selected.id+':'+chapter.id} label="Trò tự ôn · Nhận diện công thức" loading="Đang tải trò ghép thẻ…"><FormulaMatch track={selected.id} chapter={chapter.id}/></PracticeTool>
+          <PracticeTool key={'graph:'+selected.id+':'+chapter.id} label="Trò tự luyện · Đọc đồ thị đường thẳng" loading="Đang tải trò đồ thị…"><LineGraphGame/></PracticeTool>
+        </>}
         {painted?<Suspense fallback={<div className="cp-shelf-loading" role="status" aria-live="polite">Đang tải danh sách bài…</div>}><ChapterShelf selected={selected} chapter={chapter}/></Suspense>:<div className="cp-shelf-loading" role="status" aria-live="polite">Đang tải danh sách bài…</div>}
       </div>
     </div>
