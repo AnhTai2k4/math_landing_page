@@ -19,6 +19,9 @@ export type PracticeQuestion = Exclude<Question, {kind: 'essay'}> & {
   solution?: string;
   /** Optional verbatim statement texts; otherwise sourceRef + a/b/c/d locates them. */
   statements?: [string, string, string, string];
+  /** Trang PDF chứa đúng câu này, thuộc sourcePdf.questionPages. Cần khi dùng
+   * PDF làm nguồn trình bày thay cho văn bản bốn ý Đúng/Sai. */
+  sourcePdfPage?: number;
   sourceContent?:{questions:SourceSegment[];solutions?:SourceSegment[]};
   correctionNote?:string;
   convertedFrom?:'essay';

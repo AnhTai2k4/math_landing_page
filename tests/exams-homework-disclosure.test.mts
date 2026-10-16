@@ -102,7 +102,7 @@ for(const role of ['questions','solutions'] as const)for(const mode of ['missing
 const closedReview=durable(true),closedStart=await closedReview.repo.call('fake','start');
 closedReview.assets.splice(closedReview.assets.findIndex(asset=>asset.path===closedReview.exam.sourcePdf!.url.slice(1)),1);
 const waitingReview=await closedReview.repo.call('fake','submit',closedReview.material.lessonCode,closedStart.draft!.attemptId,{'mc-1':'D'});
-questionsOnly(waitingReview);assert.equal(waitingReview.receipts[0].score,3);assert.ok(waitingReview.assetWarnings?.length,'Đã chấm trước giờ đóng vẫn ACK được khi PDF đề hỏng, tiếp tục giấu lời giải');
+questionsOnly(waitingReview);assert.equal(waitingReview.receipts[0].score,null);assert.equal(closedReview.read().work.receipts[0].score,3);assert.ok(waitingReview.assetWarnings?.length,'Đã chấm trước giờ đóng vẫn ACK được khi PDF đề hỏng, tiếp tục giấu lời giải');
 // Save tới sau deadline tự chấm bản đã lưu, phải trả đề/kết quả đầy đủ thay saveOnly.
 const timeout=durable(),timedStart=await timeout.repo.call('fake','start');
 await timeout.repo.call('fake','save',timeout.material.lessonCode,timedStart.draft!.attemptId,{'mc-1':'D'});

@@ -158,12 +158,15 @@ test('Máy chủ nộp bài thật lưu đúng điểm hiển thị và điểm 
   assert.equal(repeated.receipts.length,1);assert.deepEqual(repeated.receipts[0],receipt);
 });
 
-test('Máy chủ không đưa subtotal chưa chấm vào điểm và điểm cao nhất',()=>{
+test('Máy chủ chặn nguồn chưa sẵn sàng trước mở lượt, không tạo subtotal công khai',()=>{
   const exam=mtmExam(['mc','mc','mc']);exam.sourceComplete=false;
-  const fixture=server(exam),started=fixture.service.start(fixture.token),state=fixture.service.submit(fixture.token,started.draft!.attemptId,{'q-1':'A'});
-  assert.equal(state.receipts[0].score,null);assert.equal(state.bestScore,null);assert.equal(state.receipts[0].mtm!.officialDisplayTotal,null);
-  assert.deepEqual(state.receipts[0].mtm!.rawTotal,fraction('10','3'));
-  assert.ok(!scoresCsv(fixture.repo.all(),'fixture-lesson').includes('3.33'));
+  const fixture=server(exam);
+  assert.ok(fixture.service.state(fixture.token));
+  assert.throws(()=>fixture.service.start(fixture.token),error=>error instanceof HomeworkError&&error.status===409);
+  assert.equal(fixture.repo.get(fixture.student.studentCode)!.drafts.length,0);
+  const result=scored(exam,{'q-1':'A'});
+  assert.equal(result.mtm!.officialDisplayTotal,null);
+  assert.deepEqual(result.mtm!.rawTotal,fraction('10','3'));
 });
 
 test('Draft khóa phiên bản đề và rubric, từ chối dùng lượt cũ với đề mới',()=>{
@@ -236,6 +239,10 @@ const durableError=await (async()=>{
       }
       throw new Error('RPC ngoài phạm vi test: '+name);
     }},async()=>{throw new Error('Không gọi Edge trong kiểm thử chấm bài');},()=>T0);
+    if(!complete){
+      await assert.rejects(durable.call('fixture-session','start',material.lessonCode),/chấm|khóa|nguồn|hợp lệ/i);
+      assert.equal(commits.length,0);assert.equal(snapshot.work.drafts.length,0);continue;
+    }
     const started=await durable.call('fixture-session','start',material.lessonCode),id=started.draft!.attemptId;
     const saved=await durable.call('fixture-session','save',material.lessonCode,id,{'q-1':'A'});assert.equal(saved.saveOnly,true);
     const state=await durable.call('fixture-session','submit',material.lessonCode,id,{'q-1':'A'});
@@ -247,6 +254,6 @@ const durableError=await (async()=>{
     assert.equal((commits[2].p_drafts as Draft[])[0].answerKeyVersion,'fixture-key-v1');
   }
 })().then(()=>null,error=>error);
-test('Luồng durable dùng bởi API nộp qua RPC commit lưu phân số và tổng null đúng trạng thái',()=>{if(durableError)throw durableError;});
+test('Luồng durable lưu phân số cho đề sẵn sàng, nguồn thiếu không tạo commit',()=>{if(durableError)throw durableError;});
 
 finish();

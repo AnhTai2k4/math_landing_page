@@ -1,6 +1,6 @@
 import type {Draft} from '../exams/store';
 import type {HomeworkState} from './btvn-contract';
-import {acknowledgedHomeworkReceipt} from './result-summary';
+import {acknowledgedHomeworkSubmission} from './result-summary';
 
 export type RemoteSaveStatus={pending:boolean;saving:boolean;failed:boolean;message:string;closed?:boolean};
 export const REMOTE_SAVE_INITIAL:RemoteSaveStatus={pending:false,saving:false,failed:false,message:''};
@@ -34,8 +34,9 @@ export function createHomeworkSaver(options:{
         if(terminal)return;
         if(next.draft?.attemptId!==item.draft.attemptId)throw new Error('Máy chủ chưa xác nhận đúng lượt làm bài. Giữ trang mở và gửi lại.');
         if(['examId','examVersionHash','rubricVersion'].some(key=>{const field=key as 'examId'|'examVersionHash'|'rubricVersion';return typeof item.draft[field]!=='string'||!item.draft[field].trim()||next.draft![field]!==item.draft[field];}))throw new Error('Máy chủ chưa xác nhận đúng bản đề của lượt này. Giữ trang mở và gửi lại.');
+        if(item.draft.answerKeyVersion!==next.draft.answerKeyVersion)throw new Error('Máy chủ chưa xác nhận đúng phiên bản khóa của lượt này. Giữ trang mở và gửi lại.');
         if(item.draft.submittedAt!==null&&next.draft.submittedAt===null)throw new Error('Máy chủ chưa xác nhận nộp bài. Giữ trang mở và gửi lại.');
-        if(next.draft.submittedAt!==null&&!acknowledgedHomeworkReceipt(next))throw new Error('Chưa có biên nhận chấm bài đúng lượt. Giữ trang mở và gửi lại.');
+        if(next.draft.submittedAt!==null&&!acknowledgedHomeworkSubmission(next))throw new Error('Chưa có biên nhận chấm bài đúng lượt. Giữ trang mở và gửi lại.');
         const received=next.draft.answers, sent=item.draft.answers;
         if(!received||typeof received!=='object'||Array.isArray(received))throw new Error('Máy chủ chưa trả đúng bản đáp án. Giữ trang mở và gửi lại.');
         if(Object.keys(received).length!==Object.keys(sent).length||Object.keys(sent).some(key=>!Object.hasOwn(received,key)||JSON.stringify(sent[key])!==JSON.stringify(received[key]))){

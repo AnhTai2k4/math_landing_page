@@ -1,18 +1,17 @@
 import {randomBytes} from 'node:crypto';
 import {HomeworkService,HomeworkError,GATE_ERROR} from './service';
 import {MemoryHomeworkRepository,scoresCsv,type StudentWork} from './repository';
-import type {HomeworkState,HomeworkLesson,LessonMaterial,GateInput} from '../../src/native/homework/btvn-contract';
+import type {HomeworkState,LessonMaterial,GateInput} from '../../src/native/homework/btvn-contract';
 import type {PracticeExam} from '../../src/native/exams/data';
 import type {Answers} from '../../src/native/exams/store';
 import {publicClassNames} from './class-config';
 import {hydratePrivateAssets,PrivatePdfUnavailableError,SIGNED_ASSET_SECONDS,type PrivateAsset} from './private-assets';
-import {lessonOpensAt,visibleLesson} from './opening-policy';
+import {lessonOpensAt} from './opening-policy';
+import {homeworkLessonCard} from './lesson-card';
 
 export interface RpcTransport {rpc(name:string,args:Record<string,unknown>):Promise<{data:unknown;error:null|{code?:string}}>}
 export type DurableSnapshot={revision:number;work:StudentWork;exam?:PracticeExam;material?:LessonMaterial;lessons:LessonMaterial[]};
-function monthlyCards(lessons:LessonMaterial[],now:number,className:string){return lessons.map(l=>{const visible=visibleLesson(l,className,now),row=l as Partial<HomeworkLesson>;
-  const card={...visible,dueAt:row.dueAt??null,bestScore:visible.locked?null:row.bestScore??null,late:visible.locked?null:row.late??null,submittedAt:visible.locked?null:row.submittedAt??null,available:visible.locked?false:row.available===true};
-  return l.kind==='kiem-tra-thang'&&now<(l.closesAt??Infinity)?{...card,materialUrl:null,handoutUrl:null,homeworkUrl:null,homeworkUrls:[],videoId:null,videoUrl:null}:card;});}
+const monthlyCards=(lessons:LessonMaterial[],now:number,className:string)=>lessons.map(l=>homeworkLessonCard(l,className,now));
 /** Server-only. Không liệt kê học sinh, không giữ mã thô trong repository.
  * Mỗi request đọc snapshot có quyền; CAS DB là điểm commit duy nhất.
  * Edge Function giữ resolver cũ + limiter chung; transport phải trỏ đúng Edge đã có. */

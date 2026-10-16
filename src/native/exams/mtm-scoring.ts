@@ -108,12 +108,14 @@ function decimal(value: string): Fraction | null {
   const [whole, part = ''] = value.replace(/^[+-]/, '').replace(',', '.').split('.');
   return mtmFraction(BigInt(whole + part) * (value.startsWith('-') ? -1n : 1n), 10n ** BigInt(part.length));
 }
-function normalizedShort(value: unknown, rule: MtmShortRule): string | null {
+export function normalizeMtmShort(value: unknown, rule: MtmShortRule): string | null {
   if (typeof value !== 'string' || value.length > 1024) return null;
   let raw = value.trim();
   if (rule.whitespace === 'collapse') raw = raw.replace(/\s+/gu, ' ');
   if (rule.unit !== undefined) {
     if (!raw.endsWith(rule.unit)) return null;
+    const unitStart = raw.length - rule.unit.length;
+    if (unitStart > 0 && !/\s/u.test(raw[unitStart - 1])) return null;
     raw = raw.slice(0, -rule.unit.length).trim();
   }
   if (!raw) return null;
@@ -187,7 +189,7 @@ function compile(source: JsonObject): MtmExamSnapshot {
     const fail = (code: string, message: string) => errors.push(issue(code, message, id));
     counts[found.type]++;
     if (found.type === 'UNKNOWN') fail('AMBIGUOUS_TYPE', 'Nội dung/cấu trúc thiếu bằng chứng hoặc chứa nhiều loại câu mâu thuẫn.');
-    if (found.conflict) fail('SOURCE_STRUCTURE_CONFLICT', 'Số ý/phương án hoặc thứ tự nhãn trong nội dung không khớp dữ liệu câu.');
+    if (found.conflict || q.sourceStructureConflict === true) fail('SOURCE_STRUCTURE_CONFLICT', 'Nội dung, số ý/phương án hoặc thứ tự nhãn không khớp dữ liệu câu.');
     const hinted = ({mc: 'TN', tf: 'DS', short: 'TLN', TN: 'TN', DS: 'DS', TLN: 'TLN'} as Record<string, string>)[String(q.kind)];
     if (q.kind !== undefined && (hinted === undefined || hinted !== found.type))
       fail('TYPE_CONFLICT', 'Nhãn loại câu không khớp cấu trúc nhận diện, cần kiểm nguồn.');
@@ -226,7 +228,7 @@ function compile(source: JsonObject): MtmExamSnapshot {
             (r.decimalPlaces as number) < 0 || (r.decimalPlaces as number) > 100))) {
         fail('TLN_RULE', 'Thiếu quy tắc chấp nhận TLN đã xác minh hoặc quy tắc định dạng không hợp lệ.');
       } else if (!Array.isArray(q.acceptedAnswers) || !q.acceptedAnswers.length ||
-          !Array.from(q.acceptedAnswers).every(a => text(a) && normalizedShort(a, r as MtmShortRule) !== null)) {
+          !Array.from(q.acceptedAnswers).every(a => text(a) && normalizeMtmShort(a, r as MtmShortRule) !== null)) {
         fail('TLN_KEY', 'Thiếu đáp án TLN hoặc đáp án vi phạm quy tắc đơn vị/định dạng đã chốt.');
       }
       if (own(q, 'answer')) fail('KEY_CONFLICT', 'TLN có khóa answer riêng ngoài acceptedAnswers, cần đối chiếu.');
@@ -323,8 +325,8 @@ export function scoreMtmAttempt(attempt: MtmAttempt, answers: unknown): MtmScore
         if (typeof answer !== 'string') fail('TLN_RESPONSE', 'Bài làm TLN phải là văn bản.');
         else {
           const rule = source.shortRule as unknown as MtmShortRule;
-          const normalized = normalizedShort(answer, rule);
-          earned = normalized !== null && (source.acceptedAnswers as string[]).some(a => normalizedShort(a, rule) === normalized) ? q.maxScore : ZERO;
+          const normalized = normalizeMtmShort(answer, rule);
+          earned = normalized !== null && (source.acceptedAnswers as string[]).some(a => normalizeMtmShort(a, rule) === normalized) ? q.maxScore : ZERO;
         }
       }
     } else if (!errors.length && q.type === 'DS') correctCount = 0;

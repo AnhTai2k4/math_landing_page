@@ -1,5 +1,7 @@
 import {validatePracticeExam,type PracticeExam} from '../../src/native/exams/data';
 import {normalizedShort} from '../../src/native/exams/assessment';
+import {mtmPracticeGradingReadiness} from '../../src/native/exams/mtm-assessment';
+import {MTM_SCORING_VERSION,normalizeMtmShort} from '../../src/native/exams/mtm-scoring';
 import {classOpeningTimes} from './class-schedule';
 import {attendanceRpc} from './publish-attendance';
 import {scorebookRpc,scorebookResult} from './publish-scorebook';
@@ -79,6 +81,7 @@ export function createBtvnPublishHandler(port:PublishPort,secret:string){return 
    return respond(200,await port.rpc('error',{lesson_key:body.lesson_key,source_version:body.source_version,material,error_code:body.error_code,reason}));
   }
   const exam=body.exam as PracticeExam;ensure(validatePracticeExam(exam).valid&&exam.durationMinutes===120,'VALIDATOR_FAILED');
+  if(exam.rubricVersion===MTM_SCORING_VERSION)ensure(mtmPracticeGradingReadiness(exam).valid,'MTM_GRADING_NOT_READY');
   const proof=body.verification;
   ensure(proof?.validator===true&&proof.independent===true&&/^[a-f0-9]{64}$/.test(proof.receipt_hash??'')&&typeof proof.provider==='string'&&proof.provider.trim().length>0&&typeof proof.model==='string'&&proof.model.trim().length>0,'REVIEW_REQUIRED');
   const slots=expectedSlots(exam);ensure(Array.isArray(proof.slots)&&proof.slots.length===slots.length,'REVIEW_COVERAGE');
@@ -88,7 +91,11 @@ export function createBtvnPublishHandler(port:PublishPort,secret:string){return 
    ensure(matches.length===1&&canonical(matches[0].expected)===canonical(slot.expected),'REVIEW_MISMATCH');
    if(q.convertedFrom==='essay'||q.kind==='self'||(exam.rubricVersion==='MTM-BTVN-10-v1'&&q.kind==='short'))ensure(matches[0].conversion_verified===true,'CONVERSION_REVIEW_REQUIRED');
    const actual=matches[0].actual;
-   ensure(q.kind==='short'?typeof actual==='string'&&normalizedShort(q.mode,actual)!==null&&q.acceptedAnswers.some(a=>normalizedShort(q.mode,a)===normalizedShort(q.mode,actual)):canonical(actual)===canonical(slot.expected),'REVIEW_MISMATCH');
+   if(q.kind==='short'&&exam.rubricVersion===MTM_SCORING_VERSION){
+    ensure(typeof actual==='string','REVIEW_MISMATCH');
+    const normalized=normalizeMtmShort(actual,q.shortRule!);
+    ensure(normalized!==null&&q.acceptedAnswers.some(expected=>normalizeMtmShort(expected,q.shortRule!)===normalized),'REVIEW_MISMATCH');
+   }else ensure(q.kind==='short'?typeof actual==='string'&&normalizedShort(q.mode,actual)!==null&&q.acceptedAnswers.some(a=>normalizedShort(q.mode,a)===normalizedShort(q.mode,actual)):canonical(actual)===canonical(slot.expected),'REVIEW_MISMATCH');
   }
   ensure(Array.isArray(body.assets)&&body.assets.length>0&&body.assets.length<=500,'INVALID_ASSETS');
   const assets=body.assets as PublishAsset[],paths=new Set<string>();let bytesTotal=0;

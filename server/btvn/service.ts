@@ -3,12 +3,14 @@ import {normalizeName,normalizePhone} from './roster';
 import {createDraft,submitDraft,validateDraft,type Answers} from '../../src/native/exams/store';
 import {resultFor} from '../../src/native/exams/result';
 import {validatePracticeExam,type PracticeExam} from '../../src/native/exams/data';
-import type {HomeworkState,LessonMaterial} from '../../src/native/homework/btvn-contract';
+import type {HomeworkState,HomeworkReceipt,LessonMaterial} from '../../src/native/homework/btvn-contract';
 import type {HomeworkRepository,StudentWork} from './repository';
 import {receiptScores} from './repository';
 import {MTM_SCORING_VERSION} from '../../src/native/exams/mtm-scoring';
-import {lessonOpensAt,visibleLesson} from './opening-policy';
+import {mtmPracticeGradingReadiness} from '../../src/native/exams/mtm-assessment';
+import {lessonOpensAt} from './opening-policy';
 import {concealMonthlySolutions} from './monthly-policy';
+import {homeworkLessonCard} from './lesson-card';
 
 export class HomeworkError extends Error {constructor(public status:number,message:string){super(message);}}
 export const GATE_ERROR='Không thể vào bài. Hãy kiểm tra thông tin hoặc thử lại sau.';
@@ -16,6 +18,10 @@ const freezeExam=<T,>(value:T):T=>{if(value&&typeof value==='object'){Object.val
 const lockedExam=(exam:PracticeExam)=>exam.rubricVersion===MTM_SCORING_VERSION?freezeExam(structuredClone(exam)):exam;
 const norm=(value:string)=>value.normalize('NFC').trim().replace(/\s+/g,' ').toLocaleLowerCase('vi-VN');
 const digest=(value:string)=>createHash('sha256').update(value).digest();
+/** Trước giờ đóng chỉ xác nhận đã nộp. Không gửi chi tiết điểm hay dữ liệu
+ * dẫn xuất có thể suy ra điểm; kho vẫn giữ nguyên biên nhận đầy đủ. */
+const receiptWithoutScore=({attemptId,attemptNumber,submittedAt,elapsedSeconds,late,timedOut}:HomeworkReceipt):HomeworkReceipt=>
+  ({attemptId,attemptNumber,submittedAt,elapsedSeconds,late,timedOut,score:null});
 type Session={code:string; expires:number;lessonCode?:string};
 type Limit={count:number; until:number};
 export class HomeworkService {
@@ -66,6 +72,14 @@ export class HomeworkService {
   private opening(token:string){const work=this.work(token),material=this.materials.find(l=>l.lessonCode===this.selected(token));return material?lessonOpensAt(material,work.student.className):0;}
   private assertOpen(token:string){if(this.clock()<this.opening(token))throw new HomeworkError(409,'Bài chưa mở. BTVN chỉ mở làm sau buổi học.');}
   private examFor(token:string){return this.selected(token)===this.lessonCode?this.exam:this.lessonExams[this.selected(token)];}
+  private gradingReadiness(token:string){
+    const exam=this.examFor(token);
+    return exam.rubricVersion===MTM_SCORING_VERSION?mtmPracticeGradingReadiness(exam):{valid:true,errors:[]};
+  }
+  private assertReadyToStart(token:string){
+    const ready=this.gradingReadiness(token);
+    if(!ready.valid)throw new HomeworkError(409,'Gói đề MTM chưa sẵn sàng chấm: '+ready.errors.join('; '));
+  }
   private lessonWork(token:string){const work=this.work(token),code=this.selected(token);if(code===this.lessonCode)return work;
     const entry=work.lessons?.[code]??{drafts:[],receipts:[]};return {...work,drafts:entry.drafts,receipts:entry.receipts,student:{...work.student,nextActualClassAt:entry.nextActualClassAt}};
   }
@@ -77,19 +91,20 @@ export class HomeworkService {
     this.sessions.get(digest(token).toString('hex'))!.lessonCode=code;return this.state(token);
   }
   state(token:string):HomeworkState {
-    const root=this.work(token),work=this.lessonWork(token),scores=receiptScores(work.receipts);
+    const now=this.clock(),root=this.work(token),work=this.lessonWork(token),scores=receiptScores(work.receipts);
     const lessons=this.materials.filter(l=>l.classNames.includes(root.student.className)).sort((a,b)=>b.date.localeCompare(a.date)).map(l=>{
       const entry=l.lessonCode===this.lessonCode?{...root,nextActualClassAt:root.student.nextActualClassAt}:root.lessons?.[l.lessonCode];
       const receipts=entry?.receipts??[],scores=receiptScores(receipts),best=scores.length?Math.max(...scores):null;
       const receipt=receipts.filter(r=>r.score===best).at(-1);
-      return {...visibleLesson(l,root.student.className,this.clock()),dueAt:entry?.nextActualClassAt??null,bestScore:best,late:receipt?.late??null,submittedAt:receipt?.submittedAt??null,available:this.clock()>=lessonOpensAt(l,root.student.className)&&(l.lessonCode===this.lessonCode||!!this.lessonExams[l.lessonCode])};
+      return homeworkLessonCard(l,root.student.className,now,{dueAt:entry?.nextActualClassAt??null,bestScore:best,late:receipt?.late??null,submittedAt:receipt?.submittedAt??null,available:l.lessonCode===this.lessonCode||!!this.lessonExams[l.lessonCode]});
     });
-    const now=this.clock(),opensAt=this.opening(token),monthly=this.monthly(token),draft=work.drafts.at(-1)??null;
+    const opensAt=this.opening(token),monthly=this.monthly(token),draft=work.drafts.at(-1)??null;
+    const hidden=!!monthly&&now<(monthly.closesAt??Infinity);
     if(now<opensAt)return {serverNow:now,exam:null,opensAt,canStart:false,solutionsAvailable:false,fullName:work.student.fullName,className:work.student.className,lessonCode:this.selected(token),dueAt:work.student.nextActualClassAt??null,maxAttempts:this.maxAttemptsFor(token),attemptsUsed:0,draft:null,receipts:[],bestScore:null,demo:true,lessons};
     const graded=!!draft&&draft.submittedAt!==null&&work.receipts.some(r=>r.attemptId===draft.attemptId);
     const solutionsAvailable=graded&&(!monthly||now>=(monthly.closesAt??Infinity));
     return {serverNow:now,exam:solutionsAvailable?this.examFor(token):concealMonthlySolutions(this.examFor(token)),opensAt,canStart:!monthly||now<(monthly.closesAt??Infinity),solutionsAvailable,...(monthly?{kind:'kiem-tra-thang' as const,closesAt:monthly.closesAt}:{}),fullName:work.student.fullName,className:work.student.className,lessonCode:this.selected(token),dueAt:work.student.nextActualClassAt??null,maxAttempts:this.maxAttemptsFor(token),
-      attemptsUsed:work.drafts.length,draft,receipts:work.receipts,bestScore:scores.length?Math.max(...scores):null,demo:true,lessons};
+      attemptsUsed:work.drafts.length,draft,receipts:hidden?work.receipts.map(receiptWithoutScore):work.receipts,bestScore:hidden?null:scores.length?Math.max(...scores):null,demo:true,lessons};
   }
   /** Chỉ phía vận hành gọi sau khi xác minh ca thực học, không mở API học sinh. */
   reconcileActualClass(studentCode:string,startsAt:number,lessonCode=this.lessonCode){
@@ -101,9 +116,17 @@ export class HomeworkService {
   start(token:string){
     this.assertOpen(token);
     let work=this.lessonWork(token);const previous=work.drafts.at(-1),now=this.clock();
-    if(previous?.submittedAt===null){if(now<Math.min(previous.deadline,this.monthly(token)?.closesAt??Infinity))return this.state(token);if(this.monthly(token))return this.submit(token,previous.attemptId,previous.answers);this.submit(token,previous.attemptId,previous.answers);work=this.lessonWork(token);}
+    if(previous?.submittedAt===null){
+      if(now<Math.min(previous.deadline,this.monthly(token)?.closesAt??Infinity))return this.state(token);
+      const submitted=this.submit(token,previous.attemptId,previous.answers);
+      // Phải trả bản nộp để adapter commit lượt cũ, kể cả khi chưa được mở lượt kế tiếp.
+      if(this.monthly(token)||work.drafts.length>=this.maxAttemptsFor(token)||!this.gradingReadiness(token).valid)return submitted;
+      work=this.lessonWork(token);
+    }
     const monthly=this.monthly(token);if(monthly&&(now<monthly.opensAt!||now>=monthly.closesAt!))throw new HomeworkError(409,'Bài kiểm tra chưa mở hoặc đã đóng.');
     if(work.drafts.length>=this.maxAttemptsFor(token))throw new HomeworkError(409,'Đã dùng hết lượt làm bài.');
+    // Chỉ chặn lượt mới. Lượt đã mở vẫn phải tải lại, lưu và nộp được bằng khóa hiện có.
+    this.assertReadyToStart(token);
     const made=createDraft(this.examFor(token),randomBytes(16).toString('hex'),now);if(!made.ok)throw new Error(made.message);
     work.drafts.push(made.value);this.putLesson(token,work);return this.state(token);
   }

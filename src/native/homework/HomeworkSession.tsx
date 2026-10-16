@@ -1,6 +1,6 @@
 import {LoadingCards} from '../../components/LoadingCards';
 import {Link} from '../../migration/navigation';
-import {createAssetRenewal,mergeHomeworkSave} from './asset-renewal';
+import {createAssetRenewal,mergeHomeworkSave,mergeHomeworkRenewal,homeworkServerNow} from './asset-renewal';
 import {scheduleOpeningRefresh} from './opening-refresh';
 import {useContext,useEffect,useMemo,useRef,useState} from 'react';
 import {displayClassName} from './presentation';
@@ -96,6 +96,7 @@ export default function HomeworkSession({pathname}:{pathname:string}){
   const hasSession=useRef(false);hasSession.current=state!==null;
   const imageNeedsRenewal=useRef(false);
   const renewAssets=useRef<(failed?:boolean)=>void>(()=>{});
+  const renewalState=useRef(state);renewalState.current=state;
   const selectedLesson=useRef<string|undefined>(parts?.[2]);
   useEffect(()=>{if(state)selectedLesson.current=state.lessonCode||undefined;},[state?.lessonCode]);
   const gateway=useMemo<HomeworkGateway>(()=>({async call(action,body={}){
@@ -134,11 +135,11 @@ export default function HomeworkSession({pathname}:{pathname:string}){
     const renew=createAssetRenewal(async()=>{try{
       const next=await gateway.call('state',{lessonCode:lesson});
       imageNeedsRenewal.current=!!next.exam?.questions.some(q=>q.sourceContent?.questions.some(segment=>segment.privateUnavailable));
-      if(alive)setState(previous=>previous?.lessonCode===lesson?{...previous,exam:next.exam,assetWarnings:next.assetWarnings,lessons:next.lessons,assetsExpiresAt:next.assetsExpiresAt,canStart:next.canStart,solutionsAvailable:next.solutionsAvailable}:previous);
-    }catch{ /* Giữ bài hiện tại khi mất mạng; lần kiểm sau thử lại. */ }});
+      if(alive)setState(previous=>previous?.lessonCode===lesson?mergeHomeworkRenewal(previous,next):previous);
+    }catch{ /* Giữ bài hiện tại khi mất mạng; lần kiểm sau thử lại. */ }},()=>homeworkServerNow(renewalState.current??state));
     const check=(failed=false)=>{if(failed)imageNeedsRenewal.current=true;void renew(state.assetsExpiresAt,imageNeedsRenewal.current);};
     renewAssets.current=check;
-    const timer=setInterval(()=>check((!state.exam&&!!state.opensAt&&Date.now()>=state.opensAt)||(state.kind==='kiem-tra-thang'&&!state.solutionsAvailable&&!!state.closesAt&&Date.now()>=state.closesAt)),60000);
+    const timer=setInterval(()=>{const now=homeworkServerNow(renewalState.current??state);check((!state.exam&&!!state.opensAt&&now>=state.opensAt)||(state.kind==='kiem-tra-thang'&&!state.solutionsAvailable&&!!state.closesAt&&now>=state.closesAt));},60000);
     const retry=()=>renewAssets.current(true);window.addEventListener('mtm:retry-assets',retry);
     const visible=()=>{if(document.visibilityState==='visible')check();};document.addEventListener('visibilitychange',visible);
     return()=>{alive=false;renewAssets.current=()=>{};clearInterval(timer);window.removeEventListener('mtm:retry-assets',retry);document.removeEventListener('visibilitychange',visible);};

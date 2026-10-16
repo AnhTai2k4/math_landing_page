@@ -47,6 +47,86 @@ export function validateMtmEqualAssessment(input:unknown):Validation {
   return {valid:errors.length===0,errors};
 }
 
+/** So nhãn và nội dung theo kind đã khóa, không suy loại từ nhãn trong đề.
+ * Prompt và text đều phải nhất quán khi chúng chép lại phương án hoặc ý DS. */
+function sourceStructureConflict(q:Record<string,unknown>):boolean {
+  const alphabet=q.kind==='mc'?'ABCDEFGHIJKLMNOPQRSTUVWXYZ':q.kind==='tf'?'abcdefghijklmnopqrstuvwxyz':null;
+  if(alphabet===null)return false;
+  const structure=q.kind==='mc'?q.choices:q.statements;
+  const expected=Array.isArray(structure)?structure.length:4;
+  const normalized=(value:string)=>value.trim().replace(/\s+/gu,' ');
+  return [q.prompt,q.text].some(content=>{
+    if(typeof content!=='string')return false;
+    const parts=[...content.matchAll(new RegExp('(?:^|[\\n;:])[\\t ]*(['+alphabet+'])[).:][\\t ]*','g'))];
+    if(!parts.length)return false;
+    return parts.length!==expected||parts.map(part=>part[1]).join('')!==alphabet.slice(0,parts.length)||
+      Array.isArray(structure)&&parts.some((part,index)=>{
+        const body=content.slice(part.index!+part[0].length,parts[index+1]?.index??content.length);
+        return typeof structure[index]!=='string'||normalized(body)!==normalized(structure[index]);
+      });
+  });
+}
+
+/** Nguồn ảnh/PDF dùng để định vị bốn ý DS. Không nhập data.ts vì vòng import.
+ * PDF toàn đề chỉ đủ khi câu có locator trang tường minh nằm trong các trang đề. */
+function verifiedQuestionSource(exam:Record<string,unknown>,q:Record<string,unknown>):boolean {
+  const pdf=exam.sourcePdf;
+  if(record(pdf)&&pdf.verified===true&&sha(pdf.sha256)&&typeof pdf.url==='string'&&
+    Number.isSafeInteger(pdf.bytes)&&(pdf.bytes as number)>=8&&(pdf.bytes as number)<=15*1024*1024&&
+    Number.isSafeInteger(pdf.totalPages)&&(pdf.totalPages as number)>=1&&(pdf.totalPages as number)<=200&&
+    Array.isArray(pdf.questionPages)&&pdf.questionPages.length>0&&new Set(pdf.questionPages).size===pdf.questionPages.length&&
+    Array.from(pdf.questionPages).every(page=>Number.isSafeInteger(page)&&page>=1&&page<=(pdf.totalPages as number))){
+    const urlValid=pdf.sha256===String(pdf.sha256).toLowerCase()&&
+      [`/exam-assets/${pdf.sha256}.pdf`,`/qa-exam-assets/${pdf.sha256}.pdf`].includes(pdf.url);
+    if(urlValid&&Number.isSafeInteger(q.sourcePdfPage)&&pdf.questionPages.includes(q.sourcePdfPage))return true;
+  }
+  const content=q.sourceContent;
+  return record(content)&&Array.isArray(content.questions)&&content.questions.length>0&&content.questions.length<=12&&
+    content.questions.every(segment=>record(segment)&&typeof segment.path==='string'&&segment.path.length<=300&&
+      /^[a-zA-Z0-9][a-zA-Z0-9_/-]*\.png$/.test(segment.path)&&!segment.path.includes('//')&&!segment.path.split('/').includes('..')&&sha(segment.sha256)&&
+      Number.isSafeInteger(segment.sourcePage)&&((segment.sourcePage as number)>=1||segment.mtmAuthored===true&&segment.sourcePage===0)&&
+      Number.isSafeInteger(segment.width)&&(segment.width as number)>=1&&(segment.width as number)<=20000&&
+      Number.isSafeInteger(segment.height)&&(segment.height as number)>=1&&(segment.height as number)<=30000)&&
+    new Set(content.questions.map(segment=>(segment as Record<string,unknown>).path)).size===content.questions.length;
+}
+
+/** kind của PracticeExam là loại đã khóa; nhãn a), b) trong prompt không đổi loại.
+ * Giữ câu gốc ở practiceQuestion của snapshot nội bộ. Bốn chuỗi DS khi không có
+ * statements là locator đến nguồn ảnh/PDF, không phải câu được biên soạn thêm. */
+function scoringQuestion(exam:Record<string,unknown>,q:Record<string,unknown>):Record<string,unknown> {
+  const issues=q.issues===undefined?[]:Array.isArray(q.issues)?[...q.issues]:['Danh sách lỗi nguồn của câu không hợp lệ.'];
+  const hasSource=verifiedQuestionSource(exam,q);
+  if(!text(q.prompt)&&!text(q.text)&&!hasSource)issues.push('Thiếu nội dung câu hoặc nguồn trình bày đã kiểm.');
+  const adapted:Record<string,unknown>={...q,practiceQuestion:q,prompt:'Nội dung theo PracticeExam đã khóa.',text:undefined,
+    sourceStructureConflict:sourceStructureConflict(q)};
+  if(q.kind==='tf'&&!Object.hasOwn(q,'statements'))adapted.statements=hasSource?
+    ['a','b','c','d'].map(label=>String(q.sourceRef)+' | ý '+label):[];
+  if(q.kind==='short'){
+    adapted.responseFormat='short';
+    const rule=q.shortRule;
+    if(record(rule)&&rule.mode!==({numeric:'decimal',rational:'rational',exact:'exact'} as Record<string,string>)[String(q.mode)])
+      issues.push('Chế độ nhập TLN không khớp quy tắc chấp nhận đã khóa.');
+  }
+  if(issues.length)adapted.issues=issues;
+  return adapted;
+}
+
+/** Gate xuất bản/mở lượt. Chấm từng phần vẫn giữ câu lỗi trong N; đường ghi
+ * phải chờ đủ nguồn, khóa và quy tắc trước khi tạo lượt mới. Chỉ dành rubric MTM. */
+export function mtmPracticeGradingReadiness(input:unknown):Validation {
+  try{
+    const gate=validateMtmEqualAssessment(input);
+    if(!gate.valid)return gate;
+    const scored=scoreMtmEqualAssessment(input,{},'grading-readiness');
+    if(!scored.ok)return {valid:false,errors:scored.errors};
+    const mtm=scored.mtm;
+    if(!mtm||mtm.officialTotal===null||mtm.pending.length)return {valid:false,errors:
+      mtm?.pending.length?mtm.pending.map(error=>'MTM_GRADING_NOT_READY: '+error.code+(error.questionId?' ('+error.questionId+')':'')):
+      ['MTM_GRADING_NOT_READY: missing official total']};
+    return {valid:true,errors:[]};
+  }catch{return {valid:false,errors:['MTM_GRADING_NOT_READY: invalid locked source']};}
+}
+
 export function scoreMtmEqualAssessment(input:unknown,submitted:unknown,attemptId='assessment'):ScoreResult {
   const gate=validateMtmEqualAssessment(input);
   if(!gate.valid)return {ok:false,errors:gate.errors};
@@ -56,9 +136,7 @@ export function scoreMtmEqualAssessment(input:unknown,submitted:unknown,attemptI
   const unknown=Object.keys(submitted).filter(id=>!known.has(id));
   if(unknown.length)return {ok:false,errors:unknown.map(id=>'answers: unknown question '+id)};
   const snapshot=new MtmScoringCatalog().prepare({...exam,examId:exam.id,examVersion:exam.versionHash,
-    questions:exam.questions.map(q=>q.kind==='short'?{...q,responseFormat:'short',
-      ...(q.shortRule&&q.shortRule.mode!==({numeric:'decimal',rational:'rational',exact:'exact'} as const)[q.mode]?
-        {issues:[...(Array.isArray(q.issues)?q.issues:q.issues===undefined?[]:['Danh sách lỗi nguồn của câu không hợp lệ.']),'Chế độ nhập TLN không khớp quy tắc chấp nhận đã khóa.']}:{})}:{...q})});
+    questions:exam.questions.map(q=>scoringQuestion(exam as unknown as Record<string,unknown>,q as unknown as Record<string,unknown>))});
   const ids=new Map(snapshot.questions.map((q,i)=>[q.id,exam.questions[i].id]));
   const answers=Object.fromEntries(snapshot.questions.filter((_,i)=>Object.hasOwn(submitted,exam.questions[i].id))
     .map(q=>[q.id,submitted[ids.get(q.id)!]]));

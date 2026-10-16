@@ -3,6 +3,7 @@ import type {HomeworkState} from './btvn-contract';
 import type {PracticeExam,PracticeQuestion} from '../exams/data';
 import type {Response} from '../exams/store';
 import {normalizedShort} from '../exams/assessment';
+import {MTM_SCORING_VERSION,normalizeMtmShort} from '../exams/mtm-scoring';
 import {displayAnswer,reviewRows,statementLetters} from '../exams/review';
 import {questionLabel,shortInterpretationMessage} from '../exams/attempt-ui';
 import {hasReadableTfStatements} from '../exams/question-statements';
@@ -55,7 +56,7 @@ type RetryDraft={answer:Response;verdict:RetryVerdict|null;hints:number;solution
 const emptyRetryDraft=(q:PracticeQuestion):RetryDraft=>({answer:q.kind==='tf'?[null,null,null,null]:null,verdict:null,hints:0,solution:false,solutionViewed:false,hintsViewed:false,needsRecheck:false});
 const hasRetryAnswer=(answer:Response)=>Array.isArray(answer)?answer.some(value=>typeof value==='boolean'):typeof answer==='string'&&!!answer.trim();
 /** Answer comparison only; no score, submission, storage or attempt is created. */
-export function checkRetryAnswer(q:PracticeQuestion,answer:Response):RetryVerdict{
+export function checkRetryAnswer(q:PracticeQuestion,answer:Response,rubricVersion?:string):RetryVerdict{
   if(q.kind==='self')return 'invalid';
   if(q.kind==='tf'){
     if(!Array.isArray(q.answer)||q.answer.length!==4||Array.from(q.answer).some(v=>typeof v!=='boolean'))return 'invalid';
@@ -64,6 +65,12 @@ export function checkRetryAnswer(q:PracticeQuestion,answer:Response):RetryVerdic
   }
   if(typeof answer!=='string'||!answer.trim())return 'incomplete';
   if(q.kind==='mc')return !['A','B','C','D'].includes(answer)?'invalid':answer===q.answer?'correct':'wrong';
+  if(rubricVersion===MTM_SCORING_VERSION){
+    if(!q.shortRule||q.shortRule.verified!==true)return 'invalid';
+    const value=normalizeMtmShort(answer,q.shortRule);
+    if(value===null)return 'invalid';
+    return q.acceptedAnswers.some(expected=>normalizeMtmShort(expected,q.shortRule!)===value)?'correct':'wrong';
+  }
   const value=normalizedShort(q.mode,answer);
   if(value===null)return 'invalid';
   return q.acceptedAnswers.some(expected=>normalizedShort(q.mode,expected)===value)?'correct':'wrong';
@@ -96,6 +103,16 @@ function RetryExercise({exam,item,submittedAnswer,onCorrect,onNext,hasNext,compl
   const revise=(patch:Partial<RetryDraft>)=>{const next={...retry,...patch};setRetry(next);onDraftChange?.(next);};
   const {steps,reason}=sourceRetryStepInfo(q.solution),label=questionLabel(exam,index).full;
   const feedbackId=instance+'-feedback';
+  const shortRule=q.kind==='short'&&exam.rubricVersion===MTM_SCORING_VERSION?q.shortRule:undefined;
+  const mtmFormat=shortRule?[shortRule.mode==='exact'?'Nhập chính xác theo đề, có phân biệt chữ hoa và chữ thường.':shortRule.mode==='rational'?'Nhập số nguyên, số thập phân hoặc phân số.':shortRule.decimalPlaces===0?'Nhập số nguyên, không có chữ số thập phân.':shortRule.decimalPlaces!==undefined?'Nhập đúng '+shortRule.decimalPlaces+' chữ số sau dấu thập phân.':'Nhập số nguyên hoặc số thập phân bằng dấu phẩy hoặc dấu chấm. Dấu chấm và dấu phẩy là dấu thập phân, không tách hàng nghìn.',shortRule.unit===undefined?(shortRule.mode==='exact'?'':'Không nhập đơn vị.'):'Ghi đơn vị '+shortRule.unit+' ở cuối.',shortRule.whitespace==='collapse'?'Các khoảng trắng liên tiếp được hiểu là một khoảng trắng.':''].filter(Boolean).join(' '):null;
+  const interpreted=shortRule?normalizeMtmShort(answer,shortRule):null;
+  const rawShort=typeof answer==='string'?answer.trim():'';
+  const unitStart=shortRule?.unit===undefined?-1:rawShort.length-shortRule.unit.length;
+  const hasExpectedUnit=shortRule?.unit!==undefined&&rawShort.endsWith(shortRule.unit)&&(unitStart===0||unitStart>0&&/\s/u.test(rawShort[unitStart-1]));
+  const numericShort=hasExpectedUnit?rawShort.slice(0,unitStart).trim():rawShort;
+  const interpretedDisplay=shortRule?.mode==='decimal'?numericShort.replace('.',','):interpreted;
+  const interpretation=shortRule?(interpreted===null?rawShort&&shortRule.unit!==undefined&&!hasExpectedUnit?'Đơn vị chưa đúng. Ghi đơn vị '+shortRule.unit+' ở cuối, cách số bằng một khoảng trắng.':'':'Máy đang hiểu là '+interpretedDisplay+(shortRule.unit?' '+shortRule.unit:'')+'.'):q.kind==='short'?shortInterpretationMessage(q.mode,answer):'';
+  const ambiguousShort=shortRule?.decimalPlaces===undefined&&shortRule?.mode!=='exact'&&/^[+-]?\d+[.,]\d{3}$/.test(numericShort);
   // Với hai lựa chọn Đúng/Sai, chỉ đích danh ý lệch cũng suy ra đáp án của ý đó.
   const canShowMismatches=!canAttemptAgain||solution;
   const mismatches=verdict==='wrong'&&canShowMismatches?retryMismatchStatements(q,answer):[];
@@ -117,13 +134,13 @@ function RetryExercise({exam,item,submittedAnswer,onCorrect,onNext,hasNext,compl
     {!!q.sourceContent?.questions?.length&&<MtmSourceContent segments={q.sourceContent.questions} assetBase="/practice-media/source-crops" label={q.sourceRef} kind="question" context="review"/>}
     <p className="btvn-footnote">Nguồn: {q.sourceRef} · MTM sưu tầm và biên soạn</p>
     <details className="btvn-retry-submitted"><summary>{'Xem câu trả lời đã nộp của '+label}</summary><p className="btvn-retry-text">Câu trả lời đã nộp: {displayAnswer(submittedAnswer)}</p><p>Em thử lại ở phần bên dưới. Câu trả lời đã nộp được giữ nguyên.</p></details>
-    <form onSubmit={event=>{event.preventDefault();const next=checkRetryAnswer(q,answer);focused.current.checkFeedback=true;revise({verdict:next,needsRecheck:false});if(next==='correct')onCorrect(q.id);}}>
+    <form onSubmit={event=>{event.preventDefault();const next=checkRetryAnswer(q,answer,exam.rubricVersion);focused.current.checkFeedback=true;revise({verdict:next,needsRecheck:false});if(next==='correct')onCorrect(q.id);}}>
       {q.kind==='mc'&&<fieldset><legend>Em chọn lại đáp án</legend><div className="btvn-retry-choices">{q.choices.map((choice,i)=><label key={letters[i]}><input type="radio" name={instance+'-mc'} value={letters[i]} checked={answer===letters[i]} onChange={()=>change(letters[i])}/><span>{letters[i]}. <MathText text={choice}/></span></label>)}</div></fieldset>}
       {q.kind==='tf'&&<div className="btvn-retry-tf">{[0,1,2,3].map(i=>{
         const mismatch=mismatches.includes(statementLetters[i]);
         return <fieldset key={i} className={mismatch?'is-mismatch':undefined} aria-invalid={mismatch||undefined} aria-describedby={instance+'-statement-'+i+(mismatch?' '+feedbackId:'')}><legend>Ý {statementLetters[i]}</legend><div className="btvn-retry-tf-row"><p id={instance+'-statement-'+i} className="btvn-retry-text btvn-retry-statement"><MathText text={q.statements?.[i]??''}/></p><div className="btvn-retry-choices">{[true,false].map(value=><label key={String(value)}><input type="radio" name={instance+'-tf-'+i} checked={Array.isArray(answer)&&answer[i]===value} onChange={()=>{const next=Array.isArray(answer)?[...answer]:[null,null,null,null];next[i]=value;change(next);}}/><span>{value?'Đúng':'Sai'}</span></label>)}</div></div></fieldset>;
       })}</div>}
-      {q.kind==='short'&&<div><label htmlFor={instance+'-answer'}>Em thử lại câu trả lời</label><input id={instance+'-answer'} className="btvn-retry-short" type="text" maxLength={500} autoComplete="off" spellCheck={false} value={typeof answer==='string'?answer:''} aria-invalid={verdict==='invalid'||undefined} aria-describedby={`${instance}-format ${instance}-interpretation`+(hasFeedback?' '+feedbackId:'')} onChange={event=>change(event.target.value)}/><div aria-live="polite" aria-atomic="true"><p className={'btvn-footnote ep-short-interpretation'+(typeof answer==='string'&&/^[+-]?\d+[.,]\d{3}$/.test(answer.trim())?' is-ambiguous':'')} id={instance+'-interpretation'}>{shortInterpretationMessage(q.mode,answer)}</p><p className="btvn-footnote" id={instance+'-format'}>{q.mode==='numeric'?'Nhập số nguyên hoặc thập phân bằng dấu phẩy hoặc dấu chấm, không nhập đơn vị hay biểu thức.':q.mode==='rational'?'Nhập số nguyên, số thập phân hoặc phân số, ví dụ -3/4; không nhập đơn vị hay biểu thức.':'Nhập chính xác theo yêu cầu đề, có phân biệt chữ hoa và chữ thường.'}</p></div></div>}
+      {q.kind==='short'&&<div><label htmlFor={instance+'-answer'}>Em thử lại câu trả lời</label><input id={instance+'-answer'} className="btvn-retry-short" type="text" maxLength={500} autoComplete="off" spellCheck={false} value={typeof answer==='string'?answer:''} aria-invalid={verdict==='invalid'||undefined} aria-describedby={`${instance}-format ${instance}-interpretation`+(hasFeedback?' '+feedbackId:'')} onChange={event=>change(event.target.value)}/><p className="btvn-footnote" id={instance+'-format'}>{mtmFormat??(q.mode==='numeric'?'Nhập số nguyên hoặc thập phân bằng dấu phẩy hoặc dấu chấm, không nhập đơn vị hay biểu thức.':q.mode==='rational'?'Nhập số nguyên, số thập phân hoặc phân số, ví dụ -3/4; không nhập đơn vị hay biểu thức.':'Nhập chính xác theo yêu cầu đề, có phân biệt chữ hoa và chữ thường.')}</p><p className={'btvn-footnote ep-short-interpretation'+(ambiguousShort?' is-ambiguous':'')} id={instance+'-interpretation'} aria-live="polite" aria-atomic="true">{interpretation}</p></div>}
       <div className="btvn-overview-actions"><button type="submit" className="btvn-btn primary">Kiểm tra lại</button><button type="button" className="btvn-btn" aria-label="Thử lại từ đầu câu này" onClick={()=>{setConfirmSource(null);focused.current.checkFeedback=false;revise({...emptyRetryDraft(q),solutionViewed,hintsViewed});}}>Thử lại từ đầu</button></div>
     </form>
     {/* Phản hồi được đọc khi nhận focus, không phát thêm cùng nội dung qua vùng live. */}

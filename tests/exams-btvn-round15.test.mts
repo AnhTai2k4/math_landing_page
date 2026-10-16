@@ -39,7 +39,7 @@ let work:any={student:{...student},drafts:[],receipts:[]};
 const durable=new SupabaseHomeworkRepository({async rpc(name,args){if(name==='mtm_btvn_read')return {data:{revision:0,exam,material,lessons:[material],work},error:null};if(name==='mtm_btvn_commit'){work={...work,drafts:args.p_drafts,receipts:args.p_receipts};return {data:{ok:true},error:null};}throw Error(name);}},async()=>({}),()=>now);
 now=opensAt-1;state=await durable.call('fake','state');assert.equal(state.exam,null);assert.equal(state.canStart,false);
 now=opensAt;state=await durable.call('fake','start');assert.equal(state.maxAttempts,1);assert.equal(state.solutionsAvailable,false);assert.ok(!JSON.stringify(state).includes('LỜI GIẢI BÍ MẬT'));assert.ok(!JSON.stringify(state).includes('SECRET-HANDOUT'));
-now+=1000;state=await durable.call('fake','submit',material.lessonCode,state.draft!.attemptId,{'mc-1':'D'});assert.equal(state.receipts[0].score,3);assert.ok(!JSON.stringify(state).includes('LỜI GIẢI BÍ MẬT'));
+now+=1000;state=await durable.call('fake','submit',material.lessonCode,state.draft!.attemptId,{'mc-1':'D'});assert.equal(state.receipts[0].score,null);assert.equal(work.receipts[0].score,3);assert.ok(!JSON.stringify(state).includes('LỜI GIẢI BÍ MẬT'));
 now=closesAt;state=await durable.call('fake','state');assert.equal(state.solutionsAvailable,true);assert.ok(JSON.stringify(state).includes('LỜI GIẢI BÍ MẬT'));
 const {default:Overview}=load('src/native/homework/HomeworkOverview.tsx');
 const html=renderToStaticMarkup(React.createElement(Overview,{state:{...state,solutionsAvailable:false},busy:false,onStart(){}}));assert.ok(!html.includes('Xem lời giải'));assert.ok(html.includes('Chỉ 1 lượt'));

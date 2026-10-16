@@ -1,7 +1,8 @@
 import type {HomeworkReceipt,HomeworkState} from './btvn-contract';
 import {MTM_SCORING_VERSION} from '../exams/mtm-scoring';
 
-type SummaryState=Pick<HomeworkState,'draft'|'receipts'|'kind'>;
+type SummaryState=Pick<HomeworkState,'draft'|'receipts'|'kind'|'solutionsAvailable'>;
+export const monthlyResultsHidden=(state:Pick<HomeworkState,'kind'|'solutionsAvailable'>)=>state.kind==='kiem-tra-thang'&&state.solutionsAvailable===false;
 const MAX_TIME=253402300799999;
 const validTime=(value:unknown):value is number=>typeof value==='number'&&Number.isSafeInteger(value)&&value>=0&&value<=MAX_TIME;
 export const isMtmHomeworkReceipt=(receipt:HomeworkReceipt)=>receipt.rubricVersion===MTM_SCORING_VERSION||receipt.mtm?.versions?.rubricVersion===MTM_SCORING_VERSION;
@@ -18,13 +19,25 @@ export function homeworkReceiptScore(receipt:HomeworkReceipt):string|null{
 
 /** Chỉ nhận biên nhận của chính bản nộp đang xem, không lấy lượt lịch sử thay thế. */
 export function acknowledgedHomeworkReceipt(state:SummaryState):HomeworkReceipt|null{
+  if(monthlyResultsHidden(state))return null;
   const {draft}=state;
   if(!draft||typeof draft.attemptId!=='string'||!draft.attemptId.trim()||!validTime(draft.submittedAt)||!Array.isArray(state.receipts))return null;
   const matching=state.receipts.filter(receipt=>receipt?.attemptId===draft.attemptId);
   if(matching.length!==1)return null;
   const receipt=matching[0];
+  if(isMtmHomeworkReceipt(receipt)&&(!matchingMtmSnapshot(receipt)||receipt.mtm!.versions.examId!==draft.examId||receipt.mtm!.versions.examVersion!==draft.examVersionHash||receipt.mtm!.versions.answerKeyVersion!==draft.answerKeyVersion||receipt.mtm!.versions.rubricVersion!==draft.rubricVersion))return null;
   // Điểm đã xác nhận không phụ thuộc metadata thời gian dùng để tạo phiếu.
   return homeworkReceiptScore(receipt)!==null||pendingHomeworkReceipt(receipt)?receipt:null;
+}
+
+/** ACK nộp bài độc lập với quyền xem điểm. Bản tháng đã lược vẫn phải
+ * có đúng một biên nhận, cùng lượt và cùng mốc nộp của draft máy chủ. */
+export function acknowledgedHomeworkSubmission(state:SummaryState):HomeworkReceipt|null{
+  if(!monthlyResultsHidden(state))return acknowledgedHomeworkReceipt(state);
+  const {draft}=state;
+  if(!draft||typeof draft.attemptId!=='string'||!draft.attemptId.trim()||!validTime(draft.submittedAt)||!Array.isArray(state.receipts))return null;
+  const matching=state.receipts.filter(receipt=>receipt?.attemptId===draft.attemptId);
+  return matching.length===1&&matching[0].submittedAt===draft.submittedAt?matching[0]:null;
 }
 
 /** Phiếu tự gửi cần đủ metadata hợp lệ; thiếu phiếu không khóa điểm hoặc lượt tiếp. */
