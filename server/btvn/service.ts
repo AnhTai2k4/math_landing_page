@@ -5,11 +5,15 @@ import {resultFor} from '../../src/native/exams/result';
 import {validatePracticeExam,type PracticeExam} from '../../src/native/exams/data';
 import type {HomeworkState,LessonMaterial} from '../../src/native/homework/btvn-contract';
 import type {HomeworkRepository,StudentWork} from './repository';
+import {receiptScores} from './repository';
+import {MTM_SCORING_VERSION} from '../../src/native/exams/mtm-scoring';
 import {lessonOpensAt,visibleLesson} from './opening-policy';
 import {concealMonthlySolutions} from './monthly-policy';
 
 export class HomeworkError extends Error {constructor(public status:number,message:string){super(message);}}
 export const GATE_ERROR='Không thể vào bài. Hãy kiểm tra thông tin hoặc thử lại sau.';
+const freezeExam=<T,>(value:T):T=>{if(value&&typeof value==='object'){Object.values(value).forEach(freezeExam);Object.freeze(value);}return value;};
+const lockedExam=(exam:PracticeExam)=>exam.rubricVersion===MTM_SCORING_VERSION?freezeExam(structuredClone(exam)):exam;
 const norm=(value:string)=>value.normalize('NFC').trim().replace(/\s+/g,' ').toLocaleLowerCase('vi-VN');
 const digest=(value:string)=>createHash('sha256').update(value).digest();
 type Session={code:string; expires:number;lessonCode?:string};
@@ -24,6 +28,10 @@ export class HomeworkService {
     const valid=validatePracticeExam(exam);if(!valid.valid)throw new Error(valid.errors.join('; '));
     if(exam.durationMinutes!==120)throw new Error('BTVN cần 120 phút/lượt');
     for(const item of Object.values(lessonExams))if(!validatePracticeExam(item).valid||item.durationMinutes!==120)throw new Error('Gói đề buổi học chưa hợp lệ');
+    // Giữ riêng bản đề/khóa đã nhận. Sửa dữ liệu biên tập ngoài service không
+    // được thay nội dung của lượt đang mở hoặc tính lại biên nhận đã lưu.
+    this.exam=lockedExam(exam);
+    this.lessonExams=Object.fromEntries(Object.entries(lessonExams).map(([code,item])=>[code,lockedExam(item)]));
   }
   login(gate:unknown,ip:string):string {
     const now=this.clock();
@@ -69,10 +77,10 @@ export class HomeworkService {
     this.sessions.get(digest(token).toString('hex'))!.lessonCode=code;return this.state(token);
   }
   state(token:string):HomeworkState {
-    const root=this.work(token),work=this.lessonWork(token),scores=work.receipts.map(r=>r.score);
+    const root=this.work(token),work=this.lessonWork(token),scores=receiptScores(work.receipts);
     const lessons=this.materials.filter(l=>l.classNames.includes(root.student.className)).sort((a,b)=>b.date.localeCompare(a.date)).map(l=>{
       const entry=l.lessonCode===this.lessonCode?{...root,nextActualClassAt:root.student.nextActualClassAt}:root.lessons?.[l.lessonCode];
-      const receipts=entry?.receipts??[],best=receipts.length?Math.max(...receipts.map(r=>r.score)):null;
+      const receipts=entry?.receipts??[],scores=receiptScores(receipts),best=scores.length?Math.max(...scores):null;
       const receipt=receipts.filter(r=>r.score===best).at(-1);
       return {...visibleLesson(l,root.student.className,this.clock()),dueAt:entry?.nextActualClassAt??null,bestScore:best,late:receipt?.late??null,submittedAt:receipt?.submittedAt??null,available:this.clock()>=lessonOpensAt(l,root.student.className)&&(l.lessonCode===this.lessonCode||!!this.lessonExams[l.lessonCode])};
     });
@@ -121,7 +129,8 @@ export class HomeworkService {
     const result=resultFor(exam,submitted.value);if(!result?.score.ok)throw new Error('Không chấm được');
     work.drafts[work.drafts.length-1]=submitted.value;
     // Bản nộp và biên nhận dùng cùng mốc server đã chuẩn hóa, kể cả khi đồng hồ lùi sau lần lưu trước.
-    work.receipts.push({attemptId:id,attemptNumber:work.drafts.length,submittedAt:submitted.value.submittedAt!,elapsedSeconds:Math.min(exam.durationMinutes*60,Math.floor((Math.min(now,this.monthly(token)?.closesAt??Infinity)-draft.startedAt)/1000)),score:result.score.earnedMillipoints/1000,late:work.student.nextActualClassAt===undefined?null:now>=work.student.nextActualClassAt,timedOut});
+    const mtm=result.mtm;
+    work.receipts.push({attemptId:id,attemptNumber:work.drafts.length,submittedAt:submitted.value.submittedAt!,elapsedSeconds:Math.min(exam.durationMinutes*60,Math.floor((Math.min(now,this.monthly(token)?.closesAt??Infinity)-draft.startedAt)/1000)),score:mtm?(mtm.officialDisplayTotal===null?null:Number(mtm.officialDisplayTotal)):result.score.earnedMillipoints/1000,...(mtm?{rubricVersion:MTM_SCORING_VERSION,mtm}:{}),late:work.student.nextActualClassAt===undefined?null:now>=work.student.nextActualClassAt,timedOut});
     this.putLesson(token,work);return this.state(token);
   }
 }

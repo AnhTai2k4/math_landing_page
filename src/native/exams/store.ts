@@ -1,4 +1,5 @@
 import type {Choice} from './assessment';
+import {MTM_SCORING_VERSION} from './mtm-scoring';
 import {boundedText, isRecord, validatePracticeExam, validateQuestionOnlyPracticeExam, type PracticeExam} from './data';
 
 export const STORAGE_PREFIX = 'mtm:exam:v1:';
@@ -10,6 +11,7 @@ export type Draft = Readonly<{
   examId: string;
   examVersionHash: string;
   rubricVersion: string;
+  answerKeyVersion?:string;
   attemptId: string;
   startedAt: number;
   deadline: number;
@@ -37,8 +39,10 @@ export function validateDraft(value: unknown, exam: PracticeExam, options:DraftV
   if (!validDraftExam(exam,options)) return fail('exam', 'Đề chưa đủ điều kiện mở làm bài.');
   if (!isRecord(value)) return fail('shape', 'Bản lưu không đúng định dạng. Dữ liệu cũ được giữ nguyên.');
   const fields = ['version', 'examId', 'examVersionHash', 'rubricVersion', 'attemptId', 'startedAt', 'deadline', 'updatedAt', 'answers', 'submittedAt', 'revision'];
+  if(exam.rubricVersion===MTM_SCORING_VERSION)fields.push('answerKeyVersion');
   if (Object.keys(value).length !== fields.length || !fields.every(key => Object.hasOwn(value, key))) return fail('shape', 'Bản lưu có cấu trúc khác. Dữ liệu cũ được giữ nguyên.');
   if (value.version !== 1 || value.examId !== exam.id || value.examVersionHash !== exam.versionHash || value.rubricVersion !== exam.rubricVersion) return fail('version', 'Bản lưu thuộc đề hoặc phiên bản khác. Dữ liệu cũ được giữ nguyên.');
+  if(exam.rubricVersion===MTM_SCORING_VERSION&&value.answerKeyVersion!==exam.answerKeyVersion)return fail('version','Bản lưu thuộc phiên bản đáp án khác. Dữ liệu cũ được giữ nguyên.');
   if (!boundedText(value.attemptId, 160) || value.attemptId.trim() !== value.attemptId) return fail('attempt', 'Mã lượt làm trong bản lưu không hợp lệ.');
   if (!validTime(value.startedAt) || !validTime(value.deadline) || !validTime(value.updatedAt) || !validRevision(value.revision)) return fail('time', 'Thời gian hoặc số lần lưu không hợp lệ.');
   if (value.deadline <= value.startedAt || value.deadline - value.startedAt !== exam.durationMinutes * 60000 || value.updatedAt < value.startedAt) return fail('time', 'Thời hạn trong bản lưu không khớp thời lượng đề.');
@@ -77,7 +81,7 @@ const sameAnswers = (a: Answers, b: Answers) => {
   return keys.length === Object.keys(b).length && keys.every(key => Object.hasOwn(b, key) && JSON.stringify(a[key]) === JSON.stringify(b[key]));
 };
 export function sameDraft(a: Draft, b: Draft): boolean {
-  return a.version === b.version && a.examId === b.examId && a.examVersionHash === b.examVersionHash && a.rubricVersion === b.rubricVersion && a.attemptId === b.attemptId && a.startedAt === b.startedAt && a.deadline === b.deadline && a.updatedAt === b.updatedAt && a.submittedAt === b.submittedAt && a.revision === b.revision && sameAnswers(a.answers, b.answers);
+  return a.version === b.version && a.examId === b.examId && a.examVersionHash === b.examVersionHash && a.rubricVersion === b.rubricVersion && a.answerKeyVersion===b.answerKeyVersion && a.attemptId === b.attemptId && a.startedAt === b.startedAt && a.deadline === b.deadline && a.updatedAt === b.updatedAt && a.submittedAt === b.submittedAt && a.revision === b.revision && sameAnswers(a.answers, b.answers);
 }
 
 /** Optimistic save against the exact last successfully read/saved snapshot.
@@ -110,7 +114,7 @@ export function saveDraft(storage: Store | null, exam: PracticeExam, candidate: 
 export function createDraft(exam: PracticeExam, attemptId: string, now: number, options:DraftValidationOptions={}): Outcome<Draft> {
   return validateDraft({version: 1, examId: exam.id, examVersionHash: exam.versionHash, rubricVersion: exam.rubricVersion, attemptId,
     startedAt: now, deadline: now + exam.durationMinutes * 60000, updatedAt: now,
-    answers: {}, submittedAt: null, revision: 0}, exam, options);
+    answers: {}, submittedAt: null, revision: 0,...(exam.rubricVersion===MTM_SCORING_VERSION?{answerKeyVersion:exam.answerKeyVersion}:{})}, exam, options);
 }
 export function remainingMs(draft: Pick<Draft, 'deadline'>, now: number): number {
   if (!validTime(now) || !validTime(draft.deadline)) throw new RangeError('Invalid clock');

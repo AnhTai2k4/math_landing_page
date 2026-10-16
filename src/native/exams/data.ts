@@ -3,6 +3,8 @@ import type {Assessment, Question, Validation} from './assessment';
 import type {SourceSegment} from './MtmSourceContent';
 import {FLEX_RUBRIC,validatePracticeProfile,type ExamSection} from './flexible-profile';
 import {MTM_PROFILE} from './mtm-profile';
+import {MTM_SCORING_VERSION} from './mtm-scoring';
+import {isMtmQuestionPoints} from './mtm-assessment';
 
 export const GRADES = [10, 11, 12] as const;
 export const PERIODS = ['GK1', 'CK1', 'GK2', 'CK2'] as const;
@@ -85,6 +87,7 @@ export function validatePracticeExam(input: unknown): Validation {
  * remains exclusively on the server. */
 export function validateQuestionOnlyPracticeExam(input: unknown): Validation {
   if (!isRecord(input)) return {valid:false,errors:['exam: object required']};
+  if(input.rubricVersion===MTM_SCORING_VERSION)return validateEqualQuestionPublicExam(input);
   const errors:string[]=[];
   if(input.responseMode!=='questions-only')errors.push('Explicit question-only homework transport required');
   const homework=input.rubricVersion==='MTM-BTVN-10-v1';
@@ -136,8 +139,58 @@ export function validateQuestionOnlyPracticeExam(input: unknown): Validation {
   return validatePracticePresentation(input,true);
 }
 
+/** The new rubric is admitted by its exact version only. The public transport
+ * carries exact question maxima, but never a key or the private short rule. */
+function validateEqualQuestionPublicExam(input:Record<string,unknown>):Validation {
+  const errors:string[]=[];
+  if(input.responseMode!=='questions-only')errors.push('Explicit question-only homework transport required');
+  if(!boundedText(input.sourceRef,20000)||!isSha256(input.sourceHash)||input.answerKeyVerified!==true||input.rubricVerified!==true)errors.push('Invalid verified source or rubric');
+  if(!boundedText(input.answerKeyVersion,160))errors.push('Explicit answer key version required');
+  if(input.sourceComplete!==undefined&&typeof input.sourceComplete!=='boolean')errors.push('Invalid sourceComplete');
+  if(!Array.isArray(input.questions)||!input.questions.length)return {valid:false,errors:[...errors,'Complete questions required']};
+  if(!Number.isSafeInteger(input.questionCount)||input.questionCount!==input.questions.length)errors.push('Question count mismatch');
+  const milli=10000/input.questions.length;
+  const ids=new Set<string>();
+  for(const q of input.questions){
+    if(!isRecord(q)){errors.push('Question object required');continue;}
+    if(!boundedText(q.id,120)||q.id!==q.id.trim()||ids.has(q.id))errors.push('Invalid or duplicate question id');else ids.add(q.id);
+    if(!boundedText(q.sourceRef,20000))errors.push('Question source required');
+    if(!isMtmQuestionPoints(q.maxPoints,input.questions.length))errors.push('Question maxPoints must equal exact 10/N');
+    if(q.maxMillipoints!==milli)errors.push('Question millipoints must derive from 10000/N');
+    if('answer' in q||'acceptedAnswers' in q||'solution' in q||'shortRule' in q)errors.push('Private answer fields must be absent');
+    if(q.kind==='mc'){
+      if(!Array.isArray(q.choices)||q.choices.length!==4||!Array.from(q.choices).every(c=>boundedText(c,20000))||new Set(q.choices).size!==4)errors.push('Four distinct choices required');
+    }else if(q.kind==='tf'){
+      if(!validEqualQuestionSchedule(q.pointsByCorrectCount,milli))errors.push('Invalid MTM true/false compatibility schedule');
+    }else if(q.kind==='short'){
+      if(!['numeric','rational','exact'].includes(q.mode as string))errors.push('Explicit short answer mode required');
+    }else errors.push('Unsupported MTM question kind');
+  }
+  if(input.sections!==undefined){
+    if(!Array.isArray(input.sections)||!input.sections.length)errors.push('Invalid sections');
+    else{
+      let offset=0;
+      for(const section of input.sections){
+        if(!isRecord(section)||!boundedText(section.label,100)||!['mc','tf','short'].includes(section.kind as string)||!Number.isSafeInteger(section.count)||(section.count as number)<1){errors.push('Invalid section');continue;}
+        const count=section.count as number,questions=input.questions.slice(offset,offset+count);
+        if(questions.length!==count||questions.some(q=>!isRecord(q)||q.kind!==section.kind))errors.push('Section/question mismatch');
+        offset+=count;
+      }
+      if(offset!==input.questions.length)errors.push('Complete section counts required');
+    }
+  }
+  if(errors.length)return {valid:false,errors};
+  return validatePracticePresentation(input,true);
+}
+
+function validEqualQuestionSchedule(value:unknown,milli:number):boolean {
+  const expected=[0,milli/10,milli/4,milli/2,milli];
+  return Array.isArray(value)&&value.length===5&&Array.from(value).every((v,i)=>typeof v==='number'&&Number.isFinite(v)&&Math.abs(v-expected[i])<=Math.max(1,expected[i])*Number.EPSILON*4);
+}
+
 function validatePracticePresentation(input: Record<string,unknown>, questionOnly:boolean):Validation {
   const errors: string[] = [];
+  const equalQuestion=input.rubricVersion===MTM_SCORING_VERSION;
   if (!boundedText(input.id, 120) || !/^[a-zA-Z0-9][a-zA-Z0-9_-]*$/.test(input.id)||input.id==='history') errors.push('Invalid or reserved route id');
   if (!GRADES.includes(input.grade as Grade) || !PERIODS.includes(input.period as Period)) errors.push('Invalid grade or period');
   if (!boundedText(input.title, 300)) errors.push('Missing title');
@@ -168,8 +221,9 @@ function validatePracticePresentation(input: Record<string,unknown>, questionOnl
       if(!isRecord(q.sourceContent)||!validSourceSegments(q.sourceContent.questions)||(questionOnly?'solutions' in q.sourceContent:!validSourceSegments(q.sourceContent.solutions)))errors.push('Invalid complete source fragments');
       else if(!questionOnly&&q.sourceContent.solutions!.some(segment=>q.sourceContent!.questions.some(question=>question.path===segment.path||question.sha256.toLowerCase()===segment.sha256.toLowerCase())))errors.push('Question and solution fragments must be separate');
     }
-    if (!questionOnly && q.kind === 'short' && !q.acceptedAnswers.every(answer => boundedText(answer, 500))) errors.push('Short answer exceeds input limit');
-    if (q.statements !== undefined && (q.kind !== 'tf' || !Array.isArray(q.statements) || q.statements.length !== 4 || !Array.from(q.statements).every(s => boundedText(s, 10000)))) errors.push('Invalid statement texts');
+    if (!questionOnly && q.kind === 'short' && (!equalQuestion||Array.isArray(q.acceptedAnswers)) && !q.acceptedAnswers.every(answer => boundedText(answer, 500))) errors.push('Short answer exceeds input limit');
+    if(equalQuestion&&q.kind==='tf'&&!validEqualQuestionSchedule(q.pointsByCorrectCount,10000/(input as unknown as PracticeExam).questions.length))errors.push('Invalid MTM true/false compatibility schedule');
+    if (q.statements !== undefined && (q.kind !== 'tf' || !Array.isArray(q.statements) || (!equalQuestion&&q.statements.length !== 4) || !Array.from(q.statements).every(s => boundedText(s, 10000)))) errors.push('Invalid statement texts');
     if(input.sourcePdf===undefined&&q.sourceContent===undefined&&(!boundedText(q.prompt??q.text,20000)||(q.kind==='tf'&&!q.statements)))errors.push('Question content is missing; a source locator is insufficient');
   }
   return {valid: errors.length === 0, errors};

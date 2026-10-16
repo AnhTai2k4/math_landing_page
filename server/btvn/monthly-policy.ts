@@ -10,6 +10,7 @@ export function concealMonthlySolutions(exam:PracticeExam):PracticeExam {
  if(copy.mtmDocuments)delete (copy.mtmDocuments as Partial<NonNullable<PracticeExam['mtmDocuments']>>).solutions;
  for(const q of copy.questions){
   delete q.solution;delete q.correctionNote;
+  delete (q as {shortRule?:unknown}).shortRule;
   if(q.sourceContent)delete q.sourceContent.solutions;
   delete (q as {answer?:unknown}).answer;
   delete (q as {acceptedAnswers?:unknown}).acceptedAnswers;

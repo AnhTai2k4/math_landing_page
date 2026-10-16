@@ -9,8 +9,10 @@ import MtmSourceQuestion from './MtmSourceQuestion';
 import {displayAnswer,formatPoints,reviewRows,statementLetters,STATUS_LABELS} from './review';
 import {displayKeyAnswer,questionLabel} from './attempt-ui';
 import {hasReadableTfStatements} from './question-statements';
+import {MTM_SCORING_VERSION} from './mtm-scoring';
 const DetailedSolution=lazy(()=>import('./DetailedSolution'));
 const SolutionPdf=lazy(()=>import('../admin/SolutionPdf'));
+const hasReviewableKey=(q:PracticeQuestion)=>q.kind==='mc'?['A','B','C','D'].includes(q.answer):q.kind==='tf'?Array.isArray(q.answer)&&q.answer.length===4&&q.answer.every(value=>typeof value==='boolean'):q.kind==='short'?Array.isArray(q.acceptedAnswers)&&q.acceptedAnswers.length>0&&q.acceptedAnswers.every(value=>typeof value==='string'&&!!value.trim()):false;
 
 export default function ExamReview({exam,draft,initialQuestionId,renderText,renderSolutionExtra,showSummary=true}:{exam:PracticeExam;draft:Draft;initialQuestionId?:string;showSummary?:boolean;renderText?:(text:string)=>ReactNode;renderSolutionExtra?:(q:PracticeQuestion)=>ReactNode}) {
   const [filter,setFilter]=useState<'all'|'mistakes'|'unanswered'>('all');
@@ -19,6 +21,8 @@ export default function ExamReview({exam,draft,initialQuestionId,renderText,rend
   const instance=useId();
   useEffect(()=>{if(focusQuestion!==null){const target=document.getElementById(`${instance}-card-${focusQuestion}`);target?.focus();target?.scrollIntoView({block:'start'});setFocusQuestion(null);}},[focusQuestion,instance]);
   if(draft.submittedAt===null)return null;
+  const mtm=exam.rubricVersion===MTM_SCORING_VERSION;
+  const keyReady=(q:PracticeQuestion,status:string)=>!mtm||status!=='unscored'&&hasReviewableKey(q);
   const rows=reviewRows(exam,draft),visible=rows.filter(r=>filter==='all'||(filter==='mistakes'?r.status!=='correct'&&r.status!=='self':r.status==='unanswered'));
   const wrong=rows.filter(r=>r.status!=='correct'&&r.status!=='self').length,blank=rows.filter(r=>r.status==='unanswered').length;
   const allOpen=visible.length>0&&visible.every(r=>expanded.has(r.q.id));
@@ -44,8 +48,8 @@ export default function ExamReview({exam,draft,initialQuestionId,renderText,rend
       {q.sourceContent&&<MtmSourceQuestion question={q}/>}<p className="ep-source-ref">MTM sưu tầm và biên soạn</p>
       <div className="ep-review">
         <p><strong>Bài làm:</strong> {displayAnswer(answer)}</p>
-        <p><strong>Đáp án:</strong> {q.kind==='mc'?q.answer:q.kind==='tf'?q.answer.map((v,i)=>`${statementLetters[i]}) ${v?'Đúng':'Sai'}`).join('; '):q.kind==='self'?'Xem lời giải để tự kiểm tra':q.acceptedAnswers.map(value=>displayKeyAnswer(q.mode,value)).join(' hoặc ')}</p>
-        {q.kind==='tf'&&(hasReadableTfStatements(q)?<ul className="ep-statement-review">{q.answer.map((expected,i)=>{
+        <p><strong>Đáp án:</strong> {!keyReady(q,status)?'Chưa có đáp án đã xác minh':q.kind==='mc'?q.answer:q.kind==='tf'?q.answer.map((v,i)=>`${statementLetters[i]}) ${v?'Đúng':'Sai'}`).join('; '):q.kind==='self'?'Xem lời giải để tự kiểm tra':q.acceptedAnswers.map(value=>displayKeyAnswer(q.mode,value)).join(' hoặc ')}</p>
+        {q.kind==='tf'&&keyReady(q,status)&&(hasReadableTfStatements(q)?<ul className="ep-statement-review">{q.answer.map((expected,i)=>{
           const value=Array.isArray(answer)?answer[i]:null;
           return <li key={i}><strong>Ý {statementLetters[i]}:</strong> {value===null?'Chưa trả lời':value===expected?'Khớp đáp án':'Chưa khớp đáp án'}{q.statements?.[i]&&<p>{renderText?renderText(q.statements[i]):q.statements[i]}</p>}</li>;
         })}</ul>:<p className="ep-statement-unavailable">{exam.sourcePdf?'Các mệnh đề nằm trong PDF đề. Màn này không mở PDF; em xem lại đề gốc để đối chiếu từng ý.':'Màn này chưa có đủ văn bản bốn mệnh đề. Em xem lại các ý trong đề gốc để đối chiếu.'}</p>)}
@@ -53,8 +57,8 @@ export default function ExamReview({exam,draft,initialQuestionId,renderText,rend
         <p><strong>Điểm câu này:</strong> {status==='self'?'Không tính điểm':status==='unscored'?'Chưa tính được':formatPoints(displayQuestionPoints(exam,earned))} / {formatPoints(displayQuestionPoints(exam,q.maxMillipoints))}</p>
       </div>
       {q.correctionNote&&<p className="ep-source-erratum"><strong>Đính chính MTM:</strong> {renderText?renderText(q.correctionNote):q.correctionNote}</p>}
-      {q.sourceContent?.solutions&&<details className="ep-solution" open={expanded.has(q.id)} onToggle={event=>{const open=event.currentTarget.open;setExpanded(previous=>{if(previous.has(q.id)===open)return previous;const next=new Set(previous);open?next.add(q.id):next.delete(q.id);return next;});}}><summary>Đáp án và lời giải đầy đủ theo mẫu MTM</summary>{expanded.has(q.id)&&<MtmSourceContent segments={q.sourceContent.solutions} assetBase="/practice-media/source-crops" label={q.sourceRef} kind="solution"/>}</details>}
-      {q.solution&&<details className="ep-solution" open={expanded.has(q.id)} onToggle={event=>{const open=event.currentTarget.open;setExpanded(previous=>{if(previous.has(q.id)===open)return previous;const next=new Set(previous);open?next.add(q.id):next.delete(q.id);return next;});}}><summary>Lời giải · {questionLabel(exam,index).full}</summary>{expanded.has(q.id)&&<Suspense fallback={<p>Đang mở lời giải…</p>}><DetailedSolution examId={exam.id} versionHash={exam.versionHash} questionId={q.id} fallback={q.solution}/>{renderSolutionExtra?.(q)}</Suspense>}</details>}
+      {q.sourceContent?.solutions&&keyReady(q,status)&&<details className="ep-solution" open={expanded.has(q.id)} onToggle={event=>{const open=event.currentTarget.open;setExpanded(previous=>{if(previous.has(q.id)===open)return previous;const next=new Set(previous);open?next.add(q.id):next.delete(q.id);return next;});}}><summary>Đáp án và lời giải đầy đủ theo mẫu MTM</summary>{expanded.has(q.id)&&<MtmSourceContent segments={q.sourceContent.solutions} assetBase="/practice-media/source-crops" label={q.sourceRef} kind="solution"/>}</details>}
+      {q.solution&&keyReady(q,status)&&<details className="ep-solution" open={expanded.has(q.id)} onToggle={event=>{const open=event.currentTarget.open;setExpanded(previous=>{if(previous.has(q.id)===open)return previous;const next=new Set(previous);open?next.add(q.id):next.delete(q.id);return next;});}}><summary>Lời giải · {questionLabel(exam,index).full}</summary>{expanded.has(q.id)&&<Suspense fallback={<p>Đang mở lời giải…</p>}><DetailedSolution examId={exam.id} versionHash={exam.versionHash} questionId={q.id} fallback={q.solution}/>{renderSolutionExtra?.(q)}</Suspense>}</details>}
     </section>)}
   </section>;
 }

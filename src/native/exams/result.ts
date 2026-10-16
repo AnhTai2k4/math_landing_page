@@ -1,4 +1,5 @@
 import {normalizedShort} from './assessment';
+import {MTM_SCORING_VERSION} from './mtm-scoring';
 import {scorePracticeAssessment} from './flexible-profile';
 import type {PracticeExam} from './data';
 import {validateDraft, type Draft} from './store';
@@ -11,6 +12,10 @@ export function resultFor(exam: PracticeExam, draft: Draft) {
   if (!validated.ok || draft.submittedAt === null) return null;
   const answers: Record<string, unknown> = {...draft.answers};
   const invalidNumeric: string[] = [];
+  if(exam.rubricVersion===MTM_SCORING_VERSION){
+    const score=scorePracticeAssessment(exam,answers,draft.attemptId);
+    return {score,mtm:score.ok?score.mtm:undefined,invalidNumeric};
+  }
   for (const q of exam.questions) {
     const value = answers[q.id];
     if (q.kind === 'short' && q.mode !== 'exact' && typeof value === 'string' && value.trim() && normalizedShort(q.mode,value) === null) {

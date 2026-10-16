@@ -22,12 +22,13 @@ export class MemoryHomeworkRepository implements HomeworkRepository {
   }
 }
 const csvCell=(value:unknown)=>'"'+String(value??'').replace(/^[=+\-@]/,"'$&").replace(/"/g,'""')+'"';
+/** Chỉ điểm tổng chính thức được tham gia điểm cao nhất. Null là chờ chấm. */
+export const receiptScores=(receipts:HomeworkReceipt[])=>receipts.map(r=>r.score).filter((score):score is number=>typeof score==='number'&&Number.isFinite(score));
 export function scoresCsv(rows:StudentWork[],lessonCode:string){
   const columns=['ma_hs','ho_ten','lop','ma_buoi','diem','so_lan','gio_nop','thoi_gian_lam_giay','ma_luot','nop_muon','het_gio','diem_cao_nhat','han_nop','trang_thai_han'];
   const data=rows.flatMap(row=>{
-    const scores=row.receipts.map(r=>r.score),best=scores.length?Math.max(...scores):null;
     const entries=[{code:lessonCode,receipts:row.receipts,due:row.student.nextActualClassAt},...Object.entries(row.lessons??{}).map(([code,l])=>({code,receipts:l.receipts,due:l.nextActualClassAt}))];
-    return entries.flatMap(entry=>entry.receipts.map(r=>[row.student.studentCode,row.student.fullName,row.student.className,entry.code,r.score,r.attemptNumber,new Date(r.submittedAt).toISOString(),r.elapsedSeconds,r.attemptId,r.late===null?'':r.late,r.timedOut,entry.receipts.length?Math.max(...entry.receipts.map(x=>x.score)):best,entry.due===undefined?'':new Date(entry.due).toISOString(),r.late===null?'cho_buoi_thuc_hoc':r.late?'muon':'dung_han']));
+    return entries.flatMap(entry=>{const scores=receiptScores(entry.receipts);return entry.receipts.map(r=>[row.student.studentCode,row.student.fullName,row.student.className,entry.code,r.score,r.attemptNumber,new Date(r.submittedAt).toISOString(),r.elapsedSeconds,r.attemptId,r.late===null?'':r.late,r.timedOut,scores.length?Math.max(...scores):null,entry.due===undefined?'':new Date(entry.due).toISOString(),r.late===null?'cho_buoi_thuc_hoc':r.late?'muon':'dung_han']);});
   });
   return '\uFEFF'+[columns,...data].map(line=>line.map(csvCell).join(',')).join('\r\n')+'\r\n';
 }

@@ -1,14 +1,17 @@
 /** Standalone import/scoring gate. Verification flags require independent source review;
  * this module cannot establish that a PDF or its answer key is authentic. */
+import {validateMtmEqualAssessment,scoreMtmEqualAssessment} from './mtm-assessment';
+import {MTM_SCORING_VERSION,type Fraction,type MtmScore,type MtmShortRule} from './mtm-scoring';
 export type Choice = 'A' | 'B' | 'C' | 'D';
-type Base = { id: string; sourceRef: string; maxMillipoints: number };
+type Base = { id: string; sourceRef: string; maxMillipoints: number; maxPoints?:Fraction;
+  issues?:string[];answerVerified?:boolean;answerConflict?:boolean };
 export type Question =
   | (Base & { kind: 'mc'; choices: [string, string, string, string]; answer: Choice })
   | (Base & { kind: 'tf'; answer: [boolean, boolean, boolean, boolean]; pointsByCorrectCount: [number, number, number, number, number] })
-  | (Base & { kind: 'short'; mode: 'numeric' | 'rational' | 'exact'; acceptedAnswers: string[] })
+  | (Base & { kind: 'short'; mode: 'numeric' | 'rational' | 'exact'; acceptedAnswers: string[];shortRule?:MtmShortRule })
   | (Base & { kind: 'essay' })
   | (Base & { kind: 'self'; maxMillipoints: 0 });
-export type Assessment = { rubricVersion?:string; id: string; sourceHash: string; sourceRef: string; questionCount: number;
+export type Assessment = { rubricVersion?:string;versionHash?:string;answerKeyVersion?:string;sourceComplete?:boolean;issues?:string[]; id: string; sourceHash: string; sourceRef: string; questionCount: number;
   answerKeyVerified: true; rubricVerified: true; questions: Question[] };
 export type Validation = { valid: boolean; errors: string[] };
 const record = (v: unknown): v is Record<string, unknown> => !!v && typeof v === 'object' && !Array.isArray(v);
@@ -39,6 +42,7 @@ export function canonicalRational(value:string):string|null {
 export const normalizedShort=(mode:string,value:string)=>mode==='numeric'?canonicalNumeric(value):mode==='rational'?canonicalRational(value):value.trim();
 
 export function validateAssessment(input: unknown): Validation {
+  if(record(input)&&input.rubricVersion===MTM_SCORING_VERSION)return validateMtmEqualAssessment(input);
   const errors: string[] = [];
   if (!record(input)) return { valid: false, errors: ['exam: object required'] };
   if (!text(input.id)) errors.push('exam: id required');
@@ -91,10 +95,11 @@ export function validateAssessment(input: unknown): Validation {
 export type AnswerMap = Record<string, unknown>;
 export type ScoreResult = { ok: false; errors: string[] } | { ok: true;
   earnedMillipoints: number; maxMillipoints: 10000; finalMillipoints: number | null;
-  manualPending: string[]; rows: { id: string; earnedMillipoints: number | null; maxMillipoints: number }[] };
+  mtm?:MtmScore; manualPending: string[]; rows: { id: string; earnedMillipoints: number | null; maxMillipoints: number }[] };
 const blank = (v: unknown) => v === undefined || v === null || (typeof v === 'string' && !v.trim());
 
-export function scoreAssessment(input: unknown, submitted: unknown): ScoreResult {
+export function scoreAssessment(input: unknown, submitted: unknown, attemptId?:string): ScoreResult {
+  if(record(input)&&input.rubricVersion===MTM_SCORING_VERSION)return scoreMtmEqualAssessment(input,submitted,attemptId);
   const gate = validateAssessment(input);
   if (!gate.valid) return { ok: false, errors: gate.errors };
   if (!record(submitted)) return { ok: false, errors: ['answers: object required'] };

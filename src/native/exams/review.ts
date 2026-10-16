@@ -16,8 +16,10 @@ export function reviewRows(exam:PracticeExam,draft:Draft) {
     const answer=draft.answers[q.id];
     const hasResponse=Array.isArray(answer)?answer.some(v=>v!==null):typeof answer==='string'&&!!answer.trim();
     const scored=result?.score.ok?result.score.rows.find(r=>r.id===q.id):undefined;
+    const exact=result?.mtm?.rows.find(r=>r.id===q.id);
     const earned=scored?.earnedMillipoints??0;
-    const status:ReviewStatus=q.kind==='self'?'self':!scored?'unscored':!hasResponse?'unanswered':earned===q.maxMillipoints?'correct':earned>0?'partial':'wrong';
+    const full=exact?.earned?BigInt(exact.earned.numerator)*BigInt(exact.maxScore.denominator)===BigInt(exact.maxScore.numerator)*BigInt(exact.earned.denominator):earned===q.maxMillipoints;
+    const status:ReviewStatus=q.kind==='self'?'self':!scored||exact?.status==='ungradable'?'unscored':!hasResponse?'unanswered':full?'correct':earned>0?'partial':'wrong';
     return {q,index,answer,earned,status,invalidNumeric:result?.invalidNumeric.includes(q.id)??false};
   });
 }
