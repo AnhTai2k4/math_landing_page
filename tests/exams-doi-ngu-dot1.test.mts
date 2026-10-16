@@ -10,7 +10,7 @@ const root=process.env.MTM_ROOT!,require=createRequire(join(root,'package.json')
 let count=0;
 async function test(name:string,fn:()=>unknown){await fn();console.log('ĐẠT '+(++count)+' '+name);}
 const draft=(answer='A',submittedAt:number|null=null)=>({attemptId:'synthetic-attempt',answers:{q:answer},submittedAt} as unknown as Draft);
-const response=(value:Draft)=>({draft:value} as HomeworkState);
+const response=(value:Draft)=>({draft:value,receipts:value.submittedAt===null?[]:[{attemptId:value.attemptId,submittedAt:value.submittedAt,score:0}]} as HomeworkState);
 function remote(){
  const calls:{draft:Draft;resolve:(v:HomeworkState)=>void;reject:(e:Error)=>void}[]=[],statuses:RemoteSaveStatus[]=[],saved:HomeworkState[]=[];
  const saver=createHomeworkSaver({delay:60000,send:d=>new Promise((resolve,reject)=>calls.push({draft:d,resolve,reject})),onStatus:s=>statuses.push(s),onSaved:s=>saved.push(s)});
@@ -36,11 +36,41 @@ await test('Mất mạng giữ pending, gửi lại không tạo bản xác nh�
 await test('ACK khác lượt bị từ chối; nộp/hết giờ từ máy chủ có hiệu lực cuối cùng',async()=>{
  const bad=remote();bad.saver.update(draft());bad.saver.retry();await Promise.resolve();bad.calls[0].resolve(response({...draft(),attemptId:'other'}));await bad.saver.settled();assert.equal(bad.saver.pending(),true);assert.equal(bad.last().failed,true);bad.saver.dispose();
  const r=remote();r.saver.update(draft());r.saver.retry();await Promise.resolve();const first=r.saver.settled();r.saver.update(draft('B'));r.saver.retry();
- r.calls[0].resolve(response(draft('A',123)));await first;await r.saver.settled();assert.equal(r.calls.length,1);assert.equal(r.saved[0].draft!.submittedAt,123);assert.equal(r.saver.pending(),false);r.saver.dispose();
+ r.calls[0].resolve(response(draft('A',123)));await first;await Promise.resolve();assert.equal(r.calls.length,2);assert.equal(r.saver.pending(),true);assert.equal(r.saved.length,0);
+ r.calls[1].resolve(response(draft('A',123)));await r.saver.settled();assert.equal(r.saver.pending(),true);assert.equal(r.last().failed,true);assert.match(r.last().message,/Câu sửa sau đó không tính/);assert.equal(r.saved.length,0);r.saver.dispose();
 });
 await test('Nộp không đợi debounce; tháo component cố gửi RAM nhưng không gọi UI đã tháo',async()=>{
  const r=remote();r.saver.update(draft('A',123));await Promise.resolve();assert.equal(r.calls.length,1);r.calls[0].resolve(response(r.calls[0].draft));await r.saver.settled();r.saver.dispose();
  const leaving=remote();leaving.saver.update(draft());const before=leaving.statuses.length;leaving.saver.dispose();await Promise.resolve();assert.equal(leaving.calls.length,1);leaving.calls[0].resolve(response(leaving.calls[0].draft));await leaving.saver.settled();assert.equal(leaving.saved.length,0);assert.equal(leaving.statuses.length,before);
+});
+await test('Nộp cần biên nhận đúng lượt; flush bản đã ACK không gửi dư',async()=>{
+ const r=remote();r.saver.update(draft('A',123));await Promise.resolve();
+ r.calls[0].resolve({draft:draft('A',null),receipts:[]} as unknown as HomeworkState);await r.saver.settled();assert.equal(r.saver.pending(),true);assert.equal(r.last().failed,true);
+ r.saver.retry();await Promise.resolve();r.calls[1].resolve({draft:draft('A',123),receipts:[]} as unknown as HomeworkState);await r.saver.settled();assert.equal(r.saver.pending(),true);assert.match(r.last().message,/biên nhận/);
+ r.saver.retry();await Promise.resolve();r.calls[2].resolve(response(draft('A',123)));await r.saver.settled();assert.equal(r.saver.pending(),false);assert.equal(await r.saver.flush(),true);assert.equal(r.calls.length,3);r.saver.dispose();
+});
+await test('Máy chủ đóng bản cũ: giữ lỗi và RAM đến khi người học chọn bản đã chấm',async()=>{
+ const r=remote();r.saver.update(draft('B',200));await Promise.resolve();r.calls[0].resolve(response(draft('A',123)));await r.saver.settled();
+ assert.equal(r.saver.pending(),true);assert.equal(r.last().closed,true);assert.equal(r.saved.length,0);assert.match(r.last().message,/chưa được nhận/);
+ assert.equal(r.saver.closed(),true);assert.equal(await r.saver.flush(),false);r.saver.retry();await r.saver.settled();assert.equal(r.calls.length,1,'Không gửi lại lượt đã đóng');assert.equal(r.saver.pending(),true);
+ const closedMessage=r.last().message;r.saver.update(draft('C',201));assert.equal(r.last().closed,true);assert.equal(r.last().failed,true);assert.equal(r.last().saving,false);assert.equal(r.last().message,closedMessage,'Gõ thêm không làm mất thông báo máy chủ đã chấm');
+ r.saver.acceptClosed();assert.equal(r.saver.pending(),false);assert.equal(r.saved[0].draft!.answers.q,'A');assert.match(r.last().message,/Phần sửa chưa được nhận không tính điểm/);r.saver.dispose();
+});
+await test('Phản hồi đóng của bản cũ vẫn báo lỗi và không gửi bản mới đang xếp hàng',async()=>{
+ const r=remote();r.saver.update(draft('A'));r.saver.retry();await Promise.resolve();
+ r.saver.update(draft('B'));r.saver.retry();r.calls[0].resolve(response(draft('C',123)));await r.saver.flush();
+ assert.equal(r.calls.length,1);assert.equal(r.last().closed,true);assert.equal(r.last().failed,true);assert.equal(r.saver.pending(),true);assert.equal(r.saved.length,0);
+ r.saver.acceptClosed();assert.equal(r.saver.pending(),false);assert.equal(r.saved[0].draft!.answers.q,'C');r.saver.dispose();
+});
+await test('Biên nhận lệch thời gian vẫn xác nhận đúng lượt có điểm hữu hạn',async()=>{
+ const r=remote();r.saver.update(draft('A',105000));await Promise.resolve();
+ r.calls[0].resolve({...response(draft('A',105000)),receipts:[{attemptId:'synthetic-attempt',submittedAt:100000,score:0}]} as HomeworkState);
+ await r.saver.settled();assert.equal(r.saver.pending(),false);assert.equal(r.saved.length,1);assert.equal(r.last().failed,false);r.saver.dispose();
+});
+for(const score of [NaN,Infinity,undefined])await test('Biên nhận không có điểm hữu hạn vẫn giữ bản chưa xác nhận: '+String(score),async()=>{
+ const r=remote();r.saver.update(draft('A',123));await Promise.resolve();
+ r.calls[0].resolve({...response(draft('A',123)),receipts:[{attemptId:'synthetic-attempt',submittedAt:123,score}]} as HomeworkState);
+ await r.saver.settled();assert.equal(r.saver.pending(),true);assert.equal(r.saved.length,0);assert.match(r.last().message,/biên nhận/);r.saver.dispose();
 });
 
 class Runtime{

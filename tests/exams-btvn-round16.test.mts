@@ -34,8 +34,9 @@ const expiry=now+SIGNED_ASSET_SECONDS*1000;
 await renew(expiry);await renew(expiry);await renew(undefined);assert.equal(renewals,0,'timer/tab hiện lại khi còn hạn không gọi state');
 now=expiry-ASSET_RENEW_WINDOW_MS-1;await renew(expiry);assert.equal(renewals,0);
 now++;const pending=renew(expiry);assert.equal(renewals,1);assert.equal(renew(expiry,true),pending);release();await pending;
-await renew(expiry,true);assert.equal(renewals,1,'chống bão lỗi ảnh');
-now+=30000;const imageError=renew(now+SIGNED_ASSET_SECONDS*1000,true);assert.equal(renewals,2,'ảnh lỗi gia hạn dù còn xa hạn');release();await imageError;
+const immediateRetry=renew(expiry,true);assert.equal(renewals,2,'Bấm thử lại không bị khóa 30 giây');assert.equal(renew(expiry,true),immediateRetry,'Các lỗi đồng thời dùng chung yêu cầu');release();await immediateRetry;
+await renew(expiry);assert.equal(renewals,2,'Kiểm hạn tự động vẫn được giới hạn');
+now+=30000;const imageError=renew(now+SIGNED_ASSET_SECONDS*1000,true);assert.equal(renewals,3,'ảnh lỗi gia hạn dù còn xa hạn');release();await imageError;
 let retries=0;const retry=createAssetRenewal(async()=>{if(++retries===1)throw Error('offline');},()=>now);await assert.rejects(retry(now));now+=30000;await retry(now);assert.equal(retries,2);
 const root=process.env.MTM_ROOT??process.cwd(),source=readFileSync(root+'/src/native/homework/HomeworkSession.tsx','utf8');
 assert.match(source,/onErrorCapture/);assert.ok(source.includes('renewAssets.current(true)'));assert.ok(!source.includes('240000'));assert.ok(!source.includes('5 phút'));
@@ -47,9 +48,9 @@ const require=createRequire(join(root,'package.json')),{buildSync}=require('esbu
 const reactFixture=join(root,'tests/fixtures/room-react.mts');
 const code=buildSync({entryPoints:[join(root,'src/native/exams/MtmSourceContent.tsx')],bundle:true,write:false,platform:'node',format:'cjs',jsx:'automatic',packages:'external',alias:{react:reactFixture,'react/jsx-runtime':reactFixture,'react-dom':reactFixture},loader:{'.css':'empty'},logLevel:'silent'}).outputFiles[0].text;
 const mod={exports:{} as any};new Function('require','module','exports',code)(require,mod,mod.exports);
-let failed:any; (globalThis as any).__mtmRoomRuntime={state(initial:any){failed??=initial();return [failed,(fn:any)=>{failed=fn(failed);}];}};
+const slots:any[]=[];let cursor=0;(globalThis as any).__mtmRoomRuntime={state(initial:any){const i=cursor++;if(!(i in slots))slots[i]=typeof initial==='function'?initial():initial;return [slots[i],(value:any)=>{slots[i]=typeof value==='function'?value(slots[i]):value;}];}};
 const segment={path:'fake.png',sha256:'a'.repeat(64),width:100,height:100,sourcePage:1,privateUrl:'https://storage.invalid/old'};
-const render=()=>mod.exports.default({segments:[segment],assetBase:'/fake',label:'GIẢ',kind:'question'});
+const render=()=>{cursor=0;return mod.exports.default({segments:[segment],assetBase:'/fake',label:'GIẢ',kind:'question'});};
 function find(tree:any,predicate:(node:any)=>boolean):any{if(!tree||typeof tree!=='object')return null;if(Array.isArray(tree))return tree.map(t=>find(t,predicate)).find(Boolean);return predicate(tree)?tree:find(tree.props?.children,predicate);}
 const image=find(render(),n=>typeof n.props?.onError==='function');assert.ok(image);image.props.onError();assert.ok(find(render(),n=>n.props?.role==='alert'));
 segment.privateUrl='https://storage.invalid/renewed';assert.ok(find(render(),n=>n.props?.src===segment.privateUrl));assert.ok(!find(render(),n=>n.props?.role==='alert'));

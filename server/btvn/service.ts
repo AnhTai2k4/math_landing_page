@@ -6,6 +6,7 @@ import {validatePracticeExam,type PracticeExam} from '../../src/native/exams/dat
 import type {HomeworkState,LessonMaterial} from '../../src/native/homework/btvn-contract';
 import type {HomeworkRepository,StudentWork} from './repository';
 import {lessonOpensAt,visibleLesson} from './opening-policy';
+import {concealMonthlySolutions} from './monthly-policy';
 
 export class HomeworkError extends Error {constructor(public status:number,message:string){super(message);}}
 export const GATE_ERROR='Không thể vào bài. Hãy kiểm tra thông tin hoặc thử lại sau.';
@@ -75,9 +76,12 @@ export class HomeworkService {
       const receipt=receipts.filter(r=>r.score===best).at(-1);
       return {...visibleLesson(l,root.student.className,this.clock()),dueAt:entry?.nextActualClassAt??null,bestScore:best,late:receipt?.late??null,submittedAt:receipt?.submittedAt??null,available:this.clock()>=lessonOpensAt(l,root.student.className)&&(l.lessonCode===this.lessonCode||!!this.lessonExams[l.lessonCode])};
     });
-    const opensAt=this.opening(token);if(this.clock()<opensAt)return {exam:null,opensAt,canStart:false,solutionsAvailable:false,fullName:work.student.fullName,className:work.student.className,lessonCode:this.selected(token),dueAt:work.student.nextActualClassAt??null,maxAttempts:this.maxAttempts,attemptsUsed:0,draft:null,receipts:[],bestScore:null,demo:true,lessons};
-    return {exam:this.examFor(token),opensAt,canStart:true,fullName:work.student.fullName,className:work.student.className,lessonCode:this.selected(token),dueAt:work.student.nextActualClassAt??null,maxAttempts:this.maxAttempts,
-      attemptsUsed:work.drafts.length,draft:work.drafts.at(-1)??null,receipts:work.receipts,bestScore:scores.length?Math.max(...scores):null,demo:true,lessons};
+    const now=this.clock(),opensAt=this.opening(token),monthly=this.monthly(token),draft=work.drafts.at(-1)??null;
+    if(now<opensAt)return {serverNow:now,exam:null,opensAt,canStart:false,solutionsAvailable:false,fullName:work.student.fullName,className:work.student.className,lessonCode:this.selected(token),dueAt:work.student.nextActualClassAt??null,maxAttempts:this.maxAttempts,attemptsUsed:0,draft:null,receipts:[],bestScore:null,demo:true,lessons};
+    const graded=!!draft&&draft.submittedAt!==null&&work.receipts.some(r=>r.attemptId===draft.attemptId);
+    const solutionsAvailable=graded&&(!monthly||now>=(monthly.closesAt??Infinity));
+    return {serverNow:now,exam:solutionsAvailable?this.examFor(token):concealMonthlySolutions(this.examFor(token)),opensAt,canStart:!monthly||now<(monthly.closesAt??Infinity),solutionsAvailable,...(monthly?{kind:'kiem-tra-thang' as const,closesAt:monthly.closesAt}:{}),fullName:work.student.fullName,className:work.student.className,lessonCode:this.selected(token),dueAt:work.student.nextActualClassAt??null,maxAttempts:this.maxAttempts,
+      attemptsUsed:work.drafts.length,draft,receipts:work.receipts,bestScore:scores.length?Math.max(...scores):null,demo:true,lessons};
   }
   /** Chỉ phía vận hành gọi sau khi xác minh ca thực học, không mở API học sinh. */
   reconcileActualClass(studentCode:string,startsAt:number,lessonCode=this.lessonCode){
@@ -116,7 +120,8 @@ export class HomeworkService {
     const submitted=submitDraft(exam,checked.value,now);if(!submitted.ok)throw new Error(submitted.message);
     const result=resultFor(exam,submitted.value);if(!result?.score.ok)throw new Error('Không chấm được');
     work.drafts[work.drafts.length-1]=submitted.value;
-    work.receipts.push({attemptId:id,attemptNumber:work.drafts.length,submittedAt:now,elapsedSeconds:Math.min(exam.durationMinutes*60,Math.floor((Math.min(now,this.monthly(token)?.closesAt??Infinity)-draft.startedAt)/1000)),score:result.score.earnedMillipoints/1000,late:work.student.nextActualClassAt===undefined?null:now>=work.student.nextActualClassAt,timedOut});
+    // Bản nộp và biên nhận dùng cùng mốc server đã chuẩn hóa, kể cả khi đồng hồ lùi sau lần lưu trước.
+    work.receipts.push({attemptId:id,attemptNumber:work.drafts.length,submittedAt:submitted.value.submittedAt!,elapsedSeconds:Math.min(exam.durationMinutes*60,Math.floor((Math.min(now,this.monthly(token)?.closesAt??Infinity)-draft.startedAt)/1000)),score:result.score.earnedMillipoints/1000,late:work.student.nextActualClassAt===undefined?null:now>=work.student.nextActualClassAt,timedOut});
     this.putLesson(token,work);return this.state(token);
   }
 }

@@ -1,7 +1,7 @@
 import React,{useEffect,useState} from 'react';
 import type {HomeworkLesson} from './btvn-contract';
 import {isDemoVideo,lessonHomeworkTitle,lessonCaption} from './presentation';
-import {createHomeworkDeadlineICS,hasHomeworkDeadline} from './deadline-calendar';
+import {createHomeworkDeadlineICS,hasHomeworkDeadline,homeworkDeadlineFilename} from './deadline-calendar';
 export const LOCKED_HOMEWORK_HELP='Bài mở sau khi buổi học kết thúc. Tới giờ em tải lại trang rồi bấm Làm BTVN.';
 const openingLabel=(lesson:HomeworkLesson)=>lesson.opensAt!=null&&Number.isFinite(lesson.opensAt)?dateTime(lesson.opensAt):'sau buổi học';
 const dateTime=(at:number)=>new Date(at).toLocaleString('vi-VN',{timeZone:'Asia/Ho_Chi_Minh',hour:'2-digit',minute:'2-digit',weekday:'long',day:'2-digit',month:'2-digit'});
@@ -14,16 +14,14 @@ export function LessonVideo({lesson,demo}:{lesson:HomeworkLesson;demo:boolean}){
 const upcomingLesson=(date:string)=>date>=new Date().toLocaleDateString('sv-SE',{timeZone:'Asia/Ho_Chi_Minh'});
 export default function LessonCards({lessons,busy,onHomework,demo=false}:{lessons:HomeworkLesson[];busy:boolean;onHomework:(code:string)=>void;demo?:boolean}){
   const [explained,setExplained]=useState<string|null>(null),[opened,setOpened]=useState<string|null>(null),[invited,setInvited]=useState<string|null>(null),[now,setNow]=useState(Date.now);
-  const [calendarBusy,setCalendarBusy]=useState(false),[calendarStatus,setCalendarStatus]=useState<{code:string;message:string}|null>(null);
-  const downloadDeadline=async(lesson:HomeworkLesson)=>{
-    if(calendarBusy)return;
-    setCalendarBusy(true);setCalendarStatus(null);
+  const [calendarStatus,setCalendarStatus]=useState<{code:string;message:string}|null>(null);
+  const downloadDeadline=(lesson:HomeworkLesson)=>{
+    setCalendarStatus(null);
     try{
-      const ics=await createHomeworkDeadlineICS(lesson),url=URL.createObjectURL(new Blob([ics],{type:'text/calendar;charset=utf-8'}));
-      try{const link=document.createElement('a');link.href=url;link.download='MTM-han-BTVN.ics';document.body.appendChild(link);try{link.click();}finally{link.remove();}}finally{setTimeout(()=>URL.revokeObjectURL(url),1000);}
-      setCalendarStatus({code:lesson.lessonCode,message:'Đã tạo tệp lịch. Mở tệp để thêm vào lịch điện thoại; nếu MTM đổi hạn, em cần tải lại.'});
-    }catch(error){setCalendarStatus({code:lesson.lessonCode,message:error instanceof Error?error.message:'Chưa tạo được tệp lịch. Em thử lại.'});}
-    finally{setCalendarBusy(false);}
+      const ics=createHomeworkDeadlineICS(lesson),url=URL.createObjectURL(new Blob([ics],{type:'text/calendar;charset=utf-8'}));
+      try{const link=document.createElement('a');link.href=url;link.download=homeworkDeadlineFilename(lesson);link.hidden=true;try{document.body.appendChild(link);link.click();}finally{link.remove();}}finally{setTimeout(()=>URL.revokeObjectURL(url),60000);}
+      setCalendarStatus({code:lesson.lessonCode,message:'Đã yêu cầu tải tệp lịch. Em mở tệp để thêm vào lịch; nếu MTM đổi hạn, em cần tải lại. Việc nhắc do ứng dụng lịch quyết định.'});
+    }catch{setCalendarStatus({code:lesson.lessonCode,message:'Chưa yêu cầu tải được tệp lịch. Em kiểm tra hạn nộp rồi thử mở bằng Chrome hoặc Safari.'});}
   };
   useEffect(()=>{const timer=setInterval(()=>setNow(Date.now()),1000);return ()=>clearInterval(timer);},[]);
   const locked=(lesson:HomeworkLesson)=>lesson.opensAt!==undefined?now<lesson.opensAt:lesson.locked===true;
@@ -38,10 +36,9 @@ export default function LessonCards({lessons,busy,onHomework,demo=false}:{lesson
       {isLocked&&<p className="btvn-review-note">Mở làm sau buổi học: {openingLabel(lesson)}</p>}
       {isLocked&&explained===lesson.lessonCode&&<p id={'locked-help-'+lesson.lessonCode} className="btvn-review-note" role="status">{LOCKED_HOMEWORK_HELP}</p>}
       {!lesson.available&&!isLocked&&<p className="btvn-review-note">BTVN buổi này đang chờ chuẩn bị.</p>}
-      {lesson.available&&!isLocked&&hasHomeworkDeadline(lesson.dueAt,now)&&<p><button type="button" className="btvn-btn" disabled={busy||calendarBusy} onClick={()=>void downloadDeadline(lesson)}>Thêm hạn vào lịch (.ics)</button></p>}
       {calendarStatus?.code===lesson.lessonCode&&<p className="btvn-review-note" role="status">{calendarStatus.message}</p>}
       {isOpen&&<LessonVideo lesson={lesson} demo={demo}/>}
-      <div className="btvn-files">{lesson.materialUrl&&<a href={lesson.materialUrl} target="_blank" rel="noopener noreferrer">📄 Tài liệu buổi học</a>}{lesson.handoutUrl&&<a href={lesson.handoutUrl} target="_blank" rel="noopener noreferrer">📄 Handout</a>}{lesson.homeworkNote&&<span>{lesson.homeworkNote}</span>}</div>
+      <div className="btvn-files">{lesson.materialUrl&&<a href={lesson.materialUrl} target="_blank" rel="noopener noreferrer">📄 Tài liệu buổi học</a>}{lesson.handoutUrl&&<a href={lesson.handoutUrl} target="_blank" rel="noopener noreferrer">📄 Handout</a>}{lesson.available&&!isLocked&&hasHomeworkDeadline(lesson.dueAt,now)&&<button type="button" className="btvn-btn btvn-btn-subtle" disabled={busy} onClick={()=>downloadDeadline(lesson)}>Nhắc lịch hạn nộp</button>}{lesson.homeworkNote&&<span>{lesson.homeworkNote}</span>}</div>
       {(isOpen||invited===lesson.lessonCode)&&<div className="btvn-after"><p><b>Xem xong rồi?</b> {isLocked?'BTVN sẽ mở sau buổi học: '+openingLabel(lesson):'Em có thể làm BTVN của buổi này ngay.'}</p><button className={'btvn-btn'+(isLocked?' locked':' primary')} disabled={busy||(!lesson.available&&!isLocked)} aria-describedby={isLocked&&explained===lesson.lessonCode?'locked-help-'+lesson.lessonCode:undefined} onClick={doHomework}>{isLocked?'🔒 Chưa mở, mở lúc '+openingLabel(lesson):'Làm BTVN buổi này'}</button></div>}
     </section>;})}
     {!lessons.length&&<p>Lớp em chưa có BTVN trên web. Khi thầy giao bài, buổi học và BTVN sẽ hiện ở đây.</p>}<p className="btvn-footnote">Buổi mới nhất ở trên cùng. Điểm lấy lần cao nhất; nộp sau hạn đã xác minh vẫn được nhưng ghi nộp muộn.</p>

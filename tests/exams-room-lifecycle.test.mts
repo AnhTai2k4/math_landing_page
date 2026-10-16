@@ -143,7 +143,7 @@ test('B: chỉ một bộ trả lời, đáy chỉ điều hướng và không c
   for(let i=0;i<exam.questions.length;i++){
     state.activeQuestion=i;r.flush();
     const dock=find(r.value,(n:any)=>n.props?.className==='fr-answer-dock');
-    assert.equal(buttons(dock).length,3);
+    assert.equal(buttons(dock).length,4);assert.ok(buttons(dock).some(b=>textOf(b)==='Nộp bài'));
     assert.ok(!find(dock,(n:any)=>n.type==='input'||n.type==='fieldset'));
     assert.ok(!buttons(dock).some(b=>/^Chọn [A-D]$/.test(b.props['aria-label']??'')));
     const paper=find(r.value,(n:any)=>n.props?.className==='fr-paper');
@@ -210,5 +210,20 @@ test('Vòng 1: PDF cuộn riêng, giữ đúng một bộ trả lời ở ngoài
   mark.props.onClick();r.flush();assert.ok(buttons(r.value).find(b=>b.props['aria-label']==='Bỏ đánh dấu xem lại'&&b.props['aria-pressed']));
   r.dispose();
 });
+test('Ảnh lỗi chỉ khóa câu đó; tải đủ ảnh mở lại và vẫn nộp được phần đã làm',()=>{
+ const {r,state}=mount(new FakeStore());state.failedQuestions=new Set();
+ state.setQuestionAssetReady=(id:string,ready:boolean)=>{ready?state.failedQuestions.delete(id):state.failedQuestions.add(id);r.changed=true;};
+ state.setNotice=(message:string)=>{state.notice=message;r.changed=true;};
+ class Image extends FakeElement{complete=true;naturalWidth=100;closest(){return {} as any;}}
+ (globalThis as any).HTMLImageElement=Image;
+ const image=new Image(),firstId=exam.questions[0].id;
+ let paper=find(r.value,(n:any)=>n.props?.className==='fr-paper');paper.props.onErrorCapture({target:image});r.flush();
+ assert.equal(state.pdfReady,true);assert.ok(state.failedQuestions.has(firstId));assert.equal(find(r.value,(n:any)=>n.type==='fieldset').props.disabled,true);
+ assert.ok(buttons(r.value).filter(b=>textOf(b)==='Nộp bài').every(b=>!b.props.disabled));
+ state.activeQuestion=1;r.flush();assert.equal(find(r.value,(n:any)=>n.type==='fieldset').props.disabled,false);
+ state.activeQuestion=0;r.flush();paper=find(r.value,(n:any)=>n.props?.className==='fr-paper');
+ const currentTarget={querySelector:()=>null,querySelectorAll:()=>[image]};image.naturalWidth=0;paper.props.onLoadCapture({target:image,currentTarget});r.flush();assert.ok(state.failedQuestions.has(firstId));
+ image.naturalWidth=100;paper.props.onLoadCapture({target:image,currentTarget});r.flush();assert.equal(state.failedQuestions.has(firstId),false);assert.equal(find(r.value,(n:any)=>n.type==='fieldset').props.disabled,false);
+ r.dispose();delete (globalThis as any).HTMLImageElement;
+});
 finish();
-

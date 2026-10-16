@@ -26,7 +26,7 @@ assert.equal((await request(createRankApi(()=>({}),async()=>{throw Error('must n
 response=await request(createRankApi(()=>env,async()=>new Response('{}',{status:500})));assert.equal(response.status,503);assert.equal(response.headers['Cache-Control'],'no-store');
 const fixture=pipelineFixture(),exam=fixture.exam;
 exam.questions[0].solution='LỜI GIẢI BÍ MẬT';
-const concealed=concealMonthlySolutions(exam);assert.ok(!JSON.stringify(concealed).includes('LỜI GIẢI BÍ MẬT'));assert.equal(concealed.questions[0].kind==='mc'&&concealed.questions[0].answer,'A');assert.equal(validatePracticeExam(concealed).valid,true);assert.equal(exam.questions[0].solution,'LỜI GIẢI BÍ MẬT');
+const concealed=concealMonthlySolutions(exam);assert.ok(!JSON.stringify(concealed).includes('LỜI GIẢI BÍ MẬT'));assert.ok(concealed.questions.every(q=>!('answer' in q)&&!('acceptedAnswers' in q)));assert.equal(concealed.responseMode,'questions-only');assert.equal(validatePracticeExam(concealed).valid,false,'Đề không có khóa chỉ được dùng ở luồng BTVN, không được nhập vào bộ chấm đầy đủ');assert.equal(exam.questions[0].solution,'LỜI GIẢI BÍ MẬT');
 let now=Date.parse('2026-10-30T17:00:00+07:00');const opensAt=now+60000,closesAt=now+180000;
 const material={...fixture.material,kind:'kiem-tra-thang' as const,opensAt,closesAt,handoutUrl:'https://fake.invalid/SECRET-HANDOUT'};
 const student={studentCode:'FAKE-CODE',fullName:'Học sinh GIẢ',phone:'0900000000',className:material.classNames[0]};

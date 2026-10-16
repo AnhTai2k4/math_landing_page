@@ -10,20 +10,37 @@ import {erratumFor} from './practice-errata';
 import type {PracticeAttemptProps} from './attempt-types';
 
 /** Một instance cho mỗi lượt đang mở; RAM, đồng hồ và kiểm xung đột giữ cùng vòng đời. */
-export function usePracticeAttempt({exam,previousExam,storeOverride,newAttemptsClosed,onRetake,isHomework=false}: PracticeAttemptProps) {
+export function usePracticeAttempt({exam,previousExam,storeOverride,newAttemptsClosed,onRetake,isHomework=false,deadlineAt,clockOffsetMs=0}: PracticeAttemptProps) {
+  const validation={allowQuestionOnly:isHomework};
+  const clockNow=()=>Date.now()+clockOffsetMs;
+  const timeLeft=(value:Draft,at:number)=>remainingMs({deadline:Math.min(value.deadline,deadlineAt??Infinity)},at);
+  const [failedQuestions,setFailedQuestions]=useState<Set<string>>(()=>new Set(exam.questions.filter(q=>q.sourceContent?.questions.some(segment=>segment.privateUnavailable)).map(q=>q.id)));
+  const unavailableQuestions=useRef(new Set(failedQuestions));
+  const setQuestionAssetReady=(id:string,ready:boolean)=>setFailedQuestions(previous=>{const next=new Set(previous);if(ready)next.delete(id);else next.add(id);return next;});
+  useEffect(()=>{
+    const ids=new Set(exam.questions.map(q=>q.id));
+    const missing=new Set(exam.questions.filter(q=>q.sourceContent?.questions.some(segment=>segment.privateUnavailable)).map(q=>q.id));
+    const previousMissing=unavailableQuestions.current;unavailableQuestions.current=missing;
+    setFailedQuestions(previous=>{
+      const next=new Set([...previous].filter(id=>ids.has(id)&&(!previousMissing.has(id)||missing.has(id))));
+      for(const id of missing)next.add(id);
+      return next.size===previous.size&&[...next].every(id=>previous.has(id))?previous:next;
+    });
+  },[exam]);
   const getStore=useCallback(()=>storeOverride??localStore(),[storeOverride]);
   const sourceIssue=SOURCE_HOLDS[exam.id];
   const erratum=erratumFor(exam.id);
   const [acceptedErratum,setAcceptedErratum]=useState(false);
   const [legacy]=useState(()=>previousExam?readDraft(getStore(),previousExam):null);
-  const [initial] = useState(() => readDraft(getStore(), exam));
+  const [initial] = useState(() => readDraft(getStore(), exam,validation));
   const persisted = useRef<Draft | null>(initial.ok ? initial.value : null);
   const ram = useRef<Draft | null>(initial.ok && initial.value && initial.value.submittedAt !== null ? initial.value : null);
   const dirty = useRef(false), conflict = useRef(false);
   const [draft, setDraft] = useState<Draft | null>(ram.current);
   const [notice, setNotice] = useState(initial.ok ? '' : initial.message);
+  useEffect(()=>{if(!failedQuestions.size&&notice.startsWith('Một phần đề chưa tải.'))setNotice('');},[failedQuestions,notice]);
   const [unsaved, setUnsaved] = useState(false);
-  const [now, setNow] = useState(Date.now);
+  const [now, setNow] = useState(clockNow);
   const [exportNotice, setExportNotice] = useState('');
   const [pdfReady,setPdfReady]=useState(!exam.sourcePdf);
   const [confirmation,setConfirmation]=useState<'submit'|'retake'|null>(null);
@@ -33,7 +50,7 @@ export function usePracticeAttempt({exam,previousExam,storeOverride,newAttemptsC
   const resultHeading = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
     if (draft?.submittedAt != null) resultHeading.current?.focus();
-  }, [draft?.attemptId, draft?.submittedAt]);
+  }, [draft?.attemptId, draft?.submittedAt,clockOffsetMs]);
   // BTVN có một guard theo ACK máy chủ ở HomeworkSession, tránh hai guard tranh popstate.
   const leaveConfirmation=useUnsavedGuard(() => dirty.current,undefined,!isHomework);
 
@@ -45,7 +62,7 @@ export function usePracticeAttempt({exam,previousExam,storeOverride,newAttemptsC
       setUnsaved(true);
       setNotice('Bản lưu đã thay đổi ở nơi khác. Câu trả lời trên trang này được giữ nguyên và chưa được lưu. Hãy tải bản lưu bài làm (mục "Bản lưu bài làm" bên dưới) trước khi rời trang.');
     } else {
-      const saved = saveDraft(getStore(), exam, next, persisted.current);
+      const saved = saveDraft(getStore(), exam, next, persisted.current,validation);
       dirty.current = !saved.ok;
       setUnsaved(!saved.ok);
       if (saved.ok) { persisted.current = saved.value; setNotice(''); }
@@ -55,7 +72,7 @@ export function usePracticeAttempt({exam,previousExam,storeOverride,newAttemptsC
       }
     }
     setDraft(next);
-  }, [exam,getStore]);
+  }, [exam,getStore,isHomework]);
 
   useEffect(() => {
     const captured=getStore();
@@ -73,26 +90,26 @@ export function usePracticeAttempt({exam,previousExam,storeOverride,newAttemptsC
     const current = ram.current;
     if (!current || current.submittedAt !== null) return;
     if(!automatic&&!pdfReady){setNotice('Chưa thể nộp thủ công khi có phần câu hỏi chưa hiển thị. Bài làm vẫn được giữ; hãy tải lại trang để đọc đủ đề.');return;}
-    const clock = Date.now();
+    const clock = clockNow();
     const unanswered = exam.questions.filter(q => q.kind!=='self' && answerState(exam, q, current.answers) !== 'answered').length;
-    if (!automatic && remainingMs(current, clock) > 0 && unanswered > 0 && !confirmed) {setConfirmation('submit');return;}
-    const result = submitDraft(exam, current, Date.now());
+    if (!automatic && timeLeft(current, clock) > 0 && unanswered > 0 && !confirmed) {setConfirmation('submit');return;}
+    const result = submitDraft(exam, current, clockNow(),validation);
     if (!result.ok) { setNotice(result.message); return; }
     setConfirmation(null);setMobilePane('answers');
     persist(result.value); // Sets the ref synchronously before another click/tick.
-  }, [exam, persist, pdfReady]);
+  }, [exam, persist, pdfReady,deadlineAt,clockOffsetMs]);
 
   useEffect(() => {
     if (!draft || draft.submittedAt !== null) return;
-    const tick = () => setNow(Date.now());
+    const tick = () => setNow(clockNow());
     tick();
     const interval = window.setInterval(tick, 500);
     window.addEventListener('focus', tick);
     document.addEventListener('visibilitychange', tick);
     return () => { clearInterval(interval); window.removeEventListener('focus', tick); document.removeEventListener('visibilitychange', tick); };
-  }, [draft?.attemptId, draft?.submittedAt]);
+  }, [draft?.attemptId, draft?.submittedAt,clockOffsetMs]);
   useEffect(() => {
-    if (draft && draft.submittedAt === null && remainingMs(draft, now) === 0) finish(true);
+    if (draft && draft.submittedAt === null && timeLeft(draft, now) === 0) finish(true);
   }, [draft, now, finish]);
 
   const begin = () => {
@@ -103,32 +120,32 @@ export function usePracticeAttempt({exam,previousExam,storeOverride,newAttemptsC
     if (!old && newAttemptsClosed) return; // DL-01: không mở lượt mới; bài dở và lượt đã nộp vẫn mở.
     if (old) {
       if (old.submittedAt !== null) { persist(old); return; }
-      const resumed = validateDraft({...old, updatedAt: Math.max(old.updatedAt, Date.now()), revision: old.revision + 1}, exam);
+      const resumed = validateDraft({...old, updatedAt: Math.max(old.updatedAt, clockNow()), revision: old.revision + 1}, exam,validation);
       if (resumed.ok) persist(resumed.value); else setNotice(resumed.message);
     } else {
       const attemptId = typeof globalThis.crypto?.randomUUID === 'function' ? globalThis.crypto.randomUUID() : `local-${Date.now()}-${Math.random().toString(36).slice(2)}`;
-      const made = createDraft(exam, attemptId, Date.now());
+      const made = createDraft(exam, attemptId, clockNow(),validation);
       if (made.ok) persist(made.value); else setNotice(made.message);
     }
-    setNow(Date.now());setMobilePane('answers');
+    setNow(clockNow());setMobilePane('answers');
   };
   const changeAnswer = (id: string, answer: Response) => {
-    if(!pdfReady)return;
+    if(!pdfReady||failedQuestions.has(id))return;
     const current = ram.current;
     if (!current || current.submittedAt !== null) return;
-    const clock = Date.now();
-    if (remainingMs(current, clock) === 0) { finish(true); return; }
-    const next = validateDraft({...current, answers: {...current.answers, [id]: answer}, updatedAt: Math.max(clock, current.updatedAt), revision: current.revision + 1}, exam);
+    const clock = clockNow();
+    if (timeLeft(current, clock) === 0) { finish(true); return; }
+    const next = validateDraft({...current, answers: {...current.answers, [id]: answer}, updatedAt: Math.max(clock, current.updatedAt), revision: current.revision + 1}, exam,validation);
     if (!next.ok) { setNotice(next.message); return; }
     persist(next.value);
   };
   const submitted = !!draft && draft.submittedAt !== null;
-  const result = draft && submitted ? resultFor(exam, draft) : null;
+  const result = draft && submitted&&!isHomework ? resultFor(exam, draft) : null;
   const score = result?.score;
   const sections=examSections(exam);
   const states = draft ? exam.questions.map(q => answerState(exam, q, draft.answers)) : [];
   const answered = states.filter(state => state === 'answered').length, invalidCount = states.filter(state => state === 'invalid').length;
-  const seconds = draft ? Math.ceil(remainingMs(draft, now) / 1000) : 0;
+  const seconds = draft ? Math.ceil(timeLeft(draft, now) / 1000) : 0;
   const startDisabled=!pdfReady||!!sourceIssue||!!erratum&&!acceptedErratum||!!newAttemptsClosed&&!persisted.current;
   const startLabel=sourceIssue?'Chờ đính chính điều kiện':persisted.current?'Tiếp tục làm bài':newAttemptsClosed?'Chờ phản biện · chưa mở lượt mới':'Bắt đầu làm bài';
   const retake=(confirmed=false)=>{
@@ -144,6 +161,6 @@ export function usePracticeAttempt({exam,previousExam,storeOverride,newAttemptsC
     persisted.current=next.value;ram.current=next.value;setDraft(next.value);setNow(Date.now());setNotice('');setExportNotice('');setUnsaved(false);
   };
 
-  return {sourceIssue,erratum,acceptedErratum,setAcceptedErratum,legacy,persisted,conflict,draft,notice,setNotice,unsaved,exportNotice,setExportNotice,pdfReady,setPdfReady,confirmation,setConfirmation,desktopLayout,setDesktopLayout,activeQuestion,setActiveQuestion,setQuestionFocus,mobilePane,setMobilePane,resultHeading,leaveConfirmation,persist,finish,begin,changeAnswer,submitted,score,sections,states,answered,invalidCount,seconds,startDisabled,startLabel,retake};
+  return {failedQuestions,setQuestionAssetReady,sourceIssue,erratum,acceptedErratum,setAcceptedErratum,legacy,persisted,conflict,draft,notice,setNotice,unsaved,exportNotice,setExportNotice,pdfReady,setPdfReady,confirmation,setConfirmation,desktopLayout,setDesktopLayout,activeQuestion,setActiveQuestion,setQuestionFocus,mobilePane,setMobilePane,resultHeading,leaveConfirmation,persist,finish,begin,changeAnswer,submitted,score,sections,states,answered,invalidCount,seconds,startDisabled,startLabel,retake};
 }
 export type PracticeAttemptState = ReturnType<typeof usePracticeAttempt>;

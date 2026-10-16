@@ -33,19 +33,19 @@ await test('Bảng công khai không render tên dù cache/API cũ còn trườn
 });
 const all=(t:any,p:(n:any)=>boolean):any[]=>!t||typeof t!=='object'?[]:Array.isArray(t)?t.flatMap(n=>all(n,p)):[...(p(t)?[t]:[]),...all(t.props?.children,p)];
 const now=Date.parse('2099-10-16T10:00:00+07:00'),dueAt=Date.parse('2099-10-16T17:30:00+07:00');
-await test('Lịch BTVN dùng đúng UTC và UID ổn định, không lặp hay tự nhắc',async()=>{
+await test('Lịch BTVN dùng đúng UTC và UID ổn định, một nhắc 15 phút và không lặp',async()=>{
   const a=await createHomeworkDeadlineICS({lessonCode:'synthetic-code',dueAt},now);
   const b=await createHomeworkDeadlineICS({lessonCode:'synthetic-code',dueAt},now+1000);
   assert.match(a,/DTSTART:20991016T103000Z\r\n/);assert.match(a,/DTSTAMP:20991016T030000Z\r\n/);
   assert.equal(a.match(/UID:([^\r]+)/)![1],b.match(/UID:([^\r]+)/)![1]);
   assert.notEqual(a.match(/UID:([^\r]+)/)![1],(await createHomeworkDeadlineICS({lessonCode:'synthetic-code',dueAt:dueAt+1000},now)).match(/UID:([^\r]+)/)![1]);
-  assert.doesNotMatch(a,/RRULE|VALARM|DTEND|ATTENDEE|ORGANIZER/);assert.ok(a.endsWith('END:VCALENDAR\r\n'));
+  assert.doesNotMatch(a,/RRULE|ATTENDEE|ORGANIZER/);assert.match(a,/DTEND:20991016T103100Z\r\n/);assert.match(a,/TRIGGER:-PT15M\r\n/);assert.equal((a.match(/BEGIN:VALARM/g)||[]).length,1);assert.ok(a.endsWith('END:VCALENDAR\r\n'));
   for(const line of a.split('\r\n'))assert.ok(new TextEncoder().encode(line).length<=75);
 });
 await test('Hạn thiếu, hỏng, quá hạn hoặc ngoài năm ICS không tạo lịch',async()=>{
   for(const due of [null,undefined,NaN,Infinity,-Infinity,0,now,now-1,'2099-10-16',Date.UTC(10000,0,1),8.64e15]){
     assert.equal(hasHomeworkDeadline(due,now),false);
-    await assert.rejects(()=>createHomeworkDeadlineICS({lessonCode:'synthetic',dueAt:due as any},now),/Chưa có hạn/);
+    assert.throws(()=>createHomeworkDeadlineICS({lessonCode:'synthetic',dueAt:due as any},now),/Chưa có hạn/);
   }
 });
 await test('Lịch không đưa tên, điện thoại, mã, điểm hay URL riêng ra tệp',async()=>{
@@ -58,9 +58,9 @@ const {default:Cards}=load('src/native/homework/LessonCards.tsx');
 const lesson={lessonCode:'synthetic',classNames:['Lớp thử'],date:'2099-10-16',title:'Buổi học thử',videoId:null,materialUrl:null,handoutUrl:null,homeworkUrl:null,dueAt,bestScore:null,late:null,submittedAt:null,available:true};
 await test('Thẻ chỉ xuất lịch khi đã mở, có bài và hạn thật trong tương lai',()=>{
   const card=(patch:any={})=>render(Cards,{lessons:[{...lesson,...patch}],busy:false,onHomework(){}});
-  assert.match(card(),/Thêm hạn vào lịch/);assert.match(card(),/Làm BTVN/);
-  for(const patch of [{dueAt:null,expectedDueAt:dueAt},{dueAt:NaN},{dueAt:1},{available:false},{locked:true},{opensAt:Date.now()+600000}])assert.doesNotMatch(card(patch),/Thêm hạn vào lịch/);
-  assert.match(card({opensAt:Date.now()-1,locked:true}),/Thêm hạn vào lịch/);
+  assert.match(card(),/Nhắc lịch hạn nộp/);assert.match(card(),/Làm BTVN/);
+  for(const patch of [{dueAt:null,expectedDueAt:dueAt},{dueAt:NaN},{dueAt:1},{available:false},{locked:true},{opensAt:Date.now()+600000}])assert.doesNotMatch(card(patch),/Nhắc lịch hạn nộp/);
+  assert.match(card({opensAt:Date.now()-1,locked:true}),/Nhắc lịch hạn nộp/);
 });
 const {default:Gate}=load('src/native/homework/HomeworkGate.tsx');
 const props={studentCode:'SYNTHETIC-CODE',identity:{fullName:'Tên thử',phone:'0000000000',className:'Lớp thử'},busy:false,classNames:['Lớp thử']};

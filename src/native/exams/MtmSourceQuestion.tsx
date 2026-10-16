@@ -1,9 +1,10 @@
-import React, {useId, useState} from 'react';
+import React, {useContext, useId, useState} from 'react';
 import RoomChoice from './RoomChoice';
 import MathText from '../math/MathText';
 import type {PracticeQuestion} from './data';
 import MtmSourceContent from './MtmSourceContent';
 import ZoomableImage from './ZoomableImage';
+import {RoomQuestionContext} from './RoomQuestionContext';
 import display from '../chapters/exact-source-display.json';
 
 type SourceStatement={label:string;text:string};
@@ -44,14 +45,15 @@ export function roomSourceDisplay(question:PracticeQuestion) {
 /** A checked transcription controls layout only. Grading and history retain their original identity. */
 export default function MtmSourceQuestion({question}:{question:PracticeQuestion}) {
   const instance=useId();
+  const inRoom=useContext(RoomQuestionContext)!==null;
   const [figureFailed,setFigureFailed]=useState(false);
   if(!question.sourceContent)return null;
   const entry=roomSourceDisplay(question);
-  if(!entry)return <MtmSourceContent segments={question.sourceContent.questions} assetBase="/practice-media/source-crops" label={question.sourceRef} kind="question"/>;
-  return <section className="mtm-source-content mtm-native-source" aria-label={`Đề ${question.sourceRef}`}>
+  if(!entry)return <div data-question-id={question.id}><MtmSourceContent segments={question.sourceContent.questions} assetBase="/practice-media/source-crops" label={question.sourceRef} kind="question"/></div>;
+  return <section data-question-id={question.id} className="mtm-source-content mtm-native-source" aria-label={`Đề ${question.sourceRef}`}>
     <div className="mtm-native-question-text">
       <p><MathText text={entry.prompt}/></p>
-      {entry.figureRef&&<figure className="mtm-native-figure" style={{maxWidth:entry.figureRef.width>600?640:420}}>{figureFailed?<p role="alert">Không tải được hình của {question.sourceRef}. Hãy tải lại trang để đọc đủ câu hỏi.</p>:<ZoomableImage src={`/practice-media/source-crops/${entry.figureRef.path}`} width={entry.figureRef.width} height={entry.figureRef.height} watermark label={`Hình ${question.sourceRef}`} alt={entry.figureRef.alt??`Hình gốc ${question.sourceRef}`} onError={()=>setFigureFailed(true)}/>}</figure>}
+      {entry.figureRef&&<figure className="mtm-native-figure" style={{maxWidth:entry.figureRef.width>600?640:420}}>{figureFailed?<p className="mtm-source-error" role="alert"><span>Không tải được hình của {question.sourceRef}. Em có thể làm câu khác hoặc nộp phần đã làm.</span><button type="button" onClick={()=>setFigureFailed(false)}>Thử tải lại ảnh</button></p>:<ZoomableImage src={`/practice-media/source-crops/${entry.figureRef.path}`} width={entry.figureRef.width} height={entry.figureRef.height} loading={inRoom?'eager':'lazy'} watermark label={`Hình ${question.sourceRef}`} alt={entry.figureRef.alt??`Hình gốc ${question.sourceRef}`} onError={()=>setFigureFailed(true)}/>}</figure>}
       {entry.promptAfterFigure&&<p><MathText text={entry.promptAfterFigure}/></p>}
       {entry.choices&&<ol className="mtm-native-choices" type="A">{entry.choices.map(choice=><li key={choice.label}><RoomChoice questionId={question.id} choice={choice.label}><MathText text={choice.text}/></RoomChoice></li>)}</ol>}
       {entry.statements&&statementBlocks(entry)}

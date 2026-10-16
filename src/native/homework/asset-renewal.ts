@@ -7,7 +7,7 @@ export function createAssetRenewal(refresh:()=>Promise<void>,clock=Date.now){
     const now=clock();
     if(!imageFailed&&(!Number.isFinite(expiresAt)||expiresAt!-now>ASSET_RENEW_WINDOW_MS))return Promise.resolve();
     if(pending)return pending;
-    if(now-lastAttempt<30000)return Promise.resolve();
+    if(!imageFailed&&now-lastAttempt<30000)return Promise.resolve();
     lastAttempt=now;
     pending=refresh().finally(()=>{pending=null;});return pending;
   };
@@ -16,5 +16,5 @@ export function createAssetRenewal(refresh:()=>Promise<void>,clock=Date.now){
 export function mergeHomeworkSave(previous:HomeworkState,next:HomeworkState):HomeworkState{
   if(!next.saveOnly)return next;
   if(previous.lessonCode!==next.lessonCode||previous.draft?.attemptId!==next.draft?.attemptId)return previous;
-  return {...previous,draft:next.draft,revision:next.revision,receipts:next.receipts,bestScore:next.bestScore,attemptsUsed:next.attemptsUsed};
+  return {...previous,serverNow:next.serverNow,clientReceivedAt:next.clientReceivedAt,draft:next.draft,revision:next.revision,receipts:next.receipts,bestScore:next.bestScore,attemptsUsed:next.attemptsUsed};
 }

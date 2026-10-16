@@ -22,6 +22,20 @@ export function shortFormatMessage(mode: string): string {
     : 'Chưa đúng định dạng: câu này chỉ nhận số thập phân, ví dụ 0,5 hoặc -2,75 (không nhận phân số như 1/2 hay biểu thức). Nếu nộp như vậy, câu này được 0 điểm.';
 }
 
+/** Explain the existing numeric parser without rewriting the response or key.
+ * Keep decimal digits as text so long answers never pass through Number. */
+export function shortInterpretationMessage(mode:string,value:unknown):string {
+  if((mode!=='numeric'&&mode!=='rational')||typeof value!=='string'||!value.trim())return '';
+  const normalized=normalizedShort(mode,value);
+  if(normalized===null)return '';
+  const interpreted=mode==='rational'?normalized.replace(/\/1$/,''):normalized.replace('.',',');
+  if(interpreted===value.trim())return '';
+  const decimal=mode==='rational'?normalizedShort('numeric',value):normalized;
+  const decimalNote=decimal?.includes('.')?(mode==='rational'?` (số thập phân ${decimal.replace('.',',')})`:' (số thập phân)'):'';
+  const separatorNote=/[.,]/.test(value)?' Dấu chấm và dấu phẩy là dấu thập phân, không tách hàng nghìn.':'';
+  return `Máy đang hiểu là ${interpreted}${decimalNote}.${separatorNote}`;
+}
+
 export type AnswerState = 'answered' | 'blank' | 'partial' | 'invalid' | 'self';
 
 /** "Đã trả lời đầy đủ" khi có câu trả lời VÀ hợp lệ định dạng; câu ngắn sai định dạng tách riêng;

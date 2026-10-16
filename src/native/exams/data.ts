@@ -1,7 +1,8 @@
 import verifiedCatalog from './catalog.json';
 import type {Assessment, Question, Validation} from './assessment';
 import type {SourceSegment} from './MtmSourceContent';
-import {validatePracticeProfile,type ExamSection} from './flexible-profile';
+import {FLEX_RUBRIC,validatePracticeProfile,type ExamSection} from './flexible-profile';
+import {MTM_PROFILE} from './mtm-profile';
 
 export const GRADES = [10, 11, 12] as const;
 export const PERIODS = ['GK1', 'CK1', 'GK2', 'CK2'] as const;
@@ -16,12 +17,14 @@ export type PracticeQuestion = Exclude<Question, {kind: 'essay'}> & {
   solution?: string;
   /** Optional verbatim statement texts; otherwise sourceRef + a/b/c/d locates them. */
   statements?: [string, string, string, string];
-  sourceContent?:{questions:SourceSegment[];solutions:SourceSegment[]};
+  sourceContent?:{questions:SourceSegment[];solutions?:SourceSegment[]};
   correctionNote?:string;
   convertedFrom?:'essay';
 
 };
 export interface PracticeExam extends Assessment {
+  /** Transport for server-graded homework. Never sufficient for local scoring. */
+  responseMode?:'questions-only';
   sections?:ExamSection[];
   grade: Grade;
   period: Period;
@@ -35,12 +38,14 @@ export interface PracticeExam extends Assessment {
   sourceMaterial: {title: string; publisher: string; version: string; locator: string};
   answerVerificationNote?: string;
   preAttemptNotice?: string;
+  /** Non-fatal server warnings when optional document assets cannot be loaded. */
+  assetWarnings?:string[];
   /** Only expose a PDF before submission when it is separately verified to
    * contain questions only, without an answer key or solutions. */
   sourcePdf?: {url: string; verified: true; sha256: string; bytes: number; totalPages: number; questionPages: number[]};
   sourceInstructions?:SourceSegment[];
   solutionInstructions?:SourceSegment[];
-  mtmDocuments?:{questions:{url:string;sha256:string};solutions:{url:string;sha256:string}};
+  mtmDocuments?:{questions:{url:string;sha256:string};solutions?:{url:string;sha256:string}};
   questions: PracticeQuestion[];
 }
 
@@ -71,6 +76,67 @@ export function validSourceSegments(value:unknown):value is SourceSegment[] {
 export function validatePracticeExam(input: unknown): Validation {
   const gate = validatePracticeProfile(input);
   if (!gate.valid || !isRecord(input)) return gate;
+  if (input.responseMode !== undefined) return {valid:false,errors:['Question-only transport is not a complete scoring exam']};
+  return validatePracticePresentation(input, false);
+}
+
+/** Checks the public homework transport without inventing answer keys or using
+ * the scoring validator. Acceptance only permits collecting responses; grading
+ * remains exclusively on the server. */
+export function validateQuestionOnlyPracticeExam(input: unknown): Validation {
+  if (!isRecord(input)) return {valid:false,errors:['exam: object required']};
+  const errors:string[]=[];
+  if(input.responseMode!=='questions-only')errors.push('Explicit question-only homework transport required');
+  const homework=input.rubricVersion==='MTM-BTVN-10-v1';
+  const flexible=homework||input.rubricVersion===FLEX_RUBRIC;
+  if(!boundedText(input.sourceRef,20000)||!isSha256(input.sourceHash)||input.answerKeyVerified!==true||input.rubricVerified!==true)errors.push('Invalid verified source or rubric');
+  if(!Array.isArray(input.questions)||!input.questions.length||input.questions.length>300)return {valid:false,errors:[...errors,'Complete bounded questions required']};
+  if(input.questionCount!==input.questions.length||!Number.isSafeInteger(input.questionCount))errors.push('Question count mismatch');
+  const id=input.id;
+  if(flexible&&(!boundedText(id,120)||!['mtm-custom-','mtm-preview-','mtm-practice-'].some(prefix=>id.startsWith(prefix))))errors.push('Flexible profile requires a custom edition');
+  const units=(n:unknown)=>Number.isSafeInteger(n)&&(n as number)>=0&&(n as number)<=10000;
+  const ids=new Set<string>();let total=0;
+  for(const q of input.questions){
+    if(!isRecord(q)){errors.push('Question object required');continue;}
+    if(!boundedText(q.id,120)||q.id!==q.id.trim()||ids.has(q.id))errors.push('Invalid or duplicate question id');else ids.add(q.id);
+    if(!boundedText(q.sourceRef,20000))errors.push('Question source required');
+    if(!units(q.maxMillipoints)||(q.kind==='self'?q.maxMillipoints!==0:q.maxMillipoints===0))errors.push('Invalid question points');else total+=q.maxMillipoints as number;
+    if('answer' in q||'acceptedAnswers' in q||'solution' in q)errors.push('Private answer fields must be absent');
+    if(q.kind==='mc'){
+      if(!Array.isArray(q.choices)||q.choices.length!==4||!Array.from(q.choices).every(c=>boundedText(c,20000))||new Set(q.choices).size!==4)errors.push('Four distinct choices required');
+    }else if(q.kind==='tf'){
+      const schedule=q.pointsByCorrectCount;
+      if(!Array.isArray(schedule)||schedule.length!==5||!Array.from(schedule).every(units)||schedule[0]!==0||schedule[4]!==q.maxMillipoints||schedule.some((n,i)=>i>0&&n<schedule[i-1]))errors.push('Invalid true/false point schedule');
+    }else if(q.kind==='short'){
+      if(!['numeric','rational','exact'].includes(q.mode as string))errors.push('Explicit short answer mode required');
+    }else if(q.kind!=='self'||!homework)errors.push('Unsupported homework question kind');
+  }
+  if(homework?total<=0:total!==10000)errors.push(homework?'Homework needs a positive scored total':'Total must equal 10000 millipoints');
+  if(!flexible){
+    if(input.questionCount!==MTM_PROFILE.questionCount)errors.push('MTM profile requires exactly 22 questions');
+    input.questions.forEach((q,i)=>{
+      const expected=i<MTM_PROFILE.mc?'mc':i<MTM_PROFILE.mc+MTM_PROFILE.tf?'tf':'short';
+      if(!isRecord(q)||q.kind!==expected)errors.push('MTM profile requires source order: 12 MC, 4 TF, 6 short');
+    });
+  }
+  if(flexible||input.sections!==undefined){
+    if(!Array.isArray(input.sections)||!input.sections.length||input.sections.length>12)errors.push('Sections required');
+    else{
+      let offset=0;
+      for(const section of input.sections){
+        if(!isRecord(section)||!boundedText(section.label,100)||!(homework?['mc','tf','short','self']:['mc','tf','short']).includes(section.kind as string)||!Number.isSafeInteger(section.count)||(section.count as number)<1||(section.count as number)>300){errors.push('Invalid section');continue;}
+        const count=section.count as number,questions=input.questions.slice(offset,offset+count);
+        if(questions.length!==count||questions.some(q=>!isRecord(q)||q.kind!==section.kind))errors.push('Section/question mismatch');
+        offset+=count;
+      }
+      if(offset!==input.questions.length)errors.push('Complete section counts required');
+    }
+  }
+  if(errors.length)return {valid:false,errors};
+  return validatePracticePresentation(input,true);
+}
+
+function validatePracticePresentation(input: Record<string,unknown>, questionOnly:boolean):Validation {
   const errors: string[] = [];
   if (!boundedText(input.id, 120) || !/^[a-zA-Z0-9][a-zA-Z0-9_-]*$/.test(input.id)||input.id==='history') errors.push('Invalid or reserved route id');
   if (!GRADES.includes(input.grade as Grade) || !PERIODS.includes(input.period as Period)) errors.push('Invalid grade or period');
@@ -84,10 +150,10 @@ export function validatePracticeExam(input: unknown): Validation {
   if (input.preAttemptNotice !== undefined && !boundedText(input.preAttemptNotice, 2000)) errors.push('Invalid pre-attempt notice');
   if (input.sourcePdf !== undefined && !validSourcePdf(input.sourcePdf)) errors.push('PDF question-page asset not verified');
   if(input.sourceInstructions!==undefined&&!validSourceSegments(input.sourceInstructions))errors.push('Invalid question instructions');
-  if(input.solutionInstructions!==undefined&&!validSourceSegments(input.solutionInstructions))errors.push('Invalid solution instructions');
+  if(questionOnly?'solutionInstructions' in input:input.solutionInstructions!==undefined&&!validSourceSegments(input.solutionInstructions))errors.push('Invalid solution instructions');
   if(input.mtmDocuments!==undefined){
     const files=input.mtmDocuments;
-    if(!isRecord(files)||!isRecord(files.questions)||!isRecord(files.solutions)||!validPdfUrl(files.questions.url,files.questions.sha256)||!validPdfUrl(files.solutions.url,files.solutions.sha256)||files.questions.sha256===files.solutions.sha256)errors.push('Invalid separate MTM documents');
+    if(!isRecord(files)||!isRecord(files.questions)||!validPdfUrl(files.questions.url,files.questions.sha256)||(questionOnly?'solutions' in files:!isRecord(files.solutions)||!validPdfUrl(files.solutions.url,files.solutions.sha256)||files.questions.sha256===files.solutions.sha256))errors.push('Invalid separate MTM documents');
   }
   for (const q of (input as unknown as PracticeExam).questions) {
     if (!boundedText(q.id, 120) || ['__proto__', 'constructor', 'prototype'].includes(q.id)) errors.push('Unsafe question id');
@@ -95,14 +161,14 @@ export function validatePracticeExam(input: unknown): Validation {
     if (q.prompt !== undefined && !boundedText(q.prompt, 20000)) errors.push('Invalid prompt');
     if (q.text !== undefined && !boundedText(q.text, 20000)) errors.push('Invalid text');
     if(q.convertedFrom!==undefined&&(input.rubricVersion!=='MTM-BTVN-10-v1'||q.kind!=='short'||q.convertedFrom!=='essay'))errors.push('Invalid essay conversion');
-    if(q.kind==='self'&&!boundedText(q.solution,20000)&&!q.sourceContent?.solutions?.length) errors.push('Self question requires a solution');
+    if(!questionOnly&&q.kind==='self'&&!boundedText(q.solution,20000)&&!q.sourceContent?.solutions?.length) errors.push('Self question requires a solution');
     if (q.solution !== undefined && !boundedText(q.solution, 20000)) errors.push('Invalid solution');
     if(q.correctionNote!==undefined&&!boundedText(q.correctionNote,2000))errors.push('Invalid correction note');
     if(q.sourceContent!==undefined){
-      if(!isRecord(q.sourceContent)||!validSourceSegments(q.sourceContent.questions)||!validSourceSegments(q.sourceContent.solutions))errors.push('Invalid complete source fragments');
-      else if(q.sourceContent.solutions.some(segment=>q.sourceContent!.questions.some(question=>question.path===segment.path||question.sha256.toLowerCase()===segment.sha256.toLowerCase())))errors.push('Question and solution fragments must be separate');
+      if(!isRecord(q.sourceContent)||!validSourceSegments(q.sourceContent.questions)||(questionOnly?'solutions' in q.sourceContent:!validSourceSegments(q.sourceContent.solutions)))errors.push('Invalid complete source fragments');
+      else if(!questionOnly&&q.sourceContent.solutions!.some(segment=>q.sourceContent!.questions.some(question=>question.path===segment.path||question.sha256.toLowerCase()===segment.sha256.toLowerCase())))errors.push('Question and solution fragments must be separate');
     }
-    if (q.kind === 'short' && !q.acceptedAnswers.every(answer => boundedText(answer, 500))) errors.push('Short answer exceeds input limit');
+    if (!questionOnly && q.kind === 'short' && !q.acceptedAnswers.every(answer => boundedText(answer, 500))) errors.push('Short answer exceeds input limit');
     if (q.statements !== undefined && (q.kind !== 'tf' || !Array.isArray(q.statements) || q.statements.length !== 4 || !Array.from(q.statements).every(s => boundedText(s, 10000)))) errors.push('Invalid statement texts');
     if(input.sourcePdf===undefined&&q.sourceContent===undefined&&(!boundedText(q.prompt??q.text,20000)||(q.kind==='tf'&&!q.statements)))errors.push('Question content is missing; a source locator is insufficient');
   }

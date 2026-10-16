@@ -1,5 +1,5 @@
 import type {Choice} from './assessment';
-import {boundedText, isRecord, validatePracticeExam, type PracticeExam} from './data';
+import {boundedText, isRecord, validatePracticeExam, validateQuestionOnlyPracticeExam, type PracticeExam} from './data';
 
 export const STORAGE_PREFIX = 'mtm:exam:v1:';
 export const MAX_SHORT_LENGTH = 500;
@@ -21,6 +21,11 @@ export type Draft = Readonly<{
 export type Store = Pick<Storage, 'getItem' | 'setItem'>;
 export type Failure = {ok: false; code: string; message: string};
 export type Outcome<T> = {ok: true; value: T} | Failure;
+/** Only the server-graded homework caller may admit a public question transport.
+ * Practice/history callers retain the complete-exam gate by default. */
+export type DraftValidationOptions = {allowQuestionOnly?:boolean};
+const validDraftExam=(exam:PracticeExam,options:DraftValidationOptions)=>
+  (options.allowQuestionOnly===true&&exam.responseMode==='questions-only'?validateQuestionOnlyPracticeExam(exam):validatePracticeExam(exam)).valid;
 const fail = (code: string, message: string): Failure => ({ok: false, code, message});
 const validTime = (value: unknown): value is number => Number.isSafeInteger(value) && (value as number) >= 0 && (value as number) <= 8640000000000000;
 const validRevision = (value: unknown): value is number => Number.isSafeInteger(value) && (value as number) >= 0;
@@ -28,8 +33,8 @@ export const draftKey = (examId: string) => STORAGE_PREFIX + encodeURIComponent(
 
 /** A provider is supplied by the caller. This module never reads browser globals,
  * enumerates unrelated storage, deletes data, or uses fallback storage. */
-export function validateDraft(value: unknown, exam: PracticeExam): Outcome<Draft> {
-  if (!validatePracticeExam(exam).valid) return fail('exam', 'Đề chưa đủ điều kiện mở làm bài.');
+export function validateDraft(value: unknown, exam: PracticeExam, options:DraftValidationOptions={}): Outcome<Draft> {
+  if (!validDraftExam(exam,options)) return fail('exam', 'Đề chưa đủ điều kiện mở làm bài.');
   if (!isRecord(value)) return fail('shape', 'Bản lưu không đúng định dạng. Dữ liệu cũ được giữ nguyên.');
   const fields = ['version', 'examId', 'examVersionHash', 'rubricVersion', 'attemptId', 'startedAt', 'deadline', 'updatedAt', 'answers', 'submittedAt', 'revision'];
   if (Object.keys(value).length !== fields.length || !fields.every(key => Object.hasOwn(value, key))) return fail('shape', 'Bản lưu có cấu trúc khác. Dữ liệu cũ được giữ nguyên.');
@@ -54,8 +59,8 @@ export function validateDraft(value: unknown, exam: PracticeExam): Outcome<Draft
   return {ok: true, value: JSON.parse(JSON.stringify(value)) as Draft};
 }
 
-export function readDraft(storage: Store | null, exam: PracticeExam): Outcome<Draft | null> {
-  if (!validatePracticeExam(exam).valid) return fail('exam', 'Đề chưa đủ điều kiện mở làm bài.');
+export function readDraft(storage: Store | null, exam: PracticeExam, options:DraftValidationOptions={}): Outcome<Draft | null> {
+  if (!validDraftExam(exam,options)) return fail('exam', 'Đề chưa đủ điều kiện mở làm bài.');
   if (!storage) return fail('unavailable', 'Không truy cập được nơi lưu trên trình duyệt này.');
   let raw: string | null;
   try { raw = storage.getItem(draftKey(exam.id)); }
@@ -64,7 +69,7 @@ export function readDraft(storage: Store | null, exam: PracticeExam): Outcome<Dr
   let parsed: unknown;
   try { parsed = JSON.parse(raw); }
   catch { return fail('json', 'Bản lưu bị lỗi định dạng. Dữ liệu cũ được giữ nguyên.'); }
-  return validateDraft(parsed, exam);
+  return validateDraft(parsed, exam, options);
 }
 
 const sameAnswers = (a: Answers, b: Answers) => {
@@ -78,14 +83,14 @@ export function sameDraft(a: Draft, b: Draft): boolean {
 /** Optimistic save against the exact last successfully read/saved snapshot.
  * localStorage has no cross-tab atomic CAS; re-read + readback catch observable
  * conflicts. A storage event must freeze automatic writes in the UI as well. */
-export function saveDraft(storage: Store | null, exam: PracticeExam, candidate: Draft, expected: Draft | null): Outcome<Draft> {
-  const checked = validateDraft(candidate, exam);
+export function saveDraft(storage: Store | null, exam: PracticeExam, candidate: Draft, expected: Draft | null, options:DraftValidationOptions={}): Outcome<Draft> {
+  const checked = validateDraft(candidate, exam, options);
   if (!checked.ok) return checked;
   if (expected !== null) {
-    const validExpected = validateDraft(expected, exam);
+    const validExpected = validateDraft(expected, exam, options);
     if (!validExpected.ok) return validExpected;
   }
-  const read = readDraft(storage, exam);
+  const read = readDraft(storage, exam, options);
   if (!read.ok) return read;
   const current = read.value, next = checked.value;
   // Exact repeat is safe and writes nothing, including after submission/reload.
@@ -96,16 +101,16 @@ export function saveDraft(storage: Store | null, exam: PracticeExam, candidate: 
   }
   try { storage!.setItem(draftKey(exam.id), JSON.stringify(next)); }
   catch { return fail('write', 'Không lưu được bài trên trình duyệt. Có thể bộ nhớ đã đầy hoặc quyền lưu đang bị chặn.'); }
-  const confirmed = readDraft(storage, exam);
+  const confirmed = readDraft(storage, exam, options);
   if (!confirmed.ok) return confirmed;
   if (!confirmed.value || !sameDraft(confirmed.value, next)) return fail('conflict', 'Chưa xác nhận được bản vừa lưu. Câu trả lời vẫn được giữ trên trang này.');
   return {ok: true, value: confirmed.value};
 }
 
-export function createDraft(exam: PracticeExam, attemptId: string, now: number): Outcome<Draft> {
+export function createDraft(exam: PracticeExam, attemptId: string, now: number, options:DraftValidationOptions={}): Outcome<Draft> {
   return validateDraft({version: 1, examId: exam.id, examVersionHash: exam.versionHash, rubricVersion: exam.rubricVersion, attemptId,
     startedAt: now, deadline: now + exam.durationMinutes * 60000, updatedAt: now,
-    answers: {}, submittedAt: null, revision: 0}, exam);
+    answers: {}, submittedAt: null, revision: 0}, exam, options);
 }
 export function remainingMs(draft: Pick<Draft, 'deadline'>, now: number): number {
   if (!validTime(now) || !validTime(draft.deadline)) throw new RangeError('Invalid clock');
@@ -118,13 +123,13 @@ export function isAnswered(exam: PracticeExam, id: string, answers: Answers): bo
   return typeof answer === 'string' && answer.trim().length > 0;
 }
 /** Once submitted, repeated manual clicks, timeout ticks and refresh are no-ops. */
-export function submitDraft(exam: PracticeExam, draft: Draft, now: number): Outcome<Draft> {
-  const checked = validateDraft(draft, exam);
+export function submitDraft(exam: PracticeExam, draft: Draft, now: number, options:DraftValidationOptions={}): Outcome<Draft> {
+  const checked = validateDraft(draft, exam, options);
   if (!checked.ok) return checked;
   if (draft.submittedAt !== null) return checked;
   if (!validTime(now)) return fail('time', 'Không xác định được thời gian nộp bài.');
   const submittedAt = Math.max(now, draft.startedAt, draft.updatedAt);
-  return validateDraft({...draft, submittedAt, updatedAt: submittedAt, revision: draft.revision + 1}, exam);
+  return validateDraft({...draft, submittedAt, updatedAt: submittedAt, revision: draft.revision + 1}, exam, options);
 }
 
 /** Merge archived submitted snapshots and the active completed draft, deduplicated

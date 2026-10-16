@@ -17,16 +17,15 @@ import MtmSourceContent from '../exams/MtmSourceContent';
 import {RoomQuestionContext} from '../exams/RoomQuestionContext';
 import {questionLabel} from '../exams/attempt-ui';
 import {useUnsavedGuard} from '../exams/navigation-guard';
-import ExamConfirm from '../exams/ExamConfirm';
 import {createHomeworkSaver,REMOTE_SAVE_INITIAL,REMOTE_LEAVE_MESSAGE} from './remote-save';
 import '../exams/exams.css';
 import './btvn-session.css';
 
 function HomeworkReader({exam}:{exam:PracticeExam}){
   const active=useContext(RoomQuestionContext);
-  return <section aria-label="Đề BTVN">{exam.questions.map((q,index)=>active!==null&&active!==index?null:<article key={q.id} className="btvn-question"><h2>{questionLabel(exam,index).full}</h2>{q.sourceContent&&<MtmSourceContent segments={q.sourceContent.questions} assetBase="/practice-media/source-crops" label={questionLabel(exam,index).full} kind="question"/>}<small>MTM sưu tầm và biên soạn</small></article>)}</section>;
+  return <section aria-label="Đề BTVN">{exam.questions.map((q,index)=>active!==null&&active!==index?null:<article key={q.id} data-question-id={q.id} className="btvn-question"><h2>{questionLabel(exam,index).full}</h2>{q.sourceContent&&<MtmSourceContent segments={q.sourceContent.questions} assetBase="/practice-media/source-crops" label={questionLabel(exam,index).full} kind="question"/>}<small>MTM sưu tầm và biên soạn</small></article>)}</section>;
 }
-function ManagedAttempt({state,gateway,onState,onPendingChange}:{state:HomeworkState & {exam:PracticeExam};gateway:HomeworkGateway;onState:(state:HomeworkState)=>void;onPendingChange:(pending:boolean)=>void}){
+function ManagedAttempt({state,gateway,onState,onPendingChange,saverRef}:{state:HomeworkState & {exam:PracticeExam};gateway:HomeworkGateway;onState:(state:HomeworkState)=>void;onPendingChange:(pending:boolean)=>void;saverRef:{current:ReturnType<typeof createHomeworkSaver>|null}}){
   const [save,setSave]=useState(REMOTE_SAVE_INITIAL),[notice,setNotice]=useState('');
   const last=useRef<Draft|null>(state.draft);
   const saver=useMemo(()=>createHomeworkSaver({
@@ -34,12 +33,7 @@ function ManagedAttempt({state,gateway,onState,onPendingChange}:{state:HomeworkS
     onSaved:onState,
     onStatus:status=>{onPendingChange(status.pending);setSave(status);},
   }),[state.draft?.attemptId,gateway]);
-  useEffect(()=>()=>{saver.dispose();onPendingChange(false);},[saver]);
-  useEffect(()=>{
-    if(state.kind!=='kiem-tra-thang'||!state.closesAt)return;
-    const timer=setInterval(()=>{if(Date.now()>=state.closesAt!&&last.current?.submittedAt===null){clearInterval(timer);last.current={...last.current,submittedAt:Date.now()};saver.update(last.current);}},1000);
-    return()=>clearInterval(timer);
-  },[state.kind,state.closesAt]);
+  useEffect(()=>{saverRef.current=saver;return()=>{saver.dispose();if(saverRef.current===saver)saverRef.current=null;onPendingChange(false);};},[saver]);
   const store=useMemo<Store>(()=>{
     const values=new Map<string,string>();if(state.draft)values.set(draftKey(state.exam.id),JSON.stringify(state.draft));
     return {getItem:key=>values.get(key)??null,setItem:(key,value)=>{
@@ -51,9 +45,10 @@ function ManagedAttempt({state,gateway,onState,onPendingChange}:{state:HomeworkS
     }};
   },[state.draft?.attemptId,saver]);
   const saveStatus=save.failed?'Chưa lưu máy chủ':save.pending?'Chờ máy chủ lưu':'Đã lưu máy chủ';
-  return <><p role="status">{save.message||notice}</p>{save.failed&&<button disabled={save.saving} onClick={saver.retry}>Gửi lại bài đang giữ</button>}
+  return <><p role="status">{save.message||notice}</p>{save.failed&&!save.closed&&<button disabled={save.saving} onClick={saver.retry}>Gửi lại bài đang giữ</button>}
     <PracticeAttempt isHomework exam={state.exam} catalogUrl={location.pathname} contextLabel="BTVN" audienceLabel={displayClassName(state)} storeOverride={store}
-      saveStatus={saveStatus} onRetrySave={save.failed?saver.retry:undefined}
+      saveStatus={save.failed?save.message:saveStatus} savePending={save.pending} onRetrySave={save.failed&&!save.closed?saver.retry:undefined} onAcceptClosed={save.closed?saver.acceptClosed:undefined}
+      deadlineAt={state.closesAt} clockOffsetMs={state.serverNow!==undefined&&state.clientReceivedAt!==undefined?state.serverNow-state.clientReceivedAt:0}
       storageNotice="Bài làm gửi đến máy chủ MTM theo tài khoản em. Chỉ thông báo nhận bài từ máy chủ mới xác nhận đã nộp BTVN."
       onRetake={()=>{setNotice('Dùng nút Làm lượt tiếp ở phần kết quả BTVN.');document.getElementById('btvn-summary')?.scrollIntoView({behavior:'smooth'});}}
       questionReader={<HomeworkReader exam={state.exam}/>}/>
@@ -77,18 +72,28 @@ export default function HomeworkSession({pathname}:{pathname:string}){
   };
   useEffect(()=>{void loadClasses();return()=>{classesGeneration.current++;};},[pathname]);
   const [room,setRoom]=useState(false);
-  const remotePending=useRef(false),[pendingExit,setPendingExit]=useState<{run:()=>void}|null>(null);
+  const remotePending=useRef(false),saverRef=useRef<ReturnType<typeof createHomeworkSaver>|null>(null);
   const leaveConfirmation=useUnsavedGuard(()=>remotePending.current,REMOTE_LEAVE_MESSAGE);
-  const requestExit=(run:()=>void)=>{if(remotePending.current)setPendingExit({run});else run();};
-  const [busy,setBusy]=useState(false),[notice,setNotice]=useState(''),[checking,setChecking]=useState(true);
+  const [busy,setBusy]=useState(false),[notice,setNotice]=useState(''),[checking,setChecking]=useState(true),[exitClosed,setExitClosed]=useState(false);
+  const requestExit=async(run:()=>void|Promise<void>)=>{
+    setBusy(true);setNotice('');setExitClosed(false);
+    try{
+      if(saverRef.current&&!await saverRef.current.flush()){
+        const closed=saverRef.current.closed();setExitClosed(closed);
+        setNotice(closed?'Máy chủ đã chấm bản đã lưu. Bấm Chấp nhận bản máy chủ đã chấm rồi mới rời bài. Phần sửa chưa được nhận không tính điểm.':'Chưa rời bài vì máy chủ chưa nhận bản mới nhất. Giữ trang mở và bấm Gửi lại bài đang giữ.');return;
+      }
+      await run();
+    }catch(error){setNotice(error instanceof Error?error.message:'Chưa rời bài được. Em thử lại sau.');}finally{setBusy(false);}
+  };
   const mounted=useRef(true);
+  const imageNeedsRenewal=useRef(false);
   const renewAssets=useRef<(failed?:boolean)=>void>(()=>{});
   const selectedLesson=useRef<string|undefined>(parts?.[2]);
   useEffect(()=>{if(state)selectedLesson.current=state.lessonCode||undefined;},[state?.lessonCode]);
   const gateway=useMemo<HomeworkGateway>(()=>({async call(action,body={}){
     const response=await fetch('/api/btvn',{method:'POST',credentials:'same-origin',cache:'no-store',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({action,classKey:parts?.[1],lessonCode:action==='login'?parts?.[2]:selectedLesson.current,...body})}).catch(()=>{throw new Error('Chưa kết nối được máy chủ. Em thử lại sau.');});
-    const data=await response.json().catch(()=>{throw new Error('Máy chủ chưa trả lời hợp lệ. Em thử lại sau.');});if(!response.ok)throw new Error(action==='login'?entryFailure(response.status,data.message):data.message??'Chưa kết nối được máy chủ.');return data as HomeworkState;
+    const data=await response.json().catch(()=>{throw new Error('Máy chủ chưa trả lời hợp lệ. Em thử lại sau.');});if(!response.ok)throw new Error(action==='login'?entryFailure(response.status,data.message):data.message??'Chưa kết nối được máy chủ.');return {...data,clientReceivedAt:Date.now()} as HomeworkState;
   }}),[pathname]);
   useEffect(()=>{mounted.current=true;void gateway.call('state').then(next=>{if(mounted.current){setState(next);setRoom(!!next.draft&&next.draft.submittedAt===null);}}).catch(()=>{}).finally(()=>{if(mounted.current)setChecking(false);});return()=>{mounted.current=false;};},[gateway]);
   useEffect(()=>{
@@ -103,26 +108,28 @@ export default function HomeworkSession({pathname}:{pathname:string}){
     let alive=true;const lesson=state.lessonCode;
     const renew=createAssetRenewal(async()=>{try{
       const next=await gateway.call('state',{lessonCode:lesson});
-      if(alive)setState(previous=>previous?.lessonCode===lesson?{...previous,exam:next.exam,lessons:next.lessons,assetsExpiresAt:next.assetsExpiresAt,canStart:next.canStart,solutionsAvailable:next.solutionsAvailable}:previous);
+      imageNeedsRenewal.current=!!next.exam?.questions.some(q=>q.sourceContent?.questions.some(segment=>segment.privateUnavailable));
+      if(alive)setState(previous=>previous?.lessonCode===lesson?{...previous,exam:next.exam,assetWarnings:next.assetWarnings,lessons:next.lessons,assetsExpiresAt:next.assetsExpiresAt,canStart:next.canStart,solutionsAvailable:next.solutionsAvailable}:previous);
     }catch{ /* Giữ bài hiện tại khi mất mạng; lần kiểm sau thử lại. */ }});
-    const check=(failed=false)=>void renew(state.assetsExpiresAt,failed);
+    const check=(failed=false)=>{if(failed)imageNeedsRenewal.current=true;void renew(state.assetsExpiresAt,imageNeedsRenewal.current);};
     renewAssets.current=check;
     const timer=setInterval(()=>check((!state.exam&&!!state.opensAt&&Date.now()>=state.opensAt)||(state.kind==='kiem-tra-thang'&&!state.solutionsAvailable&&!!state.closesAt&&Date.now()>=state.closesAt)),60000);
+    const retry=()=>renewAssets.current(true);window.addEventListener('mtm:retry-assets',retry);
     const visible=()=>{if(document.visibilityState==='visible')check();};document.addEventListener('visibilitychange',visible);
-    return()=>{alive=false;renewAssets.current=()=>{};clearInterval(timer);document.removeEventListener('visibilitychange',visible);};
+    return()=>{alive=false;renewAssets.current=()=>{};clearInterval(timer);window.removeEventListener('mtm:retry-assets',retry);document.removeEventListener('visibilitychange',visible);};
   },[gateway,state?.lessonCode,state?.demo,state?.assetsExpiresAt,state?.opensAt,state?.closesAt,state?.solutionsAvailable,!!state?.exam]);
   const run=async(action:'login'|'start',input?:GateInput)=>{setBusy(true);setNotice('');try{setState(await gateway.call(action,action==='login'?{gate:input}:{}));if(action==='start')setRoom(true);setGate({fullName:'',phone:'',className:''});setStudentCode('');}catch(error){setNotice(error instanceof Error?error.message:'Chưa kết nối được máy chủ. Em thử lại sau.');}finally{setBusy(false);}};
   if(!parts&&pathname!=='/btvn')return <section className="mig-container mig-panel"><Link href="/" className="btvn-home-link">← Trang chủ</Link><h1>Đường dẫn BTVN không hợp lệ</h1></section>;
   return <section className="ep-root btvn-session" onErrorCapture={event=>{if(event.target instanceof HTMLImageElement&&event.target.closest('.mtm-source-content'))renewAssets.current(true);}}>
-    {leaveConfirmation}{pendingExit&&<ExamConfirm title="Có rời bài đang làm?" message={REMOTE_LEAVE_MESSAGE} confirmLabel="Rời bài" onCancel={()=>setPendingExit(null)} onConfirm={()=>{const action=pendingExit.run;setPendingExit(null);action();}}/>}
-    {state?.demo&&<p className="btvn-demo" role="note">Bản thử với học sinh giả và buổi mẫu. Chưa giao BTVN cho lớp thật.</p>}{notice&&<p role="alert">{notice}</p>}
+    {leaveConfirmation}
+    {state?.demo&&<p className="btvn-demo" role="note">Bản thử với học sinh giả và buổi mẫu. Chưa giao BTVN cho lớp thật.</p>}{notice&&<p role="alert">{notice}</p>}{exitClosed&&<button type="button" className="btvn-btn" onClick={()=>{saverRef.current?.acceptClosed();setExitClosed(false);setNotice('Đã chọn bản máy chủ đã chấm. Em có thể rời bài.');}}>Chấp nhận bản máy chủ đã chấm</button>}
     {!state&&<header className="btvn-entry-heading"><div className="btvn-entry-bar"><Link href="/" className="btvn-home-logo" aria-label="Minh Thành Math, về trang chủ"><img src="/mtm-original-logo-420w.webp" alt="Minh Thành Math"/></Link><Link href="/" className="btvn-home-link">← Trang chủ</Link></div><h1>Bài tập về nhà</h1><p>Vào lớp để xem bài giảng và hoàn thành BTVN của em.</p></header>}
     {checking?<LoadingCards label="Đang kiểm tra phiên và tải danh sách buổi học…"/>:!state?<HomeworkGate studentCode={studentCode} identity={gate} busy={busy} classNames={classNames} classesLoading={classesLoading} classesError={classesError} onReloadClasses={()=>void loadClasses()} onCode={setStudentCode} onIdentity={setGate} onLogin={input=>void run('login',input)}/>:<>
-      <header className="btvn-top"><Link href="/" className="btvn-home-logo" aria-label="Minh Thành Math, về trang chủ"><img src="/mtm-original-logo-420w.webp" alt="Minh Thành Math"/></Link><div><b>Bài tập về nhà</b><p>Video buổi học và BTVN của lớp em</p></div><div className="btvn-me"><Link href="/" className="btvn-home-link">← Trang chủ</Link><b>{state.fullName}</b><span>{displayClassName(state)}</span><button disabled={busy} onClick={()=>requestExit(()=>{void(async()=>{setBusy(true);try{await gateway.call('logout');setState(null);setRoom(false);}catch{setNotice('Chưa thoát phiên được.');}finally{setBusy(false);}})();})}>Thoát</button></div></header>
+      <header className="btvn-top"><Link href="/" className="btvn-home-logo" aria-label="Minh Thành Math, về trang chủ"><img src="/mtm-original-logo-420w.webp" alt="Minh Thành Math"/></Link><div><b>Bài tập về nhà</b><p>Video buổi học và BTVN của lớp em</p></div><div className="btvn-me"><Link href="/" className="btvn-home-link">← Trang chủ</Link><b>{state.fullName}</b><span>{displayClassName(state)}</span><button disabled={busy} onClick={()=>void requestExit(async()=>{await gateway.call('logout');setState(null);setRoom(false);})}>Thoát</button></div></header>
       {state.classMismatch&&<EntryNotice className={state.className}/>}
       {!room&&<LessonCards demo={state.demo} lessons={state.lessons??[]} busy={busy} onHomework={async code=>{setBusy(true);setNotice('');try{setState(await gateway.call('select',{lessonCode:code}));setRoom(true);requestAnimationFrame(()=>document.getElementById('btvn-summary')?.scrollIntoView({behavior:'smooth'}));}catch(error){setNotice(error instanceof Error?error.message:'Chưa mở được bài.');}finally{setBusy(false);}}}/>}
-      {room&&(state.exam||state.opensAt!==undefined||state.kind==='kiem-tra-thang')&&<><button className="btvn-btn btvn-back" disabled={busy} onClick={()=>requestExit(()=>setRoom(false))}>← Các buổi học</button>
-        {state.exam&&state.draft&&state.draft.submittedAt===null?<ManagedAttempt key={state.draft.attemptId} state={{...state,exam:state.exam}} gateway={gateway} onState={next=>setState(previous=>previous?mergeHomeworkSave(previous,next):next)} onPendingChange={pending=>{remotePending.current=pending;}}/>:<HomeworkOverview key={state.lessonCode+':'+(state.draft?.attemptId??'new')} state={state} busy={busy} onStart={()=>void run('start')}/>}
+      {room&&(state.exam||state.opensAt!==undefined||state.kind==='kiem-tra-thang')&&<><button className="btvn-btn btvn-back" disabled={busy} onClick={()=>void requestExit(()=>setRoom(false))}>← Các buổi học</button>
+        {state.exam&&state.draft&&state.draft.submittedAt===null?<ManagedAttempt key={state.draft.attemptId} state={{...state,exam:state.exam}} gateway={gateway} saverRef={saverRef} onState={next=>setState(previous=>previous?mergeHomeworkSave(previous,next):next)} onPendingChange={pending=>{remotePending.current=pending;}}/>:<HomeworkOverview key={state.lessonCode+':'+(state.draft?.attemptId??'new')} state={state} busy={busy} onStart={()=>void run('start')}/>}
       </>}
 
     </>}

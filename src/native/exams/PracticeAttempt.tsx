@@ -31,13 +31,13 @@ function exportDraft(draft: Draft): boolean {
 }
 
 /** kind: 'exam' cho Thi thử (/thi-thu), 'practice' (mặc định) cho Luyện tập; chỉ đổi chữ hiển thị. */
-export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverride,questionReader,renderText,renderSolutionExtra,contextLabel,audienceLabel,displayTitle,kind='practice',isHomework=false,newAttemptsClosed,storageNotice,saveStatus,onRetrySave,onRetake}: PracticeAttemptProps) {
-  const props = {exam,previousExam,catalogUrl,storeOverride,questionReader,renderText,renderSolutionExtra,contextLabel,audienceLabel,displayTitle,kind,isHomework,newAttemptsClosed,storageNotice,saveStatus,onRetrySave,onRetake};
+export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverride,questionReader,renderText,renderSolutionExtra,contextLabel,audienceLabel,displayTitle,kind='practice',isHomework=false,deadlineAt,clockOffsetMs,newAttemptsClosed,storageNotice,saveStatus,savePending,onRetrySave,onAcceptClosed,onRetake}: PracticeAttemptProps) {
+  const props = {exam,previousExam,catalogUrl,storeOverride,questionReader,renderText,renderSolutionExtra,contextLabel,audienceLabel,displayTitle,kind,isHomework,deadlineAt,clockOffsetMs,newAttemptsClosed,storageNotice,saveStatus,savePending,onRetrySave,onAcceptClosed,onRetake};
   const state = usePracticeAttempt(props);
   const {sourceIssue,erratum,acceptedErratum,setAcceptedErratum,legacy,persisted,conflict,draft,notice,setNotice,unsaved,exportNotice,setExportNotice,pdfReady,setPdfReady,confirmation,setConfirmation,desktopLayout,setDesktopLayout,setActiveQuestion,setQuestionFocus,mobilePane,setMobilePane,leaveConfirmation,persist,finish,begin,submitted,sections,answered,invalidCount,seconds,startDisabled,startLabel,retake} = state;
   const [exitedAttempt,setExitedAttempt]=useState<string|null>(null);
   const focused=phongThiV2&&!!draft&&!submitted&&exitedAttempt!==draft.attemptId;
-  if(isHomework&&submitted)return <p role="status">Đang chờ máy chủ MTM xác nhận bài nộp của em…</p>;
+  if(isHomework&&submitted)return <section aria-label="Xác nhận nộp BTVN"><p role={onRetrySave||onAcceptClosed?"alert":"status"}>{onRetrySave||onAcceptClosed?saveStatus:"Đang chờ máy chủ MTM xác nhận bài nộp của em…"}</p>{onRetrySave&&<button type="button" onClick={onRetrySave}>Gửi lại bài đang giữ</button>}{onAcceptClosed&&<button type="button" onClick={onAcceptClosed}>Chấp nhận bản máy chủ đã chấm</button>}</section>;
   return <section className="ep-attempt">{leaveConfirmation}
     {focused?<FocusRoom key={draft.attemptId} props={props} state={state} onExit={()=>setExitedAttempt(draft.attemptId)}/>:<>
     {phongThiV2&&draft&&!submitted&&<button type="button" className="ep-primary" onClick={()=>setExitedAttempt(null)}>Vào lại phòng tập trung</button>}
@@ -56,9 +56,9 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverr
     {!submitted&&<div className="ep-desktop-layout" role="group" aria-label="Bố cục đọc đề và phiếu trả lời"><span>Bố cục làm bài</span>{([['balanced','Cân đối'],['reading','Ưu tiên đọc đề'],['answers','Ưu tiên phiếu']] as const).map(([value,label])=><button key={value} type="button" aria-pressed={desktopLayout===value} onClick={()=>setDesktopLayout(value)}>{label}</button>)}</div>}
     <div className={`ep-exam-layout ep-pane-${mobilePane}${submitted?questionReader?' ep-chapter-submitted':' ep-submitted':''}`} data-layout={desktopLayout} onErrorCapture={event=>{
       if(!submitted&&event.target instanceof HTMLImageElement&&event.target.closest('.mtm-source-content')){
-        setPdfReady(false);setNotice('Có phần câu hỏi chưa tải được. Bài làm đang nhập được giữ nguyên; hãy tải lại trang để đọc đủ đề trước khi tiếp tục.');
+        const id=event.target.closest('[data-question-id]')?.getAttribute('data-question-id');if(id)state.setQuestionAssetReady(id,false);setNotice('Một phần đề chưa tải. Em vẫn làm câu khác và nộp phần đã làm; dùng nút Thử tải lại ảnh ở câu lỗi.');
       }
-    }}>
+    }} onLoadCapture={event=>{if(event.target instanceof HTMLImageElement&&event.target.closest('.mtm-source-content')){const article=event.target.closest('[data-question-id]');const id=article?.getAttribute('data-question-id');if(id&&!article?.querySelector('.mtm-source-content [role="alert"]')&&Array.from(article!.querySelectorAll<HTMLImageElement>('.mtm-source-content img')).every(image=>image.complete&&image.naturalWidth>0))state.setQuestionAssetReady(id,true);}}}>
       <div className="ep-pdf-pane">
         {submitted&&!questionReader&&exam.sourcePdf&&<h2 className="ep-pdf-after">Đề bài đã làm</h2>}
         {submitted&&questionReader?<details className="ep-read-again"><summary>Đọc lại toàn bộ đề bài</summary>{questionReader}</details>:questionReader}

@@ -9,7 +9,7 @@ type Req={method?:string;body?:unknown;headers:Record<string,string|string[]|und
 type Res={setHeader:(key:string,value:string)=>void;status:(n:number)=>{json:(value:unknown)=>void}};
 const header=(req:Req,key:string)=>typeof req.headers[key]==='string'?req.headers[key] as string:'';
 /** Chỉ mount production sau Claude nghiệm thu. Không đọc env/kết nối khi import. */
-export function createBtvnApi(getEnv=()=>process.env,loadRepository:()=>Promise<typeof createSupabaseRepository>=async()=>createSupabaseRepository){return async function handler(req:Req,res:Res){
+export function createBtvnApi(getEnv=()=>process.env,loadRepository:()=>Promise<typeof createSupabaseRepository>=async()=>createSupabaseRepository,options:{checkVideoEmbed?:typeof checkVideoEmbed;clock?:()=>number}={}){return async function handler(req:Req,res:Res){
  res.setHeader('Cache-Control','no-store, private');res.setHeader('X-Robots-Tag','noindex, nofollow');
  const env=getEnv();
  if(env.MTM_BTVN_ENABLED!=='1'||env.VERCEL!=='1'||!env.SUPABASE_URL||!env.SUPABASE_SERVICE_ROLE_KEY||!env.MTM_HOMEWORK_PUBLISHABLE_KEY||!env.MTM_BTVN_NETWORK_SECRET||env.MTM_BTVN_NETWORK_SECRET.length<32)return res.status(503).json({message:'BTVN chưa mở trên máy chủ. Vui lòng chờ MTM xác nhận.'});
@@ -23,7 +23,18 @@ export function createBtvnApi(getEnv=()=>process.env,loadRepository:()=>Promise<
   const factory=await loadRepository();
   const repo=factory({SUPABASE_URL:env.SUPABASE_URL!,SUPABASE_SERVICE_ROLE_KEY:env.SUPABASE_SERVICE_ROLE_KEY!,MTM_HOMEWORK_PUBLISHABLE_KEY:env.MTM_HOMEWORK_PUBLISHABLE_KEY!,VERCEL:env.VERCEL,VERCEL_ENV:env.VERCEL_ENV,VERCEL_URL:env.VERCEL_URL},origin,key);
   const result=await createDurableHomeworkHandler(repo)({method:req.method??'',body:req.body,cookie:header(req,'cookie'),origin,host,secure:true});
-  if(result.status===200&&Array.isArray((result.body as any).lessons)){await Promise.all((result.body as any).lessons.map(async(card:any)=>{card.videoEmbeddable=card.videoId?await checkVideoEmbed(card.videoId):null;}));}
+  const body=result.body as any,action=(req.body as {action?:unknown}|null)?.action;
+  if(result.status===200&&Array.isArray(body.lessons)){
+   // Chỉ danh sách buổi mới đợi metadata. Mở lượt/gia hạn ảnh và ACK bài
+   // không phụ thuộc YouTube, không tạo request nền sau khi đã trả JSON.
+   const listAction=['login','state','select'].includes(String(action)),active=body.draft?.submittedAt===null;
+   await Promise.all(body.lessons.map(async(card:any)=>{
+    card.videoEmbeddable=null;
+    if(!listAction||active||!card.videoId)return;
+    try{card.videoEmbeddable=await (options.checkVideoEmbed??checkVideoEmbed)(card.videoId);}catch{ /* Giữ link YouTube dự phòng khi metadata chưa xác minh. */ }
+   }));
+  }
+  if(result.status===200&&typeof body.serverNow==='number')body.serverNow=(options.clock??Date.now)();
   for(const [key,value] of Object.entries(result.headers))res.setHeader(key,value);
   return res.status(result.status).json(result.body);
  }catch(error){

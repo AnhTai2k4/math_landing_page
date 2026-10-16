@@ -3,6 +3,7 @@ import type {HomeworkState,HomeworkLesson} from './btvn-contract';
 import {homeworkTitle,homeworkLessonCaption,displayClassName} from './presentation';
 import ExamReview from '../exams/ExamReview';
 import {LessonVideo} from './LessonCards';
+import HomeworkRetry from './HomeworkRetry';
 
 export const homeworkDate=(at:number)=>new Date(at).toLocaleString('vi-VN',{timeZone:'Asia/Ho_Chi_Minh',hour:'2-digit',minute:'2-digit',weekday:'long',day:'2-digit',month:'2-digit'});
 export function HomeworkDeadline({lesson,dueAt}:{lesson?:HomeworkLesson;dueAt:number|null}){
@@ -27,12 +28,15 @@ export default function HomeworkOverview({state,busy,onStart}:{state:HomeworkSta
         <div className="btvn-stats"><div><small>Đã dùng</small><strong>{state.attemptsUsed}/{state.maxAttempts} lượt</strong></div><div><small>Điểm cao nhất</small><strong>{best}</strong></div><div><small>{current?'Còn lại':'Thời gian'}</small><strong>{current?remaining+' lượt':state.exam?state.exam.durationMinutes+' phút/lượt':'Chờ mở bài'}</strong></div></div>
         {!current&&<>{!monthly&&<HomeworkDeadline lesson={lesson} dueAt={state.dueAt}/>}<p>Em có tối đa {state.maxAttempts} lượt{state.exam&&<>, mỗi lượt {state.exam.durationMinutes} phút, gồm {state.exam.questions.length} câu</>}. Mở lượt tính ngay là một lần làm.</p><p>{monthly?'Bài tự nộp khi hết thời gian làm hoặc đến giờ đóng.':'Điểm cao nhất tính cả lần nộp muộn. Hết thời gian, bài tự nộp.'}</p></>}
         <div className="btvn-overview-actions">{current&&canReview&&state.draft?.submittedAt!=null&&<button className="btvn-btn primary" aria-expanded={solutions} aria-controls="btvn-solutions" onClick={()=>setSolutions(!solutions)}>{solutions?'Đóng lời giải':'Xem lời giải'}</button>}{remaining>0?<button className={'btvn-btn'+(current?'':' primary')} disabled={busy||state.canStart===false} onClick={onStart}>{current?'Làm lượt tiếp':'Bắt đầu làm bài'}</button>:<p>Em đã dùng hết {state.maxAttempts} lượt.</p>}</div>
+        {current&&canReview&&!monthly&&<p className="btvn-footnote">Lượt làm sau khi đã xem lời giải vẫn tính vào điểm cao nhất của BTVN.</p>}
         {remaining>0&&state.exam&&<p className="btvn-footnote">Lượt tiếp theo: lượt {state.attemptsUsed+1} · {state.exam.durationMinutes} phút</p>}
       </article>
       <aside className="btvn-sheet btvn-history">{current?<><h2>Các lượt em đã làm</h2>{receipts.map(r=><div className="btvn-history-row" key={r.attemptId}><div><b>Lượt {r.attemptNumber}</b><small>{homeworkDate(r.submittedAt)} · {r.late===null?'Chờ xác minh hạn':r.late?'Nộp muộn':'Đúng hạn'}{r.timedOut?' · Hết giờ':''}</small></div><strong>{r.score.toLocaleString('vi-VN')}/10</strong></div>)}<HomeworkDeadline lesson={lesson} dueAt={state.dueAt}/></>:<><p className="btvn-eyebrow">SẴN SÀNG RỒI CHỨ?</p><h2>Đến lượt em thử sức.</h2><p>Chuẩn bị giấy nháp và máy tính. Chọn một nơi yên tĩnh để tập trung làm bài.</p></>}
         {lesson&&(lesson.videoId||lesson.videoUrl)&&<button className="btvn-btn" aria-expanded={video} onClick={()=>setVideo(!video)}>{video?'Đóng video':'▷ Xem video buổi học'}</button>}
       </aside>
     </div>
+    {state.assetWarnings?.map(warning=><p key={warning} role="status">{warning}</p>)}
+    <HomeworkRetry state={state}/>
     {video&&lesson&&<div className="btvn-sheet"><LessonVideo lesson={lesson} demo={state.demo}/></div>}
     {solutions&&canReview&&state.exam&&state.draft?.submittedAt!=null&&<div id="btvn-solutions" className="btvn-sheet"><ExamReview exam={state.exam} draft={state.draft} showSummary={false}/></div>}
   </div>;

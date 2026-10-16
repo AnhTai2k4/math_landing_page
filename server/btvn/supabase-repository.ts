@@ -5,8 +5,7 @@ import type {HomeworkState,HomeworkLesson,LessonMaterial,GateInput} from '../../
 import type {PracticeExam} from '../../src/native/exams/data';
 import type {Answers} from '../../src/native/exams/store';
 import {publicClassNames} from './class-config';
-import {hydratePrivateAssets,SIGNED_ASSET_SECONDS,type PrivateAsset} from './private-assets';
-import {concealMonthlySolutions} from './monthly-policy';
+import {hydratePrivateAssets,PrivatePdfUnavailableError,SIGNED_ASSET_SECONDS,type PrivateAsset} from './private-assets';
 import {lessonOpensAt,visibleLesson} from './opening-policy';
 
 export interface RpcTransport {rpc(name:string,args:Record<string,unknown>):Promise<{data:unknown;error:null|{code?:string}}>}
@@ -53,12 +52,12 @@ export class SupabaseHomeworkRepository {
       const now=this.clock(),className=snapshot.work.student.className;
       if(snapshot.material&&now<lessonOpensAt(snapshot.material,className)){
         if(action!=='state'&&action!=='select')throw new HomeworkError(409,'Bài chưa mở. BTVN chỉ mở làm sau buổi học.');
-        return {exam:null,kind:snapshot.material.kind,opensAt:lessonOpensAt(snapshot.material,className),closesAt:snapshot.material.closesAt,solutionsAvailable:false,canStart:false,fullName:snapshot.work.student.fullName,className,lessonCode:snapshot.material.lessonCode,dueAt:snapshot.work.student.nextActualClassAt??null,maxAttempts:snapshot.material.kind==='kiem-tra-thang'?1:5,attemptsUsed:0,draft:null,receipts:[],bestScore:null,demo:false,lessons:monthlyCards(snapshot.lessons,now,className) as HomeworkState['lessons']};
+        return {serverNow:now,exam:null,kind:snapshot.material.kind,opensAt:lessonOpensAt(snapshot.material,className),closesAt:snapshot.material.closesAt,solutionsAvailable:false,canStart:false,fullName:snapshot.work.student.fullName,className,lessonCode:snapshot.material.lessonCode,dueAt:snapshot.work.student.nextActualClassAt??null,maxAttempts:snapshot.material.kind==='kiem-tra-thang'?1:5,attemptsUsed:0,draft:null,receipts:[],bestScore:null,demo:false,lessons:monthlyCards(snapshot.lessons,now,className) as HomeworkState['lessons']};
       }
       if(!snapshot.exam||!snapshot.material){
         if(snapshot.lessons.length||snapshot.exam||snapshot.material)throw new HomeworkError(503,'Dữ liệu buổi học chưa sẵn sàng.');
         if(action!=='state')throw new HomeworkError(404,'Lớp em chưa có BTVN trên web.');
-        return {exam:null,fullName:snapshot.work.student.fullName,className:snapshot.work.student.className,lessonCode:'',dueAt:null,maxAttempts:5,attemptsUsed:0,draft:null,receipts:[],bestScore:null,demo:false,lessons:[]};
+        return {serverNow:now,exam:null,fullName:snapshot.work.student.fullName,className:snapshot.work.student.className,lessonCode:'',dueAt:null,maxAttempts:5,attemptsUsed:0,draft:null,receipts:[],bestScore:null,demo:false,lessons:[]};
       }
       const monthly=snapshot.material.kind==='kiem-tra-thang';
       const code=randomBytes(16).toString('hex'),work={...snapshot.work,student:{...snapshot.work.student,studentCode:code}};
@@ -66,21 +65,31 @@ export class SupabaseHomeworkRepository {
       const service=new HomeworkService(memory,snapshot.exam,0,'private',snapshot.material.lessonCode,this.clock,[snapshot.material]);
       const token=service.login({studentCode:code},'internal');
       const next=action==='start'?service.start(token):action==='save'?service.save(token,attemptId??'',answers??{}):action==='submit'?service.submit(token,attemptId??'',answers??{}):service.state(token);
-      next.demo=false;
-      if(monthly){next.kind='kiem-tra-thang';next.opensAt=snapshot.material.opensAt;next.closesAt=snapshot.material.closesAt;next.solutionsAvailable=now>=snapshot.material.closesAt!;next.canStart=now<snapshot.material.closesAt!;}
+      next.demo=false;next.serverNow=this.clock();
+      if(monthly){next.kind='kiem-tra-thang';next.opensAt=snapshot.material.opensAt;next.closesAt=snapshot.material.closesAt;next.canStart=now<snapshot.material.closesAt!;}
       // Hạn/điểm mỗi thẻ lấy từ snapshot có quyền, không suy từ lịch lớp.
       next.lessons=monthlyCards(snapshot.lessons,now,className) as HomeworkState['lessons'];
-      if(action==='state'||action==='select'){
-        const visible=monthly&&!next.solutionsAvailable?concealMonthlySolutions(snapshot.exam):snapshot.exam;
-        next.exam=visible;
-        if(this.signAsset){const assets=await this.rpc<PrivateAsset[]>('mtm_btvn_assets',{p_session:session,p_lesson:snapshot.material.lessonCode});const signedAt=this.clock();next.exam=await hydratePrivateAssets(visible,assets,this.signAsset);if(assets.length)next.assetsExpiresAt=signedAt+SIGNED_ASSET_SECONDS*1000;}
-        return next;
+      if(action==='state'||action==='select'||action==='start'){
+        if(this.signAsset&&next.exam){
+          const assets=await this.rpc<PrivateAsset[]>('mtm_btvn_assets',{p_session:session,p_lesson:snapshot.material.lessonCode}),signedAt=this.clock();
+          const graded=!!next.draft&&next.draft.submittedAt!==null&&next.receipts.some(receipt=>receipt.attemptId===next.draft!.attemptId);
+          try{next.exam=await hydratePrivateAssets(next.exam,assets,this.signAsset,{allowUnavailablePdfs:graded});}
+          catch(error){
+            if(!(error instanceof PrivatePdfUnavailableError))throw error;
+            const previous=snapshot.work.drafts.at(-1),newAttempt=action==='start'&&next.draft?.submittedAt===null&&next.draft.attemptId!==previous?.attemptId;
+            throw new HomeworkError(503,newAttempt||!previous?'Chưa tải đủ đề. Đồng hồ chưa chạy. Em thử lại sau.':'Chưa tải đủ đề. Lượt đang làm vẫn được giữ. Em thử tải lại.');
+          }
+          next.assetWarnings=next.exam.assetWarnings;next.assetsExpiresAt=signedAt+SIGNED_ASSET_SECONDS*1000;
+        }
+        // Start kiểm PDF câu hỏi trước commit: lỗi không để lại đồng hồ/lượt mới.
+        if(action!=='start'){next.serverNow=this.clock();return next;}
       }
       const updated=memory.get(code)!;
       const committed=await this.rpc<{ok:boolean}>('mtm_btvn_commit',{p_session:session,p_lesson:snapshot.material.lessonCode,p_revision:snapshot.revision,p_drafts:updated.drafts,p_receipts:updated.receipts});
       if(committed.ok){
         // Save chỉ xác nhận bản vừa commit, không đọc/ký lại đề và tài sản.
-        if(action==='save')return {...next,exam:null,lessons:undefined,saveOnly:true,revision:snapshot.revision+1};
+        if(action==='save'&&next.draft?.submittedAt===null)return {...next,serverNow:this.clock(),exam:null,lessons:undefined,saveOnly:true,revision:snapshot.revision+1};
+        if(action==='start'){next.serverNow=this.clock();return next;}
         return this.call(session,'state',snapshot.material.lessonCode);
       }
     }
