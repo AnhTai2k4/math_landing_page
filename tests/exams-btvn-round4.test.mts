@@ -11,12 +11,14 @@ const read=readLessonMaterials(headers,[row('2026-10-12','https://youtu.be/abcde
 assert.equal(read.lessons.length,2);assert.equal(read.pending.length,3);assert.equal(read.lessons[0].videoId,null);assert.equal(read.lessons[1].classNames.length,2);assert.equal(read.lessons[1].lessonCode,'2k9-2026-10-12');
 assert.equal(read.lessons[1].classDates?.['Lớp giả 8+'],'2026-10-13');assert.equal(read.lessons[1].classDates?.['Lớp giả 9+'],'2026-10-12');
 assert.throws(()=>readLessonMaterials([...headers,'Bài'],[],config));
-assert.throws(()=>readLessonMaterials(headers,[row('2026-10-12'),row('2026-10-13','https://youtu.be/abcdefghijk')],config));
+const mismatchedSessions=readLessonMaterials(headers,[row('2026-10-12'),row('2026-10-13','https://youtu.be/abcdefghijk')],config);
+assert.equal(mismatchedSessions.lessons.length,0);assert.equal(mismatchedSessions.pending[0].code,'source_conflict');assert.deepEqual(mismatchedSessions.pending[0].fields,['videoId']);
 for(const url of ['https://youtu.be/abcdefghijk','https://www.youtube.com/watch?v=abcdefghijk','https://www.youtube-nocookie.com/embed/abcdefghijk','https://youtube.com/shorts/abcdefghijk'])assert.equal(youtubeVideoId(url),'abcdefghijk');
 for(const url of ['javascript:alert(1)','http://youtu.be/abcdefghijk','https://youtube.com.evil.invalid/watch?v=abcdefghijk','https://youtube.com/watch?v=abc','https://name:pass@youtube.com/watch?v=abcdefghijk'])assert.equal(youtubeVideoId(url),null);
 assert.equal(safeMaterialUrl('javascript:alert(1)'),null);
 let calls=0;const two=await readLessonSources([config,{...config,sheetId:'FAKE-2'}],async()=>{calls++;return [headers,row('2026-10-14')];});assert.equal(calls,2);assert.equal(two.sources.length,2);assert.equal(two.lessons.length,1);
-await assert.rejects(()=>readLessonSources([config,{...config,sheetId:'FAKE-2'}],async id=>[headers,row('2026-10-14',id==='FAKE-2'?'https://youtu.be/abcdefghijk':'')]));
+const mismatchedSources=await readLessonSources([config,{...config,sheetId:'FAKE-2'}],async id=>[headers,row('2026-10-14',id==='FAKE-2'?'https://youtu.be/abcdefghijk':'')]);
+assert.equal(mismatchedSources.lessons.length,0);assert.equal(mismatchedSources.pending[0].code,'source_conflict');assert.deepEqual(mismatchedSources.pending[0].sheetIds,['FAKE-1','FAKE-2']);
 const exam=examJson as unknown as PracticeExam,lessons=[...read.lessons,{...read.lessons[0],lessonCode:'foreign',classNames:['Lớp khác']}];
 let now=Date.parse('2026-10-15T10:00:00+07:00');const repo=new MemoryHomeworkRepository([{studentCode:'FAKE-CODE',fullName:'Học sinh giả',phone:'0900000001',className:'Lớp giả 9+'}]);
 const service=new HomeworkService(repo,exam,0,'fake',lessons[0].lessonCode,()=>now,lessons,{[lessons[1].lessonCode]:{...exam,id:exam.id+'-other'},foreign:exam});

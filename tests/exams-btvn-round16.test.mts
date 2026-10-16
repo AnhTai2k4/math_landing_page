@@ -54,5 +54,20 @@ const render=()=>{cursor=0;return mod.exports.default({segments:[segment],assetB
 function find(tree:any,predicate:(node:any)=>boolean):any{if(!tree||typeof tree!=='object')return null;if(Array.isArray(tree))return tree.map(t=>find(t,predicate)).find(Boolean);return predicate(tree)?tree:find(tree.props?.children,predicate);}
 const image=find(render(),n=>typeof n.props?.onError==='function');assert.ok(image);image.props.onError();assert.ok(find(render(),n=>n.props?.role==='alert'));
 segment.privateUrl='https://storage.invalid/renewed';assert.ok(find(render(),n=>n.props?.src===segment.privateUrl));assert.ok(!find(render(),n=>n.props?.role==='alert'));
+// Phần ôn không nộp bài. Lỗi ảnh phải giữ nguyên bản chữ, kể cả điều kiện trước Bước 1.
+const text=(tree:any):string=>tree==null||typeof tree==='boolean'?'':Array.isArray(tree)?tree.map(text).join(''):typeof tree==='object'?text(tree.props?.children):String(tree);
+const fallback='Điều kiện: $x>0$.\nBước 1: Đọc điều kiện.\nBước 2: Đối chiếu nghiệm.';
+function review(segments:any[],kind='solution',errorFallback:any=fallback){cursor=0;return mod.exports.default({segments,assetBase:'/fake',label:'Câu GIẢ',kind,context:'review',errorFallback});}
+let tree=review([{...segment,privateUnavailable:true}]);
+assert.match(text(tree),/Chưa tải được ảnh lời giải\. Em đọc bản chữ bên dưới\./);
+assert.ok(text(tree).includes(fallback),'Không mất điều kiện hoặc các bước trong bản chữ');assert.ok(!text(tree).includes('nộp phần đã làm'));
+tree=review([segment]);assert.ok(!find(tree,n=>n.props?.className==='mtm-source-fallback'),'Không lặp bản chữ khi ảnh còn tải được');
+find(tree,n=>typeof n.props?.onError==='function').props.onError();tree=review([segment]);
+assert.ok(text(tree).includes(fallback),'Handler lỗi tải thật cũng mở bản chữ đầy đủ');assert.ok(!text(tree).includes('nộp phần đã làm'));
+segment.privateUrl='https://storage.invalid/review-renewed';tree=review([segment]);
+assert.ok(!find(tree,n=>n.props?.className==='mtm-source-fallback'),'URL ảnh được phục hồi không giữ fallback lỗi');
+tree=review([{...segment,privateUnavailable:true}],'solution',null);
+assert.match(text(tree),/Em thử tải lại ảnh/);assert.ok(!text(tree).includes('bản chữ bên dưới'),'Không hứa bản chữ khi câu chỉ có ảnh');
+tree=review([{...segment,privateUnavailable:true}],'question',null);assert.ok(!text(tree).includes('nộp phần đã làm'));
 delete (globalThis as any).__mtmRoomRuntime;
-console.log('Đạt phục hồi ảnh: handler onError thật báo lỗi, URL ký mới hiển thị lại ảnh.');
+console.log('Đạt phục hồi ảnh: handler onError thật, URL mới hiển thị lại ảnh; ôn có bản chữ giữ điều kiện khi ảnh lỗi, không nhắc nộp bài.');

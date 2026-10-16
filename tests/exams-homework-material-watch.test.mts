@@ -4,7 +4,7 @@ import {mkdirSync,mkdtempSync,readFileSync,writeFileSync,rmSync,existsSync} from
 import {join,resolve,sep} from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {detectHomework,type MaterialConfig,type SeenHomeworkSource} from '../server/btvn/material-watch';
-import {readLessonMaterials,type LessonSourceConfig} from '../server/btvn/lesson-materials';
+import {readLessonMaterials,readLessonSources,type LessonSourceConfig} from '../server/btvn/lesson-materials';
 import type {MaterialCell} from '../server/btvn/material-cells';
 
 // Dữ liệu tổng hợp, không đọc Sheet, hồ sơ, token hoặc nhật ký thật.
@@ -98,8 +98,120 @@ assert.equal(run(punctuated).pending[0].code,'source_conflict','So note trim gi�
 const lessonHeaders=['Lớp','Ngày','Tên','Tài liệu','Phiếu','BTVN'];
 const lessonConfig:LessonSourceConfig={sheetId:'FAKE-SHEET',tab:'FAKE-TAB',programKey:'fake',paired:true,classNames:['FAKE-A','FAKE-B'],columns:{className:'Lớp',date:'Ngày',title:'Tên',material:'Tài liệu',handout:'Phiếu',homework:'BTVN'}};
 const lessonRows:MaterialCell[][]=[['FAKE-A','2026-10-12','Buổi GIẢ',base,'',note],['FAKE-B','2026-10-13','Buổi GIẢ',base,'',note+'.']];
-assert.throws(()=>readLessonMaterials(lessonHeaders,lessonRows,lessonConfig),/đối soát/,'Reader cũng từ chối gộp cùng cặp note khác câu chữ');
+const conflictingLesson=readLessonMaterials(lessonHeaders,lessonRows,lessonConfig);
+assert.equal(conflictingLesson.lessons.length,0,'Reader cô lập cùng cặp note khác câu chữ');
+assert.equal(conflictingLesson.pending[0].code,'source_conflict');
+assert.deepEqual(conflictingLesson.pending[0].fields,['homeworkNote']);
+assert.deepEqual(conflictingLesson.pending[0].sourceRows,[2,3]);
 assert.equal(run([noteRow('2026-10-12T21:00:00+07:00',' '+note+' '),noteRow('2026-10-13T21:00:00+07:00')]).jobs.length,1,'Hai đường đọc đều trim ghi chú trước khi so');
+
+// Phạm vi phải được so cả giữa các nguồn, không phụ thuộc thứ tự config.
+const otherConfig={...lessonConfig,sheetId:'FAKE-OTHER-SHEET',tab:'FAKE-OTHER-TAB'};
+const sourceRows=new Map<string,MaterialCell[][]>([
+ [lessonConfig.sheetId,[lessonHeaders,['FAKE-A','2026-10-12','Buổi GIẢ',base,'',note]]],
+ [otherConfig.sheetId,[lessonHeaders,['FAKE-B','2026-10-13','Buổi GIẢ',base,'',base]]],
+]);
+const readFake=async(sheet:string)=>sourceRows.get(sheet)!;
+for(const configs of [[lessonConfig,otherConfig],[otherConfig,lessonConfig]]){
+ const conflict=await readLessonSources(configs,readFake);
+ assert.equal(conflict.lessons.length,0,'Không gộp cả phiếu với phần trắc nghiệm từ hai nguồn');
+ assert.equal(conflict.pending[0].lessonCode,'fake-2026-10-12');
+ assert.equal(conflict.pending[0].code,'source_conflict');
+ assert.deepEqual(conflict.pending[0].fields,['homeworkNote']);
+ assert.deepEqual(conflict.pending[0].sheetIds,configs.map(config=>config.sheetId));
+ assert.deepEqual(conflict.pending[0].sources?.map(source=>source.row),[2,2]);
+}
+sourceRows.set(otherConfig.sheetId,[lessonHeaders,['FAKE-B','2026-10-13','Buổi GIẢ',base,'',' '+note+' ']]);
+const sameScope=await readLessonSources([lessonConfig,otherConfig],readFake);
+assert.equal(sameScope.lessons.length,1);
+assert.equal(sameScope.lessons[0].homeworkNote,note);
+assert.deepEqual(Object.keys(sameScope.lessons[0].classDates!).sort(),['FAKE-A','FAKE-B']);
+
+// Dòng nối URL thường kế thừa phạm vi. Ghi chú phạm vi tường minh trái nguồn cha phải giữ cả nhóm.
+for(const continuation of [['',note,'',base],['',note+'.',answer,base],['2026-10-12T21:00:00+07:00',note,'',base],['2026-10-12T14:00:00Z',note,'',base],['2026-10-13T21:00:00+07:00',note,'',base],['',note,'',''],['',note,'',{text:'Chưa có URL GIẢ',links:[]}]] as MaterialCell[][]){
+ const result=run([row('2026-10-05T21:00:00+07:00'),row('2026-10-12T21:00:00+07:00'),continuation,row('2026-10-13T21:00:00+07:00')]);
+ assert.deepEqual(result.jobs.map(job=>job.lessonCode),['fake-2026-10-05']);
+ assert.equal(result.pending[0].code,'source_conflict');
+ assert.equal(result.pending[0].requiresScopeReview,true);
+ assert.deepEqual(result.pending[0].fields,['homeworkNote']);
+ assert.deepEqual(result.pending[0].sourceRows,[3,4]);
+ assert.equal(result.seenSources.some(source=>source.lessonCode==='fake-2026-10-12'),false,'Không đánh dấu đã xử lý nhóm phạm vi xung đột');
+ assert.match(result.pending[0].reason,/dòng 3 và 4/);
+}
+const inherited=run([noteRow('2026-10-12T21:00:00+07:00'),row('',[a],'')]);
+assert.deepEqual(inherited.jobs[0].homeworkUrls,[base,a]);
+assert.equal(inherited.jobs[0].homeworkNote,note,'Dòng PDF thường kế thừa phạm vi thay vì bị coi là giao cả phiếu');
+assert.equal(inherited.pending.length,0);
+const repeatedNote=run([noteRow('2026-10-12T21:00:00+07:00'),['',' '+note+' ','',a]]);
+assert.equal(repeatedNote.jobs.length,1);
+assert.deepEqual(repeatedNote.jobs[0].homeworkUrls,[base,a]);
+const conflictingNote=run([noteRow('2026-10-12T21:00:00+07:00'),['',note+'.','',base]]);
+assert.equal(conflictingNote.jobs.length,0,'Note tường minh khác câu chữ vẫn cần đối soát');
+assert.equal(conflictingNote.pending[0].code,'source_conflict');
+
+const confirmedConflict=run([row('12/10'),['2026-10-12T14:00:00Z',note,'',base]],[],{...config,confirmedSessions:{'12/10':'2026-10-12T21:00:00+07:00'}});
+assert.equal(confirmedConflict.jobs.length,0,'Ngày rút gọn đã xác minh dùng cùng thời điểm với dòng ISO');
+assert.equal(confirmedConflict.pending[0].code,'source_conflict');
+assert.deepEqual(confirmedConflict.seen,[]);
+const futureScope=detectHomework(headers,[row('2026-10-12T21:00:00+07:00'),['2026-10-13T21:00:00+07:00',note,'',base]],config,[],Date.parse('2026-10-13T00:00:00Z'));
+assert.equal(futureScope.jobs.length,0,'Ca tương lai đã xác minh cùng bài có note khác vẫn chặn phạm vi, chưa dựng ca đó');
+assert.equal(futureScope.pending[0].code,'source_conflict');
+for(const date of ['2026-10-12T14:00:00Z','2026-10-13T21:00:00+07:00']){
+ const sameNoteWithoutAnswer=run([noteRow('2026-10-12T21:00:00+07:00'),[date,note,'',base]]);
+ assert.equal(sameNoteWithoutAnswer.jobs.length,1,'Ghi chú trùng ở cùng thời điểm hoặc cùng cặp ca không xóa bài hợp lệ');
+ assert.equal(sameNoteWithoutAnswer.pending.some(p=>p.code==='source_conflict'),false);
+}
+const missingNoteLink=run([noteRow('2026-10-12T21:00:00+07:00'),['',' '+note+' ','',''],row('',[a],'')]);
+assert.deepEqual(missingNoteLink.jobs[0].homeworkUrls,[base,a],'Ghi chú trùng chưa có URL vẫn giữ cha cho tệp phụ kế tiếp');
+assert.equal(missingNoteLink.jobs[0].homeworkNote,note);
+assert.deepEqual(missingNoteLink.pending,[{row:3,reason:'Chờ URL thật của học liệu'}]);
+
+// Hai đường đọc dùng cùng chuẩn NFC, hoa thường và trim, vẫn giữ dấu câu/dấu tiếng Việt.
+for(const equivalent of [note.toUpperCase(),note.normalize('NFD'),' '+note+' ']){
+ const equivalentWatch=run([noteRow('2026-10-12T21:00:00+07:00'),['',equivalent,'',a]]);
+ assert.equal(equivalentWatch.jobs.length,1);
+ assert.deepEqual(equivalentWatch.jobs[0].homeworkUrls,[base,a]);
+ const equivalentRead=readLessonMaterials(lessonHeaders,[lessonRows[0],['FAKE-B','2026-10-13','Buổi GIẢ',base,'',equivalent]],lessonConfig);
+ assert.equal(equivalentRead.lessons.length,1);
+ assert.equal(equivalentRead.pending.length,0);
+}
+const unaccented=run([noteRow('2026-10-12T21:00:00+07:00'),['','PHAN TRAC NGHIEM TRONG PHIEU','',a]]);
+assert.equal(unaccented.jobs.length,0,'Không tự suy tương đương khi khác dấu tiếng Việt');
+assert.equal(unaccented.pending[0].code,'source_conflict');
+
+// Reader phải đọc ghi chú dòng nối trước khi xét liên kết và cô lập đúng bài.
+const independentLesson:MaterialCell[]=['FAKE-A','2026-10-05','Buổi GIẢ',base,'',base];
+for(const continuation of [['','','','','',note],['','','',a,'',{text:note+'.',links:[a]}]] as MaterialCell[][]){
+ const parent=continuation[5]===note?['FAKE-A','2026-10-12','Buổi GIẢ',base,'',base]:lessonRows[0];
+ const result=readLessonMaterials(lessonHeaders,[independentLesson,parent,continuation,['FAKE-B','2026-10-13','Buổi GIẢ',base,'',base]],lessonConfig);
+ assert.deepEqual(result.lessons.map(lesson=>lesson.lessonCode),['fake-2026-10-05']);
+ assert.equal(result.pending[0].code,'source_conflict');
+ assert.equal(result.pending[0].requiresScopeReview,true);
+ assert.deepEqual(result.pending[0].sourceRows,[3,4]);
+ assert.deepEqual(result.pending[0].fields,['homeworkNote']);
+}
+const readerMissingNoteLink=readLessonMaterials(lessonHeaders,[lessonRows[0],['','','','','',' '+note+' '],['','','','','',a]],lessonConfig);
+assert.deepEqual(readerMissingNoteLink.lessons[0].homeworkUrls,[base,a]);
+assert.deepEqual(readerMissingNoteLink.pending,[{row:3,reason:'Tệp phụ chưa có liên kết'}]);
+const localIsolation=readLessonMaterials(lessonHeaders,[independentLesson,...lessonRows],lessonConfig);
+assert.deepEqual(localIsolation.lessons.map(lesson=>lesson.lessonCode),['fake-2026-10-05']);
+
+const isolatedSources=new Map<string,MaterialCell[][]>([
+ [lessonConfig.sheetId,[lessonHeaders,independentLesson,lessonRows[0]]],
+ [otherConfig.sheetId,[lessonHeaders,['FAKE-B','2026-10-06','Buổi GIẢ',base,'',base],lessonRows[1]]],
+]);
+for(const configs of [[lessonConfig,otherConfig],[otherConfig,lessonConfig]]){
+ const isolated=await readLessonSources(configs,async id=>isolatedSources.get(id)!);
+ assert.deepEqual(isolated.lessons.map(lesson=>lesson.lessonCode),['fake-2026-10-05'],'Một bài lệch nguồn không làm rơi bài độc lập');
+ assert.equal(isolated.pending[0].lessonCode,'fake-2026-10-12');
+ assert.deepEqual(isolated.pending[0].fields,['homeworkNote']);
+ assert.deepEqual(isolated.pending[0].sourceRows,[3,3]);
+ assert.deepEqual(isolated.pending[0].sheetIds,configs.map(config=>config.sheetId));
+ assert.match(isolated.pending[0].reason,/fake-2026-10-12.*homeworkNote.*dòng 3 và 3/);
+}
+isolatedSources.set(lessonConfig.sheetId,[lessonHeaders,independentLesson,...lessonRows]);
+const localConflictNotRevived=await readLessonSources([otherConfig,lessonConfig],async id=>isolatedSources.get(id)!);
+assert.deepEqual(localConflictNotRevived.lessons.map(lesson=>lesson.lessonCode),['fake-2026-10-05'],'Xung đột nội bộ một nguồn cũng chặn bài đó từ nguồn khác');
 assert.throws(()=>detectHomework(headers.slice(0,3),[],config),/Thiếu\/trùng cột/,'Thiếu cột vẫn chặn toàn bộ dữ liệu không đủ cấu trúc');
 
 // Kiểm đường CLI bằng snapshot giả và checkpoint riêng, không bật --sheet.
