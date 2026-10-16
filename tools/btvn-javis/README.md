@@ -1,5 +1,18 @@
 # BTVN tự đăng trên Javis VPS, đợt 17
 
+## Bổ sung vòng 12 ngày 16/10/2026, mã local chưa triển khai
+
+Đã port hành vi phần 12:00 của thư `20261016-1200-btvn-sua-vps.md`, dựa diff ngắn và kiểm repo; chưa đối chiếu nguyên byte `fix.patch`/manifest VPS hoặc port phần 12:25 về retry/quota/branding/alias.
+
+- Parser ngày đồng bộ với web: ISO, `YYYYMMDD`, dấu chấm/phẩy/gạch chéo/gạch ngang và khoảng trắng giữa các phần, ví dụ `15.10.,2026` thành `2026-10-15`. Ngày không tồn tại, ngày tuần ISO và năm hai chữ số bị từ chối; thiếu năm cần cấu hình năm học.
+- `read_material_rows(config, transport, row_errors)` chỉ cô lập lỗi ngày khi có danh sách nhận lỗi. Ngày sai hoặc thiếu năm có lý do cố định, tab và ô A1; không có danh sách thì ném `GateError`. Tệp phụ có ngày sai làm loại cả đơn vị cha và mọi tệp phụ, ghi thêm `parent_cell`, tránh đăng đề cụt. Các bài/tab độc lập tiếp tục. Lỗi cấu trúc hoặc quyền vẫn dừng đọc nguồn.
+- `route_rows` dùng mốc `material_start_date` mặc định `2026-10-05`, đồng thời không lấy trước kỳ được cấu hình sớm nhất. Cả ngày nguồn và ngày lớp nhận chung dùng cùng mốc. Parser không lọc theo mốc; lịch lớp, kỳ từng bài, END và luật mở/hạn giữ nguyên. Không đổi mốc điểm danh.
+- Ngày `material_start_date`, nguồn và đích bài chung, cùng ngày giữ buổi dùng parser Sheet. Bài chung sai chỉ lỗi lượt chia đó, không gắn một phần lớp đích; bài nguồn độc lập vẫn được xử lý. Receipt ghi `bo_qua` cho buổi ngoài mốc và `backfill` cho bài cũ trước 15/10, không đổi luật mở/hạn.
+- Cấu hình lượt có thể có `held_lessons: [{"class_name":"LỚP GIẢ","lesson_date":"2026-10-11"}]`. Đây là schema local cần đối chiếu khi triển khai, không phải bản chép cấu hình VPS. Thiếu hoặc sai trường/ngày dừng xử lý BTVN trước worker, ghi receipt lỗi và vẫn đi qua bước điểm danh. Khớp một lớp/ngày trong bài chung thì giữ cả bài, receipt `cho_hoc_lieu`, không gọi process/publish. Không tự thêm lớp thật hoặc hold vĩnh viễn vào cấu hình.
+- Launcher mặc định chạy thật theo cấu hình và khóa hiện hành; `--live` là cách ghi tường minh cùng hành vi, loại trừ với `--dry-run` ngoại tuyến. Giữ hợp đồng của lịch gọi không cờ. Chưa chạy live trong đợt này.
+
+Kiểm mới: `python -B -X utf8 -m unittest discover -s tools/btvn-javis/tests -p test_daily12.py -v`. Chỉ fixture GIẢ, socket/urllib bị chặn, không cấu hình thật hoặc AI trả phí.
+
 ## Bổ sung đợt 24
 
 Luật mở chuẩn nằm trong `server/btvn/class-rules.json`, dùng chung với web. Chép tệp này vào `<brain>/Javis/btvn/class-rules.json` và đặt `BTVN_CLASS_RULES` bằng đường dẫn tuyệt đối tương ứng. Thiếu tệp thì worker giữ bài, không tự mở theo lịch cũ. Ngày ngoài buổi khớp của lớp có luật dùng 21:30 như web; lớp ngoài luật vẫn dùng lịch dự phòng cũ. Cặp 2K9 8+/9+ mở sau buổi 9+ đầu cặp; 2K10 9+ buổi Chủ nhật mở sau buổi thứ Sáu.

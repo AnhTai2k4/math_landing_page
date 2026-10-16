@@ -76,32 +76,61 @@ class GoogleTransport(p.Transport):
         return super().request(url, body, headers, limit)
 
 
-def route_rows(rows, config, now):
+def configured_date(value, config, reason):
+    """Cùng quy tắc ngày với Sheet, chỉ trả lý do cố định khi cấu hình sai."""
+    try:
+        day = p.material_date(value, config) if isinstance(value, str) else None
+    except p.GateError:
+        day = None
+    p.require(day is not None, reason)
+    return dt.date.fromisoformat(day)
+
+
+def route_rows(rows, config, now, row_events=None):
     """Chỉ lấy lịch đã xác nhận; không suy lịch 8+/9+ từ tên lớp."""
     classes = config['classes']
+    start=configured_date(config.get('material_start_date','2026-10-05'),config,'Mốc học liệu không hợp lệ')
+    period_starts=[configured_date(item['start'],config,'Ngày bắt đầu kỳ không hợp lệ') for item in config.get('periods',[])]
+    if period_starts:start=max(start,min(period_starts))
     selected = []
     for source in rows:
         name = source['class_name']
         scope = classes.get(name)
         if not scope or not scope.get('enabled'):
             continue
-        date = dt.date.fromisoformat(source['lesson_date'])
-        if date < dt.date(2026, 10, 15) or date > r.END:
+        date = configured_date(source['lesson_date'],config,'Ngày học không hợp lệ')
+        if date < start or date > r.END:
+            if row_events is not None:
+                row_events.append({'lesson_key':source['lesson_key'],'classes':{name:date.isoformat()},
+                                   'status':'bo_qua','reason':'Buổi trước mốc học liệu' if date < start else 'Buổi sau thời hạn tự đăng'})
             continue
         calendar = scope.get('dates', [])
         p.require(date.isoformat() in calendar or date.weekday() in scope.get('weekdays', []), 'Ngày buổi chưa khớp lịch lớp '+name)
         row = copy.deepcopy(source)
+        row['lesson_date'] = date.isoformat()
         row['class_dates'] = {name:date.isoformat()}
         # Ngày đích explicit ưu tiên lịch có thể thay đổi; không gán +1 tự động.
         for share in config.get('shared_lessons', []):
-            if share['source_class'] == name and share['source_date'] == date.isoformat():
+            if share['source_class'] != name:
+                continue
+            try:
+                source_date = configured_date(share.get('source_date'),config,'Ngày nguồn bài chung không hợp lệ')
+                if source_date != date:
+                    continue
+                shared_dates = {}
                 for target, target_date in share['classDates'].items():
                     p.require(classes.get(target, {}).get('enabled'), 'Lớp nhận chung chưa thuộc phạm vi')
-                    td = dt.date.fromisoformat(target_date)
-                    p.require(td <= r.END and td >= dt.date(2026,10,15), 'Ngày lớp nhận chung ngoài phạm vi')
+                    td = configured_date(target_date,config,'Ngày lớp nhận chung không hợp lệ')
+                    p.require(start <= td <= r.END, 'Ngày lớp nhận chung ngoài phạm vi')
                     rule=classes[target]
-                    p.require(target_date in rule.get('dates',[]) or td.weekday() in rule.get('weekdays',[]), 'Ngày lớp nhận chung chưa khớp lịch')
-                    row['class_dates'][target] = target_date
+                    p.require(td.isoformat() in rule.get('dates',[]) or td.weekday() in rule.get('weekdays',[]), 'Ngày lớp nhận chung chưa khớp lịch')
+                    shared_dates[target] = td.isoformat()
+                row['class_dates'].update(shared_dates)
+            except (p.GateError, KeyError, TypeError, AttributeError) as error:
+                if row_events is None:
+                    raise p.GateError(str(error) if isinstance(error,p.GateError) else 'Cấu hình bài chung không hợp lệ') from None
+                row_events.append({'lesson_key':source['lesson_key'],'classes':{name:date.isoformat()},
+                                   'status':'loi','scope':'bai_chung','reason':str(error) if isinstance(error,p.GateError) else 'Cấu hình bài chung không hợp lệ'})
         # Quyết định mục 25: chỉ bài thứ Ba của 2K10 9+.
         if name == '2K10 9+' and date.weekday() == 1 and classes.get('2K10 Thứ 3, 6', {}).get('enabled'):
             row['class_dates']['2K10 Thứ 3, 6'] = date.isoformat()
@@ -254,17 +283,33 @@ def run_batch(config, transport, publisher, root, now=None, extractor=None, revi
         return {'status':'ngoai_lich', 'items':[]}
     receipt = {'at':now.isoformat(), 'items':[]}
     root.mkdir(parents=True, exist_ok=True)
-    worker = VersionWorker(config, transport, publisher, root/'receipts.sqlite', extractor or NativeAI(transport,config['extractor']), reviewer or NativeAI(transport,config['reviewer']), validator=validator)
+    worker = None
     pending=[]
+    failure_status='loi_cau_hinh'
     try:
+        holds=config.get('held_lessons',[])
+        p.require(isinstance(holds,list) and all(isinstance(item,dict) and isinstance(item.get('class_name'),str) and item['class_name']==item['class_name'].strip() and item['class_name'] in config['classes'] and isinstance(item.get('lesson_date'),str) for item in holds),'Danh sách giữ buổi không hợp lệ')
+        held_sessions={(item['class_name'],configured_date(item['lesson_date'],config,'Ngày buổi giữ không hợp lệ').isoformat()) for item in holds}
+        worker = VersionWorker(config, transport, publisher, root/'receipts.sqlite', extractor or NativeAI(transport,config['extractor']), reviewer or NativeAI(transport,config['reviewer']), validator=validator)
+        failure_status='loi_doc_nguon'
         retry_errors(config,root)
-        rows=[]
-        for source in p.read_material_rows(config,transport):
-            try:rows.extend(route_rows([source],config,now))
+        rows=[];row_errors=[]
+        sources=p.read_material_rows(config,transport,row_errors)
+        for error in row_errors:
+            receipt['items'].append(error)
+            key='source-date-'+p.digest(p.encoded([error['tab'],error['cell']]))[:32]
+            report_error(config,root,key,'BTVN lỗi nguồn: '+error['tab']+'!'+error['cell']+'; '+error['reason'],now)
+        route_events=[]
+        for source in sources:
+            try:rows.extend(route_rows([source],config,now,route_events))
             except Exception as error:
                 reason=str(error) if isinstance(error,p.GateError) else 'Lịch lớp không hợp lệ'
                 receipt['items'].append({'lesson_key':source['lesson_key'],'status':'loi','reason':reason})
                 report_error(config,root,source['lesson_key'],'BTVN lỗi: '+source['class_name']+'; '+source['lesson_date']+'; '+reason,now)
+        for event in route_events:
+            receipt['items'].append(event)
+            if event['status']=='loi':
+                report_error(config,root,event['lesson_key']+'-share','BTVN lỗi chia bài: '+event['reason'],now)
         # Hai dòng có cùng bản đồ ngày chỉ được nhận một nguồn nhất quán.
         unique={};conflicts=set()
         for row in rows:
@@ -281,10 +326,16 @@ def run_batch(config, transport, publisher, root, now=None, extractor=None, revi
         for row in rows:
             if r.now_vn().date() > r.END:
                 break
+            held=any((name,date) in held_sessions for name,date in row['class_dates'].items())
+            # Chỉ ghi dấu nhận bài cũ; luật mở/hạn vẫn do máy chủ hiện hành quyết định.
+            backfill=any(date < '2026-10-15' and date < now.astimezone(r.VN).date().isoformat() for date in row['class_dates'].values())
+            if held:
+                receipt['items'].append({'lesson_key':row['lesson_key'],'classes':row['class_dates'],'backfill':backfill,'status':'cho_hoc_lieu','reason':'Buổi đang được giữ theo cấu hình lượt chạy'})
+                continue
             label = ', '.join(row['class_dates'])+'; '+row['lesson_date']+'; '+row['title']
             try:
                 status = worker.process(row)
-                receipt['items'].append({'lesson_key':worker.last_key,'source_version':worker.last_source_version,'classes':row['class_dates'],'status':status,'reason':worker.last_reason})
+                receipt['items'].append({'lesson_key':worker.last_key,'source_version':worker.last_source_version,'classes':row['class_dates'],'backfill':backfill,'status':status,'reason':worker.last_reason})
                 if status == 'da_dang':
                     pending.append(label)
                 elif status == 'updated':
@@ -295,11 +346,14 @@ def run_batch(config, transport, publisher, root, now=None, extractor=None, revi
                     report_error(config, root, worker.last_key, 'BTVN lỗi: '+label+'; '+(worker.last_reason or 'không đạt kiểm độc lập, chưa đăng'), now)
             except Exception as error:
                 reason = str(error) if isinstance(error,p.GateError) else 'Lỗi xử lý nội bộ'
-                receipt['items'].append({'lesson_key':row['lesson_key'], 'status':'loi', 'reason':reason})
+                receipt['items'].append({'lesson_key':row['lesson_key'],'classes':row['class_dates'],'backfill':backfill,'status':'loi','reason':reason})
                 report_error(config, root, row['lesson_key'], 'BTVN lỗi: '+label+'; '+reason, now)
-    except Exception:
-        receipt['status']='loi_doc_nguon'
-        report_error(config, root, 'discovery', 'BTVN: không đọc hoặc ghép được Sheet/lịch lớp; chưa đăng buổi bị lỗi.', now)
+    except Exception as error:
+        reason=str(error) if isinstance(error,p.GateError) else 'Không đọc hoặc ghép được Sheet/lịch lớp'
+        receipt['status']=failure_status
+        receipt['reason']=reason
+        receipt['items'].append({'status':'loi','reason':reason})
+        report_error(config, root, 'discovery', 'BTVN: '+reason+'; chưa đăng buổi bị lỗi.', now)
     finally:
         # Sau xử lý bài để hạn áp dụng cả bài vừa đăng trong cùng lượt.
         # Lỗi cấu hình/sổ/báo cáo không được chặn lớp hay receipt độc lập.
@@ -307,7 +361,8 @@ def run_batch(config, transport, publisher, root, now=None, extractor=None, revi
             receipt['attendance_sync']=run_attendance(config,transport,publisher,root,now)
         except Exception:
             receipt['attendance_sync']={'sync':'loi_noi_bo'}
-        worker.db.close()
+        if worker is not None:
+            worker.db.close()
         flush_notifications(config,root,pending,now)
         directory = root/'receipts';directory.mkdir(exist_ok=True)
         r.atomic_json(directory/(now.strftime('%Y%m%dT%H%M%S%f')+'.json'),receipt)

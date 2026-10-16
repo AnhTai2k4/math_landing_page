@@ -53,7 +53,7 @@ def load_config(path):
     require(c.get('source_publisher') and c.get('period') in ('GK1','CK1','GK2','CK2'), 'Thiếu nguồn/khối học kỳ')
     return c
 
-def read_material_rows(config,transport):
+def read_material_rows(config,transport,row_errors=None):
     rows=[]
     exports={}
     for sheet in sheet_sources(config):
@@ -70,11 +70,11 @@ def read_material_rows(config,transport):
             url='https://www.googleapis.com/drive/v3/files/'+sheet['id']+'/export?'+query
             key=(url,sheet.get('bearer_env'))
             if key not in exports:exports[key]=transport.request(url,headers=headers,limit=10*1024*1024)
-            rows.extend(sheet_rows(exports[key],sheet));continue
+            rows.extend(sheet_rows(exports[key],sheet,row_errors));continue
         if sheet.get('format')=='grid':
             query=urllib.parse.parse_qs(urllib.parse.urlsplit(url).query)
             require(query.get('includeGridData')==['true'] and len(query.get('ranges',[]))==1,'Grid API cần includeGridData và đúng một vùng tab học liệu')
-        rows.extend(sheet_rows(transport.request(url,headers=headers),sheet))
+        rows.extend(sheet_rows(transport.request(url,headers=headers),sheet,row_errors))
     return merge_rows(rows)
 
 def download_pdf(url,config,transport):
@@ -147,15 +147,24 @@ def material_class(value,sheet):
     return re.sub(r'^2k','2K',value,flags=re.I)
 
 def material_date(value,sheet):
-    try:return datetime.date.fromisoformat(value).isoformat()
-    except ValueError:pass
-    match=re.fullmatch(r'(\d{1,2})/(\d{1,2})(?:/(\d{4}))?',value)
-    if not match:return None
-    day,month=int(match[1]),int(match[2]);year=int(match[3]) if match[3] else None
-    if year is None:
-        school=sheet.get('school_year')
-        require(school and type(school.get('start_year')) is int and 1<=school.get('start_month',0)<=12,'Ngày thiếu năm cần cấu hình năm học')
-        year=school['start_year']+(month<school['start_month'])
+    """Calendar dates only; two-digit years and ISO week dates are never inferred."""
+    value=value.strip()
+    if re.fullmatch(r'[0-9]{8}',value):
+        year,month,day=int(value[:4]),int(value[4:6]),int(value[6:])
+    else:
+        value=re.sub(r'[.,/\s-]+','/',value)
+        year_first=re.fullmatch(r'([0-9]{4})/([0-9]{1,2})/([0-9]{1,2})',value)
+        day_first=re.fullmatch(r'([0-9]{1,2})/([0-9]{1,2})(?:/([0-9]{4}))?',value)
+        if year_first:
+            year,month,day=map(int,year_first.groups())
+        elif day_first:
+            day,month=int(day_first[1]),int(day_first[2])
+            year=int(day_first[3]) if day_first[3] else None
+            if year is None:
+                school=sheet.get('school_year')
+                require(isinstance(school,dict) and type(school.get('start_year')) is int and 1<=school['start_year']<=9999 and type(school.get('start_month')) is int and 1<=school['start_month']<=12,'Ngày thiếu năm cần cấu hình năm học')
+                year=school['start_year']+(month<school['start_month'])
+        else:return None
     try:return datetime.date(year,month,day).isoformat()
     except ValueError:return None
 
@@ -207,11 +216,22 @@ def xlsx_rows(raw,sheet):
     except GateError:raise
     except Exception:raise GateError('XLSX học liệu không đọc được') from None
 
-def sheet_rows(raw, sheet):
+def sheet_rows(raw, sheet, row_errors=None):
     try:
+        row_offset=0;column_offset=0
         if sheet.get('format')=='grid':table=grid_rows(raw)
         elif sheet.get('format')=='xlsx':table=xlsx_rows(raw,sheet)
         else:table=[[{'text':x,'links':[x]} for x in row] for row in csv.reader(io.StringIO(raw.decode('utf-8-sig')))]
+        if sheet.get('format')=='grid':
+            # grid_rows giữ chỉ số hàng/cột tuyệt đối của Grid API.
+            row_offset=next((i for i,row in enumerate(table) if any(cell['text'].strip() for cell in row)),len(table))
+            table=table[row_offset:]
+        elif sheet.get('format')=='xlsx':
+            start=re.match(r'^([A-Z]+)([1-9][0-9]*):',sheet['range'])
+            require(start is not None,'XLSX cần vùng hữu hạn')
+            row_offset=int(start[2])-1
+            for letter in start[1]:column_offset=column_offset*26+ord(letter)-ord('A')+1
+            column_offset-=1
         require(bool(table),'Thiếu tiêu đề học liệu')
         headers=[header_key(x['text']) for x in table[0]]
         # Headers may include operational columns, but never accept student sources.
@@ -225,8 +245,22 @@ def sheet_rows(raw, sheet):
             hits=[i for i,h in enumerate(headers) if h in ('phamvibtvn','ghichubtvn','btvntucau','phamvi')]
             require(len(hits)<=1,'Trùng cột phạm vi BTVN');
             if hits:indexes['homework_scope']=hits[0]
-        result=[];parent=None
-        for source in table[1:]:
+        result=[];parent=None;parent_row=None;parent_invalid=False
+        def flush_parent():
+            nonlocal parent,parent_row,parent_invalid
+            if parent is not None and not parent_invalid:result.append(parent)
+            parent=None;parent_row=None;parent_invalid=False
+        def date_cell(row_number):
+            column=indexes['lesson_date']+column_offset+1;letters=''
+            while column:
+                column,remainder=divmod(column-1,26);letters=chr(ord('A')+remainder)+letters
+            return letters+str(row_number)
+        def date_error(reason,row_number,parent_number=None):
+            if row_errors is None:raise GateError(reason)
+            error={'status':'loi','reason':reason,'tab':sheet.get('name',sheet.get('id','')),'cell':date_cell(row_number)}
+            if parent_number is not None:error['parent_cell']=date_cell(parent_number)
+            row_errors.append(error)
+        for row_number,source in enumerate(table[1:],2+row_offset):
             def cell(k):
                 i=indexes.get(k,-1)
                 return source[i] if 0<=i<len(source) else {'text':'','links':[]}
@@ -239,16 +273,27 @@ def sheet_rows(raw, sheet):
                     u=urllib.parse.urlsplit(url)
                     if u.scheme=='https' and not u.username and not u.password:out.append(url)
                 return list(dict.fromkeys(out))
-            date=material_date(r['lesson_date'],sheet) if r['lesson_date'] and not re.fullmatch(r'\\+',r['lesson_date']) else None
-            if not r['class_name'] and not r['title'] and r['homework'] and parent and (not r['lesson_date'] or date==parent['lesson_date']):
-                require(not r['homework_scope'] or r['homework_scope']==parent.get('homework_scope',''),'Phạm vi tệp phụ xung đột; giữ bài')
-                extra=links('homework');require(extra,'Tệp phụ thiếu URL smart chip')
-                parent['homework_urls']=list(dict.fromkeys(parent['homework_urls']+extra));parent['homework_labels'].append(r['homework']);continue
-            parent=None
-            if not r['homework']:continue
-            if not date:
-                if not r['lesson_date'] or re.fullmatch(r'\\+',r['lesson_date']):continue
-                raise GateError('Ngày học không hợp lệ')
+            if not r['homework']:
+                flush_parent();continue
+            date=None;date_reason=None
+            if r['lesson_date'] and not re.fullmatch(r'\\+',r['lesson_date']):
+                try:date=material_date(r['lesson_date'],sheet)
+                except GateError as error:date_reason=str(error)
+                if date is None and date_reason is None:date_reason='Ngày học không hợp lệ'
+            continuation=not r['class_name'] and not r['title'] and parent is not None
+            if continuation:
+                if date_reason:
+                    date_error(date_reason,row_number,parent_row);parent_invalid=True;continue
+                # Keep an invalid unit buffered so later files cannot attach elsewhere.
+                if parent_invalid:continue
+                if not r['lesson_date'] or date==parent['lesson_date']:
+                    require(not r['homework_scope'] or r['homework_scope']==parent.get('homework_scope',''),'Phạm vi tệp phụ xung đột; giữ bài')
+                    extra=links('homework');require(extra,'Tệp phụ thiếu URL smart chip')
+                    parent['homework_urls']=list(dict.fromkeys(parent['homework_urls']+extra));parent['homework_labels'].append(r['homework']);continue
+            flush_parent()
+            if date_reason:
+                date_error(date_reason,row_number);continue
+            if not date:continue
             require(r['class_name'],'Thiếu lớp/bài')
             r['sheet_title']=r['title']
             r['title']=r['title'] or r['homework']
@@ -262,7 +307,8 @@ def sheet_rows(raw, sheet):
             for key in ('document','handout','video','answers'):r[key]=links(key)[0] if links(key) else ''
             r['homework']=r['homework_urls'][0]
             r['lesson_key']='btvn-'+digest(encoded([sheet.get('program_key','mtm-btvn'),r['class_name'],r['lesson_date']]))[:32]
-            result.append(r);parent=r
+            parent=r;parent_row=row_number
+        flush_parent()
         return merge_rows(result)
     except (UnicodeError,ValueError,TypeError):raise GateError('Dữ liệu học liệu sai cấu trúc UTF-8/JSON') from None
 

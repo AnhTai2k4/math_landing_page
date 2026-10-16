@@ -7,10 +7,29 @@ export function cellLinks(cell:MaterialCell|undefined):string[]{
 export const headerKey=(s:string)=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/gi,'d').toLowerCase().replace(/[^a-z0-9]/g,'');
 export function normalizeMaterialClass(s:string){return s.trim().replace(/\s+/g,' ').replace(/^20(\d{2})(?=\s|$)/,'2K$1').replace(/^2k/i,'2K');}
 export function materialDate(value:string,schoolYear?:{startYear:number;startMonth:number}){
- let date=value;
- const m=/^(\d{1,2})\/(\d{1,2})(?:\/(\d{4}))?$/.exec(value);
- if(m){const month=Number(m[2]),year=m[3]?Number(m[3]):schoolYear?schoolYear.startYear+(month<schoolYear.startMonth?1:0):NaN;date=`${year}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`;}
- return /^\d{4}-\d{2}-\d{2}$/.test(date)&&Number.isFinite(Date.parse(date))&&new Date(date).toISOString().slice(0,10)===date?date:null;
+ const text=value.trim(),compact=/^(\d{4})(\d{2})(\d{2})$/.exec(text);
+ let year:number,month:number,day:number;
+ if(compact){year=Number(compact[1]);month=Number(compact[2]);day=Number(compact[3]);}
+ else{
+  // Cùng quy tắc với material_date của pipeline: ngày lịch, không đoán năm hai số.
+  if(!/^\d{1,4}(?:[/.,\s-]+\d{1,4}){1,2}$/.test(text))return null;
+  const parts=text.split(/[/.,\s-]+/);
+  if(parts.length===3&&parts[0].length===4){
+   if(parts[1].length>2||parts[2].length>2)return null;
+   [year,month,day]=parts.map(Number);
+  }else{
+   if(parts[0].length>2||parts[1].length>2||(parts.length===3&&parts[2].length!==4))return null;
+   day=Number(parts[0]);month=Number(parts[1]);
+   if(parts.length===3)year=Number(parts[2]);
+   else{
+    if(!schoolYear||!Number.isInteger(schoolYear.startYear)||!Number.isInteger(schoolYear.startMonth)||schoolYear.startMonth<1||schoolYear.startMonth>12)return null;
+    year=schoolYear.startYear+(month<schoolYear.startMonth?1:0);
+   }
+  }
+ }
+ if(!Number.isInteger(year)||year<1||year>9999||month<1||month>12||day<1||day>31)return null;
+ const date=`${String(year).padStart(4,'0')}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+ return Number.isFinite(Date.parse(date))&&new Date(date).toISOString().slice(0,10)===date?date:null;
 }
 /** Pure decoder for includeGridData. No network, no roster access. */
 export function decodeMaterialGrid(data:any):MaterialCell[][] {

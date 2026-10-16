@@ -1,4 +1,8 @@
-"""Launcher dưới 20 giây, không gọi mạng, không đợi worker."""
+"""Launcher mặc định chạy thật qua worker, dưới 20 giây và không đợi worker.
+
+Không cờ hoặc --live đều khởi chạy theo cấu hình và khóa hiện hành.
+Launcher không gọi mạng; --dry-run chỉ dùng dữ liệu giả ngoại tuyến.
+"""
 import argparse
 import os
 import subprocess
@@ -53,8 +57,10 @@ def launch(now=None, root=None, spawn=subprocess.Popen, check=bounded_preflight,
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--dry-run', action='store_true')
+    parser = argparse.ArgumentParser(description='Mặc định chạy thật theo cấu hình và khóa hiện hành, kể cả khi không truyền cờ.')
+    modes=parser.add_mutually_exclusive_group()
+    modes.add_argument('--dry-run', action='store_true', help='Chỉ kiểm bằng dữ liệu giả ngoại tuyến, không chạy worker thật')
+    modes.add_argument('--live', action='store_true', help='Tên tường minh của chế độ chạy thật mặc định; giống khi không truyền cờ')
     parser.add_argument('--check-config', action='store_true',help=argparse.SUPPRESS)
     args = parser.parse_args()
     if args.check_config:
