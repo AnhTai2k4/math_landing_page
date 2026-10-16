@@ -1,0 +1,6 @@
+.btvn-session .btvn-priority{padding:20px;min-height:0;border-top:4px solid #ffcf24}
+.btvn-session .btvn-priority h2{font-size:22px;line-height:1.4;margin:0 0 12px;color:#213269;overflow-wrap:anywhere}
+.btvn-session .btvn-priority p{font-size:18px;line-height:1.6;margin:10px 0;overflow-wrap:anywhere}
+.btvn-session .btvn-priority .btvn-review-note{font-size:16px;color:#465776}
+.btvn-session .btvn-priority .btvn-btn{max-width:100%;white-space:normal;min-height:48px}
+@media(max-width:600px){.btvn-session .btvn-priority{padding:16px}.btvn-session .btvn-priority .btvn-btn{width:100%}}

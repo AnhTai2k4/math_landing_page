@@ -1,0 +1,15 @@
+.cp-error-hunt{color:#213269;min-width:0;font-size:18px;line-height:1.65}
+.cp-error-hunt h3{font-size:24px}.cp-error-hunt h4{font-size:21px;line-height:1.5}
+.cp-error-note{color:#465776;font-size:16px;overflow-wrap:anywhere}
+.cp-error-card{padding:20px;border:1px solid #d7deea;border-radius:16px;background:#fff;margin-top:16px;min-width:0}
+.cp-error-hunt .cp-error-formula{font-size:22px;font-weight:700;overflow-wrap:anywhere;line-height:1.7}
+.cp-error-actions{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
+.cp-error-hunt button{min-height:48px;padding:10px 16px;border:1px solid #8291ae;border-radius:10px;background:#fff;color:#213269;font:inherit;cursor:pointer;overflow-wrap:anywhere;max-width:100%;white-space:normal}
+.cp-error-hunt button.cp-error-primary{background:#ffcf24;color:#213269;border-color:#213269;font-weight:700}
+.cp-error-hunt button[aria-pressed=true]{background:#213269;color:#fff;border-color:#213269}
+.cp-error-hunt button:disabled{opacity:1;cursor:default}
+.cp-error-hunt :focus-visible{outline:3px solid #b08200;outline-offset:4px}
+.cp-error-feedback{padding:14px;border-left:4px solid #ffcf24;background:#f5f7fb;margin:16px 0;overflow-wrap:anywhere}
+.cp-error-hunt details{border-top:1px solid #d7deea;padding-top:10px;margin-top:12px}
+.cp-error-hunt summary{min-height:44px;padding:8px 0;cursor:pointer;font-weight:700;overflow-wrap:anywhere}
+@media(max-width:520px){.cp-error-card{padding:12px}.cp-error-actions{flex-direction:column}.cp-error-actions button{width:100%;text-align:left}}

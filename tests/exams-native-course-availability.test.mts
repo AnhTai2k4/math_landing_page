@@ -51,14 +51,17 @@ try{
       assert.equal(routeMetadata('/khoa-hoc/'+course.slug,'www.minhthanhmath.vn').known,true);
       const first=course.sections.flatMap(section=>section.lessons)[0];
       if(first){
-        assert.ok(hrefs.includes(nativeLessonUrl(course,first)));assert.match(html,/Xem bài học đầu tiên/);
+        assert.ok(hrefs.includes(nativeLessonUrl(course,first)));assert.match(html,/Thông tin bài học đầu tiên/);
         const lessonLink=anchors.find(([,attrs])=>attrs.includes('href="'+nativeLessonUrl(course,first).replace(/&/g,'&amp;')+'"')&&/class="ne-primary"/.test(attrs));
         assert.ok(lessonLink,'Bài học đầu tiên giữ nút chính.');
       }
       assert.equal(anchors.filter(([,attrs])=>/class="ne-primary"/.test(attrs)).length,first?1:0,'Chỉ bài học đầu tiên dùng kiểu nút chính.');
       const lessons=course.sections.flatMap(section=>section.lessons);
-      assert.equal((html.match(/<em><span aria-hidden="true">FREE<\/span><span class="mig-sr-only">Bài thử<\/span><\/em>/g)||[]).length,lessons.filter(lesson=>lesson.isFree).length);
-      assert.equal((html.match(/<span class="mig-sr-only">Cần tài khoản<\/span>/g)||[]).length,lessons.filter(lesson=>!lesson.isFree).length);
+      assert.equal((html.match(/id="ne-video-state"/g)||[]).length,1);
+      assert.equal((html.match(/aria-describedby="ne-video-state"/g)||[]).length,lessons.length);
+      assert.match(html,/Danh mục hiện chỉ mở thông tin bài học\. Video chưa được kết nối tại đây/);
+      assert.equal((html.match(/<em><span aria-hidden="true">Bài thử<\/span><span class="mig-sr-only">Bài thử theo nguồn, video chưa kết nối<\/span><\/em>/g)||[]).length,lessons.filter(lesson=>lesson.isFree).length);
+      assert.equal((html.match(/<span class="mig-sr-only">Nguồn yêu cầu tài khoản, video chưa kết nối<\/span>/g)||[]).length,lessons.filter(lesson=>!lesson.isFree).length);
       assert.ok(hrefs.includes('/huong-dan'));
       assert.ok(hrefs.every(href=>new URL(href,origin).origin===origin),'Không mở cổng cũ hoặc trang mua bên ngoài.');
     }

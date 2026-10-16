@@ -3,6 +3,8 @@ import type {HomeworkLesson} from './btvn-contract';
 import {homeworkServerNow} from './asset-renewal';
 import {isDemoVideo,lessonHomeworkTitle,lessonCaption} from './presentation';
 import {createHomeworkDeadlineICS,hasHomeworkDeadline,homeworkDeadlineFilename} from './deadline-calendar';
+import {homeworkPriorityDeadline,homeworkPriorityReason,isHomeworkLocked,nextHomework} from './homework-priority';
+import './homework-priority.css';
 export const LOCKED_HOMEWORK_HELP='Bài mở theo giờ ghi trên thẻ. Tới giờ mở, em tải lại trang rồi bấm Làm BTVN. Nếu chỉ ghi “sau buổi học” hoặc hạn “Chờ xác minh”, em nhắn Zalo trợ lý để kiểm tra lịch lớp.';
 const openingLabel=(lesson:HomeworkLesson)=>lesson.opensAt!=null&&Number.isFinite(lesson.opensAt)?dateTime(lesson.opensAt):'sau buổi học';
 const dateTime=(at:number)=>new Date(at).toLocaleString('vi-VN',{timeZone:'Asia/Ho_Chi_Minh',hour:'2-digit',minute:'2-digit',weekday:'long',day:'2-digit',month:'2-digit'});
@@ -16,7 +18,17 @@ const upcomingLesson=(date:string,now:number)=>date>=new Date(now).toLocaleDateS
 export default function LessonCards({lessons,busy,onHomework,demo=false,serverNow,clientReceivedAt}:{lessons:HomeworkLesson[];busy:boolean;onHomework:(code:string)=>void;demo?:boolean;serverNow?:number;clientReceivedAt?:number}){
   const [explained,setExplained]=useState<string|null>(null),[opened,setOpened]=useState<string|null>(null),[invited,setInvited]=useState<string|null>(null),[now,setNow]=useState(Date.now);
   const [calendarStatus,setCalendarStatus]=useState<{code:string;message:string}|null>(null);
+  const [priorityNotice,setPriorityNotice]=useState<string|null>(null);
   const clockNow=homeworkServerNow({serverNow,clientReceivedAt},now);
+  const priority=nextHomework(lessons,clockNow),priorityId='next-homework-'+priority?.lessonCode,priorityDeadline=priority?homeworkPriorityDeadline(priority):null;
+  const openPriority=()=>{
+    if(busy||!priority)return;
+    const clickedAt=Date.now();
+    setNow(clickedAt);
+    const current=nextHomework(lessons,homeworkServerNow({serverNow,clientReceivedAt},clickedAt));
+    if(current?.lessonCode===priority.lessonCode){setPriorityNotice(null);onHomework(current.lessonCode);}
+    else setPriorityNotice(current?'Gợi ý vừa thay đổi theo giờ của lớp. Em kiểm tra bài mới rồi bấm mở lại.':'Hiện không còn bài phù hợp để gợi ý. Em kiểm tra trạng thái trên từng bài.');
+  };
   const downloadDeadline=(lesson:HomeworkLesson)=>{
     setCalendarStatus(null);
     try{
@@ -26,10 +38,18 @@ export default function LessonCards({lessons,busy,onHomework,demo=false,serverNo
     }catch{setCalendarStatus({code:lesson.lessonCode,message:'Chưa yêu cầu tải được tệp lịch. Em kiểm tra hạn nộp rồi thử mở bằng Chrome hoặc Safari.'});}
   };
   useEffect(()=>{const timer=setInterval(()=>setNow(Date.now()),1000);return ()=>clearInterval(timer);},[]);
-  const locked=(lesson:HomeworkLesson)=>Number.isFinite(lesson.opensAt)?clockNow<lesson.opensAt!:lesson.locked===true;
+  const locked=(lesson:HomeworkLesson)=>isHomeworkLocked(lesson,clockNow);
   const submitted=(lesson:HomeworkLesson)=>lesson.submittedAt!=null;
   const todo=lessons.filter(l=>l.available&&!locked(l)&&l.bestScore===null&&!submitted(l)).length, pending=lessons.filter(locked).length;
   return <div className="btvn-cards"><div className="btvn-lead"><h1>Buổi học của em</h1><p>Xem lại bài giảng, hoàn thành BTVN trước hạn ghi trên từng bài.</p><p>Giờ mở và hạn nộp theo lịch riêng của lớp. Em xem thời gian cụ thể trên từng bài.</p><div className="btvn-overview"><b>{todo===0&&pending>0?`Chưa có bài cần làm. Có ${pending} bài chưa tới giờ mở.`:`Em còn ${todo} buổi cần làm BTVN`}</b><span>{lessons.length} buổi học</span></div><div className="btvn-legend"><span className="btvn-chip vid">▶ Có video bài giảng</span><span className="btvn-chip review">↻ Chưa có video bài giảng</span></div></div>
+    {priority&&<section className="btvn-card btvn-priority" aria-labelledby={priorityId+'-title'}>
+      <h2 id={priorityId+'-title'}>Việc nên làm tiếp</h2>
+      <p><strong>{lessonHomeworkTitle(priority)}</strong> · Buổi {priority.date.slice(8,10)}/{priority.date.slice(5,7)}</p>
+      <p id={priorityId+'-reason'}>{homeworkPriorityReason(priority,clockNow)} {priorityDeadline!==null&&(priority.kind==='kiem-tra-thang'?'Đóng bài lúc ':'Hạn: trước ')+dateTime(priorityDeadline)+' (theo lịch lớp).'}</p>
+      <p className="btvn-review-note">Ưu tiên bài còn hạn gần nhất, sau đó BTVN quá hạn rồi bài chưa rõ hạn. Chọn bài chỉ mở thông tin, chưa bắt đầu lượt làm.</p>
+      <button type="button" className="btvn-btn primary" disabled={busy} aria-describedby={priorityId+'-reason'} onClick={openPriority}>Mở bài được gợi ý</button>
+    </section>}
+    <div aria-live="polite" aria-atomic="true">{priorityNotice&&<p className="btvn-review-note">{priorityNotice}</p>}</div>
     {[...lessons].sort((a,b)=>b.date.localeCompare(a.date)).map(lesson=>{const isOpen=opened===lesson.lessonCode,isLocked=locked(lesson);
       const awaitingPublication=lesson.bestScore===null&&submitted(lesson),publicationId='publication-'+lesson.lessonCode;
       const homeworkDescription=isLocked&&explained===lesson.lessonCode?'locked-help-'+lesson.lessonCode:awaitingPublication?publicationId:undefined;
