@@ -1,0 +1,8 @@
+.cp-formula-choices{display:grid;gap:10px;margin:18px 0;min-width:0}
+.cp-formula-choices button{text-align:left;overflow-wrap:anywhere}
+.cp-formula-choices button[aria-pressed=true]{background:#213269;color:#fff}
+.cp-formula-choices button:disabled{cursor:default;opacity:1}
+.cp-formula-review{border-top:1px solid #d7deea;margin-top:14px;padding-top:8px;min-width:0;overflow-x:auto}
+.cp-formula-review summary{min-height:44px;box-sizing:border-box;padding:8px 0;cursor:pointer;font-weight:700;overflow-wrap:anywhere}
+.cp-formula-game .cp-recall-answer{max-width:100%;box-sizing:border-box}
+.cp-formula-game .cp-recall-answer p{overflow-wrap:anywhere}

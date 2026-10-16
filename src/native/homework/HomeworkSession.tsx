@@ -1,7 +1,7 @@
 import {LoadingCards} from '../../components/LoadingCards';
 import {Link} from '../../migration/navigation';
 import {createAssetRenewal,mergeHomeworkSave,mergeHomeworkRenewal,homeworkServerNow} from './asset-renewal';
-import {scheduleOpeningRefresh} from './opening-refresh';
+import {scheduleOpeningRefresh,mergeOpeningState} from './opening-refresh';
 import {useContext,useEffect,useMemo,useRef,useState} from 'react';
 import {displayClassName} from './presentation';
 import EntryNotice,{entryFailure} from './EntryNotice';
@@ -122,12 +122,26 @@ export default function HomeworkSession({pathname}:{pathname:string}){
     return {...data,clientReceivedAt:Date.now()} as HomeworkState;
   }}),[pathname]);
   useEffect(()=>{mounted.current=true;void gateway.call('state').then(next=>{if(mounted.current){setState(next);setRoom(!!next.draft&&next.draft.submittedAt===null);}}).catch(()=>{}).finally(()=>{if(mounted.current)setChecking(false);});return()=>{mounted.current=false;sessionGeneration.current++;};},[gateway]);
+  const refreshingReceipt=useRef(false);
+  const refreshReceipt=async()=>{
+    if(busy||refreshingReceipt.current||!state?.draft||state.draft.submittedAt===null||remotePending.current)return;
+    const generation=sessionGeneration.current,lesson=state.lessonCode,attempt=state.draft.attemptId;
+    const current=()=>mounted.current&&sessionGeneration.current===generation;
+    refreshingReceipt.current=true;setBusy(true);setNotice('');
+    try{
+      const next=await gateway.call('state',{lessonCode:lesson});
+      if(!current())return;
+      setState(previous=>previous?.lessonCode===lesson&&previous.draft?.attemptId===attempt?mergeHomeworkRenewal(previous,next):previous);
+      setNotice('Đã kiểm tra lại biên nhận. Trạng thái xác nhận hiện ở phần kết quả bên dưới.');
+    }catch(error){if(current())setNotice(error instanceof Error?error.message:'Chưa kiểm tra được biên nhận. Em giữ trang và thử lại.');}
+    finally{refreshingReceipt.current=false;if(current())setBusy(false);}
+  };
   useEffect(()=>{
     if(!state?.lessons)return;
     let alive=true;const lessonCode=state.lessonCode;
-    const cancel=scheduleOpeningRefresh(state.lessons,async()=>{const next=await gateway.call('state',{lessonCode});if(alive)setState(previous=>previous?.lessonCode===lessonCode?{...previous,lessons:next.lessons}:previous);});
+    const cancel=scheduleOpeningRefresh(state.lessons,async()=>{const next=await gateway.call('state',{lessonCode});if(alive)setState(previous=>previous?.lessonCode===lessonCode?mergeOpeningState(previous,next):previous);},()=>homeworkServerNow(renewalState.current??state));
     return ()=>{alive=false;cancel();};
-  },[gateway,state?.lessonCode,state?.lessons]);
+  },[gateway,state?.lessonCode,state?.lessons,state?.serverNow,state?.clientReceivedAt]);
   // Link ảnh/PDF sống 150 phút; chỉ gia hạn khi còn tối đa 30 phút hoặc ảnh lỗi.
   useEffect(()=>{
     if(!state||state.demo||(!state.exam&&!state.opensAt))return;
@@ -160,9 +174,9 @@ export default function HomeworkSession({pathname}:{pathname:string}){
     {checking?<LoadingCards label="Đang kiểm tra phiên và tải danh sách buổi học…"/>:!state?<HomeworkGate studentCode={studentCode} identity={gate} busy={busy} classNames={classNames} classesLoading={classesLoading} classesError={classesError} onReloadClasses={()=>void loadClasses()} onCode={setStudentCode} onIdentity={setGate} onLogin={input=>void run('login',input)}/>:<>
       <header className="btvn-top"><Link href="/" className="btvn-home-logo" aria-label="Minh Thành Math, về trang chủ"><img src="/mtm-original-logo-420w.webp" alt="Minh Thành Math"/></Link><div><b>Bài tập về nhà</b><p>Video buổi học và BTVN của lớp em</p></div><div className="btvn-me"><Link href="/" className="btvn-home-link">← Trang chủ</Link><b>{state.fullName}</b><span>{displayClassName(state)}</span><button disabled={busy} onClick={()=>void requestExit(async()=>{await gateway.call('logout');setState(null);setRoom(false);})}>Thoát</button></div></header>
       {state.classMismatch&&<EntryNotice className={state.className}/>}
-      {!room&&<LessonCards demo={state.demo} lessons={state.lessons??[]} busy={busy} onHomework={async code=>{const generation=sessionGeneration.current,current=()=>mounted.current&&sessionGeneration.current===generation;setBusy(true);setNotice('');try{const next=await gateway.call('select',{lessonCode:code});if(!current())return;setState(next);setRoom(true);requestAnimationFrame(()=>{if(current())document.getElementById('btvn-summary')?.scrollIntoView({behavior:'smooth'});});}catch(error){if(current())setNotice(error instanceof Error?error.message:'Chưa mở được bài.');}finally{if(current())setBusy(false);}}}/>}
+      {!room&&<LessonCards serverNow={state.serverNow} clientReceivedAt={state.clientReceivedAt} demo={state.demo} lessons={state.lessons??[]} busy={busy} onHomework={async code=>{const generation=sessionGeneration.current,current=()=>mounted.current&&sessionGeneration.current===generation;setBusy(true);setNotice('');try{const next=await gateway.call('select',{lessonCode:code});if(!current())return;setState(next);setRoom(true);requestAnimationFrame(()=>{if(current())document.getElementById('btvn-summary')?.scrollIntoView({behavior:'smooth'});});}catch(error){if(current())setNotice(error instanceof Error?error.message:'Chưa mở được bài.');}finally{if(current())setBusy(false);}}}/>}
       {room&&(state.exam||state.opensAt!==undefined||state.kind==='kiem-tra-thang')&&<><button className="btvn-btn btvn-back" disabled={busy} onClick={()=>void requestExit(()=>setRoom(false))}>← Các buổi học</button>
-        {state.exam&&state.draft&&state.draft.submittedAt===null?<ManagedAttempt key={state.draft.attemptId} state={{...state,exam:state.exam}} gateway={gateway} saverRef={saverRef} onState={next=>setState(previous=>previous?mergeHomeworkSave(previous,next):next)} onPendingChange={pending=>{remotePending.current=pending;}}/>:<HomeworkOverview key={state.lessonCode+':'+(state.draft?.attemptId??'new')} state={state} busy={busy} onStart={()=>void run('start')}/>}
+        {state.exam&&state.draft&&state.draft.submittedAt===null?<ManagedAttempt key={state.draft.attemptId} state={{...state,exam:state.exam}} gateway={gateway} saverRef={saverRef} onState={next=>setState(previous=>previous?mergeHomeworkSave(previous,next):next)} onPendingChange={pending=>{remotePending.current=pending;}}/>:<HomeworkOverview key={state.lessonCode+':'+(state.draft?.attemptId??'new')} state={state} busy={busy} onRefreshReceipt={()=>void refreshReceipt()} onStart={()=>void run('start')}/>}
       </>}
 
     </>}

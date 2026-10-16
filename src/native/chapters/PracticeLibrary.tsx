@@ -14,6 +14,7 @@ let shelfReady=false;
 const loadShelf=()=>import('./PracticeShelf').then(m=>{shelfReady=true;return m;});
 const QuickRecall=lazy(()=>import('./QuickRecall'));
 const MentalMath=lazy(()=>import('./MentalMath'));
+const FormulaMatch=lazy(()=>import('./FormulaMatch'));
 const ChapterShelf=lazy(()=>loadShelf().then(m=>({default:m.ChapterShelf})));
 const PracticeDetail=lazy(()=>Promise.all([loadShelf(),import('./ChapterPractice')]).then(([m])=>({default:m.PracticeDetail})));
 export {practiceURL};
@@ -36,6 +37,7 @@ export default function PracticeLibrary(){
   const painted=useAfterFirstPaint();
   const [recallReady,setRecallReady]=useState(false);
   const [mentalReady,setMentalReady]=useState(false);
+  const [formulaReady,setFormulaReady]=useState(false);
   if(requested||view)return <Suspense fallback={<div className="mig-container mig-route-loading" role="status" aria-live="polite">Đang tải bài luyện…</div>}><PracticeDetail/></Suspense>;
   if(!selected||!chapter)return <section className="mig-container mig-panel"><h1>Chưa đọc được danh mục luyện tập</h1><Link href="/thi-thu">Về Thi thử</Link></section>;
   return <section className="mig-container cp-library ep-root">
@@ -53,6 +55,7 @@ export default function PracticeLibrary(){
         <h2>{chapter.title}</h2><p>{chapter.forms.join(' · ')}</p>
         {['10','11','12'].includes(selected.id)&&<details className="cp-theory" key={selected.id+':'+chapter.id} onToggle={event=>{if(event.currentTarget.open)setRecallReady(true);}}><summary>Ôn nhanh công thức</summary>{recallReady&&<Suspense fallback={<p role="status">Đang tải bộ thẻ…</p>}><QuickRecall key={selected.id+':'+chapter.id} track={selected.id} chapter={chapter.id}/></Suspense>}</details>}
         {['10','11','12'].includes(selected.id)&&<details className="cp-theory" key={'mental:'+selected.id+':'+chapter.id} onToggle={event=>{if(event.currentTarget.open)setMentalReady(true);}}><summary>Trò tự luyện · Tính nhẩm 5 câu</summary>{mentalReady&&<Suspense fallback={<p role="status">Đang tải trò tính nhẩm…</p>}><MentalMath key={selected.id+':'+chapter.id}/></Suspense>}</details>}
+        {['10','11','12'].includes(selected.id)&&<details className="cp-theory" key={'formula:'+selected.id+':'+chapter.id} onToggle={event=>{if(event.currentTarget.open)setFormulaReady(true);}}><summary>Trò tự ôn · Nhận diện công thức</summary>{formulaReady&&<Suspense fallback={<p role="status">Đang tải trò ghép thẻ…</p>}><FormulaMatch key={selected.id+':'+chapter.id} track={selected.id} chapter={chapter.id}/></Suspense>}</details>}
         {painted?<Suspense fallback={<div className="cp-shelf-loading" role="status" aria-live="polite">Đang tải danh sách bài…</div>}><ChapterShelf selected={selected} chapter={chapter}/></Suspense>:<div className="cp-shelf-loading" role="status" aria-live="polite">Đang tải danh sách bài…</div>}
       </div>
     </div>
