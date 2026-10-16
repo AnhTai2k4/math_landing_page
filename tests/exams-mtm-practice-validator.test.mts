@@ -5,6 +5,7 @@ import {validateAssessment} from '../src/native/exams/assessment';
 import {examSections} from '../src/native/exams/flexible-profile';
 import {MTM_SCORING_VERSION,mtmFraction} from '../src/native/exams/mtm-scoring';
 import demoExam from '../server/btvn/demo-exam.json';
+import {concealMonthlySolutions} from '../server/btvn/monthly-policy';
 import {suite} from './exams-harness.mts';
 
 const {test,finish}=suite('MTM-REAL-VALIDATOR');
@@ -26,11 +27,7 @@ function examFor(kinds:Kind[]):PracticeExam {
   } as unknown as PracticeExam;
 }
 function conceal(exam:PracticeExam):PracticeExam {
-  const result=structuredClone(exam) as unknown as Record<string,any>;
-  result.responseMode='questions-only';
-  delete result.solutionInstructions;if(result.mtmDocuments)delete result.mtmDocuments.solutions;
-  for(const q of result.questions){delete q.answer;delete q.acceptedAnswers;delete q.shortRule;delete q.solution;if(q.sourceContent)delete q.sourceContent.solutions;}
-  return result as PracticeExam;
+  return concealMonthlySolutions(exam);
 }
 const check=(exam:PracticeExam)=>assert.equal(validatePracticeExam(exam).valid,true,validatePracticeExam(exam).errors.join('; '));
 
@@ -87,7 +84,7 @@ test('Câu thiếu khóa hoặc DS thiếu ý vẫn giữ trong N để engine �
   const exam=examFor(['mc','tf','short']) as unknown as Record<string,any>;
   delete exam.questions[0].answer;delete exam.questions[2].acceptedAnswers;delete exam.questions[2].shortRule;
   exam.questions[1].statements.pop();
-  check(exam as PracticeExam);assert.equal(validateQuestionOnlyPracticeExam(conceal(exam as PracticeExam)).valid,true);
+  check(exam as PracticeExam);assert.equal(validateQuestionOnlyPracticeExam(conceal(exam as PracticeExam)).valid,false,'Thiếu quy tắc nhập chỉ giữ trong engine riêng để đối soát, không nhận ở transport công khai');
   assert.equal(exam.questions.length,3);assert.equal(exam.questionCount,3);
   assert.deepEqual(exam.questions[0].maxPoints,{numerator:'10',denominator:'3'});
 });

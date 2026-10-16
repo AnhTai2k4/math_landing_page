@@ -99,7 +99,9 @@ test('Receipt pending phải có snapshot MTM đúng rubric và đúng lượt, 
 });
 
 test('Điểm MTM tròn vẫn hiện đủ 2 số, điểm cũ giữ nguyên định dạng',()=>{
- const {receipt}=fixture();const full:MtmScore={...receipt.mtm!,officialTotal:f('10'),officialDisplayTotal:'10.00',displayTotal:'10.00',rawTotal:f('10')};
+ const {exam,draft,receipt}=fixture();
+ const full=resultFor(exam,{...draft,answers:{'q-tn':'A','q-ds':[true,false,true,false],'q-tln':'1/2'}})?.mtm;
+ assert.ok(full);assert.equal(full.officialDisplayTotal,'10.00');
  assert.equal(homeworkReceiptScore({...receipt,score:10,mtm:full}),'10,00');
  assert.equal(homeworkReceiptScore({...receipt,score:7.5,rubricVersion:undefined,mtm:undefined}),'7,5');
 });

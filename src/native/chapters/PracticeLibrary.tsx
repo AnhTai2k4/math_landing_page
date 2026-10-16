@@ -12,6 +12,7 @@ import './chapters.css';
 // Bài đơn (?id=, ?luot=) nạp song song ngân hàng đề và phòng làm bài để không phải chờ nối tiếp.
 let shelfReady=false;
 const loadShelf=()=>import('./PracticeShelf').then(m=>{shelfReady=true;return m;});
+const QuickRecall=lazy(()=>import('./QuickRecall'));
 const ChapterShelf=lazy(()=>loadShelf().then(m=>({default:m.ChapterShelf})));
 const PracticeDetail=lazy(()=>Promise.all([loadShelf(),import('./ChapterPractice')]).then(([m])=>({default:m.PracticeDetail})));
 export {practiceURL};
@@ -32,6 +33,7 @@ export default function PracticeLibrary(){
   const chapter=selected?.chapters.find(c=>c.id===params.get('chuong'))??selected?.chapters[0];
   const requested=params.get('id'),view=params.get('luot');
   const painted=useAfterFirstPaint();
+  const [recallReady,setRecallReady]=useState(false);
   if(requested||view)return <Suspense fallback={<div className="mig-container mig-route-loading" role="status" aria-live="polite">Đang tải bài luyện…</div>}><PracticeDetail/></Suspense>;
   if(!selected||!chapter)return <section className="mig-container mig-panel"><h1>Chưa đọc được danh mục luyện tập</h1><Link href="/thi-thu">Về Thi thử</Link></section>;
   return <section className="mig-container cp-library ep-root">
@@ -47,6 +49,7 @@ export default function PracticeLibrary(){
       </aside>
       <div className="cp-chapter-content">
         <h2>{chapter.title}</h2><p>{chapter.forms.join(' · ')}</p>
+        {['10','11','12'].includes(selected.id)&&<details className="cp-theory" key={selected.id+':'+chapter.id} onToggle={event=>{if(event.currentTarget.open)setRecallReady(true);}}><summary>Ôn nhanh công thức</summary>{recallReady&&<Suspense fallback={<p role="status">Đang tải bộ thẻ…</p>}><QuickRecall key={selected.id+':'+chapter.id} track={selected.id} chapter={chapter.id}/></Suspense>}</details>}
         {painted?<Suspense fallback={<div className="cp-shelf-loading" role="status" aria-live="polite">Đang tải danh sách bài…</div>}><ChapterShelf selected={selected} chapter={chapter}/></Suspense>:<div className="cp-shelf-loading" role="status" aria-live="polite">Đang tải danh sách bài…</div>}
       </div>
     </div>

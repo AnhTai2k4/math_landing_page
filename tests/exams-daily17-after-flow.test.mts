@@ -28,13 +28,22 @@ await test('Nộp tháng trước đóng nhận ACK, hết pending, phiếu và 
  saver.update(draft);assert.equal(await saver.flush(),true);assert.equal(saver.pending(),false);assert.equal(statuses.at(-1)?.failed,false);assert.equal(saved.length,1);
  const next=saved[0];assert.ok(acknowledgedHomeworkSubmission(next));assert.equal(acknowledgedHomeworkReceipt(next),null);assert.equal(createHomeworkResultSummary(next),null);assert.equal(next.receipts[0].score,null);assert.equal(next.bestScore,null);saver.dispose();
 });
-await test('Biên nhận ẩn sai lượt, mốc nộp hoặc trùng không ACK',async()=>{
+await test('Biên nhận ẩn thiếu, sai lượt hoặc trùng không ACK',async()=>{
  const f=fixture();f.clock(T0+1000);const next=f.service.submit(f.token,f.started.draft!.attemptId,f.answers);
- for(const receipts of [[],[{...next.receipts[0],attemptId:'luot-gia-khac'}],[{...next.receipts[0],submittedAt:T0+999}],next.receipts.concat(next.receipts)]){
+ for(const receipts of [[],[{...next.receipts[0],attemptId:'luot-gia-khac'}],next.receipts.concat(next.receipts)]){
   const statuses:RemoteSaveStatus[]=[],saved:HomeworkState[]=[];
   const saver=createHomeworkSaver({send:()=>Promise.resolve({...next,receipts}),onSaved:s=>saved.push(s),onStatus:s=>statuses.push(s)});
   saver.update(next.draft!);assert.equal(await saver.flush(),false);assert.equal(saver.pending(),true);assert.equal(saver.closed(),false);assert.equal(saved.length,0);assert.equal(statuses.at(-1)?.failed,true);saver.dispose({flushPending:false});
  }
+});
+await test('Biên nhận tháng cùng lượt lệch mốc nộp vẫn ACK và tiếp tục giấu điểm, phiếu',async()=>{
+ const f=fixture();f.clock(T0+1000);const next=f.service.submit(f.token,f.started.draft!.attemptId,f.answers);
+ const received={...next,receipts:[{...next.receipts[0],submittedAt:T0+999}]};
+ const statuses:RemoteSaveStatus[]=[],saved:HomeworkState[]=[];
+ const saver=createHomeworkSaver({send:()=>Promise.resolve(received),onSaved:s=>saved.push(s),onStatus:s=>statuses.push(s)});
+ saver.update(next.draft!);assert.equal(await saver.flush(),true);assert.equal(saver.pending(),false);assert.equal(saver.closed(),false);assert.equal(saved.length,1);assert.equal(statuses.at(-1)?.failed,false);
+ assert.equal(acknowledgedHomeworkSubmission(received),received.receipts[0]);assert.equal(acknowledgedHomeworkReceipt(received),null);assert.equal(createHomeworkResultSummary(received),null);assert.equal(received.bestScore,null);assert.equal(received.receipts[0].score,null);
+ saver.dispose({flushPending:false});
 });
 await test('Autosave hết giờ nhận được lựa chọn bản máy chủ đã chấm dù điểm còn ẩn',async()=>{
  const f=fixture(T0+3*60*60*1000);f.clock(T0+1000);const savedState=f.service.save(f.token,f.started.draft!.attemptId,f.answers);

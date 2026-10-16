@@ -6,7 +6,8 @@ import type {Choice} from './assessment';
 import type {PracticeAttemptProps} from './attempt-types';
 import type {PracticeAttemptState} from './usePracticeAttempt';
 import MtmSourceQuestion,{roomSourceDisplay} from './MtmSourceQuestion';
-import {questionLabel,shortAnswerStatus,shortFormatMessage,shortInterpretationMessage,scoredQuestionCount} from './attempt-ui';
+import {questionLabel,shortAnswerStatus,shortFormatMessage,shortInterpretationMessage,shortHelpMessage,shortHasAmbiguousSeparator,scoredQuestionCount} from './attempt-ui';
+import {questionShortFormat} from './short-format';
 import {MAX_SHORT_LENGTH} from './store';
 import {localStore} from './local-store';
 import {readAux,writeAux,roomShortcut,warningBand} from './room-aux';
@@ -63,6 +64,7 @@ export default function FocusRoom({props,state,onExit}:{props:PracticeAttemptPro
   const label=questionLabel(exam,activeQuestion);
   const questionReady=pdfReady&&!state.failedQuestions?.has(q.id);
   const answer=draft!.answers[q.id],tfAnswers=Array.isArray(answer)?answer:[null,null,null,null];
+  const shortFormat=questionShortFormat(exam,q);
   const sourcePage=q.sourceContent?.questions[0]?.sourcePage??Number(q.sourceRef.match(/trang\s+(\d+)/i)?.[1]);
   const questionPage=exam.sourcePdf?.questionPages.includes(sourcePage)?sourcePage:undefined;
   const fullTitle=titleText(displayTitle??exam.title);
@@ -70,7 +72,7 @@ export default function FocusRoom({props,state,onExit}:{props:PracticeAttemptPro
   const titleSubtitle=titleParts.flatMap(part=>part.match(/^(Chương[^:]*|Bài\s+\d+)/i)?.[0]??[]).join(' · ');
   const shortTitle=titleParts.filter(part=>!/^Chương/i.test(part)).map(part=>part.replace(/^Bài\s+\d+\s*:\s*/i,'')).join(' · ')||fullTitle;
   const inlineChoices=q.kind==='mc'&&(!!roomSourceDisplay(q)?.choices?.length||!!questionReader&&!q.sourceContent);
-  const answerStatus=q.kind==='mc'?(answer?`Đã chọn ${answer}`:'Chưa trả lời'):q.kind==='tf'?`${tfAnswers.filter(v=>typeof v==='boolean').length}/4 ý đã chọn`:shortAnswerStatus(q.mode,answer)==='invalid'?'Sai định dạng':typeof answer==='string'&&answer.trim()?`Đã nhập ${answer}`:'Chưa trả lời';
+  const answerStatus=q.kind==='mc'?(answer?`Đã chọn ${answer}`:'Chưa trả lời'):q.kind==='tf'?`${tfAnswers.filter(v=>typeof v==='boolean').length}/4 ý đã chọn`:shortAnswerStatus(q.mode,answer,shortFormat)==='invalid'?'Sai định dạng':typeof answer==='string'&&answer.trim()?`Đã nhập ${answer}`:'Chưa trả lời';
   const saveLabel=props.isHomework?(props.saveStatus??'Đang giữ trên trang'):(unsaved?'Chưa lưu bài':'Đã lưu');
   const saveAction=!!(props.onRetrySave||props.onAcceptClosed);
   const showSaveStatus=saveAction||props.savePending;
@@ -97,7 +99,7 @@ export default function FocusRoom({props,state,onExit}:{props:PracticeAttemptPro
         {q.kind==='self'&&<p>Tự làm, xem lời giải sau khi nộp. Không tính điểm.</p>}
         {q.kind==='mc'&&!inlineChoices&&<div className={`fr-quick-mc${!q.sourceContent&&!exam.sourcePdf?' fr-text-choices':''}`}>{(['A','B','C','D'] as Choice[]).map((choice,i)=><button key={choice} aria-label={!q.sourceContent&&!exam.sourcePdf&&q.choices[i]!==choice?undefined:`Chọn ${choice}`} aria-pressed={answer===choice} onClick={()=>changeAnswer(q.id,answer===choice?null:choice)}><span className="fr-sr-only">Chọn </span><span className="fr-choice-letter">{choice}</span>{!q.sourceContent&&!exam.sourcePdf&&q.kind==='mc'&&q.choices[i]!==choice&&<span>{props.renderText?props.renderText(q.choices[i]):q.choices[i]}</span>}<span className="fr-choice-tick" aria-hidden="true">✓</span></button>)}</div>}
         {q.kind==='tf'&&<div className="fr-quick-tf">{['a','b','c','d'].map((letter,i)=><div key={letter} role="group" aria-label={`Ý ${letter}`}><span>{letter})</span>{q.kind==='tf'&&q.statements?.[i]&&<p>{props.renderText?props.renderText(q.statements[i]):q.statements[i]}</p>}{[true,false].map(value=><button key={String(value)} aria-label={`Ý ${letter}: ${value?'Đúng':'Sai'}`} aria-pressed={tfAnswers[i]===value} onClick={()=>{const next=[...tfAnswers] as (boolean|null)[];next[i]=next[i]===value?null:value;changeAnswer(q.id,next);}}>{value?'Đúng':'Sai'}</button>)}</div>)}</div>}
-        {q.kind==='short'&&<><label htmlFor="fr-quick-short">Đáp án</label><input id="fr-quick-short" className="ep-short" type="text" inputMode={q.kind==='short'&&q.mode==='numeric'?'decimal':'text'} maxLength={MAX_SHORT_LENGTH} autoComplete="off" spellCheck={false} value={typeof answer==='string'?answer:''} aria-invalid={shortAnswerStatus(q.mode,answer)==='invalid'||undefined} aria-describedby="fr-quick-format fr-quick-interpretation fr-quick-help" onChange={event=>changeAnswer(q.id,event.target.value)}/><div className="ep-short-feedback" aria-live="polite" aria-atomic="true"><small id="fr-quick-interpretation" className={`ep-short-interpretation${typeof answer==='string'&&/^[+-]?\d+[.,]\d{3}$/.test(answer.trim())?' is-ambiguous':''}`}>{shortInterpretationMessage(q.mode,answer)}</small><small id="fr-quick-format" className="ep-format-error">{shortAnswerStatus(q.mode,answer)==='invalid'?shortFormatMessage(q.mode):''}</small></div><small id="fr-quick-help">{q.mode==='numeric'?'Nhập số, dùng dấu phẩy hoặc dấu chấm.':q.mode==='rational'?'Nhập số hoặc phân số, ví dụ -3/4.':'Nhập chính xác, phân biệt chữ hoa/thường.'}</small></>}
+        {q.kind==='short'&&<><label htmlFor="fr-quick-short">Đáp án</label><input id="fr-quick-short" className="ep-short" type="text" inputMode="text" maxLength={MAX_SHORT_LENGTH} autoComplete="off" spellCheck={false} value={typeof answer==='string'?answer:''} aria-invalid={shortAnswerStatus(q.mode,answer,shortFormat)==='invalid'||undefined} aria-describedby="fr-quick-format fr-quick-interpretation fr-quick-help" onChange={event=>changeAnswer(q.id,event.target.value)}/><div className="ep-short-feedback"><small id="fr-quick-interpretation" className={`ep-short-interpretation${shortHasAmbiguousSeparator(q.mode,answer,shortFormat)?' is-ambiguous':''}`}>{shortInterpretationMessage(q.mode,answer,shortFormat)}</small><small id="fr-quick-format" className="ep-format-error" aria-live="polite">{shortAnswerStatus(q.mode,answer,shortFormat)==='invalid'?shortFormatMessage(q.mode,shortFormat):''}</small></div><small id="fr-quick-help">{shortHelpMessage(q.mode,shortFormat)}</small></>}
       </fieldset>
     </section>}
 <p className="fr-source-credit">MTM sưu tầm và biên soạn</p></RoomAnswerContext.Provider><nav className="fr-navigation" aria-label="Điều hướng câu"><button aria-label="Câu trước" disabled={activeQuestion===0} onClick={()=>go(activeQuestion-1)}>← Câu trước</button><button aria-label="Câu sau" disabled={activeQuestion===exam.questions.length-1} onClick={()=>go(activeQuestion+1)}>Câu tiếp →</button><span>{answerStatus} · {saveLabel}</span></nav>

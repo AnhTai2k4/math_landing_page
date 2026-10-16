@@ -58,12 +58,12 @@ try{
       for(const [render,inputId,messageId] of [[()=>FocusRoom({props,state,onExit(){}}),'fr-quick-short','fr-quick-interpretation'],[()=>AnswerSheet({props,state}),`ep-short-${index}`,`ep-interpretation-${index}`]] as const){
         const tree=runtime.draw(render),input=find(tree,n=>n.props?.id===inputId),message=find(tree,n=>n.props?.id===messageId);
         const feedback=find(tree,n=>n.props?.className==='ep-short-feedback');
-        assert.equal(input.props.value,value);assert.ok(input.props['aria-describedby'].split(' ').includes(messageId));assert.equal(feedback.props['aria-live'],'polite');assert.equal(feedback.props['aria-atomic'],'true');assert.equal(all(feedback,n=>n.props?.['aria-live']).length,1);assert.equal(message.props['aria-live'],undefined);assert.match(message.props.className,/ep-short-interpretation is-ambiguous/);assert.equal(text(message),shortInterpretationMessage('numeric',value));
+        assert.equal(input.props.value,value);assert.ok(input.props['aria-describedby'].split(' ').includes(messageId));assert.equal(feedback.props['aria-live'],undefined);assert.equal(feedback.props['aria-atomic'],undefined);assert.equal(find(feedback,n=>n.props?.className==='ep-format-error').props['aria-live'],'polite');assert.equal(input.props.inputMode,'text');assert.equal(all(feedback,n=>n.props?.['aria-live']).length,1);assert.equal(message.props['aria-live'],undefined);assert.match(message.props.className,/ep-short-interpretation is-ambiguous/);assert.equal(text(message),shortInterpretationMessage('numeric',value));
         input.props.onChange({target:{value}});assert.deepEqual(calls.pop(),[question.id,value]);assert.equal(draft.answers[question.id],value);
       }
     }
   });
-  test('Ô số Việt đúng không báo nhắc, sai định dạng vẫn đọc một vùng phản hồi',()=>{
+  test('Ô số Việt đúng không đọc lại diễn giải, sai định dạng chỉ có một vùng live lỗi',()=>{
     for(const value of ['1,5','1/2']){
       (draft.answers as Record<string,string>)[question.id]=value;
       for(const render of [()=>FocusRoom({props,state,onExit(){}}),()=>AnswerSheet({props,state})]){
@@ -73,6 +73,20 @@ try{
         if(value==='1,5'){assert.equal(text(feedback),'');assert.equal(input.props['aria-invalid'],undefined);}
         else{assert.match(text(feedback),/Chưa đúng định dạng/);assert.equal(input.props['aria-invalid'],true);}
       }
+    }
+  });
+  test('Gõ hợp lệ không đổi live, các phím sai liên tiếp giữ nguyên lời lỗi đến khi sửa đúng',()=>{
+    for(const render of [()=>FocusRoom({props,state,onExit(){}}),()=>AnswerSheet({props,state})]){
+      const runtime=new Runtime(),values=['1','12','1/','1/2','-2','-2,5'],messages:string[]=[];
+      for(const value of values){
+        (draft.answers as Record<string,string>)[question.id]=value;
+        const tree=runtime.draw(render),feedback=find(tree,n=>n.props?.className==='ep-short-feedback'),regions=all(feedback,n=>n.props?.['aria-live']);
+        assert.equal(regions.length,1);assert.equal(regions[0].props.className,'ep-format-error');
+        assert.equal(feedback.props['aria-live'],undefined);assert.equal(feedback.props['aria-atomic'],undefined);
+        messages.push(text(regions[0]));
+      }
+      assert.deepEqual(messages.slice(0,2),['','']);assert.match(messages[2],/Chưa đúng định dạng/);
+      assert.equal(messages[2],messages[3]);assert.deepEqual(messages.slice(4),['','']);
     }
   });
   test('Phiếu trả lời khóa đúng câu có ảnh lỗi, mở lại câu khác và không khóa nút nộp',()=>{

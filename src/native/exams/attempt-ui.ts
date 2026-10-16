@@ -1,30 +1,75 @@
 // Quy tắc hiển thị thuần cho màn làm bài (không React, không đọc/ghi bộ nhớ) để test được.
-// Không đổi luật chấm: dùng lại normalizedShort của assessment.ts đúng như resultFor.
+// Giữ parser cũ; định dạng MTM mới dùng trực tiếp normalizeMtmShort của bộ chấm.
 import {normalizedShort} from './assessment';
 import {isAnswered, type Answers} from './store';
 import type {PracticeExam, PracticeQuestion} from './data';
 import {examSections} from './flexible-profile';
+import {normalizeMtmShort} from './mtm-scoring';
+import {questionShortFormat,validPublicShortFormat,type PublicShortFormat} from './short-format';
 
 export type ShortStatus = 'empty' | 'valid' | 'invalid';
 
-/** Trạng thái ô trả lời ngắn. "invalid" khớp đúng trường hợp resultFor chấm 0 điểm
- * (mode numeric/rational mà normalizedShort trả null). Mode exact: có chữ là hợp lệ. */
-export function shortAnswerStatus(mode: string, value: unknown): ShortStatus {
+/** Trạng thái định dạng, không kiểm đúng/sai đáp án. MTM dùng đúng parser của engine;
+ * mode exact cũ giữ cách hiểu có chữ là hợp lệ. */
+export function shortAnswerStatus(mode: string, value: unknown, format?: PublicShortFormat): ShortStatus {
   if (typeof value !== 'string' || !value.trim()) return 'empty';
+  if (validPublicShortFormat(format, mode)) return normalizeMtmShort(value, format) === null ? 'invalid' : 'valid';
   if (mode === 'exact') return 'valid';
   return normalizedShort(mode, value) === null ? 'invalid' : 'valid';
 }
 
 /** Lời báo ngay dưới ô khi nhập sai định dạng; không lộ đáp án, không sửa hộ bài làm. */
-export function shortFormatMessage(mode: string): string {
+export function shortFormatMessage(mode: string, format?: PublicShortFormat): string {
+  if (validPublicShortFormat(format, mode)) return 'Chưa đúng định dạng. ' + shortHelpMessage(mode, format) + ' Câu trả lời vẫn được giữ để em sửa. Nếu nộp nguyên câu trả lời này, câu này được 0 điểm.';
   return mode === 'rational'
     ? 'Chưa đúng định dạng: chỉ nhận số nguyên, số thập phân hoặc phân số dạng a/b (ví dụ -3/4). Nếu nộp như vậy, câu này được 0 điểm.'
     : 'Chưa đúng định dạng: câu này chỉ nhận số thập phân, ví dụ 0,5 hoặc -2,75 (không nhận phân số như 1/2 hay biểu thức). Nếu nộp như vậy, câu này được 0 điểm.';
 }
 
+/** Yêu cầu nhập không chứa một giá trị đáp án cụ thể. */
+export function shortHelpMessage(mode: string, format?: PublicShortFormat): string {
+  if (validPublicShortFormat(format, mode)) return [
+    format.mode === 'exact' ? 'Nhập chính xác theo đề, có phân biệt chữ hoa và chữ thường.' :
+      format.mode === 'rational' ? 'Nhập số nguyên, số thập phân hoặc phân số dạng a/b.' :
+      format.decimalPlaces === 0 ? 'Nhập số nguyên, không có chữ số thập phân.' :
+      format.decimalPlaces !== undefined ? 'Nhập đúng ' + format.decimalPlaces + ' chữ số sau dấu thập phân, dùng dấu phẩy hoặc dấu chấm.' :
+      'Nhập số nguyên hoặc số thập phân bằng dấu phẩy hoặc dấu chấm.',
+    format.unit === undefined ? (format.mode === 'exact' ? '' : 'Không nhập đơn vị.') : 'Ghi đơn vị ' + format.unit + ' ở cuối, cách số hoặc nội dung bằng một khoảng trắng.',
+    format.whitespace === 'collapse' ? 'Các khoảng trắng liên tiếp được hiểu là một khoảng trắng.' : 'Khoảng trắng ở đầu và cuối được bỏ qua.',
+  ].filter(Boolean).join(' ');
+  return mode === 'numeric' ? 'Nhập số thập phân bằng dấu phẩy hoặc dấu chấm; không nhập biểu thức hoặc phân số.' :
+    mode === 'rational' ? 'Nhập số nguyên, số thập phân hoặc phân số, ví dụ -3/4; không nhập đơn vị hay biểu thức.' :
+    'Nhập câu trả lời chính xác theo yêu cầu đề (phân biệt chữ hoa/thường).';
+}
+
+/** Một dấu với đúng ba chữ số phía sau có thể bị nhầm với cách tách hàng nghìn. */
+export function shortHasAmbiguousSeparator(mode:string,value:unknown,format?:PublicShortFormat):boolean {
+  if((mode!=='numeric'&&mode!=='rational')||typeof value!=='string')return false;
+  let raw=value.trim();
+  if(validPublicShortFormat(format,mode)&&format.unit!==undefined&&raw.endsWith(format.unit))raw=raw.slice(0,-format.unit.length).trim();
+  return /^[+-]?\d+[.,]\d{3}$/.test(raw);
+}
+
 /** Explain the existing numeric parser without rewriting the response or key.
  * Keep decimal digits as text so long answers never pass through Number. */
-export function shortInterpretationMessage(mode:string,value:unknown):string {
+export function shortInterpretationMessage(mode:string,value:unknown,format?:PublicShortFormat):string {
+  if(validPublicShortFormat(format,mode)){
+    const normalized=normalizeMtmShort(value,format);
+    if(normalized===null||typeof value!=='string')return '';
+    let raw=value.trim();
+    if(format.whitespace==='collapse')raw=raw.replace(/\s+/gu,' ');
+    if(format.unit!==undefined)raw=raw.slice(0,-format.unit.length).trim();
+    let interpreted=format.mode==='rational'?normalized.replace(/\/1$/,''):normalized,clarification='';
+    if(format.mode==='decimal'){
+      const [whole,part='']=normalizedShort('numeric',raw)!.split('.');
+      const digits=format.decimalPlaces===undefined?part:part.padEnd(format.decimalPlaces,'0');
+      interpreted=whole+(digits?','+digits:'');
+      const canonical=whole+(part?','+part:'');
+      if(shortHasAmbiguousSeparator(mode,value,format)&&canonical!==interpreted)clarification=', tức '+canonical+(format.unit===undefined?'':' '+format.unit);
+    }
+    const separatorNote=format.mode!=='exact'&&(format.decimalPlaces===undefined||shortHasAmbiguousSeparator(mode,value,format))&&/[.,]/.test(raw)?' Dấu chấm và dấu phẩy là dấu thập phân, không tách hàng nghìn.':'';
+    return `Máy đang hiểu là ${interpreted}${format.unit===undefined?'':' '+format.unit}${clarification}.${separatorNote}`;
+  }
   if((mode!=='numeric'&&mode!=='rational')||typeof value!=='string'||!value.trim())return '';
   const normalized=normalizedShort(mode,value);
   if(normalized===null)return '';
@@ -43,7 +88,7 @@ export type AnswerState = 'answered' | 'blank' | 'partial' | 'invalid' | 'self';
 export function answerState(exam: PracticeExam, q: PracticeQuestion, answers: Answers): AnswerState {
   if (q.kind === 'self') return 'self';
   if (q.kind === 'short') {
-    const status = shortAnswerStatus(q.mode, answers[q.id]);
+    const status = shortAnswerStatus(q.mode, answers[q.id], questionShortFormat(exam,q));
     return status === 'valid' ? 'answered' : status === 'invalid' ? 'invalid' : 'blank';
   }
   if (isAnswered(exam, q.id, answers)) return 'answered';

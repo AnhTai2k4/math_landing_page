@@ -5,6 +5,7 @@ import {FLEX_RUBRIC,validatePracticeProfile,type ExamSection} from './flexible-p
 import {MTM_PROFILE} from './mtm-profile';
 import {MTM_SCORING_VERSION} from './mtm-scoring';
 import {isMtmQuestionPoints} from './mtm-assessment';
+import {validPublicShortFormat,type PublicShortFormat} from './short-format';
 
 export const GRADES = [10, 11, 12] as const;
 export const PERIODS = ['GK1', 'CK1', 'GK2', 'CK2'] as const;
@@ -25,6 +26,8 @@ export type PracticeQuestion = Exclude<Question, {kind: 'essay'}> & {
   sourceContent?:{questions:SourceSegment[];solutions?:SourceSegment[]};
   correctionNote?:string;
   convertedFrom?:'essay';
+  /** Public input requirements only. No answer key or verification evidence. */
+  shortFormat?:PublicShortFormat;
 
 };
 export interface PracticeExam extends Assessment {
@@ -107,7 +110,8 @@ export function validateQuestionOnlyPracticeExam(input: unknown): Validation {
     if(!boundedText(q.id,120)||q.id!==q.id.trim()||ids.has(q.id))errors.push('Invalid or duplicate question id');else ids.add(q.id);
     if(!boundedText(q.sourceRef,20000))errors.push('Question source required');
     if(!units(q.maxMillipoints)||(q.kind==='self'?q.maxMillipoints!==0:q.maxMillipoints===0))errors.push('Invalid question points');else total+=q.maxMillipoints as number;
-    if('answer' in q||'acceptedAnswers' in q||'solution' in q)errors.push('Private answer fields must be absent');
+    if('answer' in q||'acceptedAnswers' in q||'solution' in q||'shortRule' in q)errors.push('Private answer fields must be absent');
+    if('shortFormat' in q)errors.push('Public short format requires the explicit MTM rubric');
     if(q.kind==='mc'){
       if(!Array.isArray(q.choices)||q.choices.length!==4||!Array.from(q.choices).every(c=>boundedText(c,20000))||new Set(q.choices).size!==4)errors.push('Four distinct choices required');
     }else if(q.kind==='tf'){
@@ -161,6 +165,7 @@ function validateEqualQuestionPublicExam(input:Record<string,unknown>):Validatio
     if(!isMtmQuestionPoints(q.maxPoints,input.questions.length))errors.push('Question maxPoints must equal exact 10/N');
     if(q.maxMillipoints!==milli)errors.push('Question millipoints must derive from 10000/N');
     if('answer' in q||'acceptedAnswers' in q||'solution' in q||'shortRule' in q)errors.push('Private answer fields must be absent');
+    if((q.kind==='short'||'shortFormat' in q)&&(q.kind!=='short'||!validPublicShortFormat(q.shortFormat,String(q.mode))))errors.push('Invalid public short input format');
     if(q.kind==='mc'){
       if(!Array.isArray(q.choices)||q.choices.length!==4||!Array.from(q.choices).every(c=>boundedText(c,20000))||new Set(q.choices).size!==4)errors.push('Four distinct choices required');
     }else if(q.kind==='tf'){

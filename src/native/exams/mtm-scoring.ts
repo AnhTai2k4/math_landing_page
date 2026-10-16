@@ -108,7 +108,7 @@ function decimal(value: string): Fraction | null {
   const [whole, part = ''] = value.replace(/^[+-]/, '').replace(',', '.').split('.');
   return mtmFraction(BigInt(whole + part) * (value.startsWith('-') ? -1n : 1n), 10n ** BigInt(part.length));
 }
-export function normalizeMtmShort(value: unknown, rule: MtmShortRule): string | null {
+export function normalizeMtmShort(value: unknown, rule: Pick<MtmShortRule, 'mode' | 'whitespace' | 'unit' | 'decimalPlaces'>): string | null {
   if (typeof value !== 'string' || value.length > 1024) return null;
   let raw = value.trim();
   if (rule.whitespace === 'collapse') raw = raw.replace(/\s+/gu, ' ');
