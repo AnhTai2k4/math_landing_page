@@ -78,11 +78,12 @@ test('Tiện ích chỉ tạo nội dung sau mở, đóng mở giữ cùng phiê
   all(instance.render(),n=>n.type==='button')[0].props.onClick();assert.equal(closed,1);m.unmount();
 });
 
-test('Năm tiện ích có boundary độc lập theo khối/chương; danh sách bài nằm ngoài wrapper',()=>{
+test('Sáu tiện ích có boundary độc lập theo khối/chương; danh sách bài nằm ngoài wrapper',()=>{
   const source=readFileSync(join(root,'src/native/chapters/PracticeLibrary.tsx'),'utf8');
-  assert.equal((source.match(/<PracticeTool key=/g)||[]).length,5);assert.ok(source.includes("const LineGraphGame=lazy(()=>import('./LineGraphGame'))"));
+  assert.equal((source.match(/<PracticeTool key=/g)||[]).length,6);assert.ok(source.includes("const LineGraphGame=lazy(()=>import('./LineGraphGame'))"));
   assert.ok(source.includes("const ErrorHunt=lazy(()=>import('./ErrorHunt'))"));
-  for(const kind of ['recall','mental','formula','graph','error'])assert.ok(source.includes("key={'"+kind+":'+selected.id+':'+chapter.id}"));
+  assert.ok(source.includes("const StepSolver=lazy(()=>import('./StepSolver'))"));
+  for(const kind of ['recall','mental','formula','graph','error','solver'])assert.ok(source.includes("key={'"+kind+":'+selected.id+':'+chapter.id}"));
   assert.ok(source.indexOf('<ChapterShelf')>source.lastIndexOf('</PracticeTool>'));assert.doesNotMatch(source,/setRecallReady|setFormulaReady|setMentalReady/);
 });
 
