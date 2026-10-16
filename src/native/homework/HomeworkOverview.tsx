@@ -4,6 +4,8 @@ import {homeworkTitle,homeworkLessonCaption,displayClassName} from './presentati
 import ExamReview from '../exams/ExamReview';
 import {LessonVideo} from './LessonCards';
 import HomeworkRetry from './HomeworkRetry';
+import {reviewRows} from '../exams/review';
+import {hasReadableTfStatements} from '../exams/question-statements';
 
 export const homeworkDate=(at:number)=>new Date(at).toLocaleString('vi-VN',{timeZone:'Asia/Ho_Chi_Minh',hour:'2-digit',minute:'2-digit',weekday:'long',day:'2-digit',month:'2-digit'});
 export function HomeworkDeadline({lesson,dueAt}:{lesson?:HomeworkLesson;dueAt:number|null}){
@@ -17,6 +19,8 @@ export default function HomeworkOverview({state,busy,onStart}:{state:HomeworkSta
   const best=state.bestScore===null?'Chưa có':state.bestScore.toLocaleString('vi-VN')+'/10';
   const remaining=Math.max(0,state.maxAttempts-state.attemptsUsed);
   const monthly=state.kind==='kiem-tra-thang',canReview=state.solutionsAvailable!==false;
+  const unavailableRetry=canReview&&state.exam&&state.draft?.submittedAt!=null&&state.draft.examId===state.exam.id&&state.draft.examVersionHash===state.exam.versionHash&&state.receipts.some(r=>r.attemptId===state.draft!.attemptId&&Number.isFinite(r.score))
+    ?reviewRows(state.exam,state.draft).filter(({q,status})=>q.kind==='tf'&&(status==='wrong'||status==='partial')&&!hasReadableTfStatements(q)).length:0;
   return <div id="btvn-summary" className="btvn-detail">
     <div className="btvn-heading"><p className="btvn-eyebrow">{displayClassName(state)} · {current?(monthly?'KẾT QUẢ KIỂM TRA THÁNG':'KẾT QUẢ BTVN'):'CHUẨN BỊ LÀM BÀI'}</p><h1>{homeworkTitle(state)}</h1>{homeworkLessonCaption(state)&&<p className="btvn-sub">{homeworkLessonCaption(state)}</p>}</div>
     {current&&<div className="btvn-result-meta"><span>Bài đã nộp và lưu kết quả.</span><strong className="btvn-chip success">Điểm cao nhất: {best}</strong></div>}
@@ -36,6 +40,7 @@ export default function HomeworkOverview({state,busy,onStart}:{state:HomeworkSta
       </aside>
     </div>
     {state.assetWarnings?.map(warning=><p key={warning} role="status">{warning}</p>)}
+    {unavailableRetry>0&&<p className="btvn-footnote">Có {unavailableRetry} câu Đúng/Sai chưa đủ điểm chưa đưa vào phần ôn vì màn này thiếu văn bản các mệnh đề. Em xem lại đề gốc và lời giải để đối chiếu.</p>}
     <HomeworkRetry state={state}/>
     {video&&lesson&&<div className="btvn-sheet"><LessonVideo lesson={lesson} demo={state.demo}/></div>}
     {solutions&&canReview&&state.exam&&state.draft?.submittedAt!=null&&<div id="btvn-solutions" className="btvn-sheet"><ExamReview exam={state.exam} draft={state.draft} showSummary={false}/></div>}

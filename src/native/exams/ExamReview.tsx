@@ -8,6 +8,7 @@ import MtmSourceContent from './MtmSourceContent';
 import MtmSourceQuestion from './MtmSourceQuestion';
 import {displayAnswer,formatPoints,reviewRows,statementLetters,STATUS_LABELS} from './review';
 import {displayKeyAnswer,questionLabel} from './attempt-ui';
+import {hasReadableTfStatements} from './question-statements';
 const DetailedSolution=lazy(()=>import('./DetailedSolution'));
 const SolutionPdf=lazy(()=>import('../admin/SolutionPdf'));
 
@@ -34,7 +35,7 @@ export default function ExamReview({exam,draft,initialQuestionId,renderText,rend
       <button type="button" aria-pressed={filter==='unanswered'} onClick={()=>setFilter('unanswered')}>Câu bỏ trống ({blank})</button>
       <button type="button" disabled={!visible.length} onClick={()=>setExpanded(previous=>{const next=new Set(previous);for(const r of visible)allOpen?next.delete(r.q.id):next.add(r.q.id);return next;})}>{allOpen?'Thu gọn lời giải':'Mở lời giải các câu đang xem'}</button>
     </div>
-    <p role="status">Đang xem {visible.length}/{rows.length} câu. Câu đúng/sai được đối chiếu từng ý; câu đúng một phần vẫn nằm trong mục chưa đủ điểm.</p>
+    <p role="status">Đang xem {visible.length}/{rows.length} câu. Câu đúng/sai có đủ văn bản được đối chiếu từng ý; câu đúng một phần vẫn nằm trong mục chưa đủ điểm.</p>
     {!visible.length&&<p>Không có câu trong mục này.</p>}
     {visible.map(({q,index,answer,earned,status,invalidNumeric})=><section className="ep-question ep-card" key={q.id} id={`${instance}-card-${index}`} tabIndex={-1} aria-labelledby={`${instance}-q-${index}`}>
       <h3 id={`${instance}-q-${index}`}>{questionLabel(exam,index).full} <small>({formatPoints(displayQuestionPoints(exam,q.maxMillipoints))} điểm)</small></h3>
@@ -44,10 +45,10 @@ export default function ExamReview({exam,draft,initialQuestionId,renderText,rend
       <div className="ep-review">
         <p><strong>Bài làm:</strong> {displayAnswer(answer)}</p>
         <p><strong>Đáp án:</strong> {q.kind==='mc'?q.answer:q.kind==='tf'?q.answer.map((v,i)=>`${statementLetters[i]}) ${v?'Đúng':'Sai'}`).join('; '):q.kind==='self'?'Xem lời giải để tự kiểm tra':q.acceptedAnswers.map(value=>displayKeyAnswer(q.mode,value)).join(' hoặc ')}</p>
-        {q.kind==='tf'&&<ul className="ep-statement-review">{q.answer.map((expected,i)=>{
+        {q.kind==='tf'&&(hasReadableTfStatements(q)?<ul className="ep-statement-review">{q.answer.map((expected,i)=>{
           const value=Array.isArray(answer)?answer[i]:null;
           return <li key={i}><strong>Ý {statementLetters[i]}:</strong> {value===null?'Chưa trả lời':value===expected?'Khớp đáp án':'Chưa khớp đáp án'}{q.statements?.[i]&&<p>{renderText?renderText(q.statements[i]):q.statements[i]}</p>}</li>;
-        })}</ul>}
+        })}</ul>:<p className="ep-statement-unavailable">{exam.sourcePdf?'Các mệnh đề nằm trong PDF đề. Màn này không mở PDF; em xem lại đề gốc để đối chiếu từng ý.':'Màn này chưa có đủ văn bản bốn mệnh đề. Em xem lại các ý trong đề gốc để đối chiếu.'}</p>)}
         {invalidNumeric&&<p>Câu trả lời không đúng định dạng số: 0 điểm.</p>}
         <p><strong>Điểm câu này:</strong> {status==='self'?'Không tính điểm':status==='unscored'?'Chưa tính được':formatPoints(displayQuestionPoints(exam,earned))} / {formatPoints(displayQuestionPoints(exam,q.maxMillipoints))}</p>
       </div>

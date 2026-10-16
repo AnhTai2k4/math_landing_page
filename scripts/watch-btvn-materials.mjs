@@ -7,8 +7,11 @@ import {resolve} from 'node:path';
 const args=process.argv.slice(2),live=args[0]==='--sheet';if(live)args.shift();
 const [source,checkpoint,output]=args;
 if(!source||!checkpoint||!output)throw new Error('Cần snapshot học liệu, checkpoint và output');
-if(new Set([source,checkpoint,output].map(p=>resolve(p))).size!==3)throw new Error('Ba đường dẫn phải khác nhau');
+const temporaryCheckpoint=checkpoint+'.tmp';
+const pathKey=p=>process.platform==='win32'?resolve(p).toLowerCase():resolve(p);
+if(new Set([source,checkpoint,output,temporaryCheckpoint].map(pathKey)).size!==4)throw new Error('Snapshot, checkpoint, output và tệp tạm checkpoint phải khác nhau');
 if(existsSync(output))throw new Error('Output đã tồn tại; chọn file mới để giữ việc cũ');
+if(existsSync(temporaryCheckpoint))throw new Error('Tệp tạm checkpoint đã tồn tại; cần đối soát trước khi chạy tiếp');
 const {outputFiles}=await build({entryPoints:['server/btvn/material-watch.ts'],bundle:true,write:false,platform:'node',format:'esm'});
 const {detectHomework}=await import('data:text/javascript;base64,'+Buffer.from(outputFiles[0].text).toString('base64'));
 const input=JSON.parse(readFileSync(source,'utf8'));
@@ -19,12 +22,13 @@ if(live){
   const {readMaterialGrid}=await import('data:text/javascript;base64,'+Buffer.from(reader.outputFiles[0].text).toString('base64'));
   input.values=await readMaterialGrid(input.config.sheetId,input.config.tab,process.env.MTM_MATERIALS_ACCESS_TOKEN??'',fetch,input.config.range??'A:K');
 }
-const seen=existsSync(checkpoint)?JSON.parse(readFileSync(checkpoint,'utf8')).seen:[];
+const previous=existsSync(checkpoint)?JSON.parse(readFileSync(checkpoint,'utf8')):{seen:[],seenSources:[]};
 const [cells,...rows]=input.values;
 const headers=cells.map(c=>typeof c==='string'?c:c.text);
-const result=detectHomework(headers,rows,input.config,seen);
+const result=detectHomework(headers,rows,input.config,previous.seen,Date.now(),previous.seenSources??[]);
 // Output giữ cả jobs + seen, là receipt phục hồi nếu cập nhật checkpoint bị gián đoạn.
+if(existsSync(temporaryCheckpoint))throw new Error('Tệp tạm checkpoint đã tồn tại; cần đối soát trước khi chạy tiếp');
 writeFileSync(output,JSON.stringify(result,null,2)+'\n',{encoding:'utf8',flag:'wx'});
-writeFileSync(checkpoint+'.tmp',JSON.stringify({seen:result.seen,receipt:resolve(output)},null,2)+'\n','utf8');
-renameSync(checkpoint+'.tmp',checkpoint);
+writeFileSync(temporaryCheckpoint,JSON.stringify({seen:result.seen,seenSources:result.seenSources,receipt:resolve(output)},null,2)+'\n',{encoding:'utf8',flag:'wx'});
+renameSync(temporaryCheckpoint,checkpoint);
 console.log(`Đã tạo ${result.jobs.length} việc nháp; ${result.pending.length} dòng chờ xác minh. Chưa dựng/đăng.`);

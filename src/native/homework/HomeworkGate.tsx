@@ -21,7 +21,8 @@ export default function HomeworkGate({studentCode,identity,busy,classNames=[],cl
   </section><div className="btvn-gates" aria-label="Vào bài của lớp">
     <form className="btvn-gate mig-panel" aria-labelledby="btvn-code-title" onSubmit={event=>{event.preventDefault();if(!busy)onLogin({studentCode});}}>
       <h2 id="btvn-code-title">Có mã</h2>
-      <label>Mã học sinh<input type="password" autoComplete="off" maxLength={160} required value={studentCode} onChange={event=>onCode(event.target.value)}/></label>
+      <label>Mã học sinh<input type="password" autoComplete="off" maxLength={160} required aria-describedby="btvn-code-help" value={studentCode} onChange={event=>onCode(event.target.value)}/></label>
+      <p id="btvn-code-help">Nhập mã học sinh do MTM cấp riêng cho em.</p>
       <button type="submit" className="ep-primary" disabled={busy}>{busy?'Đang kiểm tra…':'Vào bài'}</button>
     </form>
     <form className="btvn-gate mig-panel" aria-labelledby="btvn-identity-title" onSubmit={event=>{event.preventDefault();if(!busy&&!classesLoading&&classNames.includes(identity.className))onLogin({...identity});}}>

@@ -4,6 +4,8 @@ import {join} from 'node:path';
 import type {PracticeExam} from '../src/native/exams/data';
 import type {HomeworkState} from '../src/native/homework/btvn-contract';
 import type {Draft} from '../src/native/exams/store';
+import {validatePracticeExam} from '../src/native/exams/data';
+import {hasReadableTfStatements} from '../src/native/exams/question-statements';
 
 const root=process.env.MTM_ROOT!,require=createRequire(join(root,'package.json'));
 const {buildSync}=require('esbuild'),React=require('react'),{renderToStaticMarkup}=require('react-dom/server');
@@ -40,6 +42,29 @@ assert.deepEqual(homeworkRetryQuestions({...state,receipts:[{...state.receipts[0
 assert.deepEqual(homeworkRetryQuestions({...state,exam:{...exam,questions:exam.questions.map(q=>({...q,solution:undefined}))}}),[]);
 assert.deepEqual(homeworkRetryQuestions({...state,draft:{...draft,answers:{'fake-mc':'C','fake-tf':[true,true,false,true],'fake-short':'1/2'}}}),[]);
 assert.deepEqual(homeworkRetryQuestions({...state,draft:{...draft,answers:{}}}),[],'Không coi bỏ trống là một câu đã làm sai');
+// PDF đề đầy đủ ở màn kết quả không có nghĩa phần ôn nhúng được các mệnh đề.
+for(const statements of [undefined,[],['','','',''],['Ý a','Ý b','Ý c'],['Ý a','Ý b','Ý c',' \t '],new Array(4)]){
+  const pdfOnly={...exam,sourcePdf:{url:'https://example.invalid/fake.pdf',verified:true,sha256:'e'.repeat(64),bytes:100,totalPages:1,questionPages:[1]},questions:exam.questions.map(q=>q.kind==='tf'?{...q,statements}:q)};
+  if(statements===undefined)assert.equal(validatePracticeExam(pdfOnly).valid,true,'Đề PDF đầy đủ hợp lệ nhưng phần ôn phải kiểm riêng nội dung hiển thị');
+  const available=homeworkRetryQuestions({...state,exam:pdfOnly}).map((r:any)=>r.question.id);
+  assert.ok(!available.includes('fake-tf'),'Không mời ôn Đ/S khi chỉ có stem và không hiển thị được bốn mệnh đề');
+  if(statements===undefined)assert.deepEqual(available,['fake-mc'],'Giữ câu trắc nghiệm hợp lệ trong cùng đề PDF');
+}
+const cropTf={...exam,questions:exam.questions.map(q=>q.kind==='tf'?{...q,statements:undefined,sourceContent:{questions:[{path:'fake-tf.png',sha256:'f'.repeat(64),sourcePage:1,width:600,height:400}],solutions:[{path:'fake-solution.png',sha256:'e'.repeat(64),sourcePage:2,width:600,height:400}]}}:q)};
+assert.equal(validatePracticeExam(cropTf).valid,true);
+assert.deepEqual(homeworkRetryQuestions({...state,exam:cropTf}).map((r:any)=>r.question.id),['fake-mc'],'Ảnh nguồn không thay thế văn bản của bốn mệnh đề để ôn');
+const unreadableCropStates=[undefined,['','','',''],['Ý a','Ý b','Ý c',' \t ']].flatMap(statements=>[false,true].map(privateUnavailable=>({...state,exam:{...cropTf,questions:cropTf.questions.map(q=>q.kind==='tf'?{...q,statements,sourceContent:{...q.sourceContent!,questions:q.sourceContent!.questions.map(segment=>({...segment,privateUnavailable}))}}:q)}})));
+for(const input of unreadableCropStates){
+  const tf=input.exam.questions[1];
+  assert.equal(hasReadableTfStatements(tf),false,'Ảnh có hoặc không tải được đều không thay mệnh đề thiếu/rỗng');
+  const available=homeworkRetryQuestions(input).map((r:any)=>r.question.id);
+  assert.ok(!available.includes('fake-tf'),'Không mời ôn khi thiếu văn bản, kể cả ảnh nguồn hợp lệ');
+  if(tf.statements===undefined)assert.deepEqual(available,['fake-mc'],'Giữ câu MC khi các câu còn lại qua validator');
+}
+assert.deepEqual(homeworkRetryQuestions({...state,exam:{...cropTf,questions:cropTf.questions.map(q=>q.kind==='tf'?{...q,statements:exam.questions[1].kind==='tf'?exam.questions[1].statements:undefined}:q)}}).map((r:any)=>r.question.id),['fake-mc','fake-tf'],'Giữ câu có đủ bốn văn bản ngay cả khi kèm ảnh minh họa');
+const malformedSource={...state,exam:{...exam,questions:exam.questions.map(q=>({...q,prompt:undefined,text:undefined,sourceContent:{} as any}))}};
+assert.doesNotThrow(()=>homeworkRetryQuestions(malformedSource),'sourceContent thiếu questions không làm đổ màn điểm');
+assert.deepEqual(homeworkRetryQuestions(malformedSource),[],'Bỏ câu thiếu cả văn bản lẫn mảng ảnh nguồn');
 assert.equal(sourceRetrySteps('Chỉ có đáp án C.').length,0);
 assert.equal(sourceRetrySteps('Bước 1: Chỉ một bước.').length,0);
 assert.deepEqual(sourceRetrySteps(exam.questions[0].solution),exam.questions[0].solution!.split('\n'));
@@ -65,6 +90,15 @@ const button=(tree:any,label:string)=>find(tree,n=>n.type==='button'&&n.props.ch
 const original=JSON.stringify(state),originalFetch=globalThis.fetch;
 globalThis.fetch=()=>{throw Error('Phần ôn cục bộ không được gửi yêu cầu mạng');};
 try{
+  for(const input of unreadableCropStates){
+    values=[{key:input.draft!.attemptId+':'+input.exam!.versionHash,selected:'fake-tf',open:true,correct:[]}];cursor=0;
+    const html=renderToStaticMarkup(Retry({state:input}));
+    assert.ok(!html.includes('II · Đúng sai · Câu 1'),'Pill câu TF không đọc được phải biến mất khỏi bản dựng');
+    assert.ok(!html.includes('trong đề ở trên'),'Không hướng dẫn đọc PDF không được nhúng trong phần ôn');
+    if(input.exam.questions[1].statements===undefined)assert.match(html,/I · Trắc nghiệm · Câu 1/,'Giữ câu MC hợp lệ khi câu TF bị bỏ qua');
+  }
+  values=[{key:state.draft!.attemptId+':'+exam.versionHash,selected:'fake-mc',open:true,correct:[]}];cursor=0;
+  assert.doesNotThrow(()=>renderToStaticMarkup(Retry({state:{...state,exam:{...exam,questions:exam.questions.map(q=>({...q,sourceContent:{} as any}))}}})), 'Nguồn lệch dạng không làm đổ bản dựng khi câu còn đủ văn bản');
   const parentValues:any[]=[];
   function drawParent(input=state){values=parentValues;cursor=0;return Retry({state:input});}
   let tree=drawParent();
@@ -74,14 +108,21 @@ try{
   const exerciseValues:any[]=[];
   const draw=()=>{values=exerciseValues;cursor=0;return exerciseNode.type(exerciseNode.props);};
   let exercise=draw();
+  values=[];cursor=0;
+  const malformedSourceExercise=exerciseNode.type({...exerciseNode.props,item:{question:{...exam.questions[0],sourceContent:{}},index:0}});
+  assert.doesNotThrow(()=>renderToStaticMarkup(malformedSourceExercise),'Không render MtmSourceContent với mảng questions bị thiếu');
+  exercise=draw();
   assert.equal(find(exercise,n=>n.props?.role==='status'),null,'Không để thông báo kết quả rỗng khi chưa kiểm tra');
   const support=find(exercise,n=>n.props?.className==='btvn-retry-support');assert.ok(button(support,'Xem gợi ý bước 1'));assert.ok(button(support,'Xem lời giải đầy đủ của câu ôn'),'Gợi ý và lời giải cùng một nhóm hỗ trợ');
   find(exercise,n=>n.type==='input'&&n.props.value==='A').props.onChange();exercise=draw();
   find(exercise,n=>n.type==='form').props.onSubmit({preventDefault(){}});exercise=draw();assert.match(renderToStaticMarkup(exercise),/Chưa khớp đáp án/);
   find(exercise,n=>n.type==='input'&&n.props.value==='C').props.onChange();exercise=draw();assert.ok(!renderToStaticMarkup(exercise).includes('Chưa khớp đáp án'));
   find(exercise,n=>n.type==='form').props.onSubmit({preventDefault(){}});exercise=draw();assert.match(renderToStaticMarkup(exercise),/Em đã sửa được lỗi này/);assert.match(find(exercise,n=>n.props?.role==='status').props.className,/btvn-retry-success/);
-  assert.ok(find(drawParent(),n=>n.type==='button'&&n.props['aria-label']?.includes('Đã sửa đúng trong phiên ôn')),'Pill ghi nhận đã sửa đúng mà không ghi điểm/lượt');
-  button(exercise,'Xem gợi ý bước 1').props.onClick();exercise=draw();let html=renderToStaticMarkup(exercise);assert.match(html,/Trừ 1 ở hai vế/);assert.ok(!html.includes('Chia hai vế cho 2'));
+  const correctedPill=find(drawParent(),n=>n.type==='button'&&n.props['aria-label']?.includes('Đã sửa đúng trong phiên ôn'));
+  assert.ok(correctedPill,'Pill ghi nhận đã sửa đúng mà không ghi điểm/lượt');
+  assert.equal(correctedPill.props['aria-label'],'I · Trắc nghiệm · Câu 1 · Đã sửa đúng trong phiên ôn','Nhãn trợ năng giữ tên phần và trạng thái đầy đủ');
+  assert.equal(find(correctedPill,n=>n.props?.className==='btvn-retry-pill-compact').props.children,'I · Câu 1','Nhãn mobile gọn nhưng không lẫn Câu 1 ở hai phần');
+  button(exercise,'Xem gợi ý bước 1').props.onClick();exercise=draw();let html=renderToStaticMarkup(exercise);assert.match(html,/Trừ 1 ở hai vế/);assert.ok(!html.includes('Chia hai vế cho 2'));assert.ok(find(exercise,n=>n.props?.className==='btvn-retry-hints'),'Gợi ý có khung riêng để phân biệt với đề bài');
   button(exercise,'Xem gợi ý bước 2').props.onClick();exercise=draw();html=renderToStaticMarkup(exercise);assert.match(html,/Chia hai vế cho 2/);assert.equal(button(exercise,'Đã mở hết các bước nguồn').props.disabled,true);
   button(exercise,'Xem lời giải đầy đủ của câu ôn').props.onClick();exercise=draw();assert.equal(button(exercise,'Đóng lời giải câu ôn').props['aria-expanded'],true);
   const full=find(exercise,n=>n.props?.fallback===exam.questions[0].solution);assert.ok(full,'Đưa đúng lời giải gốc, đúng exam/version/question vào renderer');assert.equal(full.props.examId,exam.id);assert.equal(full.props.questionId,'fake-mc');assert.equal(full.props.versionHash,exam.versionHash);
@@ -89,7 +130,15 @@ try{
   tree=drawParent();assert.equal(find(tree,n=>n.type==='select'),null);const tfPill=find(tree,n=>n.type==='button'&&n.props.className?.includes('btvn-retry-pill')&&!n.props.className.includes('is-correct'));assert.equal(tfPill.props['aria-pressed'],false);tfPill.props.onClick();tree=drawParent();const selected=find(tree,n=>typeof n.type==='function'&&n.type.name==='RetryExercise');assert.equal(selected.props.item.question.id,'fake-tf');assert.notEqual(selected.key,exerciseNode.key,'Đổi câu phải tạo state ôn riêng');assert.equal(find(tree,n=>n.type==='button'&&n.props.className?.includes('btvn-retry-pill')&&!n.props.className.includes('is-correct')).props['aria-pressed'],true);
   const tfValues:any[]=[];
   const drawTf=()=>{values=tfValues;cursor=0;return selected.type(selected.props);};
-  let tfTree=drawTf();find(tfTree,n=>n.type==='form').props.onSubmit({preventDefault(){}});assert.match(renderToStaticMarkup(drawTf()),/Em trả lời đủ câu/);
+  let tfTree=drawTf();
+  for(let i=0;i<4;i++){
+    const group=find(tfTree,n=>n.type==='fieldset'&&n.props['aria-describedby']===`:retry-test:-statement-${i}`);
+    assert.ok(group,'Nhóm Đúng/Sai liên kết với văn bản mệnh đề');
+    assert.equal(find(group,n=>n.type==='legend').props.children.join(''),'Ý '+String.fromCharCode(97+i),'Legend ngắn, không nhét công thức dài');
+    assert.equal(find(group,n=>n.props?.id===`:retry-test:-statement-${i}`).props.children.props.text,exam.questions[1].kind==='tf'?exam.questions[1].statements![i]:undefined);
+  }
+  assert.ok(!renderToStaticMarkup(tfTree).includes('trong đề ở trên'));
+  find(tfTree,n=>n.type==='form').props.onSubmit({preventDefault(){}});assert.match(renderToStaticMarkup(drawTf()),/Em trả lời đủ câu/);
   for(const [i,value] of [true,true,false,true].entries()){
     tfTree=drawTf(); // Tìm theo tên input để không phụ thuộc vị trí các fieldset.
     const all:any[]=[];const collect=(node:any)=>{if(!node||typeof node!=='object')return;if(Array.isArray(node)){node.forEach(collect);return;}if(node.type==='input'&&node.props.name===`:retry-test:-tf-${i}`)all.push(node);collect(node.props?.children);};collect(tfTree);
