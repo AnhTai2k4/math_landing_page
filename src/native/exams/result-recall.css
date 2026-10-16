@@ -1,0 +1,17 @@
+.ep-recall{color:#213269;overflow-wrap:anywhere}
+.ep-recall .ep-recall-eyebrow{font-size:.8rem;font-weight:800;letter-spacing:.08em}
+.ep-recall .ep-recall-note,.ep-recall .ep-recall-source{font-size:.9rem;color:#4b5674}
+.ep-recall .ep-recall-limit{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:16px 0}
+.ep-recall select,.ep-recall button{min-height:48px;max-width:100%;font:inherit;border:1px solid #213269;border-radius:12px;padding:10px 16px;background:#fff;color:#213269}
+.ep-recall button{cursor:pointer;margin:8px 8px 8px 0;white-space:normal;text-align:left}
+.ep-recall button.ep-recall-primary{background:#ffcf24;color:#213269;font-weight:700}
+.ep-recall button:hover{background:#fff5c9}
+.ep-recall button:disabled{cursor:wait;opacity:.65}
+.ep-recall button:focus-visible,.ep-recall select:focus-visible,.ep-recall [tabindex="-1"]:focus{outline:3px solid #b38619;outline-offset:4px}
+.ep-recall [tabindex="-1"]{scroll-margin-top:110px;scroll-margin-bottom:24px}
+.ep-recall .ep-recall-card,.ep-recall .ep-recall-summary{margin-top:20px;padding-top:16px;border-top:1px solid #dce1ee}
+.ep-recall .ep-recall-solution{background:#f6f8fc;border:1px solid #dce1ee;border-radius:14px;padding:18px;margin:16px 0}
+.ep-recall .ep-recall-actions{display:flex;flex-wrap:wrap;gap:8px}
+.ep-recall li{margin:10px 0;line-height:1.65}
+.ep-recall ol,.ep-recall ul{padding-left:24px}
+@media(max-width:600px){.ep-recall .ep-recall-actions{display:block}.ep-recall .ep-recall-actions button{display:block;width:100%}.ep-recall .ep-recall-solution{padding:12px}}

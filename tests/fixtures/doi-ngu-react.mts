@@ -15,4 +15,6 @@ export const createElement=jsx;
 export const Fragment='fragment';
 export const createPortal=(children:unknown)=>children;
 export const useId=()=> 'doi-ngu-test-id';
+// Ranh lỗi chỉ cần lớp nền khi bundle; các ca này không dựng cây class trong DOM.
+export class Component<P=unknown,S=unknown>{props:P;state:S;constructor(props:P){this.props=props;this.state={} as S;}}
 export default {createElement:jsx};
