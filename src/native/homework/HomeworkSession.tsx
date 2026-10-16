@@ -9,6 +9,7 @@ import EntryNotice,{entryFailure} from './EntryNotice';
 import LessonCards from './LessonCards';
 import HomeworkOverview from './HomeworkOverview';
 import HomeworkGate from './HomeworkGate';
+import HomeworkTimePlan from './HomeworkTimePlan';
 import PracticeAttempt from '../exams/PracticeAttempt';
 import type {Draft,Store} from '../exams/store';
 import {draftKey} from '../exams/store';
@@ -182,5 +183,6 @@ export default function HomeworkSession({pathname}:{pathname:string}){
       </>}
 
     </>}
+    {!checking&&(!state||!room)&&<HomeworkTimePlan/>}
   </section>;
 }
