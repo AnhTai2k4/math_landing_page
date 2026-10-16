@@ -44,7 +44,7 @@ function Btvn({parent}:{parent:boolean}){return <section className="mg-card mg-w
  <p className="mg-sub">Đã mở cho các lớp 2K9 (8+, 9+, XPT), 2K10 (9+, 8+, Thứ 3-6, XPT), 2K11 (8+, 9+, XPT).</p>
  <p>{parent?'Con bấm':'Bấm'} <b>Không có mã</b>, nhập họ tên ({parent?'của con hoặc phụ huynh':'của em hoặc phụ huynh'}), số điện thoại đã đăng ký với trung tâm và chọn lớp.</p>
  <ul className="mg-list">
-  <li>Hạn nộp là giờ vào buổi học kế tiếp; nộp sau hạn vẫn được nhưng ghi muộn.</li>
+  <li>Xem hạn nộp ghi trên từng bài; nộp sau hạn đã xác minh vẫn được nhưng ghi muộn.</li>
   <li>Mỗi bài làm tối đa 5 lần, điểm tính lần cao nhất, cần đạt từ 7 điểm; nộp xong xem ngay lời giải.</li>
   <li>Bài chưa đạt thì làm lại trên web; vẫn thấy quá khó thì nên tham gia buổi bổ trợ miễn phí của lớp.</li>
   <li>Lớp HSA tạm thời vẫn làm BTVN như hiện tại.</li>
@@ -52,10 +52,10 @@ function Btvn({parent}:{parent:boolean}){return <section className="mg-card mg-w
  <p className="mg-sub">{parent?'Anh/chị đã đổi số điện thoại':'Đã đổi số điện thoại'} hoặc không vào được thì nhắn Zalo trợ lý để trung tâm cập nhật.</p>
 </section>;}
 
-export function WebHelp(){return <section className="mg-card mg-web">
+export function WebHelp({parent=false}:{parent?:boolean}={}){return <section className="mg-card mg-web">
  <h2>Gặp khó khi dùng web</h2>
  <ul className="mg-list">
-  <li><b>Bài chưa mở:</b> thẻ ghi “🔒 Chưa mở”, nút xám ghi “Chưa mở, mở lúc” kèm giờ. BTVN của mỗi buổi mở sau khi buổi học đó kết thúc, hạn là giờ vào buổi học tới. Tới giờ mở, tải lại trang rồi bấm <b>Làm BTVN</b>.</li>
+  <li><b>Bài chưa mở:</b> trạng thái “🔒 Chưa mở · mở” và nút “🔒 Chưa mở, mở lúc” kèm thời gian cho biết giờ mở bài. {parent?'Anh/chị và con':'Em'} xem giờ mở và hạn nộp trên từng thẻ. Tới giờ mở, tải lại trang rồi bấm <b>Làm BTVN</b>. Nếu thời gian chỉ ghi “sau buổi học” hoặc hạn ghi “Chờ xác minh”, nhắn <a href={ZALO_ASSISTANT_URL} target="_blank" rel="noopener noreferrer">Zalo trợ lý</a> để trung tâm kiểm tra lịch lớp.</li>
   <li><b>Không đăng nhập được:</b> chọn đúng lớp, nhập số điện thoại đã đăng ký với trung tâm (có thể là số của bố hoặc mẹ). Tên gõ không dấu cũng được. Nếu đã đổi số, nhắn trợ lý để trung tâm kiểm tra.</li>
   <li><b>Trang báo “Chưa tải được nội dung” hoặc trắng trang:</b> tải lại trang, vẫn lỗi thì đóng hẳn trình duyệt rồi mở lại. Nếu mở link trong Zalo, bấm dấu ba chấm và mở bằng Chrome hoặc Safari.</li>
   <li><b>Vẫn lỗi:</b> nhắn <a href={ZALO_ASSISTANT_URL} target="_blank" rel="noopener noreferrer">Zalo trợ lý</a> kèm ảnh chụp toàn màn hình báo lỗi, điện thoại hay máy tính đang dùng, mở từ Zalo hay trình duyệt, lớp và buổi học muốn làm. Che tên, số điện thoại, mã học sinh và thông tin riêng trong thanh địa chỉ trước khi gửi ảnh.</li>
@@ -103,6 +103,6 @@ export default function Guide(){const [who,setWho]=useState<Audience>(readAudien
    <button type="button" role="tab" id="mg-tab-hs" tabIndex={parent?-1:0} aria-selected={!parent} aria-controls="mg-panel" onKeyDown={tabKey} onClick={()=>pick('hoc-sinh')}>Học sinh</button>
    <button type="button" role="tab" id="mg-tab-ph" tabIndex={parent?0:-1} aria-selected={parent} aria-controls="mg-panel" onKeyDown={tabKey} onClick={()=>pick('phu-huynh')}>Phụ huynh</button>
   </div>
-  <div id="mg-panel" role="tabpanel" tabIndex={0} aria-labelledby={parent?'mg-tab-ph':'mg-tab-hs'}><Steps parent={parent}/><Btvn parent={parent}/><Web parent={parent}/><WebHelp/><More parent={parent}/></div>
+  <div id="mg-panel" role="tabpanel" tabIndex={0} aria-labelledby={parent?'mg-tab-ph':'mg-tab-hs'}><Steps parent={parent}/><Btvn parent={parent}/><Web parent={parent}/><WebHelp parent={parent}/><More parent={parent}/></div>
   <p className="mg-slogan">Minh Thành Math - Thinking gets sharp!</p>
  </div></div>;}

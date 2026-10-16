@@ -12,10 +12,16 @@ const props={lessons:[lesson],busy:false,onHomework(){assert.fail('Không mở �
 const {default:Cards,LOCKED_HOMEWORK_HELP}=load('src/native/homework/LessonCards.tsx');
 const html=render(Cards,props);
 assert.match(html,/🔒 Chưa mở · mở/);assert.match(html,/🔒 Chưa mở, mở lúc/);
-assert.match(html,/Chưa có bài cần làm\. Có 1 bài sẽ mở sau buổi học\./);
+assert.match(html,/Chưa có bài cần làm\. Có 1 bài chưa tới giờ mở\./);
 assert.match(html,/Giờ mở và hạn nộp theo lịch riêng của lớp\. Em xem thời gian cụ thể trên từng bài\./);
 assert.doesNotMatch(html,/Chưa làm BTVN|todo-card|class="todo"|btvn-btn primary|disabled=""|Invalid Date/);
-assert.doesNotMatch(render(Cards,{...props,lessons:[{...lesson,opensAt:undefined}]}),/Invalid Date/);
+const missingOpening=render(Cards,{...props,lessons:[{...lesson,opensAt:undefined}]});
+assert.match(missingOpening,/🔒 Chưa mở, mở lúc sau buổi học/);
+assert.match(missingOpening,/Giờ mở: sau buổi học/);
+assert.match(missingOpening,/Hạn: Chờ xác minh lịch lớp và ca học/);
+assert.doesNotMatch(missingOpening,/Invalid Date/);
+assert.match(html,/Giờ mở:/);
+assert.doesNotMatch(html,/Mở làm sau buổi học:/);
 const open=render(Cards,{...props,lessons:[{...lesson,available:true,opensAt:0}]});
 assert.match(open,/Em còn 1 buổi cần làm BTVN/);assert.match(open,/class="todo">Chưa làm BTVN/);assert.match(open,/btvn-btn primary/);
 let values:any[]=[],cursor=0;
@@ -25,12 +31,25 @@ const draw=()=>{cursor=0;return Interactive(props);};
 function find(t:any,p:(n:any)=>boolean):any{if(!t||typeof t!=='object')return null;if(Array.isArray(t))return t.map(n=>find(n,p)).find(Boolean);return p(t)?t:find(t.props?.children,p);}
 const button=find(draw(),n=>n.type==='button'&&n.props.className==='btvn-btn locked');assert.equal(button.props.disabled,false);button.props.onClick();
 const clicked=renderToStaticMarkup(draw());assert.ok(clicked.includes(LOCKED_HOMEWORK_HELP));assert.match(clicked,/role="status"/);assert.match(clicked,/aria-describedby="locked-help-fake-locked"/);
+assert.ok(LOCKED_HOMEWORK_HELP.includes('Bài mở theo giờ ghi trên thẻ.'));
+assert.ok(!LOCKED_HOMEWORK_HELP.includes('Bài mở sau khi buổi học kết thúc.'));
 writeFileSync(join(root,'.qa-temp/dot-23/locked-clicked-ssr.html'),clicked);
-const Guide=load('src/migration/Guide.tsx').default;
+const {default:Guide,WebHelp}=load('src/migration/Guide.tsx');
+const defaultHelp=renderToStaticMarkup(WebHelp());
+assert.match(defaultHelp,/Em xem giờ mở và hạn nộp trên từng thẻ/);
 for(const who of ['hoc-sinh','phu-huynh']){
  (globalThis as any).location={pathname:'/huong-dan',search:'?cho='+who,hash:''};
  const guide=render(Guide);for(const phrase of ['Gặp khó khi dùng web','Chưa mở','Không đăng nhập được','bố hoặc mẹ','không dấu','Chưa tải được nội dung','Chrome hoặc Safari','toàn màn hình','lớp và buổi học','https://zalo.me/0967365413'])assert.ok(guide.includes(phrase),phrase);
  assert.match(guide,new RegExp('aria-labelledby="mg-tab-'+(who==='hoc-sinh'?'hs':'ph')+'"'));
+ assert.ok(guide.includes('Xem hạn nộp ghi trên từng bài; nộp sau hạn đã xác minh'));
+ assert.ok(!guide.includes('Hạn nộp là giờ vào buổi học kế tiếp'));
+ const help=render(WebHelp,{parent:who==='phu-huynh'});
+ for(const phrase of ['🔒 Chưa mở · mở','🔒 Chưa mở, mở lúc','sau buổi học','Chờ xác minh'])assert.ok(help.includes(phrase),phrase);
+ assert.ok(!help.includes('thẻ chưa có giờ mở'));
+ assert.match(help,who==='phu-huynh'?/Anh\/chị và con xem giờ mở/:/Em xem giờ mở/);
+ if(who==='phu-huynh')assert.doesNotMatch(help,/Em xem/);
+ const lockedItem=help.split('</li>')[0];
+ assert.match(lockedItem,/<a href="https:\/\/zalo.me\/0967365413"[^>]*>Zalo trợ lý<\/a>/);
  writeFileSync(join(root,'.qa-temp/dot-23/guide-'+who+'-ssr.html'),guide);
 }
 delete (globalThis as any).location;

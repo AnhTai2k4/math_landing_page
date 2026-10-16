@@ -37,7 +37,7 @@ assert.ok(!session.includes('setMode'));assert.ok(!session.includes('Quên mã')
 assert.ok(session.includes("entryFailure(response.status,data.message)"));
 const css=readFileSync(root+'/src/native/homework/btvn-session.css','utf8');
 assert.ok(css.includes('grid-template-columns:repeat(2,minmax(0,1fr))'));
-assert.ok(css.includes('align-items:stretch'));
+assert.match(css,/\.btvn-gates\{[^}]*align-items:start(?:;|\})/,'Hai thẻ cao theo nội dung, không kéo thẻ Có mã tạo khoảng trống');
 assert.ok(css.includes('@media(max-width:700px){.btvn-gates{grid-template-columns:minmax(0,1fr)'));
 writeFileSync(out+'/render.html','<!doctype html><html lang="vi"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>*{box-sizing:border-box}'+css+'</style><section class="btvn-session">'+rendered.html+'</section></html>');
 console.log('Đạt hai form thật, payload riêng khi thẻ kia trống, chặn busy, sửa ô nhập, lỗi chung; CSS desktop/mobile kiểm tĩnh. Chưa kiểm pixel/validation browser.');
