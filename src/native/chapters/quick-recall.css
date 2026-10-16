@@ -14,5 +14,8 @@
 .cp-recall-answer h4{font-size:1rem;margin:16px 0 8px}
 .cp-recall-answer p{margin:8px 0}
 .cp-recall-context{border-bottom:1px solid #d7deea;padding-bottom:12px;margin-bottom:14px}
-.cp-recall :is(button,select,h3,.cp-recall-answer):focus-visible{outline:3px solid #b28516;outline-offset:3px}
+.cp-recall-history{border-top:1px solid #d7deea;margin-top:20px;padding-top:10px}
+.cp-recall-history summary{cursor:pointer;font-weight:700;min-height:44px;box-sizing:border-box;padding:8px 0;overflow-wrap:anywhere}
+.cp-recall-history h4{overflow-wrap:anywhere}
+.cp-recall :is(button,select,summary,h3,.cp-recall-answer):focus-visible{outline:3px solid #b28516;outline-offset:3px}
 @media(max-width:600px){.cp-recall-session{padding:14px}.cp-recall-actions{flex-direction:column}.cp-recall-actions button{width:100%}}

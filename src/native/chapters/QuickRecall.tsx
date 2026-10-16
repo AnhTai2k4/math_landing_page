@@ -3,8 +3,33 @@ import MathText from '../math/MathText';
 import {recallBatch,recallDecks,type RecallCard,type RecallDeck} from './quick-recall';
 import './quick-recall.css';
 
-type Session={cards:RecallCard[];index:number;revealed:boolean;review:RecallCard[];done:boolean;revisiting:boolean};
-const start=(cards:RecallCard[],revisiting=false):Session=>({cards,index:0,revealed:false,review:[],done:false,revisiting});
+type HistoryItem={card:RecallCard;remembered:boolean};
+type Session={cards:RecallCard[];index:number;revealed:boolean;review:RecallCard[];history:HistoryItem[];done:boolean;revisiting:boolean};
+const start=(cards:RecallCard[],revisiting=false):Session=>({cards,index:0,revealed:false,review:[],history:[],done:false,revisiting});
+
+function CardContent({card}:{card:RecallCard}){
+  return <>
+    {card.context.map((context,index)=><aside key={index} className="cp-recall-context"><h4>Ký hiệu và điều kiện: {context.topic}</h4>{[...context.formulaLines,...context.usageLines].map((line,i)=><p key={i}><MathText text={line}/></p>)}</aside>)}
+    {card.notes.map((line,i)=><p key={'note-'+i}><MathText text={line}/></p>)}
+    {card.formulaLines.map((line,i)=><p key={i}><MathText text={line}/></p>)}
+    <h4>Cách dùng và điều cần nhớ</h4>
+    {card.usageLines.map((line,i)=><p key={i}><MathText text={line}/></p>)}
+  </>;
+}
+
+function RecallHistory({items,onReturn,done}:{items:HistoryItem[];onReturn:()=>void;done:boolean}){
+  const [selected,setSelected]=useState(0),id=useId(),panel=useRef<HTMLDetailsElement>(null);
+  const item=items[selected]??items[0];
+  return <details className="cp-recall-history" ref={panel}>
+    <summary>Xem lại thẻ vừa ôn ({items.length})</summary>
+    <p>Xem lại không thay đổi tự đánh giá hoặc tiến độ của lượt ôn.</p>
+    <label htmlFor={id+'-history'}>Chọn thẻ đã ôn</label>
+    <select id={id+'-history'} value={selected} onChange={event=>setSelected(Number(event.target.value))}>{items.map(({card},index)=><option key={card.id} value={index}>{index+1}. {card.topic}</option>)}</select>
+    <h4>{item.card.topic}</h4><p>Em đã đánh dấu: {item.remembered?'Em đã nhớ':'Cần ôn lại'}.</p>
+    <div className="cp-recall-answer"><CardContent card={item.card}/></div>
+    <button type="button" onClick={()=>{if(panel.current)panel.current.open=false;onReturn();}}>{done?'Về tổng kết lượt ôn':'Về thẻ đang ôn'}</button>
+  </details>;
+}
 
 function RecallSession({deck}:{deck:RecallDeck}){
   const id=useId(),[offset,setOffset]=useState(0),[session,setSession]=useState(()=>start(recallBatch(deck,0)));
@@ -14,7 +39,7 @@ function RecallSession({deck}:{deck:RecallDeck}){
     if(!session.revealed||session.done)return;
     const review=remembered?session.review:[...session.review,session.cards[session.index]];
     focusNext.current=true;
-    setSession({...session,review,index:session.index+1,revealed:false,done:session.index+1===session.cards.length});
+    setSession({...session,review,history:[...session.history,{card:session.cards[session.index],remembered}],index:session.index+1,revealed:false,done:session.index+1===session.cards.length});
   };
   const restart=(cards:RecallCard[],revisiting=false)=>{focusNext.current=true;setSession(start(cards,revisiting));};
   if(!session.cards.length)return <p>Chưa có thẻ cho phần này.</p>;
@@ -25,7 +50,7 @@ function RecallSession({deck}:{deck:RecallDeck}){
       <p role="status">Em tự đánh dấu {session.cards.length-session.review.length} thẻ đã nhớ và {session.review.length} thẻ cần ôn lại. Đây là tự đánh giá, không tính điểm.</p>
       <div className="cp-recall-actions">
         {!!session.review.length&&<button type="button" onClick={()=>restart(session.review,true)}>Ôn lại {session.review.length} thẻ cần nhớ</button>}
-        <button type="button" onClick={()=>{const next=offset+5<deck.cards.length?offset+5:0;setOffset(next);restart(recallBatch(deck,next));}}>{offset+5<deck.cards.length?'5 thẻ tiếp theo':'Ôn lại từ đầu'}</button>
+        <button type="button" onClick={()=>{const next=offset+5<deck.cards.length?offset+5:0;setOffset(next);restart(recallBatch(deck,next));}}>{offset+5<deck.cards.length?Math.min(5,deck.cards.length-offset-5)+' thẻ tiếp theo':'Ôn lại từ đầu'}</button>
       </div>
       <p>Em có thể dừng ở đây hoặc chọn bài luyện bên dưới để áp dụng.</p>
     </>:<>
@@ -34,14 +59,11 @@ function RecallSession({deck}:{deck:RecallDeck}){
       <p>Em thử nhắc lại công thức cùng điều kiện trước khi mở thẻ.</p>
       <button type="button" className="cp-recall-reveal" aria-expanded={session.revealed} aria-controls={id+'-answer'} onClick={()=>{focusAnswer.current=!session.revealed;setSession({...session,revealed:!session.revealed});}}>{session.revealed?'Ẩn công thức':'Lật thẻ xem công thức'}</button>
       <div ref={answer} id={id+'-answer'} hidden={!session.revealed} className="cp-recall-answer" tabIndex={-1} role="region" aria-label={'Công thức: '+card.topic}>
-        {card.context.map((context,index)=><aside key={index} className="cp-recall-context"><h4>Ký hiệu và điều kiện: {context.topic}</h4>{[...context.formulaLines,...context.usageLines].map((line,i)=><p key={i}><MathText text={line}/></p>)}</aside>)}
-        {card.notes.map((line,i)=><p key={'note-'+i}><MathText text={line}/></p>)}
-        {card.formulaLines.map((line,i)=><p key={i}><MathText text={line}/></p>)}
-        <h4>Cách dùng và điều cần nhớ</h4>
-        {card.usageLines.map((line,i)=><p key={i}><MathText text={line}/></p>)}
+        <CardContent card={card}/>
       </div>
       {session.revealed&&<div className="cp-recall-actions"><button type="button" onClick={()=>move(false)}>Cần ôn lại</button><button type="button" onClick={()=>move(true)}>Em đã nhớ</button></div>}
     </>}
+    {!!session.history.length&&<RecallHistory items={session.history} done={session.done} onReturn={()=>heading.current?.focus()}/>}
   </div>;
 }
 

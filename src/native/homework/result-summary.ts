@@ -126,6 +126,20 @@ export function acknowledgedHomeworkSubmission(state:SummaryState):HomeworkRecei
   return acknowledgedHomeworkReceipt(state);
 }
 
+/** Phiếu ACK riêng cho BTVN thường đang đối soát. Chỉ literal, không chọn
+ * metadata mâu thuẫn làm sự thật và không nới cổng công bố điểm hoặc phiếu tháng. */
+export function createHomeworkSubmissionSummary(state:SummaryState):string|null{
+  if(state.kind==='kiem-tra-thang'||!acknowledgedHomeworkSubmission(state)||acknowledgedHomeworkReceipt(state))return null;
+  return [
+    'MINH THÀNH MATH',
+    'Phiếu xác nhận đã nộp BTVN',
+    'Máy chủ đã xác nhận nhận bản nộp đang xem.',
+    'Điểm đang đối soát.',
+    'Phiếu này không xác nhận điểm, thời gian hoặc hạn nộp.',
+    'Phiếu này không được gửi tự động.',
+  ].join('\n');
+}
+
 /** Phiếu tự gửi cần đủ metadata hợp lệ; thiếu phiếu không khóa điểm hoặc lượt tiếp. */
 function shareableHomeworkReceipt(state:SummaryState):HomeworkReceipt|null{
   const receipt=acknowledgedHomeworkReceipt(state),draft=state.draft;

@@ -95,11 +95,12 @@ test('Lượt cuối kết thúc, cho phép dừng hoặc ôn lại từ đầu'
 });
 test('Lô cuối ít hơn 5 thẻ không đọc vượt câu và kết thúc đúng',()=>{
   const deck=recallDecks('10').find(item=>item.id==='g10-c3')!,m=mount(deck);
-  for(const count of [5,5,4]){
+  const counts=[5,5,4];
+  for(const [batch,count] of counts.entries()){
     assert.ok(text(m.tree).includes('Thẻ 1/'+count));
     for(let i=0;i<count;i++){m.click('Lật thẻ xem công thức');m.click('Em đã nhớ');}
     assert.ok(text(m.tree).includes('Đã xem hết '+count+' thẻ'));
-    if(count===5)m.click('5 thẻ tiếp theo');
+    if(batch+1<counts.length)m.click(counts[batch+1]+' thẻ tiếp theo');
   }
   m.click('Ôn lại từ đầu');assert.ok(text(m.tree).includes('Thẻ 1/5'));
 });
