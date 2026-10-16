@@ -245,21 +245,36 @@ def sheet_rows(raw, sheet, row_errors=None):
             hits=[i for i,h in enumerate(headers) if h in ('phamvibtvn','ghichubtvn','btvntucau','phamvi')]
             require(len(hits)<=1,'Trùng cột phạm vi BTVN');
             if hits:indexes['homework_scope']=hits[0]
-        result=[];parent=None;parent_row=None;parent_invalid=False
+        result=[];parent=None;parent_row=None;parent_invalid=False;parent_error=None
         def flush_parent():
-            nonlocal parent,parent_row,parent_invalid
+            nonlocal parent,parent_row,parent_invalid,parent_error
             if parent is not None and not parent_invalid:result.append(parent)
-            parent=None;parent_row=None;parent_invalid=False
+            parent=None;parent_row=None;parent_invalid=False;parent_error=None
         def date_cell(row_number):
             column=indexes['lesson_date']+column_offset+1;letters=''
             while column:
                 column,remainder=divmod(column-1,26);letters=chr(ord('A')+remainder)+letters
             return letters+str(row_number)
+        def parent_source_fields(row_number):
+            return {'scope':'nguon_hong','lesson_key':parent['lesson_key'],
+                    'classes':{parent['class_name']:parent['lesson_date']},
+                    'source_locations':parent['source_locations']+[
+                        {'tab':sheet.get('name',sheet.get('id','')),'cell':date_cell(row_number)}]}
         def date_error(reason,row_number,parent_number=None):
+            nonlocal parent_error
             if row_errors is None:raise GateError(reason)
             error={'status':'loi','reason':reason,'tab':sheet.get('name',sheet.get('id','')),'cell':date_cell(row_number)}
-            if parent_number is not None:error['parent_cell']=date_cell(parent_number)
+            if parent_number is not None:
+                error['parent_cell']=date_cell(parent_number)
+                error.update(parent_source_fields(row_number))
             row_errors.append(error)
+            if parent_number is not None:parent_error=error
+        def invalid_parent(reason,row_number):
+            nonlocal parent_invalid,parent_error
+            if row_errors is None:raise GateError(reason)
+            parent_error={'status':'loi','reason':reason,'parent_cell':date_cell(parent_row),**parent_source_fields(row_number)}
+            row_errors.append(parent_error)
+            parent_invalid=True
         for row_number,source in enumerate(table[1:],2+row_offset):
             def cell(k):
                 i=indexes.get(k,-1)
@@ -282,14 +297,20 @@ def sheet_rows(raw, sheet, row_errors=None):
                 if date is None and date_reason is None:date_reason='Ngày học không hợp lệ'
             continuation=not r['class_name'] and not r['title'] and parent is not None
             if continuation:
+                # Keep an invalid unit buffered and report every later attachment row.
+                if parent_invalid:
+                    parent_error['source_locations'].append({'tab':sheet.get('name',sheet.get('id','')),'cell':date_cell(row_number)})
+                    continue
                 if date_reason:
                     date_error(date_reason,row_number,parent_row);parent_invalid=True;continue
-                # Keep an invalid unit buffered so later files cannot attach elsewhere.
-                if parent_invalid:continue
                 if not r['lesson_date'] or date==parent['lesson_date']:
-                    require(not r['homework_scope'] or r['homework_scope']==parent.get('homework_scope',''),'Phạm vi tệp phụ xung đột; giữ bài')
-                    extra=links('homework');require(extra,'Tệp phụ thiếu URL smart chip')
-                    parent['homework_urls']=list(dict.fromkeys(parent['homework_urls']+extra));parent['homework_labels'].append(r['homework']);continue
+                    if r['homework_scope'] and r['homework_scope']!=parent.get('homework_scope',''):
+                        invalid_parent('Phạm vi tệp phụ xung đột; giữ bài',row_number);continue
+                    extra=links('homework')
+                    if not extra:
+                        invalid_parent('Tệp phụ thiếu URL smart chip',row_number);continue
+                    parent['homework_urls']=list(dict.fromkeys(parent['homework_urls']+extra));parent['homework_labels'].append(r['homework'])
+                    parent['source_locations'].append({'tab':sheet.get('name',sheet.get('id','')),'cell':date_cell(row_number)});continue
             flush_parent()
             if date_reason:
                 date_error(date_reason,row_number);continue
@@ -323,7 +344,7 @@ def merge_rows(rows,row_errors=None):
                 if value not in result:result.append(value)
         return result
     # Giữ key đã chặn xuyên các tab, không nhận lại một bản từ tab đọc sau.
-    blocked={item['lesson_key']:item for item in (row_errors or []) if item.get('scope')=='nguon_trung'}
+    blocked={item['lesson_key']:item for item in (row_errors or []) if item.get('scope') in ('nguon_trung','nguon_hong')}
     merged={}
     for row in rows:
         key=row['lesson_key']

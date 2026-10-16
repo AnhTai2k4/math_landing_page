@@ -169,6 +169,14 @@ def route_rows(rows, config, now, row_events=None):
         row = copy.deepcopy(source)
         row['lesson_date'] = date.isoformat()
         row['class_dates'] = {name:date.isoformat()}
+        assigned_sessions=set(row['class_dates'].items());ambiguous=False
+        def assign_dates(shared_dates):
+            nonlocal ambiguous
+            for target,target_date in shared_dates.items():
+                assigned_sessions.add((target,target_date))
+                if target in row['class_dates'] and row['class_dates'][target]!=target_date:
+                    ambiguous=True
+                else:row['class_dates'][target]=target_date
         # Ngày đích explicit ưu tiên lịch có thể thay đổi; không gán +1 tự động.
         for share in config.get('shared_lessons', []):
             if share['source_class'] != name:
@@ -185,7 +193,7 @@ def route_rows(rows, config, now, row_events=None):
                     rule=classes[target]
                     p.require(td.isoformat() in rule.get('dates',[]) or td.weekday() in rule.get('weekdays',[]), 'Ngày lớp nhận chung chưa khớp lịch')
                     shared_dates[target] = td.isoformat()
-                row['class_dates'].update(shared_dates)
+                assign_dates(shared_dates)
             except (p.GateError, KeyError, TypeError, AttributeError) as error:
                 if row_events is None:
                     raise p.GateError(str(error) if isinstance(error,p.GateError) else 'Cấu hình bài chung không hợp lệ') from None
@@ -193,7 +201,14 @@ def route_rows(rows, config, now, row_events=None):
                                    'status':'loi','scope':'bai_chung','reason':str(error) if isinstance(error,p.GateError) else 'Cấu hình bài chung không hợp lệ'})
         # Quyết định mục 25: chỉ bài thứ Ba của 2K10 9+.
         if name == '2K10 9+' and date.weekday() == 1 and classes.get('2K10 Thứ 3, 6', {}).get('enabled'):
-            row['class_dates']['2K10 Thứ 3, 6'] = date.isoformat()
+            assign_dates({'2K10 Thứ 3, 6':date.isoformat()})
+        if ambiguous:
+            reason='Lịch nhận bài chung xung đột; giữ các buổi liên quan'
+            if row_events is None:raise p.GateError(reason)
+            row_events.append({'lesson_key':source['lesson_key'],'classes':{name:date.isoformat()},
+                               'sessions':[{'class_name':target,'lesson_date':day} for target,day in sorted(assigned_sessions)],
+                               'status':'loi','scope':'lich_chung_xung_dot','reason':reason})
+            continue
         row['homework_note'] = source.get('homework_note', '')
         selected.append(row)
     # Gộp hai dòng cùng nguồn khi có cùng classDates được xác nhận rõ.
@@ -358,7 +373,7 @@ def run_batch(config, transport, publisher, root, now=None, extractor=None, revi
         sources=p.read_material_rows(config,transport,row_errors)
         for error in row_errors:
             receipt['items'].append(error)
-            if error.get('scope')=='nguon_trung':
+            if error.get('scope') in ('nguon_trung','nguon_hong'):
                 positions=', '.join(item['tab']+'!'+item['cell'] for item in error.get('source_locations',[]))
                 sessions=', '.join(name+'; '+day for name,day in error['classes'].items())
                 report_error(config,root,error['lesson_key'],'BTVN lỗi nguồn: '+sessions+'; '+positions+'; '+error['reason'],now)
@@ -367,7 +382,7 @@ def run_batch(config, transport, publisher, root, now=None, extractor=None, revi
                 report_error(config,root,key,'BTVN lỗi nguồn: '+error['tab']+'!'+error['cell']+'; '+error['reason'],now)
         route_events=[]
         blocked_sessions=conflict_dependent_sessions(
-            (session for error in row_errors if error.get('scope')=='nguon_trung'
+            (session for error in row_errors if error.get('scope') in ('nguon_trung','nguon_hong')
              for session in error['classes'].items()),config)
         for source in sources:
             try:rows.extend(route_rows([source],config,now,route_events))
@@ -375,10 +390,14 @@ def run_batch(config, transport, publisher, root, now=None, extractor=None, revi
                 reason=str(error) if isinstance(error,p.GateError) else 'Lịch lớp không hợp lệ'
                 receipt['items'].append({'lesson_key':source['lesson_key'],'status':'loi','reason':reason})
                 report_error(config,root,source['lesson_key'],'BTVN lỗi: '+source['class_name']+'; '+source['lesson_date']+'; '+reason,now)
+        blocked_sessions.update(conflict_dependent_sessions(
+            ((item['class_name'],item['lesson_date']) for event in route_events
+             if event.get('scope')=='lich_chung_xung_dot' for item in event['sessions']),config))
         for event in route_events:
             receipt['items'].append(event)
             if event['status']=='loi':
-                report_error(config,root,event['lesson_key']+'-share','BTVN lỗi chia bài: '+event['reason'],now)
+                context=', '.join(item['class_name']+'; '+item['lesson_date'] for item in event.get('sessions',[]))
+                report_error(config,root,event['lesson_key']+'-share','BTVN lỗi chia bài: '+(context+'; ' if context else '')+event['reason'],now)
         # Hai dòng có cùng bản đồ ngày chỉ được nhận một nguồn nhất quán.
         unique={};conflicts={}
         for row in rows:

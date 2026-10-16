@@ -12,3 +12,5 @@
 .btvn-retry-confirm::backdrop{background:#12244b80}
 .btvn-retry-confirm h4{margin:0 0 10px;color:#182d50;font-size:1.15em}
 .btvn-retry-hints:focus{outline:3px solid #b38619;outline-offset:3px;border-radius:8px}
+.btvn-retry-feedback{scroll-margin-top:100px;scroll-margin-bottom:24px}
+.btvn-retry-feedback:focus{outline:3px solid #b38619;outline-offset:3px}

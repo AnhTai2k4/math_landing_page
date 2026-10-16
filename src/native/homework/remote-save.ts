@@ -29,6 +29,9 @@ export function createHomeworkSaver(options:{
       try{
         if(closedState||terminal)return;
         const next=await options.send(item.draft);
+        // Đã bỏ quyền: phản hồi đang bay không còn được ghi ACK hoặc bản đã chấm.
+        // Rời trang bình thường vẫn theo dõi ACK, nhưng attached=false chặn callback UI.
+        if(terminal)return;
         if(next.draft?.attemptId!==item.draft.attemptId)throw new Error('Máy chủ chưa xác nhận đúng lượt làm bài. Giữ trang mở và gửi lại.');
         if(['examId','examVersionHash','rubricVersion'].some(key=>{const field=key as 'examId'|'examVersionHash'|'rubricVersion';return typeof item.draft[field]!=='string'||!item.draft[field].trim()||next.draft![field]!==item.draft[field];}))throw new Error('Máy chủ chưa xác nhận đúng bản đề của lượt này. Giữ trang mở và gửi lại.');
         if(item.draft.submittedAt!==null&&next.draft.submittedAt===null)throw new Error('Máy chủ chưa xác nhận nộp bài. Giữ trang mở và gửi lại.');
@@ -70,7 +73,7 @@ export function createHomeworkSaver(options:{
       if(attached)options.onSaved(closedState);
     },
     // Rời trang đã được xác nhận: cố gửi bản mới nhất, không cập nhật component đã tháo.
-    dispose(){attached=false;if(timer!==undefined)sendLatest();},
+    dispose(options:{flushPending?:boolean}={}){attached=false;if(options.flushPending===false){terminal=true;clearTimer();latest=null;discarded=seq;}else if(timer!==undefined)sendLatest();},
     settled:()=>queue,
     async flush(){
       sendLatest();
