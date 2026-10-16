@@ -118,6 +118,34 @@ def row_source_conflicts(first, other):
     return [code for code, value in first_fields.items() if value != other_fields[code]]
 
 
+def conflict_dependent_sessions(initial_sessions, config):
+    """Giữ metadata mọi buổi phụ thuộc dù cổng lịch từ chối dòng nguồn."""
+    classes=config['classes']
+    shares=config.get('shared_lessons',[])
+    p.require(isinstance(shares,list), 'Danh sách bài chung không hợp lệ')
+    blocked=set(initial_sessions);pending=list(blocked)
+    while pending:
+        name,day=pending.pop()
+        date=configured_date(day,config,'Ngày buổi nguồn lỗi không hợp lệ')
+        targets=set()
+        for share in shares:
+            p.require(isinstance(share,dict),'Cấu hình bài chung không hợp lệ')
+            if share.get('source_class')!=name:continue
+            source_date=configured_date(share.get('source_date'),config,'Ngày nguồn bài chung không hợp lệ')
+            if source_date!=date:continue
+            class_dates=share.get('classDates')
+            p.require(isinstance(class_dates,dict),'Cấu hình ngày nhận chung không hợp lệ')
+            for target,target_date in class_dates.items():
+                if not classes.get(target,{}).get('enabled'):continue
+                targets.add((target,configured_date(target_date,config,'Ngày lớp nhận chung không hợp lệ').isoformat()))
+        if name=='2K10 9+' and date.weekday()==1 and classes.get('2K10 Thứ 3, 6',{}).get('enabled'):
+            targets.add(('2K10 Thứ 3, 6',date.isoformat()))
+        for session in targets:
+            if session not in blocked:
+                blocked.add(session);pending.append(session)
+    return blocked
+
+
 def route_rows(rows, config, now, row_events=None):
     """Chỉ lấy lịch đã xác nhận; không suy lịch 8+/9+ từ tên lớp."""
     classes = config['classes']
@@ -330,9 +358,17 @@ def run_batch(config, transport, publisher, root, now=None, extractor=None, revi
         sources=p.read_material_rows(config,transport,row_errors)
         for error in row_errors:
             receipt['items'].append(error)
-            key='source-date-'+p.digest(p.encoded([error['tab'],error['cell']]))[:32]
-            report_error(config,root,key,'BTVN lỗi nguồn: '+error['tab']+'!'+error['cell']+'; '+error['reason'],now)
+            if error.get('scope')=='nguon_trung':
+                positions=', '.join(item['tab']+'!'+item['cell'] for item in error.get('source_locations',[]))
+                sessions=', '.join(name+'; '+day for name,day in error['classes'].items())
+                report_error(config,root,error['lesson_key'],'BTVN lỗi nguồn: '+sessions+'; '+positions+'; '+error['reason'],now)
+            else:
+                key='source-date-'+p.digest(p.encoded([error['tab'],error['cell']]))[:32]
+                report_error(config,root,key,'BTVN lỗi nguồn: '+error['tab']+'!'+error['cell']+'; '+error['reason'],now)
         route_events=[]
+        blocked_sessions=conflict_dependent_sessions(
+            (session for error in row_errors if error.get('scope')=='nguon_trung'
+             for session in error['classes'].items()),config)
         for source in sources:
             try:rows.extend(route_rows([source],config,now,route_events))
             except Exception as error:
@@ -352,12 +388,24 @@ def run_batch(config, transport, publisher, root, now=None, extractor=None, revi
                 continue
             codes=row_source_conflicts(unique[key],row)
             if codes:conflicts.setdefault(key,set()).update(codes)
+        # Một buổi lớp/ngày không được đăng qua nhiều nhóm có key khác nhau.
+        # Kiểm cả nhóm đã xung đột nguồn để giữ tất cả nhóm giao liên quan.
+        sessions={}
+        for key,row in unique.items():
+            for session in row['class_dates'].items():sessions.setdefault(session,set()).add(key)
+        overlapping=set().union(*(keys for keys in sessions.values() if len(keys)>1))
+        overlapping.update(key for session,keys in sessions.items() if session in blocked_sessions for key in keys)
         for key,codes in conflicts.items():
             row=unique[key]
             reason='Hai dòng chung bài xung đột: '+', '.join(sorted(codes))
             receipt['items'].append({'lesson_key':key,'classes':row['class_dates'],'status':'loi','reason':reason})
-            report_error(config,root,key,'BTVN lỗi: '+', '.join(row['class_dates'])+'; '+row['lesson_date']+'; '+reason,now)
-        rows=[row for key,row in unique.items() if key not in conflicts]
+            report_error(config,root,key,'BTVN lỗi: '+', '.join(name+'; '+day for name,day in row['class_dates'].items())+'; '+reason,now)
+        for key,row in unique.items():
+            if key in overlapping and key not in conflicts:
+                reason='Buổi học xuất hiện trong nhiều nhóm bài; giữ các nhóm liên quan'
+                receipt['items'].append({'lesson_key':key,'classes':row['class_dates'],'status':'loi','reason':reason})
+                report_error(config,root,key,'BTVN lỗi: '+', '.join(name+'; '+day for name,day in row['class_dates'].items())+'; '+reason,now)
+        rows=[row for key,row in unique.items() if key not in conflicts and key not in overlapping]
         for row in rows:
             if r.now_vn().date() > r.END:
                 break

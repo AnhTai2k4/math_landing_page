@@ -9,7 +9,7 @@ import {displayTitle} from '../src/components/display-text';
 const root=process.env.MTM_ROOT!,require=createRequire(join(root,'package.json')),{buildSync}=require('esbuild');
 let count=0;
 async function test(name:string,fn:()=>unknown){await fn();console.log('ĐẠT '+(++count)+' '+name);}
-const draft=(answer='A',submittedAt:number|null=null)=>({attemptId:'synthetic-attempt',answers:{q:answer},submittedAt} as unknown as Draft);
+const draft=(answer='A',submittedAt:number|null=null):Draft=>({version:1,examId:'synthetic-exam',examVersionHash:'synthetic-version',rubricVersion:'synthetic-rubric',attemptId:'synthetic-attempt',startedAt:0,deadline:600000,updatedAt:submittedAt??0,revision:0,answers:{q:answer},submittedAt});
 const response=(value:Draft)=>({draft:value,receipts:value.submittedAt===null?[]:[{attemptId:value.attemptId,submittedAt:value.submittedAt,score:0}]} as HomeworkState);
 function remote(){
  const calls:{draft:Draft;resolve:(v:HomeworkState)=>void;reject:(e:Error)=>void}[]=[],statuses:RemoteSaveStatus[]=[],saved:HomeworkState[]=[];

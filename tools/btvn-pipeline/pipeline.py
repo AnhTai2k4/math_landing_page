@@ -75,7 +75,7 @@ def read_material_rows(config,transport,row_errors=None):
             query=urllib.parse.parse_qs(urllib.parse.urlsplit(url).query)
             require(query.get('includeGridData')==['true'] and len(query.get('ranges',[]))==1,'Grid API cần includeGridData và đúng một vùng tab học liệu')
         rows.extend(sheet_rows(transport.request(url,headers=headers),sheet,row_errors))
-    return merge_rows(rows)
+    return merge_rows(rows,row_errors)
 
 def download_pdf(url,config,transport):
     """Resolve only configured Drive file links; bearer never escapes auth host scope."""
@@ -307,17 +307,41 @@ def sheet_rows(raw, sheet, row_errors=None):
             for key in ('document','handout','video','answers'):r[key]=links(key)[0] if links(key) else ''
             r['homework']=r['homework_urls'][0]
             r['lesson_key']='btvn-'+digest(encoded([sheet.get('program_key','mtm-btvn'),r['class_name'],r['lesson_date']]))[:32]
+            r['source_locations']=[{'tab':sheet.get('name',sheet.get('id','')),'cell':date_cell(row_number)}]
             parent=r;parent_row=row_number
         flush_parent()
-        return merge_rows(result)
+        return merge_rows(result,row_errors)
     except (UnicodeError,ValueError,TypeError):raise GateError('Dữ liệu học liệu sai cấu trúc UTF-8/JSON') from None
 
-def merge_rows(rows):
+def merge_rows(rows,row_errors=None):
+    # Chỉ tab/ô ngày được đưa vào receipt; không giữ URL/nhãn tệp/nội dung.
+    def locations(*items):
+        result=[]
+        for item in items:
+            for position in item.get('source_locations',[]):
+                value={key:position[key] for key in ('tab','cell')}
+                if value not in result:result.append(value)
+        return result
+    # Giữ key đã chặn xuyên các tab, không nhận lại một bản từ tab đọc sau.
+    blocked={item['lesson_key']:item for item in (row_errors or []) if item.get('scope')=='nguon_trung'}
     merged={}
     for row in rows:
-        key=row['lesson_key'];other=merged.get(key)
+        key=row['lesson_key']
+        if key in blocked:
+            blocked[key]['source_locations']=locations(blocked[key],row)
+            continue
+        other=merged.get(key)
         if other:
-            require(all(other.get(k,'')==row.get(k,'') for k in ('class_name','lesson_date','homework','answers','homework_urls','homework_note','homework_scope')), 'Cùng lớp/ngày nhưng nguồn BTVN xung đột; chưa đăng')
+            same=all(other.get(k,'')==row.get(k,'') for k in ('class_name','lesson_date','homework','answers','homework_urls','homework_note','homework_scope'))
+            if not same:
+                reason='Cùng lớp/ngày nhưng nguồn BTVN xung đột; chưa đăng'
+                if row_errors is None:raise GateError(reason)
+                error={'status':'loi','reason':reason,'scope':'nguon_trung','lesson_key':key,
+                       'classes':{row['class_name']:row['lesson_date']},'source_locations':locations(other,row)}
+                blocked[key]=error;merged.pop(key);row_errors.append(error)
+            else:
+                # Cùng nguồn vẫn giữ vị trí mọi bản để tìm đủ khi có xung đột sau.
+                merged[key]={**other,'source_locations':locations(other,row)}
             # Same source appears twice: retain first title/material deterministically.
             continue
         merged[key]=row

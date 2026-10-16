@@ -51,8 +51,8 @@ export function sourceRetrySteps(solution:string|undefined):string[]{
 }
 
 export type RetryVerdict='correct'|'wrong'|'incomplete'|'invalid';
-type RetryDraft={answer:Response;verdict:RetryVerdict|null;hints:number;solution:boolean;solutionViewed:boolean;needsRecheck:boolean};
-const emptyRetryDraft=(q:PracticeQuestion):RetryDraft=>({answer:q.kind==='tf'?[null,null,null,null]:null,verdict:null,hints:0,solution:false,solutionViewed:false,needsRecheck:false});
+type RetryDraft={answer:Response;verdict:RetryVerdict|null;hints:number;solution:boolean;solutionViewed:boolean;hintsViewed:boolean;needsRecheck:boolean};
+const emptyRetryDraft=(q:PracticeQuestion):RetryDraft=>({answer:q.kind==='tf'?[null,null,null,null]:null,verdict:null,hints:0,solution:false,solutionViewed:false,hintsViewed:false,needsRecheck:false});
 const hasRetryAnswer=(answer:Response)=>Array.isArray(answer)?answer.some(value=>typeof value==='boolean'):typeof answer==='string'&&!!answer.trim();
 /** Answer comparison only; no score, submission, storage or attempt is created. */
 export function checkRetryAnswer(q:PracticeQuestion,answer:Response):RetryVerdict{
@@ -87,11 +87,12 @@ function RetryExercise({exam,item,submittedAnswer,onCorrect,onNext,hasNext,compl
   const focused=useRef<{sequence:number|undefined;restoreFeedback:boolean}>({sequence:undefined,restoreFeedback:!!(savedDraft?.verdict||savedDraft?.needsRecheck)});
   const [retry,setRetry]=useState<RetryDraft>(()=>{
     const draft=savedDraft??emptyRetryDraft(q);
-    return {...draft,solution:canAttemptAgain?false:draft.solution,solutionViewed:draft.solutionViewed||draft.solution};
+    return {...draft,solution:canAttemptAgain?false:draft.solution,solutionViewed:draft.solutionViewed||draft.solution,hintsViewed:!!(draft.hintsViewed||draft.hints)};
   });
-  const [confirmSolution,setConfirmSolution]=useState(false);
-  const solutionButton=useRef<HTMLButtonElement|null>(null);
-  const {answer,verdict,hints,solution,solutionViewed,needsRecheck}=retry;
+  const [confirmSource,setConfirmSource]=useState<'hint'|'solution'|null>(null);
+  const solutionButton=useRef<HTMLButtonElement|null>(null),hintButton=useRef<HTMLButtonElement|null>(null);
+  const sourceDialog=useRef<HTMLDialogElement|null>(null),cancelSourceButton=useRef<HTMLButtonElement|null>(null),focusHints=useRef(false);
+  const {answer,verdict,hints,solution,solutionViewed,hintsViewed,needsRecheck}=retry;
   const revise=(patch:Partial<RetryDraft>)=>{const next={...retry,...patch};setRetry(next);onDraftChange?.(next);};
   const {steps,reason}=sourceRetryStepInfo(q.solution),label=questionLabel(exam,index).full;
   const feedbackId=instance+'-feedback';
@@ -101,6 +102,15 @@ function RetryExercise({exam,item,submittedAnswer,onCorrect,onNext,hasNext,compl
   const showComplete=complete&&!needsRecheck&&(!verdict||verdict==='correct');
   const hasFeedback=!!verdict||needsRecheck||showComplete;
   const change=(next:Response)=>revise({answer:next,verdict:null,needsRecheck:true});
+  const restoreSourceFocus=()=>{(confirmSource==='hint'?hintButton:solutionButton).current?.focus();};
+  const cancelSource=()=>{sourceDialog.current?.close();setConfirmSource(null);restoreSourceFocus();};
+  const revealHint=()=>{
+    const nextHints=Math.min(steps.length,hints+1),last=nextHints===steps.length;
+    // Focus sau commit để không ở lại trên nút vừa bị disabled khi mở bước cuối.
+    if(last)focusHints.current=true;
+    revise({hints:nextHints,hintsViewed:true});
+    return last;
+  };
   return <div className="btvn-retry-exercise">
     <h3 tabIndex={-1} ref={node=>{if(node&&focusTitle&&!focused.current.restoreFeedback&&focused.current.sequence!==focusSeq){focused.current.sequence=focusSeq;node.focus();}}}>{label}</h3>
     {(q.prompt||q.text)&&<p className="btvn-retry-text"><MathText text={q.prompt??q.text!}/></p>}
@@ -114,17 +124,17 @@ function RetryExercise({exam,item,submittedAnswer,onCorrect,onNext,hasNext,compl
         return <fieldset key={i} className={mismatch?'is-mismatch':undefined} aria-invalid={mismatch||undefined} aria-describedby={instance+'-statement-'+i+(mismatch?' '+feedbackId:'')}><legend>Ý {statementLetters[i]}</legend><div className="btvn-retry-tf-row"><p id={instance+'-statement-'+i} className="btvn-retry-text btvn-retry-statement"><MathText text={q.statements?.[i]??''}/></p><div className="btvn-retry-choices">{[true,false].map(value=><label key={String(value)}><input type="radio" name={instance+'-tf-'+i} checked={Array.isArray(answer)&&answer[i]===value} onChange={()=>{const next=Array.isArray(answer)?[...answer]:[null,null,null,null];next[i]=value;change(next);}}/><span>{value?'Đúng':'Sai'}</span></label>)}</div></div></fieldset>;
       })}</div>}
       {q.kind==='short'&&<div><label htmlFor={instance+'-answer'}>Em thử lại câu trả lời</label><input id={instance+'-answer'} className="btvn-retry-short" type="text" maxLength={500} autoComplete="off" spellCheck={false} value={typeof answer==='string'?answer:''} aria-invalid={verdict==='invalid'||undefined} aria-describedby={`${instance}-format ${instance}-interpretation`+(hasFeedback?' '+feedbackId:'')} onChange={event=>change(event.target.value)}/><div aria-live="polite" aria-atomic="true"><p className={'btvn-footnote ep-short-interpretation'+(typeof answer==='string'&&/^[+-]?\d+[.,]\d{3}$/.test(answer.trim())?' is-ambiguous':'')} id={instance+'-interpretation'}>{shortInterpretationMessage(q.mode,answer)}</p><p className="btvn-footnote" id={instance+'-format'}>{q.mode==='numeric'?'Nhập số nguyên hoặc thập phân bằng dấu phẩy hoặc dấu chấm, không nhập đơn vị hay biểu thức.':q.mode==='rational'?'Nhập số nguyên, số thập phân hoặc phân số, ví dụ -3/4; không nhập đơn vị hay biểu thức.':'Nhập chính xác theo yêu cầu đề, có phân biệt chữ hoa và chữ thường.'}</p></div></div>}
-      <div className="btvn-overview-actions"><button type="submit" className="btvn-btn primary">Kiểm tra lại</button><button type="button" className="btvn-btn" aria-label="Thử lại từ đầu câu này" onClick={()=>{setConfirmSolution(false);revise({...emptyRetryDraft(q),needsRecheck:hasRetryAnswer(answer)||corrected});}}>Thử lại từ đầu</button></div>
+      <div className="btvn-overview-actions"><button type="submit" className="btvn-btn primary">Kiểm tra lại</button><button type="button" className="btvn-btn" aria-label="Thử lại từ đầu câu này" onClick={()=>{setConfirmSource(null);revise({...emptyRetryDraft(q),solutionViewed,hintsViewed});}}>Thử lại từ đầu</button></div>
     </form>
     <div id={feedbackId} role="status" aria-live="polite" aria-atomic="true" tabIndex={-1} ref={node=>{if(node&&hasFeedback&&focused.current.restoreFeedback){focused.current.restoreFeedback=false;focused.current.sequence=focusSeq;node.focus();}}} className={hasFeedback?'btvn-retry-feedback '+(verdict&&verdict!=='correct'?'btvn-retry-error':verdict==='correct'||showComplete?'btvn-retry-success':'btvn-retry-notice'):undefined}>{verdict&&<p>{q.kind==='tf'&&verdict==='wrong'&&!canShowMismatches?'Có ý chưa khớp. Em đọc lại từng mệnh đề hoặc mở lời giải.':feedback[verdict]}</p>}{!verdict&&needsRecheck&&<p>Em đã đổi lựa chọn. Bấm Kiểm tra lại để chấm lại câu này.</p>}{mismatches.length>0&&<p>Các ý chưa khớp: {mismatches.map(letter=>'Ý '+letter).join(', ')}. Em đọc lại từng mệnh đề rồi thử lại.</p>}{showComplete&&<p>Em đã làm đúng các câu trong phiên ôn này. Em có thể nghỉ hoặc xem lại cách làm.</p>}</div>
     <div className="btvn-retry-next-bar"><button type="button" className={'btvn-btn'+(corrected&&hasNext?' btvn-retry-start':'')} disabled={!hasNext} aria-describedby={!hasNext&&!complete?instance+'-remaining':undefined} onClick={onNext}>Ôn câu chưa xong tiếp theo</button>{!hasNext&&!complete&&<p id={instance+'-remaining'} className="btvn-footnote">Em đang ở câu còn lại chưa đúng hoặc còn bỏ trống.</p>}</div>
     {q.correctionNote&&<p><strong>Đính chính MTM:</strong> <MathText text={q.correctionNote}/></p>}
     <div className="btvn-retry-support">
-      {steps.length>0&&<button type="button" className="btvn-btn" disabled={hints>=steps.length} aria-controls={instance+'-hints'} onClick={()=>revise({hints:Math.min(steps.length,hints+1)})}>{hints>=steps.length?'Đã mở hết các bước nguồn':'Xem gợi ý bước '+(hints+1)}</button>}
-      <button type="button" ref={solutionButton} className="btvn-btn" aria-expanded={solution} aria-controls={instance+'-solution'} aria-describedby={confirmSolution?instance+'-solution-warning':undefined} onClick={()=>{if(!solution&&!solutionViewed&&canAttemptAgain){setConfirmSolution(true);return;}setConfirmSolution(false);revise({solution:!solution,solutionViewed:true});}}>{solution?'Đóng lời giải câu ôn':solutionViewed?'Mở lại lời giải đã xem':'Xem lời giải đầy đủ của câu ôn'}</button>
+      {steps.length>0&&<button type="button" ref={hintButton} className="btvn-btn" disabled={hints>=steps.length} aria-controls={instance+'-hints'} aria-describedby={confirmSource==='hint'?instance+'-solution-warning':undefined} onClick={()=>{if(!hintsViewed&&canAttemptAgain){setConfirmSource('hint');return;}setConfirmSource(null);revealHint();}}>{hints>=steps.length?'Đã mở hết các bước nguồn':'Xem gợi ý bước '+(hints+1)}</button>}
+      <button type="button" ref={solutionButton} className="btvn-btn" aria-expanded={solution} aria-controls={instance+'-solution'} aria-describedby={confirmSource==='solution'?instance+'-solution-warning':undefined} onClick={()=>{if(!solution&&!solutionViewed&&canAttemptAgain){setConfirmSource('solution');return;}setConfirmSource(null);revise({solution:!solution,solutionViewed:true});}}>{solution?'Đóng lời giải câu ôn':solutionViewed?'Mở lại lời giải đã xem':'Xem lời giải đầy đủ của câu ôn'}</button>
     </div>
-    {confirmSolution&&<div className="btvn-retry-feedback btvn-retry-notice" role="group" aria-labelledby={instance+'-solution-warning'}><p id={instance+'-solution-warning'}>Em còn lượt tính điểm. Lượt làm sau khi đã xem lời giải vẫn tính điểm.</p><div className="btvn-overview-actions"><button type="button" className="btvn-btn" onClick={()=>{setConfirmSolution(false);revise({solution:true,solutionViewed:true});solutionButton.current?.focus();}}>Vẫn mở lời giải</button><button type="button" className="btvn-btn" onClick={()=>{setConfirmSolution(false);solutionButton.current?.focus();}}>Tiếp tục tự làm</button></div></div>}
-    {steps.length>0?<><div id={instance+'-hints'} className="btvn-retry-hints" aria-live="polite">{steps.slice(0,hints).map((step,i)=><p className="btvn-retry-text" key={i}><MathText text={step}/></p>)}</div>{hints>0&&<p className="btvn-footnote">Các bước được trích nguyên văn từ lời giải của câu này. Em xem bản đầy đủ để đối chiếu.</p>}</>:<p className="btvn-footnote">{reason==='preamble'?'Em mở lời giải đầy đủ để xem trọn phần mở đầu, điều kiện và cách làm.':'Em mở lời giải đầy đủ để xem cách làm của câu này.'}</p>}
+    {confirmSource&&<dialog className="btvn-retry-feedback btvn-retry-notice btvn-retry-confirm" role="dialog" aria-modal="true" aria-labelledby={instance+'-source-title'} aria-describedby={instance+'-solution-warning'} ref={node=>{sourceDialog.current=node;if(node&&!node.open){node.showModal();cancelSourceButton.current?.focus();}}} onCancel={event=>{event.preventDefault();cancelSource();}}><h4 id={instance+'-source-title'}>{confirmSource==='hint'?'Mở gợi ý từ lời giải?':'Mở lời giải đầy đủ?'}</h4><p id={instance+'-solution-warning'}>Em còn lượt tính điểm. {confirmSource==='hint'?'Gợi ý trích từ lời giải có thể cho biết đáp án. ':''}Lượt làm sau khi đã xem lời giải vẫn tính điểm.</p><div className="btvn-overview-actions"><button type="button" className="btvn-btn" onClick={()=>{sourceDialog.current?.close();setConfirmSource(null);if(confirmSource==='hint'){if(!revealHint())restoreSourceFocus();}else{revise({solution:true,solutionViewed:true});restoreSourceFocus();}}}>{confirmSource==='hint'?'Vẫn mở gợi ý':'Vẫn mở lời giải'}</button><button type="button" ref={cancelSourceButton} className="btvn-btn" onClick={cancelSource}>Tiếp tục tự làm</button></div></dialog>}
+    {steps.length>0?<><div id={instance+'-hints'} className="btvn-retry-hints" aria-live="polite" aria-label="Các bước gợi ý đã mở" tabIndex={-1} ref={node=>{if(node&&focusHints.current){focusHints.current=false;node.focus();}}}>{steps.slice(0,hints).map((step,i)=><p className="btvn-retry-text" key={i}><MathText text={step}/></p>)}</div>{hints>0&&<p className="btvn-footnote">Các bước được trích nguyên văn từ lời giải của câu này. Em xem bản đầy đủ để đối chiếu.</p>}</>:<p className="btvn-footnote">{reason==='preamble'?'Em mở lời giải đầy đủ để xem trọn phần mở đầu, điều kiện và cách làm.':'Em mở lời giải đầy đủ để xem cách làm của câu này.'}</p>}
     {solution&&<div id={instance+'-solution'}>{q.sourceContent?.solutions?.length?<MtmSourceContent segments={q.sourceContent.solutions} assetBase="/practice-media/source-crops" label={q.sourceRef} kind="solution" context="review" errorFallback={q.solution?.trim()?<p className="btvn-retry-text"><MathText text={q.solution}/></p>:undefined}/>:<Suspense fallback={<p>Đang mở lời giải…</p>}><DetailedSolution examId={exam.id} versionHash={exam.versionHash} questionId={q.id} fallback={q.solution!}/></Suspense>}</div>}
   </div>;
 }

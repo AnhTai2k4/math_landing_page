@@ -17,7 +17,7 @@ type Limit={count:number; until:number};
 export class HomeworkService {
   private sessions=new Map<string,Session>();
   private limits=new Map<string,Limit>();
-  get maxAttempts(){return this.materials.find(l=>l.lessonCode===this.lessonCode)?.kind==='kiem-tra-thang'?1:5;}
+  private maxAttemptsFor(token:string){return this.monthly(token)?1:5;}
   private monthly(token:string){const m=this.materials.find(l=>l.lessonCode===this.selected(token));return m?.kind==='kiem-tra-thang'?m:undefined;}
   constructor(readonly repo:HomeworkRepository,readonly exam:PracticeExam,readonly dueAt:number,
     readonly classKey='lop-test-12',readonly lessonCode='buoi-mau-01',private clock=Date.now,readonly materials:LessonMaterial[]=[],readonly lessonExams:Record<string,PracticeExam>={}){
@@ -77,10 +77,10 @@ export class HomeworkService {
       return {...visibleLesson(l,root.student.className,this.clock()),dueAt:entry?.nextActualClassAt??null,bestScore:best,late:receipt?.late??null,submittedAt:receipt?.submittedAt??null,available:this.clock()>=lessonOpensAt(l,root.student.className)&&(l.lessonCode===this.lessonCode||!!this.lessonExams[l.lessonCode])};
     });
     const now=this.clock(),opensAt=this.opening(token),monthly=this.monthly(token),draft=work.drafts.at(-1)??null;
-    if(now<opensAt)return {serverNow:now,exam:null,opensAt,canStart:false,solutionsAvailable:false,fullName:work.student.fullName,className:work.student.className,lessonCode:this.selected(token),dueAt:work.student.nextActualClassAt??null,maxAttempts:this.maxAttempts,attemptsUsed:0,draft:null,receipts:[],bestScore:null,demo:true,lessons};
+    if(now<opensAt)return {serverNow:now,exam:null,opensAt,canStart:false,solutionsAvailable:false,fullName:work.student.fullName,className:work.student.className,lessonCode:this.selected(token),dueAt:work.student.nextActualClassAt??null,maxAttempts:this.maxAttemptsFor(token),attemptsUsed:0,draft:null,receipts:[],bestScore:null,demo:true,lessons};
     const graded=!!draft&&draft.submittedAt!==null&&work.receipts.some(r=>r.attemptId===draft.attemptId);
     const solutionsAvailable=graded&&(!monthly||now>=(monthly.closesAt??Infinity));
-    return {serverNow:now,exam:solutionsAvailable?this.examFor(token):concealMonthlySolutions(this.examFor(token)),opensAt,canStart:!monthly||now<(monthly.closesAt??Infinity),solutionsAvailable,...(monthly?{kind:'kiem-tra-thang' as const,closesAt:monthly.closesAt}:{}),fullName:work.student.fullName,className:work.student.className,lessonCode:this.selected(token),dueAt:work.student.nextActualClassAt??null,maxAttempts:this.maxAttempts,
+    return {serverNow:now,exam:solutionsAvailable?this.examFor(token):concealMonthlySolutions(this.examFor(token)),opensAt,canStart:!monthly||now<(monthly.closesAt??Infinity),solutionsAvailable,...(monthly?{kind:'kiem-tra-thang' as const,closesAt:monthly.closesAt}:{}),fullName:work.student.fullName,className:work.student.className,lessonCode:this.selected(token),dueAt:work.student.nextActualClassAt??null,maxAttempts:this.maxAttemptsFor(token),
       attemptsUsed:work.drafts.length,draft,receipts:work.receipts,bestScore:scores.length?Math.max(...scores):null,demo:true,lessons};
   }
   /** Chỉ phía vận hành gọi sau khi xác minh ca thực học, không mở API học sinh. */
@@ -95,7 +95,7 @@ export class HomeworkService {
     let work=this.lessonWork(token);const previous=work.drafts.at(-1),now=this.clock();
     if(previous?.submittedAt===null){if(now<Math.min(previous.deadline,this.monthly(token)?.closesAt??Infinity))return this.state(token);if(this.monthly(token))return this.submit(token,previous.attemptId,previous.answers);this.submit(token,previous.attemptId,previous.answers);work=this.lessonWork(token);}
     const monthly=this.monthly(token);if(monthly&&(now<monthly.opensAt!||now>=monthly.closesAt!))throw new HomeworkError(409,'Bài kiểm tra chưa mở hoặc đã đóng.');
-    if(work.drafts.length>=this.maxAttempts)throw new HomeworkError(409,'Đã dùng hết lượt làm bài.');
+    if(work.drafts.length>=this.maxAttemptsFor(token))throw new HomeworkError(409,'Đã dùng hết lượt làm bài.');
     const made=createDraft(this.examFor(token),randomBytes(16).toString('hex'),now);if(!made.ok)throw new Error(made.message);
     work.drafts.push(made.value);this.putLesson(token,work);return this.state(token);
   }
