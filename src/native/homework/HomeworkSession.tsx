@@ -3,11 +3,12 @@ import HomeworkBrowserHelp from './HomeworkBrowserHelp';
 import {Link} from '../../migration/navigation';
 import {createAssetRenewal,mergeHomeworkSave,mergeHomeworkRenewal,homeworkServerNow} from './asset-renewal';
 import {scheduleOpeningRefresh,mergeOpeningState} from './opening-refresh';
-import {useContext,useEffect,useMemo,useRef,useState} from 'react';
+import {useContext,useEffect,useMemo,useRef,useState,type ReactNode} from 'react';
 import {displayClassName} from './presentation';
 import EntryNotice,{entryFailure} from './EntryNotice';
 import LessonCards from './LessonCards';
 import HomeworkOverview from './HomeworkOverview';
+import R104Dashboard from './R104Dashboard';
 import HomeworkGate from './HomeworkGate';
 import PracticeAttempt from '../exams/PracticeAttempt';
 import type {Draft,Store} from '../exams/store';
@@ -58,7 +59,7 @@ function ManagedAttempt({state,gateway,onState,onPendingChange,saverRef}:{state:
       questionReader={<HomeworkReader exam={state.exam}/>}/>
   </>;
 }
-export default function HomeworkSession({pathname}:{pathname:string}){
+export default function HomeworkSession({pathname,profileControl}:{pathname:string;profileControl?:(state:HomeworkState)=>ReactNode}){
   const parts=/^\/btvn\/([a-z0-9-]+)\/([a-z0-9-]+)$/.exec(pathname);
   const [state,setState]=useState<HomeworkState|null>(null),[gate,setGate]=useState({fullName:'',phone:'',className:''});
   const [studentCode,setStudentCode]=useState('');
@@ -167,6 +168,13 @@ export default function HomeworkSession({pathname}:{pathname:string}){
       completed=true;setState(next);setRoom(action==='start'||!!next.draft);setGate({fullName:'',phone:'',className:''});setStudentCode('');
     }catch(error){if(current())setNotice(error instanceof Error?error.message:'Chưa kết nối được máy chủ. Em thử lại sau.');}finally{if(mounted.current&&(current()||completed))setBusy(false);}
   };
+  const selectLesson=async(code:string)=>{
+    const generation=sessionGeneration.current,current=()=>mounted.current&&sessionGeneration.current===generation;
+    setBusy(true);setNotice('');
+    try{const next=await gateway.call('select',{lessonCode:code});if(!current())return;setState(next);setRoom(true);requestAnimationFrame(()=>{if(current())document.getElementById('btvn-summary')?.scrollIntoView({behavior:'smooth'});});}
+    catch(error){if(current())setNotice(error instanceof Error?error.message:'Chưa mở được bài.');}
+    finally{if(current())setBusy(false);}
+  };
   if(!parts&&pathname!=='/btvn')return <section className="mig-container mig-panel"><Link href="/" className="btvn-home-link">← Trang chủ</Link><h1>Đường dẫn BTVN không hợp lệ</h1></section>;
   return <section className="ep-root btvn-session" onErrorCapture={event=>{if(event.target instanceof HTMLImageElement&&event.target.closest('.mtm-source-content'))renewAssets.current(true);}}>
     {leaveConfirmation}
@@ -176,7 +184,7 @@ export default function HomeworkSession({pathname}:{pathname:string}){
       <header className="btvn-top"><Link href="/" className="btvn-home-logo" aria-label="Minh Thành Math, về trang chủ"><img src="/mtm-original-logo-420w.webp" alt="Minh Thành Math"/></Link><div><b>Bài tập về nhà</b><p>Video buổi học và BTVN của lớp em</p></div><div className="btvn-me"><Link href="/" className="btvn-home-link">← Trang chủ</Link><b>{state.fullName}</b><span>{displayClassName(state)}</span><button disabled={busy} onClick={()=>void requestExit(async()=>{await gateway.call('logout');setState(null);setRoom(false);})}>Thoát</button></div></header>
       <HomeworkBrowserHelp/>
       {state.classMismatch&&<EntryNotice className={state.className}/>}
-      {!room&&<LessonCards serverNow={state.serverNow} clientReceivedAt={state.clientReceivedAt} demo={state.demo} lessons={state.lessons??[]} busy={busy} onHomework={async code=>{const generation=sessionGeneration.current,current=()=>mounted.current&&sessionGeneration.current===generation;setBusy(true);setNotice('');try{const next=await gateway.call('select',{lessonCode:code});if(!current())return;setState(next);setRoom(true);requestAnimationFrame(()=>{if(current())document.getElementById('btvn-summary')?.scrollIntoView({behavior:'smooth'});});}catch(error){if(current())setNotice(error instanceof Error?error.message:'Chưa mở được bài.');}finally{if(current())setBusy(false);}}}/>}
+      {!room&&<><R104Dashboard state={state} busy={busy} onSelect={code=>void selectLesson(code)} profileControl={profileControl?.(state)}/><div className="r104-lesson-list" id="r104-lesson-list"><LessonCards serverNow={state.serverNow} clientReceivedAt={state.clientReceivedAt} demo={state.demo} lessons={state.lessons??[]} busy={busy} onHomework={code=>void selectLesson(code)}/></div></>}
       {room&&(state.exam||state.opensAt!==undefined||state.kind==='kiem-tra-thang')&&<><button className="btvn-btn btvn-back" disabled={busy} onClick={()=>void requestExit(()=>setRoom(false))}>← Các buổi học</button>
         {state.exam&&state.draft&&state.draft.submittedAt===null?<ManagedAttempt key={state.draft.attemptId} state={{...state,exam:state.exam}} gateway={gateway} saverRef={saverRef} onState={next=>setState(previous=>previous?mergeHomeworkSave(previous,next):next)} onPendingChange={pending=>{remotePending.current=pending;}}/>:<HomeworkOverview key={state.lessonCode+':'+(state.draft?.attemptId??'new')} state={state} busy={busy} onRefreshReceipt={()=>void refreshReceipt()} onStart={()=>void run('start')}/>}
       </>}

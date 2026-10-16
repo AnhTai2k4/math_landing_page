@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import {appearanceIdentity,readAppearance,DEFAULT_APPEARANCE} from '../src/components/student-appearance';
+assert.notEqual(appearanceIdentity('Học sinh GIẢ|2K9 HSA (THỨ 5)'),appearanceIdentity('Học sinh GIẢ|2K9 HSA (CN)'));
+assert.equal(appearanceIdentity('Học sinh GIẢ (ghi chú)|2K9 9+'),appearanceIdentity(' HỌC SINH GIẢ | 2k9 9+ '));
+assert.equal(appearanceIdentity('|2K9 9+'),'');
+let content:string|null=null;Object.defineProperty(globalThis,'localStorage',{configurable:true,value:{getItem:()=>content}});
+content='invalid';assert.deepEqual(readAppearance('fixture'),DEFAULT_APPEARANCE);
+content=JSON.stringify({avatar:'spark',photo:'https://private.invalid/student.jpg'});assert.deepEqual(readAppearance('fixture'),{avatar:'spark',photo:''});
+content=JSON.stringify({avatar:'spark',photo:'data:image/svg+xml;base64,PHN2Zz4='});assert.equal(readAppearance('fixture').photo,'');
+content=JSON.stringify({avatar:'wave',photo:'data:image/jpeg;base64,'+'a'.repeat(180000)});assert.equal(readAppearance('fixture').photo,'');
+Object.defineProperty(globalThis,'localStorage',{configurable:true,value:{getItem:()=>{throw Error('storage denied');}}});assert.deepEqual(readAppearance('fixture'),DEFAULT_APPEARANCE);
+console.log('R104 appearance: HSA classes remain distinct, name notes normalize, empty names rejected, external/SVG/oversized images and unavailable storage fail closed.');
