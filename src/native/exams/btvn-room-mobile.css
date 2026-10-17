@@ -6,6 +6,7 @@
   min-width: 0;
   overflow-wrap: anywhere;
 }
+.fr-study-layout { display: contents; }
 .ep-root.fr-room.r104-room.r106-room[data-homework] *,
 .ep-root.fr-room.r104-room.r106-room[data-homework] *::before,
 .ep-root.fr-room.r104-room.r106-room[data-homework] *::after { box-sizing: border-box; }
@@ -90,28 +91,125 @@
   padding-inline: 8px;
 }
 
+.ep-root.fr-room.r104-room.r106-room[data-homework] .fr-sheet .fr-section-label {
+  display: inline-flex;
+  align-items: center;
+  width: auto;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0 0 10px;
+  padding: 6px 10px;
+  border: 1px solid var(--fr-line);
+  border-radius: 8px;
+  background: var(--fr-bg);
+  font-size: 14px;
+  font-weight: 750;
+  line-height: 1.5;
+  white-space: normal;
+}
+
 @media (min-width: 761px) {
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-top {
+    padding-inline: calc(var(--btvn-room-gutter) + 20px);
+  }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-top::after {
+    left: var(--btvn-room-gutter);
+    right: var(--btvn-room-gutter);
+  }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-study-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(320px, 22vw, 336px);
+    align-items: stretch;
+    gap: 24px;
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    width: 100%;
+    padding: 12px var(--btvn-room-gutter) 24px;
+  }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-workspace {
+    grid-column: 1;
+    grid-row: 1;
+    width: 100%;
+    min-height: 0;
+    padding: 0;
+    scrollbar-gutter: stable;
+  }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-paper {
+    min-height: 100%;
+    padding: 28px 32px;
+  }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-sheet,
   .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-sheet.is-open {
+    grid-column: 2;
+    grid-row: 1;
     display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    padding: 16px var(--btvn-room-gutter);
-    max-height: 40dvh;
-    overflow-y: auto;
+    flex-flow: column nowrap;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 0;
+    position: static;
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+    max-height: none;
+    padding: 22px 20px;
+    border: 1px solid var(--fr-line);
+    border-radius: 24px;
+    background: var(--fr-card);
+    overflow: auto;
+    scrollbar-gutter: stable;
   }
-  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-sheet.is-open > section {
-    flex: 1 1 280px;
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-sheet > * {
+    flex: none;
+    order: initial;
+    grid-column: auto;
+    grid-row: auto;
+  }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-sheet .fr-sheet-title {
+    width: auto;
+    margin-bottom: 12px;
+  }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-sheet h2 { font-size: 20px; }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-sheet .fr-sheet-title small {
+    display: block;
+    margin-top: 4px;
+    font-size: 14px;
+  }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-sheet > section {
+    display: block;
+    width: 100%;
     min-width: 0;
     max-width: 100%;
+    margin: 22px 0 0;
   }
-  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-sheet.is-open .fr-grid {
-    flex-wrap: wrap;
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-sheet .fr-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 8px;
+    width: 100%;
     min-width: 0;
     max-width: 100%;
+    padding: 4px;
   }
-  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-sheet.is-open .fr-legend {
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-sheet .fr-grid button {
+    width: 100%;
+    min-width: 0;
+    height: 44px;
+    min-height: 44px;
+    font-size: 16px;
+  }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-sheet .fr-legend {
+    font-size: 13px;
+    line-height: 1.65;
     white-space: normal;
-    flex-basis: 100%;
+  }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-sheet .fr-wide {
+    width: 100%;
+    margin-top: 14px;
+    padding: 10px 12px;
+    font-size: 14px;
+    white-space: normal;
   }
 }
 
@@ -192,6 +290,15 @@
   .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-mobile-nav .fr-submit { grid-column: auto; }
   .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-answer-dock small { margin-top: 6px; overflow-wrap: anywhere; }
   .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-sheet:not(.is-open) { min-height: 66px; padding: 6px 12px; }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-sheet:not(.is-open) .fr-section-label {
+    flex: none;
+    max-width: none;
+    margin: 0;
+    padding: 7px 10px;
+    font-size: 16px;
+    white-space: nowrap;
+  }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-sheet.is-open .fr-section-label { font-size: 16px; }
   .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-sheet.is-open {
     max-height: min(80dvh, calc(var(--btvn-viewport-height, 100dvh) - 12px));
     overflow-y: auto;

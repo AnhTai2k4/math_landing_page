@@ -43,12 +43,13 @@ guard(has(room,/.fr-workspace/,'padding-inline',/var\(--btvn-room-gutter\)/)&&ha
 guard(has(room,/.fr-answer-dock/,'flex',/^none$/),'Thanh nộp chiếm một hàng riêng, không đè lên vùng đọc');
 guard(has(room,/.fr-answer-dock/,'padding',/safe-area-inset-bottom/),'Thanh nộp chừa vùng an toàn phía dưới');
 guard(has(room,/.fr-sheet.is-open/,'overflow-y',/^auto$/)&&has(room,/.fr-sheet.is-open/,'max-height',/btvn-viewport-height/),'Phiếu mở cuộn riêng trong chiều cao nhìn thấy');
-// Lỗi bắt được bằng Chrome ở 1366 px: grid max-content của phiếu mở
-// cộng các phần vượt sang 1418 px. Cả nhóm phần và dãy nút phải xuống hàng.
+// Phòng máy tính có hai cột trong một grid chung. Phiếu luôn hiện bên phải,
+// các nhóm thu nhỏ và lưới câu xuống hàng trong cột, không ép tràn viewport.
 const desktopRoom=room.filter(rule=>!mobile(rule));
-guard(has(desktopRoom,/\.fr-sheet\.is-open$/,'display',/^flex$/)&&has(desktopRoom,/\.fr-sheet\.is-open$/,'flex-wrap',/^wrap$/),'Phiếu mở trên máy tính xuống hàng khi không đủ chiều ngang');
-guard(has(desktopRoom,/\.fr-sheet\.is-open\s*>\s*section$/,'min-width',/^0$/)&&has(desktopRoom,/\.fr-sheet\.is-open\s*>\s*section$/,'max-width',/^100%$/),'Mỗi phần phiếu mở trên máy tính thu nhỏ trong container');
-guard(has(desktopRoom,/\.fr-sheet\.is-open\s+\.fr-grid$/,'flex-wrap',/^wrap$/),'Dãy nút câu hỏi của phiếu mở không ép tràn ngang');
+guard(has(desktopRoom,/\.fr-study-layout$/,'display',/^grid$/)&&has(desktopRoom,/\.fr-study-layout$/,'grid-template-columns',/minmax\(0,\s*1fr\).*clamp/),'Đề và phiếu dùng hai cột cân đối, cho phép đề thu nhỏ');
+guard(has(desktopRoom,/\.fr-sheet(?:\.is-open)?\s*(?:,|$)/,'grid-column',/^2$/)&&has(desktopRoom,/\.fr-sheet(?:\.is-open)?\s*(?:,|$)/,'position',/^static$/),'Phiếu máy tính luôn nằm trong cột phải, không phải popup bị khuất');
+guard(has(desktopRoom,/\.fr-sheet\s*>\s*section$/,'min-width',/^0$/)&&has(desktopRoom,/\.fr-sheet\s*>\s*section$/,'max-width',/^100%$/),'Mỗi phần phiếu máy tính thu nhỏ trong container');
+guard(has(desktopRoom,/\.fr-sheet\s+\.fr-grid$/,'grid-template-columns',/repeat\(5,\s*minmax\(0,\s*1fr\)\)/),'Dãy câu hỏi xuống hàng trong năm cột không ép tràn ngang');
 guard(has(room,/button/,'min-height',/^(?:4[4-9]|[5-9]\d)px$/),'Nút phòng BTVN có vùng chạm ít nhất 44 px');
 guard(has(room,/button/,'font-size',/^16px$/)&&has(page,/input/,'font-size',/^16px$/),'Chữ và ô nhập trên điện thoại ít nhất 16 px');
 
