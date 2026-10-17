@@ -1,6 +1,7 @@
 .cp-recall{color:#213269;font-size:1rem;line-height:1.7;min-width:0}
 .cp-recall label{display:block;font-weight:700;margin:12px 0 6px}
 .cp-recall select{font:inherit;width:100%;max-width:100%;min-height:48px;border:1px solid #9daac4;border-radius:10px;padding:10px;background:#fff;color:#213269;text-overflow:ellipsis}
+.cp-recall select:disabled{background:#f2f5fa;color:#526078;cursor:default}
 .cp-recall .cp-recall-note{font-size:.9rem;color:#526078;overflow-wrap:anywhere}
 .cp-recall-session{border:1px solid #d7deea;border-radius:12px;background:#fff;padding:20px;margin:16px 0;min-width:0}
 .cp-recall-session h3{font-size:1.25rem;line-height:1.5;margin:0 0 12px;overflow-wrap:anywhere}

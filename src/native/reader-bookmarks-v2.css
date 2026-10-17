@@ -1,0 +1,6 @@
+.native-ui .reader-bookmarks[data-bookmark-version="2"] button{min-height:44px;font-size:14px}
+.native-ui .reader-bookmarks[data-bookmark-version="2"] .reader-bookmarks-navigation{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;max-width:100%;border-radius:8px}
+.native-ui .reader-bookmarks[data-bookmark-version="2"] .reader-bookmarks-navigation button{border-color:#213269;color:#213269;background:#fff8dd}
+.native-ui .reader-bookmarks[data-bookmark-version="2"] .reader-bookmarks-navigation button:enabled:hover{background:#FFCF24}
+.native-ui .reader-bookmarks[data-bookmark-version="2"] button:focus-visible,.native-ui .reader-bookmarks[data-bookmark-version="2"] .reader-bookmarks-navigation:focus{outline:3px solid #213269;outline-offset:3px}
+@media(max-width:600px){.native-ui .reader-bookmarks[data-bookmark-version="2"] .reader-bookmarks-navigation button{flex:1 1 100%;width:100%}}

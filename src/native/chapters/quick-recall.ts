@@ -21,4 +21,4 @@ export function recallDecks(track:string):RecallDeck[]{
   }));
 }
 
-export const recallBatch=(deck:RecallDeck,offset:number)=>deck.cards.slice(offset,offset+5);
+export const recallBatch=(deck:RecallDeck,offset:number,size:3|5=5)=>deck.cards.slice(offset,offset+size);
