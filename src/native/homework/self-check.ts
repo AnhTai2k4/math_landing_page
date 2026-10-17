@@ -6,7 +6,11 @@ export const HOMEWORK_CHECKS = [
   {id:'data',label:'Khớp dữ kiện của đề',detail:'Đọc lại câu hỏi để kết quả đúng đại lượng, phạm vi và dữ kiện đã cho.',hint:'Đối chiếu điều đề hỏi với kết luận, kiểm dữ kiện đã chép và xem kết quả có hợp lý trong tình huống của bài không.'},
 ] as const;
 
-export function summarizeHomeworkChecks(selected:readonly string[]){
-  const checked=new Set(selected),remaining=HOMEWORK_CHECKS.filter(item=>!checked.has(item.id));
+export type HomeworkCheckFocus='all'|typeof HOMEWORK_CHECKS[number]['id'];
+export function homeworkChecksForFocus(focus:HomeworkCheckFocus='all'){
+  return [...HOMEWORK_CHECKS.filter(item=>item.id===focus),...HOMEWORK_CHECKS.filter(item=>item.id!==focus)];
+}
+export function summarizeHomeworkChecks(selected:readonly string[],focus:HomeworkCheckFocus='all'){
+  const checked=new Set(selected),remaining=homeworkChecksForFocus(focus).filter(item=>!checked.has(item.id));
   return {done:HOMEWORK_CHECKS.length-remaining.length,total:HOMEWORK_CHECKS.length,remaining,next:remaining[0]??null};
 }

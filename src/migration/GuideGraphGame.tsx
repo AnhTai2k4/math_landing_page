@@ -1,6 +1,9 @@
-import {useId,useRef,useState} from 'react';
+import {Component,lazy,Suspense,useId,useRef,useState,type ReactNode} from 'react';
 import {GRAPH_COEFFICIENTS,compareGraphs,graphEquation,graphInfo,readGraphCoefficient,type GraphLine} from './guide-graph-game';
 import './guide-graph-game.css';
+
+const CoordinateFlight=lazy(()=>import('./CoordinateFlight'));
+class FlightBoundary extends Component<{children:ReactNode;onRetry:()=>void},{failed:boolean}>{state={failed:false};static getDerivedStateFromError(){return{failed:true};}render(){return this.state.failed?<div role="alert"><p>Chưa mở được chuyến bay tọa độ. Em vẫn có thể khám phá đồ thị bên trên.</p><button type="button" onClick={this.props.onRetry}>Thử mở lại chuyến bay</button></div>:this.props.children;}}
 
 const displayNumber=(value:number)=>String(value).replace('-','−');
 
@@ -24,7 +27,7 @@ export function LineGraph({line,pinned,id}:{line:GraphLine;pinned:GraphLine|null
 type LabState=GraphLine&{pinned:GraphLine|null};
 const start=():LabState=>({a:1,b:0,pinned:null});
 export default function GuideGraphGame(){
- const id=useId(),[state,setState]=useState(start),live=useRef(state),generation=useRef(0),revision=generation.current;
+ const id=useId(),[state,setState]=useState(start),live=useRef(state),generation=useRef(0),revision=generation.current,[flight,setFlight]=useState(false),[loader,setLoader]=useState(()=>({View:CoordinateFlight,revision:0})),Flight=loader.View;
  const firstSelect=useRef<HTMLSelectElement>(null),pinButton=useRef<HTMLButtonElement>(null);
  live.current=state;
  const info=graphInfo(state),comparison=state.pinned?compareGraphs(state,state.pinned):null;
@@ -33,7 +36,7 @@ export default function GuideGraphGame(){
  function pin(){if(revision===generation.current)update({...live.current,pinned:{a:live.current.a,b:live.current.b}});}
  function unpin(){if(revision!==generation.current)return;update({...live.current,pinned:null});pinButton.current?.focus();}
  function reset(){if(revision!==generation.current)return;generation.current++;update(start());firstSelect.current?.focus();}
- return <div className="guide-graph-game">
+ return <div className="guide-graph-game" data-version="2">
   <p>Chọn a và b trong y = ax + b, quan sát đồ thị và bảng giá trị thay đổi cùng nhau. Với a = 0, em đang xem hàm hằng.</p>
   <div className="guide-graph-controls">{(['a','b'] as const).map(field=><label key={field} htmlFor={id+'-'+field}>Hệ số {field}<select id={id+'-'+field} ref={field==='a'?firstSelect:undefined} value={state[field]} onChange={event=>choose(field,event.target.value)}>{GRAPH_COEFFICIENTS.map(value=><option key={value} value={value}>{displayNumber(value)}</option>)}</select></label>)}</div>
   <div className="guide-graph-actions"><button ref={pinButton} type="button" onClick={pin}>{state.pinned?'Cập nhật đồ thị ghim':'Ghim để so sánh'}</button>{state.pinned&&<button type="button" className="guide-graph-secondary" onClick={unpin}>Bỏ ghim</button>}<button type="button" className="guide-graph-secondary" onClick={reset}>Đặt lại a = 1, b = 0</button></div>
@@ -44,5 +47,7 @@ export default function GuideGraphGame(){
   <div className="guide-graph-reading"><h3>Đọc từ hệ số đến đồ thị</h3><p>{info.behaviour}</p><p>{info.ox}</p><p>{info.oy}</p></div>
   <details className="guide-graph-prompts"><summary>Thử hai cách quan sát</summary><ol><li>Giữ a = 1, chọn b = 0 rồi ghim. Đổi riêng b thành 2. Hai đường có cùng độ dốc không? Đọc nhận xét để kiểm tra.</li><li>Giữ b = 0, chọn a = 1 rồi ghim. Đổi riêng a thành −1. Quan sát chiều tăng giảm và giao điểm. Thử thêm a = 0 để so sánh với hàm hằng.</li></ol></details>
   <p className="guide-graph-note">MTM sưu tầm và biên soạn. Phòng khám phá ôn kiến thức THCS, không tính điểm thi. Lựa chọn và đồ thị ghim chỉ ở lần mở này, không lưu kết quả.</p>
+  <button type="button" className="guide-graph-secondary" aria-expanded={flight} aria-controls={id+'-flight'} onClick={()=>setFlight(value=>!value)}>{flight?'Đóng màn tàu tọa độ':'Mở màn tàu tọa độ'}</button>
+  <div id={id+'-flight'}>{flight&&<FlightBoundary key={loader.revision} onRetry={()=>setLoader(value=>({View:lazy(()=>import('./CoordinateFlight')),revision:value.revision+1}))}><Suspense fallback={<p role="status">Đang mở chuyến bay tọa độ...</p>}><Flight/></Suspense></FlightBoundary>}</div>
  </div>;
 }

@@ -17,3 +17,4 @@
 .ep-root.fr-room .btvn-self-check-content>button:enabled{background:#fff;border-color:#213269;color:#213269}
 .ep-root.fr-room .btvn-self-check-content>button:hover:enabled{background:#f0f3f9;color:#213269}
 .ep-root.fr-room .btvn-self-check button:disabled{background:#f4f6fb;color:#64708c;opacity:1}
+.btvn-self-check-focus{display:block;margin:18px 0 8px;line-height:1.6}.ep-root .btvn-self-check-focus select{display:block;width:100%;min-height:48px;box-sizing:border-box;margin-top:8px;padding:10px 12px;border:1px solid #9daac4;border-radius:10px;background:#fff;color:#213269;font:inherit}.btvn-self-check-focus select:focus-visible{outline:3px solid #213269;outline-offset:3px}
