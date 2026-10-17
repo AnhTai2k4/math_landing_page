@@ -8,5 +8,5 @@ export class ReadingReviewBoundary extends Component<{children:ReactNode},{faile
 }
 export default function ReadingReviewTool(){
  const [ready,setReady]=useState(false);
- return <details className="ne-reference-more reading-review-tool" onToggle={event=>{if(event.currentTarget.open)setReady(true);}}><summary>Mốc ôn sau đọc 1, 3, 7 ngày</summary>{ready&&<ReadingReviewBoundary><Suspense fallback={<p role="status">Đang mở mốc tự ôn…</p>}><ReadingReviewPlan/></Suspense></ReadingReviewBoundary>}</details>;
+ return <details className="ne-reference-more reading-review-tool" onToggle={event=>{if(event.currentTarget.open)setReady(true);}}><summary>Mốc ôn sau đọc</summary>{ready&&<ReadingReviewBoundary><Suspense fallback={<p role="status">Đang mở mốc tự ôn…</p>}><ReadingReviewPlan/></Suspense></ReadingReviewBoundary>}</details>;
 }

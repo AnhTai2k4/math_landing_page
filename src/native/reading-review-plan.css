@@ -3,7 +3,8 @@
 .native-ui .reading-review-plan h3{font-size:20px;margin:0 0 12px;color:#213269}
 .native-ui .reading-review-plan p{margin:0 0 14px}
 .native-ui .reading-review-plan form>label{display:block;font-weight:700;margin-bottom:8px}
-.native-ui .reading-review-plan input[type=date]{min-height:48px;max-width:100%;min-width:0;width:260px;background:#fff;border:1px solid #213269;border-radius:8px;padding:10px 12px;color:#213269;font:inherit;margin-bottom:10px}
+.native-ui .reading-review-plan input[type=date]{box-sizing:border-box;min-height:48px;max-width:100%;min-width:0;width:260px;background:#fff;border:1px solid #213269;border-radius:8px;padding:10px 12px;color:#213269;font:inherit;margin-bottom:10px}
+.native-ui .reading-review-plan select{display:block;box-sizing:border-box;min-height:48px;width:100%;max-width:440px;margin-bottom:10px;padding:10px 12px;border:1px solid #213269;border-radius:8px;color:#213269;background:#fff;font:inherit}
 .native-ui .reading-review-plan input[aria-invalid=true]{border:2px solid #9b3524}
 .native-ui .reading-review-plan [role=alert]{color:#7d2419;background:#fff1ed;padding:12px;border-radius:8px}
 .native-ui .reading-review-plan-actions{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
@@ -11,7 +12,13 @@
 .native-ui .reading-review-plan button[type=submit]{background:#FFCF24}
 .native-ui .reading-review-plan button:hover:enabled{background:#f0f4fa}
 .native-ui .reading-review-plan button[type=submit]:hover:enabled{background:#f4c200}
-.native-ui .reading-review-plan input:focus-visible,.native-ui .reading-review-plan button:focus-visible{outline:3px solid #213269;outline-offset:3px}
+.native-ui .reading-review-plan input:focus-visible,.native-ui .reading-review-plan select:focus-visible,.native-ui .reading-review-plan button:focus-visible,.native-ui .reading-review-plan-result:focus-visible{outline:3px solid #213269;outline-offset:3px}
+.native-ui .reading-review-plan li:focus-within{outline:3px solid #213269;outline-offset:3px}
+.native-ui .reading-review-plan .reading-review-date-status{padding:14px;border:1px solid #d5dceb;border-radius:10px;background:#fff}
+.native-ui .reading-review-plan .reading-review-date-status p{margin-bottom:10px}
+.native-ui .reading-review-plan li.is-today{background:#fff8d5;border-color:#9b8012}
+.native-ui .reading-review-plan li.is-available{border-left:4px solid #213269}
+.native-ui .reading-review-plan .reading-review-milestone-status{font-size:15px;font-weight:700;line-height:1.5}
 .native-ui .reading-review-plan-result{margin-top:22px;border-top:2px solid #FFCF24;padding-top:20px}
 .native-ui .reading-review-plan ul{list-style:none;padding:0;margin:14px 0;display:grid;gap:12px}
 .native-ui .reading-review-plan li{padding:0;border:1px solid #d5dceb;border-radius:10px;background:#f8faff;min-width:0}

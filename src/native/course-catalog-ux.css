@@ -1,0 +1,8 @@
+.mtm-migration.r106-site .native-ui .ne-catalog .ne-search-row{display:flex;flex-wrap:wrap;gap:12px}
+.mtm-migration.r106-site .native-ui .ne-catalog .ne-search-row input{flex:1 1 220px;min-width:0}
+.mtm-migration.r106-site .native-ui .ne-catalog .ne-search-row button{min-height:48px;white-space:normal}
+.native-ui .ne-catalog-count{color:#526079;font-size:15px;line-height:1.6;min-height:24px;margin:12px 0 20px}
+.native-ui .course-score-goal{margin-top:28px;color:#213269;background:#fffbeb;border:1px solid #e2ce82;border-radius:16px;padding:12px 16px}
+.native-ui .course-score-goal summary{min-height:48px;padding:12px 4px;font-size:16px;font-weight:700;cursor:pointer;overflow-wrap:anywhere}
+.native-ui .course-score-goal summary:focus-visible{outline:3px solid #b07a00;outline-offset:3px;border-radius:8px}
+@media(max-width:600px){.mtm-migration.r106-site .native-ui .ne-catalog .ne-search-row>*{flex-basis:100%;width:100%;min-width:0}}

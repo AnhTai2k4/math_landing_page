@@ -23,6 +23,7 @@ const ErrorHunt=lazy(()=>import('./ErrorHunt'));
 const StepSolver=lazy(()=>import('./StepSolver'));
 const DomainCheck=lazy(()=>import('./DomainCheck'));
 const EstimationGame=lazy(()=>import('./EstimationGame'));
+const MinerGame=lazy(()=>import('./MinerGame'));
 const ChapterShelf=lazy(()=>loadShelf().then(m=>({default:m.ChapterShelf})));
 const PracticeDetail=lazy(()=>Promise.all([loadShelf(),import('./ChapterPractice')]).then(([m])=>({default:m.PracticeDetail})));
 export {practiceURL};
@@ -59,6 +60,7 @@ export default function PracticeLibrary(){
       <div className="cp-chapter-content">
         <h2>{chapter.title}</h2><p>{chapter.forms.join(' · ')}</p>
         {['10','11','12'].includes(selected.id)&&<>
+          <PracticeTool key={'miner:'+selected.id+':'+chapter.id} label="Thợ mỏ Toán · 8 tầng đại số" loading="Đang mở hầm mỏ…"><MinerGame/></PracticeTool>
           <PracticeTool key={'recall:'+selected.id+':'+chapter.id} label="Ôn nhanh công thức" loading="Đang tải bộ thẻ…"><QuickRecall track={selected.id} chapter={chapter.id}/></PracticeTool>
           <PracticeTool key={'interval:'+selected.id+':'+chapter.id} label="Mini game · Tập nghiệm trên trục số" loading="Đang tải trò tập nghiệm…"><IntervalGame/></PracticeTool>
           <PracticeTool key={'mental:'+selected.id+':'+chapter.id} label="Trò tự luyện · Tính nhẩm 5 câu" loading="Đang tải trò tính nhẩm…"><MentalMath/></PracticeTool>

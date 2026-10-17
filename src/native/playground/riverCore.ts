@@ -1,6 +1,8 @@
-export const RIVER_VERSION = 'v1';
+export const RIVER_VERSION = 'v2';
 export const RIVER_MAX_SCORE = 1240;
 export type Lane = 0 | 1 | 2;
+export type RiverMode = 'standard' | 'practice';
+export function riverModeLabel(mode: RiverMode) { return mode === 'practice' ? 'Tập chèo' : 'Tiêu chuẩn'; }
 export interface RiverQuestion {
   id: string;
   prompt: string;
@@ -24,6 +26,7 @@ export const RIVER_QUESTIONS: readonly RiverQuestion[] = [
 
 export interface RiverAnswer { questionId: string; chosen: Lane; correct: boolean }
 export interface RiverState {
+  mode: RiverMode;
   phase: 'ready' | 'intro' | 'running' | 'paused' | 'finished';
   lane: Lane;
   wave: 'answer' | 'rock' | 'feedback';
@@ -41,10 +44,11 @@ export interface RiverState {
   results: RiverAnswer[];
 }
 
-export function freshRiver(): RiverState {
-  return {phase:'ready',lane:1,wave:'answer',cursor:0,progress:0,elapsed:0,introTime:0,score:0,hearts:3,combo:0,bestCombo:0,crashes:0,feedback:'',feedbackGood:true,results:[]};
+export function freshRiver(mode: RiverMode = 'standard'): RiverState {
+  return {mode,phase:'ready',lane:1,wave:'answer',cursor:0,progress:0,elapsed:0,introTime:0,score:0,hearts:3,combo:0,bestCombo:0,crashes:0,feedback:'',feedbackGood:true,results:[]};
 }
-export function riverSpeed(state: RiverState) { return 1 + Math.min(state.score / 500, 0.45); }
+export function riverSpeed(state: RiverState) { return state.mode === 'practice' ? 0.65 : 1 + Math.min(state.score / 500, 0.45); }
+export function riverWaveDuration(state: RiverState) { return state.wave === 'answer' ? 18 / riverSpeed(state) : state.wave === 'rock' ? 3.6 / (state.mode === 'practice' ? 0.65 : 1) : 1.3; }
 export function riverRockLane(state: RiverState): Lane { return ((state.cursor + 1) % 3) as Lane; }
 export function moveRiver(state: RiverState, direction: -1 | 1): RiverState {
   if (state.phase !== 'running' || state.wave === 'feedback') return state;
@@ -62,7 +66,7 @@ export function tickRiver(state: RiverState, deltaSeconds: number): RiverState {
     const introTime = Math.min(3,state.introTime + dt);
     return {...state,introTime,phase:introTime >= 3 ? 'running' : 'intro'};
   }
-  const duration = state.wave === 'answer' ? 18 / riverSpeed(state) : state.wave === 'rock' ? 3.6 : 1.3;
+  const duration = riverWaveDuration(state);
   const progress = state.progress + dt / duration;
   const next = {...state,elapsed:state.elapsed + dt,progress};
   if (progress < 1) return next;
@@ -70,7 +74,7 @@ export function tickRiver(state: RiverState, deltaSeconds: number): RiverState {
     const question = RIVER_QUESTIONS[state.cursor];
     const correct = state.lane === question.correct;
     const combo = correct ? state.combo + 1 : 0;
-    return {...next,wave:'feedback',progress:0,combo,bestCombo:Math.max(state.bestCombo,combo),score:state.score + (correct ? 100 + 20 * Math.min(combo - 1,4) : 0),hearts:state.hearts - (correct ? 0 : 1),results:[...state.results,{questionId:question.id,chosen:state.lane,correct}],feedback:correct ? (combo >= 3 ? 'Căng đét! Chuỗi đúng tăng tốc!' : 'Đúng phao rồi! Flex nhẹ thôi!') : 'Ủa alo! Mất 1 tim. Cuối màn mình gỡ lại nhé.',feedbackGood:correct};
+    return {...next,wave:'feedback',progress:0,combo,bestCombo:Math.max(state.bestCombo,combo),score:state.score + (correct ? 100 + 20 * Math.min(combo - 1,4) : 0),hearts:state.hearts - (correct ? 0 : 1),results:[...state.results,{questionId:question.id,chosen:state.lane,correct}],feedback:correct ? (state.mode === 'practice' ? 'Đúng phao rồi! Giữ nhịp chậm và đọc kỹ câu tiếp theo.' : combo >= 3 ? 'Căng đét! Chuỗi đúng tăng tốc!' : 'Đúng phao rồi! Flex nhẹ thôi!') : 'Ủa alo! Mất 1 tim. Cuối màn mình gỡ lại nhé.',feedbackGood:correct};
   }
   if (state.wave === 'feedback') {
     if (state.hearts <= 0 || state.cursor === RIVER_QUESTIONS.length - 1) return {...next,phase:'finished',progress:0};
@@ -82,10 +86,11 @@ export function tickRiver(state: RiverState, deltaSeconds: number): RiverState {
 }
 
 export const RIVER_RECORD_KEY = 'mtm-river-local-v1';
-export function readRiverRecord(storage: Pick<Storage,'getItem'> | undefined): number {
-  try { const value = storage?.getItem(RIVER_RECORD_KEY); if (!value || !/^\d{1,4}$/.test(value)) return 0; const score=Number(value); return score <= RIVER_MAX_SCORE ? score : 0; } catch { return 0; }
+export const RIVER_PRACTICE_RECORD_KEY = 'mtm-river-practice-local-v2';
+export function readRiverRecord(storage: Pick<Storage,'getItem'> | undefined, mode: RiverMode = 'standard'): number {
+  try { const value = storage?.getItem(mode === 'practice' ? RIVER_PRACTICE_RECORD_KEY : RIVER_RECORD_KEY); if (!value || !/^\d{1,4}$/.test(value)) return 0; const score=Number(value); return score <= RIVER_MAX_SCORE ? score : 0; } catch { return 0; }
 }
-export function saveRiverRecord(storage: Pick<Storage,'getItem'|'setItem'> | undefined, score: number): boolean {
+export function saveRiverRecord(storage: Pick<Storage,'getItem'|'setItem'> | undefined, score: number, mode: RiverMode = 'standard'): boolean {
   if (!Number.isInteger(score) || score < 0 || score > RIVER_MAX_SCORE) return false;
-  try { if (score > readRiverRecord(storage)) storage?.setItem(RIVER_RECORD_KEY,String(score)); return Boolean(storage); } catch { return false; }
+  try { if (score > readRiverRecord(storage,mode)) storage?.setItem(mode === 'practice' ? RIVER_PRACTICE_RECORD_KEY : RIVER_RECORD_KEY,String(score)); return Boolean(storage); } catch { return false; }
 }

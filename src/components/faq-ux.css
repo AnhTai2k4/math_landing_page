@@ -1,0 +1,3 @@
+.mtm-faq .mtm-faq-list summary{min-height:48px;scroll-margin-block:100px}
+.mtm-faq-list summary:focus-visible,.mtm-faq-list a:focus-visible{outline:3px solid #b07a00;outline-offset:4px;border-radius:8px}
+.mtm-faq-list p{overflow-wrap:anywhere}

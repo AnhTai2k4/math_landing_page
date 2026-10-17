@@ -1,4 +1,4 @@
-import {createElement,useMemo,useRef,useState,type ReactNode} from 'react';
+import {createElement,useEffect,useMemo,useRef,useState,type ReactNode} from 'react';
 import {Search,ChevronDown,LockKeyhole,ArrowLeft,ArrowRight,BookOpen} from 'lucide-react';
 import {Link,navigate} from '../migration/navigation';import {WebpPicture} from '../migration/WebpPicture';
 import {courses,filterCourses,lessonCount,consultationUrl,type Course} from '../migration/catalogue';
@@ -7,6 +7,8 @@ import {nativeCourseMetadata,nativeLessonUrl,resolveNativeLesson,publicSnapshot}
 import {courseSearch} from './course-search';
 import R106PageIntro from '../migration/R106PageIntro';
 import './native.css';
+import ScoreGoalTool from './ScoreGoalTool';
+import './course-catalog-ux.css';
 export function Pending({children}:{children:ReactNode}){return <p className="ne-pending" role="status">{children}</p>;}
 export function SnapshotNotice(){return <div className="ne-snapshot">Nội dung theo bản chụp nguồn ngày {publicSnapshot.capturedAt.slice(0,10)}.</div>;}
 function SafeOverview({html}:{html:string}){
@@ -15,9 +17,14 @@ function SafeOverview({html}:{html:string}){
 }
 export function NativeCatalogue({search}:{search:string}){
  const state=parseCatalogQuery(search),[advanced,setAdvanced]=useState(false);const list=filterCourses(state.grade,state.query,state.order);const year=state.grade==='12'?2026:state.grade==='11'?2027:2028;const group=state.grade==='12'?2008:state.grade==='11'?2009:2010;
+ const searchInput=useRef<HTMLInputElement>(null);
+ const filtersVisible=advanced||!!state.query||state.grade==='all';
+ useEffect(()=>{if(advanced)searchInput.current?.focus();},[advanced]);
  const change=(patch:Partial<typeof state>,replace=false)=>navigate(catalogURL({...state,...patch}),{replace});
- return <div className="native-ui"><SnapshotNotice/><section className="ne-catalog"><R106PageIntro eyebrow="KHÓA HỌC MTM" title={state.grade==='all'?'Danh mục khóa học Toán':<>Lộ trình luyện thi {year} <span>dành cho {group}</span></>} description={<p>Chọn lớp để xem lộ trình, mở từng khóa để xem nội dung và danh sách bài học.</p>}><div className="ne-grades" role="group" aria-label="Chọn lớp">{['10','11','12'].map(grade=><button key={grade} aria-pressed={state.grade===grade} onClick={()=>change({grade:grade as typeof state.grade})}>Lớp {grade}</button>)}</div><div className="ne-filter-toggle"><button onClick={()=>setAdvanced(!advanced)} aria-expanded={advanced}><Search size={15}/> Tìm và lọc khóa học</button></div></R106PageIntro>{(advanced||state.query||state.grade==='all')&&<div className="ne-search-row"><input aria-label="Tìm khóa học" placeholder="Tên khóa học hoặc chủ đề…" maxLength={120} value={state.query} onChange={e=>change({query:e.target.value},true)}/><select aria-label="Sắp xếp khóa học" value={state.order} onChange={e=>change({order:e.target.value as typeof state.order})}><option value="roadmap">Theo lộ trình</option><option value="name">Theo tên</option></select><button onClick={()=>change({grade:'all',query:''})}>Tất cả</button></div>}
+ return <div className="native-ui"><SnapshotNotice/><section className="ne-catalog"><R106PageIntro eyebrow="KHÓA HỌC MTM" title={state.grade==='all'?'Danh mục khóa học Toán':<>Lộ trình luyện thi {year} <span>dành cho {group}</span></>} description={<p>Chọn lớp để xem lộ trình, mở từng khóa để xem nội dung và danh sách bài học.</p>}><div className="ne-grades" role="group" aria-label="Chọn lớp">{['10','11','12'].map(grade=><button key={grade} aria-pressed={state.grade===grade} onClick={()=>change({grade:grade as typeof state.grade})}>Lớp {grade}</button>)}</div><div className="ne-filter-toggle"><button onClick={()=>{if(filtersVisible&&!state.query&&state.grade!=='all')setAdvanced(!advanced);else{setAdvanced(true);searchInput.current?.focus();}}} aria-expanded={filtersVisible} aria-controls="ne-catalog-search"><Search size={15}/> Tìm và lọc khóa học</button></div></R106PageIntro>{filtersVisible&&<div id="ne-catalog-search" className="ne-search-row"><input ref={searchInput} aria-label="Tìm khóa học" placeholder="Tên khóa học hoặc chủ đề…" maxLength={120} value={state.query} onChange={e=>change({query:e.target.value},true)}/>{state.query&&<button type="button" onClick={()=>{setAdvanced(true);change({query:''},true);searchInput.current?.focus();}}>Xóa từ tìm kiếm</button>}<select aria-label="Sắp xếp khóa học" value={state.order} onChange={e=>change({order:e.target.value as typeof state.order})}><option value="roadmap">Theo lộ trình</option><option value="name">Theo tên</option></select><button onClick={()=>change({grade:'all',query:''})}>Tất cả</button></div>}
+ <p className="ne-catalog-count" role="status" aria-live="polite">{list.length} khóa học{state.grade==='all'?' ở tất cả các lớp':' lớp '+state.grade}{state.query?' khớp từ tìm kiếm.':'.'}</p>
  {list.length?<div className="ne-course-grid">{list.map(c=>{const raw=nativeCourseMetadata(c);return <article key={c.slug} className="ne-course-card"><Link href={'/khoa-hoc/'+c.slug}><WebpPicture src={c.image} sizes="(max-width: 767px) 92vw, 400px" alt={c.title} width={1012} height={566} loading="lazy"/><h2>{c.title}</h2></Link><p>{raw?.overview||''}</p></article>;})}</div>:<div className="ne-empty"><h2>Không tìm thấy khóa học</h2><button onClick={()=>change({query:'',grade:'all'})}>Xóa bộ lọc</button></div>}
+ {state.grade!=='all'&&<ScoreGoalTool key={state.grade} grade={state.grade}/>}
  </section></div>;
 }
 export function NativeCourseDetail({course:c}:{course:Course}){
