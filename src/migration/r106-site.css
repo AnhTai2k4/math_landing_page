@@ -1,0 +1,213 @@
+/* R100.6 site layer: shared chrome and page intro for public routes. Loaded with the route boundary; explicit scope wins legacy styles loaded later.
+   Home hero, MathText/KaTeX, question images, PDF reader toolbar and the FocusRoom portal are intentionally untouched. */
+.mtm-migration.r106-site{--r106-navy:#213269;--r106-yellow:#ffcf24;--r106-muted:#4f6a91;--r106-line:#d8e3f2;--r106-soft:#f6f9ff;--r106-shadow:0 16px 36px -30px #21326973;--r106-ease:cubic-bezier(.16,1,.3,1)}
+.mtm-migration.r106-site:not(.r106-home-page){background:var(--r106-soft);font-family:'Be Vietnam Pro',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;color:var(--r106-navy)}
+
+/* Header dock, same language as Home without changing its height or menu offsets. */
+.mtm-migration.r106-site:not(.r106-home-page) .mig-header{max-width:1600px;width:calc(100% - 64px);margin:14px auto 0;border:1px solid #dbe4f2;border-radius:19px;background:#ffffffed;box-shadow:0 12px 35px -30px #21326966}
+.mtm-migration.r106-site:not(.r106-home-page) .mig-nav-links>a{min-height:44px;display:flex;align-items:center}
+.mtm-migration.r106-site:not(.r106-home-page) .mig-preview{background:transparent;color:var(--r106-muted);border:0;font-size:11px}
+.mtm-migration.r106-site:not(.r106-home-page) .mtm-footer{border-top:1px solid var(--r106-line)}
+
+/* Shared page intro: one h1, quiet arch behind the right side, never across the text column. */
+.mtm-migration.r106-site .r106-page-intro{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:20px 48px;margin:0 0 28px;padding:36px 0 28px;border-bottom:1px solid var(--r106-line);color:var(--r106-navy);text-align:left;background:none;box-shadow:none}
+.mtm-migration.r106-site .r106-page-text{position:relative;z-index:1;min-width:0;max-width:min(860px,66%)}
+.mtm-migration.r106-site .r106-page-eyebrow{display:flex;align-items:center;gap:9px;margin:0 0 12px;padding:0;color:var(--r106-muted);font-size:11px;line-height:1.6;font-weight:500;letter-spacing:.12em;text-transform:uppercase;background:none;border:0}
+.mtm-migration.r106-site .r106-page-eyebrow>span{flex:none;width:6px;height:6px;border-radius:50%;background:var(--r106-yellow);box-shadow:0 0 0 5px #ffcf2424}
+.mtm-migration.r106-site .r106-page-intro h1{margin:0;padding:0;font-family:inherit;font-size:clamp(34px,3.3vw,54px);line-height:1.1;font-weight:600;letter-spacing:-.05em;text-transform:none;text-align:left;color:var(--r106-navy);text-wrap:balance;overflow-wrap:break-word}
+.mtm-migration.r106-site .r106-page-intro h1 span{color:#7189ae;font-weight:400}
+.mtm-migration.r106-site .r106-page-description{margin-top:14px;color:var(--r106-muted);font-size:15px;line-height:1.75;max-width:62ch}
+.mtm-migration.r106-site .r106-page-description p{margin:0 0 6px;font-size:inherit;line-height:inherit;color:inherit}
+.mtm-migration.r106-site .r106-page-description p:last-child{margin-bottom:0}
+.mtm-migration.r106-site .r106-page-aside{position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-end;gap:10px;min-width:0}
+.mtm-migration.r106-site .r106-page-arc{position:absolute;right:2%;bottom:-1px;width:min(30%,420px);aspect-ratio:2/1;z-index:-1;pointer-events:none;overflow:hidden}
+.mtm-migration.r106-site .r106-page-arc:before,.mtm-migration.r106-site .r106-page-arc:after{content:'';position:absolute;border-radius:50%}
+.mtm-migration.r106-site .r106-page-arc:before{left:0;right:0;top:0;height:200%;border:1.5px solid #ffcf24b3;background:radial-gradient(closest-side,#fff6d2a6,#fff6d200)}
+.mtm-migration.r106-site .r106-page-arc:after{left:16%;right:16%;top:32%;height:136%;border:1px solid #c9d8ee}
+
+/* Shared controls in route chrome (catalogue level only, not attempt rooms). */
+.mtm-migration.r106-site :is(.ne-catalog,.ne-detail-grid,.ne-resource-nav,.ne-search-row,.ep-filters,.ep-buckets,.cp-track-nav,.cp-chapter-panel,.mtm-guide,.mig-notebook,.r106-page-intro) :is(a,button,select,input,summary):focus-visible{outline:3px solid #3f6db0;outline-offset:3px}
+
+/* Courses: catalogue, detail, lesson. */
+.mtm-migration.r106-site .native-ui{background:var(--r106-soft);color:var(--r106-navy);font-family:inherit}
+.mtm-migration.r106-site .native-ui .ne-snapshot{background:transparent;color:#7a6320;border-bottom:1px solid #f1e4b4;font-size:11px}
+.mtm-migration.r106-site .native-ui .ne-catalog{max-width:1240px;background:transparent;padding:0 24px 56px}
+.mtm-migration.r106-site .native-ui .ne-grades{display:inline-flex;gap:4px;margin:0;padding:4px;border:1px solid var(--r106-line);border-radius:14px;background:#fff}
+.mtm-migration.r106-site .native-ui .ne-grades button{min-height:44px;padding:0 22px;border-radius:10px;background:transparent;color:var(--r106-muted);font-weight:500;box-shadow:none}
+.mtm-migration.r106-site .native-ui .ne-grades button[aria-pressed=true]{background:var(--r106-navy);color:#fff;box-shadow:inset 0 -3px var(--r106-yellow)}
+.mtm-migration.r106-site .native-ui .ne-filter-toggle{margin:0;justify-content:flex-end}
+.mtm-migration.r106-site .native-ui .ne-filter-toggle button{min-height:44px;padding:0 4px;color:var(--r106-muted);font-size:13px;border-bottom:1px solid #adc1df;border-radius:0}
+.mtm-migration.r106-site .native-ui .ne-search-row{gap:10px;margin-bottom:24px}
+.mtm-migration.r106-site .native-ui .ne-search-row :is(input,select,button){min-height:44px;border:1px solid #cfdcef;border-radius:12px;background:#fff;color:var(--r106-navy);padding:0 14px}
+.mtm-migration.r106-site .native-ui .ne-course-grid{gap:28px}
+.mtm-migration.r106-site .native-ui .ne-course-card{border:1px solid var(--r106-line);border-radius:20px;box-shadow:var(--r106-shadow);padding:10px 10px 18px;transition:transform .3s var(--r106-ease),box-shadow .3s}
+.mtm-migration.r106-site .native-ui .ne-course-card:hover{transform:translateY(-3px);box-shadow:0 22px 40px -30px #21326999}
+.mtm-migration.r106-site .native-ui .ne-course-card img{border-radius:13px}
+.mtm-migration.r106-site .native-ui .ne-course-card h2{font-size:18px;line-height:1.4;font-weight:600;letter-spacing:-.02em;color:var(--r106-navy);margin:16px 8px 8px}
+.mtm-migration.r106-site .native-ui .ne-course-card>p{color:var(--r106-muted);font-size:13px;line-height:1.75}
+.mtm-migration.r106-site .native-ui .ne-empty h2{color:var(--r106-navy)}
+.mtm-migration.r106-site .native-ui .ne-empty :is(a,button){min-height:44px;color:var(--r106-navy);border-bottom:1px solid #adc1df}
+.mtm-migration.r106-site .native-ui .ne-breadcrumb{background:transparent;color:var(--r106-muted);font-size:12px;border-bottom:1px solid var(--r106-line)}
+.mtm-migration.r106-site .native-ui .ne-breadcrumb a{min-height:44px;display:inline-flex;align-items:center}
+.mtm-migration.r106-site .native-ui .ne-breadcrumb>span:last-child{color:var(--r106-navy);font-weight:500}
+.mtm-migration.r106-site .native-ui>.ne-page-intro{width:min(1216px,calc(100% - 48px));margin:0 auto}
+.mtm-migration.r106-site .native-ui>.ne-lesson-intro{width:min(1368px,calc(100% - 48px))}
+.mtm-migration.r106-site .native-ui .ne-detail-grid{margin-top:28px}
+.mtm-migration.r106-site .native-ui .ne-player-grid{padding-top:28px}
+.mtm-migration.r106-site .native-ui .ne-white{border:1px solid var(--r106-line);border-radius:18px;box-shadow:var(--r106-shadow)}
+.mtm-migration.r106-site .native-ui .ne-tabs{padding-top:8px;gap:28px}
+.mtm-migration.r106-site .native-ui .ne-tabs button{min-height:48px;padding:12px 0;color:var(--r106-muted);font-weight:500;border-bottom:2px solid transparent}
+.mtm-migration.r106-site .native-ui .ne-tabs button[aria-selected=true]{color:var(--r106-navy);font-weight:600;border-color:var(--r106-yellow)}
+.mtm-migration.r106-site .native-ui .ne-overview{color:#4f6a91}
+.mtm-migration.r106-site .native-ui :is(.ne-overview h2,.ne-overview h3,.ne-overview strong,.ne-overview b){color:var(--r106-navy)}
+.mtm-migration.r106-site .native-ui :is(.ne-syllabus-title h2,.ne-summary h2,.ne-padding>h2){font-size:17px;font-weight:600;letter-spacing:-.01em;color:var(--r106-navy);border-color:var(--r106-line)}
+.mtm-migration.r106-site .native-ui .ne-syllabus-title{border-color:var(--r106-line)}
+.mtm-migration.r106-site .native-ui .ne-syllabus-title input{min-height:44px;border:1px solid #cfdcef;border-radius:12px;background:#fff;font-size:13px}
+.mtm-migration.r106-site .native-ui .ne-syllabus-title button{min-height:44px;padding:0 14px;border:1px solid #cfdcef;border-radius:12px;background:#fff;color:var(--r106-navy)}
+.mtm-migration.r106-site .native-ui .ne-chapter{border-color:var(--r106-line);border-radius:14px}
+.mtm-migration.r106-site .native-ui .ne-chapter h3 button{min-height:56px;background:#f6f9ff;color:var(--r106-navy);font-weight:600}
+.mtm-migration.r106-site .native-ui .ne-chapter h3 button[aria-expanded=true]{box-shadow:inset 3px 0 var(--r106-yellow)}
+.mtm-migration.r106-site .native-ui .ne-lesson{min-height:56px;border-top:1px solid #edf2f9}
+.mtm-migration.r106-site .native-ui .ne-lesson b{font-weight:500;color:var(--r106-navy)}
+.mtm-migration.r106-site .native-ui .ne-number{background:var(--r106-navy);color:var(--r106-yellow);font-weight:600}
+.mtm-migration.r106-site .native-ui .ne-lesson em{padding:3px 8px;border-radius:999px;background:#fff6cf;color:#6b5207;font-size:10px;font-weight:600}
+.mtm-migration.r106-site .native-ui .ne-summary p{color:var(--r106-muted)}
+.mtm-migration.r106-site .native-ui .ne-summary p b{color:var(--r106-navy)}
+.mtm-migration.r106-site .native-ui :is(.ne-primary,.ne-buy){min-height:48px;border-radius:12px;background:var(--r106-navy);color:#fff;font-weight:600;box-shadow:inset 0 -3px var(--r106-yellow)}
+.mtm-migration.r106-site .native-ui .ne-padding>a:not(.ne-primary){min-height:44px;align-items:center;margin:4px 0;color:var(--r106-navy)}
+.mtm-migration.r106-site .native-ui .ne-player-pending{background:linear-gradient(140deg,#213269,#314985)}
+.mtm-migration.r106-site .native-ui .ne-player-pending svg{color:var(--r106-yellow)}
+.mtm-migration.r106-site .native-ui .ne-prev-next a{min-height:44px;display:inline-flex;align-items:center;gap:6px;color:var(--r106-navy);font-weight:500}
+.mtm-migration.r106-site .native-ui .ne-next-lessons>a{min-height:56px;color:var(--r106-muted);border-top:1px solid #edf2f9}
+.mtm-migration.r106-site .native-ui .ne-next-lessons>a[aria-current=page]{background:#fff8dc;color:var(--r106-navy);border-left:3px solid var(--r106-yellow)}
+.mtm-migration.r106-site .native-ui .ne-blue{color:var(--r106-navy)}
+.mtm-migration.r106-site .native-ui .ne-pending{border-left-color:var(--r106-yellow);background:#fffaf0;border-radius:0 10px 10px 0}
+
+/* Documents gallery and reader page; NativePdfReader keeps its own toolbar. */
+.mtm-migration.r106-site .native-ui.ne-resource-layout{background:var(--r106-soft)}
+.mtm-migration.r106-site .native-ui .ne-resource-nav{border-right:1px solid var(--r106-line);background:#fff}
+.mtm-migration.r106-site .native-ui .ne-user>span{background:var(--r106-navy);color:var(--r106-yellow)}
+.mtm-migration.r106-site .native-ui .ne-user b{color:var(--r106-navy)}
+.mtm-migration.r106-site .native-ui .ne-resource-nav nav{display:flex;flex-direction:column;gap:4px;padding:12px}
+.mtm-migration.r106-site .native-ui .ne-resource-nav nav button{min-height:46px;border-radius:12px;color:var(--r106-muted);font-weight:500}
+.mtm-migration.r106-site .native-ui .ne-resource-nav nav button[aria-pressed=true]{background:var(--r106-navy);color:#fff;box-shadow:inset 3px 0 var(--r106-yellow)}
+.mtm-migration.r106-site .native-ui .ne-back-home{min-height:44px;display:flex;align-items:center;gap:6px;color:var(--r106-navy)}
+.mtm-migration.r106-site .native-ui .ne-resource-content{padding:24px 40px 56px;max-width:1440px}
+.mtm-migration.r106-site .native-ui .ne-resource-content>.r106-page-intro{padding-top:16px}
+.mtm-migration.r106-site .native-ui .ne-resource-crumb a{color:var(--r106-navy)}
+.mtm-migration.r106-site .native-ui .ne-mobile-select{min-height:44px;border:1px solid #cfdcef;border-radius:12px;color:var(--r106-navy)}
+.mtm-migration.r106-site .native-ui .ne-resource-count{color:var(--r106-muted)}
+.mtm-migration.r106-site .native-ui .ne-resource-grid{gap:24px}
+.mtm-migration.r106-site .native-ui .ne-resource-card{border:1px solid var(--r106-line);border-radius:18px;box-shadow:var(--r106-shadow)}
+.mtm-migration.r106-site .native-ui .ne-resource-labels span{background:#fff6cf;color:#5d4706;border-radius:999px;font-weight:600}
+.mtm-migration.r106-site .native-ui .ne-resource-card h2{font-size:18px;font-weight:600;letter-spacing:-.02em;color:var(--r106-navy)}
+.mtm-migration.r106-site .native-ui .ne-resource-card>p{color:var(--r106-muted)}
+.mtm-migration.r106-site .native-ui .ne-resource-card .ne-primary{background:var(--r106-navy)}
+.mtm-migration.r106-site .native-ui :is(.ne-reading-shelf,.ne-reference-more){border:1px solid var(--r106-line);border-radius:18px;box-shadow:var(--r106-shadow)}
+.mtm-migration.r106-site .native-ui .ne-reading-shelf h2,.mtm-migration.r106-site .native-ui .ne-reading-shelf h3{color:var(--r106-navy);font-weight:600}
+.mtm-migration.r106-site .native-ui .ne-reading-shelf li{border-color:var(--r106-line);border-radius:14px;background:var(--r106-soft)}
+.mtm-migration.r106-site .native-ui .ne-reading-shelf li a{border-radius:12px;background:var(--r106-navy)}
+.mtm-migration.r106-site .native-ui .ne-reference-more>summary{min-height:44px;display:flex;align-items:center;color:var(--r106-navy);font-weight:600}
+
+/* Thi thử catalogue (attempt room and FocusRoom unchanged). */
+.mtm-migration.r106-site .ep-root>.r106-page-intro{padding-top:12px}
+.mtm-migration.r106-site .ep-root .r106-page-intro .ep-link{min-height:44px;display:inline-flex;align-items:center;color:var(--r106-navy);text-decoration-color:#adc1df}
+.mtm-migration.r106-site .ep-root .r106-page-intro .ep-total{margin:0;padding:14px 18px;border:1px solid var(--r106-line);border-radius:16px;background:#fff;color:var(--r106-muted);font-size:13px;line-height:1.6;max-width:320px;box-shadow:var(--r106-shadow)}
+.mtm-migration.r106-site .ep-root .r106-page-intro .ep-total strong{display:block;color:var(--r106-navy);font-size:34px;line-height:1.2;font-weight:600;margin:0}
+.mtm-migration.r106-site .ep-root .ep-filters{padding:18px;border:1px solid var(--r106-line);border-radius:18px;background:#fff;box-shadow:var(--r106-shadow);color:var(--r106-navy)}
+.mtm-migration.r106-site .ep-root .ep-filters label{font-weight:500;font-size:13px;color:var(--r106-muted)}
+.mtm-migration.r106-site .ep-root .ep-filters :is(select,input,button){min-height:44px;border-color:#cfdcef;border-radius:12px;color:var(--r106-navy)}
+.mtm-migration.r106-site .ep-root .ep-filters button{background:var(--r106-soft)}
+.mtm-migration.r106-site .ep-root .ep-bucket{min-height:72px;border-color:var(--r106-line);border-radius:16px;color:var(--r106-navy);background:#fff}
+.mtm-migration.r106-site .ep-root .ep-bucket span{color:var(--r106-muted);font-size:13px}
+.mtm-migration.r106-site .ep-root .ep-bucket strong{font-weight:600}
+.mtm-migration.r106-site .ep-root .ep-bucket[aria-pressed=true]{border:1px solid var(--r106-navy);background:#fff8dc;box-shadow:inset 0 -3px var(--r106-yellow)}
+.mtm-migration.r106-site .ep-root .ep-catalog{gap:24px}
+.mtm-migration.r106-site .ep-root .ep-catalog .ep-card{margin:0;border-color:var(--r106-line);border-radius:18px;box-shadow:var(--r106-shadow);color:var(--r106-navy)}
+.mtm-migration.r106-site .ep-root .ep-catalog .ep-card h2{font-weight:600;letter-spacing:-.02em}
+.mtm-migration.r106-site .ep-root .ep-catalog .ep-card>p:first-child{color:var(--r106-muted);font-size:13px;margin-top:0}
+.mtm-migration.r106-site .ep-root .ep-catalog .ep-link{min-height:44px;display:inline-flex;align-items:center;color:var(--r106-navy);font-weight:600}
+
+/* Luyện tập library frame (shelf, tools and attempt content keep their own CSS). */
+.mtm-migration.r106-site .cp-library{color:var(--r106-navy)}
+.mtm-migration.r106-site .cp-library .cp-local-note{font-size:13px;color:var(--r106-muted)}
+.mtm-migration.r106-site .cp-library .cp-track-nav{margin:0 0 28px;gap:6px}
+.mtm-migration.r106-site .cp-library .cp-track-nav a{min-height:44px;border-color:var(--r106-line);border-radius:12px;color:var(--r106-muted);font-weight:500}
+.mtm-migration.r106-site .cp-library .cp-track-nav a[aria-current=page]{background:var(--r106-navy);border-color:var(--r106-navy);color:#fff;box-shadow:inset 0 -3px var(--r106-yellow)}
+.mtm-migration.r106-site .cp-library .cp-chapter-panel{border-color:var(--r106-line);border-radius:20px;box-shadow:var(--r106-shadow)}
+.mtm-migration.r106-site .cp-library .cp-chapter-panel h2{font-size:20px;font-weight:600;letter-spacing:-.02em}
+.mtm-migration.r106-site .cp-library .cp-chapter-panel p{color:var(--r106-muted)}
+.mtm-migration.r106-site .cp-library .cp-chapter-panel nav a{min-height:48px;color:var(--r106-navy)}
+.mtm-migration.r106-site .cp-library .cp-chapter-panel nav a[aria-current=page]{background:#fff8dc;border-left:3px solid var(--r106-yellow);font-weight:600}
+.mtm-migration.r106-site .cp-library .cp-chapter-number{background:#edf2fa;color:var(--r106-navy);font-weight:600}
+.mtm-migration.r106-site .cp-library .cp-chapter-panel nav a[aria-current=page] .cp-chapter-number{background:var(--r106-navy);color:var(--r106-yellow)}
+.mtm-migration.r106-site .cp-library .cp-chapter-content>h2{font-size:clamp(22px,2vw,28px);font-weight:600;letter-spacing:-.03em}
+.mtm-migration.r106-site .cp-library .cp-chapter-content>p{color:var(--r106-muted)}
+.mtm-migration.r106-site .cp-library .cp-test-grid article{border-color:var(--r106-line);border-radius:18px;box-shadow:var(--r106-shadow)}
+
+/* Hướng dẫn: header and theme only; Zalo, QR, links and copy unchanged. */
+.mtm-migration.r106-site .mtm-guide{background:var(--r106-soft);padding-top:8px}
+.mtm-migration.r106-site .mtm-guide .mg-shell{width:min(880px,calc(100% - 32px))}
+.mtm-migration.r106-site .mtm-guide .r106-page-text{max-width:min(720px,72%)}
+.mtm-migration.r106-site .mtm-guide .mg-lead{font-size:16px;color:var(--r106-muted)}
+.mtm-migration.r106-site .mtm-guide .mg-tabs{background:var(--r106-soft);gap:6px}
+.mtm-migration.r106-site .mtm-guide .mg-tabs button{min-height:48px;border:1px solid var(--r106-line);border-radius:12px;font-weight:600;font-size:16px}
+.mtm-migration.r106-site .mtm-guide .mg-tabs button[aria-selected=true]{background:var(--r106-navy);border-color:var(--r106-navy);box-shadow:inset 0 -3px var(--r106-yellow)}
+.mtm-migration.r106-site .mtm-guide .mg-card{border-color:var(--r106-line);border-radius:18px;box-shadow:var(--r106-shadow)}
+.mtm-migration.r106-site .mtm-guide .mg-steps{border-top:3px solid var(--r106-yellow)}
+.mtm-migration.r106-site .mtm-guide .mg-card h2{font-weight:600;letter-spacing:-.02em}
+.mtm-migration.r106-site .mtm-guide :is(.mg-button,.mg-link){min-height:48px;display:inline-flex;align-items:center;justify-content:center}
+.mtm-migration.r106-site .mtm-guide .mg-more summary{min-height:44px;display:flex;align-items:center;font-weight:600}
+
+/* Sổ tay: intro plus file actions; notebook logic, rhythm and games untouched. */
+.mtm-migration.r106-site .mig-notebook>.r106-page-intro{padding-top:28px}
+.mtm-migration.r106-site .mig-notebook .r106-page-aside .mig-notebook-file-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:10px}
+.mtm-migration.r106-site .mig-notebook .mig-notebook-file-actions :is(button,label,a){min-height:44px}
+.mtm-migration.r106-site .mig-notebook .mig-task-filters button{min-height:44px}
+.mtm-migration.r106-site .mig-notebook :is(.mig-panel,.mig-local-notice,.mig-notebook-stats>article){border-color:var(--r106-line);border-radius:18px;box-shadow:var(--r106-shadow)}
+
+@media(min-width:1600px){
+.mtm-migration.r106-site .r106-page-intro{padding:48px 0 34px;margin-bottom:34px}
+.mtm-migration.r106-site .native-ui .ne-catalog{max-width:1320px}
+}
+@media(min-width:761px) and (max-width:1100px){
+.mtm-migration.r106-site:not(.r106-home-page) .mig-header{width:calc(100% - 40px)}
+.mtm-migration.r106-site .r106-page-intro{gap:18px 28px}
+.mtm-migration.r106-site .r106-page-text{max-width:72%}
+.mtm-migration.r106-site .r106-page-arc{width:26%}
+.mtm-migration.r106-site .native-ui .ne-resource-content{padding:20px 24px 48px}
+}
+@media(max-width:760px){
+.mtm-migration.r106-site:not(.r106-home-page) .mig-header{width:calc(100% - 24px);margin:10px 12px 0;border-radius:15px}
+.mtm-migration.r106-site .r106-page-intro{display:block;padding:22px 0 20px;margin-bottom:20px}
+.mtm-migration.r106-site .r106-page-text,.mtm-migration.r106-site .mtm-guide .r106-page-text{max-width:none}
+.mtm-migration.r106-site .r106-page-arc{display:none}
+.mtm-migration.r106-site .r106-page-eyebrow{font-size:10px;margin-bottom:10px}
+.mtm-migration.r106-site .r106-page-intro h1{font-size:clamp(28px,8.4vw,36px);line-height:1.15;letter-spacing:-.045em}
+.mtm-migration.r106-site .r106-page-description{font-size:14px;margin-top:10px}
+.mtm-migration.r106-site .r106-page-aside{align-items:stretch;margin-top:18px}
+.mtm-migration.r106-site .native-ui .ne-catalog{padding:0 16px 40px}
+.mtm-migration.r106-site .native-ui .ne-grades{display:flex;width:100%}
+.mtm-migration.r106-site .native-ui .ne-grades button{flex:1;padding:0 8px}
+.mtm-migration.r106-site .native-ui .ne-filter-toggle{justify-content:flex-start}
+.mtm-migration.r106-site .native-ui>.ne-page-intro{width:calc(100% - 24px)}
+.mtm-migration.r106-site .native-ui .ne-resource-content{padding:16px 14px 40px}
+.mtm-migration.r106-site .ep-root .r106-page-intro .ep-total{max-width:none}
+.mtm-migration.r106-site .ep-root .ep-filters{padding:14px}
+.mtm-migration.r106-site .mig-notebook .r106-page-aside .mig-notebook-file-actions{justify-content:flex-start}
+}
+@media(prefers-reduced-motion:reduce){
+.mtm-migration.r106-site .native-ui .ne-course-card{transition:none}
+.mtm-migration.r106-site .native-ui .ne-course-card:hover{transform:none}
+}
+/* Footer stays consistent after navigating between lazy-loaded public sections. */
+
+/* Homework uses the same type and compact dock while keeping its account/session header. */
+.mtm-migration.r106-site .btvn-session,.mtm-migration.r106-site .btvn-session .r104-homework{font-family:inherit}
+.mtm-migration.r106-site .btvn-session .r104-hw-primary{font-family:inherit}
+.mtm-migration.r106-site .btvn-session .btvn-top{max-width:1600px;width:calc(100% - 64px);margin:14px auto 0;border:1px solid #dbe4f2;border-radius:19px;background:#ffffffed;box-shadow:0 12px 35px -30px #21326966;min-height:76px}
+@media(max-width:760px){.mtm-migration.r106-site .btvn-session .btvn-top{width:calc(100% - 24px);margin:10px auto 0;border-radius:15px;padding:10px 12px;min-height:62px}}
+.mtm-migration.r106-site:not(.r106-home-page) .mig-login{background:var(--r106-yellow);color:var(--r106-navy);border:1px solid #efc31e;border-radius:12px;min-height:44px}
+
+.mtm-migration.r106-site .r106-lesson-archive .btvn-lead h2{font-size:26px;color:#213269;margin:0}
+.mtm-migration.r106-site .mig-notebook .mig-local-notice p{font-size:13px;line-height:1.8}

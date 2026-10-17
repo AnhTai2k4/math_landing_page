@@ -3,6 +3,7 @@ import NotebookImport from './NotebookImport';
 import NotebookRhythm from './NotebookRhythm';
 import NotebookFormulaLauncher from './NotebookFormulaLauncher';
 import NotebookStepOrderLauncher from './NotebookStepOrderLauncher';
+import R106PageIntro from './R106PageIntro';
 import {BEFORE_NAVIGATION_EVENT} from './navigation';
 import {NOTEBOOK_KEY as KEY,emptyNotebook as empty,parseNotebook,saveNotebook,type Task,type Store} from './notebook-store';
 import {CalendarDays,CheckCircle2,ChevronLeft,ChevronRight,Download,Pencil,Plus,Save,Trash2,X} from 'lucide-react';
@@ -149,7 +150,7 @@ export default function Notebook(){
  function exportData(){try{const content=localStorage.getItem(KEY)??JSON.stringify(store,null,2);const blob=new Blob([content],{type:'application/json'});const href=URL.createObjectURL(blob),a=document.createElement('a');a.href=href;a.download='MTM-so-tay-ca-nhan-'+keyFor(new Date())+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(href),1000);}catch(e){setError(e instanceof Error?e.message:'Không xuất được bản lưu từ trình duyệt.');}}
 
  return <div className="mig-container mig-notebook">
-  <div className="mig-section-heading"><div><p className="mig-eyebrow">MỖI NGÀY MỘT BƯỚC TIẾN</p><h1>Sổ tay học tập</h1></div><div className="mig-notebook-file-actions"><NotebookImport store={store} expectedRaw={lastRaw.current} blocked={!!storageNotice||!!storageConflict} onApplied={(next,raw)=>{lastRaw.current=raw;setStore(next);setNotice('Đã ghép bản lưu. Các mục có trước được giữ nguyên.');}}/><button type="button" className="mig-button outline" onClick={exportData}><Download size={17}/>Xuất bản lưu</button></div></div>
+  <R106PageIntro className="mig-notebook-intro" eyebrow="MỖI NGÀY MỘT BƯỚC TIẾN" title="Sổ tay học tập" description={<p>Lên kế hoạch từng ngày, đánh dấu việc đã xong và đặt mục tiêu tháng.</p>}><div className="mig-notebook-file-actions"><NotebookImport store={store} expectedRaw={lastRaw.current} blocked={!!storageNotice||!!storageConflict} onApplied={(next,raw)=>{lastRaw.current=raw;setStore(next);setNotice('Đã ghép bản lưu. Các mục có trước được giữ nguyên.');}}/><button type="button" className="mig-button outline" onClick={exportData}><Download size={17}/>Xuất bản lưu</button></div></R106PageIntro>
   <div className="mig-local-notice"><CalendarDays size={22}/><div><b>Bản nháp cá nhân trên trình duyệt này</b><p>Chưa đồng bộ tài khoản hoặc gửi giáo viên. Phần đang gõ được phục hồi khi tải lại trong chính thẻ này; đóng thẻ hoặc xóa dữ liệu trình duyệt vẫn có thể làm mất bản nháp. Không nhập thông tin nhạy cảm trên máy dùng chung.</p><span>Đồng bộ tài khoản đang chờ tích hợp trực tiếp trên MTM; không mở hệ thống cũ thay thế.</span></div></div>
   {(storageNotice||storageConflict||error||draftStorageError)&&<p role="alert" className="mig-error">{storageNotice||storageConflict||error||draftStorageError}</p>}
   <div className="mig-notebook-stats"><article><span>Ngày đã lên kế hoạch</span><b>{monthTasks.filter(([,t])=>t.length).length}</b></article><article><span>Việc đã hoàn thành</span><b>{completed.length}</b></article><article><span>Phút theo các việc đã đánh dấu</span><b>{completed.reduce((s,t)=>s+t.minutes,0)}</b></article></div>

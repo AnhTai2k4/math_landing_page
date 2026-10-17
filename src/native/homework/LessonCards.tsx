@@ -15,7 +15,8 @@ export function LessonVideo({lesson,demo}:{lesson:HomeworkLesson;demo:boolean}){
 }
 // Buổi chưa học (theo ngày Việt Nam) thì video chưa có, không gọi là buổi ôn tập.
 const upcomingLesson=(date:string,now:number)=>date>=new Date(now).toLocaleDateString('sv-SE',{timeZone:'Asia/Ho_Chi_Minh'});
-export default function LessonCards({lessons,busy,onHomework,demo=false,serverNow,clientReceivedAt}:{lessons:HomeworkLesson[];busy:boolean;onHomework:(code:string)=>void;demo?:boolean;serverNow?:number;clientReceivedAt?:number}){
+export default function LessonCards({lessons,busy,onHomework,demo=false,serverNow,clientReceivedAt,headingLevel=1}:{lessons:HomeworkLesson[];busy:boolean;onHomework:(code:string)=>void;demo?:boolean;serverNow?:number;clientReceivedAt?:number;headingLevel?:1|2}){
+  const Heading=headingLevel===2?'h2':'h1';
   const [explained,setExplained]=useState<string|null>(null),[opened,setOpened]=useState<string|null>(null),[invited,setInvited]=useState<string|null>(null),[now,setNow]=useState(Date.now);
   const [calendarStatus,setCalendarStatus]=useState<{code:string;message:string}|null>(null);
   const [priorityNotice,setPriorityNotice]=useState<string|null>(null);
@@ -41,7 +42,7 @@ export default function LessonCards({lessons,busy,onHomework,demo=false,serverNo
   const locked=(lesson:HomeworkLesson)=>isHomeworkLocked(lesson,clockNow);
   const submitted=(lesson:HomeworkLesson)=>lesson.submittedAt!=null;
   const todo=lessons.filter(l=>l.available&&!locked(l)&&l.bestScore===null&&!submitted(l)).length, pending=lessons.filter(locked).length;
-  return <div className="btvn-cards"><div className="btvn-lead"><h1>Buổi học của em</h1><p>Xem lại bài giảng, hoàn thành BTVN trước hạn ghi trên từng bài.</p><p>Giờ mở và hạn nộp theo lịch riêng của lớp. Em xem thời gian cụ thể trên từng bài.</p><div className="btvn-overview"><b>{todo===0&&pending>0?`Chưa có bài cần làm. Có ${pending} bài chưa tới giờ mở.`:`Em còn ${todo} buổi cần làm BTVN`}</b><span>{lessons.length} buổi học</span></div><div className="btvn-legend"><span className="btvn-chip vid">▶ Có video bài giảng</span><span className="btvn-chip review">↻ Chưa có video bài giảng</span></div></div>
+  return <div className="btvn-cards"><div className="btvn-lead"><Heading>Buổi học của em</Heading><p>Xem lại bài giảng, hoàn thành BTVN trước hạn ghi trên từng bài.</p><p>Giờ mở và hạn nộp theo lịch riêng của lớp. Em xem thời gian cụ thể trên từng bài.</p><div className="btvn-overview"><b>{todo===0&&pending>0?`Chưa có bài cần làm. Có ${pending} bài chưa tới giờ mở.`:`Em còn ${todo} buổi cần làm BTVN`}</b><span>{lessons.length} buổi học</span></div><div className="btvn-legend"><span className="btvn-chip vid">▶ Có video bài giảng</span><span className="btvn-chip review">↻ Chưa có video bài giảng</span></div></div>
     {priority&&<section className="btvn-card btvn-priority" aria-labelledby={priorityId+'-title'}>
       <h2 id={priorityId+'-title'}>Việc nên làm tiếp</h2>
       <p><strong>{lessonHomeworkTitle(priority)}</strong> · Buổi {priority.date.slice(8,10)}/{priority.date.slice(5,7)}</p>

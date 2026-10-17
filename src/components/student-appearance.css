@@ -23,3 +23,6 @@
 .r104-profile-dialog .r104-profile-preview small{color:#dbe6ff}.r104-profile-dialog .r104-profile-fields{border:0;border-radius:0}.r104-student-school{color:#52688d;font-size:12px;margin-top:4px}
 
 .r104-appearance-saved{position:fixed;bottom:20px;left:20px;right:20px;width:fit-content;max-width:calc(100% - 40px);margin:auto;padding:12px 18px;border:1px solid #b8d7c7;background:#f4fff8;border-radius:12px;box-shadow:0 8px 32px #21326920;z-index:100;font-size:14px;pointer-events:none}
+/* Shared-page styles must never reduce readability inside the private profile preview. */
+.mtm-migration .btvn-session .r104-profile-dialog .r104-profile-preview small{color:#e0e9ff}
+.mtm-migration .btvn-session .r104-profile-dialog .r104-profile-preview strong{color:#fff}

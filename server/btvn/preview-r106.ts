@@ -1,5 +1,6 @@
 /** Local-only synthetic acceptance server. Loaded only with BOTH opt-in flags. */
 import {readFileSync,writeFileSync,renameSync,existsSync} from 'node:fs';
+import {resolve} from 'node:path';
 import {createHash,randomUUID} from 'node:crypto';
 import type {Connect} from 'vite';
 import type {HomeworkService} from './service';
@@ -11,7 +12,9 @@ export function r106PreviewApi(service:HomeworkService,target:string):Connect.Ne
  const persist=()=>{writeFileSync(path+'.tmp',JSON.stringify(records),'utf8');renameSync(path+'.tmp',path);};
  const store:AvatarRepository={async read(session){const key=id(session);if(!records[key]){records[key]={profileKey:randomUUID(),revision:0,appearance:{avatar:'orbit',photo:''},school:''};persist();}return structuredClone(records[key]);},async save(session,revision,appearance,school,expectedProfileKey){const key=id(session),record=await this.read(session);if(record.profileKey!==expectedProfileKey||record.revision!==revision)throw avatarError(409);const next={...record,revision:revision+1,appearance,school};records[key]=next;try{persist();}catch{records[key]=record;throw avatarError(503);}return structuredClone(next);}};
  return async(req,res,next)=>{
-  const route=(req.url??'').split('?')[0];if(!['/api/btvn/avatar','/api/xep-hang','/api/xep-hang-cua-em'].includes(route))return next();
+  const route=(req.url??'').split('?')[0];
+  if(route==='/__preview/r106'&&req.method==='GET'){if(!/^(?:127\.0\.0\.1|localhost)(?::[0-9]+)?$/.test(req.headers.host??'')){res.writeHead(404);res.end();return;}res.writeHead(200,{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store','X-Robots-Tag':'noindex, nofollow'});res.end(readFileSync(resolve('server/btvn/preview-r106.html'),'utf8'));return;}
+  if(!['/api/btvn/avatar','/api/xep-hang','/api/xep-hang-cua-em'].includes(route))return next();
   const send=(status:number,body:unknown,headers:Record<string,string>={})=>{res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store, private',Vary:'Cookie',...headers});res.end(JSON.stringify(body));};
   try{
    let raw='';for await(const chunk of req){raw+=chunk.toString();if(Buffer.byteLength(raw)>200000)return send(413,{message:'Yêu cầu quá lớn.'});}

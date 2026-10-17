@@ -2,6 +2,7 @@ import {lazy,Suspense,useEffect,useState} from 'react';
 import {Link,useRoute} from '../../migration/navigation';
 import {practiceURL,tracks} from './practice-shared';
 import PracticeTool from './PracticeTool';
+import R106PageIntro from '../../migration/R106PageIntro';
 // Nhập tĩnh ChapterPractice (chỉ phần mã giao diện, KHÔNG có ngân hàng đề) như trước KT-06 để giữ nguyên thứ tự CSS:
 // katex, math-text, result-summary, mtm-source-content, theory-tables, chapters, exams. Đã thử nhập riêng từng CSS nhưng
 // Vite đặt CSS riêng của chunk lên trước CSS dùng chung nên đổi giao diện nút/summary (review Codex đợt 3; so computed style).
@@ -45,10 +46,10 @@ export default function PracticeLibrary(){
   if(requested||view)return <Suspense fallback={<div className="mig-container mig-route-loading" role="status" aria-live="polite">Đang tải bài luyện…</div>}><PracticeDetail/></Suspense>;
   if(!selected||!chapter)return <section className="mig-container mig-panel"><h1>Chưa đọc được danh mục luyện tập</h1><Link href="/thi-thu">Về Thi thử</Link></section>;
   return <section className="mig-container cp-library ep-root">
-    <header className="cp-library-intro"><p className="mig-eyebrow">MINH THÀNH MATH · LUYỆN TỪNG DẠNG</p><h1>Luyện tập</h1>
+    <R106PageIntro className="cp-library-intro" eyebrow="MINH THÀNH MATH · LUYỆN TỪNG DẠNG" title="Luyện tập" description={<>
       <p>Chọn chương đang học, luyện từng dạng rồi tự kiểm tra đáp án và lời giải sau khi nộp.</p>
       <p className="cp-local-note">Lượt làm lưu trên trình duyệt này; chưa đồng bộ giữa các thiết bị.</p>
-    </header>
+    </>}/>
     <nav className="cp-track-nav" aria-label="Chọn nhóm luyện tập">{tracks.map(t=><Link key={t.id} href={practiceURL(t.id,t.chapters[0].id)} aria-current={selected.id===t.id?'page':undefined}>{t.label}</Link>)}</nav>
     <div className="cp-library-layout">
       <aside className="cp-chapter-panel"><h2>{selected.label}</h2><p>{selected.description}</p>

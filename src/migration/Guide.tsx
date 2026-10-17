@@ -4,6 +4,7 @@ import {ArrowUpRight} from 'lucide-react';
 import './guide.css';
 import StudyCompass from './StudyCompass';
 import GuideGraphLauncher from './GuideGraphLauncher';
+import R106PageIntro from './R106PageIntro';
 
 import {ZALO_ASSISTANT_URL} from '../components/mtm-contact';
 export {ZALO_ASSISTANT_URL} from '../components/mtm-contact';
@@ -100,7 +101,7 @@ export default function Guide(){const [who,setWho]=useState<Audience>(readAudien
  };
  const parent=who==='phu-huynh';
  return <div className="mtm-guide"><div className="mg-shell">
-  <header className="mg-head"><p className="mg-eyebrow">Minh Thành Math</p><h1>Hướng dẫn nhanh</h1><p className="mg-lead">{parent?'Ba kênh giúp anh/chị theo dõi việc học của con thuận tiện hơn: Zalo trợ lý lớp, bài tập về nhà trên web và web luyện đề có lời giải.':'Ba kênh học cùng MTM: Zalo trợ lý lớp để hỏi lịch, xin nghỉ, lấy tài liệu, hỏi bài; bài tập về nhà trên web; web luyện đề có lời giải.'}</p></header>
+  <R106PageIntro className="mg-head" eyebrow="Minh Thành Math" title="Hướng dẫn nhanh" description={<p className="mg-lead">{parent?'Ba kênh giúp anh/chị theo dõi việc học của con thuận tiện hơn: Zalo trợ lý lớp, bài tập về nhà trên web và web luyện đề có lời giải.':'Ba kênh học cùng MTM: Zalo trợ lý lớp để hỏi lịch, xin nghỉ, lấy tài liệu, hỏi bài; bài tập về nhà trên web; web luyện đề có lời giải.'}</p>}/>
   <div className="mg-tabs" role="tablist" aria-label="Hướng dẫn dành cho">
    <button type="button" role="tab" id="mg-tab-hs" tabIndex={parent?-1:0} aria-selected={!parent} aria-controls="mg-panel" onKeyDown={tabKey} onClick={()=>pick('hoc-sinh')}>Học sinh</button>
    <button type="button" role="tab" id="mg-tab-ph" tabIndex={parent?0:-1} aria-selected={parent} aria-controls="mg-panel" onKeyDown={tabKey} onClick={()=>pick('phu-huynh')}>Phụ huynh</button>

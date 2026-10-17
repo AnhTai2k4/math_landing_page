@@ -3,7 +3,7 @@ export type StudentAppearance={avatar:'orbit'|'spark'|'prism'|'wave';photo:strin
 export type AppearanceRecord={profileKey:string;revision:number;school:string;appearance:StudentAppearance};
 export const DEFAULT_APPEARANCE:StudentAppearance={avatar:'orbit',photo:''};
 export const APPEARANCE_EVENT='mtm:student-appearance';
-const SESSION_EVENT='mtm:student-session',SYNC_KEY='mtm:appearance:refresh:v2';
+export const SESSION_EVENT='mtm:student-session',SYNC_KEY='mtm:appearance:refresh:v2';
 let accountEpoch=0,lastSessionNonce='';
 const notifyOtherTabs=(kind:'session'|'profile')=>{try{localStorage.setItem(SYNC_KEY,JSON.stringify({kind,nonce:crypto.randomUUID()}));}catch{/* Optional notification, never stores profile data. */}};
 /** Authenticated API owns identity. Browser storage contains a refresh nonce only. */
