@@ -1,6 +1,8 @@
 {
   "framework": "vite",
-  "regions": ["sin1"],
+  "regions": [
+    "sin1"
+  ],
   "buildCommand": "npm run build",
   "outputDirectory": "build",
   "rewrites": [
@@ -30,6 +32,14 @@
     },
     {
       "source": "/so-tay",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/san-choi",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/san-choi/:path*",
       "destination": "/index.html"
     },
     {
