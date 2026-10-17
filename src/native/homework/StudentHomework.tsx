@@ -7,6 +7,7 @@ import {points,time,date} from './types';
 import HomeworkAttempt from './HomeworkAttempt';
 import HomeworkResult from './HomeworkResult';
 import './homework.css';
+import './btvn-mobile.css';
 export default function StudentHomework({api=homeworkApi,initialCode=''}:{api?:HomeworkApi;initialCode?:string}){
  const [code,setCode]=useState(initialCode),[challenge,setChallenge]=useState(''),[profile,setProfile]=useState<Profile|null>(null),[session,setSession]=useState(''),[message,setMessage]=useState(''),[busy,setBusy]=useState(false),[assignments,setAssignments]=useState<Assignment[]>([]),[history,setHistory]=useState<History[]>([]),[ranks,setRanks]=useState<Rank[]>([]),[month,setMonth]=useState(()=>(()=>{const parts=new Intl.DateTimeFormat('en',{timeZone:'Asia/Ho_Chi_Minh',year:'numeric',month:'2-digit'}).formatToParts(new Date());return parts.find(p=>p.type==='year')!.value+'-'+parts.find(p=>p.type==='month')!.value;})()),[attempt,setAttempt]=useState<Attempt|null>(null),[result,setResult]=useState<Result|null>(null);
  const generation=useRef(0),refreshSequence=useRef(0);

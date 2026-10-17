@@ -1,0 +1,296 @@
+/* BTVN: giữ nội dung và điều khiển trong bề ngang màn hình. */
+.ep-root.btvn-session {
+  --btvn-page-width: 1480px;
+  --btvn-page-gutter: 24px;
+  width: 100%;
+  max-width: none;
+  margin-inline: auto;
+}
+
+/* Đề và phiếu dùng chung container, kể cả trước khi mở phòng tập trung. */
+.ep-root.btvn-session > .ep-attempt {
+  width: 100%;
+  max-width: var(--btvn-page-width);
+  margin-inline: auto;
+  padding: 24px var(--btvn-page-gutter);
+}
+
+.ep-root.btvn-session > :is(.btvn-back, .r106-save-feedback) {
+  margin-left: max(var(--btvn-page-gutter), calc((100% - var(--btvn-page-width)) / 2 + var(--btvn-page-gutter)));
+  margin-right: var(--btvn-page-gutter);
+}
+
+.ep-root.btvn-session :is(.btvn-entry-heading, .btvn-gates, .btvn-detail, .r104-homework, .r106-lesson-archive) {
+  width: 100%;
+  max-width: var(--btvn-page-width);
+  margin-inline: auto;
+  padding-inline: var(--btvn-page-gutter);
+}
+
+.ep-root.btvn-session :is(.ep-pdf-pane, .ep-answer-pane, .ep-exam-layout) {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.ep-root.btvn-session :is(.ep-inline-image, .ep-inline-scroll) { display: block; }
+.ep-root.btvn-session .ep-inline-image.is-wide img { width: auto; max-width: 100%; height: auto; }
+.ep-root.btvn-session .ep-inline-image.is-wide::after { content: none; }
+
+.btvn-session,
+.hw-root {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+}
+
+.btvn-session *,
+.btvn-session *::before,
+.btvn-session *::after,
+.hw-root *,
+.hw-root *::before,
+.hw-root *::after {
+  box-sizing: border-box;
+}
+
+.btvn-session :is(.btvn-top, .btvn-me, .btvn-entry-bar, .btvn-gates, .btvn-gate, .btvn-detail, .btvn-sheet, .btvn-card, .btvn-title, .btvn-card-actions, .btvn-result-top, .btvn-result-top > div, .btvn-history-row > div, .r104-homework, .r104-hw-workplane, .r104-hw-results, .r104-hw-profile > div, .r104-hw-profile > div > span, .r104-hw-lessons-heading > div, .r104-hw-preview-copy, .r104-hw-rank-identity > span, .r104-hw-history-title),
+.hw-root :is(header, section, article, form, label, dl, dt, dd, .hw-profile > span, .hw-actions, .hw-workspace, .hw-sheet, .hw-table) {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.btvn-session :is(.btvn-gate input, .btvn-gate select, .btvn-detail textarea),
+.hw-root :is(input, select, textarea) {
+  min-width: 0;
+  max-width: 100%;
+  scroll-margin-block: 24px;
+}
+
+.btvn-session :is(.btvn-btn, .btvn-home-link, .r104-hw-primary, .r104-hw-preview-action, .r104-hw-preview-links > *),
+.hw-root :is(button, .hw-actions a, .hw-state) {
+  max-width: 100%;
+  min-width: 44px;
+  min-height: 44px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  touch-action: manipulation;
+}
+
+.btvn-session :is(.btvn-gate button, .btvn-top button, .r104-homework button, .btvn-detail button, .btvn-self-check button) {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.btvn-session .btvn-overview span {
+  white-space: normal;
+}
+
+.btvn-session :is(.btvn-sheet, .btvn-card, .btvn-gate) img,
+.hw-root :is(.hw-panel, .hw-review, .hw-result) img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.hw-root .hw-table {
+  width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.btvn-session :is(.btvn-sheet, .btvn-card) table,
+.hw-root .hw-review table {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* FitTable cần đo bảng thật để chuyển giữa dạng ngang và dạng dọc. */
+.btvn-session .ep-table-wrap,
+.hw-root .ep-table-wrap {
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.btvn-session :is(.btvn-sheet, .btvn-card) .ep-table-wrap > table,
+.hw-root .hw-review .ep-table-wrap > table {
+  display: table;
+  max-width: none;
+  overflow: visible;
+}
+
+.btvn-session :is(.mtm-formula, .ep-inline-math, .ep-formula),
+.hw-root :is(.mtm-formula, .ep-inline-math, .ep-formula) {
+  display: inline-block;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  vertical-align: middle;
+  overflow-wrap: normal;
+  white-space: nowrap;
+  overscroll-behavior-x: contain;
+  padding-block: 3px;
+}
+
+/* Không chọn MathML ẩn mà KaTeX dùng cho trình đọc màn hình. */
+.btvn-session .katex-display:not(:is(.mtm-formula, .ep-inline-math, .ep-formula) .katex-display),
+.hw-root .katex-display:not(:is(.mtm-formula, .ep-inline-math, .ep-formula) .katex-display),
+.btvn-session math[display="block"]:not(.katex-mathml math),
+.hw-root math[display="block"]:not(.katex-mathml math),
+.btvn-session .ep-formula-line,
+.hw-root .ep-formula-line {
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-wrap: normal;
+  overscroll-behavior-x: contain;
+}
+
+@media (max-width: 760px) {
+  .ep-root.btvn-session { --btvn-page-gutter: 16px; }
+
+  .ep-root.btvn-session .ep-attempt :is(p, small, button, label, summary, input, select, textarea, .ep-desktop-layout, .ep-pdf-zoom, .ep-part-heading) {
+    font-size: 16px;
+  }
+
+  .btvn-session,
+  .hw-root {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  /* Chỉ nâng cỡ chữ thường, không thay cỡ chỉ số và ký hiệu Toán. */
+  .btvn-session :is(.btvn-entry-heading, .btvn-entry-help, .btvn-gates, .btvn-top, .r104-homework, .r106-lesson-archive, .btvn-detail, .btvn-self-check) :is(p, small, label, input, select, textarea, button, summary, dt),
+  .btvn-session :is(.btvn-chip, .btvn-footnote, .btvn-home-link, .btvn-eyebrow, .btvn-date span, .btvn-me b, .btvn-me span, .btvn-title p, .btvn-card-status, .btvn-card-status b, .btvn-files a, .btvn-history-row small, .btvn-stats small),
+  .btvn-session .r104-homework :is(.r104-hw-overline, .r104-hw-cohort, .r104-hw-today-facts, .r104-hw-today-facts span, .r104-hw-station-date, .r104-hw-station strong, .r104-hw-status, .r104-hw-preview-facts, .r104-hw-history-date, .r104-hw-history-title strong, .r104-hw-receipts li, .r104-hw-rank-identity strong),
+  .hw-root :is(p, small, label, input, select, textarea, button, summary, dt, dd, th, td, caption, .hw-state span) {
+    font-size: 16px !important;
+  }
+
+  .btvn-session :is(.btvn-entry-bar, .btvn-me, .r104-hw-profile, .r104-hw-today > header, .r104-hw-lessons-heading) {
+    flex-wrap: wrap;
+  }
+
+  .btvn-session .btvn-entry-bar {
+    align-items: center;
+  }
+
+  .btvn-session .btvn-me {
+    justify-content: flex-start;
+  }
+
+  .btvn-session .btvn-me .btvn-home-link {
+    margin-right: 0;
+  }
+
+  .btvn-session .btvn-top .btvn-home-logo,
+  .btvn-session .btvn-entry-bar .btvn-home-logo {
+    max-width: 100%;
+  }
+
+  .btvn-session .btvn-entry-help {
+    margin-inline: 16px;
+  }
+
+  .btvn-session :is(.btvn-gates, .btvn-detail, .r104-homework, .r106-lesson-archive) {
+    padding-inline: 16px;
+  }
+
+  .btvn-session .btvn-gate {
+    padding: 20px;
+  }
+
+  .btvn-session .btvn-gate button {
+    align-self: stretch;
+  }
+
+  .btvn-session :is(.btvn-card-actions, .btvn-overview-actions) > .btvn-btn {
+    width: 100%;
+  }
+
+  .btvn-session :is(.r104-hw-filters, .r104-hw-preview-links) {
+    max-width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .btvn-session .r104-hw-filters button {
+    min-width: 72px;
+    padding: 8px 12px;
+  }
+
+  .btvn-session .r104-hw-station {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
+
+  .btvn-session .r104-hw-station strong {
+    grid-row: auto;
+  }
+
+  .btvn-session .r104-hw-class-snapshot dl {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .btvn-session .r104-hw-class-snapshot dl > div {
+    flex-basis: 90px;
+    min-width: 0;
+  }
+
+  .btvn-session .r104-hw-history li > button {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .btvn-session .r104-hw-history-date {
+    grid-column: 1 / -1;
+  }
+
+  .btvn-session .r104-hw-receipts li {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .btvn-session .r104-hw-receipts li > span:nth-child(2) {
+    grid-row: 2;
+    grid-column: 1 / -1;
+  }
+
+  .btvn-session .btvn-stats {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .btvn-session .btvn-history-row {
+    flex-wrap: wrap;
+  }
+
+  .btvn-session .btvn-detail summary,
+  .hw-root summary {
+    min-height: 44px;
+    padding-block: 10px;
+    cursor: pointer;
+  }
+
+  .hw-root {
+    padding: 16px;
+  }
+
+  .hw-root .hw-actions > :is(button, a) {
+    flex: 1 1 100%;
+  }
+
+  .hw-root .hw-grid {
+    grid-template-columns: repeat(auto-fit, minmax(64px, 1fr));
+  }
+
+  .hw-root .hw-grid .hw-state {
+    padding: 10px 6px;
+  }
+}

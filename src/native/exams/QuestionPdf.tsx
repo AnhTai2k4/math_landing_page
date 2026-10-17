@@ -9,11 +9,11 @@ GlobalWorkerOptions.workerSrc=workerUrl;
 // thêm mức phóng (cuộn hai chiều) và chế độ toàn màn hình. Không đổi tệp đề, số trang hay điều kiện "bản đề đã hiển thị".
 const ZOOMS=[1,1.5,2,3] as const;
 const MAX_RENDER_WIDTH=3200;
-export default function QuestionPdf({file,title,onReady,targetPage,allowFullscreen=true,compact=false}:{file:QuestionPdfFile;title:string;onReady:(ready:boolean)=>void;targetPage?:number;allowFullscreen?:boolean;compact?:boolean}) {
+export default function QuestionPdf({file,title,onReady,targetPage,allowFullscreen=true,compact=false,fitToWidth=false}:{file:QuestionPdfFile;title:string;onReady:(ready:boolean)=>void;targetPage?:number;allowFullscreen?:boolean;compact?:boolean;fitToWidth?:boolean}) {
   const [doc,setDoc]=useState<PDFDocumentProxy|null>(null),[index,setIndex]=useState(()=>Math.max(0,file.questionPages.indexOf(targetPage??-1))),[width,setWidth]=useState(600),[error,setError]=useState(''),[busy,setBusy]=useState(true);
   useEffect(()=>{if(targetPage!==undefined){const next=file.questionPages.indexOf(targetPage);if(next>=0)setIndex(next);}},[targetPage,file]);
   // Chỉ phòng tập trung dùng mức đọc lớn trên điện thoại; nhánh cũ giữ vừa ngang.
-  const [zoom,setZoom]=useState(()=>compact&&typeof window!=='undefined'&&window.matchMedia('(max-width:760px)').matches?1:0),[full,setFull]=useState(false);
+  const [zoom,setZoom]=useState(()=>!fitToWidth&&compact&&typeof window!=='undefined'&&window.matchMedia('(max-width:760px)').matches?1:0),[full,setFull]=useState(false);
   const host=useRef<HTMLElement>(null),sheet=useRef<HTMLDivElement>(null),fullButton=useRef<HTMLButtonElement>(null),ready=useRef(onReady);ready.current=onReady;
   const [placeholder,setPlaceholder]=useState(0);
   // Trang đang hiển thị thật (để biết lúc nào "bản đề đã hiện"), và vị trí cuộn cần giữ khi đổi chế độ toàn màn hình.

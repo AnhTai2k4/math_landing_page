@@ -1,0 +1,223 @@
+/* Chỉ phòng BTVN: portal nằm ngoài .btvn-session. */
+.ep-root.fr-room.r104-room.r106-room[data-homework] {
+  --btvn-room-gutter: max(24px, calc((100% - 1480px) / 2));
+  top: var(--btvn-viewport-top, 0px);
+  height: var(--btvn-viewport-height, 100dvh);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.ep-root.fr-room.r104-room.r106-room[data-homework] *,
+.ep-root.fr-room.r104-room.r106-room[data-homework] *::before,
+.ep-root.fr-room.r104-room.r106-room[data-homework] *::after { box-sizing: border-box; }
+.ep-root.fr-room.r104-room.r106-room[data-homework] :is(.fr-top, .fr-workspace, .fr-paper, .fr-quick,
+  .fr-quick fieldset, .fr-quick-tf > div, .fr-answer-dock, .fr-mobile-nav,
+  .fr-pdf-document, .ep-pdf-viewer, .ep-question-pdf, .ep-inline-image,
+  .ep-inline-scroll, .mtm-source-content, .mtm-source-sheet, .mtm-source-segment) {
+  min-width: 0;
+  max-width: 100%;
+}
+.ep-root.fr-room.r104-room.r106-room[data-homework] .fr-workspace {
+  width: 100%;
+  padding-inline: var(--btvn-room-gutter);
+  scroll-padding-block: 20px;
+}
+.ep-root.fr-room.r104-room.r106-room[data-homework] :is(.fr-top, .fr-sheet:not(.is-open)) {
+  padding-inline: var(--btvn-room-gutter);
+}
+.ep-root.fr-room.r104-room.r106-room[data-homework] .fr-paper { width: 100%; max-width: none; }
+.ep-root.fr-room.r104-room.r106-room[data-homework] .fr-paper :is(img, .ep-inline-image.is-wide img) {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: none;
+  object-fit: contain;
+}
+.ep-root.fr-room.r104-room.r106-room[data-homework] .ep-inline-image,
+.ep-root.fr-room.r104-room.r106-room[data-homework] .ep-inline-scroll { display: block; }
+.ep-root.fr-room.r104-room.r106-room[data-homework] .ep-inline-image.is-wide::after { content: none; }
+.ep-root.fr-room.r104-room.r106-room[data-homework] :is(.mtm-formula, .ep-inline-math, .ep-formula) {
+  display: inline-block;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  vertical-align: middle;
+  overflow-wrap: normal;
+  white-space: nowrap;
+  overscroll-behavior-x: contain;
+  padding-block: 3px;
+}
+.ep-root.fr-room.r104-room.r106-room[data-homework] :is(.ep-table-wrap, .ep-formula-line) {
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+.ep-root.fr-room.r104-room.r106-room[data-homework] :is(.katex-display, math[display="block"]):not(.katex-mathml *) {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-wrap: normal;
+}
+.ep-root.fr-room.r104-room.r106-room[data-homework] .fr-paper table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+.ep-root.fr-room.r104-room.r106-room[data-homework] .ep-table-wrap > table {
+  display: table;
+  max-width: none;
+  overflow: visible;
+}
+.ep-root.fr-room.r104-room.r106-room[data-homework] .fr-paper :is(input, textarea) {
+  max-width: 100%;
+  min-width: 0;
+  scroll-margin-block: 20px;
+}
+.ep-root.fr-room.r104-room.r106-room[data-homework] .fr-paper :is(.fr-source-choice, .fr-text-choices button) > span:nth-child(2) {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.ep-root.fr-room.r104-room.r106-room[data-homework] .ep-pdf-compact-toolbar {
+  flex-wrap: wrap;
+  gap: 6px;
+  white-space: normal;
+}
+.ep-root.fr-room.r104-room.r106-room[data-homework] .ep-pdf-compact-toolbar .ep-pdf-fit {
+  min-width: 44px;
+  font-size: 16px;
+  padding-inline: 8px;
+}
+
+@media (min-width: 761px) {
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-sheet.is-open {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 16px var(--btvn-room-gutter);
+    max-height: 40dvh;
+    overflow-y: auto;
+  }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-sheet.is-open > section {
+    flex: 1 1 280px;
+    min-width: 0;
+    max-width: 100%;
+  }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-sheet.is-open .fr-grid {
+    flex-wrap: wrap;
+    min-width: 0;
+    max-width: 100%;
+  }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-sheet.is-open .fr-legend {
+    white-space: normal;
+    flex-basis: 100%;
+  }
+}
+
+@media (max-width: 760px) {
+  .ep-root.fr-room.r104-room.r106-room[data-homework] { --btvn-room-gutter: 16px; font-size: 16px; }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-top {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 144px) 44px;
+    gap: 8px;
+    min-height: 82px;
+    padding: max(8px, env(safe-area-inset-top)) 16px 8px;
+  }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-clock { padding: 6px; }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-clock small {
+    white-space: normal;
+    letter-spacing: 0;
+    font-size: 16px;
+  }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-clock strong { font-size: 28px; }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] :is(.fr-question-heading, .fr-question-heading small,
+    .btvn-question > h2, .btvn-question > small, .fr-source-credit,
+    .fr-sheet h2, .fr-sheet h3, .fr-sheet-title small, .fr-legend, .fr-tool-panel,
+    .fr-warning, .fr-save-status, .fr-quick small, .ep-inline-hint,
+    .fr-answer-dock small, .fr-grid button, .fr-choice-letter,
+    .fr-mobile-nav button, .fr-mobile-nav .fr-submit) { font-size: 16px; }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] :is(button, select, textarea, input) {
+    min-height: 44px;
+    font-size: 16px;
+  }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-workspace {
+    padding: 12px 16px max(24px, env(safe-area-inset-bottom));
+  }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-paper {
+    padding: 18px 16px;
+    font-size: calc(18px * var(--fr-font, 1));
+  }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-question-heading {
+    grid-template-columns: minmax(0, 1fr) 44px;
+    margin-bottom: 16px;
+  }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-paper .ep-zoom-row {
+    position: static;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    width: 100%;
+    min-width: 0;
+    min-height: 52px;
+    margin: 8px 0;
+  }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-paper .ep-zoom-open {
+    width: auto;
+    height: auto;
+    flex: 0 0 auto;
+    padding: 8px 12px;
+  }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-quick-tf {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-quick-tf > div {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 12px;
+    gap: 8px;
+  }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-quick-tf > div > :is(span, p) { grid-column: 1 / -1; }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-quick-tf button { grid-row: auto; }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-answer-dock {
+    /* Là một hàng riêng của flex: vùng đọc tự trừ chiều cao, không bị nút đè. */
+    flex: none;
+    padding: 8px 16px max(8px, env(safe-area-inset-bottom));
+  }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-mobile-nav {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-mobile-nav button { min-width: 44px; padding: 8px 2px; }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-mobile-nav .fr-submit { grid-column: auto; }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-answer-dock small { margin-top: 6px; overflow-wrap: anywhere; }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-sheet:not(.is-open) { min-height: 66px; padding: 6px 12px; }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-sheet.is-open {
+    max-height: min(80dvh, calc(var(--btvn-viewport-height, 100dvh) - 12px));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
+  }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-sheet.is-open > section { min-width: 0; }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-sheet.is-open .fr-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-tool-panel { max-height: 45%; }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-pdf-workspace { overflow: auto; }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-pdf-workspace .fr-paper { height: auto; min-height: 100%; }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-pdf-document { flex: none; overflow: visible; }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .ep-question-pdf {
+    overflow: auto;
+    max-height: 55dvh;
+    overscroll-behavior: contain;
+  }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-pdf-workspace .fr-quick { padding-top: 16px; }
+  .ep-root.fr-room.r104-room.r106-room[data-homework]:has(:is(input, textarea):focus) .fr-sheet:not(.is-open) { display: none; }
+  .ep-root.fr-room.r104-room.r106-room[data-homework]:has(:is(input, textarea):focus) .fr-answer-dock small { display: none; }
+  .ep-root.fr-room.r104-room.r106-room[data-homework] .fr-grid .fr-marked { font-size: 16px !important; }
+
+  /* Hai hộp thoại gắn vào body, ngoài container phòng làm bài. */
+  body:has(.fr-room[data-homework]) .ep-zoom-dialog :is(.ep-zoom-title, .ep-zoom-tools span, .ep-zoom-close, .ep-zoom-hint),
+  body:has(.fr-room[data-homework]) .r106-confirm :is(p, h3, small, button) { font-size: 16px; }
+  body:has(.fr-room[data-homework]) .ep-zoom-bar { flex-wrap: wrap; }
+  body:has(.fr-room[data-homework]) .ep-zoom-title { flex-basis: 100%; white-space: normal; }
+  body:has(.fr-room[data-homework]) .ep-zoom-close { margin-left: auto; }
+}

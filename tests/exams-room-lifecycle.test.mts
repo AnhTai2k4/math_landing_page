@@ -172,13 +172,13 @@ test('Nộp bài luôn vàng theo mẫu B, vẫn giữ trạng thái sẵn sàng
   buttons(r.value).find(b=>b.props.className==='fr-menu-title').props.onClick();r.flush();
   assert.ok(find(r.value,(n:any)=>n.props?.['aria-label']==='Tên đầy đủ của đề'));r.dispose();
 });
-test('PDF: chỉ compact mobile khởi tạo 150%, nút vừa ngang về 100%; giao diện cũ giữ nguyên',()=>{
+test('PDF: BTVN mở vừa ngang, compact thường giữ mức phóng cũ và nút vừa ngang hoạt động',()=>{
   const pdfCode=buildSync({entryPoints:[join(root,'src/native/exams/QuestionPdf.tsx')],bundle:true,write:false,platform:'node',format:'cjs',jsx:'automatic',packages:'external',alias:{react:fixture,'react/jsx-runtime':fixture,'react-dom':fixture},logLevel:'silent'}).outputFiles[0].text;
   const m={exports:{} as any};new Function('require','module','exports',pdfCode)((id:string)=>id.startsWith('pdfjs-dist')?(id.includes('worker')?{default:'worker'}:{GlobalWorkerOptions:{},AnnotationMode:{DISABLE:0},getDocument(){}}):require(id),m,m.exports);
   const original=(globalThis as any).window;
-  try{for(const [mobile,compact,want] of [[true,true,'×1,5'],[false,true,'Vừa ngang'],[true,false,'Vừa bề ngang']] as const){
+  try{for(const [mobile,compact,fitToWidth,want] of [[true,true,false,'×1,5'],[false,true,false,'Vừa ngang'],[true,false,false,'Vừa bề ngang'],[true,true,true,'Vừa ngang']] as const){
     (globalThis as any).window={matchMedia:()=>({matches:mobile})};
-    const r=new Runtime(()=>m.exports.default({file:{questionPages:[1]},title:'Đề kiểm',onReady(){},compact}));
+    const r=new Runtime(()=>m.exports.default({file:{questionPages:[1]},title:'Đề kiểm',onReady(){},compact,fitToWidth}));
     // Kiểm khởi tạo và handler; không mô phỏng vẽ canvas bằng fixture React.
     (globalThis as any).__mtmRoomRuntime=r;r.value=r.fn();
     assert.ok(textOf(r.value).includes(want));

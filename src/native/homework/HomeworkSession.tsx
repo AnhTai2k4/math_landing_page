@@ -26,6 +26,7 @@ import {useUnsavedGuard} from '../exams/navigation-guard';
 import {createHomeworkSaver,REMOTE_SAVE_INITIAL,REMOTE_LEAVE_MESSAGE} from './remote-save';
 import '../exams/exams.css';
 import './btvn-session.css';
+import './btvn-mobile.css';
 
 const ACCESS_ENDED='Máy chủ không còn xác nhận quyền xem bài. Em nhập lại mã để xem bản máy chủ đang giữ hoặc liên hệ trợ lý lớp.';
 const ACCESS_ENDED_PENDING=ACCESS_ENDED+' Phần bài chưa gửi xong có thể chưa được tính.';

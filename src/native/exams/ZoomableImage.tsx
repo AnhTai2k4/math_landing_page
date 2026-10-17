@@ -26,7 +26,7 @@ export default function ZoomableImage({src,alt,width,height,label,watermark=fals
     <div className={`ep-inline-image${naturalWidth>600?' is-wide':''}`} style={{'--ep-readable-width':`${naturalWidth*.55}px`} as CSSProperties}>
       <div className="ep-inline-scroll"><img ref={image} className="ep-zoomable" src={src} width={width} height={height} alt={alt} loading={loading} decoding="async" onLoad={event=>setNaturalWidth(width??event.currentTarget.naturalWidth)} onError={onError} onClick={()=>setOpen(true)}/></div>
     </div>
-    <div className={`ep-zoom-row${naturalWidth>600?' has-wide-image':''}`}><span className="ep-inline-hint">{naturalWidth>600?'Vuốt ngang để xem hết đề':'Chạm ảnh để xem to'}</span><button ref={trigger} type="button" className="ep-zoom-open" aria-haspopup="dialog" aria-label={`Phóng to ${label}`} onClick={()=>setOpen(true)}><span aria-hidden="true">⤢</span> Phóng to</button></div>
+    <div className={`ep-zoom-row${naturalWidth>600?' has-wide-image':''}`}><span className="ep-inline-hint">Chạm ảnh để xem to</span><button ref={trigger} type="button" className="ep-zoom-open" aria-haspopup="dialog" aria-label={`Phóng to ${label}`} onClick={()=>setOpen(true)}><span aria-hidden="true">⤢</span> Phóng to</button></div>
     {open&&<ZoomDialog src={src} alt={alt} width={width??(image.current?.naturalWidth||undefined)} height={height??(image.current?.naturalHeight||undefined)} label={label} watermark={watermark} onClose={close}/>}
   </>;
 }
