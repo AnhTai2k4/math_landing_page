@@ -44,7 +44,7 @@ for(const html of [render(HomeConsultation),render(FloatingContact,{pathname:'/'
  assert.match(html,/target="_blank"/);assert.match(html,/rel="noopener noreferrer"/);assert.match(html,/>Zalo<\/text>/);
  assert.doesNotMatch(html,/chatgpt\.site|\/register|tel:/);
 }
-assert.match(render(HomeConsultation),/>Tư vấn ngay về khóa học<\/span>/);
+assert.match(render(HomeConsultation),/>Tư vấn lớp học qua Zalo<\/span>/);
 assert.match(render(FloatingContact,{pathname:'/'}),/mtm-home-consultation-dock/);
 for(const route of ['/btvn','/btvn/bai-thu','/quan-tri/btvn','/thi-thu/de-thu']){assert.equal(contactAllowed(route),false);assert.equal(render(FloatingContact,{pathname:route}),'');}
 const home=readFileSync(join(root,'src/migration/Home.tsx'),'utf8');assert.ok(home.indexOf('<HomeConsultation/>')<home.indexOf('<R106Hero/>'));

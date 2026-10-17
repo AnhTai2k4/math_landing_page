@@ -1,0 +1,18 @@
+.mtm-social-links{display:flex;flex-wrap:wrap;align-items:center;gap:6px;min-width:0}
+.mtm-social-links a{display:inline-flex;align-items:center;justify-content:center;gap:6px;flex:none;min-width:44px;min-height:44px;box-sizing:border-box;padding:8px;border:1px solid #d5e1f3;border-radius:12px;background:#fff;color:#213269;text-decoration:none;font-size:12px;line-height:1.4;transition:background .2s,border-color .2s}
+.mtm-social-links a:hover{background:#fff6d2;border-color:#d4ac20}.mtm-social-links a:focus-visible{outline:3px solid #213269;outline-offset:3px}
+.mtm-social-links .mtm-social-icon{display:block;flex:none;width:22px;height:22px;fill:currentColor;stroke:none;stroke-width:0}
+.mtm-social-links a:first-child[title="Tư vấn lớp học qua Zalo"] .mtm-social-icon{width:28px;height:28px}
+.mtm-social-links-labelled a{padding:8px 10px}
+.r104-hero .mtm-hero-actions,.r106-hero .mtm-hero-actions{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:10px;row-gap:4px;align-items:center;min-width:0}
+.mtm-hero-actions>.mtm-social-links{grid-column:2;grid-row:1/3;display:grid;grid-template-columns:repeat(3,44px);gap:4px}
+.mtm-hero-actions>.mtm-social-links a{width:44px;height:44px;padding:7px}
+.mtm-hero-actions>:is(.r104-primary,.r106-primary){grid-column:1;grid-row:1;gap:6px;max-width:none;white-space:nowrap;padding-left:10px;font-size:12px!important}
+.mtm-hero-actions>:is(.r104-text-link,.r106-text-link){grid-column:1;grid-row:2;justify-self:start}
+.r106-hero .mtm-hero-actions>.r106-primary{color:#213269!important}
+.r104-hero .r104-mobile-actions{display:none}
+.mtm-footer .mtm-social-links{margin-top:12px}
+@media(min-width:761px) and (max-width:1500px){.mtm-hero-actions>.mtm-social-links{grid-template-columns:repeat(2,44px)}}
+@media(max-width:760px){.r104-hero .r104-actions{display:none}.r104-hero .r104-mobile-actions{display:grid;gap:4px 10px}.mtm-social-links-labelled a{font-size:11px}}
+@media(max-width:359px){.mtm-hero-actions>.mtm-social-links{grid-template-columns:repeat(2,44px)}}
+@media(prefers-reduced-motion:reduce){.mtm-social-links a{transition:none}}

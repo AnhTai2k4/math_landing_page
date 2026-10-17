@@ -2,7 +2,8 @@ import {useEffect,useState} from 'react';
 import {Phone,MessageCircle,ArrowUpRight} from 'lucide-react';
 import {Link} from '../migration/navigation';
 import {CONSULTATION_PHONE_URL,ZALO_ASSISTANT_URL} from './mtm-contact';
-import {ZaloIcon} from './HomeConsultation';
+import {ZaloIcon} from './SocialLinks';
+import './home-consultation.css';
 export function contactAllowed(pathname:string,search=''){
  return !(pathname==='/btvn'||pathname.startsWith('/btvn/')||pathname==='/quan-tri'||pathname.startsWith('/quan-tri/')||pathname==='/admin'||pathname.startsWith('/admin/')||pathname.startsWith('/thi-thu/')||(pathname==='/luyen-tap'&&['id','luot'].some(key=>new URLSearchParams(search).has(key))));
 }

@@ -2,6 +2,7 @@ import {useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties,
 import {ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Pause, Play, X} from 'lucide-react';
 import {courses, step as courseStep} from './catalogue';
 import {Link} from './navigation';
+import {SocialLinks} from '../components/SocialLinks';
 import './R104Hero.css';
 
 const photographs = [
@@ -39,7 +40,7 @@ export default function R104Hero() {
   const effectiveStep = programme === 'HSA' || programme === 'TSA' ? 4 : selected;
   const course = roadmap[effectiveStep];
   const courseTitle = guided ? programme === 'THCS' ? 'Học chắc nền tảng Toán THCS' : 'Từng bước vững Toán 10 & 11' : course?.title || 'Tìm lộ trình phù hợp';
-  const courseHref = guided ? programme === 'THCS' ? '/#register' : '/#courses' : course ? '/khoa-hoc/' + encodeURIComponent(course.slug) : '/khoa-hoc';
+  const courseHref = guided ? '/#courses' : course ? '/khoa-hoc/' + encodeURIComponent(course.slug) : '/khoa-hoc';
 
   useEffect(() => {
     const token = ++generation.current;
@@ -99,7 +100,7 @@ export default function R104Hero() {
         <p className="r104-eyebrow"><i/> TOÁN THCS · THPT · HSA · TSA</p>
         <h1 id="r104-home-title"><span>Hiểu bản chất.</span><em>Vững từng bước.</em></h1>
         <p className="r104-description">Học Toán cùng thầy cô và những người bạn.<br/>Trực tiếp và online, từ nền tảng đến vận dụng.</p>
-        <div className="r104-actions"><Link href="/#courses" className="r104-primary">Tìm lớp phù hợp <span><ArrowRight size={20}/></span></Link><Link href="/btvn" className="r104-text-link">Vào BTVN <ArrowUpRight size={17}/></Link></div>
+        <div className="r104-actions mtm-hero-actions"><Link href="/#courses" className="r104-primary">Tìm lớp phù hợp <span><ArrowRight size={20}/></span></Link><SocialLinks label="Kênh MTM cạnh nút tìm lớp"/><Link href="/btvn" className="r104-text-link">Vào BTVN <ArrowUpRight size={17}/></Link></div>
       </div>
       <aside className="r104-programmes" aria-label="Chương trình học">
         <span className="r104-kicker">CHỌN ĐIỂM BẮT ĐẦU</span>
@@ -117,7 +118,7 @@ export default function R104Hero() {
         <div className="r104-photo-tabs" ref={thumbnailBar} role="group" aria-label="Chọn ảnh MTM">{photographs.map((item, index) => <button type="button" key={item.src} aria-pressed={shown === index} onClick={() => setPhoto(index)}><img src={item.src} alt="" width={90} height={82} decoding="async"/><span>{item.tab}</span></button>)}</div>
         {photoError && <p className="r104-image-error" role="status">{photoError}</p>}
       </div>
-      <div className="r104-mobile-actions"><Link href="/#courses" className="r104-primary">Tìm lớp phù hợp <span><ArrowRight size={20}/></span></Link><Link href="/btvn" className="r104-text-link">Vào BTVN <ArrowUpRight size={17}/></Link></div>
+      <div className="r104-mobile-actions mtm-hero-actions"><Link href="/#courses" className="r104-primary">Tìm lớp phù hợp <span><ArrowRight size={20}/></span></Link><SocialLinks label="Kênh MTM cạnh nút tìm lớp trên điện thoại"/><Link href="/btvn" className="r104-text-link">Vào BTVN <ArrowUpRight size={17}/></Link></div>
       <article className="r104-course" aria-label="Lộ trình của em">
         <div className="r104-course-top"><span>LỘ TRÌNH CỦA EM</span><span>{guided ? 'LỚP HỌC' : programme === 'Toán 12' ? 'TOÁN 12' : 'HSA · TSA'}</span></div>
         <div className="r104-course-heading"><span className="r104-course-number" aria-hidden="true">{guided ? '↗' : '0' + (effectiveStep + 1)}</span><h2>{courseTitle.startsWith('Step ') ? <><small>{courseTitle.split(':')[0]}:</small>{courseTitle.split(':').slice(1).join(':').trim()}</> : courseTitle}</h2></div>

@@ -2,6 +2,7 @@ import {useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties,
 import {ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight, Pause, Play, X} from 'lucide-react';
 import {courses, step as courseStep} from './catalogue';
 import {Link} from './navigation';
+import {SocialLinks} from '../components/SocialLinks';
 import './R106Hero.css';
 
 const photographs = [
@@ -43,7 +44,7 @@ export default function R106Hero() {
   const effectiveStep = programme === 'HSA' || programme === 'TSA' ? 4 : selected;
   const course = roadmap[effectiveStep];
   const courseTitle = guided ? programme === 'THCS' ? 'Học chắc nền tảng Toán THCS' : 'Từng bước vững Toán 10 & 11' : course?.title || 'Tìm lộ trình phù hợp';
-  const courseHref = guided ? programme === 'THCS' ? '/#register' : '/#courses' : course ? '/khoa-hoc/' + encodeURIComponent(course.slug) : '/khoa-hoc';
+  const courseHref = guided ? '/#courses' : course ? '/khoa-hoc/' + encodeURIComponent(course.slug) : '/khoa-hoc';
 
   useEffect(() => {
     const token = ++generation.current;
@@ -107,7 +108,7 @@ export default function R106Hero() {
   return <section className="r106-hero" id="home" aria-labelledby="r106-home-title" data-motion-paused={paused}>
     <div className="r106-workspace">
       <GoldenArch selected={effectiveStep} programme={programme} paused={paused}/>
-      <header className="r106-intro"><div><p className="r106-eyebrow"><span/> TOÁN THCS · THPT · HSA · TSA</p><h1 id="r106-home-title">Hiểu bản chất.<br/><em>Vững từng bước.</em></h1></div><div className="r106-welcome"><p>Học Toán cùng thầy cô và những người bạn.<br/>Từ nền tảng đến vận dụng.</p><div><Link href="/#courses" className="r106-primary">Tìm lớp phù hợp <span><ArrowUpRight size={19}/></span></Link><Link href="/btvn" className="r106-text-link">Vào BTVN <ArrowRight size={17}/></Link></div></div></header>
+      <header className="r106-intro"><div><p className="r106-eyebrow"><span/> TOÁN THCS · THPT · HSA · TSA</p><h1 id="r106-home-title">Hiểu bản chất.<br/><em>Vững từng bước.</em></h1></div><div className="r106-welcome"><p>Học Toán cùng thầy cô và những người bạn.<br/>Từ nền tảng đến vận dụng.</p><div className="mtm-hero-actions"><Link href="/#courses" className="r106-primary">Tìm lớp phù hợp <span><ArrowUpRight size={19}/></span></Link><SocialLinks label="Kênh MTM cạnh nút tìm lớp"/><Link href="/btvn" className="r106-text-link">Vào BTVN <ArrowRight size={17}/></Link></div></div></header>
       <aside className="r106-programmes" aria-label="Chương trình học">
         <span className="r106-kicker">CHỌN ĐIỂM BẮT ĐẦU</span>
         <div className="r106-programme-nav" style={{'--programme': programmes.indexOf(programme)} as Variables}>{programmes.map((item, index) => <button type="button" key={item} aria-pressed={item === programme} onClick={() => setProgramme(item)}><small>0{index + 1}</small><strong>{item}</strong><ArrowUpRight size={17}/></button>)}</div>
