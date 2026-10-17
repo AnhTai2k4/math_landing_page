@@ -59,7 +59,10 @@ test('Tổng kết không tăng điểm BTVN; ôn lại chỉ thẻ chưa khớp
     enter('2');m.click('Đối chiếu và xem từng bước');m.click('Xem tổng kết thẻ');assert.match(text(m.tree),/Khớp đáp án từ lần nhập: 1\/1/);assert.match(text(m.tree),/Cần luyện lại: 0 thẻ/);
     m.click('Chọn lượt khởi động mới');staleReplay();m.draw();assert.equal(all(m.tree,n=>n.type==='article').length,0);
     m.click('Bắt đầu 3 thẻ');const staleInput=all(m.tree,n=>n.type==='input')[0].props.onChange;
-    all(m.tree,n=>n.type==='select')[0].props.onChange({target:{value:'signs'}});m.draw();staleInput({target:{value:'100'}});m.draw();assert.equal(all(m.tree,n=>n.type==='article').length,0);
+    all(m.tree,n=>n.type==='select')[0].props.onChange({target:{value:'signs'}});m.draw();
+    assert.equal(all(m.tree,n=>n.type==='article').length,1,'Giữ thẻ đang làm đến khi xác nhận đổi');
+    staleInput({target:{value:'100'}});m.draw();assert.equal(all(m.tree,n=>n.type==='input')[0].props.value,'');
+    m.click('Đổi trọng tâm và xóa lượt thẻ');assert.equal(all(m.tree,n=>n.type==='article').length,0);
     m.click('Bắt đầu 3 thẻ');assert.match(text(m.tree),/3 − 2\(x − 4\)/);assert.equal(all(m.tree,n=>n.type==='input')[0].props.value,'');
     assert.doesNotMatch(text(m.tree),/đã nộp thành công|điểm BTVN tăng|đã xác minh/i);
   }finally{m.unmount();}

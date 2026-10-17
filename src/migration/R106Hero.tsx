@@ -25,10 +25,13 @@ export default function R106Hero() {
   const [shown, setShown] = useState(1);
   const [incoming, setIncoming] = useState<number | null>(null);
   const [photoError, setPhotoError] = useState('');
+  const [photoStatus, setPhotoStatus] = useState<'idle' | 'loading' | 'error'>('idle');
+  const [photoAttempt, setPhotoAttempt] = useState(0);
   const [view, setView] = useState(1);
   const dialog = useRef<HTMLDialogElement>(null);
   const opener = useRef<HTMLElement | null>(null);
   const imageLayer = useRef<HTMLImageElement>(null);
+  const photoButton = useRef<HTMLButtonElement>(null);
   const shownRef = useRef(shown);
   const generation = useRef(0);
   const gesture = useRef<{x: number; y: number} | null>(null);
@@ -46,7 +49,8 @@ export default function R106Hero() {
     const token = ++generation.current;
     setIncoming(null);
     setPhotoError('');
-    if (shownRef.current === photo) return;
+    if (shownRef.current === photo) {setPhotoStatus('idle'); return;}
+    setPhotoStatus('loading');
     let disposed = false;
     const preload = new Image();
     preload.decoding = 'async';
@@ -56,11 +60,12 @@ export default function R106Hero() {
     const ready = typeof preload.decode === 'function' ? Promise.all([loaded, preload.decode()]) : loaded;
     void ready.then(() => {
       if (disposed || generation.current !== token) return;
+      setPhotoStatus('idle');
       if (paused || matchMedia('(prefers-reduced-motion: reduce)').matches) setShown(photo);
       else setIncoming(photo);
-    }).catch(() => {if (!disposed && generation.current === token) setPhotoError('Chưa tải được ảnh này. Em vẫn có thể xem ảnh hiện tại.');});
+    }).catch(() => {if (!disposed && generation.current === token) {setPhotoStatus('error'); setPhotoError('Chưa tải được ảnh này. Ảnh hiện tại vẫn được giữ.');}});
     return () => {disposed = true; preload.onload = null; preload.onerror = null;};
-  }, [photo, paused]);
+  }, [photo, paused, photoAttempt]);
 
   useLayoutEffect(() => {
     if (incoming === null) return;
@@ -111,12 +116,12 @@ export default function R106Hero() {
       </aside>
       <div className="r106-album" ref={album}>
         <div className="r106-photo-top"><span><i/> CÓ TOÁN. CÓ BẠN. CÓ MTM.</span><span aria-live="polite">0{shown+1} / 03</span></div>
-        <div className="r106-photo-plane"><button className="r106-photo" type="button" aria-label="Mở ảnh MTM đầy đủ" aria-busy={photo !== shown} onClick={openPhoto} onKeyDown={photoKeys} onTouchStart={event => {const touch = event.touches[0]; gesture.current = event.touches.length === 1 ? {x: touch.clientX, y: touch.clientY} : null;}} onTouchEnd={touchEnd} onTouchCancel={() => {gesture.current = null;}} onDragStart={event => event.preventDefault()}>
+        <div className="r106-photo-plane"><button ref={photoButton} className="r106-photo" type="button" aria-label="Mở ảnh MTM đầy đủ" aria-busy={photoStatus === 'loading'} onClick={openPhoto} onKeyDown={photoKeys} onTouchStart={event => {const touch = event.touches[0]; gesture.current = event.touches.length === 1 ? {x: touch.clientX, y: touch.clientY} : null;}} onTouchEnd={touchEnd} onTouchCancel={() => {gesture.current = null;}} onDragStart={event => event.preventDefault()}>
           <img className="r106-photo-front" src={photographs[shown].src} alt={photographs[shown].alt} width={2048} height={1282} decoding="async" draggable={false}/>
           {incoming !== null && <img ref={imageLayer} className="r106-incoming" src={photographs[incoming].src} alt="" aria-hidden="true" width={2048} height={1282} decoding="async" draggable={false}/>}
         </button></div>
         <div className="r106-photo-dock"><div className="r106-photo-tabs" ref={thumbnailBar} role="group" aria-label="Chọn ảnh MTM" onKeyDown={event=>{const items=Array.from(event.currentTarget.querySelectorAll('button')),at=items.indexOf(document.activeElement as HTMLButtonElement);let next:number;if(event.key==='ArrowRight')next=wrap(at+1);else if(event.key==='ArrowLeft')next=wrap(at-1);else if(event.key==='Home')next=0;else if(event.key==='End')next=2;else return;event.preventDefault();setPhoto(next);items[next]?.focus();}}>{photographs.map((item, index) => <button type="button" key={item.src} aria-pressed={shown === index} tabIndex={shown===index?0:-1} className={shown===index?'selected':''} onClick={() => setPhoto(index)}><img src={item.src} alt="" width={90} height={82} decoding="async"/><span>{item.tab}</span></button>)}</div><div className="r106-photo-controls"><button type="button" aria-label="Ảnh MTM trước" onClick={()=>advance(-1)}><ChevronLeft size={18}/></button><button type="button" aria-label="Mở ảnh MTM đang hiển thị" onClick={openPhoto}><ArrowUpRight size={18}/></button><button type="button" aria-label="Ảnh MTM sau" onClick={()=>advance(1)}><ChevronRight size={18}/></button></div></div>
-        <span className="r106-photo-note" aria-live="polite">{photographs[shown].caption}</span>{photoError && <p className="r106-image-error" role="status">{photoError}</p>}
+        <span className="r106-photo-note" aria-live="polite">{photoStatus === 'loading' ? 'Đang tải ảnh '+photographs[photo].tab+'. Ảnh hiện tại vẫn được giữ.' : photographs[shown].caption}</span>{photoError && <p className="r106-image-error" role="status">{photoError} <button className="r106-image-retry" type="button" onClick={() => {if (photoStatus === 'error') {photoButton.current?.focus(); setPhotoAttempt(value => value + 1);}}}>Thử tải lại ảnh</button></p>}
       </div>
       <article className="r106-course" aria-label="Lộ trình của em">
         <div className="r106-course-top"><span>LỘ TRÌNH CỦA EM</span><span>{guided ? 'LỚP HỌC' : programme === 'Toán 12' ? 'TOÁN 12' : 'HSA · TSA'}</span></div>

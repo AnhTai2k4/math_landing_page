@@ -11,6 +11,7 @@ export default function RiverRace({onExit}: {onExit: () => void}) {
   const [game,setGame] = useState<RiverState>(freshRiver);
   const current = useRef(game);
   const stage = useRef<HTMLDivElement>(null);
+  const focusStage = useRef(false);
   const heading = useRef<HTMLHeadingElement>(null);
   const [reduced,setReduced] = useState(() => typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   const reducedRef = useRef(reduced);
@@ -46,7 +47,7 @@ export default function RiverRace({onExit}: {onExit: () => void}) {
     const delta=event.clientX-active.x;clearSwipe();if(Math.abs(delta)>25)steer(delta>0?1:-1);
   };
   const cancelSwipe = (event: React.PointerEvent<HTMLDivElement>) => {if(swipe.current?.pointerId === event.pointerId)clearSwipe();};
-  const start = () => {if(renderSession !== session.current || (current.current.phase !== 'ready' && current.current.phase !== 'finished'))return;session.current++;reviewIdentity.current++;setReview(null);setReviewAnswer(null);update(beginRiver(freshRiver()));stage.current?.focus();};
+  const start = () => {if(renderSession !== session.current || (current.current.phase !== 'ready' && current.current.phase !== 'finished'))return;session.current++;reviewIdentity.current++;setReview(null);setReviewAnswer(null);focusStage.current=true;update(beginRiver(freshRiver()));};
   const tone = (good: boolean) => {
     const context=audio.current;
     if (!soundRef.current || !context || context.state !== 'running') return;
@@ -80,10 +81,12 @@ export default function RiverRace({onExit}: {onExit: () => void}) {
   },[game.phase]);
   useEffect(() => {
     mounted.current=true;
+    if(heading.current?.closest?.('[data-river-focus-area]')?.contains(document.activeElement))heading.current?.focus();
     const hide=() => {if (document.hidden) update(pauseRiver(current.current));};
     document.addEventListener('visibilitychange',hide);
     return () => {mounted.current=false;clearSwipe();soundRequest.current++;soundRef.current=false;document.removeEventListener('visibilitychange',hide);void audio.current?.close().catch(() => {});};
   },[]);
+  useEffect(() => {if(focusStage.current&&game.phase==='intro'){focusStage.current=false;stage.current?.focus();}},[game.phase]);
   useEffect(() => {reducedRef.current=reduced;},[reduced]);
   useEffect(() => {
     if (game.phase !== 'finished') return;
