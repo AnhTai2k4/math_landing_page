@@ -2,6 +2,7 @@ import {useEffect,useState,type KeyboardEvent} from 'react';
 import {Link,navigate,useRoute} from './navigation';
 import {ArrowUpRight} from 'lucide-react';
 import './guide.css';
+import './guide-quick-nav.css';
 import StudyCompass from './StudyCompass';
 import GuideGraphLauncher from './GuideGraphLauncher';
 import R106PageIntro from './R106PageIntro';
@@ -41,7 +42,7 @@ function Steps({parent}:{parent:boolean}){
   </div>
  </section>;}
 
-function Btvn({parent}:{parent:boolean}){return <section className="mg-card mg-web">
+function Btvn({parent}:{parent:boolean}){return <section id="mg-homework-help" tabIndex={-1} className="mg-card mg-web mg-quick-target">
  <h2>Bài tập về nhà trên web</h2>
  <div className="mg-web-links"><Link className="mg-link" href="/btvn">Vào làm BTVN</Link></div>
  <p className="mg-sub">Đã mở cho các lớp 2K9 (8+, 9+, XPT), 2K10 (9+, 8+, Thứ 3-6, XPT), 2K11 (8+, 9+, XPT).</p>
@@ -55,7 +56,7 @@ function Btvn({parent}:{parent:boolean}){return <section className="mg-card mg-w
  <p className="mg-sub">{parent?'Anh/chị đã đổi số điện thoại':'Đã đổi số điện thoại'} hoặc không vào được thì nhắn Zalo trợ lý để trung tâm cập nhật.</p>
 </section>;}
 
-export function WebHelp({parent=false}:{parent?:boolean}={}){return <section className="mg-card mg-web">
+export function WebHelp({parent=false}:{parent?:boolean}={}){return <section id="mg-troubleshooting" tabIndex={-1} className="mg-card mg-web mg-quick-target">
  <h2>Gặp khó khi dùng web</h2>
  <ul className="mg-list">
   <li><b>Bài chưa mở:</b> trạng thái “🔒 Chưa mở · mở” và nút “🔒 Chưa mở, mở lúc” kèm thời gian cho biết giờ mở bài. {parent?'Anh/chị và con':'Em'} xem giờ mở và hạn nộp trên từng thẻ. Tới giờ mở, tải lại trang rồi bấm <b>Làm BTVN</b>. Nếu thời gian chỉ ghi “sau buổi học” hoặc hạn ghi “Chờ xác minh”, nhắn <a href={ZALO_ASSISTANT_URL} target="_blank" rel="noopener noreferrer">Zalo trợ lý</a> để trung tâm kiểm tra lịch lớp.</li>
@@ -91,7 +92,7 @@ function More({parent}:{parent:boolean}){return <details className="mg-card mg-m
 
 export default function Guide(){const [who,setWho]=useState<Audience>(readAudience);
  const {search}=useRoute();
- useEffect(()=>setWho(readAudience()),[search]);
+ useEffect(()=>{setWho(readAudience());},[search]);
  const pick=(next:Audience)=>{setWho(next);const url=new URL(location.href);url.searchParams.set('cho',next);navigate(url.pathname+url.search,{replace:true});};
  const tabKey=(event:KeyboardEvent<HTMLButtonElement>)=>{
   if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;
@@ -106,6 +107,10 @@ export default function Guide(){const [who,setWho]=useState<Audience>(readAudien
    <button type="button" role="tab" id="mg-tab-hs" tabIndex={parent?-1:0} aria-selected={!parent} aria-controls="mg-panel" onKeyDown={tabKey} onClick={()=>pick('hoc-sinh')}>Học sinh</button>
    <button type="button" role="tab" id="mg-tab-ph" tabIndex={parent?0:-1} aria-selected={parent} aria-controls="mg-panel" onKeyDown={tabKey} onClick={()=>pick('phu-huynh')}>Phụ huynh</button>
   </div>
+  <nav className="mg-quick-nav" aria-label="Đi nhanh trong hướng dẫn">
+   <a href="#mg-homework-help" onClick={()=>document.getElementById('mg-homework-help')?.focus()}>Cách vào BTVN ↓</a>
+   <a href="#mg-troubleshooting" onClick={()=>document.getElementById('mg-troubleshooting')?.focus()}>Đang gặp lỗi? Xem cách xử lý ↓</a>
+  </nav>
   <div id="mg-panel" role="tabpanel" tabIndex={0} aria-labelledby={parent?'mg-tab-ph':'mg-tab-hs'}><Steps parent={parent}/><Btvn parent={parent}/><Web parent={parent}/>{!parent&&<StudyCompass/>}{!parent&&<GuideGraphLauncher/>}<WebHelp parent={parent}/><More parent={parent}/></div>
   <p className="mg-slogan">Minh Thành Math - Thinking gets sharp!</p>
  </div></div>;}

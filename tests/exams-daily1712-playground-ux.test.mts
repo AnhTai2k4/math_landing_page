@@ -28,7 +28,9 @@ test('Khi tải chậm có status và hủy được, trở lại nút mở mà 
     assert.match(text(all(fallback,n=>n.props.role==='status')[0]),/Đang đưa thuyền xuống sông/);
     all(fallback,n=>n.type==='button'&&text(n)==='Hủy mở game')[0].props.onClick();m.draw();
     assert.equal(m.focused.text,'Xuống sông chơi thử →');
-    assert.match(text(m.tree),/GAME MỚI/);
+    assert.equal(text(all(m.tree,n=>n.type==='h2'&&n.props.id==='river-card-heading')[0]),'Đua thuyền Toán');
+    assert.equal(all(m.tree,n=>n.type==='button'&&text(n)==='Xuống sông chơi thử →').length,1);
+    assert.equal(all(m.tree,n=>n.props.role==='region').length,0);
   }finally{m.unmount();}
 });
 

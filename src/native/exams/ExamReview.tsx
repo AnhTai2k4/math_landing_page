@@ -4,6 +4,7 @@ import {examSections} from './flexible-profile';
 import React,{lazy,Suspense,useEffect,useId,useState,type ReactNode} from 'react';
 import type {PracticeExam,PracticeQuestion} from './data';
 import type {Draft} from './store';
+import {validateDraft} from './store';
 import MtmSourceContent from './MtmSourceContent';
 import MtmSourceQuestion from './MtmSourceQuestion';
 import {displayAnswer,formatPoints,reviewRows,statementLetters,STATUS_LABELS,type ReviewStatus} from './review';
@@ -11,16 +12,19 @@ import {displayKeyAnswer,questionLabel} from './attempt-ui';
 import {hasReadableTfStatements} from './question-statements';
 import {MTM_SCORING_VERSION} from './mtm-scoring';
 import './review-filters-v2.css';
+import ResultSpacedReviewTool from './ResultSpacedReviewTool';
 const DetailedSolution=lazy(()=>import('./DetailedSolution'));
 const SolutionPdf=lazy(()=>import('../admin/SolutionPdf'));
 const hasReviewableKey=(q:PracticeQuestion)=>q.kind==='mc'?['A','B','C','D'].includes(q.answer):q.kind==='tf'?Array.isArray(q.answer)&&q.answer.length===4&&q.answer.every(value=>typeof value==='boolean'):q.kind==='short'?Array.isArray(q.acceptedAnswers)&&q.acceptedAnswers.length>0&&q.acceptedAnswers.every(value=>typeof value==='string'&&!!value.trim()):false;
 
-export default function ExamReview({exam,draft,initialQuestionId,renderText,renderSolutionExtra,showSummary=true,advancedFilters=false}:{exam:PracticeExam;draft:Draft;initialQuestionId?:string;showSummary?:boolean;advancedFilters?:boolean;renderText?:(text:string)=>ReactNode;renderSolutionExtra?:(q:PracticeQuestion)=>ReactNode}) {
+export default function ExamReview({exam,draft,initialQuestionId,reviewRequestRevision=0,renderText,renderSolutionExtra,showSummary=true,advancedFilters=false}:{exam:PracticeExam;draft:Draft;initialQuestionId?:string;reviewRequestRevision?:number;showSummary?:boolean;advancedFilters?:boolean;renderText?:(text:string)=>ReactNode;renderSolutionExtra?:(q:PracticeQuestion)=>ReactNode}) {
+  const requestIndex=initialQuestionId&&draft.submittedAt!==null&&validateDraft(draft,exam).ok?exam.questions.findIndex(q=>q.id===initialQuestionId):-1;
   const [filter,setFilter]=useState<'all'|'mistakes'|ReviewStatus>('all');
   const [section,setSection]=useState('all');
-  const [expanded,setExpanded]=useState<Set<string>>(()=>new Set(draft.submittedAt!==null&&initialQuestionId?[initialQuestionId]:[]));
-  const [focusQuestion,setFocusQuestion]=useState<number|null>(()=>{const index=exam.questions.findIndex(q=>q.id===initialQuestionId);return draft.submittedAt!==null&&index>=0?index:null;});
+  const [expanded,setExpanded]=useState<Set<string>>(()=>new Set(requestIndex>=0&&initialQuestionId?[initialQuestionId]:[]));
+  const [focusQuestion,setFocusQuestion]=useState<number|null>(()=>requestIndex>=0?requestIndex:null);
   const instance=useId();
+  useEffect(()=>{if(requestIndex<0||!initialQuestionId)return;setFilter('all');setSection('all');setExpanded(prior=>new Set([...prior,initialQuestionId]));setFocusQuestion(requestIndex);},[initialQuestionId,reviewRequestRevision,requestIndex,draft.attemptId,exam.versionHash,exam.answerKeyVersion]);
   useEffect(()=>{if(focusQuestion!==null){const target=document.getElementById(`${instance}-card-${focusQuestion}`);target?.focus();target?.scrollIntoView({block:'start'});setFocusQuestion(null);}},[focusQuestion,instance]);
   if(draft.submittedAt===null)return null;
   const mtm=exam.rubricVersion===MTM_SCORING_VERSION;
@@ -33,6 +37,7 @@ export default function ExamReview({exam,draft,initialQuestionId,renderText,rend
     {exam.id.startsWith('mtm-custom-')&&<Suspense fallback={<p>Đang mở công cụ lời giải…</p>}><SolutionPdf examId={exam.id} kind="questions"/><SolutionPdf examId={exam.id}/></Suspense>}
     {exam.mtmDocuments?.solutions&&<p><a href={exam.mtmDocuments.solutions.url} target="_blank" rel="noopener noreferrer">Tải đáp án và lời giải PDF theo mẫu MTM</a></p>}{exam.solutionInstructions&&<details><summary>Hướng dẫn lời giải</summary><MtmSourceContent segments={exam.solutionInstructions} assetBase="/practice-media/source-crops" label="Hướng dẫn giải" kind="solution"/></details>}
     {showSummary&&<ResultSummary exam={exam} draft={draft}/>}
+    {advancedFilters&&<ResultSpacedReviewTool key={[draft.attemptId,exam.versionHash,exam.answerKeyVersion].join(':')} exam={exam} draft={draft} onReview={id=>{const row=rows.find(value=>value.q.id===id);if(!row)return;setFilter('all');setSection('all');setExpanded(prior=>new Set([...prior,id]));setFocusQuestion(row.index);}}/>}
     <h2>Tổng quan câu trả lời</h2>
     <nav className="ep-result-nav-wrap" aria-label="Tổng quan đúng sai">{parts.map(part=><section key={part.name}><h3>{part.name}</h3><div className="ep-question-nav ep-result-nav">{rows.slice(part.from,part.to).map(r=><button type="button" key={r.q.id} className={`ep-verdict-${r.status}`} aria-label={`${questionLabel(exam,r.index).full}: ${STATUS_LABELS[r.status]}`} onClick={()=>{setFilter('all');setSection('all');setFocusQuestion(r.index);}}>{r.index-part.from+1}</button>)}</div></section>)}</nav>
     <p>Đúng toàn bộ: {rows.filter(r=>r.status==='correct').length} · Đúng một phần: {rows.filter(r=>r.status==='partial').length} · Chưa đúng: {rows.filter(r=>r.status==='wrong').length} · Bỏ trống: {blank}.</p>

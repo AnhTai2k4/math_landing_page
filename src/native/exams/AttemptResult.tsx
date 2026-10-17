@@ -20,5 +20,5 @@ export default function AttemptResult({props,state}:{props:PracticeAttemptProps;
             {kind==='exam'&&!props.isHomework&&draft.submittedAt!==null&&<ResultRecallTool key={draft.attemptId} exam={exam} draft={draft} renderText={renderText} renderSolutionExtra={renderSolutionExtra}/>}
             {kind==='exam'&&!props.isHomework&&draft.submittedAt!==null&&<ResultReflectionTool key={draft.attemptId+':'+exam.versionHash} exam={exam} draft={draft} onReview={id=>setReviewTarget(value=>({id,revision:value.revision+1}))}/>}
             {kind==='exam'&&!props.isHomework&&draft.submittedAt!==null&&<ResultCounterexampleTool key={draft.attemptId+':'+exam.versionHash}/>}
-            <ExamReview key={draft.attemptId+':'+reviewTarget.revision} exam={exam} draft={draft} initialQuestionId={reviewTarget.id||undefined} showSummary={false} advancedFilters={kind==='exam'&&!props.isHomework} renderText={renderText} renderSolutionExtra={renderSolutionExtra}/></>;
+            <ExamReview key={[draft.attemptId,exam.versionHash,exam.answerKeyVersion].join(':')} exam={exam} draft={draft} initialQuestionId={reviewTarget.id||undefined} reviewRequestRevision={reviewTarget.revision} showSummary={false} advancedFilters={kind==='exam'&&!props.isHomework} renderText={renderText} renderSolutionExtra={renderSolutionExtra}/></>;
 }

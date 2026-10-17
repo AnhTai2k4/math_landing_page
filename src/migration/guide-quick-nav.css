@@ -1,0 +1,6 @@
+.mtm-guide .mg-quick-nav{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 18px}
+.mtm-guide .mg-quick-nav a{display:inline-flex;align-items:center;min-height:48px;box-sizing:border-box;padding:10px 16px;border:1px solid #d9dfed;border-radius:12px;background:#fffbea;color:#213269;font-size:16px;font-weight:700;text-decoration:none;overflow-wrap:anywhere}
+.mtm-guide .mg-quick-nav a:hover{border-color:#b17e00;background:#fff3be}
+.mtm-guide .mg-quick-nav a:focus-visible,.mtm-guide .mg-quick-target:focus{outline:3px solid #213269;outline-offset:4px}
+.mtm-guide .mg-quick-target{scroll-margin-top:180px}
+@media(max-width:600px){.mtm-guide .mg-quick-nav a{width:100%}}

@@ -5,6 +5,11 @@ import './faq-ux.css';
 
 function moveQuestion(event:KeyboardEvent<HTMLDivElement>){
   if(event.altKey||event.ctrlKey||event.metaKey)return;
+  if(event.key==='Escape'){
+    const detail=(event.target as HTMLElement).closest('details');
+    if(detail?.open){event.preventDefault();detail.open=false;detail.querySelector('summary')?.focus();}
+    return;
+  }
   const summary=(event.target as HTMLElement).closest('summary');
   if(!summary||!['ArrowDown','ArrowUp','Home','End'].includes(event.key))return;
   const items=Array.from(event.currentTarget.querySelectorAll('summary')),index=items.indexOf(summary);

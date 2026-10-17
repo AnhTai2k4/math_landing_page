@@ -1,0 +1,6 @@
+.ne-resource-content .ne-resource-search{flex-wrap:wrap}
+.ne-resource-content .ne-resource-search :is(input,button){min-height:48px;font-size:16px}
+.ne-resource-content .ne-resource-search button{color:#213269;background:#fffbea;border-color:#dfc663;font-weight:700}
+.ne-resource-content .ne-resource-search :is(input,button):focus-visible,.ne-resource-content .ne-resource-count:focus{outline:3px solid #213269;outline-offset:4px}
+.ne-resource-content .ne-resource-count{scroll-margin-top:140px;overflow-wrap:anywhere}
+.ne-resource-content .ne-search-help{font-size:14px;color:#4a5875;margin-top:-10px}

@@ -49,12 +49,13 @@ test('SSR, nhãn, không storage/mạng, lazy mở đóng và boundary khôi ph�
 test('Tích hợp chỉ kết quả Thi thử, có key lượt/phiên bản và nhảy đúng câu',()=>{
  const source=readFileSync(join(root,'src/native/exams/AttemptResult.tsx'),'utf8');assert.match(source,/kind==='exam'&&!props.isHomework&&draft.submittedAt!==null&&<ResultReflectionTool/);assert.match(source,/initialQuestionId=\{reviewTarget.id\|\|undefined\}/);assert.match(source,/revision:value.revision\+1/);
 });
-test('Tích hợp thực chỉ bật đúng route và lặp thao tác xem câu vẫn chuyển đích',()=>{
+test('Tích hợp thực chỉ bật đúng route; xem lại cùng câu tăng yêu cầu nhưng giữ vùng đối chiếu',()=>{
  const state={draft,resultHeading:{current:null},score:{ok:true},unsaved:false,conflict:{current:false},pdfReady:true,retake(){}};
  for(const [kind,isHomework,submitted,expected] of [['exam',false,true,1],['practice',false,true,0],['exam',true,true,0],['exam',false,false,0]] as const){
   const m=mount('src/native/exams/AttemptResult.tsx',{props:{exam,catalogUrl:'/thi-thu',kind,isHomework},state:{...state,draft:{...draft,submittedAt:submitted?draft.submittedAt:null}}});
   try{const tools=all(m.tree,n=>n.type?.name==='ResultReflectionTool');assert.equal(tools.length,expected);const review=()=>all(m.tree,n=>n.type?.name==='ExamReview')[0];assert.equal(review().props.advancedFilters,kind==='exam'&&!isHomework);
-   if(expected){const key=review().key;tools[0].props.onReview('fake-wrong');m.draw();assert.equal(review().props.initialQuestionId,'fake-wrong');assert.notEqual(review().key,key);const nextKey=review().key;all(m.tree,n=>n.type?.name==='ResultReflectionTool')[0].props.onReview('fake-wrong');m.draw();assert.notEqual(review().key,nextKey);}
+   if(expected){const key=review().key;assert.equal(review().props.reviewRequestRevision,0);tools[0].props.onReview('fake-wrong');m.draw();assert.equal(review().props.initialQuestionId,'fake-wrong');assert.equal(review().key,key);assert.equal(review().props.reviewRequestRevision,1);all(m.tree,n=>n.type?.name==='ResultReflectionTool')[0].props.onReview('fake-wrong');m.draw();assert.equal(review().key,key);assert.equal(review().props.reviewRequestRevision,2);
+    const nextDraft={...draft,attemptId:'luot-gia-khac'};m.draw({props:{exam,catalogUrl:'/thi-thu',kind,isHomework},state:{...state,draft:nextDraft}});assert.notEqual(review().key,key);const nextKey=review().key;m.draw({props:{exam:{...exam,versionHash:'c'.repeat(64)},catalogUrl:'/thi-thu',kind,isHomework},state:{...state,draft:nextDraft}});assert.notEqual(review().key,nextKey);const versionKey=review().key;m.draw({props:{exam:{...exam,versionHash:'c'.repeat(64),answerKeyVersion:'v2'},catalogUrl:'/thi-thu',kind,isHomework},state:{...state,draft:nextDraft}});assert.notEqual(review().key,versionKey);}
   }finally{m.unmount();}
  }
 });
