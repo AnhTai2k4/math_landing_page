@@ -31,7 +31,8 @@ let result;
 try{result=await readRosterSheet(config,read,old?.registry??{});}catch{throw Error('Nhập không hoàn tất; cần kiểm riêng tab/cột/định danh/ghi chú chuyển lớp/quyền đọc. Không ghi hồ sơ một phần.');}
 const cell=v=>'"'+String(v??'').replace(/^[\s]*[=+\-@]/,"'$&").replace(/"/g,'""')+'"';
 const csv='\uFEFF'+[['ho_ten','lop','khoa','ma'],...result.students.map(s=>[s.fullName,s.className,s.cohort,s.studentCode])].map(r=>r.map(cell).join(',')).join('\r\n')+'\r\n';
-// Bundle giữ parentName riêng tư do roster đọc từ cột Họ và tên PH; CSV mã không chứa tên PH.
+// Bundle giữ parentName riêng tư và school nếu columns.school được cấu hình chính xác.
+// CSV mã không chứa tên PH hoặc trường; trường chỉ đi theo bundle để bổ sung hồ sơ.
 // --previous tái dùng registry, tên PH không tham gia identity.
 // Thư mục mới từng lượt, bundle là nguồn phục hồi đầy đủ. COMPLETE ghi cuối;
 // lượt chưa có COMPLETE không được dùng làm checkpoint. Giữ bản trước.

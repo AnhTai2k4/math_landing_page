@@ -9,7 +9,9 @@ export function makeSyncPayload(bundle,config){
   seen.add(s.studentCode.toUpperCase());
   if(!Object.values(bundle.registry).includes(s.studentCode))throw Error('Registry thiếu định danh');
   const sourceIdentity=`btvn:${sheetHash}:${digest(s.studentCode.toUpperCase())}`;
-  return {sourceIdentity,proposedCode:s.studentCode.toUpperCase(),fullName:s.fullName,phone:s.phone??'',parentPhone:s.parentPhone??'',parentName:s.parentName??'',cohort:s.cohort,className:s.className,...(config.legacyMappings?.[s.studentCode]?{studentId:config.legacyMappings[s.studentCode]}:{})};
+  if(s.school!==undefined&&(typeof s.school!=='string'||s.school.length>160||/[\u0000-\u001f\u007f-\u009f]/.test(s.school)))throw Error('Trường học không hợp lệ');
+  const school=(s.school??'').normalize('NFC').trim().replace(/\s+/g,' ');
+  return {sourceIdentity,proposedCode:s.studentCode.toUpperCase(),fullName:s.fullName,phone:s.phone??'',parentPhone:s.parentPhone??'',parentName:s.parentName??'',school:['chưa cập nhật','chua cap nhat'].includes(school.toLowerCase())?'':school,cohort:s.cohort,className:s.className,...(config.legacyMappings?.[s.studentCode]?{studentId:config.legacyMappings[s.studentCode]}:{})};
  });
  const labels=[...new Set(students.map(s=>s.className))];
  const classes=labels.map(label=>{const grade=config.classGrades?.[label];if(!Number.isInteger(grade)||grade<6||grade>12)throw Error('Cần grade đã xác minh cho mọi lớp');return {label,grade};});

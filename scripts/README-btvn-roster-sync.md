@@ -2,6 +2,10 @@
 
 `sync-btvn-roster.mjs` chỉ nhận bundle đã có COMPLETE từ importer; không tự đọc Sheet trong đợt10. Codex chỉ chạy dữ liệu giả. CLI dùng `SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY` từ process env do Claude/operator nạp; không đọc hoặc lưu file credential. Chỉ gọi RPC sync (migration007); schema private không cần expose qua PostgREST.
 
+Bổ sung hồ sơ công khai ngày 17/10/2026: sau khi operator kiểm và áp migration `202610170025_btvn_public_profile.sql`, importer nhận cột trường tùy chọn qua `columns.school`, ví dụ `"school":"Trường"`. Tên cột phải khớp nguồn đã xác minh. Bundle giữ trường để sync; CSV mã không thêm trường. Đồng bộ chỉ bổ sung `students.school` đang trống hoặc `Chưa cập nhật`, không ghi đè trường gốc đã có hoặc trường học sinh tự nhập trong hồ sơ. Cả `Chua cap nhat` không dấu và biến thể chữ hoa đều được coi là chưa cập nhật.
+
+Nguồn điểm danh tự nhận tiêu đề `Trường`, `Trường học` hoặc `Trường đang học`. Khi nhiều bản ghi cùng tên, điện thoại và lớp cho các trường khác nhau, giữ trường chờ đối soát. Không chạy importer vào nguồn thật chỉ để thử cột mới.
+
 ## Chuẩn bị riêng tư
 
 Review/áp riêng 007 sau 005/006, backup theo quy trình hiện hành. Cấu hình SQL quản trị **không dò roster**:

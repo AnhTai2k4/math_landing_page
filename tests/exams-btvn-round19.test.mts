@@ -25,7 +25,7 @@ assert.match(html,/<a[^>]+class="btvn-home-link"[^>]+href="\/">← Trang chủ<\
 }
 // Chạy state thật của thẻ, kiểm top 5, mở top 10, đổi bảng và fetch không chờ cuộn.
 let values:any[]=[],cursor=0,effects:Function[]=[],deps:any[][]=[];
-const hooks={useState:(v:any)=>{const i=cursor++;if(!(i in values))values[i]=v;return [values[i],(next:any)=>values[i]=typeof next==='function'?next(values[i]):next];},useEffect:(fn:Function,d:any[])=>{const i=cursor++;if(!deps[i]||d.some((v,j)=>v!==deps[i][j])){effects.push(fn);deps[i]=d;}}};
+const hooks={useState:(v:any)=>{const i=cursor++;if(!(i in values))values[i]=v;return [values[i],(next:any)=>values[i]=typeof next==='function'?next(values[i]):next];},useRef:(v:any)=>{const i=cursor++;if(!(i in values))values[i]={current:v};return values[i];},useEffect:(fn:Function,d:any[])=>{const i=cursor++;if(!deps[i]||d.some((v,j)=>v!==deps[i][j])){effects.push(fn);deps[i]=d;}}};
 const Board=load('src/native/homework/HomeLeaderboard.tsx',hooks).default;
 const requests:string[]=[];
 const originalFetch=globalThis.fetch;

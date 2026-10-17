@@ -10,7 +10,8 @@ try{
  const bundle=JSON.parse(readFileSync(bundlePath,'utf8').replace(/^\uFEFF/,'')),config=JSON.parse(readFileSync(configPath,'utf8').replace(/^\uFEFF/,''));
  const complete=JSON.parse(readFileSync(join(resolve(bundlePath,'..'),'COMPLETE.json'),'utf8').replace(/^\uFEFF/,''));
  if(complete.students!==bundle.students?.length)throw Error('Bundle chưa hoàn tất');
- // Payload chuyển parentName từ bundle vào RPC 010, không xuất thêm cột tên PH trong CSV.
+ // Payload chuyển parentName/school từ bundle vào RPC; school chỉ bổ sung hồ sơ đang thiếu.
+ // Không xuất thêm cột tên PH hoặc trường trong CSV mã.
  const payload=makeSyncPayload(bundle,config);let run;
  if(live){
   const target=resolve('T:/Claude/SanPham/btvn-web-diem-danh/rieng-tu');mkdirSync(target,{recursive:true});

@@ -18,7 +18,8 @@ export function createRankApi(getEnv=()=>process.env,transport:typeof fetch=fetc
   if(!Array.isArray(data)||data.length>10)throw Error('Invalid rows');
   // Ánh xạ rõ từng trường, không chuyển nguyên RPC ra công khai.
   const rows=data.map(r=>publicRankRow(r,10));
-  res.setHeader('Cache-Control','public, max-age=0, s-maxage=300');
+  // Hồ sơ vừa lưu phải xuất hiện ngay ở mọi bảng, kể cả qua CDN.
+  res.setHeader('Cache-Control','no-store');
   return res.status(200).json({enabled:true,rows});
  }catch{return res.status(503).json({message:'Chưa tải được bảng xếp hạng. Vui lòng thử lại.'});}
 };}

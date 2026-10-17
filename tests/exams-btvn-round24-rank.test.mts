@@ -5,7 +5,7 @@ const env={MTM_RANK_ENABLED:'1',MTM_BTVN_ENABLED:'1',SUPABASE_URL:'https://fixtu
 const row={rank:17,fullName:'Học sinh GIẢ',className:'2K9 9+',score:8,submitted:1,total:2};
 let calls=0;const handler=createMyRankApi(()=>env,async(url,init)=>{calls++;assert.ok(String(url).endsWith('/mtm_btvn_my_rank'));const payload=JSON.parse(String(init?.body));assert.equal(payload.p_session,'a'.repeat(64));assert.equal(payload.p_class,null);assert.ok(!('p_student' in payload));return new Response(JSON.stringify({...row,phone:'SECRET',id:'SECRET'}));});
 async function invoke(api:any,extra:any={}){let status=0,body:any;const headers:any={};await api({method:'POST',headers:{origin:'https://minhthanhmath.vn',host:'minhthanhmath.vn',cookie:'mtm_btvn_demo='+'a'.repeat(64)},body:{khoi:'2K9',loai:'btvn-tuan'},...extra},{setHeader:(k:string,v:string)=>headers[k]=v,status:(n:number)=>{status=n;return{json:(v:any)=>body=v};}});return{status,headers,body};}
-let r=await invoke(handler);assert.equal(r.status,200);assert.deepEqual(r.body.row,row);assert.match(r.headers['Cache-Control'],/no-store/);assert.equal(r.headers.Vary,'Cookie');
+let r=await invoke(handler);assert.equal(r.status,200);assert.deepEqual(r.body.row,{...row,school:null,avatar:null,photo:null});assert.match(r.headers['Cache-Control'],/no-store/);assert.equal(r.headers.Vary,'Cookie');
 assert.equal((await invoke(handler,{body:{khoi:'2K9',loai:'btvn-tuan',studentId:'victim'}})).status,400);
 assert.equal((await invoke(handler,{headers:{origin:'https://evil.invalid',host:'minhthanhmath.vn',cookie:'mtm_btvn_demo='+'a'.repeat(64)}})).status,403);
 assert.equal((await invoke(handler,{headers:{origin:'https://minhthanhmath.vn',host:'minhthanhmath.vn'}})).status,401);

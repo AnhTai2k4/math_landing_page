@@ -1,7 +1,7 @@
 import type {Draft} from '../../src/native/exams/store';
 import type {HomeworkReceipt} from '../../src/native/homework/btvn-contract';
 
-export type Student = {studentCode:string; fullName:string; phone:string; parentPhone?:string; parentName?:string; className:string; cohort?:string; nextActualClassAt?:number};
+export type Student = {studentCode:string; fullName:string; phone:string; parentPhone?:string; parentName?:string; school?:string; className:string; cohort?:string; nextActualClassAt?:number};
 export type StudentWork = {student:Student; drafts:Draft[]; receipts:HomeworkReceipt[]; lessons?:Record<string,{drafts:Draft[];receipts:HomeworkReceipt[];nextActualClassAt?:number}>};
 /** Thao tác đồng bộ trong bản RAM; adapter bền vững phải chuyển cả giao dịch
  * thành atomic transaction trước khi dùng nhiều instance serverless. */

@@ -12,7 +12,7 @@ function load(file:string){
   const mod={exports:{} as any};new Function('require','module','exports',code)(require,mod,mod.exports);return mod.exports;
 }
 let count=0;async function test(name:string,fn:()=>unknown){await fn();console.log('ĐẠT '+(++count)+' '+name);}
-await test('API xếp hạng công khai loại tên và trường riêng, luồng hạng cá nhân giữ hợp đồng',async()=>{
+await test('API công khai đúng tên đã duyệt, loại mã và điện thoại, hạng cá nhân giữ hợp đồng',async()=>{
   const row={rank:1,fullName:'TÊN THỬ RIÊNG',className:'Lớp thử',score:8,submitted:2,total:3,phone:'0000000000',studentId:'PRIVATE-TEST'};
   assert.deepEqual(anonymousRankRow(row),{rank:1,className:'Lớp thử',score:8,submitted:2,total:3});
   assert.equal(publicRankRow(row).fullName,row.fullName);
@@ -25,7 +25,7 @@ await test('API xếp hạng công khai loại tên và trường riêng, luồn
   await handler({method:'GET',query:{khoi:'invalid',loai:'btvn-tuan'}},res);assert.equal(status,400);assert.equal(calls,1);
   await handler({method:'POST'},res);assert.equal(status,405);assert.equal(calls,1);
 });
-await test('Bảng công khai không render tên dù cache/API cũ còn trường tên, hạng cá nhân có tên',()=>{
+await test('Bảng công khai và hạng cá nhân đều hiển thị tên đã duyệt',()=>{
   const {RankContent}=load('src/native/homework/HomeLeaderboard.tsx'),rows=[{rank:1,fullName:'TÊN THỬ RIÊNG',className:'Lớp thử',score:8,submitted:2,total:3}];
   assert.match(render(RankContent,{rows,status:'ready'}),/TÊN THỬ RIÊNG/);
   assert.match(render(RankContent,{rows:[{...rows[0],fullName:''}],status:'ready'}),/Học sinh MTM/);

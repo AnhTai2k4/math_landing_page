@@ -3,9 +3,10 @@
 export const AVATARS=['orbit','spark','prism','wave'] as const;
 export type AvatarId=typeof AVATARS[number];
 export type Appearance={avatar:AvatarId;photo:string};
-export type AvatarRecord={profileKey:string;revision:number;school:string;appearance:Appearance};
+export type AvatarRecord={profileKey:string;revision:number;school:string;appearance:Appearance;photoHidden?:boolean};
 export interface AvatarRepository{read(session:string):Promise<AvatarRecord>;save(session:string,revision:number,appearance:Appearance,school:string,expectedProfileKey:string):Promise<AvatarRecord>}
-export const PHOTO_MAX_CHARS=180000,PHOTO_SIZE=192,AVATAR_BODY_MAX=200000;
+// Ảnh 192px dùng cả trên hồ sơ và top 10, giữ payload bảng xếp hạng nhẹ.
+export const PHOTO_MAX_CHARS=40000,PHOTO_SIZE=192,AVATAR_BODY_MAX=42000;
 const COOKIE='mtm_btvn_demo',PREFIX='data:image/jpeg;base64,';
 export class AvatarError extends Error{constructor(public status:number,message:string){super(message);}}
 const MESSAGES:Record<number,string>={400:'Ảnh hoặc yêu cầu không hợp lệ.',401:'Phiên đã hết. Em đăng nhập lại.',403:'Không thể lưu ảnh.',405:'Chỉ nhận POST.',409:'Ảnh đã đổi ở thiết bị khác. Tải lại để tiếp tục.',413:'Ảnh quá lớn.',503:'Chưa lưu được ảnh. Em thử lại sau.'};
@@ -56,7 +57,7 @@ export function validAppearance(value:unknown):value is Appearance{
 export const validSchool=(value:unknown):value is string=>typeof value==='string'&&value.length<=160&&!/[\u0000-\u001f\u007f-\u009f]/.test(value);
 const validRecord=(value:unknown):value is AvatarRecord=>{
   const v=value as AvatarRecord|null;
-  return !!v&&typeof v==='object'&&typeof v.profileKey==='string'&&/^[0-9a-f-]{36}$/.test(v.profileKey)&&Number.isInteger(v.revision)&&v.revision>=0&&validSchool(v.school)&&validAppearance(v.appearance);
+  return !!v&&typeof v==='object'&&typeof v.profileKey==='string'&&/^[0-9a-f-]{36}$/.test(v.profileKey)&&Number.isInteger(v.revision)&&v.revision>=0&&validSchool(v.school)&&validAppearance(v.appearance)&&(v.photoHidden===undefined||typeof v.photoHidden==='boolean');
 };
 
 export async function handleAvatar(repo:AvatarRepository,input:{method:string;body:unknown;cookie?:string;origin?:string;host:string;secure?:boolean}){
@@ -76,7 +77,7 @@ export async function handleAvatar(repo:AvatarRepository,input:{method:string;bo
     if(!/^[0-9a-f]{64}$/.test(session))throw avatarError(401);
     const record=read?await repo.read(session):await repo.save(session,body.revision as number,{avatar:(body.appearance as Appearance).avatar,photo:(body.appearance as Appearance).photo},(body.school as string).normalize('NFC').trim().replace(/\s+/g,' '),body.expectedProfileKey as string);
     if(!validRecord(record))throw avatarError(503);
-    return {status:200,headers,body:{profileKey:record.profileKey,revision:record.revision,school:record.school,appearance:{avatar:record.appearance.avatar,photo:record.appearance.photo}}};
+    return {status:200,headers,body:{profileKey:record.profileKey,revision:record.revision,school:record.school,appearance:{avatar:record.appearance.avatar,photo:record.photoHidden?'':record.appearance.photo},...(record.photoHidden===undefined?{}:{photoHidden:record.photoHidden})}};
   }catch(error){
     const status=error instanceof AvatarError?error.status:503;
     return {status,headers,body:{message:MESSAGES[status]??MESSAGES[503]}};

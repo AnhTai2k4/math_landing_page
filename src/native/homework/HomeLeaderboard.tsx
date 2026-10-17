@@ -1,32 +1,43 @@
 import {LoadingCards} from '../../components/LoadingCards';
-import {useEffect,useState} from 'react';
+import {useEffect,useRef,useState} from 'react';
 import './leaderboard.css';
 import './r104-leaderboard.css';
-import {StudentAvatar,StudentAppearanceButton} from '../../components/StudentAppearance';
-export type RankRow={rank:number;fullName?:string;className:string;score:number;submitted:number;total:number};
+import {StudentAvatar} from '../../components/StudentAppearance';
+import {APPEARANCE_EVENT,DEFAULT_APPEARANCE,SESSION_EVENT,SYNC_KEY,type StudentAppearance} from '../../components/student-appearance';
+export type RankRow={rank:number;fullName?:string;className:string;school?:string|null;avatar?:StudentAppearance['avatar']|null;photo?:string|null;score:number;submitted:number;total:number};
 export const rankEmpty='Bảng xếp hạng bắt đầu từ 15/10/2026. Chưa có bài trong kỳ này.';
 const tabs=[['btvn-tuan','Tuần này'],['btvn-thang','Tháng này'],['kiem-tra-thang','Kiểm tra cuối tháng']] as const;
 const classes:Record<string,string[]>={'2K9':['2K9 9+','2K9 8+','2K9 XPT','2K9 HSA (THỨ 5)','2K9 HSA (CN)'],'2K10':['2K10 9+','2K10 8+','2K10 XPT','2K10 Thứ 3, 6'],'2K11':['2K11 9+','2K11 8+','2K11 XPT']};
 const score=(row:RankRow)=>row.score.toLocaleString('vi-VN',{maximumFractionDigits:2});
+const appearance=(row:RankRow):StudentAppearance=>({avatar:row.avatar??DEFAULT_APPEARANCE.avatar,photo:row.photo??''});
+const school=(row:RankRow)=>row.school?.trim()||'';
 export function RankContent({rows,status,own=false}:{rows:RankRow[];status:'loading'|'ready'|'error';own?:boolean}){
  if(status==='loading')return <LoadingCards label="Đang tải bảng xếp hạng…"/>;
  if(status==='error')return <p role="alert">Chưa tải được bảng xếp hạng. Vui lòng thử lại.</p>;
  if(!rows.length)return <p>{rankEmpty}</p>;
- return <ol className="mtm-rank-list">{rows.map(row=><li key={row.rank} className={row.rank<=3?'mtm-rank-top':''}><b className="mtm-rank-place" aria-label={'Hạng '+row.rank}>{row.rank}</b><div><strong>{row.fullName||'Học sinh MTM'}</strong><small>{row.className} · Đã nộp {row.submitted}/{row.total} bài</small></div><b className="mtm-rank-score">{score(row)}<small>/10</small></b></li>)}</ol>;
+ return <ol className={'mtm-rank-list'+(own?' mtm-rank-list-own':'')}>{rows.map(row=><li key={row.rank} className={row.rank<=3?'mtm-rank-top':''}><b className="mtm-rank-place" aria-label={'Hạng '+row.rank}>{row.rank}</b><StudentAvatar appearance={appearance(row)} size={own?44:42}/><div className="mtm-rank-identity"><strong>{row.fullName||'Học sinh MTM'}</strong><small className="mtm-rank-class">{row.className}</small>{school(row)&&<small className="mtm-rank-school">{school(row)}</small>}<small className="mtm-rank-submitted">Đã nộp {row.submitted}/{row.total} bài</small></div><b className="mtm-rank-score">{score(row)}<small>/10</small></b></li>)}</ol>;
 }
 export default function HomeLeaderboard({compact=false}:{compact?:boolean}){
  const [expanded,setExpanded]=useState(false);
  const [cohort,setCohort]=useState('2K9'),[kind,setKind]=useState('btvn-tuan'),[cls,setClass]=useState(''),[rows,setRows]=useState<RankRow[]>([]),[status,setStatus]=useState<'loading'|'ready'|'error'>('loading'),[enabled,setEnabled]=useState(true),[retry,setRetry]=useState(0);
  const [own,setOwn]=useState<{state:'guest'|'ready'|'error';row:RankRow|null}>({state:'guest',row:null});
- useEffect(()=>{const controller=new AbortController();setExpanded(false);setRows([]);setStatus('loading');
-  // Giữ URL đơn giản tương thích thẻ compact và cache công khai.
+ const ownGeneration=useRef(0);
+ useEffect(()=>{
+  if(typeof window==='undefined')return;
+  const doc=typeof document==='undefined'?undefined:document,changed=()=>{ownGeneration.current++;setRetry(n=>n+1);},session=()=>{setOwn({state:'guest',row:null});changed();},storage=(event:StorageEvent)=>{if(event.key!==SYNC_KEY)return;try{if(JSON.parse(event.newValue||'null')?.kind==='session')session();else changed();}catch{changed();}},visible=()=>{if(doc?.visibilityState==='visible')changed();};
+  window.addEventListener(APPEARANCE_EVENT,changed);window.addEventListener(SESSION_EVENT,session);window.addEventListener('storage',storage);window.addEventListener('focus',changed);doc?.addEventListener('visibilitychange',visible);
+  return()=>{window.removeEventListener(APPEARANCE_EVENT,changed);window.removeEventListener(SESSION_EVENT,session);window.removeEventListener('storage',storage);window.removeEventListener('focus',changed);doc?.removeEventListener('visibilitychange',visible);};
+ },[]);
+ useEffect(()=>setExpanded(false),[cohort,kind,cls]);
+ useEffect(()=>{const controller=new AbortController();setRows([]);setStatus('loading');
+  // Hồ sơ vừa lưu được đọc lại ngay, không dùng bản cache của bảng công khai.
   const url='/api/xep-hang?khoi='+cohort+'&loai='+kind+(cls?'&lop='+encodeURIComponent(cls):'');
-  fetch(url,{credentials:'omit',signal:controller.signal}).then(async response=>{if(!response.ok)throw Error();const data=await response.json();if(typeof data.enabled!=='boolean'||!Array.isArray(data.rows))throw Error();if(!controller.signal.aborted){setEnabled(data.enabled);setRows(data.rows);setStatus('ready');}}).catch(()=>{if(!controller.signal.aborted)setStatus('error');});
+  fetch(url,{credentials:'omit',cache:'no-store',signal:controller.signal}).then(async response=>{if(!response.ok)throw Error();const data=await response.json();if(typeof data.enabled!=='boolean'||!Array.isArray(data.rows))throw Error();if(!controller.signal.aborted){setEnabled(data.enabled);setRows(data.rows);setStatus('ready');}}).catch(()=>{if(!controller.signal.aborted)setStatus('error');});
   return()=>controller.abort();
  },[cohort,kind,cls,retry]);
  useEffect(()=>{
-  if(compact)return;const controller=new AbortController();setOwn({state:'guest',row:null});
-  fetch('/api/xep-hang-cua-em',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({khoi:cohort,loai:kind,...(cls?{lop:cls}:{})}),signal:controller.signal}).then(async response=>{if(response.status===401)return;if(!response.ok)throw Error();const data=await response.json();if(!controller.signal.aborted)setOwn({state:'ready',row:data.row??null});}).catch(()=>{if(!controller.signal.aborted)setOwn({state:'error',row:null});});
+  if(compact)return;const controller=new AbortController(),generation=++ownGeneration.current;setOwn({state:'guest',row:null});
+  fetch('/api/xep-hang-cua-em',{method:'POST',credentials:'same-origin',cache:'no-store',headers:{'Content-Type':'application/json'},body:JSON.stringify({khoi:cohort,loai:kind,...(cls?{lop:cls}:{})}),signal:controller.signal}).then(async response=>{if(response.status===401)return;if(!response.ok)throw Error();const data=await response.json();if(!controller.signal.aborted&&generation===ownGeneration.current)setOwn({state:'ready',row:data.row??null});}).catch(()=>{if(!controller.signal.aborted&&generation===ownGeneration.current)setOwn({state:'error',row:null});});
   return()=>controller.abort();
  },[compact,cohort,kind,cls,retry]);
  if(!enabled)return null;
@@ -34,8 +45,8 @@ export default function HomeLeaderboard({compact=false}:{compact?:boolean}){
  if(!compact)return <section id="home-leaderboard" className="mtm-rank r104-rank" aria-labelledby={titleId}>
   <div className="r104-rank-surface">
    <header className="r104-rank-head"><h2 id={titleId}>Bảng xếp hạng<span>.</span></h2><div className="r104-rank-filters"><div className="mtm-rank-cohorts" role="group" aria-label="Chọn khối">{Object.keys(classes).map(c=><button type="button" key={c} aria-pressed={cohort===c} onClick={()=>{setCohort(c);setClass('');}}>{c}</button>)}</div><label className="r104-rank-kind"><span className="r104-sr-only">Kỳ xếp hạng</span><select value={kind} onChange={e=>setKind(e.target.value)}>{tabs.map(([value,label])=><option value={value} key={value}>{value==='btvn-tuan'?'BTVN tuần':value==='btvn-thang'?'BTVN tháng':label}</option>)}</select></label></div><label className="r104-rank-class"><span className="r104-sr-only">Lớp</span><select value={cls} onChange={event=>setClass(event.target.value)}><option value="">Tất cả lớp trong khối</option>{classes[cohort].map(c=><option key={c}>{c}</option>)}</select></label></header>
-   <div className="r104-podium" aria-label="Vinh danh top 3" aria-live="polite">{status==='loading'?<p role="status">Đang tải bảng xếp hạng…</p>:status==='error'?<p role="alert">Chưa tải được bảng xếp hạng. <button type="button" onClick={()=>setRetry(n=>n+1)}>Thử lại</button></p>:!rows.length?<p>{rankEmpty}</p>:[1,0,2].map(i=>{const row=rows[i];return row?<article key={row.rank} className={'mtm-rank-medal mtm-rank-medal-'+row.rank}><span className="r104-medal-icon" aria-hidden="true">{i===0?'✦':i===1?'◇':'∿'}</span><strong title={row.fullName}>{row.fullName||'Học sinh MTM'}</strong><span className="r104-medal-score">{score(row)}<small>/10</small></span><div className="r104-podium-plinth"><span>Hạng {row.rank}</span></div></article>:null;})}</div>
-   <aside className="r104-rank-own" aria-live="polite"><h3>Hạng của em</h3>{own.state==='guest'?<><StudentAvatar/><p>Vào BTVN để xem điểm và hạng của em.</p><a href="/btvn">Vào góc học tập ↗</a></>:own.state==='error'?<p>Chưa tải được hạng. <button type="button" onClick={()=>setRetry(n=>n+1)}>Thử lại</button></p>:own.row?<>{own.row.fullName?.trim()?<StudentAppearanceButton identity={own.row.fullName+'|'+own.row.className}/>:<StudentAvatar/>}<RankContent rows={[own.row]} status="ready" own/></>:<><StudentAvatar/><p>Em chưa có hạng trong kỳ và bộ lọc này.</p><a href="/btvn">Vào góc học tập ↗</a></>}</aside>
+   <div className="r104-podium" aria-label="Vinh danh top 3" aria-live="polite">{status==='loading'?<p role="status">Đang tải bảng xếp hạng…</p>:status==='error'?<p role="alert">Chưa tải được bảng xếp hạng. <button type="button" onClick={()=>setRetry(n=>n+1)}>Thử lại</button></p>:!rows.length?<p>{rankEmpty}</p>:[1,0,2].map(i=>{const row=rows[i];return row?<article key={row.rank} className={'mtm-rank-medal mtm-rank-medal-'+row.rank}><StudentAvatar appearance={appearance(row)} size={row.rank===1?72:64}/><strong title={row.fullName}>{row.fullName||'Học sinh MTM'}</strong><small className="r104-medal-class">{row.className}</small>{school(row)&&<small className="r104-medal-school">{school(row)}</small>}<span className="r104-medal-score">{score(row)}<small>/10</small></span><div className="r104-podium-plinth"><span>Hạng {row.rank}</span></div></article>:null;})}</div>
+   <aside className="r104-rank-own" aria-live="polite"><h3>Hạng của em</h3>{own.state==='guest'?<><StudentAvatar/><p>Vào BTVN để xem điểm và hạng của em.</p><a href="/btvn">Vào góc học tập ↗</a></>:own.state==='error'?<p>Chưa tải được hạng. <button type="button" onClick={()=>setRetry(n=>n+1)}>Thử lại</button></p>:own.row?<RankContent rows={[own.row]} status="ready" own/>:<><StudentAvatar/><p>Em chưa có hạng trong kỳ và bộ lọc này.</p><a href="/btvn">Vào góc học tập ↗</a></>}</aside>
    <div className="r104-rank-bottom"><span>{kind==='btvn-tuan'?'Tuần hiện tại':'Tháng hiện tại'} · Giờ Việt Nam</span><button type="button" aria-expanded={expanded} aria-controls="r104-top-ten" onClick={()=>setExpanded(v=>!v)}>{expanded?'Thu gọn':'Top 10'} <span aria-hidden="true">↗</span></button></div>
   </div><div id="r104-top-ten" className={'r104-top-ten'+(expanded?' is-open':'')} aria-hidden={!expanded} ref={element=>{if(element)element.inert=!expanded;}}><div><h3>Top 10 · Điểm trung bình</h3><RankContent rows={rows.slice(0,10)} status={status}/><p className="mtm-rank-note">{kind==='kiem-tra-thang'?'Ưu tiên điểm thi trên web khi có cả điểm thi giấy.':'Bài chưa tới hạn mà chưa nộp không tính 0. Điểm và hạng lấy từ hệ thống MTM.'}</p></div></div>
  </section>;

@@ -16,7 +16,7 @@ export function attendanceRpc(body:any):{name:string;payload:Record<string,unkno
  ensure(body.apply===undefined||typeof body.apply==='boolean');
  if(body.action==='sync_attendance'){
   ensure(Array.isArray(body.rows)&&body.rows.length>0&&body.rows.length<=10000);
-  for(const r of body.rows)ensure(record(r)&&Object.keys(r).every(k=>['label','fullName','phone','source'].includes(k))&&validAttendanceLabel(r.label)&&text(r.fullName,160)&&typeof r.phone==='string'&&/^0\d{9}$/.test(r.phone)&&(r.source===undefined||text(r.source,200)));
+  for(const r of body.rows)ensure(record(r)&&Object.keys(r).every(k=>['label','fullName','phone','source','school'].includes(k))&&validAttendanceLabel(r.label)&&text(r.fullName,160)&&typeof r.phone==='string'&&/^0\d{9}$/.test(r.phone)&&(r.source===undefined||text(r.source,200))&&(r.school===undefined||typeof r.school==='string'&&r.school.length<=160&&!/[\u0000-\u001f\u007f-\u009f]/.test(r.school)));
   return {name:'sync_attendance',payload:{p_payload:{rows:body.rows},p_apply:body.apply??false}};
  }
  ensure(Array.isArray(body.sessions)&&body.sessions.length<=2000);
