@@ -8,9 +8,10 @@ import {publicClassNames} from './class-config';
 import {hydratePrivateAssets,PrivatePdfUnavailableError,SIGNED_ASSET_SECONDS,type PrivateAsset} from './private-assets';
 import {lessonOpensAt} from './opening-policy';
 import {homeworkLessonCard} from './lesson-card';
+import {validOfficialHomeworkScore} from '../../src/native/homework/grading-policy';
 
 export interface RpcTransport {rpc(name:string,args:Record<string,unknown>):Promise<{data:unknown;error:null|{code?:string}}>}
-export type DurableSnapshot={revision:number;work:StudentWork;exam?:PracticeExam;material?:LessonMaterial;lessons:LessonMaterial[]};
+export type DurableSnapshot={revision:number;work:StudentWork;exam?:PracticeExam;material?:LessonMaterial;lessons:LessonMaterial[];officialGrades?:Record<string,number>};
 const monthlyCards=(lessons:LessonMaterial[],now:number,className:string)=>lessons.map(l=>homeworkLessonCard(l,className,now));
 /** Server-only. Không liệt kê học sinh, không giữ mã thô trong repository.
  * Mỗi request đọc snapshot có quyền; CAS DB là điểm commit duy nhất.
@@ -66,6 +67,16 @@ export class SupabaseHomeworkRepository {
       const next=action==='start'?service.start(token):action==='save'?service.save(token,attemptId??'',answers??{}):action==='submit'?service.submit(token,attemptId??'',answers??{}):service.state(token);
       next.demo=false;next.serverNow=this.clock();
       if(monthly){next.kind='kiem-tra-thang';next.opensAt=snapshot.material.opensAt;next.closesAt=snapshot.material.closesAt;next.canStart=now<snapshot.material.closesAt!;}
+      // Điểm chấm tay do RPC owner cung cấp, chỉ ghép vào response. Không sửa
+      // biên nhận gốc hoặc ghi metadata này trở lại giao dịch commit.
+      if(!monthly||now>=(snapshot.material.closesAt??Infinity)){
+        next.receipts=next.receipts.map(receipt=>{
+          const score=snapshot.officialGrades?.[receipt.attemptId];
+          return validOfficialHomeworkScore(score)?{...receipt,gradingPending:false,officialScore:score}:receipt;
+        });
+        const official=next.receipts.filter(receipt=>!receipt.gradingPending).map(receipt=>receipt.officialScore??receipt.score).filter(validOfficialHomeworkScore);
+        if(official.length&&next.receipts.some(receipt=>validOfficialHomeworkScore(receipt.officialScore)))next.bestScore=Math.max(...official);
+      }
       // Hạn/điểm mỗi thẻ lấy từ snapshot có quyền, không suy từ lịch lớp.
       next.lessons=monthlyCards(snapshot.lessons,now,className) as HomeworkState['lessons'];
       if(action==='state'||action==='select'||action==='start'){

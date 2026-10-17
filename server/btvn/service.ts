@@ -11,6 +11,7 @@ import {mtmPracticeGradingReadiness} from '../../src/native/exams/mtm-assessment
 import {lessonOpensAt} from './opening-policy';
 import {concealMonthlySolutions} from './monthly-policy';
 import {homeworkLessonCard} from './lesson-card';
+import {requiresManualHomeworkGrade} from '../../src/native/homework/grading-policy';
 
 export class HomeworkError extends Error {constructor(public status:number,message:string){super(message);}}
 export const GATE_ERROR='Không thể vào bài. Hãy kiểm tra thông tin hoặc thử lại sau.';
@@ -97,7 +98,8 @@ export class HomeworkService {
       const entry=l.lessonCode===this.lessonCode?{...root,nextActualClassAt:root.student.nextActualClassAt}:root.lessons?.[l.lessonCode];
       const receipts=entry?.receipts??[],scores=receiptScores(receipts),best=scores.length?Math.max(...scores):null;
       const receipt=receipts.filter(r=>r.score===best).at(-1);
-      return homeworkLessonCard(l,root.student.className,now,{dueAt:entry?.nextActualClassAt??null,bestScore:best,late:receipt?.late??null,submittedAt:receipt?.submittedAt??null,available:l.lessonCode===this.lessonCode||!!this.lessonExams[l.lessonCode]});
+      const lessonExam=l.lessonCode===this.lessonCode?this.exam:this.lessonExams[l.lessonCode];
+      return homeworkLessonCard(l,root.student.className,now,{pendingGrading:receipts.length>0&&!!lessonExam&&requiresManualHomeworkGrade(lessonExam,l),dueAt:entry?.nextActualClassAt??null,bestScore:best,late:receipt?.late??null,submittedAt:receipt?.submittedAt??null,available:l.lessonCode===this.lessonCode||!!this.lessonExams[l.lessonCode]});
     });
     const opensAt=this.opening(token),monthly=this.monthly(token),draft=work.drafts.at(-1)??null;
     const hidden=!!monthly&&now<(monthly.closesAt??Infinity);
@@ -105,7 +107,7 @@ export class HomeworkService {
     const graded=!!draft&&draft.submittedAt!==null&&work.receipts.some(r=>r.attemptId===draft.attemptId);
     const solutionsAvailable=graded&&(!monthly||now>=(monthly.closesAt??Infinity));
     return {serverNow:now,exam:solutionsAvailable?this.examFor(token):concealMonthlySolutions(this.examFor(token)),opensAt,canStart:!monthly||now<(monthly.closesAt??Infinity),solutionsAvailable,...(monthly?{kind:'kiem-tra-thang' as const,closesAt:monthly.closesAt}:{}),fullName:work.student.fullName,className:work.student.className,lessonCode:this.selected(token),dueAt:work.student.nextActualClassAt??null,maxAttempts:this.maxAttemptsFor(token),
-      attemptsUsed:work.drafts.length,draft,receipts:hidden?work.receipts.map(receiptWithoutScore):work.receipts,bestScore:hidden?null:scores.length?Math.max(...scores):null,demo:true,lessons};
+      attemptsUsed:work.drafts.length,draft,receipts:hidden?work.receipts.map(receiptWithoutScore):work.receipts.map(receipt=>requiresManualHomeworkGrade(this.examFor(token),this.materials.find(l=>l.lessonCode===this.selected(token)))?{...receipt,gradingPending:true}:receipt),bestScore:hidden?null:scores.length?Math.max(...scores):null,demo:true,lessons};
   }
   /** Chỉ phía vận hành gọi sau khi xác minh ca thực học, không mở API học sinh. */
   reconcileActualClass(studentCode:string,startsAt:number,lessonCode=this.lessonCode){

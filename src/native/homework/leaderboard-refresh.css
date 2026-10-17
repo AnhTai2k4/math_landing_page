@@ -1,0 +1,7 @@
+/* Nhấn nhẹ vị trí và điểm khi dữ liệu thực sự thay đổi, giữ nguyên bố cục. */
+.mtm-rank .mtm-rank-official-note{margin:9px 4px 0;font-size:12px;line-height:1.6}
+.mtm-rank-refresh-odd .mtm-rank-place,.mtm-rank-refresh-odd .mtm-rank-score,.mtm-rank-refresh-odd .r104-medal-score,.mtm-rank-refresh-odd .r104-hw-scores dd{animation:mtm-rank-refresh-odd .65s ease-out}
+.mtm-rank-refresh-even .mtm-rank-place,.mtm-rank-refresh-even .mtm-rank-score,.mtm-rank-refresh-even .r104-medal-score,.mtm-rank-refresh-even .r104-hw-scores dd{animation:mtm-rank-refresh-even .65s ease-out}
+@keyframes mtm-rank-refresh-odd{0%{transform:translateY(3px);opacity:.65}100%{transform:none;opacity:1}}
+@keyframes mtm-rank-refresh-even{0%{transform:translateY(3px);opacity:.65}100%{transform:none;opacity:1}}
+@media(prefers-reduced-motion:reduce){.mtm-rank-refresh-odd *,.mtm-rank-refresh-even *{animation:none!important}}

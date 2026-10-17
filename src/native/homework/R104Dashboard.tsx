@@ -7,6 +7,9 @@ import {homeworkPriorityDeadline,homeworkPriorityReason,isHomeworkLocked,nextHom
 import {displayClassName,lessonCaption,lessonHomeworkTitle} from './presentation';
 import {LessonVideo} from './LessonCards';
 import './r104-homework.css';
+import './leaderboard-refresh.css';
+import {requestLeaderboard,subscribeLeaderboardRefresh} from './leaderboard-refresh';
+import {homeworkReceiptScore,pendingHomeworkReceipt} from './result-summary';
 
 const periods=[['btvn-tuan','BTVN tuần'],['btvn-thang','BTVN tháng'],['kiem-tra-thang','Kiểm tra cuối tháng']] as const;
 const PAGE=6;
@@ -24,7 +27,7 @@ function validRow(row:unknown):row is RankRow{
 /** Trạng thái hiển thị theo giờ lớp; quyền làm bài vẫn do máy chủ quyết định khi chọn bài. */
 export function lessonStatus(lesson:HomeworkLesson,now:number):LessonStatus{
   if(isHomeworkLocked(lesson,now))return 'locked';
-  if(lesson.bestScore!==null)return 'scored';
+  if(lesson.bestScore!==null&&!lesson.pendingGrading)return 'scored';
   if(lesson.submittedAt!=null)return 'submitted';
   if(!lesson.available)return 'preparing';
   const end=lesson.kind==='kiem-tra-thang'?homeworkPriorityDeadline(lesson):null;
@@ -49,22 +52,32 @@ export default function R104Dashboard({state,busy,onSelect,profileControl}:{stat
   const [now,setNow]=useState(Date.now),[kind,setKind]=useState('btvn-tuan'),[retry,setRetry]=useState(0),[priorityNotice,setPriorityNotice]=useState('');
   const [rank,setRank]=useState<RankState>({status:'loading',row:null});
   const [filter,setFilter]=useState<'all'|'opened'>('all'),[limit,setLimit]=useState(PAGE),[picked,setPicked]=useState<string|null>(null),[video,setVideo]=useState<string|null>(null);
-  const preview=useRef<HTMLDivElement>(null);
+  const preview=useRef<HTMLDivElement>(null),rankGeneration=useRef(0),rankQuery=useRef(''),rankSnapshot=useRef('');
+  const [rankUpdate,setRankUpdate]=useState(0);
   const clock=homeworkServerNow(state,now),lessons=state.lessons??[],priority=nextHomework(lessons,clock);
   const cohort=/\b(2K(?:9|1[0-4]))\b/i.exec(state.className)?.[1].toUpperCase();
+  const rankIdentity=cohort+'|'+kind+'|'+state.fullName+'|'+state.className,latestRankIdentity=useRef(rankIdentity);latestRankIdentity.current=rankIdentity;
   useEffect(()=>{const timer=setInterval(()=>setNow(Date.now()),1000);return()=>clearInterval(timer);},[]);
+  useEffect(()=>subscribeLeaderboardRefresh(event=>{
+    rankGeneration.current++;
+    if(event.reason==='session'){rankSnapshot.current='';setRank({status:'guest',row:null});}
+    setRetry(value=>value+1);
+  }),[]);
   useEffect(()=>{
-    const controller=new AbortController();
+    const controller=new AbortController(),generation=++rankGeneration.current;
     if(!cohort){setRank({status:'unsupported',row:null});return()=>controller.abort();}
-    setRank({status:'loading',row:null});
-    fetch('/api/xep-hang-cua-em',{method:'POST',credentials:'same-origin',cache:'no-store',headers:{'Content-Type':'application/json'},body:JSON.stringify({khoi:cohort,loai:kind}),signal:controller.signal})
-      .then(async response=>{
-        if(response.status===401||response.status===403){if(!controller.signal.aborted)setRank({status:'guest',row:null});return;}
-        if(!response.ok)throw Error();
-        const data=await response.json();
+    const body=JSON.stringify({khoi:cohort,loai:kind}),query=body+'|'+state.fullName+'|'+state.className;
+    if(rankQuery.current!==query){rankQuery.current=query;rankSnapshot.current='';setRank({status:'loading',row:null});}
+    requestLeaderboard<{enabled:boolean;row:RankRow|null}>('/api/xep-hang-cua-em',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body})
+      .then(response=>{
+        if(controller.signal.aborted||generation!==rankGeneration.current||latestRankIdentity.current!==rankIdentity)return;
+        if(response.status===401||response.status===403){rankSnapshot.current='';setRank({status:'guest',row:null});return;}
+        const data=response.data;
+        if(!response.ok||!data)throw Error();
         if(typeof data.enabled!=='boolean'||(data.row!=null&&!validRow(data.row)))throw Error();
-        if(!controller.signal.aborted)setRank({status:data.enabled?'ready':'disabled',row:data.row??null});
-      }).catch(()=>{if(!controller.signal.aborted)setRank({status:'error',row:null});});
+        const next=JSON.stringify(data.row??null);if(rankSnapshot.current&&rankSnapshot.current!==next)setRankUpdate(value=>value+1);rankSnapshot.current=next;
+        setRank({status:data.enabled?'ready':'disabled',row:data.row??null});
+      }).catch(()=>{if(!controller.signal.aborted&&generation===rankGeneration.current&&latestRankIdentity.current===rankIdentity)setRank({status:'error',row:null});});
     return()=>controller.abort();
   },[cohort,kind,retry,state.fullName,state.className]);
   const choosePriority=()=>{
@@ -107,15 +120,15 @@ export default function R104Dashboard({state,busy,onSelect,profileControl}:{stat
         </section>}
       </section>
       <div className="r104-hw-results">
-        <aside className="r104-hw-summary" aria-labelledby="r104-hw-summary-title"><h2 id="r104-hw-summary-title">Điểm &amp; hạng của em</h2><label>Kỳ xem<select value={kind} onChange={event=>setKind(event.target.value)}>{periods.map(([id,label])=><option key={id} value={id}>{label}</option>)}</select></label><p className="r104-hw-period">{kind==='btvn-tuan'?'Tuần hiện tại, thứ Hai đến Chủ nhật':'Tháng dương lịch hiện tại'} · {cohort?'Khối '+cohort:displayClassName(state)}</p>
+        <aside className={'r104-hw-summary'+(rankUpdate?(rankUpdate%2?' mtm-rank-refresh-odd':' mtm-rank-refresh-even'):'')} aria-labelledby="r104-hw-summary-title"><h2 id="r104-hw-summary-title">Điểm &amp; hạng của em</h2><label>Kỳ xem<select value={kind} onChange={event=>setKind(event.target.value)}>{periods.map(([id,label])=><option key={id} value={id}>{label}</option>)}</select></label><p className="r104-hw-period">{kind==='btvn-tuan'?'Tuần hiện tại, thứ Hai đến Chủ nhật':'Tháng dương lịch hiện tại'} · {cohort?'Khối '+cohort:displayClassName(state)}</p>
           <div aria-live="polite" aria-busy={rank.status==='loading'}>{rank.status==='ready'&&rank.row?<><dl className="r104-hw-scores"><div><dt>Điểm trung bình<small>Thang điểm 10</small></dt><dd>{rank.row.score.toLocaleString('vi-VN',{minimumFractionDigits:2,maximumFractionDigits:2})}</dd></div><div><dt>Hạng trong khối<small>{cohort?'Nhóm '+cohort:'Theo khối'}</small></dt><dd>{rank.row.rank}</dd></div></dl><p className="r104-hw-rank-context">Đã nộp {rank.row.submitted} bài, kỳ này có {rank.row.total} bài được giao.</p></>:<p className="r104-hw-rank-empty">{rank.status==='loading'?'Đang tải điểm và hạng…':rank.status==='guest'?'Phiên xếp hạng cần đăng nhập lại. Em thoát BTVN rồi đăng nhập lại để xem.':rank.status==='disabled'?'Bảng xếp hạng hiện chưa được mở.':rank.status==='unsupported'?'Lớp em chưa có bảng xếp hạng theo khối tại đây.':rank.status==='error'?'Chưa tải được điểm và hạng.':'Em chưa có hạng trong kỳ này.'}</p>}</div>
           {rank.status==='error'&&<button type="button" className="r104-hw-retry" onClick={()=>setRetry(n=>n+1)}>Thử tải lại</button>}
           <div className="r104-hw-rank-identity">{profileControl}<span><strong>{state.fullName}</strong><small>{cohort?'Khối '+cohort:displayClassName(state)} · {periods.find(([id])=>id===kind)?.[1]}</small></span></div>
-          <details><summary>Điểm này được tính thế nào?</summary><p>{kind==='kiem-tra-thang'?'Ưu tiên điểm thi trên web khi có cả điểm thi giấy.':'Điểm trung bình các bài được giao trong kỳ. Bài chưa tới hạn mà chưa nộp không tính 0; điểm lấy từ hệ thống MTM.'}</p><p>Thời gian tính theo giờ Việt Nam. Điểm từng buổi và lịch sử lượt làm nằm trong phần kết quả của buổi học.</p></details>
+          <details><summary>Điểm này được tính thế nào?</summary><p>{kind==='kiem-tra-thang'?'Ưu tiên điểm thi trên web khi có cả điểm thi giấy.':'Điểm trung bình các bài được giao trong kỳ. Bài chưa tới hạn mà chưa nộp không tính 0; điểm lấy từ hệ thống MTM.'}</p><p>Chỉ điểm đã chấm đủ mới tính hạng chính thức. Điểm tạm tính của bài tự luận hoặc nộp vở đang chờ chấm chưa tính vào hạng.</p><p>Thời gian tính theo giờ Việt Nam. Điểm từng buổi và lịch sử lượt làm nằm trong phần kết quả của buổi học.</p></details>
         </aside>
         <section className="r104-hw-history" aria-labelledby="r104-hw-history-title"><h2 id="r104-hw-history-title">Lịch sử của em</h2>
-          {history.length?<><p className="r104-hw-history-note">Các buổi em đã nộp, mới nhất ở trên. Điểm là điểm cao nhất của buổi.</p><ol>{history.slice(0,5).map(lesson=><li key={lesson.lessonCode}><button type="button" onClick={()=>select(lesson,true)}><span className="r104-hw-history-date">{dateTime(lesson.submittedAt!)}</span><span className="r104-hw-history-title"><strong>{lessonHomeworkTitle(lesson)}</strong><small>Buổi {dayMonth(lesson.date)} · {lesson.late===true?'Nộp muộn':lesson.late===false?'Đúng hạn':'Chờ xác minh hạn'}</small></span><span className="r104-hw-history-score">{lesson.bestScore!==null?formatScore(lesson.bestScore):<small>Chờ công bố</small>}</span></button></li>)}</ol></>:<p className="r104-hw-history-note">Em chưa có bài nộp nào trên web. Bài đã nộp sẽ hiện ở đây.</p>}
-          {receipts&&<div className="r104-hw-receipts"><h3>Các lượt của buổi {dayMonth(receipts.lesson.date)}</h3><ol>{receipts.receipts.slice(0,3).map(receipt=><li key={receipt.attemptId}><span>Lượt {receipt.attemptNumber}</span><span>{dateTime(receipt.submittedAt)}{receipt.late===true?' · Nộp muộn':''}{receipt.timedOut?' · Nộp khi hết giờ':''}</span><strong>{receipt.score!==null?formatScore(receipt.score):'Chờ công bố'}</strong></li>)}</ol></div>}
+          {history.length?<><p className="r104-hw-history-note">Các buổi em đã nộp, mới nhất ở trên. Điểm là điểm cao nhất của buổi.</p><ol>{history.slice(0,5).map(lesson=><li key={lesson.lessonCode}><button type="button" onClick={()=>select(lesson,true)}><span className="r104-hw-history-date">{dateTime(lesson.submittedAt!)}</span><span className="r104-hw-history-title"><strong>{lessonHomeworkTitle(lesson)}</strong><small>Buổi {dayMonth(lesson.date)} · {lesson.late===true?'Nộp muộn':lesson.late===false?'Đúng hạn':'Chờ xác minh hạn'}</small></span><span className="r104-hw-history-score">{lesson.bestScore!==null?<>{formatScore(lesson.bestScore)}{lesson.pendingGrading&&<small>Tạm tính</small>}</>:<small>{lesson.pendingGrading?'Tạm tính · chờ chấm':'Chờ công bố'}</small>}</span></button></li>)}</ol></>:<p className="r104-hw-history-note">Em chưa có bài nộp nào trên web. Bài đã nộp sẽ hiện ở đây.</p>}
+          {receipts&&<div className="r104-hw-receipts"><h3>Các lượt của buổi {dayMonth(receipts.lesson.date)}</h3><ol>{receipts.receipts.slice(0,3).map(receipt=><li key={receipt.attemptId}><span>Lượt {receipt.attemptNumber}</span><span>{dateTime(receipt.submittedAt)}{receipt.late===true?' · Nộp muộn':''}{receipt.timedOut?' · Nộp khi hết giờ':''}</span><strong>{homeworkReceiptScore(receipt)!==null?<>{homeworkReceiptScore(receipt)}{pendingHomeworkReceipt(receipt)&&<small> · Tạm tính</small>}</>:pendingHomeworkReceipt(receipt)?'Tạm tính · chờ chấm':'Chờ công bố'}</strong></li>)}</ol></div>}
         </section>
       </div>
     </div>
@@ -131,7 +144,7 @@ function LessonPreview({anchor,lesson,status,demo,busy,videoOpen,onVideo,onSelec
       <ul className="r104-hw-preview-facts"><li><span className={'r104-hw-status r104-hw-status--'+status}>{statusLabels[status]}</span></li>
         <li>{due!==null?(lesson.kind==='kiem-tra-thang'?'Đóng: ':'Hạn: ')+dateTime(due):lesson.expectedDueAt!=null?'Hạn dự kiến: '+dateTime(lesson.expectedDueAt):'Hạn: chờ xác minh'}</li>
         {lesson.submittedAt!=null&&<li>Nộp: {dateTime(lesson.submittedAt)}</li>}
-        {lesson.bestScore!==null&&<li>Điểm cao nhất: <strong>{formatScore(lesson.bestScore)}</strong></li>}</ul></div>
+        {lesson.pendingGrading&&lesson.bestScore===null&&<li>Tạm tính · Chờ chấm đủ các phần.</li>}{lesson.bestScore!==null&&<li>{lesson.pendingGrading?'Điểm tạm tính: ':'Điểm cao nhất: '}<strong>{formatScore(lesson.bestScore)}</strong></li>}</ul></div>
     <div className="r104-hw-preview-tools"><button type="button" className="r104-hw-preview-action" disabled={disabled} onClick={()=>onSelect(lesson.lessonCode)}>{action}{!disabled&&<span aria-hidden="true">→</span>}</button>
       <p>{status==='locked'?'Buổi học mở theo lịch của lớp.':status==='preparing'?'BTVN buổi này đang chờ chuẩn bị.':'Mở thông tin bài, chưa bắt đầu lượt làm.'}</p>
       <div className="r104-hw-preview-links">{hasVideo&&<button type="button" aria-expanded={videoOpen} onClick={onVideo}>{videoOpen?'Đóng video':'▶ Xem video'}</button>}{lesson.materialUrl&&<a href={lesson.materialUrl} target="_blank" rel="noopener noreferrer">Tài liệu</a>}{lesson.handoutUrl&&<a href={lesson.handoutUrl} target="_blank" rel="noopener noreferrer">Handout</a>}</div></div>

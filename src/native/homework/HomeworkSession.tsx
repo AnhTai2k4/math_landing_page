@@ -25,6 +25,8 @@ import {RoomQuestionContext} from '../exams/RoomQuestionContext';
 import {questionLabel} from '../exams/attempt-ui';
 import {useUnsavedGuard} from '../exams/navigation-guard';
 import {createHomeworkSaver,REMOTE_SAVE_INITIAL,REMOTE_LEAVE_MESSAGE} from './remote-save';
+import {notifyLeaderboardSubmitted} from './leaderboard-refresh';
+import {acknowledgedHomeworkSubmission} from './result-summary';
 import '../exams/exams.css';
 import './btvn-session.css';
 import './btvn-mobile.css';
@@ -42,7 +44,7 @@ function ManagedAttempt({state,gateway,onState,onPendingChange,saverRef}:{state:
   const last=useRef<Draft|null>(state.draft);
   const saver=useMemo(()=>createHomeworkSaver({
     send:draft=>gateway.call(draft.submittedAt===null?'save':'submit',{lessonCode:state.lessonCode,attemptId:draft.attemptId,answers:draft.answers}),
-    onSaved:onState,
+    onSaved:next=>{onState(next);if(acknowledgedHomeworkSubmission(next))notifyLeaderboardSubmitted();},
     onStatus:status=>{onPendingChange(status.pending);setSave(status);},
   }),[state.draft?.attemptId,gateway]);
   useEffect(()=>{saverRef.current=saver;return()=>{saver.dispose();if(saverRef.current===saver)saverRef.current=null;onPendingChange(false);};},[saver]);

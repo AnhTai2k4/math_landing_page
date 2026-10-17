@@ -1,5 +1,6 @@
 import type {HomeworkReceipt,HomeworkState} from './btvn-contract';
 import {MTM_SCORING_VERSION,roundMtmTotal,type MtmScore,type MtmType} from '../exams/mtm-scoring';
+import {validOfficialHomeworkScore} from './grading-policy';
 
 type SummaryState=Pick<HomeworkState,'draft'|'receipts'|'kind'|'solutionsAvailable'>;
 export const monthlyResultsHidden=(state:Pick<HomeworkState,'kind'|'solutionsAvailable'>)=>state.kind==='kiem-tra-thang'&&state.solutionsAvailable===false;
@@ -88,8 +89,14 @@ export function validatedMtmReceiptSnapshot(receipt:HomeworkReceipt):MtmScore|nu
   }
   return receipt.mtm!;
 }
-export const pendingHomeworkReceipt=(receipt:HomeworkReceipt)=>!!validatedMtmReceiptSnapshot(receipt)&&receipt.mtm!.pending.length>0;
+export const pendingHomeworkReceipt=(receipt:HomeworkReceipt)=>!validOfficialHomeworkScore(receipt.officialScore)&&(receipt.gradingPending===true||!!validatedMtmReceiptSnapshot(receipt)&&receipt.mtm!.pending.length>0);
+export function provisionalHomeworkReceiptScore(receipt:HomeworkReceipt):string|null{
+  // Snapshot MTM có câu chưa chấm được không công bố tổng thiếu phần.
+  if(isMtmHomeworkReceipt(receipt))return null;
+  return validOfficialHomeworkScore(receipt.score)?receipt.score.toLocaleString('vi-VN',{maximumFractionDigits:3}):null;
+}
 export function homeworkReceiptScore(receipt:HomeworkReceipt):string|null{
+  if(validOfficialHomeworkScore(receipt.officialScore))return receipt.officialScore.toLocaleString('vi-VN',{maximumFractionDigits:3});
   if(isMtmHomeworkReceipt(receipt)){
     const score=validatedMtmReceiptSnapshot(receipt);
     return score?.officialDisplayTotal?.replace('.',',')??null;
@@ -158,8 +165,10 @@ export function createHomeworkResultSummary(state:SummaryState):string|null{
     'MINH THÀNH MATH',
     state.kind==='kiem-tra-thang'?'Kết quả kiểm tra cuối tháng':'Kết quả BTVN',
     'Lượt làm: '+receipt.attemptNumber,
-    'Điểm: '+(homeworkReceiptScore(receipt)===null?'Chưa công bố tổng điểm':homeworkReceiptScore(receipt)+'/10'),
-    ...(isMtmHomeworkReceipt(receipt)?['Tổng tính từ điểm gốc bằng phân số chính xác, làm tròn ROUND_HALF_UP đến 2 chữ số thập phân.']:[]),
+    'Điểm: '+(pendingHomeworkReceipt(receipt)?(provisionalHomeworkReceiptScore(receipt)??'Chưa công bố tổng điểm')+(provisionalHomeworkReceiptScore(receipt)!==null?'/10':'')+' (Tạm tính)':homeworkReceiptScore(receipt)===null?'Chưa công bố tổng điểm':homeworkReceiptScore(receipt)+'/10'),
+    ...(pendingHomeworkReceipt(receipt)?['Chờ chấm đủ các phần; điểm tạm chưa được tính vào hạng chính thức.']:[]),
+    ...(isMtmHomeworkReceipt(receipt)&&!validOfficialHomeworkScore(receipt.officialScore)?['Tổng tính từ điểm gốc bằng phân số chính xác, làm tròn ROUND_HALF_UP đến 2 chữ số thập phân.']:[]),
+    ...(validOfficialHomeworkScore(receipt.officialScore)?['Điểm chính thức được giáo vụ xác nhận sau khi chấm đủ các phần.']:[]),
     'Nộp lúc: '+date+' (giờ Việt Nam)',
     'Thời gian làm bài: '+minutes+' phút '+seconds+' giây',
     'Hạn nộp: '+(receipt.late===null?'Chờ xác minh':receipt.late?'Nộp muộn':'Đúng hạn'),
