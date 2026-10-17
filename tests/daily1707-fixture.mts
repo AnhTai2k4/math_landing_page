@@ -1,0 +1,10 @@
+// Đề và lượt GIẢ chỉ để kiểm thử trong RAM, không đọc dữ liệu học sinh.
+import type {PracticeExam} from '../src/native/exams/data';
+import type {Draft} from '../src/native/exams/store';
+export const exam:PracticeExam={id:'mtm-preview-recall-fake',title:'Đề GIẢ cho thẻ tự ôn',grade:10,period:'GK1',durationMinutes:10,rubricVersion:'MTM-FLEX-10-v1',versionHash:'a'.repeat(64),sourceHash:'b'.repeat(64),sourceRef:'Đề GIẢ kiểm thử local',sourceUrl:'https://example.invalid/de-gia',sourceMaterial:{title:'Đề GIẢ',publisher:'Kiểm thử cục bộ',version:'fake-v1',locator:'4 câu giả'},publicationVerified:true,questionDisplayVerified:true,answerKeyVerified:true,rubricVerified:true,questionCount:4,sections:[{label:'I · Trắc nghiệm',kind:'mc',count:2},{label:'II · Đúng sai',kind:'tf',count:1},{label:'III · Trả lời ngắn',kind:'short',count:1}],questions:[
+  {id:'fake-correct',sourceRef:'Đề GIẢ, câu 1',kind:'mc',maxMillipoints:2000,prompt:'Tính $1+1$.',choices:['1','2','3','4'],answer:'B',solution:'$1+1=2$.'},
+  {id:'fake-wrong',sourceRef:'Đề GIẢ, câu 2',kind:'mc',maxMillipoints:2000,prompt:'Giải $2x+1=5$.',choices:['-2','0','2','4'],answer:'C',solution:'Trừ 1 ở hai vế được $2x=4$, chia cho 2 được $x=2$.'},
+  {id:'fake-partial',sourceRef:'Đề GIẢ, câu 3',kind:'tf',maxMillipoints:4000,prompt:'Cho $x=2$, xét đúng sai.',statements:['$x>0$','$x^2=4$','$x+1=2$','$x$ chẵn'],answer:[true,true,false,true],pointsByCorrectCount:[0,1000,2000,3000,4000],solution:'Thay $x=2$: a, b, d đúng, c sai vì $2+1=3$.'},
+  {id:'fake-blank',sourceRef:'Đề GIẢ, câu 4',kind:'short',mode:'rational',maxMillipoints:2000,prompt:'Giải $2x=1$.',acceptedAnswers:['1/2'],solution:'Chia hai vế cho 2 được $x=1/2$.'},
+]};
+export const draft:Draft={version:1,examId:exam.id,examVersionHash:exam.versionHash,rubricVersion:exam.rubricVersion,attemptId:'luot-gia-recall',startedAt:1000,deadline:601000,updatedAt:2000,submittedAt:2000,revision:1,answers:{'fake-correct':'B','fake-wrong':'A','fake-partial':[true,false,false,true],'fake-blank':''}};

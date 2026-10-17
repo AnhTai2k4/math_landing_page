@@ -6,16 +6,18 @@ import type {PracticeExam,PracticeQuestion} from './data';
 import type {Draft} from './store';
 import MtmSourceContent from './MtmSourceContent';
 import MtmSourceQuestion from './MtmSourceQuestion';
-import {displayAnswer,formatPoints,reviewRows,statementLetters,STATUS_LABELS} from './review';
+import {displayAnswer,formatPoints,reviewRows,statementLetters,STATUS_LABELS,type ReviewStatus} from './review';
 import {displayKeyAnswer,questionLabel} from './attempt-ui';
 import {hasReadableTfStatements} from './question-statements';
 import {MTM_SCORING_VERSION} from './mtm-scoring';
+import './review-filters-v2.css';
 const DetailedSolution=lazy(()=>import('./DetailedSolution'));
 const SolutionPdf=lazy(()=>import('../admin/SolutionPdf'));
 const hasReviewableKey=(q:PracticeQuestion)=>q.kind==='mc'?['A','B','C','D'].includes(q.answer):q.kind==='tf'?Array.isArray(q.answer)&&q.answer.length===4&&q.answer.every(value=>typeof value==='boolean'):q.kind==='short'?Array.isArray(q.acceptedAnswers)&&q.acceptedAnswers.length>0&&q.acceptedAnswers.every(value=>typeof value==='string'&&!!value.trim()):false;
 
-export default function ExamReview({exam,draft,initialQuestionId,renderText,renderSolutionExtra,showSummary=true}:{exam:PracticeExam;draft:Draft;initialQuestionId?:string;showSummary?:boolean;renderText?:(text:string)=>ReactNode;renderSolutionExtra?:(q:PracticeQuestion)=>ReactNode}) {
-  const [filter,setFilter]=useState<'all'|'mistakes'|'unanswered'>('all');
+export default function ExamReview({exam,draft,initialQuestionId,renderText,renderSolutionExtra,showSummary=true,advancedFilters=false}:{exam:PracticeExam;draft:Draft;initialQuestionId?:string;showSummary?:boolean;advancedFilters?:boolean;renderText?:(text:string)=>ReactNode;renderSolutionExtra?:(q:PracticeQuestion)=>ReactNode}) {
+  const [filter,setFilter]=useState<'all'|'mistakes'|ReviewStatus>('all');
+  const [section,setSection]=useState('all');
   const [expanded,setExpanded]=useState<Set<string>>(()=>new Set(draft.submittedAt!==null&&initialQuestionId?[initialQuestionId]:[]));
   const [focusQuestion,setFocusQuestion]=useState<number|null>(()=>{const index=exam.questions.findIndex(q=>q.id===initialQuestionId);return draft.submittedAt!==null&&index>=0?index:null;});
   const instance=useId();
@@ -23,7 +25,8 @@ export default function ExamReview({exam,draft,initialQuestionId,renderText,rend
   if(draft.submittedAt===null)return null;
   const mtm=exam.rubricVersion===MTM_SCORING_VERSION;
   const keyReady=(q:PracticeQuestion,status:string)=>!mtm||status!=='unscored'&&hasReviewableKey(q);
-  const rows=reviewRows(exam,draft),visible=rows.filter(r=>filter==='all'||(filter==='mistakes'?r.status!=='correct'&&r.status!=='self':r.status==='unanswered'));
+  const parts=examSections(exam),selectedPart=advancedFilters?parts.find(part=>String(part.from)===section):undefined;
+  const rows=reviewRows(exam,draft),visible=rows.filter(r=>(!selectedPart||r.index>=selectedPart.from&&r.index<selectedPart.to)&&(filter==='all'||(filter==='mistakes'?r.status!=='correct'&&r.status!=='self':r.status===filter)));
   const wrong=rows.filter(r=>r.status!=='correct'&&r.status!=='self').length,blank=rows.filter(r=>r.status==='unanswered').length;
   const allOpen=visible.length>0&&visible.every(r=>expanded.has(r.q.id));
   return <section className="ep-result-review" aria-label="Đối chiếu bài đã nộp">
@@ -31,14 +34,16 @@ export default function ExamReview({exam,draft,initialQuestionId,renderText,rend
     {exam.mtmDocuments?.solutions&&<p><a href={exam.mtmDocuments.solutions.url} target="_blank" rel="noopener noreferrer">Tải đáp án và lời giải PDF theo mẫu MTM</a></p>}{exam.solutionInstructions&&<details><summary>Hướng dẫn lời giải</summary><MtmSourceContent segments={exam.solutionInstructions} assetBase="/practice-media/source-crops" label="Hướng dẫn giải" kind="solution"/></details>}
     {showSummary&&<ResultSummary exam={exam} draft={draft}/>}
     <h2>Tổng quan câu trả lời</h2>
-    <nav className="ep-result-nav-wrap" aria-label="Tổng quan đúng sai">{examSections(exam).map(part=><section key={part.name}><h3>{part.name}</h3><div className="ep-question-nav ep-result-nav">{rows.slice(part.from,part.to).map(r=><button type="button" key={r.q.id} className={`ep-verdict-${r.status}`} aria-label={`${questionLabel(exam,r.index).full}: ${STATUS_LABELS[r.status]}`} onClick={()=>{setFilter('all');setFocusQuestion(r.index);}}>{r.index-part.from+1}</button>)}</div></section>)}</nav>
+    <nav className="ep-result-nav-wrap" aria-label="Tổng quan đúng sai">{parts.map(part=><section key={part.name}><h3>{part.name}</h3><div className="ep-question-nav ep-result-nav">{rows.slice(part.from,part.to).map(r=><button type="button" key={r.q.id} className={`ep-verdict-${r.status}`} aria-label={`${questionLabel(exam,r.index).full}: ${STATUS_LABELS[r.status]}`} onClick={()=>{setFilter('all');setSection('all');setFocusQuestion(r.index);}}>{r.index-part.from+1}</button>)}</div></section>)}</nav>
     <p>Đúng toàn bộ: {rows.filter(r=>r.status==='correct').length} · Đúng một phần: {rows.filter(r=>r.status==='partial').length} · Chưa đúng: {rows.filter(r=>r.status==='wrong').length} · Bỏ trống: {blank}.</p>
     <div className="ep-review-filters" role="group" aria-label="Lọc câu đã nộp">
       <button type="button" aria-pressed={filter==='all'} onClick={()=>setFilter('all')}>Tất cả câu ({rows.length})</button>
       <button type="button" aria-pressed={filter==='mistakes'} onClick={()=>setFilter('mistakes')}>Câu sai / chưa đủ điểm ({wrong})</button>
       <button type="button" aria-pressed={filter==='unanswered'} onClick={()=>setFilter('unanswered')}>Câu bỏ trống ({blank})</button>
+      {advancedFilters&&(['correct','partial','wrong','unscored','self'] as const).map(status=><button type="button" key={status} aria-pressed={filter===status} onClick={()=>setFilter(status)}>{STATUS_LABELS[status]} ({rows.filter(row=>row.status===status).length})</button>)}
       <button type="button" disabled={!visible.length} onClick={()=>setExpanded(previous=>{const next=new Set(previous);for(const r of visible)allOpen?next.delete(r.q.id):next.add(r.q.id);return next;})}>{allOpen?'Thu gọn lời giải':'Mở lời giải các câu đang xem'}</button>
     </div>
+    {advancedFilters&&<label className="ep-review-section-filter">Lọc theo phần của đề<select value={selectedPart?section:'all'} onChange={event=>setSection(event.target.value)}><option value="all">Tất cả phần</option>{parts.map(part=><option key={part.from} value={String(part.from)}>{part.label}</option>)}</select><small>Kết hợp với trạng thái đã chọn. Số trên các nút tính cho toàn đề.</small></label>}
     <p role="status">Đang xem {visible.length}/{rows.length} câu. Câu đúng/sai có đủ văn bản được đối chiếu từng ý; câu đúng một phần vẫn nằm trong mục chưa đủ điểm.</p>
     {!visible.length&&<p>Không có câu trong mục này.</p>}
     {visible.map(({q,index,answer,earned,status,invalidNumeric})=><section className="ep-question ep-card" key={q.id} id={`${instance}-card-${index}`} tabIndex={-1} aria-labelledby={`${instance}-q-${index}`}>

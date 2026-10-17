@@ -1,6 +1,7 @@
 import {useEffect,useRef,useState,type KeyboardEvent} from 'react';
 import NotebookImport from './NotebookImport';
 import NotebookRhythm from './NotebookRhythm';
+import NotebookFormulaLauncher from './NotebookFormulaLauncher';
 import {BEFORE_NAVIGATION_EVENT} from './navigation';
 import {NOTEBOOK_KEY as KEY,emptyNotebook as empty,parseNotebook,saveNotebook,type Task,type Store} from './notebook-store';
 import {CalendarDays,CheckCircle2,ChevronLeft,ChevronRight,Download,Pencil,Plus,Save,Trash2,X} from 'lucide-react';
@@ -55,14 +56,23 @@ export default function Notebook(){
  const [store,setStore]=useState<Store>(initial.data),[title,setTitle]=useState(recovery.draft?.title??''),[minutes,setMinutes]=useState(String(recovery.draft?.minutes??30)),[goalDraft,setGoalDraft]=useState<string|null>(recoveredGoal);
  const [editingId,setEditingId]=useState<string|null>(recoveredEdit?.id??null),[editingText,setEditingText]=useState(recoveredEdit?.text??''),[editingMinutes,setEditingMinutes]=useState(String(recoveredEdit?.minutes??30));
  const [draftStorageError,setDraftStorageError]=useState('');
+ const [taskFilter,setTaskFilter]=useState<'all'|'pending'|'done'>('all');
+ const [taskFocus,setTaskFocus]=useState<{id:string|null;revision:number}>({id:null,revision:0});
+ const nextTaskCheckbox=useRef<HTMLInputElement>(null),activeTaskFilter=useRef<HTMLButtonElement>(null);
  const [storageNotice,setStorageNotice]=useState(initial.error),[storageConflict,setStorageConflict]=useState('');
  const monthKey=keyFor(month).slice(0,7),offset=(month.getDay()+6)%7;
  const days=Array.from({length:42},(_,i)=>new Date(month.getFullYear(),month.getMonth(),i-offset+1));
  const tasks=store.days[date]??[],monthTasks=Object.entries(store.days).filter(([k])=>k.startsWith(monthKey)),completed=monthTasks.flatMap(([,v])=>v).filter(t=>t.done);
  const editingTask=editingId?tasks.find(t=>t.id===editingId):undefined;
+ const dayCompleted=tasks.filter(t=>t.done).length;
+ const matchesFilter=(task:Task)=>taskFilter==='all'||(taskFilter==='done'?task.done:!task.done);
+ const visibleTasks=tasks.filter(task=>matchesFilter(task)||task.id===editingId);
+ const editingOutsideFilter=!!editingTask&&!matchesFilter(editingTask);
  const orphanEdit=!!editingId&&!editingTask;
  const goalDirty=goalDraft!==null&&goalDraft!==(store.goals[monthKey]??''),editDirty=!!editingId&&(!editingTask||editingText!==editingTask.text||editingMinutes!==String(editingTask.minutes));
  const taskDraftDirty=!!title.trim()||minutes!=='30'||editDirty,dirty=taskDraftDirty||goalDirty;
+
+ useEffect(()=>{if(taskFocus.revision)(taskFocus.id?nextTaskCheckbox.current:activeTaskFilter.current)?.focus();},[taskFocus]);
 
  function discardSessionDraft(){
   try{sessionStorage.removeItem(DRAFT_KEY);setDraftStorageError('');return true;}
@@ -124,8 +134,17 @@ export default function Notebook(){
   if(!next)return;e.preventDefault();const key=keyFor(next);if(!confirmDayChange(key))return;requestAnimationFrame(()=>calendarButtons.current.get(key)?.focus());
  }
  function update(nextTasks:Task[],message='Đã lưu trên trình duyệt này.'){return persist({...store,days:{...store.days,[date]:nextTasks}},message);}
+ function focusAfterTaskRemoval(id:string,nextTasks:Task[],nextEditingId=editingId){
+  const remaining=nextTasks.filter(task=>matchesFilter(task)||task.id===nextEditingId);
+  if(remaining.some(task=>task.id===id))return;
+  const index=visibleTasks.findIndex(task=>task.id===id),adjacent=remaining[Math.min(index,remaining.length-1)];
+  const next=adjacent?.id===nextEditingId?remaining.find(task=>task.id!==nextEditingId):adjacent;
+  setTaskFocus(previous=>({id:next?.id??null,revision:previous.revision+1}));
+ }
+ function toggleTask(task:Task,done:boolean){const next=tasks.map(item=>item.id===task.id?{...item,done}:item);if(update(next))focusAfterTaskRemoval(task.id,next);}
+ function finishEdit(task:Task){setEditingId(null);setEditingText('');if(matchesFilter(task))setTaskFocus(previous=>({id:task.id,revision:previous.revision+1}));else focusAfterTaskRemoval(task.id,tasks,null);}
  function startEdit(task:Task){if(taskDraftDirty&&!confirm('Bỏ phần đang gõ để sửa việc khác?'))return;setTitle('');setMinutes('30');setEditingId(task.id);setEditingText(task.text);setEditingMinutes(String(task.minutes));setError('');setNotice('');}
- function saveEdit(task:Task){const text=editingText.trim();if(!text){setError('Nội dung việc không được để trống.');return;}const parsedMinutes=parseMinutes(editingMinutes);if(parsedMinutes===null){setError('Số phút phải là số nguyên từ 0 đến 1440.');return;}if(update(tasks.map(t=>t.id===task.id?{...t,text,minutes:parsedMinutes}:t),'Đã lưu thay đổi của việc trên trình duyệt.')){setEditingId(null);setEditingText('');}}
+ function saveEdit(task:Task){const text=editingText.trim();if(!text){setError('Nội dung việc không được để trống.');return;}const parsedMinutes=parseMinutes(editingMinutes);if(parsedMinutes===null){setError('Số phút phải là số nguyên từ 0 đến 1440.');return;}if(update(tasks.map(t=>t.id===task.id?{...t,text,minutes:parsedMinutes}:t),'Đã lưu thay đổi của việc trên trình duyệt.'))finishEdit(task);}
  function exportData(){try{const content=localStorage.getItem(KEY)??JSON.stringify(store,null,2);const blob=new Blob([content],{type:'application/json'});const href=URL.createObjectURL(blob),a=document.createElement('a');a.href=href;a.download='MTM-so-tay-ca-nhan-'+keyFor(new Date())+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(href),1000);}catch(e){setError(e instanceof Error?e.message:'Không xuất được bản lưu từ trình duyệt.');}}
 
  return <div className="mig-container mig-notebook">
@@ -134,6 +153,7 @@ export default function Notebook(){
   {(storageNotice||storageConflict||error||draftStorageError)&&<p role="alert" className="mig-error">{storageNotice||storageConflict||error||draftStorageError}</p>}
   <div className="mig-notebook-stats"><article><span>Ngày đã lên kế hoạch</span><b>{monthTasks.filter(([,t])=>t.length).length}</b></article><article><span>Việc đã hoàn thành</span><b>{completed.length}</b></article><article><span>Phút theo các việc đã đánh dấu</span><b>{completed.reduce((s,t)=>s+t.minutes,0)}</b></article></div>
   <NotebookRhythm days={store.days} today={keyFor(today)} selectedDate={date} onSelectDay={confirmDayChange} unavailable={!!storageNotice||!!storageConflict} unavailableMessage={storageConflict||undefined}/>
+  <NotebookFormulaLauncher/>
   <div className="mig-notebook-grid">
    <section className="mig-panel"><div className="mig-calendar-heading"><h2>Tháng {month.getMonth()+1}, {month.getFullYear()}</h2><div><button type="button" className="mig-icon-button" aria-label="Tháng trước" onClick={()=>move(-1)}><ChevronLeft/></button><button type="button" className="mig-icon-button" aria-label="Tháng sau" onClick={()=>move(1)}><ChevronRight/></button></div></div>
     <div className="mig-calendar" role="group" aria-label="Chọn ngày lập kế hoạch">{['T.2','T.3','T.4','T.5','T.6','T.7','CN'].map(d=><span className="mig-calendar-weekday" key={d}>{d}</span>)}{days.map(d=>{const key=keyFor(d),has=(store.days[key]||[]).length>0;return <button ref={node=>{if(node)calendarButtons.current.set(key,node);else calendarButtons.current.delete(key);}} type="button" key={key} tabIndex={date===key?0:-1} className={(d.getMonth()!==month.getMonth()?'is-outside ':'')+(key===keyFor(today)?'is-today':'')} aria-pressed={date===key} aria-label={key+(has?' · đã có kế hoạch':'')} onClick={()=>confirmDayChange(key)} onKeyDown={e=>moveCalendarFocus(e,d)}>{d.getDate()}<span className={has?'has-plan':''}/></button>;})}</div>
@@ -143,7 +163,10 @@ export default function Notebook(){
    <section className="mig-panel"><div className="mig-calendar-heading"><div><p className="mig-eyebrow">KẾ HOẠCH TRONG NGÀY</p><h2>{date.split('-').reverse().join('/')}</h2></div><CheckCircle2 size={26}/></div>
     {orphanEdit&&<div className="mig-error" role="status"><b>Bản sửa chưa tìm thấy việc gốc</b><p>Phần sửa được giữ lại để em sao chép. Chưa lưu và chưa ghép phần sửa này vào việc nào. Chuyển ngày hoặc rời trang sẽ hỏi trước khi bỏ phần chưa lưu.</p><label className="mig-field">Nội dung bản sửa chưa ghép<textarea aria-label="Nội dung bản sửa chưa ghép" readOnly rows={3} value={editingText}/></label><p>Số phút đang nhập: {editingMinutes||'(để trống)'}</p></div>}
     <form onSubmit={e=>{e.preventDefault();if(!title.trim())return;const parsedMinutes=parseMinutes(minutes);if(parsedMinutes===null){setError('Số phút phải là số nguyên từ 0 đến 1440.');return;}if(tasks.length>=30){setError('Mỗi ngày tối đa 30 việc.');return;}if(persist({...store,days:{...store.days,[date]:[...tasks,{id:crypto.randomUUID(),text:title.trim(),minutes:parsedMinutes,done:false}]}},'Đã thêm việc vào bản nháp trên trình duyệt.')){setTitle('');setMinutes('30');}}}><label className="mig-field">Việc cần làm<input maxLength={400} value={title} required placeholder="Ví dụ: Ôn lại điều kiện xác định của hàm số" onChange={e=>setTitle(e.target.value)}/></label><div className="mig-task-add"><label className="mig-field">Dự kiến (phút)<input type="text" inputMode="decimal" maxLength={32} value={minutes} onChange={e=>setMinutes(e.target.value)}/></label><button className="mig-button gold" type="submit"><Plus size={17}/>Thêm việc</button></div></form>
-    <div className="mig-task-list">{tasks.length?tasks.map(t=><article key={t.id} className={t.done?'done':''}>{editingId===t.id?<div className="mig-task-edit"><label className="mig-field">Nội dung việc<input autoFocus maxLength={400} value={editingText} onChange={e=>setEditingText(e.target.value)}/></label><label className="mig-field">Dự kiến (phút)<input type="text" inputMode="decimal" maxLength={32} value={editingMinutes} onChange={e=>setEditingMinutes(e.target.value)}/></label><div className="mig-task-edit-actions"><button type="button" className="mig-button primary" onClick={()=>saveEdit(t)}><Save size={15}/>Lưu thay đổi</button><button type="button" className="mig-button outline" onClick={()=>{setEditingId(null);setEditingText('');setError('');}}><X size={15}/>Hủy sửa</button></div></div>:<><label><input type="checkbox" checked={t.done} onChange={e=>update(tasks.map(x=>x.id===t.id?{...x,done:e.target.checked}:x))}/><span>{t.text}<small>{t.minutes} phút dự kiến</small></span></label><div className="mig-task-actions"><button type="button" className="mig-icon-button" aria-label={'Sửa việc '+t.text} onClick={()=>startEdit(t)}><Pencil size={16}/></button><button type="button" className="mig-icon-button" aria-label={'Xóa việc '+t.text} onClick={()=>{if(confirm('Xóa việc này khỏi bản nháp?'))update(tasks.filter(x=>x.id!==t.id),'Đã xóa việc khỏi bản nháp trên trình duyệt.');}}><Trash2 size={16}/></button></div></>}</article>):<div className="mig-empty"><CalendarDays size={34}/><h3>Một ngày mới, một kế hoạch mới</h3><p>Thêm việc đầu tiên và đánh dấu khi em đã hoàn thành.</p></div>}</div>
+    <div className="mig-task-filters" role="group" aria-label="Lọc việc trong ngày">{([{id:'all',label:'Tất cả',count:tasks.length},{id:'pending',label:'Chưa xong',count:tasks.length-dayCompleted},{id:'done',label:'Đã xong',count:dayCompleted}] as const).map(filter=><button key={filter.id} id={'notebook-task-filter-'+filter.id} ref={taskFilter===filter.id?activeTaskFilter:undefined} type="button" aria-pressed={taskFilter===filter.id} onClick={()=>setTaskFilter(filter.id)}>{filter.label} ({filter.count})</button>)}</div>
+    <p className="mig-task-filter-count" role="status">Đang hiện {visibleTasks.length}/{tasks.length} việc trong ngày.</p>
+    {editingOutsideFilter&&<p className="mig-task-filter-edit-note">Việc đang sửa được giữ trong danh sách để em lưu hoặc hủy sửa.</p>}
+    <div className="mig-task-list">{visibleTasks.length?visibleTasks.map(t=><article key={t.id} className={t.done?'done':''}>{editingId===t.id?<div className="mig-task-edit"><label className="mig-field">Nội dung việc<input autoFocus maxLength={400} value={editingText} onChange={e=>setEditingText(e.target.value)}/></label><label className="mig-field">Dự kiến (phút)<input type="text" inputMode="decimal" maxLength={32} value={editingMinutes} onChange={e=>setEditingMinutes(e.target.value)}/></label><div className="mig-task-edit-actions"><button type="button" className="mig-button primary" onClick={()=>saveEdit(t)}><Save size={15}/>Lưu thay đổi</button><button type="button" className="mig-button outline" onClick={()=>{finishEdit(t);setError('');}}><X size={15}/>Hủy sửa</button></div></div>:<><label><input id={'notebook-task-'+t.id} ref={taskFocus.id===t.id?nextTaskCheckbox:undefined} type="checkbox" checked={t.done} onChange={e=>toggleTask(t,e.target.checked)}/><span>{t.text}<small>{t.minutes} phút dự kiến</small></span></label><div className="mig-task-actions"><button type="button" className="mig-icon-button" aria-label={'Sửa việc '+t.text} onClick={()=>startEdit(t)}><Pencil size={16}/></button><button type="button" className="mig-icon-button" aria-label={'Xóa việc '+t.text} onClick={()=>{if(!confirm('Xóa việc này khỏi bản nháp?'))return;const next=tasks.filter(x=>x.id!==t.id);if(update(next,'Đã xóa việc khỏi bản nháp trên trình duyệt.'))focusAfterTaskRemoval(t.id,next);}}><Trash2 size={16}/></button></div></>}</article>):tasks.length?<div className="mig-empty"><CheckCircle2 size={34}/><h3>{taskFilter==='pending'?'Không còn việc chưa xong':'Chưa có việc đã xong'}</h3><p>{taskFilter==='pending'?'Các việc trong ngày đã được đánh dấu hoàn thành.':'Đánh dấu khi em hoàn thành một việc.'} Chọn Tất cả để xem lại kế hoạch.</p></div>:<div className="mig-empty"><CalendarDays size={34}/><h3>Một ngày mới, một kế hoạch mới</h3><p>Thêm việc đầu tiên và đánh dấu khi em đã hoàn thành.</p></div>}</div>
     <p role="status" aria-live="polite" className="mig-saved-note">{notice}</p>
    </section>
   </div>

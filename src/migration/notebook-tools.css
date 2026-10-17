@@ -1,0 +1,28 @@
+.mig-notebook .mig-notebook-formula{margin:24px 0;padding:24px;border:1px solid #dce1ec;border-radius:18px;background:#fff;color:#213269}
+.mig-notebook-formula .mig-formula-heading{display:flex;align-items:center;justify-content:space-between;gap:18px}
+.mig-notebook-formula .mig-formula-heading h2{font-size:24px;line-height:1.3;margin:0 0 8px}
+.mig-notebook-formula p{font-size:15px;line-height:1.6;margin:8px 0;color:#425273}
+.mig-notebook .mig-notebook-formula button,.mig-notebook .mig-task-filters button{min-width:44px;min-height:44px;border:1px solid #aab5ce;border-radius:10px;background:#fff;color:#213269;font:inherit;padding:10px 14px;cursor:pointer;line-height:1.4}
+.mig-notebook .mig-notebook-formula button:focus-visible,.mig-notebook .mig-task-filters button:focus-visible{outline:3px solid #213269;outline-offset:3px;box-shadow:0 0 0 6px #FFCF24}
+.mig-notebook .mig-formula-heading>button{background:#FFCF24;border-color:#FFCF24;font-weight:700;flex-shrink:0}
+.mig-notebook-formula .mig-formula-game{margin-top:20px;padding-top:20px;border-top:1px solid #dce1ec}
+.mig-notebook-formula .mig-formula-decks{border:0;padding:0;margin:0 0 12px;min-width:0}
+.mig-notebook-formula legend{font-weight:700;margin-bottom:8px}
+.mig-notebook-formula .mig-formula-decks>div,.mig-notebook-formula .mig-formula-summary>div,.mig-notebook .mig-task-filters{display:flex;flex-wrap:wrap;gap:8px}
+.mig-notebook .mig-notebook-formula button[aria-pressed=true],.mig-notebook .mig-task-filters button[aria-pressed=true]{background:#213269;color:#fff;border-color:#213269}
+.mig-notebook-formula .mig-formula-progress{padding:10px 14px;background:#fff8dc;border-radius:10px;color:#213269;font-weight:700}
+.mig-notebook-formula .mig-formula-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:16px 0}
+.mig-notebook-formula .mig-formula-columns h3,.mig-notebook-formula .mig-formula-solutions h3,.mig-notebook-formula .mig-formula-summary h3{font-size:17px;line-height:1.4;margin:0 0 10px}
+.mig-notebook .mig-formula-columns button{display:flex;width:100%;min-height:92px;flex-direction:column;justify-content:center;gap:6px;text-align:left;margin-top:10px;overflow-wrap:anywhere}
+.mig-notebook .mig-formula-columns button b{font-size:18px}
+.mig-notebook .mig-formula-columns button small{font-size:13px;line-height:1.5}
+.mig-notebook .mig-formula-columns button:disabled{cursor:default;background:#f1f4fa;color:#536382;border-color:#dce1ec;opacity:1}
+.mig-notebook-formula .mig-formula-feedback{min-height:48px;background:#f4f6fb;padding:14px;border-radius:12px;color:#213269}
+.mig-notebook-formula .mig-formula-solutions ul{padding-left:20px;margin:0}
+.mig-notebook-formula .mig-formula-solutions li{padding:8px 0;font-size:15px;line-height:1.6}
+.mig-notebook-formula .mig-formula-summary{background:#fff8dc;padding:16px;border:1px solid #FFCF24;border-radius:12px;margin-top:16px}
+.mig-notebook-formula .mig-formula-caption{font-size:13px;margin-top:16px}
+.mig-notebook .mig-task-filters{margin-top:20px}
+.mig-notebook .mig-task-list input[type=checkbox]:focus-visible{outline:3px solid #213269;outline-offset:3px}
+.mig-notebook .mig-task-filter-count,.mig-notebook .mig-task-filter-edit-note{font-size:14px;color:#425273;line-height:1.6;margin:10px 0}
+@media(max-width:680px){.mig-notebook .mig-notebook-formula{padding:18px}.mig-notebook-formula .mig-formula-heading{align-items:stretch;flex-direction:column}.mig-notebook-formula .mig-formula-columns{gap:8px}.mig-notebook .mig-formula-columns button{padding:10px 8px;min-height:110px}.mig-notebook-formula .mig-formula-columns h3{font-size:15px}.mig-notebook .mig-formula-columns button b{font-size:16px}}
