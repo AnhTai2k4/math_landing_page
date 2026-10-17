@@ -1,6 +1,8 @@
-export const MINER_VERSION='1.0';
+import {STUDY_GAME_TOPICS,studyGameQuestions,type StudyGameQuestion} from '../playground/study-game-bank';
+export const MINER_VERSION='2.0';
 export type MinerLane=0|1|2;
-export type MinerQuestion={id:string;prompt:string;answers:[string,string,string];correct:MinerLane;steps:string[];tip:string};
+export type MinerMode='standard'|'practice';
+export type MinerQuestion={id:string;prompt:string;answers:readonly [string,string,string];correct:MinerLane;steps:string[];tip:string;grade?:StudyGameQuestion['grade'];chapter?:string;lesson?:string;type?:string;level?:StudyGameQuestion['level']};
 /** Bộ ôn đại số nền tảng lớp 9, 10 do MTM tự biên soạn, tách khỏi mọi đề đã đăng. */
 export const MINER_QUESTIONS:MinerQuestion[]=[
   {id:'miner-1',prompt:'Tìm x: 4(x − 1) − 3 = 13.',answers:['3','5','4'],correct:1,steps:['4(x − 1) − 3 = 13 ⇔ 4x − 4 − 3 = 13.','4x − 7 = 13 ⇔ 4x = 20 ⇔ x = 5.','Thử lại: 4(5 − 1) − 3 = 16 − 3 = 13.'],tip:'Nhân vào ngoặc trước, rồi chuyển các số sang cùng một vế.'},
@@ -12,9 +14,17 @@ export const MINER_QUESTIONS:MinerQuestion[]=[
   {id:'miner-7',prompt:'Tìm x < 0 biết |2x − 3| = 7.',answers:['5','−5','−2'],correct:2,steps:['|2x − 3| = 7 ⇔ 2x − 3 = 7 hoặc 2x − 3 = −7.','Nhánh thứ nhất: 2x = 10 ⇔ x = 5. Nhánh thứ hai: 2x = −4 ⇔ x = −2.','Vì x < 0, chỉ nhận x = −2.','Thử lại: |2 × (−2) − 3| = |−7| = 7.'],tip:'Giá trị tuyệt đối bằng 7 cho hai nhánh 7 và −7.'},
   {id:'miner-8',prompt:'Tìm x: √(2x + 1) = x − 1.',answers:['0','4','−4'],correct:1,steps:['Căn bậc hai không âm, nên x − 1 ≥ 0, tức x ≥ 1. Điều kiện này cũng bảo đảm 2x + 1 ≥ 0.','Với x ≥ 1, bình phương hai vế: 2x + 1 = (x − 1)² = x² − 2x + 1.','x² − 4x = 0 ⇔ x(x − 4) = 0, nên x = 0 hoặc x = 4.','Loại x = 0 vì không thỏa x ≥ 1. Nhận x = 4.','Thử lại: √(2 × 4 + 1) = √9 = 3 = 4 − 1.'],tip:'Trước khi bình phương, xét dấu vế không chứa căn để tránh nghiệm ngoại lai.'},
 ];
+/** Chỉ chương 1 đã có ngân hàng THPT được kiểm. Chương khác không nhận câu thay thế. */
+export function minerChapter(track?:string,chapter?:string){
+  if(chapter!=='1')return null;
+  const topic=STUDY_GAME_TOPICS.find(t=>String(t.grade)===track);
+  if(!topic)return null;
+  const questions:MinerQuestion[]=studyGameQuestions(topic.grade,topic.id).map(q=>({...q,steps:q.explanation.split(/(?<=\.)\s+/u)}));
+  return {...topic,questions};
+}
 export type MinerResult={question:number;chosen:MinerLane;correct:boolean};
-export type MinerState={phase:'ready'|'intro'|'playing'|'feedback'|'paused'|'finished';resume:'intro'|'playing'|null;queue:number[];cursor:number;lane:MinerLane;x:number;dig:number;intro:number;elapsed:number;hearts:number;score:number;combo:number;bestCombo:number;results:MinerResult[]};
-export const freshMiner=(queue:number[]=MINER_QUESTIONS.map((_,i)=>i)):MinerState=>({phase:'ready',resume:null,queue:queue.filter((q,i)=>Number.isInteger(q)&&q>=0&&q<MINER_QUESTIONS.length&&queue.indexOf(q)===i),cursor:0,lane:1,x:.5,dig:0,intro:0,elapsed:0,hearts:3,score:0,combo:0,bestCombo:0,results:[]});
+export type MinerState={phase:'ready'|'intro'|'playing'|'feedback'|'paused'|'finished';resume:'intro'|'playing'|null;mode:MinerMode;scope:string|null;questions:readonly MinerQuestion[];queue:number[];cursor:number;lane:MinerLane;x:number;dig:number;intro:number;elapsed:number;hearts:number;score:number;combo:number;bestCombo:number;results:MinerResult[]};
+export const freshMiner=(queue?:number[],mode:MinerMode='standard',questions:readonly MinerQuestion[]=MINER_QUESTIONS,scope:string|null=null):MinerState=>{const requested=queue??questions.map((_,i)=>i);return {phase:'ready',resume:null,mode,scope,questions,queue:requested.filter((q,i)=>Number.isInteger(q)&&q>=0&&q<questions.length&&requested.indexOf(q)===i),cursor:0,lane:1,x:.5,dig:0,intro:0,elapsed:0,hearts:3,score:0,combo:0,bestCombo:0,results:[]};};
 export const startMiner=(state:MinerState,reduced=false):MinerState=>state.phase!=='ready'?state:{...state,phase:state.queue.length?(reduced?'playing':'intro'):'finished'};
 export const moveMiner=(state:MinerState,direction:-1|1,reduced=false):MinerState=>{
   if(state.phase!=='playing'||state.dig>0||(direction!==-1&&direction!==1))return state;
@@ -25,8 +35,8 @@ export const canDigMiner=(state:MinerState)=>state.phase==='playing'&&state.dig=
 export const digMiner=(state:MinerState):MinerState=>canDigMiner(state)?{...state,dig:.001}:state;
 export function resolveMinerDig(state:MinerState):MinerState{
   if(state.phase!=='playing'||state.dig<=0)return state;
-  const question=state.queue[state.cursor],correct=state.lane===MINER_QUESTIONS[question].correct,combo=correct?state.combo+1:0;
-  return {...state,phase:'feedback',dig:1,hearts:state.hearts-(correct?0:1),score:state.score+(correct?100+20*Math.min(combo-1,4):0),combo,bestCombo:Math.max(combo,state.bestCombo),results:[...state.results,{question,chosen:state.lane,correct}]};
+  const question=state.queue[state.cursor],correct=state.lane===state.questions[question].correct,combo=correct?state.combo+1:0;
+  return {...state,phase:'feedback',dig:1,hearts:state.hearts-(correct||state.mode==='practice'?0:1),score:state.score+(correct?100+20*Math.min(combo-1,4):0),combo,bestCombo:Math.max(combo,state.bestCombo),results:[...state.results,{question,chosen:state.lane,correct}]};
 }
 export function tickMiner(state:MinerState,delta:number):MinerState{
   if(!Number.isFinite(delta)||delta<=0||(state.phase!=='intro'&&state.phase!=='playing'))return state;
@@ -43,10 +53,14 @@ export const MINER_RECORD_KEY='mtm-miner-record-v1';
 type MinerStore=Pick<Storage,'getItem'|'setItem'>;
 export type MinerRecord={best:number;completed:number};
 const validRecord=(value:any):value is MinerRecord=>!!value&&Number.isInteger(value.best)&&value.best>=0&&value.best<=1240&&value.best%20===0&&Number.isInteger(value.completed)&&value.completed>=0&&value.completed<=8;
-export function readMinerRecord(store?:MinerStore):MinerRecord{try{const record=JSON.parse(store?.getItem(MINER_RECORD_KEY)??'null');if(validRecord(record))return {best:record.best,completed:record.completed};}catch{}return {best:0,completed:0};}
+export function minerRecordKey(mode:MinerMode='standard',scope:string|null=null):string|null{
+  if(!['standard','practice'].includes(mode)||(scope!==null&&!STUDY_GAME_TOPICS.some(topic=>topic.id===scope)))return null;
+  return scope?`mtm-miner-record-v2-${scope}-${mode}`:mode==='standard'?MINER_RECORD_KEY:'mtm-miner-record-v2-practice';
+}
+export function readMinerRecord(store?:MinerStore,mode:MinerMode='standard',scope:string|null=null):MinerRecord{try{const key=minerRecordKey(mode,scope),record=key?JSON.parse(store?.getItem(key)??'null'):null;if(validRecord(record))return {best:record.best,completed:record.completed};}catch{}return {best:0,completed:0};}
 export function saveMinerRecord(store:MinerStore|undefined,state:MinerState):boolean{
   if(!store||state.phase!=='finished')return false;
-  const previous=readMinerRecord(store),record={best:Math.max(previous.best,state.score),completed:Math.max(previous.completed,state.results.length)};
-  if(!validRecord(record))return false;
-  try{store.setItem(MINER_RECORD_KEY,JSON.stringify(record));return true;}catch{return false;}
+  const key=minerRecordKey(state.mode,state.scope),previous=readMinerRecord(store,state.mode,state.scope),record={best:Math.max(previous.best,state.score),completed:Math.max(previous.completed,state.results.length)};
+  if(!key||!validRecord(record))return false;
+  try{store.setItem(key,JSON.stringify(record));return true;}catch{return false;}
 }

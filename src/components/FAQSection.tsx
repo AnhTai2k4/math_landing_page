@@ -11,6 +11,11 @@ function moveQuestion(event:KeyboardEvent<HTMLDivElement>){
     return;
   }
   const summary=(event.target as HTMLElement).closest('summary');
+  if(summary&&['ArrowRight','ArrowLeft'].includes(event.key)){
+    const detail=summary.closest('details');
+    if(detail){event.preventDefault();detail.open=event.key==='ArrowRight';}
+    return;
+  }
   if(!summary||!['ArrowDown','ArrowUp','Home','End'].includes(event.key))return;
   const items=Array.from(event.currentTarget.querySelectorAll('summary')),index=items.indexOf(summary);
   if(index<0)return;
@@ -24,4 +29,4 @@ const questions = [
   ['Sau buổi học, xem bài tập và tài liệu lúc nào?', <>Trong BTVN, mỗi thẻ buổi ghi giờ mở và hạn nộp nếu lịch lớp đã được xác minh. Bài chưa mở có ghi thời điểm mở; video và tài liệu chỉ hiện khi buổi đó đã có nguồn. Chưa rõ lịch thì hỏi trợ lý lớp.</>],
   ['Học phí và lịch học được xác nhận thế nào?', 'Trung tâm trao đổi học phí, lịch và điều kiện của lớp trước khi xác nhận đăng ký. Nếu bạn chưa rõ, hãy để lại lớp đang học và hình thức mong muốn để được tư vấn.'],
 ] as const;
-export function FAQSection(){return <section id="faq" className="mtm-section mtm-faq"><div className="mtm-shell mtm-faq-grid"><div><p className="mtm-eyebrow">BẠN CÓ THỂ ĐANG THẮC MẮC</p><h2>Hỏi một chút,<br /><span className="mtm-highlight">rõ hơn một chút.</span></h2><p className="mtm-lead">Những điều cần biết trước khi bắt đầu học cùng MTM.</p><a href="#register" className="mtm-text-link">Còn câu hỏi khác? Gửi lời nhắn →</a></div><div className="mtm-faq-list" onKeyDown={moveQuestion}>{questions.map(([question,answer])=><details key={question}><summary>{question}</summary><p>{answer}</p></details>)}</div></div></section>}
+export function FAQSection(){return <section id="faq" className="mtm-section mtm-faq"><div className="mtm-shell mtm-faq-grid"><div><p className="mtm-eyebrow">BẠN CÓ THỂ ĐANG THẮC MẮC</p><h2>Hỏi một chút,<br /><span className="mtm-highlight">rõ hơn một chút.</span></h2><p className="mtm-lead">Những điều cần biết trước khi bắt đầu học cùng MTM.</p><a href="#register" className="mtm-text-link">Còn câu hỏi khác? Gửi lời nhắn →</a></div><div className="mtm-faq-list" onKeyDown={moveQuestion} aria-describedby="mtm-faq-key-help"><p id="mtm-faq-key-help" className="mtm-faq-key-help">Dùng ↑ ↓ để chuyển câu hỏi, → để mở, ← hoặc Esc để thu gọn.</p>{questions.map(([question,answer])=><details key={question}><summary>{question}</summary><p>{answer}</p></details>)}</div></div></section>}

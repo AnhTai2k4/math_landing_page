@@ -1,5 +1,5 @@
 import {displayTitle} from '../components/display-text';
-import {useEffect, useMemo, useState} from 'react';
+import {useEffect, useMemo, useRef, useState} from 'react';
 import {Link, navigate} from '../migration/navigation';
 import {filterSearch, GRADES, PERIODS, PERIOD_LABELS, PRACTICE_EXAMS, readFilters, readyExams, titleTerm, type Filters, type PracticeExam} from './exams/data';
 import PracticeAttempt, {localStore} from './exams/PracticeAttempt';
@@ -16,6 +16,7 @@ import {SOURCE_HOLDS} from './exams/source-holds';
 import {erratumFor,originalExamId,practiceVersion} from './exams/practice-errata';
 import {visibleBuckets} from './exams/attempt-ui';
 import R106PageIntro from '../migration/R106PageIntro';
+import ExamSearchField from './exams/ExamSearchField';
 import './exams/exams.css';
 
 function SavedAttemptReview({exam,draft}:{exam:PracticeExam;draft:Draft}) {
@@ -62,6 +63,7 @@ function LocalHistory({summary}: {summary:ReturnType<typeof historySummary>}) {
 /** Explicit catalog prop is for an external owner QA entry module. Production
  * App passes no catalog, and this entry imports no synthetic test material. */
 export default function NativeExams({pathname, search, catalog = PRACTICE_EXAMS, historyCatalog = catalog}: {pathname: string; search: string; catalog?: readonly unknown[]; historyCatalog?: readonly unknown[]}) {
+  const searchResult=useRef<HTMLParagraphElement>(null);
   const ready = useMemo(() => readyExams(catalog), [catalog]);
   const filters = readFilters(search), normalizedSearch = filterSearch(filters);
   const catalogUrl = '/thi-thu' + normalizedSearch;
@@ -85,11 +87,11 @@ export default function NativeExams({pathname, search, catalog = PRACTICE_EXAMS,
       <div className="ep-filters" role="search" aria-label="Lọc đề thi">
         <label>Lớp<select value={filters.lop} onChange={event => changeFilters({lop: event.target.value as Filters['lop']})}><option value="all">Tất cả lớp</option>{GRADES.map(grade => <option key={grade} value={grade}>Lớp {grade}</option>)}</select></label>
         <label>Kỳ kiểm tra<select value={filters.ky} onChange={event => changeFilters({ky: event.target.value as Filters['ky']})}><option value="all">Tất cả kỳ</option>{PERIODS.map(period => <option key={period} value={period}>{PERIOD_LABELS[period]}</option>)}</select></label>
-        <label>Tìm theo tên đề<input type="search" maxLength={120} value={filters.q} placeholder="Nhập tên đề…" onChange={event => changeFilters({q: event.target.value})}/></label>
+        <ExamSearchField query={filters.q} onChange={q=>changeFilters({q})} onSearch={()=>searchResult.current?.focus()}/>
         <button type="button" onClick={() => changeFilters({lop: 'all', ky: 'all', q: ''})}>Xóa bộ lọc</button>
       </div>
       <section aria-label="Đề theo lớp và kỳ" className="ep-buckets">{visibleBuckets(ready, GRADES, PERIODS, {grade: filters.lop === 'all' ? 'all' : Number(filters.lop) as typeof GRADES[number], period: filters.ky}).map(({grade, period, count}) => <button type="button" className="ep-bucket" key={`${grade}-${period}`} aria-pressed={filters.lop === String(grade) && filters.ky === period} onClick={() => changeFilters({lop: String(grade) as Filters['lop'], ky: period})}><span>Lớp {grade} · {PERIOD_LABELS[period]}</span><strong>{count} đề</strong></button>)}</section>
-      <p role="status" aria-live="polite">{matches.length} đề phù hợp bộ lọc</p>
+      <p ref={searchResult} tabIndex={-1} className="ep-exam-search-result" role="status" aria-live="polite">{matches.length} đề phù hợp bộ lọc</p>
       <p>Trên trình duyệt này: đã làm {localSummary.completedExams} đề, {localSummary.totalAttempts} lượt đã nộp.</p>
       <div className="ep-catalog">{matches.map(item => {const saved=localSummary.exams.find(e=>e.examId===item.id);return <article className="ep-card" key={item.id}><p>Lớp {item.grade} · {PERIOD_LABELS[item.period]}</p><h2>{displayTitle(item.title)}</h2><p>{item.questions.length} câu · {item.durationMinutes} phút</p>{erratumFor(item.id)&&<p className="ep-notice">Bản MTM đính chính v37 · giữ PDF nguồn</p>}{SOURCE_HOLDS[item.id]&&<p className="ep-notice">Chờ đính chính điều kiện · chưa mở lượt mới</p>}<p className="ep-progress-label">{saved?.count?`Đã làm ${saved.count} lượt`: 'Chưa có lượt đã nộp'}{saved?.inProgress?' · Có bài đang làm':''}</p>{saved&&saved.count>0&&<p>Gần nhất: {saved.latestScore===null?'Chưa tính được':formatPoints(saved.latestScore)} / 10 · Cao nhất: {saved.best===null?'Chưa tính được':formatPoints(saved.best)} / 10</p>}<Link className="ep-link" href={`/thi-thu/${encodeURIComponent(item.id)}${normalizedSearch}`}>{saved?.inProgress?'Tiếp tục làm bài →':'Làm đề thi thử →'}</Link></article>;})}</div>
       {!matches.length && <p className="ep-card">{ready.length ? 'Chưa có đề phù hợp. Hãy thử đổi bộ lọc.' : 'Chưa có đề mở làm bài.'}</p>}

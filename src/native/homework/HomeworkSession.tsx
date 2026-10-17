@@ -12,6 +12,7 @@ import HomeworkOverview from './HomeworkOverview';
 import R104Dashboard from './R104Dashboard';
 import HomeworkGate from './HomeworkGate';
 import HomeworkTimePlan from './HomeworkTimePlan';
+import HomeworkStudyRhythmTool from './HomeworkStudyRhythmTool';
 import HomeworkSelfCheckTool from './HomeworkSelfCheckTool';
 import HomeworkWarmupTool from './HomeworkWarmupTool';
 import PracticeAttempt from '../exams/PracticeAttempt';
@@ -198,6 +199,7 @@ export default function HomeworkSession({pathname,profileControl}:{pathname:stri
 
     </>}
     {!checking&&(!state||!room)&&<HomeworkTimePlan/>}
+    {!checking&&(!state||!room)&&<HomeworkStudyRhythmTool/>}
     {!checking&&(!state||!room)&&<HomeworkWarmupTool key={'warmup:'+(state?.lessonCode??'')}/>}
     {!checking&&(!state||!room)&&<HomeworkSelfCheckTool key={'entry:'+(state?.lessonCode??'')}/>}
     {!checking&&(!state||!room)&&<aside className="btvn-self-check" aria-label="Đổi nhịp luyện Toán"><Link href="/san-choi" className="btvn-btn">Đổi nhịp với Sân chơi Toán</Link><p>Luyện riêng để đổi nhịp sau khi học, không tính điểm BTVN.</p></aside>}

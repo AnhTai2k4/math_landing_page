@@ -1,0 +1,2 @@
+.ep-filters .ep-exam-search{min-width:0;display:grid;gap:8px}.ep-exam-search>label{font-weight:700}.ep-filters .ep-exam-search>p{margin:0;color:#47536c;font-size:14px;line-height:1.6;overflow-wrap:anywhere}.ep-exam-search-actions{display:flex;flex-wrap:wrap;gap:8px}.ep-exam-search-actions button{min-height:48px;white-space:normal}.ep-root .ep-exam-search :is(input,button):focus-visible,.ep-root .ep-exam-search-result:focus{outline:3px solid #213269;outline-offset:3px;border-radius:8px}
+@media(max-width:760px){.ep-filters .ep-exam-search{grid-column:1/-1}}
