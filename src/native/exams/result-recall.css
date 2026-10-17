@@ -14,4 +14,8 @@
 .ep-recall .ep-recall-actions{display:flex;flex-wrap:wrap;gap:8px}
 .ep-recall li{margin:10px 0;line-height:1.65}
 .ep-recall ol,.ep-recall ul{padding-left:24px}
+.ep-recall .ep-recall-filters{border:1px solid #dce1ee;border-radius:14px;padding:0 16px 16px}
+.ep-recall .ep-recall-blank{display:flex;align-items:center;gap:12px;min-height:48px;cursor:pointer}
+.ep-recall .ep-recall-blank input{width:22px;height:22px;flex-shrink:0;accent-color:#213269}
+.ep-recall .ep-recall-blank input:focus-visible{outline:3px solid #b38619;outline-offset:4px}
 @media(max-width:600px){.ep-recall .ep-recall-actions{display:block}.ep-recall .ep-recall-actions button{display:block;width:100%}.ep-recall .ep-recall-solution{padding:12px}}

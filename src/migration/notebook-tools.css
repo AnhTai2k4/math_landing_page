@@ -25,4 +25,11 @@
 .mig-notebook .mig-task-filters{margin-top:20px}
 .mig-notebook .mig-task-list input[type=checkbox]:focus-visible{outline:3px solid #213269;outline-offset:3px}
 .mig-notebook .mig-task-filter-count,.mig-notebook .mig-task-filter-edit-note{font-size:14px;color:#425273;line-height:1.6;margin:10px 0}
+.mig-notebook-formula .mig-step-cards{display:grid;gap:10px;margin:16px 0}
+.mig-notebook .mig-step-cards button{text-align:left;overflow-wrap:anywhere}
+.mig-notebook-formula .mig-step-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.mig-notebook .mig-notebook-formula button:disabled{cursor:default;background:#f1f4fa;color:#536382;border-color:#dce1ec}
+.mig-notebook-formula .mig-formula-solutions ol{padding-left:24px}
+.mig-notebook-formula .mig-formula-recall{padding:14px;border-radius:12px;background:#fff8dc;margin-bottom:14px}
+.mig-notebook-formula .mig-formula-recall-cover{border:1px dashed #aab5ce;border-radius:12px;padding:14px;min-height:140px}
 @media(max-width:680px){.mig-notebook .mig-notebook-formula{padding:18px}.mig-notebook-formula .mig-formula-heading{align-items:stretch;flex-direction:column}.mig-notebook-formula .mig-formula-columns{gap:8px}.mig-notebook .mig-formula-columns button{padding:10px 8px;min-height:110px}.mig-notebook-formula .mig-formula-columns h3{font-size:15px}.mig-notebook .mig-formula-columns button b{font-size:16px}}

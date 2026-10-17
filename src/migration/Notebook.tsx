@@ -2,6 +2,7 @@ import {useEffect,useRef,useState,type KeyboardEvent} from 'react';
 import NotebookImport from './NotebookImport';
 import NotebookRhythm from './NotebookRhythm';
 import NotebookFormulaLauncher from './NotebookFormulaLauncher';
+import NotebookStepOrderLauncher from './NotebookStepOrderLauncher';
 import {BEFORE_NAVIGATION_EVENT} from './navigation';
 import {NOTEBOOK_KEY as KEY,emptyNotebook as empty,parseNotebook,saveNotebook,type Task,type Store} from './notebook-store';
 import {CalendarDays,CheckCircle2,ChevronLeft,ChevronRight,Download,Pencil,Plus,Save,Trash2,X} from 'lucide-react';
@@ -154,6 +155,7 @@ export default function Notebook(){
   <div className="mig-notebook-stats"><article><span>Ngày đã lên kế hoạch</span><b>{monthTasks.filter(([,t])=>t.length).length}</b></article><article><span>Việc đã hoàn thành</span><b>{completed.length}</b></article><article><span>Phút theo các việc đã đánh dấu</span><b>{completed.reduce((s,t)=>s+t.minutes,0)}</b></article></div>
   <NotebookRhythm days={store.days} today={keyFor(today)} selectedDate={date} onSelectDay={confirmDayChange} unavailable={!!storageNotice||!!storageConflict} unavailableMessage={storageConflict||undefined}/>
   <NotebookFormulaLauncher/>
+  <NotebookStepOrderLauncher/>
   <div className="mig-notebook-grid">
    <section className="mig-panel"><div className="mig-calendar-heading"><h2>Tháng {month.getMonth()+1}, {month.getFullYear()}</h2><div><button type="button" className="mig-icon-button" aria-label="Tháng trước" onClick={()=>move(-1)}><ChevronLeft/></button><button type="button" className="mig-icon-button" aria-label="Tháng sau" onClick={()=>move(1)}><ChevronRight/></button></div></div>
     <div className="mig-calendar" role="group" aria-label="Chọn ngày lập kế hoạch">{['T.2','T.3','T.4','T.5','T.6','T.7','CN'].map(d=><span className="mig-calendar-weekday" key={d}>{d}</span>)}{days.map(d=>{const key=keyFor(d),has=(store.days[key]||[]).length>0;return <button ref={node=>{if(node)calendarButtons.current.set(key,node);else calendarButtons.current.delete(key);}} type="button" key={key} tabIndex={date===key?0:-1} className={(d.getMonth()!==month.getMonth()?'is-outside ':'')+(key===keyFor(today)?'is-today':'')} aria-pressed={date===key} aria-label={key+(has?' · đã có kế hoạch':'')} onClick={()=>confirmDayChange(key)} onKeyDown={e=>moveCalendarFocus(e,d)}>{d.getDate()}<span className={has?'has-plan':''}/></button>;})}</div>

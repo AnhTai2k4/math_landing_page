@@ -4,6 +4,7 @@ import ResultSummary from './ResultSummary';
 import ExamReview from './ExamReview';
 import ResultRecallTool from './ResultRecallTool';
 import ResultReflectionTool from './ResultReflectionTool';
+import ResultCounterexampleTool from './ResultCounterexampleTool';
 import type {PracticeAttemptProps} from './attempt-types';
 import type {PracticeAttemptState} from './usePracticeAttempt';
 export default function AttemptResult({props,state}:{props:PracticeAttemptProps;state:PracticeAttemptState}) {
@@ -18,5 +19,6 @@ export default function AttemptResult({props,state}:{props:PracticeAttemptProps;
             </section>
             {kind==='exam'&&!props.isHomework&&draft.submittedAt!==null&&<ResultRecallTool key={draft.attemptId} exam={exam} draft={draft} renderText={renderText} renderSolutionExtra={renderSolutionExtra}/>}
             {kind==='exam'&&!props.isHomework&&draft.submittedAt!==null&&<ResultReflectionTool key={draft.attemptId+':'+exam.versionHash} exam={exam} draft={draft} onReview={id=>setReviewTarget(value=>({id,revision:value.revision+1}))}/>}
+            {kind==='exam'&&!props.isHomework&&draft.submittedAt!==null&&<ResultCounterexampleTool key={draft.attemptId+':'+exam.versionHash}/>}
             <ExamReview key={draft.attemptId+':'+reviewTarget.revision} exam={exam} draft={draft} initialQuestionId={reviewTarget.id||undefined} showSummary={false} advancedFilters={kind==='exam'&&!props.isHomework} renderText={renderText} renderSolutionExtra={renderSolutionExtra}/></>;
 }
