@@ -18,7 +18,7 @@ export function createSupabaseRepository(env:{SUPABASE_URL:string;SUPABASE_SERVI
     if(!response.ok)throw new HomeworkError(response.status,response.status===429?'Em đã thử nhiều lần. Chờ 15 phút rồi thử lại.':response.status===401?GATE_ERROR:'Chưa kết nối được máy chủ. Em thử lại sau.');return response.json();
   },Date.now,batchSigner(path=>db.storage.from('mtm-btvn').createSignedUrls(path,SIGNED_ASSET_SECONDS)));
 }
-type SignResult={data:{path:string|null;signedUrl:string;error:string|null}[]|null;error:unknown};
+type SignResult={data:{path:string|null;signedUrl:string|null;error:string|null}[]|null;error:unknown};
 /** Gom các lần ký cùng một nhịp thành một request createSignedUrls (hạn SIGNED_ASSET_SECONDS như hydratePrivateAssets yêu cầu). */
 export function batchSigner(signMany:(paths:string[])=>Promise<SignResult>){
   let queue:{path:string;resolve:(url:string)=>void;reject:(error:Error)=>void}[]=[];

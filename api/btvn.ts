@@ -1,3 +1,4 @@
+import {expireLegacyHomeworkCookie} from '../server/btvn/http';
 import {checkVideoEmbed} from '../server/btvn/video-embed';
 import {createHmac} from 'node:crypto';
 import {isIP} from 'node:net';
@@ -6,7 +7,7 @@ import {allowedBtvnOrigin} from '../server/btvn/origin-policy';
 // Nạp tĩnh: Vercel chạy ESM, import() động không đuôi tệp không được truy vết (lỗi Cannot find module 15/10).
 import {createSupabaseRepository} from '../server/btvn/supabase-transport';
 type Req={method?:string;body?:unknown;headers:Record<string,string|string[]|undefined>};
-type Res={setHeader:(key:string,value:string)=>void;status:(n:number)=>{json:(value:unknown)=>void}};
+type Res={setHeader:(key:string,value:string|string[])=>void;status:(n:number)=>{json:(value:unknown)=>void}};
 const header=(req:Req,key:string)=>typeof req.headers[key]==='string'?req.headers[key] as string:'';
 /** Chỉ mount production sau Claude nghiệm thu. Không đọc env/kết nối khi import. */
 export function createBtvnApi(getEnv=()=>process.env,loadRepository:()=>Promise<typeof createSupabaseRepository>=async()=>createSupabaseRepository,options:{checkVideoEmbed?:typeof checkVideoEmbed;clock?:()=>number}={}){return async function handler(req:Req,res:Res){
@@ -35,7 +36,7 @@ export function createBtvnApi(getEnv=()=>process.env,loadRepository:()=>Promise<
    }));
   }
   if(result.status===200&&typeof body.serverNow==='number')body.serverNow=(options.clock??Date.now)();
-  for(const [key,value] of Object.entries(result.headers))res.setHeader(key,value);
+  for(const [key,value] of Object.entries(result.headers))res.setHeader(key,key==='Set-Cookie'?[value,expireLegacyHomeworkCookie(true)]:value);
   return res.status(result.status).json(result.body);
  }catch(error){
   // Chỉ tên lỗi và thông điệp ngắn để vận hành đọc nhật ký Vercel; không ghi body, cookie, khoá.

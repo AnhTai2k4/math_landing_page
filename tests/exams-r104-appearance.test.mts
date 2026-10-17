@@ -1,12 +1,6 @@
 import assert from 'node:assert/strict';
-import {appearanceIdentity,readAppearance,DEFAULT_APPEARANCE} from '../src/components/student-appearance';
-assert.notEqual(appearanceIdentity('Học sinh GIẢ|2K9 HSA (THỨ 5)'),appearanceIdentity('Học sinh GIẢ|2K9 HSA (CN)'));
-assert.equal(appearanceIdentity('Học sinh GIẢ (ghi chú)|2K9 9+'),appearanceIdentity(' HỌC SINH GIẢ | 2k9 9+ '));
-assert.equal(appearanceIdentity('|2K9 9+'),'');
-let content:string|null=null;Object.defineProperty(globalThis,'localStorage',{configurable:true,value:{getItem:()=>content}});
-content='invalid';assert.deepEqual(readAppearance('fixture'),DEFAULT_APPEARANCE);
-content=JSON.stringify({avatar:'spark',photo:'https://private.invalid/student.jpg'});assert.deepEqual(readAppearance('fixture'),{avatar:'spark',photo:''});
-content=JSON.stringify({avatar:'spark',photo:'data:image/svg+xml;base64,PHN2Zz4='});assert.equal(readAppearance('fixture').photo,'');
-content=JSON.stringify({avatar:'wave',photo:'data:image/jpeg;base64,'+'a'.repeat(180000)});assert.equal(readAppearance('fixture').photo,'');
-Object.defineProperty(globalThis,'localStorage',{configurable:true,value:{getItem:()=>{throw Error('storage denied');}}});assert.deepEqual(readAppearance('fixture'),DEFAULT_APPEARANCE);
-console.log('R104 appearance: HSA classes remain distinct, name notes normalize, empty names rejected, external/SVG/oversized images and unavailable storage fail closed.');
+import {validAppearanceRecord} from '../src/components/student-appearance';
+const good={profileKey:'8c445b54-05b1-4df6-9013-e90f58169078',revision:2,school:'Trường thử nghiệm',appearance:{avatar:'spark',photo:''}};
+assert.equal(validAppearanceRecord(good),true);
+for(const value of [null,{...good,profileKey:'name|class'},{...good,revision:-1},{...good,school:undefined},{...good,school:'a'.repeat(161)},{...good,appearance:{avatar:'spark',photo:'https://example.invalid/a.jpg'}},{...good,appearance:{avatar:'spark',photo:'data:image/svg+xml;base64,PHN2Zz4='}},{...good,appearance:{avatar:'unknown',photo:''}}])assert.equal(validAppearanceRecord(value),false);
+console.log('Account avatar records require opaque server identity, valid revision/school and an inline JPEG or default avatar. No name-based browser persistence.');

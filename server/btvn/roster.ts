@@ -15,7 +15,7 @@ export function importRoster(headers:string[],rows:string[][],config:RosterConfi
   for(const column of Object.values(config.columns))if(headers.filter(h=>h===column).length!==1)throw new Error('Thiếu/trùng cột cấu hình');
   const students:Student[]=[],nextRegistry={...registry},seen=new Set<string>();let excluded=0;
   for(const row of rows){
-    const cell=(key:keyof RosterColumns)=>String(row[headers.indexOf(config.columns[key])]??'').trim();
+    const cell=(key:keyof RosterColumns)=>String(row[headers.indexOf(config.columns[key]??'')]??'').trim();
     if(!cell('fullName'))continue;
     const notes=normalizeName(cell('fullName')+' '+cell('leave'));
     if(/nghi han|hoc 1 buoi roi nghi|tam nghi/.test(notes)){excluded++;continue;}

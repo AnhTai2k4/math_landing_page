@@ -12,7 +12,7 @@ let created=0,rpcCalls=0;
 const repo=new SupabaseHomeworkRepository({async rpc(name,args){rpcCalls++;assert.equal(name,'mtm_btvn_classes');assert.deepEqual(args,{});return {data:['Lớp giả B','Lớp giả A','Lớp giả B'],error:null};}},async()=>{throw Error('No student access in fixture');});
 const factory=async()=>((config:any,origin:string,key:string)=>{created++;assert.equal(config.SUPABASE_SERVICE_ROLE_KEY,env.SUPABASE_SERVICE_ROLE_KEY);assert.equal(config.VERCEL_ENV,env.VERCEL_ENV);assert.ok(allowedBtvnOrigin(origin,config));assert.match(key,/^[a-f0-9]{64}$/);assert.ok(!key.includes('203.0.113.1'));return repo;});
 const api=createBtvnApi(()=>env,factory);
-async function call(headers:Record<string,string>={},method='POST',body:unknown={action:'classes'}){let status=0;let output:any;const responseHeaders:Record<string,string>={};await api({method,body,headers:{host:env.VERCEL_URL!,origin:`https://${env.VERCEL_URL}`,'x-vercel-forwarded-for':'203.0.113.1',...headers}},{setHeader(k,v){responseHeaders[k]=v;},status(n){status=n;return {json(v){output=v;}};}});return {status,output,responseHeaders};}
+async function call(headers:Record<string,string>={},method='POST',body:unknown={action:'classes'}){let status=0;let output:any;const responseHeaders:Record<string,string|string[]>={};await api({method,body,headers:{host:env.VERCEL_URL!,origin:`https://${env.VERCEL_URL}`,'x-vercel-forwarded-for':'203.0.113.1',...headers}},{setHeader(k,v){responseHeaders[k]=v;},status(n){status=n;return {json(v){output=v;}};}});return {status,output,responseHeaders};}
 for(const flag of [undefined,'0','true','01']){env.MTM_BTVN_ENABLED=flag;assert.equal((await call()).status,503);}
 env.MTM_BTVN_ENABLED='1';
 for(const key of ['SUPABASE_URL','SUPABASE_SERVICE_ROLE_KEY','MTM_HOMEWORK_PUBLISHABLE_KEY','MTM_BTVN_NETWORK_SECRET']){const saved=env[key];delete env[key];assert.equal((await call()).status,503);env[key]=saved;}
@@ -22,7 +22,7 @@ assert.equal((await call({host:'attacker.vercel.app'})).status,403);
 assert.equal((await call({},'GET')).status,405);
 assert.equal((await call({'x-vercel-forwarded-for':''})).status,503);
 assert.equal(created,0);
-const classes=await call();assert.equal(classes.status,200);assert.deepEqual(classes.output,{classNames:['Lớp giả A','Lớp giả B']});assert.equal(rpcCalls,1);assert.match(classes.responseHeaders['Cache-Control'],/no-store/);assert.ok(!JSON.stringify(classes).includes('FAKE_SERVER_SECRET'));
+const classes=await call();assert.equal(classes.status,200);assert.deepEqual(classes.output,{classNames:['Lớp giả A','Lớp giả B']});assert.equal(rpcCalls,1);assert.match(String(classes.responseHeaders['Cache-Control']),/no-store/);assert.ok(!JSON.stringify(classes).includes('FAKE_SERVER_SECRET'));
 env.VERCEL_ENV='production';assert.equal((await call()).status,403);assert.equal((await call({host:'minhthanhmath.vn',origin:'https://minhthanhmath.vn'})).status,200);
 assert.equal(allowedBtvnOrigin('https://anything.vercel.app',{VERCEL:'1',VERCEL_ENV:'preview',VERCEL_URL:'anything.vercel.app.evil.invalid'}),false);
 const payload=pipelineFixture();let requests=0;

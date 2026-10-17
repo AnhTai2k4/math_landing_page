@@ -16,6 +16,11 @@
     "tests/exams-btvn-round7.test.mts",
     "tests/exams-btvn-round8.test.mts",
     "tests/exams-btvn-round9.test.mts",
-    "tests/btvn-pipeline-fixture.ts"
+    "tests/btvn-pipeline-fixture.ts",
+    "api/btvn/avatar.ts",
+    "tests/exams-r106-avatar.test.mts",
+    "tests/exams-r106-cookie.test.mts",
+    "tests/exams-r106-dashboard.test.mts",
+    "tests/exams-r104-appearance.test.mts"
   ]
 }

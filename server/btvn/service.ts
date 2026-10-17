@@ -63,6 +63,7 @@ export class HomeworkService {
     const token=randomBytes(32).toString('hex');this.sessions.set(digest(token).toString('hex'),{code:student.studentCode,expires:now+4*3600000,lessonCode:allowed[0]?.lessonCode});return token;
   }
   logout(token:string){this.sessions.delete(digest(token).toString('hex'));}
+  public studentIdentity(token:string){return this.work(token).student.studentCode;}
   private work(token:string):StudentWork {
     const session=this.sessions.get(digest(token).toString('hex'));
     if(!session||session.expires<=this.clock())throw new HomeworkError(401,GATE_ERROR);

@@ -1,18 +1,42 @@
-import {useEffect,useState} from 'react';
+import {useCallback,useEffect,useRef,useState} from 'react';
 export type StudentAppearance={avatar:'orbit'|'spark'|'prism'|'wave';photo:string};
+export type AppearanceRecord={profileKey:string;revision:number;school:string;appearance:StudentAppearance};
 export const DEFAULT_APPEARANCE:StudentAppearance={avatar:'orbit',photo:''};
 export const APPEARANCE_EVENT='mtm:student-appearance';
-const PREFIX='mtm:appearance:v1:';
-export function appearanceIdentity(identity:string){const separator=identity.indexOf('|');if(separator<1)return '';const name=identity.slice(0,separator).replace(/\([^)]*\)/g,'');const className=identity.slice(separator+1);return [name,className].map(part=>part.normalize('NFC').replace(/\s+/g,' ').trim().toLocaleLowerCase('vi-VN')).join('|');}
-export function readAppearance(key:string):StudentAppearance{
- try{const value=JSON.parse(localStorage.getItem(key)||'null');if(!value||!['orbit','spark','prism','wave'].includes(value.avatar))return DEFAULT_APPEARANCE;return{avatar:value.avatar,photo:typeof value.photo==='string'&&value.photo.length<180000&&/^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/.test(value.photo)?value.photo:''};}catch{return DEFAULT_APPEARANCE;}
+const SESSION_EVENT='mtm:student-session',SYNC_KEY='mtm:appearance:refresh:v2';
+let accountEpoch=0,lastSessionNonce='';
+const notifyOtherTabs=(kind:'session'|'profile')=>{try{localStorage.setItem(SYNC_KEY,JSON.stringify({kind,nonce:crypto.randomUUID()}));}catch{/* Optional notification, never stores profile data. */}};
+/** Authenticated API owns identity. Browser storage contains a refresh nonce only. */
+export function studentSessionChanged(){accountEpoch++;window.dispatchEvent(new Event(SESSION_EVENT));notifyOtherTabs('session');}
+export function validAppearanceRecord(value:unknown):value is AppearanceRecord{
+ if(!value||typeof value!=='object')return false;const r=value as AppearanceRecord,a=r.appearance;
+ return typeof r.profileKey==='string'&&/^[a-zA-Z0-9_-]{12,100}$/.test(r.profileKey)&&Number.isSafeInteger(r.revision)&&r.revision>=0&&typeof r.school==='string'&&r.school.length<=160&&!!a&&['orbit','spark','prism','wave'].includes(a.avatar)&&typeof a.photo==='string'&&(a.photo===''||a.photo.length<180000&&/^data:image\/jpeg;base64,[A-Za-z0-9+/]+={0,2}$/.test(a.photo));
 }
-/** Appearance is local to this verified identity and device. No names or login codes are stored. */
+async function requestAppearance(body:unknown,signal?:AbortSignal):Promise<AppearanceRecord>{
+ let response:Response;try{response=await fetch('/api/btvn/avatar',{method:'POST',credentials:'same-origin',cache:'no-store',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),signal:signal??AbortSignal.timeout(12000)});}catch(error){if(signal?.aborted)throw error;throw Error('Chưa kết nối được. Ảnh chưa được lưu, em thử lại.');}
+ const data=await response.json().catch(()=>null);
+ if(!response.ok)throw Error(response.status===401?'Phiên đăng nhập đã hết. Em vào lại BTVN.':response.status===409?'Ảnh đã đổi trên thiết bị khác. Em tải ảnh mới nhất rồi chỉnh lại.':data?.message||'Chưa lưu được ảnh. Em thử lại.');
+ if(!validAppearanceRecord(data))throw Error('Chưa đọc được hồ sơ ảnh. Em thử lại.');return data;
+}
+/** identity is an in-memory view invalidation hint, never an account lookup or storage key. */
 export function useStudentAppearance(identity:string){
- const [entry,setEntry]=useState<{identity:string;key:string;value:StudentAppearance}>({identity:'',key:'',value:DEFAULT_APPEARANCE});
- useEffect(()=>{let active=true;setEntry({identity,key:'',value:DEFAULT_APPEARANCE});const normalized=appearanceIdentity(identity);if(!normalized||normalized.startsWith('|')||!crypto.subtle)return;void crypto.subtle.digest('SHA-256',new TextEncoder().encode(normalized)).then(bytes=>{if(!active)return;const key=PREFIX+Array.from(new Uint8Array(bytes),n=>n.toString(16).padStart(2,'0')).join('');setEntry({identity,key,value:readAppearance(key)});}).catch(()=>{});return()=>{active=false;};},[identity]);
- const key=entry.identity===identity?entry.key:'';
- useEffect(()=>{if(!key)return;const refresh=()=>setEntry(current=>current.key===key?{...current,value:readAppearance(key)}:current);const storage=(event:StorageEvent)=>{if(event.key===key||event.key===null)refresh();};window.addEventListener('storage',storage);window.addEventListener(APPEARANCE_EVENT,refresh);return()=>{window.removeEventListener('storage',storage);window.removeEventListener(APPEARANCE_EVENT,refresh);};},[key]);
- const save=(value:StudentAppearance)=>{if(!key)throw Error('Chưa sẵn sàng lưu diện mạo. Em thử lại sau.');try{localStorage.setItem(key,JSON.stringify(value));window.dispatchEvent(new Event(APPEARANCE_EVENT));}catch{throw Error('Trình duyệt chưa lưu được ảnh. Em chọn avatar hoặc giải phóng bộ nhớ rồi thử lại.');}};
- return {appearance:entry.identity===identity?entry.value:DEFAULT_APPEARANCE,save,ready:!!key};
+ const [entry,setEntry]=useState<{identity:string;epoch:number;record:AppearanceRecord|null}>({identity:'',epoch:-1,record:null}),[error,setError]=useState(''),[attempt,setAttempt]=useState(0);
+ const latest=useRef(identity),sequence=useRef(0);latest.current=identity;
+ useEffect(()=>{
+  let active=true;const controller=new AbortController();
+  const refresh=async(clear=false)=>{const n=++sequence.current,epoch=accountEpoch;if(clear)setEntry({identity,epoch,record:null});setError('');try{const record=await requestAppearance({action:'read'},controller.signal);if(active&&n===sequence.current&&epoch===accountEpoch&&latest.current===identity)setEntry({identity,epoch,record});}catch(cause){if(active&&!controller.signal.aborted&&n===sequence.current){setError(cause instanceof Error?cause.message:'Chưa tải được ảnh.');setEntry({identity,epoch,record:null});}}};
+  void refresh(true);
+  const changed=()=>void refresh(),session=()=>void refresh(true),storage=(event:StorageEvent)=>{if(event.key===SYNC_KEY){let message:{kind?:string;nonce?:string}={};try{message=JSON.parse(event.newValue||'null')??{};}catch{}if(message.kind==='session'){if(message.nonce!==lastSessionNonce){lastSessionNonce=message.nonce||'';accountEpoch++;}void refresh(true);}else void refresh();}},visible=()=>{if(document.visibilityState==='visible')void refresh();};
+  window.addEventListener(APPEARANCE_EVENT,changed);window.addEventListener(SESSION_EVENT,session);window.addEventListener('storage',storage);window.addEventListener('focus',changed);document.addEventListener('visibilitychange',visible);
+  return()=>{active=false;controller.abort();sequence.current++;window.removeEventListener(APPEARANCE_EVENT,changed);window.removeEventListener(SESSION_EVENT,session);window.removeEventListener('storage',storage);window.removeEventListener('focus',changed);document.removeEventListener('visibilitychange',visible);};
+ },[identity,attempt]);
+ const record=entry.identity===identity&&entry.epoch===accountEpoch?entry.record:null;
+ const save=async(value:StudentAppearance,school:string,base:{profileKey:string;revision:number})=>{
+  if(!record)throw Error('Chưa tải được hồ sơ. Em thử tải lại ảnh.');if(base.profileKey!==record.profileKey)throw Error('Tài khoản đã thay đổi. Em mở lại hồ sơ.');const epoch=accountEpoch,n=++sequence.current;
+  const saved=await requestAppearance({action:'save',revision:base.revision,expectedProfileKey:base.profileKey,appearance:value,school:school.normalize('NFC').trim().replace(/\s+/g,' ')});
+  if(epoch!==accountEpoch||latest.current!==identity||saved.profileKey!==record.profileKey)throw Error('Tài khoản đã thay đổi. Em mở lại hồ sơ.');
+  if(n===sequence.current)setEntry({identity,epoch,record:saved});window.dispatchEvent(new Event(APPEARANCE_EVENT));notifyOtherTabs('profile');
+ };
+ const retry=useCallback(()=>setAttempt(n=>n+1),[]);
+ return {appearance:record?.appearance??DEFAULT_APPEARANCE,school:record?.school??'',profileKey:record?.profileKey??'',revision:record?.revision??0,save,ready:!!record,error,retry};
 }

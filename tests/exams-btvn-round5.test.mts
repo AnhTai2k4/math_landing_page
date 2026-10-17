@@ -42,7 +42,7 @@ assert.equal(await repo.login({fullName:'Giả Một',phone:'0900000001',classNa
 await assert.rejects(()=>repo.login({studentCode:'bad',phone:'0900000001'} as any));
 const state=await repo.call(session,'start','buoi-gia');assert.equal(state.demo,false);assert.equal(state.attemptsUsed,1);assert.equal(commits,1);assert.equal(snapshot.work.drafts.length,1);
 const again=await repo.call(session,'start','buoi-gia');assert.equal(again.draft?.attemptId,state.draft?.attemptId);assert.equal(snapshot.work.drafts.length,1);
-assert.equal(homeworkTitle(state),state.exam.title);assert.ok(isDemoVideo('abcdefghijk'));assert.ok(!isDemoVideo('real-video1'));
+assert.ok(state.exam);assert.equal(homeworkTitle(state),state.exam.title);assert.ok(isDemoVideo('abcdefghijk'));assert.ok(!isDemoVideo('real-video1'));
 assert.equal(displayClassName({...state,demo:true,className:'LOP-TEST-12'}),'Lớp học thử');
 const http=createDurableHomeworkHandler(repo);
 assert.equal((await http({method:'POST',host:'test.invalid',origin:'https://evil.invalid',secure:true,body:{action:'state'}})).status,403);
