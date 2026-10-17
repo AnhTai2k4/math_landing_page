@@ -8,32 +8,42 @@ import {emptyAux,readAux,writeAux} from '../src/native/exams/room-aux';
 import {FakeStore,suite} from './exams-harness.mts';
 const root=process.env.MTM_ROOT!,require=createRequire(join(root,'package.json')),{buildSync}=require('esbuild');
 const fixture=join(root,'tests/fixtures/room-react.mts');
-const code=buildSync({entryPoints:[join(root,'src/native/exams/FocusRoom.tsx')],bundle:true,write:false,platform:'node',format:'cjs',jsx:'automatic',packages:'external',alias:{react:fixture,'react/jsx-runtime':fixture,'react-dom':fixture},loader:{'.css':'empty'},logLevel:'silent'}).outputFiles[0].text;
-const mod={exports:{} as any};new Function('require','module','exports',code)((id:string)=>id.endsWith('.css')?{}:require(id),mod,mod.exports);const FocusRoom=mod.exports.default;
+const portals:{children:any;target:any}[]=[];
+function loadRoomComponent(file:string){
+ const code=buildSync({entryPoints:[join(root,file)],bundle:true,write:false,platform:'node',format:'cjs',jsx:'automatic',packages:'external',alias:{react:fixture,'react/jsx-runtime':fixture},loader:{'.css':'empty'},logLevel:'silent'}).outputFiles[0].text;
+ const mod={exports:{} as any};new Function('require','module','exports',code)((id:string)=>id==='react-dom'?{createPortal(children:any,target:any){portals.push({children,target});return children;}}:id.endsWith('.css')?{}:require(id),mod,mod.exports);return mod.exports.default;
+}
+const FocusRoom=loadRoomComponent('src/native/exams/FocusRoom.tsx'),HomeworkSelfCheck=loadRoomComponent('src/native/homework/HomeworkSelfCheck.tsx');
 class Events extends EventTarget {removeEventListener(t:string,l:any,o?:any){super.removeEventListener(t,l,typeof o==='boolean'?{capture:o}:o);}}
 const doc=new Events();Object.assign(doc,{body:{},getElementById:()=>null,documentElement:{style:{overflow:''}},activeElement:null,fullscreenElement:null});
-class FakeElement{closest(){return null;}}
+class FakeElement{isConnected=true;closest(){return null;}focus(){(doc as any).activeElement=this;}querySelector(){return null;}querySelectorAll(){return [];}}
 Object.assign(globalThis,{document:doc,Element:FakeElement,HTMLElement:FakeElement});
 class Runtime{
-  slots:any[]=[];index=0;changed=false;effects:(()=>void)[]=[];value:any;
+  slots:any[]=[];index=0;changed=false;effects:(()=>void)[]=[];value:any;attached=new Set<any>();
   constructor(public fn:()=>any){}
   state(initial:any){const i=this.index++;if(!this.slots[i])this.slots[i]={value:typeof initial==='function'?initial():initial};return[this.slots[i].value,(v:any)=>{const next=typeof v==='function'?v(this.slots[i].value):v;if(!Object.is(next,this.slots[i].value)){this.slots[i].value=next;this.changed=true;}}];}
   ref(value:any){const i=this.index++;return this.slots[i]??(this.slots[i]={current:value});}
   effect(fn:any,deps:any){const i=this.index++,old=this.slots[i];if(!old||!deps||!old.deps||deps.length!==old.deps.length||deps.some((v:any,j:number)=>!Object.is(v,old.deps[j]))){this.slots[i]={deps,cleanup:old?.cleanup};this.effects.push(()=>{old?.cleanup?.();this.slots[i].cleanup=fn();});}}
-  flush(){for(let i=0;i<30;i++){(globalThis as any).__mtmRoomRuntime=this;this.index=0;this.changed=false;this.value=this.fn();this.effects.splice(0).forEach(fn=>fn());if(!this.changed)return this.value;}throw Error('Không ổn định');}
+  attach(tree:any){
+    const current=new Set<any>();
+    const visit=(node:any)=>{if(!node||typeof node!=='object')return;if(Array.isArray(node)){node.forEach(visit);return;}const ref=node.props?.ref;if(typeof node.type==='string'&&ref&&typeof ref==='object'){current.add(ref);if(!ref.current)ref.current=new FakeElement();}visit(node.props?.children);};
+    visit(tree);for(const ref of this.attached)if(!current.has(ref))ref.current=null;this.attached=current;
+  }
+  flush(){for(let i=0;i<30;i++){(globalThis as any).__mtmRoomRuntime=this;this.index=0;this.changed=false;this.value=this.fn();this.attach(this.value);this.effects.splice(0).forEach(fn=>fn());if(!this.changed)return this.value;}throw Error('Không ổn định');}
   dispose(){this.slots.forEach(s=>s?.cleanup?.());}
 }
 const exam=PRACTICE_EXAMS[0];
-function mount(store:FakeStore,examOverride=exam,questionReader?:unknown){
+function mount(store:FakeStore,examOverride=exam,questionReader?:unknown,extraProps:any={}){
   const exam=examOverride;
   const made=createDraft(exam,'room-test',Date.now());assert.ok(made.ok);saveDraft(store,exam,made.value,null);
-  const answers:any[]=[];let exits=0;
-  const state:any={draft:made.value,activeQuestion:0,setActiveQuestion(i:number){state.activeQuestion=i;r.changed=true;},setQuestionFocus(){},seconds:5400,answered:0,states:exam.questions.map(()=> 'blank'),unsaved:false,notice:'',changeAnswer(...args:any[]){answers.push(args);},pdfReady:true,setPdfReady(){},finish(){},confirmation:null,sections:[{name:'I',from:0,to:12},{name:'II',from:12,to:16},{name:'III',from:16,to:22}]};
-  const r=new Runtime(()=>FocusRoom({props:{exam,catalogUrl:'/thi-thu',storeOverride:store,questionReader},state,onExit(){exits++;}}));r.flush();return {r,state,answers,get exits(){return exits;}};
+  const answers:any[]=[],submissions:boolean[]=[];let exits=0;
+  const state:any={draft:made.value,activeQuestion:0,setActiveQuestion(i:number){state.activeQuestion=i;r.changed=true;},setQuestionFocus(){},seconds:5400,answered:0,states:exam.questions.map(()=> 'blank'),unsaved:false,notice:'',changeAnswer(...args:any[]){answers.push(args);},pdfReady:true,setPdfReady(){},finish(auto:boolean){submissions.push(auto);},confirmation:null,sections:[{name:'I',from:0,to:12},{name:'II',from:12,to:16},{name:'III',from:16,to:22}]};
+  const r=new Runtime(()=>FocusRoom({props:{exam,catalogUrl:'/thi-thu',storeOverride:store,questionReader,...extraProps},state,onExit(){exits++;}}));r.flush();return {r,state,answers,submissions,get exits(){return exits;}};
 }
 function buttons(tree:any):any[]{if(!tree||typeof tree!=='object')return[];if(Array.isArray(tree))return tree.flatMap(buttons);return [...(tree.type==='button'?[tree]:[]),...buttons(tree.props?.children)];}
 function textOf(tree:any):string{if(tree==null||typeof tree==='boolean')return'';if(Array.isArray(tree))return tree.map(textOf).join('');if(typeof tree==='object')return textOf(tree.props?.children);return String(tree);}
 function find(tree:any,predicate:(node:any)=>boolean):any{if(!tree||typeof tree!=='object')return null;if(Array.isArray(tree))return tree.map(t=>find(t,predicate)).find(Boolean);return predicate(tree)?tree:find(tree.props?.children,predicate);}
+function findAll(tree:any,predicate:(node:any)=>boolean):any[]{if(!tree||typeof tree!=='object')return[];if(Array.isArray(tree))return tree.flatMap(t=>findAll(t,predicate));return [...(predicate(tree)?[tree]:[]),...findAll(tree.props?.children,predicate)];}
 function press(key:string,target?:any){const e=new Event('keydown',{cancelable:true});Object.assign(e,{key,ctrlKey:false,altKey:false,metaKey:false,isComposing:false});if(target)Object.defineProperty(e,'target',{value:target});doc.dispatchEvent(e);return e;}
 const {test,finish}=suite('FR');
 test('Mount/reload khôi phục câu 18 trước lưu, không ghi đè thành câu 1',()=>{
@@ -99,6 +109,43 @@ test('Menu công cụ mở/đóng bằng Esc và chọn tiện ích đóng menu'
   toggle=buttons(r.value).find(b=>b.props['aria-controls']==='fr-actions');toggle.props.onClick();r.flush();
   buttons(r.value).find(b=>textOf(b)==='Tiện ích').props.onClick();r.flush();assert.equal(find(r.value,(n:any)=>n.props?.id==='fr-actions').props.className,'fr-actions');
   assert.ok(find(r.value,(n:any)=>n.props?.['aria-label']==='Tiện ích phòng làm bài'));r.dispose();
+});
+test('BTVN: mở Tiện ích đặt phiếu thật trong portal dù root inert, giữ dấu và không chặn nộp',()=>{
+  const previousGet=(doc as any).getElementById,background={inert:false};(doc as any).getElementById=(id:string)=>id==='root'?background:null;
+  let selected:string[]=[];
+  const check=new Runtime(()=>HomeworkSelfCheck({selection:[selected,(next:any)=>{selected=typeof next==='function'?next(selected):next;check.changed=true;}]}));check.flush();
+  const extra={isHomework:true,homeworkSelfCheck:check.value},store=new FakeStore(),mounted=mount(store,exam,undefined,extra),{r,state,answers,submissions}=mounted;
+  const beforeDraft=JSON.stringify(state.draft),beforeSaved=store.getItem(draftKey(exam.id));
+  const menuButton=()=>buttons(r.value).find(b=>b.props['aria-controls']==='fr-actions');
+  const openTools=()=>{menuButton().props.onClick();r.flush();buttons(r.value).find(b=>textOf(b)==='Tự kiểm / Tiện ích').props.onClick();r.flush();};
+  const panel=()=>find(r.value,(n:any)=>n.type==='section'&&n.props?.['aria-label']==='Tiện ích phòng làm bài');
+  const boxes=()=>findAll(panel(),n=>n.type==='input'&&n.props.type==='checkbox');
+  try{
+    assert.equal(background.inert,true);assert.ok(!find(r.value,(n:any)=>n.props?.className==='btvn-self-check-content'));
+    openTools();assert.equal(portals.at(-1)?.target,(doc as any).body);assert.equal(portals.at(-1)?.children,r.value);
+    assert.ok(panel());assert.equal(panel().props.tabIndex,-1);assert.equal((doc as any).activeElement,panel().props.ref.current);
+    assert.equal(findAll(panel(),n=>n.props?.className==='btvn-self-check-content').length,1);assert.equal(boxes().length,5);assert.ok(boxes().every(b=>!b.props.checked));
+    assert.equal(panel().props.children[0].props.className,'fr-homework-self-check','Phiếu đứng đầu panel, không bị chôn sau tiện ích');
+    const submitButtons=buttons(r.value).filter(b=>textOf(b)==='Nộp bài');assert.ok(submitButtons.length>=3);assert.ok(submitButtons.every(b=>!b.props.disabled));
+    submitButtons[0].props.onClick();r.flush();assert.deepEqual(submissions,[false],'Có thể nộp ngay cả khi chưa đánh dấu mục nào');
+    boxes()[2].props.onChange();check.flush();extra.homeworkSelfCheck=check.value;r.flush();assert.equal(boxes()[2].props.checked,true);
+    buttons(panel()).find(b=>textOf(b)==='Đóng tiện ích').props.onClick();r.flush();assert.ok(!panel());assert.equal((doc as any).activeElement,menuButton().props.ref.current);
+    openTools();assert.equal(boxes()[2].props.checked,true);assert.equal(find(panel(),(n:any)=>n.type==='progress').props.value,1);
+    press('Escape');r.flush();assert.ok(!panel());assert.equal((doc as any).activeElement,menuButton().props.ref.current);
+    openTools();assert.equal(boxes()[2].props.checked,true);buttons(r.value).find(b=>textOf(b)==='Thoát tập trung').props.onClick();assert.equal(mounted.exits,1);
+    assert.equal(JSON.stringify(state.draft),beforeDraft);assert.equal(store.getItem(draftKey(exam.id)),beforeSaved);assert.deepEqual(answers,[]);
+  }finally{r.dispose();check.dispose();assert.equal(background.inert,false);(doc as any).getElementById=previousGet;}
+});
+test('Luyện tập thường không đưa phiếu BTVN vào portal kể cả khi có slot truyền nhầm',()=>{
+  const check=new Runtime(()=>HomeworkSelfCheck());check.flush();
+  const {r,submissions}=mount(new FakeStore(),exam,undefined,{isHomework:false,homeworkSelfCheck:check.value});
+  try{
+    assert.ok(!buttons(r.value).some(b=>textOf(b)==='Tự kiểm / Tiện ích'));
+    buttons(r.value).find(b=>b.props['aria-controls']==='fr-actions').props.onClick();r.flush();
+    buttons(r.value).find(b=>textOf(b)==='Tiện ích').props.onClick();r.flush();
+    assert.ok(!find(r.value,(n:any)=>n.props?.className==='fr-homework-self-check'));assert.ok(!find(r.value,(n:any)=>n.props?.className==='btvn-self-check-content'));
+    buttons(r.value).find(b=>textOf(b)==='Nộp bài').props.onClick();assert.deepEqual(submissions,[false]);
+  }finally{r.dispose();check.dispose();}
 });
 test('Tên đề đầy đủ mở bằng chạm, Esc đóng; nhãn phiếu thống nhất',()=>{
   const {r}=mount(new FakeStore());const title=buttons(r.value).find(b=>b.props.className==='fr-title-button');

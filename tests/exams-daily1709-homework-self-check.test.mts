@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {join} from 'node:path';
 import {HOMEWORK_CHECKS,summarizeHomeworkChecks} from '../src/native/homework/self-check';
+import {PRACTICE_EXAMS} from '../src/native/exams/data';
+import {createDraft,draftKey} from '../src/native/exams/store';
 import {all,load,mount,React,require,root,text} from './daily19-ui-harness.mts';
 import {suite} from './exams-harness.mts';
 const {test,finish}=suite('D1709-CHECK-'),file='src/native/homework/HomeworkSelfCheck.tsx',toolFile='src/native/homework/HomeworkSelfCheckTool.tsx';
@@ -60,7 +62,7 @@ test('Nút chỉ tải lười sau khi mở, thu gọn giữ nội dung và boun
   const source=readFileSync(join(root,toolFile),'utf8');assert.match(source,/lazy\(\(\)=>import\('\.\/HomeworkSelfCheck'\)\)/);
 });
 
-test('Tích hợp JSX thật: dùng được ngoài cổng, trong lượt đang làm; đổi lượt hoặc rời lượt xóa danh tính phiếu',()=>{
+test('Session chỉ sở hữu phiếu ngoài cổng; lượt đang làm giao phiếu cho ManagedAttempt theo attemptId',()=>{
   const render=(state:any,room:boolean,checking=false)=>{
     let index=0;
     const View=load('src/native/homework/HomeworkSession.tsx',{
@@ -68,19 +70,60 @@ test('Tích hợp JSX thật: dùng được ngoài cổng, trong lượt đang 
       useRef:(initial:any)=>({current:initial}),useMemo:(fn:()=>unknown)=>fn(),useEffect:()=>{},
     }).default;
     const before=JSON.stringify(state),tree=View({pathname:'/btvn'});assert.equal(JSON.stringify(state),before);assert.equal(index,12);
-    return {tree,tools:all(tree,n=>n.type?.name==='HomeworkSelfCheckTool'),plans:all(tree,n=>n.type?.name==='HomeworkTimePlan')};
+    return {tree,tools:all(tree,n=>n.type?.name==='HomeworkSelfCheckTool'),plans:all(tree,n=>n.type?.name==='HomeworkTimePlan'),managed:all(tree,n=>n.type?.name==='ManagedAttempt')};
   };
   assert.equal(render(null,false,true).tools.length,0);
   const entry=render(null,false);assert.equal(entry.tools.length,1);assert.equal(entry.plans.length,1);assert.equal(entry.tools[0].key,'entry:');
   const before={lessonCode:'buoi-gia',fullName:'Dữ liệu giả',className:'LỚP GIẢ',lessons:[],draft:null};
   assert.equal(render(before,false).tools.length,1);
   const active={...before,exam:{questions:[]},draft:{attemptId:'luot-gia-1',submittedAt:null}};
-  const room=render(active,true);assert.equal(room.tools.length,1);assert.equal(room.plans.length,0);assert.equal(room.tools[0].key,'attempt:luot-gia-1');
-  const leftRoom=render(active,false);assert.equal(leftRoom.tools.length,1);assert.equal(leftRoom.tools[0].key,'entry:buoi-gia');assert.notEqual(leftRoom.tools[0].key,room.tools[0].key,'Rời lượt về các buổi học bỏ dấu tự kiểm của lượt');
-  assert.deepEqual(Object.keys(room.tools[0].props),[],'Không đưa bài làm hoặc dữ liệu người học vào phiếu');
-  const next=render({...active,draft:{...active.draft,attemptId:'luot-gia-2'}},true);assert.notEqual(room.tools[0].key,next.tools[0].key);
+  const room=render(active,true);assert.equal(room.tools.length,0,'Không để phiếu trùng ở nền phía sau phòng tập trung');assert.equal(room.plans.length,0);assert.equal(room.managed.length,1);assert.equal(room.managed[0].key,'luot-gia-1');
+  const leftRoom=render(active,false);assert.equal(leftRoom.tools.length,1);assert.equal(leftRoom.tools[0].key,'entry:buoi-gia');assert.equal(leftRoom.managed.length,0,'Rời lượt tháo owner của dấu kiểm trong lượt');
+  assert.deepEqual(Object.keys(leftRoom.tools[0].props),[],'Phiếu ngoài cổng không nhận bài làm hoặc dữ liệu người học');
+  const next=render({...active,draft:{...active.draft,attemptId:'luot-gia-2'}},true);assert.notEqual(room.managed[0].key,next.managed[0].key,'Lượt mới tạo owner mới');
   assert.equal(render({...active,draft:{...active.draft,submittedAt:123}},true).tools.length,0,'Kết quả đã nộp không mang dấu tự kiểm của lượt cũ');
   assert.notEqual(render(before,false).tools[0].key,render({...before,lessonCode:'buoi-gia-khac'},false).tools[0].key);
+});
+
+test('Tuple của ManagedAttempt giữ dấu qua remount công cụ và đổi view, không sửa bản nháp hoặc gửi gateway',()=>{
+  const exam=PRACTICE_EXAMS[0],made=createDraft(exam,'check-controlled-test',Date.now());assert.ok(made.ok);
+  const state={lessonCode:'buoi-gia',className:'Lớp giả',fullName:'Dữ liệu giả',lessons:[],exam,draft:made.value},before=JSON.stringify(state);
+  const values:any[]=[];let cursor=0,calls=0,updates=0;
+  const hooks={
+    useState:(initial:any)=>{const at=cursor++;if(!(at in values))values[at]=typeof initial==='function'?initial():initial;return [values[at],(next:any)=>{values[at]=typeof next==='function'?next(values[at]):next;}];},
+    useRef:(initial:any)=>{const at=cursor++;return values[at]??(values[at]={current:initial});},
+    useMemo:(fn:()=>unknown,deps:any[])=>{const at=cursor++,prior=values[at];if(!prior||deps.some((v,index)=>!Object.is(v,prior.deps[index])))values[at]={value:fn(),deps};return values[at].value;},
+    useEffect:()=>{},
+  };
+  const Managed=load('src/native/homework/HomeworkSession.tsx',hooks,'export {ManagedAttempt};').ManagedAttempt;
+  const previous=Object.getOwnPropertyDescriptor(globalThis,'location');Object.defineProperty(globalThis,'location',{configurable:true,value:{pathname:'/btvn/lop-gia/buoi-gia'}});
+  const gateway={call(){calls++;throw Error('Phiếu tự kiểm không được gửi gateway');}},saverRef={current:null};
+  const drawOwner=()=>{cursor=0;const tree=Managed({state,gateway,saverRef,onState(){updates++;},onPendingChange(){}});return all(tree,n=>n.type?.name==='PracticeAttempt')[0];};
+  let attempt=drawOwner(),tool:any,content:any;
+  const originalDraft=attempt.props.storeOverride.getItem(draftKey(exam.id));
+  const openContent=()=>{
+    const slot=attempt.props.homeworkSelfCheck;
+    assert.equal(slot.type.name,'HomeworkSelfCheckTool');assert.deepEqual(Object.keys(slot.props),['selection']);
+    tool=mount(toolFile,slot.props);tool.click('Mở phiếu tự kiểm');
+    const child=all(tool.tree,n=>n.type===React.Suspense)[0].props.children;
+    assert.equal(child.props.selection,slot.props.selection,'Tool chuyển nguyên tuple cho nội dung tải lười');
+    content=mount(file,child.props);return content;
+  };
+  try{
+    assert.equal(attempt.props.isHomework,true);openContent();
+    all(content.tree,n=>n.type==='input'&&n.props.type==='checkbox')[1].props.onChange();
+    attempt=drawOwner();content.draw({selection:attempt.props.homeworkSelfCheck.props.selection});
+    assert.equal(all(content.tree,n=>n.type==='progress')[0].props.value,1);
+    tool.click('Thu gọn phiếu tự kiểm');tool.unmount();content.unmount();
+    attempt=drawOwner();openContent();
+    assert.equal(all(content.tree,n=>n.type==='progress')[0].props.value,1,'Đóng panel rồi mở lại không mất dấu do owner còn sống');
+    assert.equal(all(content.tree,n=>n.type==='input'&&n.props.type==='checkbox')[1].props.checked,true);
+    tool.unmount();content.unmount();attempt=drawOwner();openContent();
+    assert.equal(all(content.tree,n=>n.type==='progress')[0].props.value,1,'Chuyển giữa phòng tập trung và phiếu cũ vẫn dùng tuple của lượt');
+    content.click('Bỏ đánh dấu để tự kiểm lại');attempt=drawOwner();content.draw({selection:attempt.props.homeworkSelfCheck.props.selection});
+    assert.equal(all(content.tree,n=>n.type==='progress')[0].props.value,0);
+    assert.equal(attempt.props.storeOverride.getItem(draftKey(exam.id)),originalDraft);assert.equal(JSON.stringify(state),before);assert.equal(calls,0);assert.equal(updates,0);
+  }finally{tool?.unmount();content?.unmount();if(previous)Object.defineProperty(globalThis,'location',previous);else delete (globalThis as any).location;}
 });
 
 test('CSS riêng navy vàng, mục và nút đủ 44px, có focus và không sửa bố cục trang chủ',()=>{
@@ -88,4 +131,4 @@ test('CSS riêng navy vàng, mục và nút đủ 44px, có focus và không s�
   assert.match(css,/#213269/);assert.match(css,/#FFCF24/);assert.match(css,/min-height:44px/);assert.match(css,/:focus-visible/);assert.match(css,/\[hidden\]\{display:none\}/);
   assert.doesNotMatch(css,/\.mig-home|\.home-hero|body\s*\{|:root\s*\{/);
 });
-finish({note:'6 nhóm kiểm, 32 tổ hợp checklist; hook/SSR và tích hợp JSX ngoại tuyến, chưa thay QA trình duyệt.'});
+finish({note:'7 nhóm kiểm, 32 tổ hợp checklist; hook/SSR, ownership theo lượt và tuple controlled qua remount ngoại tuyến, chưa thay QA trình duyệt.'});

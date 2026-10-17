@@ -13,6 +13,6 @@ export default function GuideGraphLauncher(){
   <p>Đổi hệ số, xem bảng giá trị và ghim hai đồ thị để tự tìm ra điều gì làm đường thẳng đổi độ dốc hoặc dịch lên, xuống.</p>
   <button className="mg-button" type="button" aria-expanded={open} aria-controls={id+'-content'} onClick={()=>setOpen(value=>!value)}>{open?'Đóng phòng khám phá':'Mở phòng khám phá'}</button>
   <div id={id+'-content'} hidden={!open}>{open&&<GuideGraphBoundary><Suspense fallback={<p role="status">Đang mở phòng khám phá...</p>}><GuideGraphGame/></Suspense></GuideGraphBoundary>}</div>
-  <p className="mg-sub">Không hẹn giờ hoặc tính điểm thi. Hệ số và đồ thị ghim chỉ giữ trong lần mở này.</p>
+  {!open&&<p className="mg-sub">Không hẹn giờ hoặc tính điểm thi. Hệ số và đồ thị ghim chỉ giữ trong lần mở này.</p>}
  </section>;
 }

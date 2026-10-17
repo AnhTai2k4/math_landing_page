@@ -32,6 +32,7 @@ function HomeworkReader({exam}:{exam:PracticeExam}){
   return <section aria-label="Đề BTVN">{exam.questions.map((q,index)=>active!==null&&active!==index?null:<article key={q.id} data-question-id={q.id} className="btvn-question"><h2>{questionLabel(exam,index).full}</h2>{q.sourceContent&&<MtmSourceContent segments={q.sourceContent.questions} assetBase="/practice-media/source-crops" label={questionLabel(exam,index).full} kind="question"/>}<small>MTM sưu tầm và biên soạn</small></article>)}</section>;
 }
 function ManagedAttempt({state,gateway,onState,onPendingChange,saverRef}:{state:HomeworkState & {exam:PracticeExam};gateway:HomeworkGateway;onState:(state:HomeworkState)=>void;onPendingChange:(pending:boolean)=>void;saverRef:{current:ReturnType<typeof createHomeworkSaver>|null}}){
+  const checkSelection=useState<string[]>([]);
   const [save,setSave]=useState(REMOTE_SAVE_INITIAL),[notice,setNotice]=useState('');
   const last=useRef<Draft|null>(state.draft);
   const saver=useMemo(()=>createHomeworkSaver({
@@ -53,6 +54,7 @@ function ManagedAttempt({state,gateway,onState,onPendingChange,saverRef}:{state:
   const saveStatus=save.failed?'Chưa lưu máy chủ':save.pending?'Chờ máy chủ lưu':'Đã lưu máy chủ';
   return <><p role="status">{save.message||notice}</p>{save.failed&&!save.closed&&<button disabled={save.saving} onClick={saver.retry}>Gửi lại bài đang giữ</button>}
     <PracticeAttempt isHomework exam={state.exam} catalogUrl={location.pathname} contextLabel="BTVN" audienceLabel={displayClassName(state)} storeOverride={store}
+      homeworkSelfCheck={<HomeworkSelfCheckTool selection={checkSelection}/>}
       saveStatus={save.failed?save.message:saveStatus} savePending={save.pending} onRetrySave={save.failed&&!save.closed?saver.retry:undefined} onAcceptClosed={save.closed?saver.acceptClosed:undefined}
       deadlineAt={state.closesAt} clockOffsetMs={state.serverNow!==undefined&&state.clientReceivedAt!==undefined?state.serverNow-state.clientReceivedAt:0}
       storageNotice="Bài làm gửi đến máy chủ MTM theo tài khoản em. Chỉ thông báo nhận bài từ máy chủ mới xác nhận đã nộp BTVN."
@@ -185,6 +187,6 @@ export default function HomeworkSession({pathname}:{pathname:string}){
 
     </>}
     {!checking&&(!state||!room)&&<HomeworkTimePlan/>}
-    {!checking&&(!state||!room||state.draft?.submittedAt===null)&&<HomeworkSelfCheckTool key={room&&state?.draft?.submittedAt===null?'attempt:'+state.draft.attemptId:'entry:'+(state?.lessonCode??'')}/>}
+    {!checking&&(!state||!room)&&<HomeworkSelfCheckTool key={'entry:'+(state?.lessonCode??'')}/>}
   </section>;
 }

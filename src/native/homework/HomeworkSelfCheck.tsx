@@ -1,8 +1,11 @@
-import {useId,useRef,useState} from 'react';
+import {useId,useRef,useState,type Dispatch,type SetStateAction} from 'react';
 import {HOMEWORK_CHECKS,summarizeHomeworkChecks} from './self-check';
 
-export default function HomeworkSelfCheck(){
-  const id=useId(),[selected,setSelected]=useState<string[]>([]),progress=summarizeHomeworkChecks(selected);
+export type HomeworkCheckSelection=[string[],Dispatch<SetStateAction<string[]>>];
+
+export default function HomeworkSelfCheck({selection}:{selection?:HomeworkCheckSelection}={}){
+  const id=useId(),localSelection=useState<string[]>([]);
+  const [selected,setSelected]=selection??localSelection,progress=summarizeHomeworkChecks(selected);
   const first=useRef<HTMLInputElement>(null);
   return <div className="btvn-self-check-content">
     <p id={id+'-help'}>Em tự đánh dấu sau khi đọc lại bài. Phiếu dùng chung, không đọc nội dung hoặc đáp án em đã nhập, không tự xác minh, không chặn nộp và không thay đổi điểm hay trạng thái bài.</p>
