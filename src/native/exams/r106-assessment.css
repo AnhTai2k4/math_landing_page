@@ -1,0 +1,1021 @@
+/* R100.6 learner assessment theme: presentation only.
+   Scopes: .r106-room (FocusRoom portal), .r106-assessment (PracticeAttempt), .r106-confirm (ExamConfirm portal),
+   .r106-homework-overview (BTVN intake/result). Layout, MathText/KaTeX, source images and PDF pages are untouched.
+   Selectors carry extra scope so lazy CSS loaded later (exams.css, btvn-session.css) cannot win by order. */
+
+/* ---------- FocusRoom ---------- */
+.ep-root.fr-room.r104-room.r106-room {
+  --fr-bg: #f6f9ff;
+  --fr-card: #fff;
+  --fr-ink: #213269;
+  --fr-line: #d8e3f2;
+  --fr-gold: #ffcf24;
+  --r106-muted: #4f6a91;
+  font-family: 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+  background: radial-gradient(ellipse 60% 42% at 50% 0%, #e6efff 0%, transparent 70%), var(--fr-bg);
+}
+.ep-root.fr-room.r104-room.r106-room.fr-dark {
+  --fr-bg: #101b2b;
+  --fr-card: #17273d;
+  --fr-ink: #e7eef8;
+  --fr-line: #344761;
+  --r106-muted: #a9bad2;
+  background: var(--fr-bg);
+}
+.ep-root.fr-room.r104-room.r106-room button:not(.fr-scrim) {
+  border-radius: 12px;
+}
+.ep-root.fr-room.r104-room.r106-room :is(select, textarea) {
+  border-radius: 12px;
+}
+.ep-root.fr-room.r104-room.r106-room button[aria-pressed=true] {
+  background: #fff6d6;
+  border-color: #213269;
+  color: #213269;
+}
+.ep-root.fr-room.r104-room.r106-room.fr-dark button[aria-pressed=true] {
+  background: #2e2a12;
+  border-color: #ffcf24;
+  color: var(--fr-ink);
+}
+/* Dark mode: never light-yellow hover behind light text. */
+.ep-root.fr-room.r104-room.r106-room.fr-dark button:hover:not(:disabled) {
+  background: #22385a;
+  border-color: #ffcf24;
+  color: var(--fr-ink);
+}
+.ep-root.fr-room.r104-room.r106-room :is(button, input, textarea, select, a, summary):focus-visible {
+  outline: 3px solid #213269;
+  outline-offset: 3px;
+}
+.ep-root.fr-room.r104-room.r106-room.fr-dark :is(button, input, textarea, select, a, summary):focus-visible {
+  outline-color: #ffcf24;
+}
+
+/* Header dock: white R106 card drawn behind the existing grid; nothing is moved. */
+.ep-root.fr-room.r104-room.r106-room .fr-top {
+  min-height: 112px;
+  padding: 14px max(48px, calc((100vw - 1480px) / 2));
+  background: transparent;
+  border-bottom: 0;
+  box-shadow: none;
+}
+.ep-root.fr-room.r104-room.r106-room .fr-top::after {
+  content: '';
+  position: absolute;
+  z-index: -2;
+  top: 8px;
+  bottom: 8px;
+  left: max(16px, calc((100vw - 1600px) / 2));
+  right: max(16px, calc((100vw - 1600px) / 2));
+  border: 1px solid #dbe4f2;
+  border-radius: 20px;
+  background: #ffffffed;
+  box-shadow: inset 0 -1px 0 #ffcf2480, 0 14px 36px -30px #21326973;
+  pointer-events: none;
+}
+.ep-root.fr-room.r104-room.r106-room.fr-dark .fr-top::after {
+  border-color: var(--fr-line);
+  background: var(--fr-card);
+  box-shadow: inset 0 -1px 0 #ffcf2459;
+}
+.ep-root.fr-room.r104-room.r106-room .fr-title strong {
+  font-weight: 600;
+  letter-spacing: -.02em;
+}
+.ep-root.fr-room.r104-room.r106-room .fr-title small {
+  color: var(--r106-muted);
+}
+
+/* Clock: solid yellow tile, navy digits; small arch sits behind it and never over text. */
+.ep-root.fr-room.r104-room.r106-room .fr-clock {
+  position: relative;
+  padding: 10px 18px 12px;
+  border: 1px solid #e9b900;
+  border-radius: 16px;
+  background: #ffcf24;
+  color: #213269;
+  box-shadow: 0 10px 24px -18px #c99a0099;
+}
+.ep-root.fr-room.r104-room.r106-room .fr-clock::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: -6px;
+  left: -14px;
+  right: -14px;
+  bottom: 35%;
+  border: 1.5px solid #ffcf24b3;
+  border-bottom: 0;
+  border-radius: 999px 999px 0 0;
+  background: radial-gradient(closest-side at 50% 100%, #fff3c4cc, #fff3c400);
+  pointer-events: none;
+}
+.ep-root.fr-room.r104-room.r106-room .fr-clock::after {
+  background: #2132692e;
+}
+.ep-root.fr-room.r104-room.r106-room .fr-clock small {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  color: inherit;
+}
+.ep-root.fr-room.r104-room.r106-room .fr-clock strong {
+  font-size: 36px;
+  font-weight: 650;
+  line-height: 1.15;
+  letter-spacing: -.02em;
+  font-variant-numeric: tabular-nums;
+}
+.ep-root.fr-room.r104-room.r106-room .fr-clock.fr-band-5 {
+  border: 2px solid #9a5b00;
+}
+.ep-root.fr-room.r104-room.r106-room .fr-clock.fr-band-1 {
+  background: #8b2938;
+  border-color: #8b2938;
+  color: #fff;
+}
+.ep-root.fr-room.r104-room.r106-room .fr-clock.fr-band-1::before {
+  border-color: #8b293859;
+  background: none;
+}
+.ep-root.fr-room.r104-room.r106-room .fr-clock.fr-band-1::after {
+  background: #ffffff70;
+}
+
+.ep-root.fr-room.r104-room.r106-room .fr-progress {
+  color: var(--r106-muted);
+}
+.ep-root.fr-room.r104-room.r106-room .fr-progress > span {
+  color: var(--fr-ink);
+  font-weight: 500;
+}
+.ep-root.fr-room.r104-room.r106-room .fr-progress progress {
+  height: 6px;
+  border-radius: 999px;
+  background: #e3eaf6;
+}
+.ep-root.fr-room.r104-room.r106-room .fr-progress progress::-webkit-progress-bar {
+  background: #e3eaf6;
+  border-radius: 999px;
+}
+.ep-root.fr-room.r104-room.r106-room .fr-progress progress::-webkit-progress-value {
+  background: #213269;
+  border-radius: 999px;
+}
+.ep-root.fr-room.r104-room.r106-room .fr-progress progress::-moz-progress-bar {
+  background: #213269;
+}
+.ep-root.fr-room.r104-room.r106-room.fr-dark .fr-progress progress,
+.ep-root.fr-room.r104-room.r106-room.fr-dark .fr-progress progress::-webkit-progress-bar {
+  background: #2a3d58;
+}
+.ep-root.fr-room.r104-room.r106-room.fr-dark .fr-progress progress::-webkit-progress-value {
+  background: #ffcf24;
+}
+.ep-root.fr-room.r104-room.r106-room.fr-dark .fr-progress progress::-moz-progress-bar {
+  background: #ffcf24;
+}
+
+/* Submit: navy with a yellow underline; stronger ring when every question is done or time is short. */
+.ep-root.fr-room.r104-room.r106-room :is(.fr-submit, .fr-sheet-submit) {
+  border-radius: 12px;
+  background: #213269;
+  border-color: #213269;
+  color: #fff;
+  font-weight: 600;
+  box-shadow: inset 0 -3px 0 #ffcf24;
+}
+.ep-root.fr-room.r104-room.r106-room :is(.fr-submit, .fr-sheet-submit):hover:not(:disabled) {
+  background: #2c437e;
+  border-color: #2c437e;
+  color: #fff;
+}
+.ep-root.fr-room.r104-room.r106-room .fr-submit.is-ready {
+  box-shadow: inset 0 -3px 0 #ffcf24, 0 0 0 3px #ffcf2466;
+}
+.ep-root.fr-room.r104-room.r106-room .fr-mobile-nav .fr-submit {
+  border-radius: 12px;
+  box-shadow: inset 0 -3px 0 #ffcf24;
+}
+
+.ep-root.fr-room.r104-room.r106-room .fr-menu-toggle[aria-expanded=true] {
+  border-color: #213269;
+}
+.ep-root.fr-room.r104-room.r106-room .fr-actions {
+  gap: 4px;
+  padding: 8px;
+  border-color: var(--fr-line);
+  border-radius: 16px;
+  box-shadow: 0 22px 48px -28px #21326980;
+}
+.ep-root.fr-room.r104-room.r106-room .fr-actions button {
+  width: 100%;
+  border-color: transparent;
+  text-align: left;
+}
+
+/* Horizontal question strip. */
+.ep-root.fr-room.r104-room.r106-room .fr-sheet h2 {
+  font-weight: 600;
+}
+.ep-root.fr-room.r104-room.r106-room .fr-sheet h3 {
+  padding: 3px 8px;
+  border: 1px solid var(--fr-line);
+  border-radius: 8px;
+  background: var(--fr-card);
+  color: var(--r106-muted);
+  font-weight: 600;
+  letter-spacing: .04em;
+}
+.ep-root.fr-room.r104-room.r106-room .fr-legend {
+  color: var(--r106-muted);
+}
+.ep-root.fr-room.r104-room.r106-room .fr-grid button {
+  border-radius: 50%;
+  border-color: #c9d7ee;
+}
+.ep-root.fr-room.r104-room.r106-room .fr-grid button.fr-invalid {
+  border: 2px solid #a12d3b;
+}
+.ep-root.fr-room.r104-room.r106-room.fr-dark .fr-grid button.fr-partial {
+  background: #3b2f0a;
+  border-color: #c7a436;
+  color: var(--fr-ink);
+}
+.ep-root.fr-room.r104-room.r106-room.fr-dark .fr-grid button.fr-answered {
+  border-color: #7f9bd6;
+}
+/* Current question: navy edge plus a yellow ring; the outline stays free for keyboard focus. */
+.ep-root.fr-room.r104-room.r106-room .fr-grid button[aria-current=step] {
+  border: 2px solid #213269;
+  outline: 0;
+  box-shadow: 0 0 0 3px var(--fr-card), 0 0 0 5px #ffcf24;
+}
+.ep-root.fr-room.r104-room.r106-room.fr-dark .fr-grid button[aria-current=step] {
+  border-color: #ffcf24;
+}
+.ep-root.fr-room.r104-room.r106-room .fr-grid button:focus-visible {
+  outline: 3px solid #213269;
+  outline-offset: 6px;
+}
+.ep-root.fr-room.r104-room.r106-room.fr-dark .fr-grid button:focus-visible {
+  outline-color: #ffcf24;
+}
+.ep-root.fr-room.r104-room.r106-room .fr-sheet.is-open {
+  border-radius: 24px 24px 0 0;
+  border-top: 1px solid var(--fr-line);
+  background: var(--fr-card);
+}
+
+/* Paper: one wide white card, corner 24, quiet arch ring painted in the top-right background. */
+.ep-root.fr-room.r104-room.r106-room .fr-paper {
+  border: 1px solid var(--fr-line);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at calc(100% + 26px) -26px, transparent 0 78px, #ffcf2459 79px 80.5px, transparent 81.5px) no-repeat,
+    var(--fr-card);
+  box-shadow: 0 22px 48px -40px #21326980;
+}
+.ep-root.fr-room.r104-room.r106-room.fr-dark .fr-paper {
+  background:
+    radial-gradient(circle at calc(100% + 26px) -26px, transparent 0 78px, #ffcf2440 79px 80.5px, transparent 81.5px) no-repeat,
+    var(--fr-card);
+}
+.ep-root.fr-room.r104-room.r106-room .fr-question-heading > span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: #213269;
+  color: #fff;
+  font-weight: 600;
+}
+.ep-root.fr-room.r104-room.r106-room.fr-dark .fr-question-heading > span {
+  background: #2b4577;
+}
+.ep-root.fr-room.r104-room.r106-room .fr-question-heading small {
+  color: var(--r106-muted);
+}
+
+/* Answer rows: separate soft cards; selected = light yellow + yellow inner edge + navy letter. */
+.ep-root.fr-room.r104-room.r106-room .fr-paper :is(.fr-source-choice, .fr-text-choices button) {
+  margin: 0 0 10px;
+  border: 1px solid var(--fr-line);
+  border-radius: 14px;
+  background: var(--fr-card);
+  box-shadow: inset 4px 0 0 transparent;
+}
+.ep-root.fr-room.r104-room.r106-room:not(.fr-dark) .fr-paper :is(.fr-source-choice, .fr-text-choices button):hover:not(:disabled):not([aria-pressed=true]) {
+  background: #f6f9ff;
+  border-color: #b9cbe8;
+}
+.ep-root.fr-room.r104-room.r106-room .fr-paper :is(.fr-source-choice, .fr-text-choices button, .fr-quick-mc button)[aria-pressed=true] {
+  background: #fff8dc;
+  border-color: #e9cf6b;
+  color: #213269;
+  box-shadow: inset 4px 0 0 #ffcf24;
+}
+.ep-root.fr-room.r104-room.r106-room.fr-dark .fr-paper :is(.fr-source-choice, .fr-text-choices button, .fr-quick-mc button)[aria-pressed=true] {
+  background: #2e2a12;
+  border-color: #8a7420;
+  color: var(--fr-ink);
+}
+.ep-root.fr-room.r104-room.r106-room .fr-paper button[aria-pressed=true] .fr-choice-letter {
+  background: #213269;
+  border-color: #213269;
+  color: #ffcf24;
+}
+.ep-root.fr-room.r104-room.r106-room.fr-dark .fr-paper button[aria-pressed=true] .fr-choice-letter {
+  background: #ffcf24;
+  border-color: #ffcf24;
+  color: #213269;
+}
+.ep-root.fr-room.r104-room.r106-room .fr-paper button[aria-pressed=true] .fr-choice-tick {
+  color: #213269;
+}
+.ep-root.fr-room.r104-room.r106-room.fr-dark .fr-paper button[aria-pressed=true] .fr-choice-tick {
+  color: #ffcf24;
+}
+.ep-root.fr-room.r104-room.r106-room .fr-quick-mc button {
+  border-radius: 14px;
+}
+.ep-root.fr-room.r104-room.r106-room .fr-quick-tf > div {
+  border-radius: 16px;
+}
+.ep-root.fr-room.r104-room.r106-room input.ep-short {
+  border: 2px solid #b9c9e3;
+  border-radius: 14px;
+}
+.ep-root.fr-room.r104-room.r106-room input.ep-short:focus {
+  border-color: #213269;
+}
+.ep-root.fr-room.r104-room.r106-room.fr-dark input.ep-short {
+  border-color: var(--fr-line);
+}
+.ep-root.fr-room.r104-room.r106-room.fr-dark input.ep-short:focus {
+  border-color: #ffcf24;
+}
+.ep-root.fr-room.r104-room.r106-room input.ep-short[aria-invalid=true] {
+  border-color: #be123c;
+}
+
+/* Bottom navigation and mobile dock. */
+.ep-root.fr-room.r104-room.r106-room .fr-navigation button:nth-child(2) {
+  background: #213269;
+  border-color: #213269;
+  color: #fff;
+  box-shadow: inset 0 -3px 0 #ffcf24;
+}
+.ep-root.fr-room.r104-room.r106-room .fr-navigation button:nth-child(2):hover:not(:disabled) {
+  background: #2c437e;
+  border-color: #2c437e;
+  color: #fff;
+}
+.ep-root.fr-room.r104-room.r106-room .fr-navigation span {
+  color: var(--r106-muted);
+}
+.ep-root.fr-room.r104-room.r106-room .fr-answer-dock {
+  border-top: 1px solid var(--fr-line);
+  border-radius: 20px 20px 0 0;
+  background: var(--fr-card);
+  box-shadow: 0 -12px 30px -26px #21326966;
+}
+.ep-root.fr-room.r104-room.r106-room .fr-answer-dock small {
+  color: var(--r106-muted);
+}
+.ep-root.fr-room.r104-room.r106-room :is(.fr-notice, .fr-save-status) {
+  border-radius: 12px;
+}
+
+@media (min-width: 761px) and (max-width: 1500px) {
+  .ep-root.fr-room.r104-room.r106-room .fr-top {
+    min-height: 100px;
+    padding: 12px 36px;
+  }
+  .ep-root.fr-room.r104-room.r106-room .fr-top::after {
+    top: 6px;
+    bottom: 6px;
+    left: 14px;
+    right: 14px;
+  }
+  .ep-root.fr-room.r104-room.r106-room .fr-clock strong {
+    font-size: 32px;
+  }
+}
+@media (max-width: 760px) {
+  .ep-root.fr-room.r104-room.r106-room .fr-top {
+    min-height: 96px;
+    padding: 12px 18px;
+  }
+  .ep-root.fr-room.r104-room.r106-room .fr-top::after {
+    top: 6px;
+    bottom: 6px;
+    left: 8px;
+    right: 8px;
+    border-radius: 16px;
+  }
+  .ep-root.fr-room.r104-room.r106-room .fr-clock {
+    padding: 8px 8px 10px;
+    border-radius: 14px;
+  }
+  .ep-root.fr-room.r104-room.r106-room .fr-clock::before {
+    top: -4px;
+    left: -8px;
+    right: -8px;
+  }
+  .ep-root.fr-room.r104-room.r106-room .fr-clock small {
+    letter-spacing: .03em;
+  }
+  .ep-root.fr-room.r104-room.r106-room .fr-clock strong {
+    font-size: 28px;
+  }
+  .ep-root.fr-room.r104-room.r106-room .fr-paper {
+    border-radius: 20px;
+  }
+  .ep-root.fr-room.r104-room.r106-room .fr-paper :is(.fr-source-choice, .fr-text-choices button) {
+    margin-bottom: 8px;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .ep-root.fr-room.r104-room.r106-room button {
+    transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
+  }
+  .ep-root.fr-room.r104-room.r106-room .fr-actions.is-open {
+    animation: r106-drop 180ms ease-out;
+  }
+}
+
+/* ---------- Confirm dialog (portal to body, so font and colours are set here) ---------- */
+.ep-confirm-backdrop.r106-confirm {
+  background: #142044a6;
+  font-family: 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+}
+.ep-confirm-backdrop.r106-confirm .ep-confirm {
+  border: 1px solid #d8e3f2;
+  border-radius: 24px;
+  background: #fff;
+  color: #213269;
+  box-shadow: 0 30px 80px -30px #142044b3;
+  line-height: 1.6;
+}
+.ep-confirm-backdrop.r106-confirm .ep-confirm h2 {
+  color: #213269;
+  font-weight: 600;
+  letter-spacing: -.02em;
+}
+.ep-confirm-backdrop.r106-confirm .ep-confirm > p {
+  color: #3c5580;
+}
+.ep-confirm-backdrop.r106-confirm .ep-confirm-list h3 {
+  color: #4f6a91;
+  font-weight: 600;
+}
+.ep-confirm-backdrop.r106-confirm .ep-confirm-list button {
+  border: 1px solid #cfdcef;
+  border-radius: 12px;
+  background: #fff;
+  color: #213269;
+  font: inherit;
+}
+.ep-confirm-backdrop.r106-confirm .ep-confirm-list button:hover {
+  background: #f6f9ff;
+  border-color: #9fb6dc;
+}
+.ep-confirm-backdrop.r106-confirm .ep-confirm-list button.is-warn {
+  border: 2px solid #be123c;
+  background: #fff1f2;
+}
+.ep-confirm-backdrop.r106-confirm .ep-confirm > .ep-toolbar {
+  border-color: #e4ebf6;
+}
+.ep-confirm-backdrop.r106-confirm .ep-confirm .ep-toolbar button {
+  border: 1px solid #cfdcef;
+  border-radius: 12px;
+  background: #fff;
+  color: #213269;
+  padding: 10px 18px;
+  font: inherit;
+  font-weight: 600;
+}
+.ep-confirm-backdrop.r106-confirm .ep-confirm .ep-toolbar button:hover {
+  background: #f6f9ff;
+  border-color: #9fb6dc;
+}
+.ep-confirm-backdrop.r106-confirm .ep-confirm .ep-toolbar .ep-primary {
+  background: #213269;
+  border-color: #213269;
+  color: #fff;
+  box-shadow: inset 0 -3px 0 #ffcf24;
+}
+.ep-confirm-backdrop.r106-confirm .ep-confirm .ep-toolbar .ep-primary:hover {
+  background: #2c437e;
+  border-color: #2c437e;
+}
+.ep-confirm-backdrop.r106-confirm .ep-confirm button:focus-visible {
+  outline: 3px solid #213269;
+  outline-offset: 3px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .ep-confirm-backdrop.r106-confirm .ep-confirm {
+    animation: r106-rise 200ms ease-out;
+  }
+  .ep-confirm-backdrop.r106-confirm .ep-confirm button {
+    transition: background-color 180ms ease, border-color 180ms ease;
+  }
+}
+
+/* ---------- Practice / exam page (intake, classic sheet, result) ---------- */
+.mtm-migration.r106-site .r106-assessment.r106-save-feedback {
+  margin: 14px 0;
+  padding: 12px 16px;
+  border: 1px solid #d8e3f2;
+  border-left: 3px solid #ffcf24;
+  border-radius: 12px;
+  background: #fff;
+  color: #213269;
+  font: 500 14px/1.7 'Be Vietnam Pro', system-ui, sans-serif;
+}
+.mtm-migration.r106-site .r106-assessment.r106-save-feedback:empty { display: none; }
+.ep-root .r106-assessment {
+  font-family: 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+}
+.ep-root .r106-assessment > header h1 {
+  font-weight: 600;
+  letter-spacing: -.04em;
+}
+.ep-root .r106-assessment > header > p:first-child::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 10px;
+  vertical-align: middle;
+  border-radius: 50%;
+  background: #ffcf24;
+  box-shadow: 0 0 0 4px #ffcf2430;
+}
+.ep-root .r106-assessment > .ep-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.ep-root .r106-assessment .ep-card {
+  border-color: #d8e3f2;
+  border-radius: 24px;
+  background-color: #fff;
+  color: #213269;
+  box-shadow: 0 16px 36px -30px #21326973;
+}
+.ep-root .r106-assessment .ep-card h2 {
+  font-weight: 600;
+  letter-spacing: -.02em;
+}
+.ep-root .r106-assessment .ep-room-intake {
+  background:
+    radial-gradient(circle at calc(100% + 30px) -30px, transparent 0 92px, #ffcf2470 93px 94.5px, transparent 95.5px) no-repeat,
+    linear-gradient(135deg, #fff 60%, #f6f9ff);
+}
+.ep-root .r106-assessment .ep-room-intake > .r106-intake-title {
+  display: block;
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: -.02em;
+}
+.ep-root .r106-assessment .ep-room-intake summary {
+  color: #213269;
+}
+.ep-root .r106-assessment .ep-notice {
+  border-radius: 14px;
+}
+.ep-root .r106-assessment .ep-erratum-accept {
+  border-color: #cfdcef;
+  border-radius: 12px;
+}
+.ep-root .r106-assessment .ep-primary {
+  border-color: #213269;
+  border-radius: 12px;
+  background: #213269;
+  color: #fff;
+  font-weight: 600;
+  box-shadow: inset 0 -3px 0 #ffcf24;
+}
+.ep-root .r106-assessment .ep-primary:hover:not(:disabled) {
+  background: #2c437e;
+  border-color: #2c437e;
+}
+.ep-root .r106-assessment :is(.ep-question-step button, .ep-backup-row button, .r106-result-card > button, .ep-clear-answer, .ep-desktop-layout button, .ep-mobile-panes button, .ep-notice button),
+.ep-root .r106-assessment.r106-submit-feedback > button {
+  min-height: 44px;
+  border: 1px solid #cfdcef;
+  border-radius: 12px;
+  background: #fff;
+  color: #213269;
+  font-weight: 500;
+}
+.ep-root .r106-assessment :is(.ep-question-step button, .ep-backup-row button, .r106-result-card > button, .ep-clear-answer, .ep-desktop-layout button, .ep-mobile-panes button, .ep-notice button):hover:not(:disabled),
+.ep-root .r106-assessment.r106-submit-feedback > button:hover:not(:disabled) {
+  background: #f6f9ff;
+  border-color: #9fb6dc;
+}
+.ep-root .r106-assessment :is(.ep-desktop-layout, .ep-mobile-panes) button[aria-pressed=true] {
+  background: #213269;
+  border-color: #213269;
+  color: #fff;
+  box-shadow: inset 0 -3px 0 #ffcf24;
+}
+.ep-root .r106-assessment .ep-mobile-timer {
+  border-radius: 12px;
+  background: #213269;
+  color: #ffcf24;
+}
+.ep-root .r106-assessment .ep-answer-toolbar {
+  border: 0;
+  border-radius: 16px;
+  background: #213269;
+  color: #fff;
+  box-shadow: inset 0 -3px 0 #ffcf24;
+}
+.ep-root .r106-assessment .ep-answer-toolbar [role=timer] {
+  color: #ffcf24;
+}
+.ep-root .r106-assessment fieldset {
+  border-color: #d8e3f2;
+  border-radius: 16px;
+}
+.ep-root .r106-assessment .ep-mc-grid .ep-option {
+  border-color: #c3d2ea;
+  border-radius: 14px;
+}
+.ep-root .r106-assessment .ep-option.is-selected,
+.ep-root .r106-assessment .ep-tf-option.is-selected {
+  background: #213269;
+  border-color: #213269;
+  color: #fff;
+  box-shadow: inset 0 -3px 0 #ffcf24;
+}
+.ep-root .r106-assessment .ep-short:not([aria-invalid=true]) {
+  border-color: #b9c9e3;
+  border-radius: 12px;
+}
+/* Classic answer sheet nav (result nav keeps verdict colours below). */
+.ep-root .r106-assessment .ep-question-nav:not(.ep-result-nav) button {
+  border: 1px solid #cfdcef;
+  border-radius: 12px;
+  background: #fff;
+  color: #213269;
+}
+.ep-root .r106-assessment .ep-question-nav:not(.ep-result-nav) button.is-answered {
+  background: #213269;
+  border-color: #213269;
+  color: #fff;
+}
+.ep-root .r106-assessment .ep-question-nav:not(.ep-result-nav) button.is-invalid {
+  border: 2px solid #be123c;
+  background: #fff1f2;
+  color: #9f1239;
+}
+.ep-root .r106-assessment .ep-question-nav:not(.ep-result-nav) button[aria-current=step] {
+  border: 2px solid #213269;
+  outline: 0;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px #ffcf24;
+}
+.ep-root .r106-assessment .ep-question-nav:not(.ep-result-nav) button:focus-visible {
+  outline: 3px solid #213269;
+  outline-offset: 5px;
+}
+.ep-root .r106-assessment .r106-result-card > h2 {
+  font-size: 1.35rem;
+}
+.ep-root .r106-assessment.r106-submit-feedback {
+  margin: 16px 0;
+  padding: 20px 24px;
+  border: 1px solid #d8e3f2;
+  border-left: 3px solid #ffcf24;
+  border-radius: 20px;
+  background: #fff;
+  color: #213269;
+  box-shadow: 0 16px 36px -30px #21326973;
+}
+.ep-root .r106-assessment.r106-submit-feedback > p {
+  margin: 0 0 12px;
+  font-weight: 500;
+}
+.ep-root .r106-assessment.r106-submit-feedback > p:last-child {
+  margin-bottom: 0;
+}
+
+/* ---------- Shared by assessment and BTVN overview: summary, review, solutions ---------- */
+.ep-root :is(.r106-assessment, .r106-homework-overview) :is(button, a, summary, select, input):focus-visible {
+  outline: 3px solid #213269;
+  outline-offset: 3px;
+}
+.ep-root :is(.r106-assessment, .r106-homework-overview) .ep-summary {
+  padding: 16px;
+  border: 1px solid #d8e3f2;
+  border-radius: 24px;
+  background: #fff;
+  color: #213269;
+  box-shadow: 0 18px 40px -34px #21326980;
+}
+.ep-root :is(.r106-assessment, .r106-homework-overview) .ep-summary-top {
+  padding: 24px 28px;
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at calc(100% + 40px) -40px, transparent 0 110px, #ffcf2459 111px 112.5px, transparent 113.5px) no-repeat,
+    linear-gradient(135deg, #213269, #2c437e);
+  color: #fff;
+}
+.ep-root :is(.r106-assessment, .r106-homework-overview) .ep-ring-track {
+  stroke: #ffffff2e;
+}
+.ep-root :is(.r106-assessment, .r106-homework-overview) .ep-ring-value {
+  stroke: #ffcf24;
+}
+.ep-root :is(.r106-assessment, .r106-homework-overview) .ep-summary-score {
+  color: #ffcf24;
+  font-weight: 700;
+}
+.ep-root :is(.r106-assessment, .r106-homework-overview) .ep-score-ring small {
+  color: #d7e4ff;
+}
+.ep-root :is(.r106-assessment, .r106-homework-overview) .ep-summary-eyebrow {
+  color: #ffe17a;
+  font-weight: 600;
+  letter-spacing: .12em;
+}
+.ep-root :is(.r106-assessment, .r106-homework-overview) .ep-summary-caption h2 {
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: -.02em;
+}
+.ep-root :is(.r106-assessment, .r106-homework-overview) .ep-summary-caption p {
+  color: #e3ebfa;
+}
+.ep-root :is(.r106-assessment, .r106-homework-overview) .ep-summary-caption .ep-summary-time {
+  color: #fff;
+}
+.ep-root :is(.r106-assessment, .r106-homework-overview) .ep-summary-caption small {
+  color: #c9d7f0;
+}
+.ep-root :is(.r106-assessment, .r106-homework-overview) .ep-summary-parts {
+  margin-top: 16px;
+}
+.ep-root :is(.r106-assessment, .r106-homework-overview) .ep-part-score {
+  border-color: #d8e3f2;
+  border-radius: 16px;
+  background: #f6f9ff;
+  color: #213269;
+}
+.ep-root :is(.r106-assessment, .r106-homework-overview) .ep-part-score small {
+  color: #4f6a91;
+}
+.ep-root :is(.r106-assessment, .r106-homework-overview) .ep-part-meter {
+  background: #e3eaf6;
+}
+.ep-root :is(.r106-assessment, .r106-homework-overview) .ep-part-meter span {
+  background: #213269;
+}
+.ep-root :is(.r106-assessment, .r106-homework-overview) .ep-summary-status > div {
+  border-radius: 14px;
+}
+.ep-root :is(.r106-assessment, .r106-homework-overview) .ep-result-review > h2 {
+  font-weight: 600;
+  letter-spacing: -.02em;
+}
+.ep-root :is(.r106-assessment, .r106-homework-overview) .ep-result-nav button {
+  border-radius: 12px;
+}
+.ep-root :is(.r106-assessment, .r106-homework-overview) .ep-result-review .ep-question.ep-card {
+  border: 1px solid #d8e3f2;
+  border-radius: 20px;
+  background: #fff;
+  color: #213269;
+  box-shadow: 0 14px 32px -30px #21326973;
+}
+.ep-root :is(.r106-assessment, .r106-homework-overview) .ep-result-review .ep-question.ep-card > h3 {
+  font-weight: 600;
+}
+.ep-root :is(.r106-assessment, .r106-homework-overview) .ep-verdict {
+  padding: 4px 12px;
+  border-radius: 999px;
+}
+.ep-root :is(.r106-assessment, .r106-homework-overview) .ep-review {
+  border-left: 3px solid #213269;
+  border-radius: 0 14px 14px 0;
+  background: #f6f9ff;
+}
+.ep-root :is(.r106-assessment, .r106-homework-overview) .ep-solution > summary {
+  min-height: 44px;
+  margin-top: 8px;
+  padding: 10px 16px;
+  border: 1px solid #cfdcef;
+  border-radius: 12px;
+  background: #fff;
+  color: #213269;
+  font-weight: 600;
+}
+.ep-root :is(.r106-assessment, .r106-homework-overview) .ep-solution[open] > summary {
+  border-color: #e9cf6b;
+  background: #fff8dc;
+  box-shadow: inset 3px 0 0 #ffcf24;
+}
+.ep-root :is(.r106-assessment, .r106-homework-overview) .ep-review-filters button {
+  min-height: 44px;
+  border: 1px solid #cfdcef;
+  border-radius: 12px;
+  background: #fff;
+  color: #213269;
+}
+.ep-root :is(.r106-assessment, .r106-homework-overview) .ep-review-filters button:hover:not(:disabled) {
+  background: #f6f9ff;
+  border-color: #9fb6dc;
+}
+.ep-root :is(.r106-assessment, .r106-homework-overview) .ep-review-filters button[aria-pressed=true] {
+  background: #213269;
+  border-color: #213269;
+  color: #fff;
+  box-shadow: inset 0 -3px 0 #ffcf24;
+}
+.ep-root :is(.r106-assessment, .r106-homework-overview) .ep-review-section-filter select {
+  border-color: #cfdcef;
+  border-radius: 12px;
+}
+
+/* ---------- BTVN overview (intake before a lesson attempt, receipt and result after submit) ---------- */
+.ep-root .r106-homework-overview.btvn-detail {
+  font-family: 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+}
+.ep-root .r106-homework-overview.btvn-detail .btvn-heading > .btvn-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .12em;
+}
+.ep-root .r106-homework-overview.btvn-detail .btvn-heading > .btvn-eyebrow::before {
+  content: '';
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ffcf24;
+  box-shadow: 0 0 0 5px #ffcf2430;
+}
+.ep-root .r106-homework-overview.btvn-detail .btvn-heading > h1 {
+  font-weight: 600;
+  letter-spacing: -.04em;
+}
+.ep-root .r106-homework-overview.btvn-detail .btvn-sheet {
+  border: 1px solid #d8e3f2;
+  border-radius: 24px;
+  background-color: #fff;
+  color: #213269;
+  box-shadow: 0 18px 40px -34px #21326980;
+}
+.ep-root .r106-homework-overview.btvn-detail .btvn-detail-grid > article.btvn-sheet {
+  background:
+    radial-gradient(circle at calc(100% + 30px) -30px, transparent 0 92px, #ffcf2466 93px 94.5px, transparent 95.5px) no-repeat,
+    #fff;
+}
+.ep-root .r106-homework-overview.btvn-detail .btvn-sheet h2 {
+  color: #213269;
+  font-weight: 600;
+  letter-spacing: -.02em;
+}
+.ep-root .r106-homework-overview.btvn-detail .btvn-sheet .btvn-eyebrow {
+  color: #4f6a91;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .12em;
+}
+.ep-root .r106-homework-overview.btvn-detail .btvn-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 4px 12px;
+  border: 1px solid #e9cf6b;
+  border-radius: 999px;
+  background: #fff8dc;
+  color: #213269;
+  font-weight: 600;
+}
+.ep-root .r106-homework-overview.btvn-detail .btvn-chip.success {
+  border-color: #9fd3b4;
+  background: #ecf6f0;
+  color: #175b3a;
+}
+.ep-root .r106-homework-overview.btvn-detail .btvn-check {
+  background: #213269;
+  color: #ffcf24;
+}
+.ep-root .r106-homework-overview.btvn-detail .btvn-score-big {
+  padding: 20px 24px;
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at calc(100% + 30px) -30px, transparent 0 84px, #ffcf2459 85px 86.5px, transparent 87.5px) no-repeat,
+    linear-gradient(135deg, #213269, #2c437e);
+  color: #fff;
+}
+.ep-root .r106-homework-overview.btvn-detail .btvn-score-big strong {
+  color: #ffcf24;
+  font-weight: 700;
+  letter-spacing: -.03em;
+}
+.ep-root .r106-homework-overview.btvn-detail .btvn-score-big strong small {
+  color: #d7e4ff;
+  letter-spacing: 0;
+}
+.ep-root .r106-homework-overview.btvn-detail .btvn-score-big p {
+  color: #e3ebfa;
+}
+.ep-root .r106-homework-overview.btvn-detail .btvn-stats > div {
+  padding: 12px 14px;
+  border: 1px solid #d8e3f2;
+  border-radius: 16px;
+  background: #f6f9ff;
+  color: #213269;
+}
+.ep-root .r106-homework-overview.btvn-detail .btvn-stats small {
+  color: #4f6a91;
+}
+.ep-root .r106-homework-overview.btvn-detail .btvn-stats strong {
+  color: #213269;
+}
+.ep-root .r106-homework-overview.btvn-detail .btvn-sheet .btvn-deadline {
+  padding-left: 12px;
+  border-left: 3px solid #ffcf24;
+}
+.ep-root .r106-homework-overview.btvn-detail .btvn-sheet .btvn-footnote {
+  color: #4f6a91;
+}
+.ep-root .r106-homework-overview.btvn-detail .btvn-history-row {
+  border-top: 1px solid #e4eaf5;
+}
+.ep-root .r106-homework-overview.btvn-detail .btvn-history-row small {
+  color: #4f6a91;
+}
+.ep-root .r106-homework-overview.btvn-detail .btvn-history-row strong {
+  color: #213269;
+}
+.ep-root .r106-homework-overview.btvn-detail .btvn-btn {
+  min-height: 44px;
+  border: 1px solid #cfdcef;
+  border-radius: 12px;
+  background: #fff;
+  color: #213269;
+  font-weight: 600;
+}
+.ep-root .r106-homework-overview.btvn-detail .btvn-btn:hover:not(:disabled) {
+  background: #f6f9ff;
+  border-color: #9fb6dc;
+}
+.ep-root .r106-homework-overview.btvn-detail .btvn-btn.primary {
+  border-color: #213269;
+  background: #213269;
+  color: #fff;
+  box-shadow: inset 0 -3px 0 #ffcf24;
+}
+.ep-root .r106-homework-overview.btvn-detail .btvn-btn.primary:hover:not(:disabled) {
+  border-color: #2c437e;
+  background: #2c437e;
+}
+.ep-root .r106-homework-overview.btvn-detail .btvn-btn:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+@media (max-width: 760px) {
+  .ep-root :is(.r106-assessment, .r106-homework-overview) .ep-summary {
+    padding: 12px;
+  }
+  .ep-root :is(.r106-assessment, .r106-homework-overview) .ep-summary-top {
+    padding: 20px 16px;
+  }
+  .ep-root .r106-homework-overview.btvn-detail .btvn-score-big {
+    padding: 16px 18px;
+  }
+  .ep-root .r106-assessment.r106-submit-feedback {
+    padding: 16px 18px;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .ep-root :is(.r106-assessment, .r106-homework-overview) :is(button, summary) {
+    transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease, transform 200ms ease;
+  }
+  .ep-root .r106-assessment .ep-primary:hover:not(:disabled),
+  .ep-root .r106-homework-overview.btvn-detail .btvn-btn.primary:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
+}
+
+@keyframes r106-rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes r106-drop {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: none; }
+}

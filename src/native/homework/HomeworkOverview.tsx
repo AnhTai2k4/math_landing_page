@@ -10,6 +10,7 @@ import {reviewRows} from '../exams/review';
 import {hasReadableTfStatements} from '../exams/question-statements';
 import MtmScoreBreakdown from '../exams/MtmScoreBreakdown';
 import {MTM_SCORING_VERSION} from '../exams/mtm-scoring';
+import '../exams/r106-assessment.css';
 
 export const homeworkDate=(at:number)=>Number.isSafeInteger(at)&&at>=0&&at<=253402300799999?new Date(at).toLocaleString('vi-VN',{timeZone:'Asia/Ho_Chi_Minh',hour:'2-digit',minute:'2-digit',weekday:'long',day:'2-digit',month:'2-digit'}):'Chưa xác định thời điểm';
 const validScore=(score:number)=>Number.isFinite(score)&&score>=0&&score<=10;
@@ -42,7 +43,7 @@ export default function HomeworkOverview({state,busy,onStart,onRefreshReceipt}:{
   const reviewReady=!!current&&canReview&&hasAnswers&&!!state.exam&&!!state.draft&&state.draft.examId===state.exam.id&&state.draft.examVersionHash===state.exam.versionHash&&state.draft.rubricVersion===state.exam.rubricVersion&&state.draft.answerKeyVersion===state.exam.answerKeyVersion;
   const unavailableRetry=reviewReady&&state.exam&&state.draft
     ?reviewRows(state.exam,state.draft).filter(({q,status})=>q.kind==='tf'&&(status==='wrong'||status==='partial'||status==='unanswered')&&!hasReadableTfStatements(q)).length:0;
-  return <div id="btvn-summary" className="btvn-detail">
+  return <div id="btvn-summary" className="btvn-detail r106-homework-overview">
     <div className="btvn-heading"><p className="btvn-eyebrow">{displayClassName(state)} · {submittedReceipt?(monthly?'KẾT QUẢ KIỂM TRA THÁNG':'KẾT QUẢ BTVN'):hiddenSubmission?'ĐÃ NỘP':awaitingReceipt?'ĐANG XÁC NHẬN KẾT QUẢ':'CHUẨN BỊ LÀM BÀI'}</p><h1>{homeworkTitle(state)}</h1>{homeworkLessonCaption(state)&&<p className="btvn-sub">{homeworkLessonCaption(state)}</p>}</div>
     {submittedReceipt&&<div className="btvn-result-meta"><span>{scoreNeedsReview?'Bài đã nộp. Điểm đang được đối soát.':'Bài đã nộp và lưu kết quả.'}</span><strong className={'btvn-chip'+(bestHasScore?' success':'')}>Điểm cao nhất: {best}</strong></div>}
     {monthly&&<p role="status">Kiểm tra cuối tháng · Chỉ 1 lượt. Mở: {state.opensAt&&homeworkDate(state.opensAt)}. Đóng: {state.closesAt&&homeworkDate(state.closesAt)} (giờ Việt Nam). {!canReview&&'Lời giải chỉ mở sau giờ đóng.'}</p>}

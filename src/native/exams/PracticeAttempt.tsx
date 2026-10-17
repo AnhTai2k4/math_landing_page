@@ -13,6 +13,7 @@ import type {PracticeAttemptProps} from './attempt-types';
 import AttemptHeader from './AttemptHeader';
 import AttemptAnswerSheet from './AttemptAnswerSheet';
 import AttemptResult from './AttemptResult';
+import './r106-assessment.css';
 export {localStore};
 const QuestionPdf=lazy(()=>import('./QuestionPdf'));
 function exportDraft(draft: Draft): boolean {
@@ -37,11 +38,11 @@ export default function PracticeAttempt({exam,previousExam,catalogUrl,storeOverr
   const {sourceIssue,erratum,acceptedErratum,setAcceptedErratum,legacy,persisted,conflict,draft,notice,setNotice,unsaved,exportNotice,setExportNotice,pdfReady,setPdfReady,confirmation,setConfirmation,desktopLayout,setDesktopLayout,setActiveQuestion,setQuestionFocus,mobilePane,setMobilePane,leaveConfirmation,persist,finish,begin,submitted,sections,answered,invalidCount,seconds,startDisabled,startLabel,retake} = state;
   const [exitedAttempt,setExitedAttempt]=useState<string|null>(null);
   const focused=phongThiV2&&!!draft&&!submitted&&exitedAttempt!==draft.attemptId;
-  if(isHomework&&submitted)return <section aria-label="Xác nhận nộp BTVN"><p role={onRetrySave||onAcceptClosed?"alert":"status"}>{onRetrySave||onAcceptClosed?saveStatus:"Đang chờ máy chủ MTM xác nhận bài nộp của em…"}</p>{onRetrySave&&<button type="button" onClick={onRetrySave}>Gửi lại bài đang giữ</button>}{onAcceptClosed&&<button type="button" onClick={onAcceptClosed}>Chấp nhận bản máy chủ đã chấm</button>}</section>;
-  return <section className="ep-attempt">{leaveConfirmation}
+  if(isHomework&&submitted)return <section className="r106-assessment r106-submit-feedback" aria-label="Xác nhận nộp BTVN"><p role={onRetrySave||onAcceptClosed?"alert":"status"}>{onRetrySave||onAcceptClosed?saveStatus:"Đang chờ máy chủ MTM xác nhận bài nộp của em…"}</p>{onRetrySave&&<button type="button" onClick={onRetrySave}>Gửi lại bài đang giữ</button>}{onAcceptClosed&&<button type="button" onClick={onAcceptClosed}>Chấp nhận bản máy chủ đã chấm</button>}</section>;
+  return <section className="ep-attempt r106-assessment">{leaveConfirmation}
     {focused?<FocusRoom key={draft.attemptId} props={props} state={state} onExit={()=>setExitedAttempt(draft.attemptId)}/>:<>
     {phongThiV2&&draft&&!submitted&&<button type="button" className="ep-primary" onClick={()=>setExitedAttempt(null)}>Vào lại phòng tập trung</button>}
-    {phongThiV2&&!draft&&<section className="ep-card ep-room-intake"><strong>{isHomework?'Phòng làm BTVN MTM':'Phòng tự luyện MTM'}</strong><RoomNotice isHomework={isHomework}/><details><summary>Nguồn và cách chấm</summary><p>MTM sưu tầm và biên soạn</p><p>Thang 10 điểm. Điểm mỗi câu hiện ở phiếu; câu trống hoặc sai định dạng được 0 điểm.</p>{exam.questions.find(q=>q.kind==='tf')?.kind==='tf'&&<p>Đúng/sai: {exam.questions.filter(q=>q.kind==='tf').slice(0,1).map(q=>q.kind==='tf'?q.pointsByCorrectCount.map((v,i)=>i+' ý đúng: '+(v/1000).toLocaleString('vi-VN')+' điểm').join(' · '):'')}</p>}<p>Hết giờ tự nộp. Toàn màn hình giúp tập trung, không xác thực kỳ thi hay chống gian lận.</p></details></section>}
+    {phongThiV2&&!draft&&<section className="ep-card ep-room-intake"><strong className="r106-intake-title">{isHomework?'Phòng làm BTVN MTM':kind==='exam'?'Phòng thi thử MTM':'Phòng tự luyện MTM'}</strong><RoomNotice isHomework={isHomework}/><details><summary>Nguồn và cách chấm</summary><p>MTM sưu tầm và biên soạn</p><p>Thang 10 điểm. Điểm mỗi câu hiện ở phiếu; câu trống hoặc sai định dạng được 0 điểm.</p>{exam.questions.find(q=>q.kind==='tf')?.kind==='tf'&&<p>Đúng/sai: {exam.questions.filter(q=>q.kind==='tf').slice(0,1).map(q=>q.kind==='tf'?q.pointsByCorrectCount.map((v,i)=>i+' ý đúng: '+(v/1000).toLocaleString('vi-VN')+' điểm').join(' · '):'')}</p>}<p>Hết giờ tự nộp. Toàn màn hình giúp tập trung, không xác thực kỳ thi hay chống gian lận.</p></details></section>}
     <AttemptHeader {...props}/>
     {/* LT-15 (Đợt 4): trên điện thoại phiếu trả lời (có nút Bắt đầu) bị ẩn sau thẻ "Đọc câu hỏi"; nút này đưa việc bắt đầu lên màn đầu.
         Cùng điều kiện và cùng hàm begin() với nút trong phiếu; chỉ hiện ở màn hẹp (exams.css). */}

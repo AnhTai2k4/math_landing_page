@@ -54,7 +54,7 @@ function ManagedAttempt({state,gateway,onState,onPendingChange,saverRef}:{state:
     }};
   },[state.draft?.attemptId,saver]);
   const saveStatus=save.failed?'Chưa lưu máy chủ':save.pending?'Chờ máy chủ lưu':'Đã lưu máy chủ';
-  return <><p role="status">{save.message||notice}</p>{save.failed&&!save.closed&&<button disabled={save.saving} onClick={saver.retry}>Gửi lại bài đang giữ</button>}
+  return <><p className="r106-assessment r106-save-feedback" role="status">{save.message||notice}</p>{save.failed&&!save.closed&&<button disabled={save.saving} onClick={saver.retry}>Gửi lại bài đang giữ</button>}
     <PracticeAttempt isHomework exam={state.exam} catalogUrl={location.pathname} contextLabel="BTVN" audienceLabel={displayClassName(state)} storeOverride={store}
       homeworkSelfCheck={<HomeworkSelfCheckTool selection={checkSelection}/>}
       saveStatus={save.failed?save.message:saveStatus} savePending={save.pending} onRetrySave={save.failed&&!save.closed?saver.retry:undefined} onAcceptClosed={save.closed?saver.acceptClosed:undefined}
