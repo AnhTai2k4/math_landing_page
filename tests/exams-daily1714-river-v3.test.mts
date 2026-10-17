@@ -84,4 +84,36 @@ test('Component route v3 khóa bắt đầu, đổi khối loại câu cũ và c
   const launcher=readFileSync(join(root,'src/native/playground/Playground.tsx'),'utf8');assert.match(launcher,/<RiverRace onExit=\{close\} studyScopeRequired/);
   const source=[file,'src/native/playground/study-game-bank.ts','src/native/playground/riverCore.ts'].map(path=>readFileSync(join(root,path),'utf8')).join('\n');assert.doesNotMatch(source,/fetch\(|sendBeacon|supabase|\u2014/);assert.match(source,/Chưa đối chiếu được tiến độ lớp từ BTVN/);
 });
-finish({note:'7 nhóm ca, 24 câu có oracle Toán riêng. Chỉ xác nhận chọn khối/chương thủ công, chưa chứng minh đồng bộ tiến độ BTVN. Hook UI không thay QA trình duyệt.'});
+test('Chọn chương giữ phím control/IME, không hiện kỷ lục legacy khi bỏ chọn và phím game thường vẫn hoạt động',()=>{
+  const keys=['window','document','requestAnimationFrame','cancelAnimationFrame'] as const,old=Object.fromEntries(keys.map(k=>[k,Object.getOwnPropertyDescriptor(globalThis,k)]));
+  const store=new FakeStore(),frames=new Map<number,any>();let id=0,time=0;
+  saveRiverRecord(store,900);saveRiverRecord(store,100,'standard','g12-derivatives');
+  Object.defineProperty(globalThis,'window',{configurable:true,value:{localStorage:store,matchMedia:()=>({matches:false})}});
+  Object.defineProperty(globalThis,'document',{configurable:true,value:{hidden:false,addEventListener(){},removeEventListener(){}}});
+  Object.defineProperty(globalThis,'requestAnimationFrame',{configurable:true,value:(fn:any)=>{frames.set(++id,fn);return id;}});
+  Object.defineProperty(globalThis,'cancelAnimationFrame',{configurable:true,value:(key:number)=>frames.delete(key)});
+  const m=mount(file,{onExit(){},studyScopeRequired:true}),select=()=>all(m.tree,n=>n.type==='select')[0];
+  const key=(value:string,tagName='DIV',extra:Record<string,unknown>={})=>{let prevented=0;m.tree.props.onKeyDown({key:value,target:{tagName},preventDefault(){prevented++;},...extra});m.draw();return prevented;};
+  try{
+    m.click('Khối 12');select().props.onChange({target:{value:'g12-derivatives'}});m.draw();assert.match(text(m.tree),/Kỷ lục Tiêu chuẩn trên máy: 100 điểm/);
+    for(const tag of ['SELECT','INPUT','BUTTON','TEXTAREA','A'])for(const value of ['ArrowLeft','ArrowRight','a','d','p']){
+      const before=text(m.tree);assert.equal(key(value,tag),0,`${tag} giữ hành vi mặc định của ${value}`);assert.equal(text(m.tree),before);
+    }
+    select().props.onChange({target:{value:''}});m.draw();assert.match(text(m.tree),/Kỷ lục Tiêu chuẩn trên máy: 0 điểm/);assert.doesNotMatch(text(m.tree),/900 điểm/);assert.equal(button(m,'Bắt đầu đua thuyền').props.disabled,true);
+    select().props.onChange({target:{value:'g12-derivatives'}});m.draw();all(m.tree,n=>n.type==='input')[0].props.onChange({target:{checked:true}});m.draw();m.click('Bắt đầu đua thuyền');
+    for(let n=0;n<33;n++){const batch=[...frames.values()];frames.clear();time+=100;batch.forEach(fn=>fn(time));m.draw();}
+    const before=text(m.tree);
+    for(const event of [{key:'a',ctrlKey:true},{key:'d',ctrlKey:true},{key:'ArrowLeft',altKey:true},{key:'ArrowRight',metaKey:true},{key:'p',altKey:true},...['a','d','p'].map(key=>({key,nativeEvent:{isComposing:true}}))]){
+      const {key:value,...extra}=event;assert.equal(key(value,'DIV',extra),0);assert.equal(text(m.tree),before);
+    }
+    assert.equal(key('ArrowLeft','BUTTON'),0);assert.equal(text(m.tree),before);
+    assert.equal(key('ArrowLeft'),1);assert.match(text(m.tree),/Thuyền ở làn 1\/3/);
+    assert.equal(key('ArrowRight'),1);assert.match(text(m.tree),/Thuyền ở làn 2\/3/);
+    assert.equal(key('d'),1);assert.match(text(m.tree),/Thuyền ở làn 3\/3/);
+    assert.equal(key('a'),1);assert.match(text(m.tree),/Thuyền ở làn 2\/3/);
+    assert.equal(key('p'),1);assert.match(text(m.tree),/Thuyền đang neo an toàn/);
+    assert.equal(key('p'),1);assert.doesNotMatch(text(m.tree),/Thuyền đang neo an toàn/);
+  }finally{m.unmount();for(const name of keys){if(old[name])Object.defineProperty(globalThis,name,old[name]!);else delete(globalThis as any)[name];}}
+});
+
+finish({note:'8 nhóm ca, 24 câu có oracle Toán riêng. Chỉ xác nhận chọn khối/chương thủ công, chưa chứng minh đồng bộ tiến độ BTVN. Hook UI không thay QA trình duyệt.'});

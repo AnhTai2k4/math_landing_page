@@ -56,7 +56,7 @@ export default function RiverRace({onExit,studyScopeRequired=false}: {onExit: ()
   const recordScope = studyScopeRequired ? topicId || 'unselected' : undefined;
   const chooseMode = (mode: RiverMode) => {if(renderSession !== session.current || current.current.phase !== 'ready')return;update(freshRiver(mode,current.current.questions));setBest(readRiverRecord(safeStorage(),mode,recordScope));};
   const chooseGrade = (value:StudyGrade) => {if(renderSession!==session.current||current.current.phase!=='ready')return;session.current++;setGrade(value);saveStudyGameGrade(safeStorage(),value);setTopicId('');setConfirmed(false);setBest(0);update(freshRiver(current.current.mode,[]));};
-  const chooseTopic = (value:string) => {if(renderSession!==session.current||current.current.phase!=='ready'||!grade)return;const questions=studyGameQuestions(grade,value);session.current++;setTopicId(value);setConfirmed(false);setBest(readRiverRecord(safeStorage(),current.current.mode,value));update(freshRiver(current.current.mode,questions));};
+  const chooseTopic = (value:string) => {if(renderSession!==session.current||current.current.phase!=='ready'||!grade)return;const questions=studyGameQuestions(grade,value);session.current++;setTopicId(value);setConfirmed(false);setBest(questions.length?readRiverRecord(safeStorage(),current.current.mode,value):0);update(freshRiver(current.current.mode,questions));};
   const start = () => {if(renderSession !== session.current || (current.current.phase !== 'ready' && current.current.phase !== 'finished') || studyScopeRequired&&(!grade||!confirmed||!current.current.questions?.length))return;session.current++;reviewIdentity.current++;setReview(null);setReviewAnswer(null);focusStage.current=true;update(beginRiver(freshRiver(current.current.mode,current.current.questions)));};
   const changeMode = () => {if(renderSession !== session.current || current.current.phase !== 'finished')return;session.current++;reviewIdentity.current++;setReview(null);setReviewAnswer(null);update(freshRiver(current.current.mode,current.current.questions));heading.current?.focus();};
   const tone = (good: boolean) => {
@@ -113,7 +113,9 @@ export default function RiverRace({onExit,studyScopeRequired=false}: {onExit: ()
   const playing=game.phase === 'running' || game.phase === 'intro';
   const keyboard=(event: React.KeyboardEvent) => {
     if (renderSession !== session.current) return;
-    if (event.altKey || event.ctrlKey || event.metaKey || event.repeat) return;
+    if (event.altKey || event.ctrlKey || event.metaKey || event.repeat || event.nativeEvent?.isComposing) return;
+    const tag=(event.target as HTMLElement|undefined)?.tagName;
+    if(tag&&['BUTTON','INPUT','SELECT','TEXTAREA','A'].includes(tag))return;
     if (event.key === 'ArrowLeft' || event.key.toLowerCase() === 'a') {event.preventDefault();steer(-1);}
     if (event.key === 'ArrowRight' || event.key.toLowerCase() === 'd') {event.preventDefault();steer(1);}
     if (event.key.toLowerCase() === 'p') {event.preventDefault();if (current.current.phase === 'paused') update(resumeRiver(current.current));else pause();}
