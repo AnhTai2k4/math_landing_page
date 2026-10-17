@@ -15,6 +15,7 @@ let shelfReady=false;
 const loadShelf=()=>import('./PracticeShelf').then(m=>{shelfReady=true;return m;});
 const QuickRecall=lazy(()=>import('./QuickRecall'));
 const MentalMath=lazy(()=>import('./MentalMath'));
+const IntervalGame=lazy(()=>import('./IntervalGame'));
 const FormulaMatch=lazy(()=>import('./FormulaMatch'));
 const LineGraphGame=lazy(()=>import('./LineGraphGame'));
 const ErrorHunt=lazy(()=>import('./ErrorHunt'));
@@ -58,6 +59,7 @@ export default function PracticeLibrary(){
         <h2>{chapter.title}</h2><p>{chapter.forms.join(' · ')}</p>
         {['10','11','12'].includes(selected.id)&&<>
           <PracticeTool key={'recall:'+selected.id+':'+chapter.id} label="Ôn nhanh công thức" loading="Đang tải bộ thẻ…"><QuickRecall track={selected.id} chapter={chapter.id}/></PracticeTool>
+          <PracticeTool key={'interval:'+selected.id+':'+chapter.id} label="Mini game · Tập nghiệm trên trục số" loading="Đang tải trò tập nghiệm…"><IntervalGame/></PracticeTool>
           <PracticeTool key={'mental:'+selected.id+':'+chapter.id} label="Trò tự luyện · Tính nhẩm 5 câu" loading="Đang tải trò tính nhẩm…"><MentalMath/></PracticeTool>
           <PracticeTool key={'formula:'+selected.id+':'+chapter.id} label="Trò tự ôn · Nhận diện công thức" loading="Đang tải trò ghép thẻ…"><FormulaMatch track={selected.id} chapter={chapter.id}/></PracticeTool>
           <PracticeTool key={'graph:'+selected.id+':'+chapter.id} label="Trò tự luyện · Đọc đồ thị đường thẳng" loading="Đang tải trò đồ thị…"><LineGraphGame/></PracticeTool>

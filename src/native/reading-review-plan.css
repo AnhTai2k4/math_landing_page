@@ -1,0 +1,23 @@
+.native-ui .reading-review-plan{color:#213269;overflow-wrap:anywhere;font-size:16px;line-height:1.7;margin-top:18px;min-width:0}
+.native-ui .reading-review-plan h2{font-size:23px;margin:0 0 12px;color:#213269}
+.native-ui .reading-review-plan h3{font-size:20px;margin:0 0 12px;color:#213269}
+.native-ui .reading-review-plan p{margin:0 0 14px}
+.native-ui .reading-review-plan form>label{display:block;font-weight:700;margin-bottom:8px}
+.native-ui .reading-review-plan input[type=date]{min-height:48px;max-width:100%;min-width:0;width:260px;background:#fff;border:1px solid #213269;border-radius:8px;padding:10px 12px;color:#213269;font:inherit;margin-bottom:10px}
+.native-ui .reading-review-plan input[aria-invalid=true]{border:2px solid #9b3524}
+.native-ui .reading-review-plan [role=alert]{color:#7d2419;background:#fff1ed;padding:12px;border-radius:8px}
+.native-ui .reading-review-plan-actions{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
+.native-ui .reading-review-plan button{min-height:48px;max-width:100%;padding:10px 16px;font:inherit;font-weight:700;border:1px solid #213269;border-radius:8px;background:#fff;color:#213269;white-space:normal}
+.native-ui .reading-review-plan button[type=submit]{background:#FFCF24}
+.native-ui .reading-review-plan button:hover:enabled{background:#f0f4fa}
+.native-ui .reading-review-plan button[type=submit]:hover:enabled{background:#f4c200}
+.native-ui .reading-review-plan input:focus-visible,.native-ui .reading-review-plan button:focus-visible{outline:3px solid #213269;outline-offset:3px}
+.native-ui .reading-review-plan-result{margin-top:22px;border-top:2px solid #FFCF24;padding-top:20px}
+.native-ui .reading-review-plan ul{list-style:none;padding:0;margin:14px 0;display:grid;gap:12px}
+.native-ui .reading-review-plan li{padding:0;border:1px solid #d5dceb;border-radius:10px;background:#f8faff;min-width:0}
+.native-ui .reading-review-plan li.is-checked{background:#fffbeb;border-color:#213269;box-shadow:inset 4px 0 0 #FFCF24}
+.native-ui .reading-review-plan li label{display:flex;align-items:flex-start;gap:12px;min-height:48px;padding:16px;cursor:pointer}
+.native-ui .reading-review-plan li input{accent-color:#213269;flex:0 0 24px;width:24px;height:24px;margin:3px 0 0}
+.native-ui .reading-review-plan li span{display:block;min-width:0}
+.native-ui .reading-review-plan li b{display:block;margin-bottom:4px}
+.native-ui .reading-review-plan li small{display:block;margin-top:8px;font-size:14px}

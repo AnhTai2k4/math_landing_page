@@ -6,6 +6,15 @@ export type ReadingCollection={
  invalid:number;
  unavailable:boolean;
 };
+export type ReadingShelfSort='recent'|'title'|'remaining';
+
+/** Display order only: saved positions and source-owned links are never changed. */
+export function sortReadingItems(items:ReadingCollection['items'],order:ReadingShelfSort):ReadingCollection['items']{
+ const result=items.slice(),title=(a:typeof items[number],b:typeof items[number])=>a.file.observedContents.localeCompare(b.file.observedContents,'vi',{numeric:true,sensitivity:'base'});
+ if(order==='title')return result.sort((a,b)=>title(a,b)||b.position.at-a.position.at);
+ if(order==='remaining')return result.sort((a,b)=>(a.file.pages-a.position.page)-(b.file.pages-b.position.page)||b.position.at-a.position.at||title(a,b));
+ return result.sort((a,b)=>b.position.at-a.position.at);
+}
 
 export function collectReading(storage:PositionStorage|null,files:ReaderFile[],contextSearch:string,now=Date.now()):ReadingCollection{
  const result:ReadingCollection={items:[],invalid:0,unavailable:storage===null};

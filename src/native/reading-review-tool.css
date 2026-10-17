@@ -1,0 +1,6 @@
+.native-ui .reading-review-tool{margin:0 0 24px;padding:12px 16px}
+.native-ui .reading-review-tool>summary{min-height:48px;box-sizing:border-box;padding:10px 4px;cursor:pointer;color:#213269;font-size:18px;line-height:1.6;overflow-wrap:anywhere}
+.native-ui .reading-review-tool[open]>summary{border-bottom:1px solid #e2e8f0;padding-bottom:14px}
+.native-ui .reading-review-tool .reading-review-plan{margin-top:14px}
+.native-ui .reading-review-tool>summary:hover{background:#f8faff}
+.native-ui .reading-review-tool>summary:focus-visible{outline:3px solid #213269;outline-offset:3px}

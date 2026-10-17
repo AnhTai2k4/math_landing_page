@@ -2,7 +2,8 @@ import {useEffect,useId,useRef,useState} from 'react';
 import {Link} from '../migration/navigation';
 import {browserPositionStorage,positionKey} from './reader-position';
 import {type ReaderFile} from './reader-policy';
-import {collectReading,type ReadingCollection} from './reading-shelf';
+import {collectReading,sortReadingItems,type ReadingCollection,type ReadingShelfSort} from './reading-shelf';
+import './reading-shelf-v2.css';
 
 type Props={files:ReaderFile[];search:string};
 
@@ -15,6 +16,7 @@ export default function ReadingShelf({files,search}:Props){
 function ReadingShelfContents({files,search}:Props){
  const headingId=useId(),scope=useRef({files,search});
  const [reading,setReading]=useState<ReadingCollection|null>(null);
+ const [order,setOrder]=useState<ReadingShelfSort>('recent');
  useEffect(()=>{
   const {files,search}=scope.current,storage=browserPositionStorage(),keys=new Set<string>();
   for(const file of files){try{keys.add(positionKey(file));}catch{/* Ignore invalid manifest rows. */}}
@@ -36,12 +38,13 @@ function ReadingShelfContents({files,search}:Props){
    {!!reading?.invalid&&<p>Có {reading.invalid} vị trí đọc không hợp lệ nên chưa hiển thị. Dữ liệu gốc vẫn được giữ nguyên.</p>}
    {reading&&!reading.unavailable&&!reading.invalid&&!reading.items.length&&<p>Chưa có vị trí đọc được lưu trên thiết bị này cho các tài liệu trong danh sách đang lọc.</p>}
   </div>
-  {!!reading?.items.length&&<ul>{reading.items.map(({file,position,href})=><li key={file.sha256}>
+  {!!reading?.items.length&&<><div className="ne-reading-shelf-sort"><label htmlFor={headingId+'-sort'}>Sắp xếp tài liệu đọc tiếp</label><select id={headingId+'-sort'} value={order} aria-describedby={headingId+'-remaining'} onChange={event=>setOrder(event.target.value==='title'?'title':event.target.value==='remaining'?'remaining':'recent')}><option value="recent">Mới đọc</option><option value="title">Tên tài liệu</option><option value="remaining">Ít trang còn lại</option></select></div><p id={headingId+'-remaining'}>Số trang phía sau vị trí đang lưu không xác nhận em đã đọc xong các trang trước đó hay hoàn thành tài liệu.</p><ul>{sortReadingItems(reading.items,order).map(({file,position,href})=><li key={file.sha256}>
    <h3>{file.observedContents}</h3>
    <p>Trang {position.page}/{file.pages} · Thu phóng {position.zoom}%</p>
+   <p>{file.pages-position.page} trang phía sau vị trí đang lưu</p>
    <p>Lưu trên thiết bị: <time dateTime={new Date(position.at).toISOString()}>{new Date(position.at).toLocaleString('vi-VN')}</time></p>
    {file.sourceMetadataNeedsReview&&<p className="ne-reading-shelf-warning">Nhãn/lớp theo nguồn đang chờ đối chiếu.</p>}
    <Link href={href}>Đọc tiếp trang {position.page}</Link>
-  </li>)}</ul>}
+  </li>)}</ul></>}
  </section>;
 }

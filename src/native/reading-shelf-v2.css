@@ -1,0 +1,9 @@
+.native-ui .ne-reading-shelf h2,.native-ui .ne-reading-shelf h3{color:#213269}
+.native-ui .ne-reading-shelf-sort{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:16px 0 12px;color:#213269}
+.native-ui .ne-reading-shelf-sort label{font-weight:700;font-size:14px}
+.native-ui .ne-reading-shelf-sort select{min-height:48px;max-width:100%;min-width:0;padding:10px 12px;border:1px solid #213269;border-radius:8px;font:inherit;font-size:14px;background:#fff;color:#213269}
+.native-ui .ne-reading-shelf>p,.native-ui .ne-reading-shelf li p{font-size:14px;line-height:1.5}
+.native-ui .ne-reading-shelf li p{margin:0 0 6px}
+.native-ui .ne-reading-shelf li a{min-height:48px;background:#213269;border-bottom:3px solid #FFCF24}
+.native-ui .ne-reading-shelf select:focus-visible,.native-ui .ne-reading-shelf a:focus-visible{outline:3px solid #213269;outline-offset:3px}
+@media(max-width:600px){.native-ui .ne-reading-shelf-sort select{font-size:16px}}

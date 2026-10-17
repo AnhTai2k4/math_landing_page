@@ -1,4 +1,6 @@
 export type MentalQuestion={id:string;kind:'nine'|'ninety-nine'|'square'|'product'|'difference';prompt:string;spoken:string;answer:number;hint:string;steps:string[]};
+export type MentalMode='mixed'|MentalQuestion['kind'];
+export const mentalModes:readonly {id:MentalMode;label:string}[]=[{id:'mixed',label:'Tổng hợp 5 kỹ thuật'},{id:'nine',label:'Nhân với 9'},{id:'ninety-nine',label:'Nhân với 99'},{id:'square',label:'Bình phương số tận cùng là 5'},{id:'product',label:'Tích của tổng và hiệu'},{id:'difference',label:'Hiệu hai bình phương'}];
 
 /** Miền hữu hạn, chỉ số nguyên. Đây là trò tự luyện, không phải ngân hàng đề. */
 export function mentalQuestion(kind:MentalQuestion['kind'],a:number,b=0):MentalQuestion{
@@ -31,9 +33,17 @@ export function mentalQuestion(kind:MentalQuestion['kind'],a:number,b=0):MentalQ
 }
 
 /** Bộ mới chỉ đổi tham số, luôn kết thúc sau 5 câu, không đồng hồ hay lưu điểm. */
-export function createMentalRound(round:number):MentalQuestion[]{
+export function createMentalRound(round:number,mode:MentalMode='mixed'):MentalQuestion[]{
   let seed=(Number.isSafeInteger(round)&&round>=0?round:0)>>>0;
   const pick=(size:number)=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return Math.floor(seed/2**32*size);};
+  if(mode!=='mixed'){
+    if(!mentalModes.some(item=>item.id===mode))throw Error('Kỹ thuật tính nhẩm không hợp lệ');
+    const pool:MentalQuestion[]=[];
+    if(mode==='nine'||mode==='ninety-nine')for(let a=12;a<=(mode==='nine'?49:39);a++)pool.push(mentalQuestion(mode,a));
+    else if(mode==='square')for(let a=25;a<=95;a+=10)pool.push(mentalQuestion(mode,a));
+    else for(let a=20;a<=90;a+=10)for(let b=2;b<=9;b++)pool.push(mentalQuestion(mode,a,b));
+    return Array.from({length:5},()=>pool.splice(pick(pool.length),1)[0]);
+  }
   return [mentalQuestion('nine',12+pick(38)),mentalQuestion('ninety-nine',12+pick(28)),mentalQuestion('square',25+10*pick(8)),
     mentalQuestion('product',20+10*pick(8),2+pick(8)),mentalQuestion('difference',20+10*pick(8),2+pick(8))];
 }

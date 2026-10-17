@@ -1,20 +1,25 @@
-.cp-mental{color:#213269;font-size:1rem;line-height:1.7;min-width:0}
-.cp-mental h3{font-size:1.25rem;margin:8px 0}
-.cp-mental .cp-mental-note{font-size:.9rem;color:#526078;overflow-wrap:anywhere}
-.cp-mental-card{border:1px solid #d7deea;border-radius:12px;background:#fff;padding:20px;margin:16px 0;min-width:0}
-.cp-mental-card h4{font-size:1.4rem;line-height:1.5;margin:0 0 16px;overflow-wrap:anywhere}
-.cp-mental-card h5{font-size:1rem;margin:14px 0 8px}
-.cp-mental .cp-mental-count{font-weight:700;color:#526078;margin:0 0 8px}
-.cp-mental label{display:block;font-weight:700;margin:8px 0}
-.cp-mental input{font:inherit;width:100%;box-sizing:border-box;max-width:320px;min-height:48px;border:1px solid #9daac4;border-radius:10px;padding:10px;color:#213269;background:#fff}
-.cp-mental input[aria-invalid=true]{border:2px solid #a52727}
-.cp-mental button{font:inherit;min-height:48px;max-width:100%;padding:10px 16px;margin:6px 0;border:1px solid #213269;border-radius:10px;background:#fff;color:#213269;cursor:pointer;font-weight:700;white-space:normal}
-.cp-mental button:hover{background:#f2f5fa}
-.cp-mental .cp-mental-primary{background:#ffcf24;color:#213269}
-.cp-mental details{margin:14px 0;border-top:1px solid #d7deea;padding-top:8px}
-.cp-mental summary{cursor:pointer;min-height:44px;padding:6px 0;box-sizing:border-box;font-weight:700;overflow-wrap:anywhere}
-.cp-mental-feedback{background:#f5f7fb;border-radius:10px;padding:14px;margin:16px 0;overflow-wrap:anywhere}
-.cp-mental-actions{display:flex;flex-wrap:wrap;gap:10px}
-.cp-mental :is(button,input,summary,h3,h4,.cp-mental-feedback):focus-visible{outline:3px solid #b28516;outline-offset:3px}
-.cp-mental-sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-@media(max-width:600px){.cp-mental-card{padding:14px}.cp-mental-actions{flex-direction:column}.cp-mental-actions button{width:100%}}
+.ep-root .cp-mental{color:#213269;font-size:1rem;line-height:1.7;min-width:0}
+.ep-root .cp-mental h3{font-size:1.25rem;margin:8px 0}
+.ep-root .cp-mental .cp-mental-note{font-size:.9rem;color:#526078;overflow-wrap:anywhere}
+.ep-root .cp-mental-card{border:1px solid #d7deea;border-radius:12px;background:#fff;padding:20px;margin:16px 0;min-width:0}
+.ep-root .cp-mental-card h4{font-size:1.4rem;line-height:1.5;margin:0 0 16px;overflow-wrap:anywhere}
+.ep-root .cp-mental-card h5{font-size:1rem;margin:14px 0 8px}
+.ep-root .cp-mental .cp-mental-count{font-weight:700;color:#526078;margin:0 0 8px}
+.ep-root .cp-mental label{display:block;font-weight:700;margin:8px 0}
+.ep-root .cp-mental input[type=text]{font:inherit;width:100%;box-sizing:border-box;max-width:320px;min-height:48px;border:1px solid #9daac4;border-radius:10px;padding:10px;color:#213269;background:#fff}
+.ep-root .cp-mental input[aria-invalid=true]{border:2px solid #a52727}
+.ep-root .cp-mental button{font:inherit;min-height:48px;max-width:100%;padding:10px 16px;margin:6px 0;border:1px solid #213269;border-radius:10px;background:#fff;color:#213269;cursor:pointer;font-weight:700;white-space:normal}
+.ep-root .cp-mental button:hover:enabled{background:#f2f5fa}
+.ep-root .cp-mental .cp-mental-primary{background:#ffcf24;color:#213269}
+.ep-root .cp-mental .cp-mental-primary:hover:enabled{background:#f4c200;color:#213269}
+.ep-root .cp-mental .cp-mental-error{color:#9f1239;background:#fff1f2;border-left:3px solid #be123c;padding:8px 12px;border-radius:6px;font-weight:700}
+.ep-root .cp-mental details{margin:14px 0;border-top:1px solid #d7deea;padding-top:8px}
+.ep-root .cp-mental summary{cursor:pointer;min-height:48px;padding:6px 0;box-sizing:border-box;font-weight:700;overflow-wrap:anywhere}
+.ep-root .cp-mental-feedback{background:#f5f7fb;border-radius:10px;padding:14px;margin:16px 0;overflow-wrap:anywhere}
+.ep-root .cp-mental-actions{display:flex;flex-wrap:wrap;gap:10px}
+.ep-root .cp-mental-secondary-actions{border-top:1px solid #d7deea;padding-top:10px;margin-top:14px}
+.ep-root .cp-mental :is(button,input,summary,h3,h4,.cp-mental-feedback):focus-visible{outline:3px solid #b28516;outline-offset:3px}
+.ep-root .cp-mental-sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:600px){.ep-root .cp-mental-card{padding:14px}.ep-root .cp-mental-actions{flex-direction:column}.ep-root .cp-mental-actions button{width:100%}}
+
+.ep-root .cp-mental select{font:inherit;box-sizing:border-box;width:100%;max-width:480px;min-height:48px;border:1px solid #9daac4;border-radius:10px;padding:10px;color:#213269;background:#fff}.ep-root .cp-mental select:focus-visible{outline:3px solid #b28516;outline-offset:3px}
