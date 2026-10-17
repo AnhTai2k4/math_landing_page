@@ -18,6 +18,7 @@
     "tests/exams-btvn-round9.test.mts",
     "tests/btvn-pipeline-fixture.ts",
     "api/btvn/avatar.ts",
+    "api/preview-disabled.ts",
     "tests/exams-r106-avatar.test.mts",
     "tests/exams-r106-cookie.test.mts",
     "tests/exams-r106-dashboard.test.mts",

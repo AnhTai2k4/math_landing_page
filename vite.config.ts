@@ -7,10 +7,12 @@ generatePracticeBank();
   import path from 'path';
   import {btvnDevPlugin} from './server/btvn/dev-plugin';
 
-  export default defineConfig({
+  export default defineConfig(({command})=>{
+    if(command==='build'&&(process.env.MTM_BTVN_DEMO==='1'||process.env.MTM_R106_PREVIEW==='1'))throw new Error('Tắt MTM_BTVN_DEMO và MTM_R106_PREVIEW trước khi tạo bản phát hành.');
+    return {
     // Cache riêng trong worktree: build/ bị middleware chặn, node_modules dùng chung.
     cacheDir: process.env.MTM_BTVN_DEMO==='1'?'.qa-temp/btvn-vite-cache':undefined,
-    plugins: [react(),btvnDevPlugin(),publicSitemapPlugin()],
+    plugins: [react(),...(command==='serve'&&process.env.VERCEL!=='1'?[btvnDevPlugin()]:[]),publicSitemapPlugin()],
     resolve: {
       extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
       alias: {
@@ -75,4 +77,4 @@ generatePracticeBank();
       port: 3000,
       open: process.env.MTM_BTVN_DEMO==='1'?false:true,
     },
-  });
+  };});

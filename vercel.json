@@ -5,6 +5,10 @@
   "outputDirectory": "build",
   "rewrites": [
     {
+      "source": "/__preview/:path*",
+      "destination": "/api/preview-disabled"
+    },
+    {
       "source": "/bai-hoc/:path*",
       "destination": "/index.html"
     },

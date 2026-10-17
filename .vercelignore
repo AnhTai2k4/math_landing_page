@@ -11,3 +11,7 @@ node_modules/**
 **/*.sqlite-*
 **/*.log
 supabase/.temp/**
+work/**
+**/preview-scores.csv*
+**/*.profiles.json
+server/btvn/preview-r106*.html
