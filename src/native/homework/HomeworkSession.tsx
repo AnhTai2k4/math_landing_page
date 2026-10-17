@@ -10,6 +10,7 @@ import LessonCards from './LessonCards';
 import HomeworkOverview from './HomeworkOverview';
 import HomeworkGate from './HomeworkGate';
 import HomeworkTimePlan from './HomeworkTimePlan';
+import HomeworkSelfCheckTool from './HomeworkSelfCheckTool';
 import PracticeAttempt from '../exams/PracticeAttempt';
 import type {Draft,Store} from '../exams/store';
 import {draftKey} from '../exams/store';
@@ -184,5 +185,6 @@ export default function HomeworkSession({pathname}:{pathname:string}){
 
     </>}
     {!checking&&(!state||!room)&&<HomeworkTimePlan/>}
+    {!checking&&(!state||!room||state.draft?.submittedAt===null)&&<HomeworkSelfCheckTool key={room&&state?.draft?.submittedAt===null?'attempt:'+state.draft.attemptId:'entry:'+(state?.lessonCode??'')}/>}
   </section>;
 }

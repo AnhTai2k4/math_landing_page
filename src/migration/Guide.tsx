@@ -3,6 +3,7 @@ import {Link,navigate,useRoute} from './navigation';
 import {ArrowUpRight} from 'lucide-react';
 import './guide.css';
 import StudyCompass from './StudyCompass';
+import GuideGraphLauncher from './GuideGraphLauncher';
 
 import {ZALO_ASSISTANT_URL} from '../components/mtm-contact';
 export {ZALO_ASSISTANT_URL} from '../components/mtm-contact';
@@ -104,6 +105,6 @@ export default function Guide(){const [who,setWho]=useState<Audience>(readAudien
    <button type="button" role="tab" id="mg-tab-hs" tabIndex={parent?-1:0} aria-selected={!parent} aria-controls="mg-panel" onKeyDown={tabKey} onClick={()=>pick('hoc-sinh')}>Học sinh</button>
    <button type="button" role="tab" id="mg-tab-ph" tabIndex={parent?0:-1} aria-selected={parent} aria-controls="mg-panel" onKeyDown={tabKey} onClick={()=>pick('phu-huynh')}>Phụ huynh</button>
   </div>
-  <div id="mg-panel" role="tabpanel" tabIndex={0} aria-labelledby={parent?'mg-tab-ph':'mg-tab-hs'}><Steps parent={parent}/><Btvn parent={parent}/><Web parent={parent}/>{!parent&&<StudyCompass/>}<WebHelp parent={parent}/><More parent={parent}/></div>
+  <div id="mg-panel" role="tabpanel" tabIndex={0} aria-labelledby={parent?'mg-tab-ph':'mg-tab-hs'}><Steps parent={parent}/><Btvn parent={parent}/><Web parent={parent}/>{!parent&&<StudyCompass/>}{!parent&&<GuideGraphLauncher/>}<WebHelp parent={parent}/><More parent={parent}/></div>
   <p className="mg-slogan">Minh Thành Math - Thinking gets sharp!</p>
  </div></div>;}
